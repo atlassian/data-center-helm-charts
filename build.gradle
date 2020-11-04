@@ -1,5 +1,5 @@
 plugins {
-    java
+    id 'java'
 }
 
 repositories {
@@ -16,8 +16,17 @@ dependencies {
 group = "com.atlassian.k8s"
 version = "0.1.0-SNAPSHOT"
 description = "data-center-helm-charts"
-java.sourceCompatibility = JavaVersion.VERSION_11
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+test.useJUnitPlatform()
+
+sourceSets {
+    test {
+        resources.srcDir("src/test/config")
+    }
 }
