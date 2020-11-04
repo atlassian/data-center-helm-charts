@@ -72,7 +72,7 @@ class HelmOutputComparisonTest {
     }
 
     private static Path getHelmTemplateOutputFile(String product) {
-        return Paths.get(String.format("target/helm_output_%s.yaml", product));
+        return Paths.get(String.format("build/helm_output_%s.yaml", product));
     }
 
     private static String getHelmReleaseName(String product) {
