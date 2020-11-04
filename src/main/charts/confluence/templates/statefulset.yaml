@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "confluence.fullname" . }}
+  labels:
+    {{- include "confluence.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "confluence.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "confluence.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "confluence.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
+      terminationGracePeriodSeconds: 1
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Cnfluence container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: {{ .Values.confluence.gid }}
+      {{- with .Values.additionalInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: confluence
+          image: {{ include "confluence.image" . | quote }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: {{ .Values.confluence.ports.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.confluence.ports.hazelcast }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.confluence.ports.http }}
+              path: /status
+            initialDelaySeconds: {{ .Values.confluence.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.confluence.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.confluence.readinessProbe.failureThreshold }}
+          {{- with .Values.confluence.resources.container }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: local-home
+              mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+            - name: shared-home
+              mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
+              {{- if .Values.volumes.sharedHome.subPath }}
+              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+              {{- end }}
+            {{- include "confluence.additionalLibraries" . | nindent 12 }}
+            {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
+          env:
+            - name: ATL_TOMCAT_SCHEME
+              value: https
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
+              value: {{ include "confluence.fullname" . | quote }}
+            - name: ATL_CLUSTER_TYPE
+              value: "kubernetes"
+            - name: ATL_CLUSTER_NAME
+              value: {{ include "confluence.name" . | quote }}
+            - name: ATL_PRODUCT_HOME_SHARED
+              value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: {{ include "confluence.fullname" . }}-jvm-config
+            - name: ATL_JDBC_URL
+              value: {{ .Values.database.url | quote }}
+            - name: ATL_JDBC_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.credentials.secretName }}
+                  key: {{ .Values.database.credentials.usernameSecretKey }}
+            - name: ATL_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.credentials.secretName }}
+                  key: {{ .Values.database.credentials.passwordSecretKey }}
+            - name: ATL_DB_TYPE
+              value: {{ .Values.database.type | quote }}
+            - name: ATL_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.confluence.license.secretName }}
+                  key: {{ .Values.confluence.license.secretKey }}
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: {{ include "confluence.fullname" . }}-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: {{ include "confluence.fullname" . }}-jvm-config
+            - name: JVM_RESERVED_CODE_CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reserved_code_cache
+                  name: {{ include "confluence.fullname" . }}-jvm-config
+        {{- with .Values.additionalContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: shared-home
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+  volumeClaimTemplates:
+    - metadata:
+        name: local-home
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if .Values.volumes.localHome.storageClassName }}
+        storageClassName: {{ .Values.volumes.localHome.storageClassName | quote }}
+        {{- end }}
+        {{- with .Values.volumes.localHome.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}

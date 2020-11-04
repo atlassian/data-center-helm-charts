@@ -1,0 +1,403 @@
+---
+# Source: bitbucket/templates/config-jvm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-bitbucket-jvm-config
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+data:
+  additional_jvm_args: >-
+  max_heap: 1g
+  min_heap: 1g
+---
+# Source: bitbucket/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bitbucket
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 7999
+      targetPort: ssh
+      protocol: TCP
+      name: ssh
+    - port: 5701
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+---
+# Source: bitbucket/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unittest-bitbucket
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  serviceName: unittest-bitbucket
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bitbucket
+      app.kubernetes.io/instance: unittest-bitbucket
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bitbucket
+        app.kubernetes.io/instance: unittest-bitbucket
+    spec:
+      terminationGracePeriodSeconds: 1
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: 2003 # Makes sure that the shared-home volume mount is writeable by the bitbucket user's GID
+      containers:
+        - name: bitbucket
+          image: "atlassian/bitbucket-server:TESTTAG"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7990
+              protocol: TCP
+            - name: ssh
+              containerPort: 7999
+              protocol: TCP
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: 7990
+              path: "/status"
+            periodSeconds: 5
+            failureThreshold: 60
+            initialDelaySeconds: 10
+          volumeMounts:
+            - name: local-home
+              mountPath: "/var/atlassian/application-data/bitbucket"
+            - name: shared-home
+              mountPath: "/var/atlassian/application-data/shared-home"
+            - name: libs-volume
+              mountPath: "/opt/atlassian/bitbucket/app/WEB-INF/lib/mylib.jar"
+              subPath: "libs/mylib.jar"
+            - name: plugins-volume
+              mountPath: "/opt/atlassian/bitbucket/app/WEB-INF/atlassian-bundled-plugins/myplugin.jar"
+              subPath: "plugins/myplugin.jar"
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
+              value: "unittest-bitbucket"
+            - name: HAZELCAST_NETWORK_KUBERNETES
+              value: "true"
+            - name: HAZELCAST_PORT
+              value: "5701"
+            - name: JDBC_DRIVER
+              value: "org.postgresql.Driver"
+            - name: JDBC_URL
+              value: "jdbc:postgresql://postgresql:5432/bitbucket"
+            - name: JDBC_USER
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-database-credentials
+                  key: username
+            - name: JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-database-credentials
+                  key: password
+            - name: SERVER_PROXY_NAME
+              value: "foo"
+            - name: SERVER_PROXY_PORT
+              value: "443"
+            - name: SERVER_SCHEME
+              value: "https"
+            - name: SERVER_SECURE
+              value: "true"
+            - name: BITBUCKET_SHARED_HOME
+              value: "/var/atlassian/application-data/shared-home"
+            - name: SETUP_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-license
+                  key: license-key
+            - name: SETUP_BASEURL
+              value: "https://foo"
+            - name: SETUP_SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-sysadmin-credentials
+                  key: username
+            - name: SETUP_SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-sysadmin-credentials
+                  key: password
+            - name: SETUP_SYSADMIN_DISPLAYNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-sysadmin-credentials
+                  key: displayName
+            - name: SETUP_SYSADMIN_EMAILADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: bitbucket-sysadmin-credentials
+                  key: emailAddress
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: unittest-bitbucket-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: unittest-bitbucket-jvm-config
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: unittest-bitbucket-jvm-config
+      volumes:
+        - name: shared-home
+          persistentVolumeClaim:
+            claimName: bitbucket-shared-home
+  volumeClaimTemplates:
+    - metadata:
+        name: local-home
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# Source: bitbucket/templates/tests/test-application-status.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-bitbucket-application-status-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: STATUS_URL
+          value: "http://unittest-bitbucket:80/status"
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          apk add -q jq curl
+          STATUS=$(curl -s "$STATUS_URL")
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+          echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+  restartPolicy: Never
+---
+# Source: bitbucket/templates/tests/test-database-connectivity.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-bitbucket-db-connectivity-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: "atlassian/bitbucket-server:TESTTAG"
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: JDBC_DRIVER
+          value: "org.postgresql.Driver"
+        - name: JDBC_URL
+          value: "jdbc:postgresql://postgresql:5432/bitbucket"
+        - name: JDBC_USER
+          valueFrom:
+            secretKeyRef:
+              name: bitbucket-database-credentials
+              key: username
+        - name: JDBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bitbucket-database-credentials
+              key: password
+        - name: CLASSPATH
+          value: "/opt/atlassian/bitbucket/app/WEB-INF/lib/*"
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          cat <<EOF | jshell - > output.txt
+          var jdbcDriver = System.getenv("JDBC_DRIVER");
+          var jdbcUrl = System.getenv("JDBC_URL");
+          var jdbcUsername = System.getenv("JDBC_USER");
+          var jdbcPassword = System.getenv("JDBC_PASSWORD");
+
+          System.out.println("Loading driver " + jdbcDriver);
+          Class.forName(jdbcDriver);
+
+          System.out.println("Establishing connection to " + jdbcUrl);
+          try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
+             System.out.println("Connection established OK, " + c.getClass());
+          }
+          EOF
+          cat output.txt
+          grep -q "Connection established OK" output.txt
+  restartPolicy: Never
+---
+# Source: bitbucket/templates/tests/test-required-values.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-bitbucket-required-values-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: required-values-test
+      image: debian:stable-slim
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: JDBC_DRIVER
+          value: "org.postgresql.Driver"
+        - name: JDBC_URL
+          value: "jdbc:postgresql://postgresql:5432/bitbucket"
+        - name: SERVER_PROXY_NAME
+          value: "foo"
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          for var in JDBC_DRIVER JDBC_URL SERVER_PROXY_NAME ; do
+            if [ -n "${!var}" ] ; then
+              echo "$var is set to ${!var}"
+            else
+              echo "$var is not set"
+              exit 1
+            fi
+          done
+  restartPolicy: Never
+---
+# Source: bitbucket/templates/tests/test-shared-home-permissions.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-bitbucket-shared-home-permissions-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: debian:stable-slim
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        runAsUser: 2003
+        runAsGroup: 2003
+      volumeMounts:
+        - name: shared-home
+          mountPath: /shared-home
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          ls -ld /shared-home
+          echo "Creating temporary file in shared home as user $(id -u):$(id -g)"
+          touch /shared-home/permissions-test
+          ls -l /shared-home/permissions-test
+          rm /shared-home/permissions-test
+  volumes:
+    - name: shared-home
+      persistentVolumeClaim:
+        claimName: bitbucket-shared-home
+  restartPolicy: Never
+---
+# Source: bitbucket/templates/nfs-permission-fixer.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: unittest-bitbucket-nfs-fixer
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": pre-install
+spec:
+  template:
+    metadata:
+      name: unittest-bitbucket-nfs-fixer
+      labels:
+        helm.sh/chart: bitbucket-0.1.0
+        app.kubernetes.io/name: bitbucket
+        app.kubernetes.io/instance: unittest-bitbucket
+        app.kubernetes.io/version: "7.7.0-jdk11"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: nfs-fixer
+          image: alpine
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2003 /shared-home; chmod g+w /shared-home)"]
+      volumes:
+        - name: shared-home
+          persistentVolumeClaim:
+            claimName: bitbucket-shared-home

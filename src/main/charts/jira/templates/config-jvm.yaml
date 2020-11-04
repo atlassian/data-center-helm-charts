@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jira.fullname" . }}-jvm-config
+  labels:
+    {{- include "jira.labels" . | nindent 4 }}
+data:
+  additional_jvm_args: >-
+    {{- range .Values.jira.additionalJvmArgs }}
+    {{ . }}
+    {{- end }}
+  max_heap: {{ .Values.jira.resources.jvm.maxHeap }}
+  min_heap: {{ .Values.jira.resources.jvm.minHeap }}
+  reserved_code_cache: {{ .Values.jira.resources.jvm.reservedCodeCache }}

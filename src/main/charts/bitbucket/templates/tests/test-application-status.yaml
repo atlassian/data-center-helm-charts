@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "bitbucket.fullname" . }}-application-status-test"
+  annotations:
+    "helm.sh/hook": test
+    {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "bitbucket.labels" . | nindent 4 }}
+spec:
+  containers:
+    - name: test
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: STATUS_URL
+          value: "http://{{ include "bitbucket.fullname" . }}:{{ .Values.bitbucket.service.port }}/status"
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          apk add -q jq curl
+          STATUS=$(curl -s "$STATUS_URL")
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+          echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+  restartPolicy: Never

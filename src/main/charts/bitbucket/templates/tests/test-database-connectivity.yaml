@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "bitbucket.fullname" . }}-db-connectivity-test"
+  annotations:
+    "helm.sh/hook": test
+    {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "bitbucket.labels" . | nindent 4 }}
+spec:
+  containers:
+    - name: test
+      image: {{ include "bitbucket.image" . | quote }}
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: JDBC_DRIVER
+          value: {{ .Values.database.driver | quote }}
+        - name: JDBC_URL
+          value: {{ .Values.database.url | quote }}
+        - name: JDBC_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.credentials.secretName }}
+              key: {{ .Values.database.credentials.usernameSecretKey }}
+        - name: JDBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.credentials.secretName }}
+              key: {{ .Values.database.credentials.passwordSecretKey }}
+        - name: CLASSPATH
+          value: "/opt/atlassian/bitbucket/app/WEB-INF/lib/*"
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          cat <<EOF | jshell - > output.txt
+          var jdbcDriver = System.getenv("JDBC_DRIVER");
+          var jdbcUrl = System.getenv("JDBC_URL");
+          var jdbcUsername = System.getenv("JDBC_USER");
+          var jdbcPassword = System.getenv("JDBC_PASSWORD");
+
+          System.out.println("Loading driver " + jdbcDriver);
+          Class.forName(jdbcDriver);
+
+          System.out.println("Establishing connection to " + jdbcUrl);
+          try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
+             System.out.println("Connection established OK, " + c.getClass());
+          }
+          EOF
+          cat output.txt
+          grep -q "Connection established OK" output.txt
+  restartPolicy: Never

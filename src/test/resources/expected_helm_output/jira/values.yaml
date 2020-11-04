@@ -1,0 +1,18 @@
+# This file contains chart value overrides for the Helm output unit test
+image:
+  tag: TESTTAG
+
+database:
+  type: postgresql
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://postgresql:5432/confluence
+
+jira:
+  additionalLibraries:
+    - volumeName: libs-volume
+      subDirectory: libs
+      fileName: mylib.jar
+  additionalBundledPlugins:
+    - volumeName: plugins-volume
+      subDirectory: plugins
+      fileName: myplugin.jar

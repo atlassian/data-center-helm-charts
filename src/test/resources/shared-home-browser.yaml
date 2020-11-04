@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shared-home-browser
+  annotations:
+    "atlassian.com/business_unit": "server_engineering"
+spec:
+  containers:
+    - name: browser
+      image: debian:stable-slim
+      volumeMounts:
+        - mountPath: /shared-home
+          name: shared-home
+      command: [ "bash", "-c", "--" ]
+      args: [ "while true; do sleep 30; done;" ]
+  volumes:
+    - name: shared-home
+      persistentVolumeClaim:
+        claimName: efs-claim

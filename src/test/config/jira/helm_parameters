@@ -1,0 +1,12 @@
+RELEASE_PREFIX=${helm.release.prefix}
+CHART_SRC_PATH=${helm.src.path}/jira
+PRODUCT_CHART_VALUES_FILES=${project.build.directory}/config/jira/values
+PRODUCT_INGRESS_TEMPLATE=${project.build.directory}/config/jira/ingress
+PRODUCT_NAME=jira
+DB_NAME=jira
+POSTGRES_CHART_VERSION=9.4.1
+POSTGRES_APP_VERSION=11
+LOG_DOWNLOAD_DIR=${project.build.directory}/logs
+TARGET_NAMESPACE=${kubernetes.target.namespace}
+DOCKER_IMAGE_REGISTRY=${dockerImage.registry}
+DOCKER_IMAGE_VERSION=${dockerImage.version}

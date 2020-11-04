@@ -1,0 +1,10 @@
+# This file contains overrides for the bitnami/postgresql helm chart, suitable for deployment into the KITT clusters.
+
+master:
+ podAnnotations:
+   # This annotation is required for all pods in the KITT kubernetes clusters
+   "atlassian.com/business_unit": "server_engineering"
+
+persistence:
+  # We don't want or need persistent data for this postgres installation
+  enabled: false

@@ -1,0 +1,495 @@
+---
+# Source: confluence/templates/config-jvm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-confluence-jvm-config
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+data:
+  additional_jvm_args: >-
+    -Dconfluence.cluster.hazelcast.listenPort=5701
+    -Dsynchrony.service.url=https://confluence/synchrony/v1
+    -DConfluenceHomeLogAppender.disabled=true
+  max_heap: 1g
+  min_heap: 1g
+  reserved_code_cache: 512m
+---
+# Source: confluence/templates/synchrony-start-script.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-confluence-synchrony-entrypoint
+data:
+  # The script we use as the entrypoint for the Synchrony container, because there isn't one we can use out of the box.
+  # Note that the classpath ony really needs to contain synchrony-standalone.jar and the JDBC driver JAR, but for simplicitly
+  # we just add every JAR in the Confluence lib directory.
+  start-synchrony.sh: |
+    #!/usr/bin/env bash
+
+    java \
+       -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
+       synchrony.core \
+       sql
+---
+# Source: confluence/templates/service-synchrony.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-confluence-synchrony
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence-synchrony
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 5701
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    app.kubernetes.io/name: confluence-synchrony
+    app.kubernetes.io/instance: unittest-confluence
+---
+# Source: confluence/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-confluence
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 5701
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+---
+# Source: confluence/templates/statefulset-synchrony.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unittest-confluence-synchrony
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence-synchrony
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  serviceName: unittest-confluence-synchrony
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: confluence-synchrony
+      app.kubernetes.io/instance: unittest-confluence
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: confluence-synchrony
+        app.kubernetes.io/instance: unittest-confluence
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: synchrony
+          image: "atlassian/confluence-server:TESTTAG"
+          imagePullPolicy: IfNotPresent
+          command: ["/scripts/start-synchrony.sh"]
+          volumeMounts:
+            - mountPath: /scripts
+              name: entrypoint-script
+          ports:
+            - name: http
+              containerPort: 8091
+              protocol: TCP
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: 8091
+              path: /heartbeat
+            initialDelaySeconds: 5
+            periodSeconds: 1
+            failureThreshold: 30
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
+              value: "unittest-confluence-synchrony"
+            - name: SYNCHRONY_BIND
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SYNCHRONY_SERVICE_URL
+              value: "https://confluence/synchrony"
+            - name: SYNCHRONY_DATABASE_URL
+              value: jdbc:postgresql://postgresql:5432/confluence
+            - name: SYNCHRONY_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: confluence-database-credentials
+                  key: username
+            - name: SYNCHRONY_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: confluence-database-credentials
+                  key: password
+            - name: CLUSTER_JOIN_TYPE
+              value: "kubernetes"
+      volumes:
+        - name: entrypoint-script
+          configMap:
+            name: unittest-confluence-synchrony-entrypoint
+            defaultMode: 0744
+---
+# Source: confluence/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unittest-confluence
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  serviceName: unittest-confluence
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: confluence
+      app.kubernetes.io/instance: unittest-confluence
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: confluence
+        app.kubernetes.io/instance: unittest-confluence
+    spec:
+      terminationGracePeriodSeconds: 1
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Cnfluence container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: 2002
+      containers:
+        - name: confluence
+          image: "atlassian/confluence-server:TESTTAG"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8090
+              protocol: TCP
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: 8090
+              path: /status
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 30
+          volumeMounts:
+            - name: local-home
+              mountPath: "/var/atlassian/application-data/confluence"
+            - name: shared-home
+              mountPath: "/var/atlassian/application-data/shared-home"
+            - name: libs-volume
+              mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/lib/mylib.jar"
+              subPath: "libs/mylib.jar"
+            - name: plugins-volume
+              mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/atlassian-bundled-plugins/myplugin.jar"
+              subPath: "plugins/myplugin.jar"
+          env:
+            - name: ATL_TOMCAT_SCHEME
+              value: https
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
+              value: "unittest-confluence"
+            - name: ATL_CLUSTER_TYPE
+              value: "kubernetes"
+            - name: ATL_CLUSTER_NAME
+              value: "confluence"
+            - name: ATL_PRODUCT_HOME_SHARED
+              value: "/var/atlassian/application-data/shared-home"
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: unittest-confluence-jvm-config
+            - name: ATL_JDBC_URL
+              value: "jdbc:postgresql://postgresql:5432/confluence"
+            - name: ATL_JDBC_USER
+              valueFrom:
+                secretKeyRef:
+                  name: confluence-database-credentials
+                  key: username
+            - name: ATL_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: confluence-database-credentials
+                  key: password
+            - name: ATL_DB_TYPE
+              value: "postgresql"
+            - name: ATL_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: confluence-license
+                  key: license-key
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: unittest-confluence-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: unittest-confluence-jvm-config
+            - name: JVM_RESERVED_CODE_CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reserved_code_cache
+                  name: unittest-confluence-jvm-config
+      volumes:
+        - name: shared-home
+          persistentVolumeClaim:
+            claimName: confluence-shared-home
+  volumeClaimTemplates:
+    - metadata:
+        name: local-home
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# Source: confluence/templates/tests/test-application-status.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-confluence-application-status-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: alpine
+      env:
+        - name: STATUS_URL
+          value: "http://unittest-confluence:80/status"
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          apk add -q jq curl
+          STATUS=$(curl -s "$STATUS_URL")
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+          echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+  restartPolicy: Never
+---
+# Source: confluence/templates/tests/test-database-connectivity.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-confluence-db-connectivity-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: "atlassian/confluence-server:TESTTAG"
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: JDBC_TYPE
+          value: "postgresql"
+        - name: JDBC_URL
+          value: "jdbc:postgresql://postgresql:5432/confluence"
+        - name: JDBC_USER
+          valueFrom:
+            secretKeyRef:
+              name: confluence-database-credentials
+              key: username
+        - name: JDBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: confluence-database-credentials
+              key: password
+        - name: CLASSPATH
+          value: "/opt/atlassian/confluence/confluence/WEB-INF/lib/*"
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          cat <<EOF | jshell - > output.txt
+          var jdbcUrl = System.getenv("JDBC_URL");
+          var jdbcUsername = System.getenv("JDBC_USER");
+          var jdbcPassword = System.getenv("JDBC_PASSWORD");
+
+          System.out.println("Establishing connection to " + jdbcUrl);
+          try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
+             System.out.println("Connection established OK, " + c.getClass());
+          }
+          EOF
+          cat output.txt
+          grep -q "Connection established OK" output.txt
+  restartPolicy: Never
+---
+# Source: confluence/templates/tests/test-required-values.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-confluence-required-values-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: required-values-test
+      image: debian:stable-slim
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: JDBC_URL
+          value: "jdbc:postgresql://postgresql:5432/confluence"
+        - name: JDBC_TYPE
+          value: "postgresql"
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          for var in JDBC_URL JDBC_TYPE ; do
+            if [ -n "${!var}" ] ; then
+              echo "$var is set to ${!var}"
+            else
+              echo "$var is not set"
+              exit 1
+            fi
+          done
+  restartPolicy: Never
+---
+# Source: confluence/templates/tests/test-shared-home-permissions.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-confluence-shared-home-permissions-test"
+  annotations:
+    "helm.sh/hook": test
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: debian:stable-slim
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        runAsUser: 2002
+        runAsGroup: 2002
+      volumeMounts:
+        - name: shared-home
+          mountPath: /shared-home
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          ls -ld /shared-home
+          echo "Creating temporary file in shared home as user $(id -u):$(id -g)"
+          touch /shared-home/permissions-test
+          ls -l /shared-home/permissions-test
+          rm /shared-home/permissions-test
+  volumes:
+    - name: shared-home
+      persistentVolumeClaim:
+        claimName: confluence-shared-home
+  restartPolicy: Never
+---
+# Source: confluence/templates/nfs-permission-fixer.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: unittest-confluence-nfs-fixer
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": pre-install
+spec:
+  template:
+    metadata:
+      name: unittest-confluence-nfs-fixer
+      labels:
+        helm.sh/chart: confluence-0.1.0
+        app.kubernetes.io/name: confluence
+        app.kubernetes.io/instance: unittest-confluence
+        app.kubernetes.io/version: "7.9.0-beta1-jdk11"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: nfs-fixer
+          image: alpine
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
+      volumes:
+        - name: shared-home
+          persistentVolumeClaim:
+            claimName: confluence-shared-home

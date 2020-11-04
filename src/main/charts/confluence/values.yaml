@@ -1,0 +1,165 @@
+# -- The initial number of pods that should be started at deployment of each of Confluence and Synchrony.
+# Note that because Confluence requires initial manual configuration after the first pod is deployed, and before scaling
+# up to additional pods, this should always be kept as 1.
+replicaCount: 1
+
+image:
+  repository: atlassian/confluence-server
+  pullPolicy: IfNotPresent
+  # -- The docker image tag to be used. Defaults to the Chart appVersion.
+  tag:
+
+# -- Specifies which serviceAccount to use for the pods. If not specified, the kubernetes default will be used.
+serviceAccountName:
+
+database:
+  # -- The type of database being used.
+  # Valid values include 'postgresql', 'mysql', 'oracle', 'mssql'.
+  type:
+  # -- The JDBC URL of the database to be used by Confluence and Synchrony, e.g. jdbc:postgresql://host:port/database
+  url:
+  credentials:
+    # -- The name of the Kubernetes Secret that contains the database login credentials.
+    secretName: confluence-database-credentials
+    # -- The key in the Secret used to store the database login username
+    usernameSecretKey: username
+    # -- The key in the Secret used to store the database login password
+    passwordSecretKey: password
+
+confluence:
+  service:
+    # -- The port on which the Confluence Kubernetes service will listen
+    port: 80
+    # -- The type of Kubernetes service to use for Confluence
+    type: ClusterIP
+  # -- The GID used by the Confluence docker image
+  gid: "2002"
+  ports:
+    # -- The port on which the Confluence container listens for HTTP traffic
+    http: 8090
+    # -- The port on which the Confluence container listens for Hazelcast traffic
+    hazelcast: 5701
+  license:
+    # -- The name of the Kubernetes Secret which contains the Confluence license key
+    secretName: confluence-license
+    # -- The key in the Kubernetes Secret which contains the Confluence license key
+    secretKey: license-key
+  readinessProbe:
+    # -- The initial delay (in seconds) for the Confluence container readiness probe, after which the probe will start running
+    initialDelaySeconds: 10
+    # -- How often (in seconds) the Confluence container readiness robe will run
+    periodSeconds: 5
+    # -- The number of consecutive failures of the Confluence container readiness probe before the pod fails readiness checks
+    failureThreshold: 30
+  resources:
+    jvm:
+      # -- The maximum amount of heap memory that will be used by the Confluence JVM
+      maxHeap: "1g"
+      # -- The minimum amount of heap memory that will be used by the Confluence JVM
+      minHeap: "1g"
+      # -- The memory reserved for the Confluence JVM code cache
+      reservedCodeCache: "512m"
+    # -- Specifies the standard Kubernetes resource requests and/or limits for the Confluence container.
+    # It is important that if the memory resources are specified here, they must allow for the size of the Confluence JVM.
+    # That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated.
+    # Allowing for (maxHeap+codeCache)*1.5 would be an example.
+    container: {}
+    #  limits:
+    #    cpu: "4"
+    #    memory: "2G"
+    #  requests:
+    #    cpu: "4"
+    #    memory: "2G"
+
+  # -- Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. system properties
+  additionalJvmArgs: []
+#    - -Dfoo=bar
+#    - -Dfruit=lemon
+
+  # -- Specifies a list of additional Java libraries that should be added to the Confluence container.
+  # Each item in the list should specify the name of the volume which contain the library, as well as the name of the
+  # library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which
+  # directory in the volume contains the library file.
+  additionalLibraries: []
+#    - volumeName:
+#      subDirectory:
+#      fileName:
+
+  # -- Specifies a list of additional Confluence plugins that should be added to the Confluence container.
+  # These are specified in the same manner as the additionalLibraries field, but the files will be loaded
+  # as bundled plugins rather than as libraries.
+  additionalBundledPlugins: []
+#    - volumeName:
+#      subDirectory:
+#      fileName:
+
+synchrony:
+  service:
+    # -- The port on which the Synchrony Kubernetes service will listen
+    port: 80
+    # -- The type of Kubernetes service to use for Synchrony
+    type: ClusterIP
+  ports:
+    # -- The port on which the Synchrony container listens for HTTP traffic
+    http: 8091
+    # -- The port on which the Synchrony container listens for Hazelcast traffic
+    hazelcast: 5701
+  readinessProbe:
+    # -- The initial delay (in seconds) for the Synchrony container readiness probe, after which the probe will start running
+    initialDelaySeconds: 5
+    # -- How often (in seconds) the Synchrony container readiness robe will run
+    periodSeconds: 1
+    # -- The number of consecutive failures of the Synchrony container readiness probe before the pod fails readiness checks
+    failureThreshold: 30
+  # -- The base URL of the Synchrony service.
+  # This will be the URL that users' browsers will be given to communicate with Synchrony, as well as the URL that the
+  # Confluence service will use to communicate directly with Synchrony, so the URL must be resovable both from inside and
+  # outside the Kubernetes cluster.
+  ingressUrl:
+
+# -- Specify additional annotations to be added to all Confluence and Synchrony pods
+podAnnotations: {}
+#  "name": "value"
+
+volumes:
+  localHome:
+    # -- Specifies the name of the storage class that should be used for the Confluence local-home volume
+    storageClassName:
+    # -- Specifies the standard Kubernetes resource requests and/or limits for the Confluence local-home volume.
+    resources:
+      requests:
+        storage: 1Gi
+    # -- Specifies the path in the Confluence container to which the local-home volume will be mounted.
+    mountPath: "/var/atlassian/application-data/confluence"
+  sharedHome:
+    # -- Specifies the path in the Confluence container to which the shared-home volume will be mounted.
+    mountPath: "/var/atlassian/application-data/shared-home"
+    # -- Specifies the sub-directory of the shared-home volume which will be mounted in to the Confluence container.
+    subPath:
+    # -- The name of the PersistentVolumeClaim which will be used for the shared-home volume
+    volumeClaimName: confluence-shared-home
+    nfsPermissionFixer:
+      # -- If enabled, this will alter the shared-home volume's root directory so that Confluence can write to it.
+      # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
+      enabled: true
+      # -- The path in the initContainer where the shared-home volume will be mounted
+      mountPath: /shared-home
+      # -- By default, the fixer will change the group ownership of the volume's root directory to match the Confluence
+      # container's GID (2002), and then ensures the directory is group-writeable. If this is not the desired behaviour,
+      # command used can be specified here.
+      command:
+
+# -- Standard Kubernetes node-selectors that will be applied to all Confluence and Synchrony pods
+nodeSelector: {}
+
+# -- Standard Kubernetes tolerations that will be applied to all Confluence and Synchrony pods
+tolerations: []
+
+# -- Standard Kubernetes affinities that will be applied to all Confluence and Synchrony pods
+affinity: {}
+
+# -- Additional container definitions that will be added to all Confluence pods
+additionalContainers: []
+
+# -- Additional initContainer definitions that will be added to all Confluence pods
+additionalInitContainers: []

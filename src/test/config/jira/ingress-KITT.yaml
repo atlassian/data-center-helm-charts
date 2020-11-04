@@ -1,0 +1,20 @@
+# This HTTP Ingress resource is for use on the KITT infrastructure only
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: ${HELM_RELEASE_NAME}
+  annotations:
+    kubernetes.io/ingress.class: "ingress-internal-01"
+spec:
+  virtualhost:
+    fqdn: ${HELM_RELEASE_NAME}.${kubernetes.ingress.domain}
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: ${HELM_RELEASE_NAME}
+          port: 80
+      timeoutPolicy:
+        response: 120s
+      loadBalancerPolicy:
+        strategy: Cookie

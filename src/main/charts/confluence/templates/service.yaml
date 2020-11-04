@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "confluence.fullname" . }}
+  labels:
+    {{- include "confluence.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.confluence.service.type }}
+  ports:
+    - port: {{ .Values.confluence.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.confluence.ports.hazelcast }}
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    {{- include "confluence.selectorLabels" . | nindent 4 }}

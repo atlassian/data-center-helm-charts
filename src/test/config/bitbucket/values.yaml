@@ -1,0 +1,23 @@
+# This file contains overrides for the Bitbucket Helm chart's values.yaml file
+
+# The service account name used in the dcng namespace of the KITT cluster
+serviceAccountName: "namespace-admin"
+
+# KITT requires these annotations on all pods
+podAnnotations:
+  "atlassian.com/business_unit": "server_engineering"
+
+database:
+  url: jdbc:postgresql://${helm.release.prefix}-bitbucket-pgsql:5432/bitbucket
+  driver: org.postgresql.Driver
+
+bitbucket:
+  resources:
+    container:
+      requests:
+        memory: 2G
+
+volumes:
+  sharedHome:
+    volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
+    subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference

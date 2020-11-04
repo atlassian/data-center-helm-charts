@@ -1,0 +1,2 @@
+The files in this directory contain the captured output of the processed Helm charts for each product,
+i.e. the output of the `helm template` command. These are used for unit testing changes to the Helm charts.

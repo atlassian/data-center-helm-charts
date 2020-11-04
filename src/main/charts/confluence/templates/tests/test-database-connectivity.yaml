@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "confluence.fullname" . }}-db-connectivity-test"
+  annotations:
+    "helm.sh/hook": test
+    {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "confluence.labels" . | nindent 4 }}
+spec:
+  containers:
+    - name: test
+      image: {{ include "confluence.image" . | quote }}
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: JDBC_TYPE
+          value: {{ .Values.database.type | quote }}
+        - name: JDBC_URL
+          value: {{ .Values.database.url | quote }}
+        - name: JDBC_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.credentials.secretName }}
+              key: {{ .Values.database.credentials.usernameSecretKey }}
+        - name: JDBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.credentials.secretName }}
+              key: {{ .Values.database.credentials.passwordSecretKey }}
+        - name: CLASSPATH
+          value: "/opt/atlassian/confluence/confluence/WEB-INF/lib/*"
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          cat <<EOF | jshell - > output.txt
+          var jdbcUrl = System.getenv("JDBC_URL");
+          var jdbcUsername = System.getenv("JDBC_USER");
+          var jdbcPassword = System.getenv("JDBC_PASSWORD");
+
+          System.out.println("Establishing connection to " + jdbcUrl);
+          try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
+             System.out.println("Connection established OK, " + c.getClass());
+          }
+          EOF
+          cat output.txt
+          grep -q "Connection established OK" output.txt
+  restartPolicy: Never

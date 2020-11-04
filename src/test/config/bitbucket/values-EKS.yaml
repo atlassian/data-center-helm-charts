@@ -1,0 +1,3 @@
+bitbucket:
+  proxy:
+    fqdn: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}

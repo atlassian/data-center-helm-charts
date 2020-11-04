@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "jira.fullname" . }}
+  labels:
+    {{- include "jira.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "jira.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "jira.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "jira.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
+      terminationGracePeriodSeconds: 1
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: {{ .Values.jira.gid }}
+      {{- with .Values.additionalInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "jira.image" . | quote }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ATL_TOMCAT_SCHEME
+              value: https
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            - name: ATL_JDBC_URL
+              value: {{ .Values.database.url | quote }}
+            - name: ATL_JDBC_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.credentials.secretName }}
+                  key: {{ .Values.database.credentials.usernameSecretKey }}
+            - name: ATL_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.credentials.secretName }}
+                  key: {{ .Values.database.credentials.passwordSecretKey }}
+            - name: ATL_DB_DRIVER
+              value: {{ .Values.database.driver | quote }}
+            - name: ATL_DB_TYPE
+              value: {{ .Values.database.type | quote }}
+            - name: JIRA_SHARED_HOME
+              value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: {{ include "jira.fullname" . }}-jvm-config
+            - name: CLUSTERED
+              value: "true"
+            - name: JIRA_NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: EHCACHE_LISTENER_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: {{ include "jira.fullname" . }}-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: {{ include "jira.fullname" . }}-jvm-config
+            - name: JVM_RESERVED_CODE_CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reserved_code_cache
+                  name: {{ include "jira.fullname" . }}-jvm-config
+          ports:
+            - name: http
+              containerPort: {{ .Values.jira.ports.http }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.jira.ports.http }}
+              path: /status
+            initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
+          {{- with .Values.jira.resources.container }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: local-home
+              mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+            - name: shared-home
+              mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
+              {{- if .Values.volumes.sharedHome.subPath }}
+              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+              {{- end }}
+            {{- include "jira.additionalLibraries" . | nindent 12 }}
+            {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
+        {{- with .Values.additionalContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: shared-home
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+  volumeClaimTemplates:
+    - metadata:
+        name: local-home
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if .Values.volumes.localHome.storageClassName }}
+        storageClassName: {{ .Values.volumes.localHome.storageClassName | quote }}
+        {{- end }}
+        {{- with .Values.volumes.localHome.resources }}
+        resources:
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
