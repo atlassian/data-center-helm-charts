@@ -12,6 +12,19 @@ confluence:
     container:
       requests:
         memory: 2G
+  additionalBundledPlugins:
+    - volumeName: shared-home
+      subDirectory: ${helm.release.prefix}-confluence
+      fileName: confluence-functestrpc-plugin-7.10.0-SNAPSHOT.jar
+    - volumeName: shared-home
+      subDirectory: ${helm.release.prefix}-confluence
+      fileName: confluence-functest-rest-plugin-7.10.0-SNAPSHOT.jar
+    - volumeName: shared-home
+      subDirectory: ${helm.release.prefix}-confluence
+      fileName: confluence-scriptsfinished-plugin-7.10.0-SNAPSHOT.jar
+    - volumeName: shared-home
+      subDirectory: ${helm.release.prefix}-confluence
+      fileName: atlassian-universal-plugin-manager-javascript-tests-4.2.6.jar
 
 database:
   type: postgresql

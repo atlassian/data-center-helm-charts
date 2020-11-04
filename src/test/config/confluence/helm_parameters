@@ -7,6 +7,7 @@ DB_NAME=confluence
 POSTGRES_CHART_VERSION=9.4.1
 POSTGRES_APP_VERSION=10
 LOG_DOWNLOAD_DIR=${project.build.directory}/logs
+ADDITIONAL_PLUGINS_DIR=${project.build.directory}/additional-plugins
 TARGET_NAMESPACE=${kubernetes.target.namespace}
 DOCKER_IMAGE_REGISTRY=${dockerImage.registry}
 DOCKER_IMAGE_VERSION=${dockerImage.version}

@@ -45,6 +45,12 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
 
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
+if [[ -d $ADDITIONAL_PLUGINS_DIR ]]
+then
+  "$THISDIR"/shared_home_browser_install.sh "${TARGET_NAMESPACE}"
+  kubectl cp "$ADDITIONAL_PLUGINS_DIR"/* shared-home-browser:/shared-home/"$PRODUCT_RELEASE_NAME"
+fi
+
 for file in ${PRODUCT_CHART_VALUES_FILES}.yaml ${PRODUCT_CHART_VALUES_FILES}-${clusterType}.yaml ; do
   [ -f "$file" ] && valueOverrides+="--values $file "
 done
