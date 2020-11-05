@@ -13,6 +13,7 @@ A chart for installing Bitbucket DC on Kubernetes
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket pods |
 | bitbucket.additionalBundledPlugins | list | `[]` | Specifies a list of additional Bitbucket plugins that should be added to the Bitbucket container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | bitbucket.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bitbucket container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
+| bitbucket.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bitbucket container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | bitbucket.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Bitbucket license key |
 | bitbucket.license.secretName | string | `"bitbucket-license"` | The name of the Kubernetes Secret which contains the Bitbucket license key |
@@ -46,6 +47,7 @@ A chart for installing Bitbucket DC on Kubernetes
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of Bitbucket. |
 | serviceAccountName | string | `nil` | Specifies which serviceAccount to use for the pods. If not specified, the kubernetes default will be used. |
 | tolerations | list | `[]` | Standard Kubernetes tolerations that will be applied to all Bitbucket pods |
+| volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Bitbucket pods. Note that this will not create any corresponding volume mounts; those needs to be defined in bitbucket.additionalVolumeMounts |
 | volumes.localHome.mountPath | string | `"/var/atlassian/application-data/bitbucket"` |  |
 | volumes.localHome.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket local-home volume. |
 | volumes.localHome.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the Bitbucket local-home volume |
