@@ -140,6 +140,8 @@ spec:
               mountPath: "/var/atlassian/application-data/jira"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - mountPath: /extra
+              name: extra-volume
             - name: libs-volume
               mountPath: "/opt/atlassian/jira/lib/mylib.jar"
               subPath: "libs/mylib.jar"
@@ -150,6 +152,9 @@ spec:
         - name: shared-home
           persistentVolumeClaim:
             claimName: jira-shared-home
+        - hostPath:
+            path: /data
+          name: extra-volume
   volumeClaimTemplates:
     - metadata:
         name: local-home

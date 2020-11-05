@@ -89,6 +89,10 @@ jira:
   #    subDirectory:
   #    fileName:
 
+  # -- Defines any additional volumes mounts for the Jira container.
+  # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
+  additionalVolumeMounts: []
+
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}
 #  "name": "value"
@@ -120,6 +124,10 @@ volumes:
       # container's GID (2001), and then ensures the directory is group-writeable. If this is not the desired behaviour,
       # command used can be specified here.
       command:
+  # -- Defines additional volumes that should be applied to all Jira pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in jira.additionalVolumeMounts
+  additional: []
 
 # -- Standard Kubernetes node-selectors that will be applied to all Jira pods
 nodeSelector: {}

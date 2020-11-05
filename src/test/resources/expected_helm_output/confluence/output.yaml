@@ -220,6 +220,8 @@ spec:
               mountPath: "/var/atlassian/application-data/confluence"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - mountPath: /extra
+              name: extra-volume
             - name: libs-volume
               mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/lib/mylib.jar"
               subPath: "libs/mylib.jar"
@@ -286,6 +288,9 @@ spec:
         - name: shared-home
           persistentVolumeClaim:
             claimName: confluence-shared-home
+        - hostPath:
+            path: /dat
+          name: extra-volume
   volumeClaimTemplates:
     - metadata:
         name: local-home

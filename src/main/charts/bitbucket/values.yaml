@@ -99,6 +99,10 @@ bitbucket:
   #    subDirectory:
   #    fileName:
 
+  # -- Defines any additional volumes mounts for the Bitbucket container.
+  # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
+  additionalVolumeMounts: []
+
 # -- Specify custom annotations to be added to all Bitbucket pods
 podAnnotations: {}
 #  "name": "value"
@@ -129,6 +133,10 @@ volumes:
       # container's GID (2003), and then ensures the directory is group-writeable. If this is not the desired behaviour,
       # command used can be specified here.
       command:
+  # -- Defines additional volumes that should be applied to all Bitbucket pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in bitbucket.additionalVolumeMounts
+  additional: []
 
 # -- Standard Kubernetes node-selectors that will be applied to all Bitbucket pods
 nodeSelector: {}

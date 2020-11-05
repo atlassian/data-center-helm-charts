@@ -16,3 +16,12 @@ jira:
     - volumeName: plugins-volume
       subDirectory: plugins
       fileName: myplugin.jar
+  additionalVolumeMounts:
+    - name: extra-volume
+      mountPath: /extra
+
+volumes:
+  additional:
+    - name: extra-volume
+      hostPath:
+        path: /data

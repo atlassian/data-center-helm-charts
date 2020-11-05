@@ -111,6 +111,9 @@ spec:
               {{- if .Values.volumes.sharedHome.subPath }}
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
+            {{- with .Values.jira.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
             {{- include "jira.additionalLibraries" . | nindent 12 }}
             {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
         {{- with .Values.additionalContainers }}
@@ -132,6 +135,9 @@ spec:
         - name: shared-home
           persistentVolumeClaim:
             claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+        {{- with .Values.volumes.additional }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: local-home
