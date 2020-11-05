@@ -34,7 +34,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "jira.image" . | quote }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: ATL_TOMCAT_SCHEME
               value: https

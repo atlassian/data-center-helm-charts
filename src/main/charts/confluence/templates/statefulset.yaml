@@ -34,7 +34,7 @@ spec:
       containers:
         - name: confluence
           image: {{ include "confluence.image" . | quote }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.confluence.ports.http }}
