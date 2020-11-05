@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 data:
   additional_jvm_args: >-
   max_heap: 1g
@@ -26,6 +27,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   type: ClusterIP
   ports:
@@ -56,6 +58,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   replicas: 1
   serviceName: unittest-bitbucket
@@ -214,6 +217,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: test
@@ -245,6 +249,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: test
@@ -302,6 +307,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: required-values-test
@@ -341,6 +347,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: test
@@ -379,6 +386,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.7.0-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
   annotations:
     "helm.sh/hook": pre-install
 spec:
@@ -391,6 +399,7 @@ spec:
         app.kubernetes.io/instance: unittest-bitbucket
         app.kubernetes.io/version: "7.7.0-jdk11"
         app.kubernetes.io/managed-by: Helm
+        label1: value1
     spec:
       restartPolicy: Never
       containers:

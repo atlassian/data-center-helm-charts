@@ -26,4 +26,7 @@ volumes:
   additional:
     - name: extra-volume
       hostPath:
-        path: /dat
+        path: /data
+
+additionalLabels:
+  label1: value1
