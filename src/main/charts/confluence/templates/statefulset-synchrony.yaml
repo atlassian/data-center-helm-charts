@@ -26,7 +26,7 @@ spec:
       containers:
         - name: synchrony
           image: {{ include "confluence.image" . | quote }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
             - mountPath: /scripts

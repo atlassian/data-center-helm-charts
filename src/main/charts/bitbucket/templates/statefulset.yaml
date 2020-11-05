@@ -35,7 +35,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "bitbucket.image" . | quote }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.bitbucket.ports.http }}
