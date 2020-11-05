@@ -82,6 +82,11 @@ bitbucket:
     #    cpu: "4"
     #    memory: "2G"
 
+  # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties
+  additionalJvmArgs:
+  #    - -Dfoo=bar
+  #    - -Dfruit=lemon
+
   # -- Specifies a list of additional Java libraries that should be added to the Bitbucket container.
   # Each item in the list should specify the name of the volume which contain the library, as well as the name of the
   # library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which

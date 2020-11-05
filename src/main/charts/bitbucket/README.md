@@ -12,6 +12,7 @@ A chart for installing Bitbucket DC on Kubernetes
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Bitbucket pods |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket pods |
 | bitbucket.additionalBundledPlugins | list | `[]` | Specifies a list of additional Bitbucket plugins that should be added to the Bitbucket container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
+| bitbucket.additionalJvmArgs | string | `nil` | Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties |
 | bitbucket.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bitbucket container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | bitbucket.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Bitbucket license key |
