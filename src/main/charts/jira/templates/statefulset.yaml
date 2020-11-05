@@ -88,6 +88,7 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: {{ include "jira.fullname" . }}-jvm-config
+            {{- toYaml .Values.jira.additionalEnvironmentVariables | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.jira.ports.http }}

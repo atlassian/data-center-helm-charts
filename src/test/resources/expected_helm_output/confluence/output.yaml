@@ -284,6 +284,8 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-confluence-jvm-config
+            - name: var1
+              value: val1
       volumes:
         - name: shared-home
           persistentVolumeClaim:

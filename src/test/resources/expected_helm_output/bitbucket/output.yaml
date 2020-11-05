@@ -185,6 +185,8 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: unittest-bitbucket-jvm-config
+            - name: var1
+              value: val1
       volumes:
         - name: shared-home
           persistentVolumeClaim:

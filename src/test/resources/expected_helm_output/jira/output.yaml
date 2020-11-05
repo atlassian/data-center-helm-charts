@@ -124,6 +124,8 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-jira-jvm-config
+            - name: var1
+              value: val1
           ports:
             - name: http
               containerPort: 8080
