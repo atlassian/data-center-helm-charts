@@ -12,6 +12,8 @@ database:
   driver: org.postgresql.Driver
 
 bitbucket:
+  additionalJvmArgs:
+    - -Dfeature.getting.started.page=false
   resources:
     container:
       requests:
