@@ -147,7 +147,9 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: {{ include "bitbucket.fullname" . }}-jvm-config
-            {{- toYaml .Values.bitbucket.additionalEnvironmentVariables | nindent 12 }}
+            {{- with .Values.bitbucket.additionalEnvironmentVariables }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         {{- with .Values.additionalContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

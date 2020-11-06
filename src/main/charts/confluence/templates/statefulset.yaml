@@ -122,7 +122,9 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: {{ include "confluence.fullname" . }}-jvm-config
-            {{- toYaml .Values.confluence.additionalEnvironmentVariables | nindent 12 }}
+            {{- with .Values.confluence.additionalEnvironmentVariables }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         {{- with .Values.additionalContainers }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
