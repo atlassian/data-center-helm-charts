@@ -147,3 +147,6 @@ additionalContainers: []
 
 # -- Additional initContainer definitions that will be added to all Jira pods
 additionalInitContainers: []
+
+# -- Additional labels that should be applied to all resources
+additionalLabels: {}

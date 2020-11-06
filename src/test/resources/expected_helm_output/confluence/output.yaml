@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 data:
   additional_jvm_args: >-
     -Dconfluence.cluster.hazelcast.listenPort=5701
@@ -47,6 +48,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   type: ClusterIP
   ports:
@@ -73,6 +75,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   type: ClusterIP
   ports:
@@ -99,6 +102,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   replicas: 1
   serviceName: unittest-confluence-synchrony
@@ -179,6 +183,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   replicas: 1
   serviceName: unittest-confluence
@@ -291,7 +296,7 @@ spec:
           persistentVolumeClaim:
             claimName: confluence-shared-home
         - hostPath:
-            path: /dat
+            path: /data
           name: extra-volume
   volumeClaimTemplates:
     - metadata:
@@ -315,6 +320,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: test
@@ -345,6 +351,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: test
@@ -398,6 +405,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: required-values-test
@@ -435,6 +443,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
 spec:
   containers:
     - name: test
@@ -473,6 +482,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-beta1-jdk11"
     app.kubernetes.io/managed-by: Helm
+    label1: value1
   annotations:
     "helm.sh/hook": pre-install
 spec:
@@ -485,6 +495,7 @@ spec:
         app.kubernetes.io/instance: unittest-confluence
         app.kubernetes.io/version: "7.9.0-beta1-jdk11"
         app.kubernetes.io/managed-by: Helm
+        label1: value1
     spec:
       restartPolicy: Never
       containers:

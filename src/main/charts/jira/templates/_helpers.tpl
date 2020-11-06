@@ -43,6 +43,7 @@ helm.sh/chart: {{ include "jira.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ toYaml .Values.additionalLabels }}
 {{- end }}
 
 {{/*
