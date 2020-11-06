@@ -19,7 +19,7 @@ whether it be a managed environment such as Amazon EKS, or a custom, on-premise 
 
 ## Documentation
 
-[Here](docs/DOCUMENTATION.md)
+[Here](docs/INSTALL.md)
 
 ## Contributions
 
