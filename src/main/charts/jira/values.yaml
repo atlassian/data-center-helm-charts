@@ -93,6 +93,10 @@ jira:
   # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
   additionalVolumeMounts: []
 
+  # -- Defines any additional environment variables to be passed to the Jira container.
+  # See https://hub.docker.com/r/atlassian/jira-software for supported variables.
+  additionalEnvironmentVariables: []
+
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}
 #  "name": "value"

@@ -19,6 +19,9 @@ jira:
   additionalVolumeMounts:
     - name: extra-volume
       mountPath: /extra
+  additionalEnvironmentVariables:
+    - name: var1
+      value: val1
 
 volumes:
   additional:

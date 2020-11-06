@@ -21,6 +21,7 @@ A chart for installing Jira DC on Kubernetes
 | image.repository | string | `"atlassian/jira-software"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
 | jira.additionalBundledPlugins | list | `[]` | Specifies a list of additional Jira plugins that should be added to the Jira container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
+| jira.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Jira container. See https://hub.docker.com/r/atlassian/jira-software for supported variables. |
 | jira.additionalJvmArgs | string | `nil` | Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. system properties |
 | jira.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Jira container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | jira.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Jira container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |

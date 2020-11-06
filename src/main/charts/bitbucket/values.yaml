@@ -108,6 +108,10 @@ bitbucket:
   # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
   additionalVolumeMounts: []
 
+  # -- Defines any additional environment variables to be passed to the Bitbucket container.
+  # See https://hub.docker.com/r/atlassian/bitbucket-server for supported variables.
+  additionalEnvironmentVariables: []
+
 # -- Specify custom annotations to be added to all Bitbucket pods
 podAnnotations: {}
 #  "name": "value"

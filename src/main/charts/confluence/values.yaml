@@ -97,6 +97,10 @@ confluence:
   # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
   additionalVolumeMounts: []
 
+  # -- Defines any additional environment variables to be passed to the Confluence container.
+  # See https://hub.docker.com/r/atlassian/confluence-server for supported variables.
+  additionalEnvironmentVariables: []
+
 synchrony:
   service:
     # -- The port on which the Synchrony Kubernetes service will listen
