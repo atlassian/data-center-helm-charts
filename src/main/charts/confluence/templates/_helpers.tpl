@@ -57,7 +57,9 @@ helm.sh/chart: {{ include "confluence.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ toYaml .Values.additionalLabels }}
+{{ with .Values.additionalLabels }}
+{{- toYaml . }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -70,7 +72,9 @@ helm.sh/chart: {{ include "confluence.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ toYaml .Values.additionalLabels }}
+{{ with .Values.additionalLabels }}
+{{- toYaml . }}
+{{- end }}
 {{- end }}
 
 {{/*
