@@ -129,6 +129,15 @@ By default, the JVM maximum heap size is set to 1 GB, so if you increase
 the JVM's max heap size, otherwise the JVM won't take advantage of the extra 
 available memory (or it'll crash if there isn't enough).
 
+You specify the JVM memory limits like this:
+
+```yaml
+jira:
+  resources:
+    jvm:
+      maxHeap: "8g"
+```
+
 Another difficulty for specifying memory resources is that the JVM requires
 additional overheads over and above the max heap size, and the container resources 
 need to take account of that.  A safe rule-of-thumb would be for the container
