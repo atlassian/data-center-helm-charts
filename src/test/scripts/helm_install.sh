@@ -51,6 +51,7 @@ done
 
 [ -n "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
 [ -n "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
+valueOverrides+="--set image.pullPolicy=Always "
 
 # Ask Helm to generate the YAML that it will send to Kubernetes in the "install" step later, so
 # that we can look at it for diagnostics.
