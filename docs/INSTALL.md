@@ -86,6 +86,9 @@ contains example ingress definitions for the Contour and nginx ingress controlle
 The exact details of the ingress resource will be highly site-specific, but these
 examples can be used as a guide.
 
+At a minimum, the ingress needs to support the ability to support long request timeouts, as
+well as session affinity (aka "sticky sessions").
+
 ## Chart values
 Each product's chart contains a large number of configurable options, most 
 of which are optional, but a few of which are mandatory. These values can all be specified 
@@ -103,4 +106,20 @@ must be provided by the installer:
 * [bitbucket] `bitbucket.proxy.fqdn` should be the FQDN of the Bitbucket URL
 
 Each chart's README file documents every configurable value. 
+
+See [CONFIG.md]() for examples of what can be done.
     
+# Scaling up Data Center
+
+By default, the Helm charts will provision a `StatefulSet` with 1 `replicaCount` of 1.
+The `replicaCount` can be altered at runtime to provision a multi-node 
+Data Center cluster, with no further configuration required (although note
+that the Ingress must support cookie-based sessin affinity in order for the 
+products to work correctly in a multi-node configuration).
+
+It is important to note, however, that both Jira and Confluence must initially
+be deployed with a `replicaCount` of 1, then be fully configured via the web interface,
+and only once setup is complete can they be scaled up to more replicas.
+
+In the case of Bitbucket, this intermediate step is unecessary, and a BitBucket
+deployment can be configure with a >1 `replicaCount` from the start.
