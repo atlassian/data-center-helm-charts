@@ -1,0 +1,16 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+Please run sanity tests against the release to verify it's healthy:
+
+  $ helm test {{ .Release.Name }} --logs
+
+If the Kubernetes resources in the release are still starting up, then the tests may fail, so it
+is advisable to wait for the tests to pass before continuing.
+
+To see the custom values you used for this release:
+
+  $ helm get values {{ .Release.Name }}
+
+For further documentation, see https://github.com/atlassian-labs/data-center-helm-charts/tree/master/docs
