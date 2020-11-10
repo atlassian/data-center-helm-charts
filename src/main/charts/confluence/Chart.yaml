@@ -3,4 +3,4 @@ name: confluence
 description: A chart for installing Confluence DC on Kubernetes
 type: application
 version: 0.1.0
-appVersion: 7.9.0-beta1-jdk11
+appVersion: 7.9.0-jdk11
