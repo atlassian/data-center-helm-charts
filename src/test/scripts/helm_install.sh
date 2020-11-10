@@ -41,7 +41,7 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    --set postgresqlUsername="$PRODUCT_NAME" \
    --set postgresqlPassword="$PRODUCT_NAME" \
    --version "$POSTGRES_CHART_VERSION" \
-   bitnami/postgresql
+   bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
@@ -70,7 +70,13 @@ helm package "$CHART_SRC_PATH" \
 helm install -n "${TARGET_NAMESPACE}" --wait \
    "$PRODUCT_RELEASE_NAME" \
    ${valueOverrides} \
-   "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz || { kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp ; exit 1; }
+   "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+
+if [ $? -ne 0 ]
+then
+  kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp
+  exit 1;
+fi
 
 # Run the chart's tests
 helm test "$PRODUCT_RELEASE_NAME" --logs -n "${TARGET_NAMESPACE}"
