@@ -29,6 +29,8 @@ esac)
 # Install the bitnami postgresql Helm chart
 helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
 
+mkdir -p "$LOG_DOWNLOAD_DIR"
+
 # Use the product name for the name of the postgres database, username and password.
 # These must match the credentials stored in the Secret pre-loaded into the namespace,
 # which the application will use to connect to the database.
@@ -42,8 +44,6 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    --set postgresqlPassword="$PRODUCT_NAME" \
    --version "$POSTGRES_CHART_VERSION" \
    bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
-
-mkdir -p "$LOG_DOWNLOAD_DIR"
 
 for file in ${PRODUCT_CHART_VALUES_FILES}.yaml ${PRODUCT_CHART_VALUES_FILES}-${clusterType}.yaml ; do
   [ -f "$file" ] && valueOverrides+="--values $file "
