@@ -18,6 +18,13 @@
         <url>scm:git:git@github.com:atlassian-labs/data-center-helm-charts.git</url>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>atlassian-public</id>
+            <url>https://packages.atlassian.com/mvn/maven-external/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.assertj</groupId>
