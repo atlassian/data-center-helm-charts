@@ -3,7 +3,7 @@
 set -e
 
 # The directory, relative to the git repository root, where the Helm charts are stored
-CHARTS_SRC_DIR="helm/src/main/charts"
+CHARTS_SRC_DIR="src/main/charts"
 
 # The directory into which the script will export tagged versions of the charts for packaging
 TMP_DIR="target/tags"
@@ -40,6 +40,7 @@ packageChartsForTag() {
 discoverAndPackageChartVersions() {
   rm -rf "$CLONE_DIR"
 
+  echo "Looking for git tags"
   while read -r tag
   do
     if isSemver "$tag"

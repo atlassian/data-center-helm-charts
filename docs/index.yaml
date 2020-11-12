@@ -1,0 +1,36 @@
+apiVersion: v1
+entries:
+  bitbucket:
+  - apiVersion: v2
+    appVersion: 7.7.0-jdk11
+    created: "2020-11-12T10:25:18.554170207Z"
+    description: A chart for installing Bitbucket DC on Kubernetes
+    digest: 9bbb6e7074d6447aa53bd27abe24a85002e456a392909ffdd12491bc4dbf87bf
+    name: bitbucket
+    type: application
+    urls:
+    - bitbucket-0.1.0.tgz
+    version: 0.1.0
+  confluence:
+  - apiVersion: v2
+    appVersion: 7.9.0-jdk11
+    created: "2020-11-12T10:25:18.554866843Z"
+    description: A chart for installing Confluence DC on Kubernetes
+    digest: b0344af9729c89cd7225df2d0335260120b03a4d7617c6b53098107eee5e329e
+    name: confluence
+    type: application
+    urls:
+    - confluence-0.1.0.tgz
+    version: 0.1.0
+  jira:
+  - apiVersion: v2
+    appVersion: 8.13.0-jdk11
+    created: "2020-11-12T10:25:18.555457223Z"
+    description: A chart for installing Jira DC on Kubernetes
+    digest: 0c409b53eb342f04c60fabd242db2c4245debd20307f7da889df19f28beff9f2
+    name: jira
+    type: application
+    urls:
+    - jira-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-11-12T10:25:18.553178105Z"
