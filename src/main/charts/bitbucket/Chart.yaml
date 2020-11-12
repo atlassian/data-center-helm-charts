@@ -4,3 +4,13 @@ description: A chart for installing Bitbucket DC on Kubernetes
 type: application
 version: 0.1.0
 appVersion: 7.7.0-jdk11
+kubeVersion: ">=1.17.x"
+keywords:
+  - Bitbucket
+  - Bitbucket Server
+  - Bitbucket Data Center
+  - Atlassian
+home: https://github.com/atlassian-labs/data-center-helm-charts
+sources:
+  - https://github.com/atlassian-labs/data-center-helm-charts
+deprecated: false
