@@ -85,3 +85,17 @@ helm test "$PRODUCT_RELEASE_NAME" --logs -n "${TARGET_NAMESPACE}"
 HELM_RELEASE_NAME=${PRODUCT_RELEASE_NAME} envsubst < "${PRODUCT_INGRESS_TEMPLATE}-${clusterType}.yaml" >$LOG_DOWNLOAD_DIR/ingress.yaml
 
 kubectl apply -n "${TARGET_NAMESPACE}" --filename $LOG_DOWNLOAD_DIR/ingress.yaml
+
+# wait until the Ingress we just created starts serving up non-error responses - there may be a lag
+INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
+INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${!INGRESS_DOMAIN_VARIABLE_NAME}/"
+echo "Waiting for $INGRESS_URI to be ready"
+while :
+do
+   STATUS_CODE=$(curl -s -o /dev/null -w %{http_code} "$INGRESS_URI")
+   echo "Received status code $STATUS_CODE from $INGRESS_URI"
+   if [ "$STATUS_CODE" -lt 400 ]; then
+     echo "Ingress is ready"
+     break
+   fi
+done
