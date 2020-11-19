@@ -10,6 +10,7 @@ source $1
 RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
 PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
 POSTGRES_RELEASE_NAME=$PRODUCT_RELEASE_NAME-pgsql
+FUNCTEST_RELEASE_NAME=$PRODUCT_RELEASE_NAME-functest
 
 HELM_PACKAGE_DIR=target/helm
 
@@ -81,14 +82,19 @@ fi
 # Run the chart's tests
 helm test "$PRODUCT_RELEASE_NAME" --logs -n "${TARGET_NAMESPACE}"
 
-# Install an ingress route to allow access to Bitbucket from outside the k8s cluster
-HELM_RELEASE_NAME=${PRODUCT_RELEASE_NAME} envsubst < "${PRODUCT_INGRESS_TEMPLATE}-${clusterType}.yaml" >$LOG_DOWNLOAD_DIR/ingress.yaml
+# Package and install he functest helm chart
+helm package "$THISDIR/../charts/functest" --destination "$HELM_PACKAGE_DIR"
 
-kubectl apply -n "${TARGET_NAMESPACE}" --filename $LOG_DOWNLOAD_DIR/ingress.yaml
+INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
+INGRESS_DOMAIN=${!INGRESS_DOMAIN_VARIABLE_NAME}
+
+helm install --wait \
+   "$FUNCTEST_RELEASE_NAME" \
+   --set clusterType="${clusterType}",ingressDomain="$INGRESS_DOMAIN",productReleaseName="$PRODUCT_RELEASE_NAME",product="$PRODUCT_NAME" \
+   "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
-INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
-INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${!INGRESS_DOMAIN_VARIABLE_NAME}/"
+INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${INGRESS_DOMAIN}/"
 echo "Waiting for $INGRESS_URI to be ready"
 while :
 do
