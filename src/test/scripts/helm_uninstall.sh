@@ -11,14 +11,6 @@ PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
 POSTGRES_RELEASE_NAME=$PRODUCT_RELEASE_NAME-pgsql
 FUNCTEST_RELEASE_NAME=$PRODUCT_RELEASE_NAME-functest
 
-#if kubectl get HTTPProxy "$PRODUCT_RELEASE_NAME" 2>/dev/null ; then
-#  ingressType=HTTPProxy
-#else
-#  ingressType=Ingress
-#fi
-#
-#kubectl delete -n "${TARGET_NAMESPACE}" ${ingressType} "$PRODUCT_RELEASE_NAME"
-
 helm uninstall -n "${TARGET_NAMESPACE}" "${FUNCTEST_RELEASE_NAME}"
 helm uninstall -n "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}"
 helm uninstall -n "${TARGET_NAMESPACE}" "${POSTGRES_RELEASE_NAME}"
