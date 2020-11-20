@@ -96,12 +96,15 @@ helm install --wait \
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
 INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${INGRESS_DOMAIN}/"
 echo "Waiting for $INGRESS_URI to be ready"
-while :
+for (( i=0; i<10; ++i ));
 do
    STATUS_CODE=$(curl -s -o /dev/null -w %{http_code} "$INGRESS_URI")
    echo "Received status code $STATUS_CODE from $INGRESS_URI"
    if [ "$STATUS_CODE" -lt 400 ]; then
      echo "Ingress is ready"
      break
+   else
+     echo "Ingress is not yet ready"
+     sleep 3
    fi
 done
