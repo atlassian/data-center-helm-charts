@@ -26,6 +26,7 @@ clusterType=$(case "${currentContext}" in
   *) echo CUSTOM;;
 esac)
 
+echo "Cluster type is $clusterType"
 
 # Install the bitnami postgresql Helm chart
 helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
@@ -82,15 +83,24 @@ fi
 # Run the chart's tests
 helm test "$PRODUCT_RELEASE_NAME" --logs -n "${TARGET_NAMESPACE}"
 
-# Package and install he functest helm chart
-helm package "$THISDIR/../charts/functest" --destination "$HELM_PACKAGE_DIR"
-
+# Package and install the functest helm chart
 INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
 INGRESS_DOMAIN=${!INGRESS_DOMAIN_VARIABLE_NAME}
+FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
+FUNCTEST_CHART_VALUES=clusterType=$clusterType,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME
+
+helm template \
+   "$FUNCTEST_RELEASE_NAME" \
+   "$FUNCTEST_CHART_PATH" \
+   --set "$FUNCTEST_CHART_VALUES" \
+   > "$LOG_DOWNLOAD_DIR/$FUNCTEST_RELEASE_NAME.yaml"
+
+helm package "$FUNCTEST_CHART_PATH" --destination "$HELM_PACKAGE_DIR"
 
 helm install --wait \
+   -n "${TARGET_NAMESPACE}" \
    "$FUNCTEST_RELEASE_NAME" \
-   --set clusterType="${clusterType}",ingressDomain="$INGRESS_DOMAIN",productReleaseName="$PRODUCT_RELEASE_NAME",product="$PRODUCT_NAME" \
+   --set "$FUNCTEST_CHART_VALUES" \
    "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
