@@ -1,7 +1,12 @@
+{{- if eq "EKS" .Values.clusterType }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: ${HELM_RELEASE_NAME}
+  name: {{ .Values.productReleaseName }}
+  labels:
+    "app.kubernetes.io/managed-by": "Helm"
+    "meta.helm.sh/release-name": {{ .Release.Name | quote }}
+    "meta.helm.sh/release-namespace": {{ .Release.Namespace | quote }}
   annotations:
     "kubernetes.io/ingress.class": nginx
     "nginx.ingress.kubernetes.io/affinity": cookie
@@ -11,14 +16,17 @@ metadata:
     "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
 spec:
   rules:
-    - host: ${HELM_RELEASE_NAME}.${eks.ingress.domain}
+    - host: {{ printf "%s.%s" .Values.productReleaseName .Values.ingressDomain }}
       http:
         paths:
           - backend:
-              serviceName: ${HELM_RELEASE_NAME}
+              serviceName: {{ .Values.productReleaseName }}
               servicePort: 80
             path: /
+          {{- if eq "confluence" .Values.product }}
           - backend:
-              serviceName: ${HELM_RELEASE_NAME}-synchrony
+              serviceName: {{ .Values.productReleaseName }}-synchrony
               servicePort: 80
             path: /synchrony
+          {{ end }}
+{{ end }}
