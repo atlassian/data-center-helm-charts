@@ -48,6 +48,50 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+The name of the service account to be used.
+If the name is defined in the chart values, then use that,
+else if we're creating a new service account then use the name of the Helm release,
+else just use the "default" service account.
+*/}}
+{{- define "confluence.serviceAccountName" -}}
+{{- if .Values.serviceAccount.name }}
+{{- .Values.serviceAccount.name }}
+{{- else }}
+{{- if .Values.serviceAccount.create }}
+{{- include "confluence.fullname" . -}}
+{{ else }}
+default
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+The name of the ClusterRole that will be created.
+If the name is defined in the chart values, then use that,
+else use the name of the Helm release.
+*/}}
+{{- define "confluence.clusterRoleName" -}}
+{{- if .Values.serviceAccount.clusterRole.name }}
+{{- .Values.serviceAccount.clusterRole.name }}
+{{- else }}
+{{- include "confluence.fullname" . -}}
+{{- end }}
+{{- end }}
+
+{{/*
+The name of the ClusterRoleBinding that will be created.
+If the name is defined in the chart values, then use that,
+else use the name of the ClusterRole.
+*/}}
+{{- define "confluence.clusterRoleBindingName" -}}
+{{- if .Values.serviceAccount.clusterRoleBinding.name }}
+{{- .Values.serviceAccount.clusterRoleBinding.name }}
+{{- else }}
+{{- include "confluence.clusterRoleName" . -}}
+{{- end }}
+{{- end }}
+
+{{/*
 These labels will be applied to all Confluence (non-Synchrony) resources in the chart
 */}}
 {{- define "confluence.labels" -}}
