@@ -1,4 +1,17 @@
 ---
+# Source: confluence/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unittest-confluence
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+---
 # Source: confluence/templates/config-jvm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -36,6 +49,50 @@ data:
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
        sql
+---
+# Source: confluence/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: unittest-confluence
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+      - pods
+      - nodes
+    verbs:
+      - get
+      - list
+---
+# Source: confluence/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: unittest-confluence
+  labels:
+    helm.sh/chart: confluence-0.1.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.9.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: unittest-confluence
+subjects:
+  - kind: ServiceAccount
+    name: unittest-confluence
+    namespace:  mynamespace
 ---
 # Source: confluence/templates/service-synchrony.yaml
 apiVersion: v1
@@ -116,6 +173,7 @@ spec:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
     spec:
+      serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 1
       containers:
         - name: synchrony
@@ -197,6 +255,7 @@ spec:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
     spec:
+      serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 1
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Cnfluence container.

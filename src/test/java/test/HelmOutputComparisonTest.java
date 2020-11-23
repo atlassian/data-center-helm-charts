@@ -47,6 +47,7 @@ class HelmOutputComparisonTest {
                         getHelmReleaseName(product),
                         getHelmChartPath(product).toString(),
                         "--debug",
+                        "-n mynamespace",
                         "--values",
                         getHelmValuesFile(product).toString())
                 .redirectOutput(outputFile.toFile())
