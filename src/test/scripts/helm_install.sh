@@ -81,7 +81,7 @@ then
 fi
 
 # Run the chart's tests
-helm test "$PRODUCT_RELEASE_NAME" --logs -n "${TARGET_NAMESPACE}"
+helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 
 # Package and install the functest helm chart
 INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
