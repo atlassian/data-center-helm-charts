@@ -9,8 +9,15 @@ image:
   # -- The docker image tag to be used. Defaults to the Chart appVersion.
   tag: ""
 
-# -- Specifies which serviceAccount to use for the pods. If not specified, the kubernetes default will be used.
-serviceAccountName:
+serviceAccount:
+  # -- Specifies the name of the ServiceAccount to be used by the pods.
+  # If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
+  # otherwise the 'default' ServiceAccount will be used.
+  name:
+  # -- true if a ServiceAccount should be created, or false if it already exists
+  create: true
+  # -- The list of image pull secrets that should be added to the created ServiceAccount
+  imagePullSecrets: []
 
 database:
   # -- The type of database being used.

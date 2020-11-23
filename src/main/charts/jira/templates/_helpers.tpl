@@ -34,6 +34,24 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+The name of the service account to be used.
+If the name is defined in the chart values, then use that,
+else if we're creating a new service account then use the name of the Helm release,
+else just use the "default" service account.
+*/}}
+{{- define "jira.serviceAccountName" -}}
+{{- if .Values.serviceAccount.name }}
+{{- .Values.serviceAccount.name }}
+{{- else }}
+{{- if .Values.serviceAccount.create }}
+{{- include "jira.fullname" . -}}
+{{ else }}
+default
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "jira.labels" -}}

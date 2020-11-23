@@ -1,0 +1,14 @@
+# This file contains overrides for the Confluence Helm chart's values.yaml file
+
+# The created service account needs to have the credentials to pull from the Atlassian docker registry
+serviceAccount:
+  imagePullSecrets:
+    - name: regcred
+
+synchrony:
+  ingressUrl: https://${helm.release.prefix}-confluence.${eks.ingress.domain}/synchrony
+
+volumes:
+  sharedHome:
+    volumeClaimName: efs-claim # Pre-provisioned, and shared by all of our pods
+    subPath: ${helm.release.prefix}-confluence # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference

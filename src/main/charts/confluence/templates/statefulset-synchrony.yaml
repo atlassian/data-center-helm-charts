@@ -19,9 +19,7 @@ spec:
       labels:
         {{- include "synchrony.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.serviceAccountName }}
-      serviceAccountName: {{ .Values.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: 1
       containers:
         - name: synchrony

@@ -1,12 +1,5 @@
 # This file contains overrides for the Confluence Helm chart's values.yaml file
 
-# The service account name used in the dcng namespace of the KITT cluster
-serviceAccountName: "namespace-admin"
-
-# KITT requires these annotations on all pods
-podAnnotations:
-  "atlassian.com/business_unit": "server_engineering"
-
 confluence:
   resources:
     container:
@@ -16,11 +9,3 @@ confluence:
 database:
   type: postgresql
   url: jdbc:postgresql://${helm.release.prefix}-confluence-pgsql:5432/confluence
-
-synchrony:
-  ingressUrl: https://${helm.release.prefix}-confluence.${kubernetes.ingress.domain}/synchrony
-
-volumes:
-  sharedHome:
-    volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
-    subPath: ${helm.release.prefix}-confluence # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
