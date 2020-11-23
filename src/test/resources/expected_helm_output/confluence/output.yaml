@@ -314,6 +314,7 @@ metadata:
   name: "unittest-confluence-application-status-test"
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     helm.sh/chart: confluence-0.1.0
     app.kubernetes.io/name: confluence
@@ -345,6 +346,7 @@ metadata:
   name: "unittest-confluence-db-connectivity-test"
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     helm.sh/chart: confluence-0.1.0
     app.kubernetes.io/name: confluence
@@ -399,6 +401,7 @@ metadata:
   name: "unittest-confluence-required-values-test"
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     helm.sh/chart: confluence-0.1.0
     app.kubernetes.io/name: confluence
@@ -437,6 +440,7 @@ metadata:
   name: "unittest-confluence-shared-home-permissions-test"
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     helm.sh/chart: confluence-0.1.0
     app.kubernetes.io/name: confluence
@@ -485,6 +489,7 @@ metadata:
     label1: value1
   annotations:
     "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     metadata:

@@ -4,6 +4,7 @@ metadata:
   name: "{{ include "bitbucket.fullname" . }}-shared-home-permissions-test"
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
     {{- with .Values.podAnnotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
