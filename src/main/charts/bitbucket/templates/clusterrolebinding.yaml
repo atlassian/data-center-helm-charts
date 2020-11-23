@@ -1,0 +1,16 @@
+{{- if .Values.serviceAccount.clusterRoleBinding.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "bitbucket.clusterRoleBindingName" . }}
+  labels:
+  {{- include "bitbucket.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "bitbucket.clusterRoleName" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "bitbucket.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{ end }}

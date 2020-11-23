@@ -1,4 +1,17 @@
 ---
+# Source: bitbucket/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unittest-bitbucket
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+---
 # Source: bitbucket/templates/config-jvm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -15,6 +28,50 @@ data:
   additional_jvm_args: >-
   max_heap: 1g
   min_heap: 1g
+---
+# Source: bitbucket/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: unittest-bitbucket
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+      - pods
+      - nodes
+    verbs:
+      - get
+      - list
+---
+# Source: bitbucket/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: unittest-bitbucket
+  labels:
+    helm.sh/chart: bitbucket-0.1.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: unittest-bitbucket
+subjects:
+  - kind: ServiceAccount
+    name: unittest-bitbucket
+    namespace:  mynamespace
 ---
 # Source: bitbucket/templates/service.yaml
 apiVersion: v1
@@ -72,6 +129,7 @@ spec:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
     spec:
+      serviceAccountName: unittest-bitbucket
       terminationGracePeriodSeconds: 1
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
