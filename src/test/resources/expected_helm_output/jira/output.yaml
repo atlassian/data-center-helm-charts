@@ -1,4 +1,17 @@
 ---
+# Source: jira/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unittest-jira
+  labels:
+    helm.sh/chart: jira-0.1.0
+    app.kubernetes.io/name: jira
+    app.kubernetes.io/instance: unittest-jira
+    app.kubernetes.io/version: "8.13.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+    label1: value1
+---
 # Source: jira/templates/config-jvm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -65,6 +78,7 @@ spec:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
     spec:
+      serviceAccountName: unittest-jira
       terminationGracePeriodSeconds: 1
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
