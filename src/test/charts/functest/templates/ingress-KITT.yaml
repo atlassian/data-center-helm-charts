@@ -1,24 +1,25 @@
 {{- if eq "KITT" .Values.clusterType }}
+{{- range $serviceName := .Values.ingressNames }}
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: {{ .Values.productReleaseName }}
+  name: {{ $serviceName }}
   annotations:
     kubernetes.io/ingress.class: "ingress-internal-01"
   labels:
     "app.kubernetes.io/managed-by": "Helm"
-    "meta.helm.sh/release-name": {{ .Release.Name | quote }}
-    "meta.helm.sh/release-namespace": {{ .Release.Namespace | quote }}
+    "meta.helm.sh/release-name": {{ $.Release.Name | quote }}
+    "meta.helm.sh/release-namespace": {{ $.Release.Namespace | quote }}
 spec:
   virtualhost:
-    fqdn: {{ printf "%s.%s" .Values.productReleaseName .Values.ingressDomain }}
+    fqdn: {{ printf "%s.%s" $serviceName $.Values.ingressDomain }}
   routes:
     - conditions:
         - prefix: /
       services:
-        - name: {{ .Values.productReleaseName }}
+        - name: {{ $serviceName }}
           port: 80
-          {{- if eq "bitbucket" .Values.product }}
+          {{- if eq "bitbucket" $.Values.product }}
           requestHeadersPolicy:
             remove:
               # we need https and this header would be set to http to match the service port (80). We rely on the SERVER_SCHEME instead
@@ -28,15 +29,17 @@ spec:
         strategy: Cookie
       timeoutPolicy:
         response: 60s
-    {{- if eq "confluence" .Values.product }}
+    {{- if eq "confluence" $.Values.product }}
     - conditions:
         - prefix: /synchrony
       services:
-        - name: {{ .Values.productReleaseName }}-synchrony
+        - name: {{ $serviceName }}-synchrony
           port: 80
       timeoutPolicy:
         response: 120s
       loadBalancerPolicy:
         strategy: Cookie
     {{ end }}
+---
+{{ end }}
 {{ end }}
