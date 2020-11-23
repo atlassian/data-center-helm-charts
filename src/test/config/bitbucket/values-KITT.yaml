@@ -1,3 +1,21 @@
+# Use the pre-created service account and role binding provided by KITT.
+serviceAccount:
+  name: "namespace-admin"
+  create: false
+  clusterRole:
+    create: false
+  clusterRoleBinding:
+    create: false
+
+# KITT requires these annotations on all pods
+podAnnotations:
+  "atlassian.com/business_unit": "server_engineering"
+
 bitbucket:
   proxy:
     fqdn: ${helm.release.prefix}-bitbucket.${kitt.ingress.domain}
+
+volumes:
+  sharedHome:
+    volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
+    subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference

@@ -1,3 +1,0 @@
-bitbucket:
-  proxy:
-    fqdn: ${helm.release.prefix}-bitbucket.${kubernetes.ingress.domain}
