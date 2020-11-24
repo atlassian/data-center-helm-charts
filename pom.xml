@@ -55,6 +55,8 @@
         <kubernetes.ingress.domain>internal.shared-dev.us-west-2.kitt-inf.net</kubernetes.ingress.domain>
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
+
+        <persistence.enabled>true</persistence.enabled>
     </properties>
 
     <build>

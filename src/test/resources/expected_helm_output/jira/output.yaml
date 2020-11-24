@@ -168,20 +168,13 @@ spec:
               mountPath: "/opt/atlassian/jira/atlassian-jira/WEB-INF/atlassian-bundled-plugins/myplugin.jar"
               subPath: "plugins/myplugin.jar"
       volumes:
+        - name: local-home
+          emptyDir: {}
         - name: shared-home
-          persistentVolumeClaim:
-            claimName: jira-shared-home
+          emptyDir: {}
         - hostPath:
             path: /data
           name: extra-volume
-  volumeClaimTemplates:
-    - metadata:
-        name: local-home
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
 ---
 # Source: jira/templates/tests/test-application-status.yaml
 apiVersion: v1

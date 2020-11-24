@@ -51,6 +51,8 @@ for file in ${PRODUCT_CHART_VALUES_FILES}.yaml ${PRODUCT_CHART_VALUES_FILES}-${c
   [ -f "$file" ] && valueOverrides+="--values $file "
 done
 
+test "$PERSISTENT_VOLUMES" = true && valueOverrides+="--set persistence.enabled=true "
+
 [ -n "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
 [ -n "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
 valueOverrides+="--set image.pullPolicy=Always "
