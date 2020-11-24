@@ -24,7 +24,42 @@ class ImageTest {
 
     @ParameterizedTest
     @EnumSource(Product.class)
-    void image(Product product) throws Exception {
+    void image_tag(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "image.tag", "myversion"
+        ));
+
+        resources.getStatefulSets()
+                .forEach(statefulSet ->
+                        assertThat(statefulSet.getContainers()
+                                .path(0)
+                                .path("image")
+                                .asText())
+                                .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
+                                .isEqualTo("%s:myversion", product.getDockerImageName()));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Product.class)
+    void image_registry_and_tag(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "image.registry", "myregistry.io",
+                "image.tag", "myversion"
+        ));
+
+        resources.getStatefulSets()
+                .forEach(statefulSet ->
+                        assertThat(statefulSet.getContainers()
+                                .path(0)
+                                .path("image")
+                                .asText())
+                                .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
+                                .isEqualTo("myregistry.io/%s:myversion", product.getDockerImageName()));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Product.class)
+    void image_registry_repository_tag(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "image.registry", "myregistry.io",
                 "image.repository", "myorg/myimage",
