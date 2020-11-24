@@ -13,6 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static test.model.Kind.ClusterRole;
 import static test.model.Kind.ServiceAccount;
 
+/**
+ * Tests the various permutations of the "serviceAccount" value structure in the Helm charts
+ */
 class ServiceAccountTest {
     private Helm helm;
 

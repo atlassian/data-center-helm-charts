@@ -11,6 +11,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests the various permutations of the "image" value structure in the Helm charts
+ */
 class ImageTest {
     private Helm helm;
 
