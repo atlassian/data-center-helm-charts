@@ -414,6 +414,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     label1: value1
 spec:
+  serviceAccountName: unittest-confluence
   containers:
     - name: test
       image: "atlassian/confluence-server:TESTTAG"

@@ -31,10 +31,6 @@ credentials (username, password, display name and email address)
    can be anything you like, but there are defaults in the charts' `values.yaml` 
    files. These defaults can be used, otherwise the alternative names must be
    specified during installation.   
-* Service account
-   * [confluence and bitbucket] a Kubernetes service account must be configured 
-   that should be used by the product. This account must have permission to query
-   the Kubernetes API to discover other Data Center cluster nodes. 
 * Volumes
    * [all products] Each Data Center node requires a "local home" Persistent Volume 
    with access mode `ReadWriteOnce`. These can be statically provisioned as required,
@@ -88,6 +84,17 @@ examples can be used as a guide.
 
 At a minimum, the ingress needs to support the ability to support long request timeouts, as
 well as session affinity (aka "sticky sessions").
+
+## Service accounts
+By default, the Helm charts will create a `ServiceAccount`. This can be configured with
+`imagePullSecrets` if required. For Bitbucket and Confluence, which require access
+to the Kubernetes API for Data Center peer discovery to work, the charts will also 
+create a `ClusterRole`, and a `ClusterRoleBinding` for the `Serviceccount`.
+
+The creation `ServiceAccount`, `ClusterRole` and `ClusterRoleBinding` can all be disabled
+if required, but Confluence and Bitbuket still require a `ServiceAccount` with Kubernetes
+API access, so either the namespace's default `ServiceAccount` must have the required
+permissions, or the name of the pre-existing `ServiceAccount` must be specified.
 
 ## Chart values
 Each product's chart contains a large number of configurable options, most 

@@ -11,6 +11,7 @@ metadata:
   labels:
     {{- include "confluence.labels" . | nindent 4 }}
 spec:
+  serviceAccountName: {{ include "confluence.serviceAccountName" . }}
   containers:
     - name: test
       image: {{ include "confluence.image" . | quote }}
