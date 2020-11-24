@@ -1,3 +1,13 @@
+# The created service account needs to have the credentials to pull from the Atlassian docker registry
+serviceAccount:
+  imagePullSecrets:
+    - name: regcred
+
 bitbucket:
   proxy:
     fqdn: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
+
+volumes:
+  sharedHome:
+    volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
+    subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference

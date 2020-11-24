@@ -19,7 +19,9 @@ spec:
       labels:
         {{- include "jira.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "jira.serviceAccountName" . }}
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
       terminationGracePeriodSeconds: 1
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
