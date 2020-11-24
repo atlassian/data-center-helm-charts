@@ -9,7 +9,7 @@ import test.model.Product;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.jackson.JsonNodeAssert.assertThat;
 
 /**
  * Tests the various permutations of the "image" value structure in the Helm charts
@@ -31,12 +31,9 @@ class ImageTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers()
-                                .path(0)
-                                .path("image")
-                                .asText())
+                        assertThat(statefulSet.getContainers().single().path("image"))
                                 .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
-                                .isEqualTo("%s:myversion", product.getDockerImageName()));
+                                .hasTextEqualTo("%s:myversion", product.getDockerImageName()));
     }
 
     @ParameterizedTest
@@ -49,12 +46,9 @@ class ImageTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers()
-                                .path(0)
-                                .path("image")
-                                .asText())
+                        assertThat(statefulSet.getContainers().single().path("image"))
                                 .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
-                                .isEqualTo("myregistry.io/%s:myversion", product.getDockerImageName()));
+                                .hasTextEqualTo("myregistry.io/%s:myversion", product.getDockerImageName()));
     }
 
     @ParameterizedTest
@@ -68,12 +62,9 @@ class ImageTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers()
-                                .path(0)
-                                .path("image")
-                                .asText())
+                        assertThat(statefulSet.getContainers().single().path("image"))
                                 .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
-                                .isEqualTo("myregistry.io/myorg/myimage:myversion"));
+                                .hasTextEqualTo("myregistry.io/myorg/myimage:myversion"));
     }
 
     @ParameterizedTest
@@ -84,11 +75,8 @@ class ImageTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers()
-                                .path(0)
-                                .path("imagePullPolicy")
-                                .asText())
+                        assertThat(statefulSet.getContainers().single().path("imagePullPolicy"))
                                 .describedAs("StatefulSet %s should have the configured imagePullPolicy", statefulSet.getName())
-                                .isEqualTo("Always"));
+                                .hasTextEqualTo("Always"));
     }
 }

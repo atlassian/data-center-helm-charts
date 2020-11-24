@@ -10,7 +10,7 @@ import test.model.Product;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static test.model.Kind.ClusterRole;
+import static test.jackson.JsonNodeAssert.assertThat;
 import static test.model.Kind.ServiceAccount;
 
 /**
@@ -34,11 +34,9 @@ class ServiceAccountTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getPodSpec()
-                                .path("serviceAccountName")
-                                .asText())
+                        assertThat(statefulSet.getPodSpec().path("serviceAccountName"))
                                 .describedAs("StatefulSet %s should have the configured ServiceAccount name", statefulSet.getName())
-                                .isEqualTo("foo"));
+                                .hasTextEqualTo("foo"));
     }
 
     @ParameterizedTest
@@ -53,11 +51,9 @@ class ServiceAccountTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getPodSpec()
-                                .path("serviceAccountName")
-                                .asText())
+                        assertThat(statefulSet.getPodSpec().path("serviceAccountName"))
                                 .describedAs("StatefulSet %s should have the default ServiceAccount name", statefulSet.getName())
-                                .isEqualTo("default"));
+                                .hasTextEqualTo("default"));
     }
 
     @ParameterizedTest
@@ -73,10 +69,8 @@ class ServiceAccountTest {
 
         resources.getStatefulSets()
                 .forEach(statefulSet ->
-                        assertThat(statefulSet.getPodSpec()
-                                .path("serviceAccountName")
-                                .asText())
+                        assertThat(statefulSet.getPodSpec().path("serviceAccountName"))
                                 .describedAs("StatefulSet %s should have the configured ServiceAccount name", statefulSet.getName())
-                                .isEqualTo("foo"));
+                                .hasTextEqualTo("foo"));
     }
 }
