@@ -16,17 +16,17 @@ metadata:
     "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
 spec:
   rules:
-    {{- range $ingressName := .Values.ingressNames }}
-    - host: {{ printf "%s.%s" . $.Values.ingressDomain }}
+    {{- range $serviceName := .Values.ingressNames }}
+    - host: {{ printf "%s.%s" $serviceName $.Values.ingressDomain }}
       http:
         paths:
           - backend:
-              serviceName: {{ $ingressName }}
+              serviceName: {{ $serviceName }}
               servicePort: 80
             path: /
           {{- if eq "confluence" $.Values.product }}
           - backend:
-              serviceName: {{ $ingressName }}-synchrony
+              serviceName: {{ $serviceName }}-synchrony
               servicePort: 80
             path: /synchrony
           {{ end }}
