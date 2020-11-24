@@ -11,6 +11,7 @@ metadata:
   labels:
     {{- include "jira.labels" . | nindent 4 }}
 spec:
+  serviceAccountName: {{ include "jira.serviceAccountName" . }}
   containers:
     - name: test
       image: {{ include "jira.image" . | quote }}
