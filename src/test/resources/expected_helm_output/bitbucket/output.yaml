@@ -313,6 +313,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     label1: value1
 spec:
+  serviceAccountName: unittest-bitbucket
   containers:
     - name: test
       image: "atlassian/bitbucket-server:TESTTAG"
