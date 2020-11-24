@@ -1,7 +1,6 @@
 package test.helm;
 
 import io.vavr.collection.HashMap;
-import io.vavr.collection.Map;
 import org.junit.jupiter.api.TestInfo;
 import test.model.KubeResources;
 import test.model.Product;
@@ -11,6 +10,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,9 +46,9 @@ public final class Helm {
         assertThat(exitCode).isEqualTo(0);
     }
 
-    public KubeResources captureKubeResourcesFromHelmChart(Product product, java.util.Map<String, String> values) throws Exception {
+    public KubeResources captureKubeResourcesFromHelmChart(Product product, Map<String, String> values) throws Exception {
         final var outputFile = getHelmTemplateOutputFile(product);
-        captureHelmTemplateOutput(product, outputFile, HashMap.ofAll(values));
+        captureHelmTemplateOutput(product, outputFile, values);
         return KubeResources.parse(outputFile);
     }
 
@@ -60,7 +60,7 @@ public final class Helm {
                         "--debug",
                         "-n mynamespace",
                         "--set",
-                        values.map(pair -> pair.toSeq().mkString("=")).mkString(","))
+                        HashMap.ofAll(values).map(pair -> pair.toSeq().mkString("=")).mkString(","))
                 .redirectOutput(outputFile.toFile())
                 .redirectError(outputFile.toFile())
                 .start();
