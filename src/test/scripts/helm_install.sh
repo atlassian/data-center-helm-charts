@@ -89,10 +89,26 @@ INGRESS_DOMAIN=${!INGRESS_DOMAIN_VARIABLE_NAME}
 FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
 FUNCTEST_CHART_VALUES=clusterType=$clusterType,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME
 
+## build values file for expose node services and ingresses
+## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef 
+NEWLINE=$'\n'
+backdoorServices="backdoorServiceNames:${NEWLINE}"
+ingressServices="ingressNames:${NEWLINE}"
+ingressServices+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
+for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1)) 
+do 
+  backdoorServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
+  ingressServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
+done
+EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
+
+echo "${backdoorServices}${ingressServices}" > ${EXPOSE_NODES_FILE}
+
 helm template \
    "$FUNCTEST_RELEASE_NAME" \
    "$FUNCTEST_CHART_PATH" \
    --set "$FUNCTEST_CHART_VALUES" \
+   --values ${EXPOSE_NODES_FILE} \
    > "$LOG_DOWNLOAD_DIR/$FUNCTEST_RELEASE_NAME.yaml"
 
 helm package "$FUNCTEST_CHART_PATH" --destination "$HELM_PACKAGE_DIR"
@@ -101,6 +117,7 @@ helm install --wait \
    -n "${TARGET_NAMESPACE}" \
    "$FUNCTEST_RELEASE_NAME" \
    --set "$FUNCTEST_CHART_VALUES" \
+   --values ${EXPOSE_NODES_FILE} \
    "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
