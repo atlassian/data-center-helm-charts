@@ -78,6 +78,7 @@ spec:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
     spec:
+      serviceAccountName: unittest-jira
       terminationGracePeriodSeconds: 1
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
