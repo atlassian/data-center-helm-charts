@@ -1,35 +1,7 @@
 # This file contains chart value overrides for the Helm output unit test
-image:
-  tag: TESTTAG
-
 database:
   type: postgresql
   url: jdbc:postgresql://postgresql:5432/confluence
 
 synchrony:
   ingressUrl: https://confluence/synchrony
-
-confluence:
-  additionalLibraries:
-    - volumeName: libs-volume
-      subDirectory: libs
-      fileName: mylib.jar
-  additionalBundledPlugins:
-    - volumeName: plugins-volume
-      subDirectory: plugins
-      fileName: myplugin.jar
-  additionalVolumeMounts:
-    - name: extra-volume
-      mountPath: /extra
-  additionalEnvironmentVariables:
-    - name: var1
-      value: val1
-
-volumes:
-  additional:
-    - name: extra-volume
-      hostPath:
-        path: /data
-
-additionalLabels:
-  label1: value1

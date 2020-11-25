@@ -10,7 +10,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 ---
 # Source: confluence/templates/config-jvm.yaml
 apiVersion: v1
@@ -23,7 +22,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 data:
   additional_jvm_args: >-
     -Dconfluence.cluster.hazelcast.listenPort=5701
@@ -44,7 +42,6 @@ data:
   # we just add every JAR in the Confluence lib directory.
   start-synchrony.sh: |
     #!/usr/bin/env bash
-
     java \
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
@@ -61,7 +58,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 rules:
   - apiGroups:
       - ""
@@ -84,7 +80,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -105,7 +100,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   type: ClusterIP
   ports:
@@ -132,7 +126,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   type: ClusterIP
   ports:
@@ -159,7 +152,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   replicas: 1
   serviceName: unittest-confluence-synchrony
@@ -177,7 +169,7 @@ spec:
       terminationGracePeriodSeconds: 1
       containers:
         - name: synchrony
-          image: "atlassian/confluence-server:TESTTAG"
+          image: "atlassian/confluence-server:7.9.0-jdk11"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -241,7 +233,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   replicas: 1
   serviceName: unittest-confluence
@@ -263,7 +254,7 @@ spec:
         fsGroup: 2002
       containers:
         - name: confluence
-          image: "atlassian/confluence-server:TESTTAG"
+          image: "atlassian/confluence-server:7.9.0-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -284,14 +275,6 @@ spec:
               mountPath: "/var/atlassian/application-data/confluence"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
-            - mountPath: /extra
-              name: extra-volume
-            - name: libs-volume
-              mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/lib/mylib.jar"
-              subPath: "libs/mylib.jar"
-            - name: plugins-volume
-              mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/atlassian-bundled-plugins/myplugin.jar"
-              subPath: "plugins/myplugin.jar"
           env:
             - name: ATL_TOMCAT_SCHEME
               value: https
@@ -348,16 +331,11 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-confluence-jvm-config
-            - name: var1
-              value: val1
       volumes:
         - name: local-home
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
-        - hostPath:
-            path: /data
-          name: extra-volume
 ---
 # Source: confluence/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -373,7 +351,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   containers:
     - name: test
@@ -405,12 +382,11 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   serviceAccountName: unittest-confluence
   containers:
     - name: test
-      image: "atlassian/confluence-server:TESTTAG"
+      image: "atlassian/confluence-server:7.9.0-jdk11"
       imagePullPolicy: IfNotPresent
       env:
         - name: JDBC_TYPE
@@ -437,7 +413,6 @@ spec:
           var jdbcUrl = System.getenv("JDBC_URL");
           var jdbcUsername = System.getenv("JDBC_USER");
           var jdbcPassword = System.getenv("JDBC_PASSWORD");
-
           System.out.println("Establishing connection to " + jdbcUrl);
           try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
              System.out.println("Connection established OK, " + c.getClass());
@@ -461,7 +436,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   containers:
     - name: required-values-test
@@ -500,7 +474,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   containers:
     - name: test
@@ -539,7 +512,6 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.9.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
@@ -553,7 +525,6 @@ spec:
         app.kubernetes.io/instance: unittest-confluence
         app.kubernetes.io/version: "7.9.0-jdk11"
         app.kubernetes.io/managed-by: Helm
-        label1: value1
     spec:
       restartPolicy: Never
       containers:

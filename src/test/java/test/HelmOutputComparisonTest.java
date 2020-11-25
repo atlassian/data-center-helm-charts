@@ -1,12 +1,16 @@
 package test;
 
+import io.vavr.collection.Array;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.platform.commons.util.StringUtils;
 import test.helm.Helm;
 import test.model.Product;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -32,10 +36,17 @@ class HelmOutputComparisonTest {
 
         final var actualOutputFile = helm.captureHelmTemplateOutput(product, getHelmValuesFile(product));
 
+        stripBlankLines(actualOutputFile);
+
         assertThat(expectedHelmOutput.toFile()).exists();
         assertThat(actualOutputFile.toFile()).exists();
 
         assertThat(actualOutputFile).hasSameTextualContentAs(expectedHelmOutput);
+    }
+
+    private static void stripBlankLines(Path file) throws IOException {
+        Files.write(file, Array.ofAll(Files.readAllLines(file))
+                .filter(StringUtils::isNotBlank));
     }
 
     private static Path testResources() {

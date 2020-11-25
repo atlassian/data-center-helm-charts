@@ -10,7 +10,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 ---
 # Source: jira/templates/config-jvm.yaml
 apiVersion: v1
@@ -23,7 +22,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 data:
   additional_jvm_args: >-
   max_heap: 1g
@@ -41,7 +39,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   type: ClusterIP
   ports:
@@ -64,7 +61,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   replicas: 1
   serviceName: unittest-jira
@@ -86,7 +82,7 @@ spec:
         fsGroup: 2001
       containers:
         - name: jira
-          image: "atlassian/jira-software:TESTTAG"
+          image: "atlassian/jira-software:8.13.0-jdk11"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -141,8 +137,6 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-jira-jvm-config
-            - name: var1
-              value: val1
           ports:
             - name: http
               containerPort: 8080
@@ -159,22 +153,11 @@ spec:
               mountPath: "/var/atlassian/application-data/jira"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
-            - mountPath: /extra
-              name: extra-volume
-            - name: libs-volume
-              mountPath: "/opt/atlassian/jira/lib/mylib.jar"
-              subPath: "libs/mylib.jar"
-            - name: plugins-volume
-              mountPath: "/opt/atlassian/jira/atlassian-jira/WEB-INF/atlassian-bundled-plugins/myplugin.jar"
-              subPath: "plugins/myplugin.jar"
       volumes:
         - name: local-home
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
-        - hostPath:
-            path: /data
-          name: extra-volume
 ---
 # Source: jira/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -190,7 +173,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   containers:
     - name: test
@@ -223,12 +205,11 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   serviceAccountName: unittest-jira
   containers:
     - name: test
-      image: "atlassian/jira-software:TESTTAG"
+      image: "atlassian/jira-software:8.13.0-jdk11"
       imagePullPolicy: IfNotPresent
       env:
         - name: JDBC_DRIVER
@@ -256,10 +237,8 @@ spec:
           var jdbcUrl = System.getenv("JDBC_URL");
           var jdbcUsername = System.getenv("JDBC_USER");
           var jdbcPassword = System.getenv("JDBC_PASSWORD");
-
           System.out.println("Loading driver " + jdbcDriver);
           Class.forName(jdbcDriver);
-
           System.out.println("Establishing connection to " + jdbcUrl);
           try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
              System.out.println("Connection established OK, " + c.getClass());
@@ -283,7 +262,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   containers:
     - name: test
@@ -324,7 +302,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
 spec:
   containers:
     - name: test
@@ -363,7 +340,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.0-jdk11"
     app.kubernetes.io/managed-by: Helm
-    label1: value1
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
@@ -377,7 +353,6 @@ spec:
         app.kubernetes.io/instance: unittest-jira
         app.kubernetes.io/version: "8.13.0-jdk11"
         app.kubernetes.io/managed-by: Helm
-        label1: value1
     spec:
       restartPolicy: Never
       containers:
