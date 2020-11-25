@@ -41,15 +41,15 @@ else if we're creating a new service account then use the name of the Helm relea
 else just use the "default" service account.
 */}}
 {{- define "bitbucket.serviceAccountName" -}}
-{{- if .Values.serviceAccount.name }}
-{{- .Values.serviceAccount.name }}
-{{- else }}
-{{- if .Values.serviceAccount.create }}
+{{- if .Values.serviceAccount.name -}}
+{{- .Values.serviceAccount.name -}}
+{{- else -}}
+{{- if .Values.serviceAccount.create -}}
 {{- include "bitbucket.fullname" . -}}
-{{ else }}
+{{- else -}}
 default
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 {{- end }}
 
 {{/*
