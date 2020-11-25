@@ -26,6 +26,11 @@ public final class KubeResources {
         return getAll(Kind.StatefulSet).map(StatefulSet.class::cast);
     }
 
+    public StatefulSet getStatefulSet(final String name) {
+        return getStatefulSets().find(ss -> name.equals(ss.getName()))
+                .getOrElseThrow(() -> new AssertionError("No StatefulSet found with name " + name));
+    }
+
     public KubeResource get(Kind kind) {
         return getAll(kind)
                 .singleOption()

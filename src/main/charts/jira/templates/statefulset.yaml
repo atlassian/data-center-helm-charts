@@ -133,12 +133,20 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        {{ if .Values.persistence.enabled }}
         - name: shared-home
           persistentVolumeClaim:
             claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+        {{ else -}}
+        - name: local-home
+          emptyDir: {}
+        - name: shared-home
+          emptyDir: {}
+        {{- end }}
         {{- with .Values.volumes.additional }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+  {{ if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: local-home
@@ -151,3 +159,4 @@ spec:
         resources:
         {{- toYaml . | nindent 10 }}
         {{- end }}
+  {{ end }}

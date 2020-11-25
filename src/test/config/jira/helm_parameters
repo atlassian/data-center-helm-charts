@@ -14,3 +14,4 @@ INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 INGRESS_DOMAIN_EKS=${eks.ingress.domain}
 # .Values.replicaCount=1, but in here we specify how many nodes we are planning to get to prepare ingress rules for each
 TARGET_REPLICA_COUNT=2
+PERSISTENT_VOLUMES=${persistence.enabled}
