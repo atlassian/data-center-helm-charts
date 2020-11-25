@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.fasterxml.jackson.databind.node.JsonNodeType.ARRAY;
+import static com.fasterxml.jackson.databind.node.JsonNodeType.NUMBER;
 import static com.fasterxml.jackson.databind.node.JsonNodeType.OBJECT;
 import static com.fasterxml.jackson.databind.node.JsonNodeType.STRING;
 
@@ -34,6 +35,14 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
         assertNodeIsOfType(STRING);
         if (!Objects.equals(actual.asText(), expected)) {
             failWithMessage("Expected JsonNode's text to be <%s> but was <%s>", expected, actual.asText());
+        }
+        return this;
+    }
+
+    public JsonNodeAssert hasValueEqualTo(int expected) {
+        assertNodeIsOfType(NUMBER);
+        if (!Objects.equals(actual.intValue(), expected)) {
+            failWithMessage("Expected JsonNode's text to be <%s> but was <%s>", expected, actual.intValue());
         }
         return this;
     }

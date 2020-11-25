@@ -24,6 +24,10 @@ public class KubeResource {
         return node.required("metadata");
     }
 
+    public JsonNode getSpec() {
+        return node.required("spec");
+    }
+
     public String getName() {
         return getMetadata().required("name").asText();
     }
@@ -45,6 +49,8 @@ public class KubeResource {
         switch (kind) {
             case StatefulSet:
                 return new StatefulSet(node);
+            case Service:
+                return new Service(node);
             default:
                 return new KubeResource(kind, node);
         }

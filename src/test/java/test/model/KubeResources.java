@@ -23,7 +23,11 @@ public final class KubeResources {
     }
 
     public Traversable<StatefulSet> getStatefulSets() {
-        return getAll(Kind.StatefulSet).map(StatefulSet.class::cast);
+        return getAll(Kind.StatefulSet, StatefulSet.class);
+    }
+
+    public <T extends KubeResource> Traversable<T> getAll(Kind kind, Class<T> type) {
+        return getAll(kind).map(type::cast);
     }
 
     public StatefulSet getStatefulSet(final String name) {
@@ -35,6 +39,13 @@ public final class KubeResources {
         return getAll(kind)
                 .singleOption()
                 .getOrElseThrow(() -> new AssertionError("No single " + kind + " found"));
+    }
+
+    public <T extends KubeResource> T get(Kind kind, Class<T> type, String name) {
+        return getAll(kind)
+                .find(resource -> name.equals(resource.getName()))
+                .map(type::cast)
+                .getOrElseThrow(() -> new AssertionError("No " + kind + " found with name " + name));
     }
 
     public Traversable<KubeResource> getAll(Kind kind) {
