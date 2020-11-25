@@ -49,4 +49,9 @@ public class KubeResource {
                 return new KubeResource(kind, node);
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s[%s]", getKind(), getName());
+    }
 }

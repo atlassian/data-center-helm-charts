@@ -6,9 +6,11 @@ import io.vavr.collection.Array;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.vavr.api.VavrAssertions;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static com.fasterxml.jackson.databind.node.JsonNodeType.ARRAY;
+import static com.fasterxml.jackson.databind.node.JsonNodeType.OBJECT;
 import static com.fasterxml.jackson.databind.node.JsonNodeType.STRING;
 
 /**
@@ -47,6 +49,16 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     public JsonNodeAssert isArrayWithChildren(String... expected) {
         assertNodeIsOfType(ARRAY);
         VavrAssertions.assertThat(Array.ofAll(actual).map(JsonNode::asText)).containsExactly(expected);
+        return this;
+    }
+
+    public JsonNodeAssert isObject(Map<String, String> expected) {
+        assertNodeIsOfType(OBJECT);
+
+        expected.forEach((key, value) -> {
+            assertThat(actual.path(key)).hasTextEqualTo(value);
+        });
+
         return this;
     }
 

@@ -5,12 +5,16 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
+import test.model.KubeResource;
 import test.model.Product;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static test.helm.Helm.getHelmReleaseName;
 import static test.jackson.JsonNodeAssert.assertThat;
+import static test.model.Kind.ClusterRole;
+import static test.model.Kind.ClusterRoleBinding;
 import static test.model.Kind.ServiceAccount;
 
 /**
@@ -72,5 +76,80 @@ class ServiceAccountTest {
                         assertThat(statefulSet.getPodSpec().path("serviceAccountName"))
                                 .describedAs("StatefulSet %s should have the configured ServiceAccount name", statefulSet.getName())
                                 .hasTextEqualTo("foo"));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Product.class)
+    void serviceAccount_imagePullSecrets(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "serviceAccount.imagePullSecrets", "{foo,bar}"));
+
+        assertThat(resources.get(ServiceAccount).getNode("imagePullSecrets"))
+                .isArrayWithChildren("foo", "bar");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "bitbucket"})
+    void cluster_role_name(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "serviceAccount.clusterRole.name", "foo"));
+
+        assertThat(resources.get(ServiceAccount).getName())
+                .isEqualTo(getHelmReleaseName(product));
+        assertThat(resources.get(ClusterRole).getName())
+                .isEqualTo("foo");
+
+        verifyClusterRoleBinding(resources.get(ClusterRoleBinding),
+                "foo", "foo", getHelmReleaseName(product));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "bitbucket"})
+    void cluster_role_create_disabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "serviceAccount.clusterRole.create", "false"));
+
+        assertThat(resources.get(ServiceAccount).getName())
+                .isEqualTo(getHelmReleaseName(product));
+
+        assertThat(resources.getAll(ClusterRole))
+                .describedAs("No ClusterRole resources should be created")
+                .isEmpty();
+
+        verifyClusterRoleBinding(resources.get(ClusterRoleBinding),
+                getHelmReleaseName(product), getHelmReleaseName(product), getHelmReleaseName(product));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "bitbucket"})
+    void cluster_role_binding_name(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "serviceAccount.clusterRoleBinding.name", "foo"));
+
+        assertThat(resources.get(ServiceAccount).getName())
+                .isEqualTo(getHelmReleaseName(product));
+        assertThat(resources.get(ClusterRole).getName())
+                .isEqualTo(getHelmReleaseName(product));
+
+        verifyClusterRoleBinding(resources.get(ClusterRoleBinding),
+                "foo", getHelmReleaseName(product), getHelmReleaseName(product));
+    }
+
+    private void verifyClusterRoleBinding(final KubeResource clusterRoleBinding,
+                                          final String expectedName,
+                                          final String expectedRoleName,
+                                          final String expectedServiceAccountName) {
+        assertThat(clusterRoleBinding.getName())
+                .isEqualTo(expectedName);
+
+        assertThat(clusterRoleBinding.getNode("roleRef", "name"))
+                .hasTextEqualTo(expectedRoleName);
+        assertThat(clusterRoleBinding.getNode("subjects"))
+                .isArrayWithNumberOfChildren(1);
+
+        assertThat(clusterRoleBinding.getNode("subjects").get(0))
+                .isObject(Map.of(
+                        "kind", "ServiceAccount",
+                        "name", expectedServiceAccountName));
     }
 }
