@@ -11,7 +11,6 @@ import test.model.Product;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static test.helm.Helm.getHelmReleaseName;
 import static test.jackson.JsonNodeAssert.assertThat;
 import static test.model.Kind.ClusterRole;
 import static test.model.Kind.ClusterRoleBinding;
@@ -95,12 +94,12 @@ class ServiceAccountTest {
                 "serviceAccount.clusterRole.name", "foo"));
 
         assertThat(resources.get(ServiceAccount).getName())
-                .isEqualTo(getHelmReleaseName(product));
+                .isEqualTo(product.getHelmReleaseName());
         assertThat(resources.get(ClusterRole).getName())
                 .isEqualTo("foo");
 
         verifyClusterRoleBinding(resources.get(ClusterRoleBinding),
-                "foo", "foo", getHelmReleaseName(product));
+                "foo", "foo", product.getHelmReleaseName());
     }
 
     @ParameterizedTest
@@ -110,14 +109,14 @@ class ServiceAccountTest {
                 "serviceAccount.clusterRole.create", "false"));
 
         assertThat(resources.get(ServiceAccount).getName())
-                .isEqualTo(getHelmReleaseName(product));
+                .isEqualTo(product.getHelmReleaseName());
 
         assertThat(resources.getAll(ClusterRole))
                 .describedAs("No ClusterRole resources should be created")
                 .isEmpty();
 
         verifyClusterRoleBinding(resources.get(ClusterRoleBinding),
-                getHelmReleaseName(product), getHelmReleaseName(product), getHelmReleaseName(product));
+                product.getHelmReleaseName(), product.getHelmReleaseName(), product.getHelmReleaseName());
     }
 
     @ParameterizedTest
@@ -127,12 +126,12 @@ class ServiceAccountTest {
                 "serviceAccount.clusterRoleBinding.name", "foo"));
 
         assertThat(resources.get(ServiceAccount).getName())
-                .isEqualTo(getHelmReleaseName(product));
+                .isEqualTo(product.getHelmReleaseName());
         assertThat(resources.get(ClusterRole).getName())
-                .isEqualTo(getHelmReleaseName(product));
+                .isEqualTo(product.getHelmReleaseName());
 
         verifyClusterRoleBinding(resources.get(ClusterRoleBinding),
-                "foo", getHelmReleaseName(product), getHelmReleaseName(product));
+                "foo", product.getHelmReleaseName(), product.getHelmReleaseName());
     }
 
     private void verifyClusterRoleBinding(final KubeResource clusterRoleBinding,

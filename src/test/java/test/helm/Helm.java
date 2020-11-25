@@ -33,7 +33,7 @@ public final class Helm {
     private static void captureHelmTemplateOutput(Product product, Path valuesFile, Path outputFile) throws Exception {
         final var process = new ProcessBuilder()
                 .command("helm", "template",
-                        getHelmReleaseName(product),
+                        product.getHelmReleaseName(),
                         getHelmChartPath(product).toString(),
                         "--debug",
                         "-n mynamespace",
@@ -55,7 +55,7 @@ public final class Helm {
     private static void captureHelmTemplateOutput(Product product, Path outputFile, Map<String, String> values) throws Exception {
         final var process = new ProcessBuilder()
                 .command("helm", "template",
-                        getHelmReleaseName(product),
+                        product.getHelmReleaseName(),
                         getHelmChartPath(product).toString(),
                         "--debug",
                         "-n mynamespace",

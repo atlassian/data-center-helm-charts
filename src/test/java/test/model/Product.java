@@ -1,5 +1,7 @@
 package test.model;
 
+import test.helm.Helm;
+
 public enum Product {
     jira {
         @Override
@@ -21,4 +23,8 @@ public enum Product {
     };
 
     public abstract String getDockerImageName();
+
+    public String getHelmReleaseName() {
+        return Helm.getHelmReleaseName(this);
+    }
 }

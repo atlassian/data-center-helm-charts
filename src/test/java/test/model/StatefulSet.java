@@ -12,8 +12,12 @@ public final class StatefulSet extends KubeResource {
         super(Kind.StatefulSet, node);
     }
 
-    public Traversable<JsonNode> getContainers() {
-        return Array.ofAll(getPodSpec().required("containers"));
+    private Traversable<Container> getContainers() {
+        return Array.ofAll(getPodSpec().required("containers")).map(Container::new);
+    }
+
+    public Container getContainer() {
+        return getContainers().single();
     }
 
     public JsonNode getPodSpec() {

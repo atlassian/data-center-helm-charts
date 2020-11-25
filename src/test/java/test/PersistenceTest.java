@@ -11,7 +11,6 @@ import test.model.Product;
 import java.util.Map;
 
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
-import static test.helm.Helm.getHelmReleaseName;
 import static test.jackson.JsonNodeAssert.assertThat;
 
 /**
@@ -32,7 +31,7 @@ class PersistenceTest {
                 "persistence.enabled", "true"
         ));
 
-        final var statefulSet = resources.getStatefulSet(getHelmReleaseName(product));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         verifyVolumeClaimTemplates(statefulSet);
         verifySharedHomeVolume(product, statefulSet);

@@ -30,10 +30,9 @@ class ImageTest {
         ));
 
         resources.getStatefulSets()
-                .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers().single().path("image"))
-                                .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
-                                .hasTextEqualTo("%s:myversion", product.getDockerImageName()));
+                .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("image"))
+                        .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
+                        .hasTextEqualTo("%s:myversion", product.getDockerImageName()));
     }
 
     @ParameterizedTest
@@ -45,10 +44,9 @@ class ImageTest {
         ));
 
         resources.getStatefulSets()
-                .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers().single().path("image"))
-                                .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
-                                .hasTextEqualTo("myregistry.io/%s:myversion", product.getDockerImageName()));
+                .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("image"))
+                        .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
+                        .hasTextEqualTo("myregistry.io/%s:myversion", product.getDockerImageName()));
     }
 
     @ParameterizedTest
@@ -61,10 +59,9 @@ class ImageTest {
         ));
 
         resources.getStatefulSets()
-                .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers().single().path("image"))
-                                .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
-                                .hasTextEqualTo("myregistry.io/myorg/myimage:myversion"));
+                .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("image"))
+                        .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
+                        .hasTextEqualTo("myregistry.io/myorg/myimage:myversion"));
     }
 
     @ParameterizedTest
@@ -74,9 +71,8 @@ class ImageTest {
                 "image.pullPolicy", "Always"));
 
         resources.getStatefulSets()
-                .forEach(statefulSet ->
-                        assertThat(statefulSet.getContainers().single().path("imagePullPolicy"))
-                                .describedAs("StatefulSet %s should have the configured imagePullPolicy", statefulSet.getName())
-                                .hasTextEqualTo("Always"));
+                .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("imagePullPolicy"))
+                        .describedAs("StatefulSet %s should have the configured imagePullPolicy", statefulSet.getName())
+                        .hasTextEqualTo("Always"));
     }
 }
