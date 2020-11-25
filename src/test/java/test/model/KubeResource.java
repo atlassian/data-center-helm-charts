@@ -1,7 +1,6 @@
 package test.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.vavr.collection.Array;
 import io.vavr.collection.Seq;
 
@@ -41,7 +40,7 @@ public class KubeResource {
         }
     }
 
-    static KubeResource wrap(ObjectNode node) {
+    static KubeResource wrap(JsonNode node) {
         final var kind = Kind.valueOf(node.required("kind").asText());
         switch (kind) {
             case StatefulSet:
