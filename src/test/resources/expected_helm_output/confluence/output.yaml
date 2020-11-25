@@ -351,20 +351,13 @@ spec:
             - name: var1
               value: val1
       volumes:
+        - name: local-home
+          emptyDir: {}
         - name: shared-home
-          persistentVolumeClaim:
-            claimName: confluence-shared-home
+          emptyDir: {}
         - hostPath:
             path: /data
           name: extra-volume
-  volumeClaimTemplates:
-    - metadata:
-        name: local-home
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 1Gi
 ---
 # Source: confluence/templates/tests/test-application-status.yaml
 apiVersion: v1

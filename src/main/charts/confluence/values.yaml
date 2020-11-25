@@ -148,6 +148,13 @@ synchrony:
 podAnnotations: {}
 #  "name": "value"
 
+persistence:
+  # -- Indicates if Persistent Volumes should be used.
+  # If false, then the local-home and shared-home volumes used by the pods will be of type emptyDir, therefore
+  # the contents will not survive pod restarts. This is useful mainly for evaluation purposes.
+  # Note that persistent volumes are a requirement for multi-node Data Center clustering to work.
+  enabled: false
+
 volumes:
   localHome:
     # -- Specifies the name of the storage class that should be used for the Confluence local-home volume
