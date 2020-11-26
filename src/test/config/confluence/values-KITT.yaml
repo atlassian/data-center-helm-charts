@@ -17,6 +17,13 @@ synchrony:
   ingressUrl: https://${helm.release.prefix}-confluence.${kitt.ingress.domain}/synchrony
 
 volumes:
+  localHome:
+    persistentVolumeClaim:
+      enabled: true
   sharedHome:
-    volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
+    customVolume:
+      persistentVolumeClaim:
+        claimName: efs-claim # Pre-provisioned, and shared by all of our pods
     subPath: ${helm.release.prefix}-confluence # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
+    nfsPermissionFixer:
+      enabled: true

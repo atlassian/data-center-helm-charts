@@ -28,7 +28,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence"})
     void localHome_pvc_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.persistentVolumeClaim.enabled", "true"
@@ -50,7 +50,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence"})
     void localHome_custom_volume(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.customVolume.hostPath", "/foo/bar" // not actually a valid hostPath definition, but it works for the test
@@ -63,7 +63,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence"})
     void localHome_pvc_custom(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.persistentVolumeClaim.enabled", "true",
@@ -81,7 +81,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence"})
     void sharedHome_custom_volume(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.sharedHome.customVolume.hostPath", "/foo/bar" // not actually a valid hostPath definition, but it works for the test

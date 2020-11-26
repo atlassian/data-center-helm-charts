@@ -25,7 +25,7 @@ class PersistenceTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bitbucket", "confluence"})
+    @EnumSource(value = Product.class, names = {"bitbucket"})
     void persistence_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "persistence.enabled", "true"
