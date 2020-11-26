@@ -2,6 +2,7 @@ package test.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.collection.Array;
+import io.vavr.collection.Seq;
 import io.vavr.collection.Traversable;
 
 /**
@@ -22,5 +23,9 @@ public final class StatefulSet extends KubeResource {
 
     public JsonNode getPodSpec() {
         return getNode("spec", "template", "spec");
+    }
+
+    public Seq<JsonNode> getVolumeClaimTemplates() {
+        return Array.ofAll(getSpec().path("volumeClaimTemplates"));
     }
 }

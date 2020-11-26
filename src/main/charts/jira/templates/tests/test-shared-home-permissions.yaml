@@ -1,3 +1,4 @@
+{{- if .Values.volumes.sharedHome.customVolume }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -36,6 +37,6 @@ spec:
           rm /shared-home/permissions-test
   volumes:
     - name: shared-home
-      persistentVolumeClaim:
-        claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+      {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 6 }}
   restartPolicy: Never
+{{ end }}

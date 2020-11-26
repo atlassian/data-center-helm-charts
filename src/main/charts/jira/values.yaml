@@ -108,34 +108,38 @@ jira:
 podAnnotations: {}
 #  "name": "value"
 
-persistence:
-  # -- Indicates if Persistent Volumes should be used.
-  # If false, then the local-home and shared-home volumes used by the pods will be of type emptyDir, therefore
-  # the contents will not survive pod restarts. This is useful mainly for evaluation purposes.
-  # Note that persistent volumes are a requirement for multi-node Data Center clustering to work.
-  enabled: false
-
 volumes:
   localHome:
-    # -- Specifies the name of the storage class that should be used for the Jira local-home volume
-    storageClassName:
-    # -- Specifies the standard Kubernetes resource requests and/or limits for the Jira local-home volume.
-    resources:
-      requests:
-        storage: 1Gi
+    persistentVolumeClaim:
+      # -- Indicates if the local-home volume should be backed by a PersistentVolumeClaim.
+      # If false (the default) then a volume will be declared inline within the pods.
+      # If true, then a PersistentVolumeClaim will be created for each pod.
+      enabled: false
+      # -- Specifies the name of the storage class that should be used for the local-home volume claim.
+      storageClassName:
+      # -- Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims.
+      resources:
+        requests:
+          storage: 1Gi
+    # -- A standard Kubernetes volume definition that should be used for the local-home volume.
+    # If defined, this will declared inline with the pod.
+    # If not defined, then an emptyDir will be used.
+    customVolume: {}
     # -- Specifies the path in the Jira container to which the local-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/jira"
   sharedHome:
+    # -- A standard Kubernetes volume definition that should be used for the shared-home volume.
+    # If defined, this will declared inline with the pod.
+    # If not defined, then an emptyDir will be used.
+    customVolume: {}
     # -- Specifies the path in the Jira container to which the shared-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/shared-home"
     # -- Specifies the sub-directory of the shared-home volume which will be mounted in to the Jira container.
     subPath:
-    # -- The name of the PersistentVolumeClaim which will be used for the shared-home volume
-    volumeClaimName: jira-shared-home
     nfsPermissionFixer:
       # -- If enabled, this will alter the shared-home volume's root directory so that Jira can write to it.
       # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
-      enabled: true
+      enabled: false
       # -- The path in the initContainer where the shared-home volume will be mounted
       mountPath: /shared-home
       # -- By default, the fixer will change the group ownership of the volume's root directory to match the Jira
