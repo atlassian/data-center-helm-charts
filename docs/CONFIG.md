@@ -3,17 +3,62 @@
 The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
 If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
-## Service account
+## Volumes
 
-Like any other Kubernetes application, the pods in the Data Center product deployments
-use a Kubernetes service account. Unless otherwise configured, this will use the
-default service account for the namespace.
+By default, the charts will configure the `local-home` and `shared-home` volues as follows:
 
-In order to use a different service account, override the chart value `serviceAccountName`.
+```yaml
+volumes:
+  - name: local-home
+    emptyDir: {}
+  - name: shared-home
+    emptyDir: {}
+```
 
-Note that for Jira, there are no special permissions required for this service account, but both Confluence and
-Bitbucket use Hazelcast for peer discovery, which entails querying the Kubernetes
-API. The account will need `get`/`list` permission for `endpoints`, `nodes` and `pods` for the current namespace.
+In order to enable the persistent of data stored in these volumes, it is necessary
+to replace these volumes with something else.
+
+The recommended way is to enable the use of PersistentVolume and PersistentVolumeClaim
+for both both volumes, using your install-specific `values.yaml` file, for example:
+
+```yaml
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      enabled: true
+  shared-home:
+    customVolume:
+      persistentVolumeClaim:
+        claimName: mySharedHome
+```
+
+This will result in each pod in the StatefulSet creating a `local-home` `PersistentVolumeClaim`
+of type `ReadWriteOnce`. 
+
+For shared-home, the creation of the `mySharedHome` PersstentVolumeClaim and 
+PersistentVolume needs to be done prior to the Helm chart being installed,
+either manually, or using an auto-provisioner. The PVC and PV need to be 
+`ReadWriteMany`, e.g. using an NFS, AzureFile or EFS volume.
+
+An alternative to PersistentVolumeClaims is to use inline volume definitions,
+either for `local-home` or `shared-home` (or both), for example:
+
+```yaml
+volumes:
+  localHome:
+    customVolume:
+      hostPath:
+        path: /path/to/my/data
+  shared-home:
+    customVolume:
+      nfs:
+        server: mynfsserver
+        path: /export/path
+````
+
+Generally, any valid Kubernetes volume resource definition can be substituted
+here. However, as mentioned previously, externalising the volume definitions
+using PersistentVolumes is the strongly recommended approach.
 
 ## Database connectivity
 

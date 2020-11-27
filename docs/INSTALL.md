@@ -32,15 +32,9 @@ credentials (username, password, display name and email address)
    files. These defaults can be used, otherwise the alternative names must be
    specified during installation.   
 * Volumes
-   * [all products] Each Data Center node requires a "local home" Persistent Volume 
-   with access mode `ReadWriteOnce`. These can be statically provisioned as required,
-   or a dynamic provisioner can be used.  
-   * [all products] All Data Center nodes in a given deployment must have access to
-   a "shared home" PersistentVolume. If there is only a single Data Center cluster node,
-   then `ReadWriteOnce` is sufficient access, but if there are to be multiple 
-   Data Center nodes, then `ReadWriteMany` is required.
-   * [all products] In addition to the shared-home PersistentVolume itself,
-   a shared-home PersistentVolumeClaim must also be created.
+   * While the Helm charts can be installed without providing any dedicated
+   storage, it is *strongly* recommended that Persistent Volumes are provisioned,
+   including a shared read-write volume. See the "Volumes" section below.
 * Ingress controller
    * Because different Kubernetes clusters use different Ingress configurations,
    the Helm charts will not install an Ingress resource. An ingress controller
@@ -96,6 +90,33 @@ if required, but Confluence and Bitbuket still require a `ServiceAccount` with K
 API access, so either the namespace's default `ServiceAccount` must have the required
 permissions, or the name of the pre-existing `ServiceAccount` must be specified.
 
+## Volumes
+The Data Center products make use of filesystem storage. Each DC node has its own "local-home" volume, and all
+nodes in the DC cluster share a single "shared-home" volume.
+
+By default, the Helm charts will configure all of these volumes as ephemeral "emptyDir" volumes. This makes it 
+possible to install the charts without configuring any volume management, but comes with two big caveats:
+
+* Any data stored in the local-home or shared-home will be lost every time a pod starts. Whilst the data that is
+stored in local-home can generally be regenerated (e.g. from the database), this can be very a very expensive process
+that sometimes required manual intervention. 
+* The shared-home volume will not actually be shared between multiple nodes in the DC cluster. Whilst this may not 
+immediately prevent scaling the DC cluster up to multiple nodes, certain critical functionality of the products relies 
+on the shared filesystem working as expected.
+
+For these reasons, the default volume configuration of the Helm charts is suitable only for running a single DC node for
+evaluation porpoises. Proper volume management needs to be configured in order for the data to survive restarts, and for
+multi-node DC clusters to operate correctly.
+
+While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by
+the products, the recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home`
+volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PV with `ReadWriteMany (RWX)`
+capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes
+engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). While this entails a higher up-front setup effort, 
+it gives the best flexibility.
+
+See [CONFIG.md]() for examples of how to configure the volumes.
+
 ## Chart values
 Each product's chart contains a large number of configurable options, most 
 of which are optional, but a few of which are mandatory. These values can all be specified 
@@ -121,7 +142,7 @@ See [CONFIG.md]() for examples of what can be done.
 By default, the Helm charts will provision a `StatefulSet` with 1 `replicaCount` of 1.
 The `replicaCount` can be altered at runtime to provision a multi-node 
 Data Center cluster, with no further configuration required (although note
-that the Ingress must support cookie-based sessin affinity in order for the 
+that the Ingress must support cookie-based session affinity in order for the 
 products to work correctly in a multi-node configuration).
 
 It is important to note, however, that both Jira and Confluence must initially
