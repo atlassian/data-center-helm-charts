@@ -12,4 +12,3 @@ DOCKER_IMAGE_REGISTRY=${dockerImage.registry}
 DOCKER_IMAGE_VERSION=${dockerImage.version}
 INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 INGRESS_DOMAIN_EKS=${eks.ingress.domain}
-PERSISTENT_VOLUMES=${persistence.enabled}

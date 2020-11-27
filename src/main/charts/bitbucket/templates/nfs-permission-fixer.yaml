@@ -34,6 +34,5 @@ spec:
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
       volumes:
         - name: shared-home
-          persistentVolumeClaim:
-            claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+          {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 10 }}
 {{- end }}

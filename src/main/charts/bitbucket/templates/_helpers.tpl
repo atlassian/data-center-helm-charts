@@ -156,3 +156,48 @@ For each additional plugin declared, generate a volume mount that injects that l
   {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "bitbucket.volumes" -}}
+{{ if not .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ include "bitbucket.volumes.localHome" . }}
+{{- end }}
+{{ include "bitbucket.volumes.sharedHome" . }}
+{{- with .Values.volumes.additional }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.volumes.localHome" -}}
+- name: local-home
+{{- if .Values.volumes.localHome.customVolume }}
+{{- toYaml .Values.volumes.localHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.volumes.sharedHome" -}}
+- name: shared-home
+{{- if .Values.volumes.sharedHome.customVolume }}
+{{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.volumeClaimTemplates" -}}
+{{ if .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+volumeClaimTemplates:
+- metadata:
+    name: local-home
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .Values.volumes.localHome.persistentVolumeClaim.storageClassName }}
+    storageClassName: {{ .Values.volumes.localHome.persistentVolumeClaim.storageClassName | quote }}
+    {{- end }}
+    {{- with .Values.volumes.localHome.persistentVolumeClaim.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- end }}
