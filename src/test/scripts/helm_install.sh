@@ -47,6 +47,12 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    --version "$POSTGRES_CHART_VERSION" \
    bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
+if [ -n "$2" ]
+then
+  kubectl cp $2 $TARGET_NAMESPACE/$POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
+  kubectl exec --stdin --tty $POSTGRES_RELEASE_NAME-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$PRODUCT_NAME -f /tmp/db-init-script.sql"
+fi
+
 for file in ${PRODUCT_CHART_VALUES_FILES}.yaml ${PRODUCT_CHART_VALUES_FILES}-${clusterType}.yaml ; do
   [ -f "$file" ] && valueOverrides+="--values $file "
 done
