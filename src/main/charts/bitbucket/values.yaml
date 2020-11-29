@@ -149,7 +149,6 @@ volumes:
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
     # volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
     customVolume:
-      emptyDir: {}
     mountPath: "/var/atlassian/application-data/bitbucket"
   sharedHome:
     persistentVolumeClaim:
@@ -164,7 +163,6 @@ volumes:
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
     # volume which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
     customVolume:
-      emptyDir: {}
     # -- Specifies the path in the Bitbucket container to which the shared-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/shared-home"
     # -- Specifies the sub-directory of the shared-home volume which will be mounted in to the Bitbucket container.

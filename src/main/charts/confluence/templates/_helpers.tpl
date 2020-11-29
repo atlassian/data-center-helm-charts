@@ -211,7 +211,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- define "confluence.volumes.localHome" -}}
 {{- if not .Values.volumes.localHome.persistentVolumeClaim.create }}
 - name: local-home
+{{ if .Values.volumes.localHome.customVolume }}
 {{- toYaml .Values.volumes.localHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
 {{- end }}
 {{- end }}
 
@@ -221,7 +225,11 @@ For each additional plugin declared, generate a volume mount that injects that l
   persistentVolumeClaim:
     claimName: {{ include "confluence.fullname" . }}-shared-home
 {{ else }}
+{{ if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
 {{- end }}
 {{- end }}
 
