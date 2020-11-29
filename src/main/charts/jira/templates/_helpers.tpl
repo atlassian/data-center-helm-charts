@@ -124,7 +124,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "jira.volumes" -}}
-{{ if not .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ if not .Values.volumes.localHome.persistentVolumeClaim.create }}
 {{ include "jira.volumes.localHome" . }}
 {{- end }}
 {{ include "jira.volumes.sharedHome" . }}
@@ -152,7 +152,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "jira.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
 volumeClaimTemplates:
 - metadata:
     name: local-home

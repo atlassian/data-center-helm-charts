@@ -31,7 +31,7 @@ class VolumesTest {
     @EnumSource
     void localHome_pvc_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "volumes.localHome.persistentVolumeClaim.enabled", "true"
+                "volumes.localHome.persistentVolumeClaim.create", "true"
         ));
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
@@ -66,7 +66,7 @@ class VolumesTest {
     @EnumSource
     void localHome_pvc_custom(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "volumes.localHome.persistentVolumeClaim.enabled", "true",
+                "volumes.localHome.persistentVolumeClaim.create", "true",
                 "volumes.localHome.persistentVolumeClaim.storageClassName", "foo",
                 "volumes.localHome.persistentVolumeClaim.resources.requests.storage", "2Gi"));
 

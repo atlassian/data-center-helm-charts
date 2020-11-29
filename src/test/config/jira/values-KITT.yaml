@@ -16,7 +16,7 @@ podAnnotations:
 volumes:
   localHome:
     persistentVolumeClaim:
-      enabled: true
+      create: true
   sharedHome:
     customVolume:
       persistentVolumeClaim:

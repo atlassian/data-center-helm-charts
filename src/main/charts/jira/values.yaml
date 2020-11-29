@@ -112,9 +112,8 @@ volumes:
   localHome:
     persistentVolumeClaim:
       # -- Indicates if the local-home volume should be backed by a PersistentVolumeClaim.
-      # If false (the default) then a volume will be declared inline within the pods.
       # If true, then a PersistentVolumeClaim will be created for each pod.
-      enabled: false
+      create: false
       # -- Specifies the name of the storage class that should be used for the local-home volume claim.
       storageClassName:
       # -- Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims.

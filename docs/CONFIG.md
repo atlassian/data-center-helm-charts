@@ -25,7 +25,7 @@ for both both volumes, using your install-specific `values.yaml` file, for examp
 volumes:
   localHome:
     persistentVolumeClaim:
-      enabled: true
+      create: true
   shared-home:
     customVolume:
       persistentVolumeClaim:

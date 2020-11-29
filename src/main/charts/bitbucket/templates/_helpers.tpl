@@ -158,7 +158,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volumes" -}}
-{{ if not .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ if not .Values.volumes.localHome.persistentVolumeClaim.create }}
 {{ include "bitbucket.volumes.localHome" . }}
 {{- end }}
 {{ include "bitbucket.volumes.sharedHome" . }}
@@ -186,7 +186,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
 volumeClaimTemplates:
 - metadata:
     name: local-home

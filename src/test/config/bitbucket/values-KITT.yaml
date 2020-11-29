@@ -18,7 +18,7 @@ bitbucket:
 volumes:
   localHome:
     persistentVolumeClaim:
-      enabled: true
+      create: true
   sharedHome:
     volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
     customVolume:

@@ -199,7 +199,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "confluence.volumes" -}}
-{{ if not .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ if not .Values.volumes.localHome.persistentVolumeClaim.create }}
 {{ include "confluence.volumes.localHome" . }}
 {{- end }}
 {{ include "confluence.volumes.sharedHome" . }}
@@ -227,7 +227,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "confluence.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.enabled }}
+{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
 volumeClaimTemplates:
 - metadata:
     name: local-home
