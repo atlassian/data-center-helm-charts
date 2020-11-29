@@ -33,6 +33,5 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
       volumes:
-        - name: shared-home
-          {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 10 }}
+        {{ include "jira.volumes.sharedHome" . | nindent 8 }}
 {{- end }}

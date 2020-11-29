@@ -3,6 +3,7 @@ package test;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.collection.Array;
 import io.vavr.control.Option;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static test.jackson.JsonNodeAssert.assertThat;
+import static test.model.Kind.PersistentVolumeClaim;
 
 /**
  * Tests the various permutations of the "persistence" value structure in the Helm charts
@@ -29,7 +31,7 @@ class VolumesTest {
 
     @ParameterizedTest
     @EnumSource
-    void localHome_pvc_enabled(Product product) throws Exception {
+    void localHome_pvc_create(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.persistentVolumeClaim.create", "true"
         ));
@@ -47,6 +49,25 @@ class VolumesTest {
         assertThat(getVolume(statefulSet, "local-home"))
                 .describedAs("StatefulSet %s should not have a local-home volume in the pod spec", statefulSet.getName())
                 .isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void sharedHome_pvc_create(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+        ));
+
+        final var kubeResource = resources.get(PersistentVolumeClaim);
+        Assertions.assertThat(kubeResource.getName()).isEqualTo(product.getHelmReleaseName() + "-shared-home");
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+
+        assertThat(getVolume(statefulSet, "shared-home"))
+                .describedAs("StatefulSet %s should not have a local-home volume in the pod spec", statefulSet.getName())
+                .hasValueSatisfying(volume ->
+                        assertThat(volume.required("persistentVolumeClaim").required("claimName"))
+                                .hasTextEqualTo(product.getHelmReleaseName() + "-shared-home"));
     }
 
     @ParameterizedTest

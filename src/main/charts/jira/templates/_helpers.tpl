@@ -134,20 +134,19 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "jira.volumes.localHome" -}}
+{{- if not .Values.volumes.localHome.persistentVolumeClaim.create }}
 - name: local-home
-{{- if .Values.volumes.localHome.customVolume }}
 {{- toYaml .Values.volumes.localHome.customVolume | nindent 2 }}
-{{ else }}
-  emptyDir: {}
 {{- end }}
 {{- end }}
 
 {{- define "jira.volumes.sharedHome" -}}
 - name: shared-home
-{{- if .Values.volumes.sharedHome.customVolume }}
-{{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
+  persistentVolumeClaim:
+    claimName: {{ include "jira.fullname" . }}-shared-home
 {{ else }}
-  emptyDir: {}
+{{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
 {{- end }}
 {{- end }}
 

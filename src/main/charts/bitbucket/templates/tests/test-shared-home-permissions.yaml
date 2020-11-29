@@ -1,4 +1,3 @@
-{{- if .Values.volumes.sharedHome.customVolume }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -36,7 +35,5 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
-    - name: shared-home
-      {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 6 }}
+    {{ include "bitbucket.volumes.sharedHome" . | nindent 4 }}
   restartPolicy: Never
-{{ end }}
