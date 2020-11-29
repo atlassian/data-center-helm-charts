@@ -27,18 +27,16 @@ volumes:
     persistentVolumeClaim:
       create: true
   shared-home:
-    customVolume:
-      persistentVolumeClaim:
-        claimName: mySharedHome
+    persistentVolumeClaim:
+      create: true
 ```
 
 This will result in each pod in the StatefulSet creating a `local-home` `PersistentVolumeClaim`
-of type `ReadWriteOnce`. 
+of type `ReadWriteOnce`, and a single PVC of type `ReadWriteMany` being created for the shared-home.
 
-For shared-home, the creation of the `mySharedHome` PersstentVolumeClaim and 
-PersistentVolume needs to be done prior to the Helm chart being installed,
-either manually, or using an auto-provisioner. The PVC and PV need to be 
-`ReadWriteMany`, e.g. using an NFS, AzureFile or EFS volume.
+For each PVC created by the chart, a suitable `PersistentVolume` needs to be made available prior 
+to installation. These can be provisioned either statically or dynamically, using an 
+auto-provisioner.
 
 An alternative to PersistentVolumeClaims is to use inline volume definitions,
 either for `local-home` or `shared-home` (or both), for example:
