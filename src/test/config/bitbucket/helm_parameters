@@ -1,7 +1,6 @@
 RELEASE_PREFIX=${helm.release.prefix}
 CHART_SRC_PATH=${helm.src.path}/bitbucket
-PRODUCT_CHART_VALUES_FILES=${project.build.directory}/config/bitbucket/values
-PRODUCT_INGRESS_TEMPLATE=${project.build.directory}/config/bitbucket/ingress
+CHART_TEST_VALUES_BASEDIR=${chart.testValues.basedir}
 PRODUCT_NAME=bitbucket
 DB_NAME=bitbucket
 POSTGRES_CHART_VERSION=9.4.1

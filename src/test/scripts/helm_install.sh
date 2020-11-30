@@ -53,7 +53,9 @@ then
   kubectl exec ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
 fi
 
-for file in ${PRODUCT_CHART_VALUES_FILES}.yaml ${PRODUCT_CHART_VALUES_FILES}-${clusterType}.yaml ; do
+CHART_TEST_VALUES_DIR=$CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME
+
+for file in ${CHART_TEST_VALUES_DIR}/values.yaml ${CHART_TEST_VALUES_DIR}/values-${clusterType}.yaml ; do
   [ -f "$file" ] && valueOverrides+="--values $file "
 done
 

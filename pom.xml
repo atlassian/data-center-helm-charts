@@ -81,7 +81,11 @@
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
 
         <persistence.enabled>true</persistence.enabled>
-        <db.init.script.file></db.init.script.file>
+
+        <db.init.script.file/>
+
+        <!-- The directory in which the helm (un)install script should look for the chart values files for integration testing -->
+        <chart.testValues.basedir>${project.build.directory}/config</chart.testValues.basedir>
     </properties>
 
     <build>
