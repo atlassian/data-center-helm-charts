@@ -117,6 +117,13 @@
                 <dockerImage.version>${user.name}</dockerImage.version>
             </properties>
         </profile>
+
+        <profile>
+            <id>default-chart-values</id>
+                <properties>
+                    <chart.testValues.basedir>dummy</chart.testValues.basedir>
+                </properties>
+        </profile>
     </profiles>
 
 </project>
