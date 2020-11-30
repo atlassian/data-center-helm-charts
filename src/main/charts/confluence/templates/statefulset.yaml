@@ -139,30 +139,5 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        {{ if .Values.persistence.enabled }}
-        - name: shared-home
-          persistentVolumeClaim:
-            claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
-        {{ else -}}
-        - name: local-home
-          emptyDir: {}
-        - name: shared-home
-          emptyDir: {}
-        {{- end }}
-        {{- with .Values.volumes.additional }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-  {{ if .Values.persistence.enabled }}
-  volumeClaimTemplates:
-    - metadata:
-        name: local-home
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        {{- if .Values.volumes.localHome.storageClassName }}
-        storageClassName: {{ .Values.volumes.localHome.storageClassName | quote }}
-        {{- end }}
-        {{- with .Values.volumes.localHome.resources }}
-        resources:
-          {{- toYaml . | nindent 10 }}
-        {{- end }}
-  {{ end }}
+        {{ include "confluence.volumes" . | nindent 8 }}
+  {{ include "confluence.volumeClaimTemplates" . | nindent 2 }}

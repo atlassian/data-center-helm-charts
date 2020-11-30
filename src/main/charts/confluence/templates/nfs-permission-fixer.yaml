@@ -33,7 +33,5 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
       volumes:
-        - name: shared-home
-          persistentVolumeClaim:
-            claimName: {{ .Values.volumes.sharedHome.volumeClaimName }}
+        {{ include "confluence.volumes.sharedHome" . | nindent 8 }}
 {{- end }}

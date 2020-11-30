@@ -61,12 +61,17 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
         return this;
     }
 
+    public JsonNodeAssert isEmpty() {
+        if (!Objects.equals(actual.isEmpty(), true)) {
+            failWithMessage("Expected JsonNode to be empty but was not");
+        }
+        return this;
+    }
+
     public JsonNodeAssert isObject(Map<String, String> expected) {
         assertNodeIsOfType(OBJECT);
 
-        expected.forEach((key, value) -> {
-            assertThat(actual.path(key)).hasTextEqualTo(value);
-        });
+        expected.forEach((key, value) -> assertThat(actual.path(key)).hasTextEqualTo(value));
 
         return this;
     }

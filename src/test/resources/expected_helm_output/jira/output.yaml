@@ -325,46 +325,5 @@ spec:
           rm /shared-home/permissions-test
   volumes:
     - name: shared-home
-      persistentVolumeClaim:
-        claimName: jira-shared-home
+      emptyDir: {}
   restartPolicy: Never
----
-# Source: jira/templates/nfs-permission-fixer.yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: unittest-jira-nfs-fixer
-  labels:
-    helm.sh/chart: jira-0.1.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-spec:
-  template:
-    metadata:
-      name: unittest-jira-nfs-fixer
-      labels:
-        helm.sh/chart: jira-0.1.0
-        app.kubernetes.io/name: jira
-        app.kubernetes.io/instance: unittest-jira
-        app.kubernetes.io/version: "8.13.0-jdk11"
-        app.kubernetes.io/managed-by: Helm
-    spec:
-      restartPolicy: Never
-      containers:
-        - name: nfs-fixer
-          image: alpine
-          securityContext:
-            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
-          volumeMounts:
-            - name: shared-home
-              mountPath: "/shared-home"
-          command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
-      volumes:
-        - name: shared-home
-          persistentVolumeClaim:
-            claimName: jira-shared-home

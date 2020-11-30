@@ -4,12 +4,23 @@
 
 A chart for installing Bitbucket DC on Kubernetes
 
+**Homepage:** <https://github.com/atlassian-labs/data-center-helm-charts>
+
+## Source Code
+
+* <https://github.com/atlassian-labs/data-center-helm-charts>
+
+## Requirements
+
+Kubernetes: `>=1.17.x-0`
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Bitbucket pods |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Bitbucket pods |
+| additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket pods |
 | bitbucket.additionalBundledPlugins | list | `[]` | Specifies a list of additional Bitbucket plugins that should be added to the Bitbucket container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | bitbucket.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bitbucket container. See https://hub.docker.com/r/atlassian/bitbucket-server for supported variables. |
@@ -47,18 +58,26 @@ A chart for installing Bitbucket DC on Kubernetes
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Specify custom annotations to be added to all Bitbucket pods |
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of Bitbucket. |
-| serviceAccountName | string | `nil` | Specifies which serviceAccount to use for the pods. If not specified, the kubernetes default will be used. |
+| serviceAccount.clusterRole.create | bool | `true` | true if a ClusterRole should be created, or false if it already exists |
+| serviceAccount.clusterRole.name | string | `nil` | Specifies the name of the ClusterRole that will be created if the "serviceAccount.clusterRole.create" flag is set. If not specified, a name will be auto-generated. |
+| serviceAccount.clusterRoleBinding.create | bool | `true` | true if a ClusterRoleBinding should be created, or false if it already exists |
+| serviceAccount.clusterRoleBinding.name | string | `nil` | Specifies the name of the ClusterRoleBinding that will be created if the "serviceAccount.clusterRoleBinding.create" flag is set If not specified, a name will be auto-generated. |
+| serviceAccount.create | bool | `true` | true if a ServiceAccount should be created, or false if it already exists |
+| serviceAccount.imagePullSecrets | list | `[]` | The list of image pull secrets that should be added to the created ServiceAccount |
+| serviceAccount.name | string | `nil` | Specifies the name of the ServiceAccount to be used by the pods. If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated, otherwise the 'default' ServiceAccount will be used. |
 | tolerations | list | `[]` | Standard Kubernetes tolerations that will be applied to all Bitbucket pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Bitbucket pods. Note that this will not create any corresponding volume mounts; those needs to be defined in bitbucket.additionalVolumeMounts |
+| volumes.localHome.customVolume | object | `{}` | A standard Kubernetes volume definition that should be used for the local-home volume. If defined, this will declared inline with the pod. If not defined, then an emptyDir will be used. |
 | volumes.localHome.mountPath | string | `"/var/atlassian/application-data/bitbucket"` |  |
-| volumes.localHome.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket local-home volume. |
-| volumes.localHome.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the Bitbucket local-home volume |
+| volumes.localHome.persistentVolumeClaim.enabled | bool | `false` | Indicates if the local-home volume should be backed by a PersistentVolumeClaim. If false (the default) then a volume will be declared inline within the pods. If true, then a PersistentVolumeClaim will be created for each pod. |
+| volumes.localHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims. |
+| volumes.localHome.persistentVolumeClaim.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the local-home volume claim. |
+| volumes.sharedHome.customVolume | object | `{}` | A standard Kubernetes volume definition that should be used for the shared-home volume. If defined, this will declared inline with the pod. If not defined, then an emptyDir will be used. |
 | volumes.sharedHome.mountPath | string | `"/var/atlassian/application-data/shared-home"` | Specifies the path in the Bitbucket container to which the shared-home volume will be mounted. |
 | volumes.sharedHome.nfsPermissionFixer.command | string | `nil` | By default, the fixer will change the group ownership of the volume's root directory to match the Bitbucket container's GID (2003), and then ensures the directory is group-writeable. If this is not the desired behaviour, command used can be specified here. |
-| volumes.sharedHome.nfsPermissionFixer.enabled | bool | `true` | If enabled, this will alter the shared-home volume's root directory so that Bitbucket can write to it. This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260 |
+| volumes.sharedHome.nfsPermissionFixer.enabled | bool | `false` | If enabled, this will alter the shared-home volume's root directory so that Bitbucket can write to it. This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260 |
 | volumes.sharedHome.nfsPermissionFixer.mountPath | string | `"/shared-home"` | The path in the initContainer where the shared-home volume will be mounted |
 | volumes.sharedHome.subPath | string | `nil` | Specifies the sub-directory of the shared-home volume which will be mounted in to the Bitbucket container. |
-| volumes.sharedHome.volumeClaimName | string | `"bitbucket-shared-home"` | The name of the PersistentVolumeClaim which will be used for the shared-home volume |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.4.0](https://github.com/norwoodj/helm-docs/releases/v1.4.0)

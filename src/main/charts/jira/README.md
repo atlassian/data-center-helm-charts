@@ -4,12 +4,23 @@
 
 A chart for installing Jira DC on Kubernetes
 
+**Homepage:** <https://github.com/atlassian-labs/data-center-helm-charts>
+
+## Source Code
+
+* <https://github.com/atlassian-labs/data-center-helm-charts>
+
+## Requirements
+
+Kubernetes: `>=1.17.x-0`
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Jira pods |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Jira pods |
+| additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Jira pods |
 | database.credentials.passwordSecretKey | string | `"password"` | The key in the Secret used to store the database login password |
 | database.credentials.secretName | string | `"jira-database-credentials"` | The name of the Kubernetes Secret that contains the database login credentials. |
@@ -39,18 +50,22 @@ A chart for installing Jira DC on Kubernetes
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Jira pods |
 | podAnnotations | object | `{}` | Specify custom annotations to be added to all Jira pods |
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of Jira. Note that because Jira requires initial manual configuration after the first pod is deployed, and before scaling up to additional pods, this should always be kept as 1. |
-| serviceAccountName | string | `nil` | Specifies which serviceAccount to use for the pods. If not specified, the kubernetes default will be used. |
+| serviceAccount.create | bool | `true` | true if a ServiceAccount should be created, or false if it already exists |
+| serviceAccount.imagePullSecrets | list | `[]` | The list of image pull secrets that should be added to the created ServiceAccount |
+| serviceAccount.name | string | `nil` | Specifies the name of the ServiceAccount to be used by the pods. If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated, otherwise the 'default' ServiceAccount will be used. |
 | tolerations | list | `[]` | Standard Kubernetes tolerations that will be applied to all Jira pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Jira pods. Note that this will not create any corresponding volume mounts; those needs to be defined in jira.additionalVolumeMounts |
+| volumes.localHome.customVolume | object | `{}` | A standard Kubernetes volume definition that should be used for the local-home volume. If defined, this will declared inline with the pod. If not defined, then an emptyDir will be used. |
 | volumes.localHome.mountPath | string | `"/var/atlassian/application-data/jira"` | Specifies the path in the Jira container to which the local-home volume will be mounted. |
-| volumes.localHome.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the Jira local-home volume. |
-| volumes.localHome.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the Jira local-home volume |
+| volumes.localHome.persistentVolumeClaim.enabled | bool | `false` | Indicates if the local-home volume should be backed by a PersistentVolumeClaim. If false (the default) then a volume will be declared inline within the pods. If true, then a PersistentVolumeClaim will be created for each pod. |
+| volumes.localHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims. |
+| volumes.localHome.persistentVolumeClaim.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the local-home volume claim. |
+| volumes.sharedHome.customVolume | object | `{}` | A standard Kubernetes volume definition that should be used for the shared-home volume. If defined, this will declared inline with the pod. If not defined, then an emptyDir will be used. |
 | volumes.sharedHome.mountPath | string | `"/var/atlassian/application-data/shared-home"` | Specifies the path in the Jira container to which the shared-home volume will be mounted. |
 | volumes.sharedHome.nfsPermissionFixer.command | string | `nil` | By default, the fixer will change the group ownership of the volume's root directory to match the Jira container's GID (2001), and then ensures the directory is group-writeable. If this is not the desired behaviour, command used can be specified here. |
-| volumes.sharedHome.nfsPermissionFixer.enabled | bool | `true` | If enabled, this will alter the shared-home volume's root directory so that Jira can write to it. This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260 |
+| volumes.sharedHome.nfsPermissionFixer.enabled | bool | `false` | If enabled, this will alter the shared-home volume's root directory so that Jira can write to it. This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260 |
 | volumes.sharedHome.nfsPermissionFixer.mountPath | string | `"/shared-home"` | The path in the initContainer where the shared-home volume will be mounted |
 | volumes.sharedHome.subPath | string | `nil` | Specifies the sub-directory of the shared-home volume which will be mounted in to the Jira container. |
-| volumes.sharedHome.volumeClaimName | string | `"jira-shared-home"` | The name of the PersistentVolumeClaim which will be used for the shared-home volume |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.4.0](https://github.com/norwoodj/helm-docs/releases/v1.4.0)

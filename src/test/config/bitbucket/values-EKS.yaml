@@ -8,6 +8,14 @@ bitbucket:
     fqdn: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
 
 volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
   sharedHome:
-    volumeClaimName: efs-claim # Pre-provisioned by KITT, and shared by all of our pods
+    volumeClaimName: efs-claim # Pre-provisioned, and shared by all of our pods
+    customVolume:
+      persistentVolumeClaim:
+        claimName: efs-claim # Pre-provisioned, and shared by all of our pods
     subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
+    nfsPermissionFixer:
+      enabled: true

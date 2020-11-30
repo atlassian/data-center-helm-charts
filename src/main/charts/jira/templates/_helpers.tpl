@@ -122,3 +122,55 @@ For each additional plugin declared, generate a volume mount that injects that l
   {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "jira.volumes" -}}
+{{ if not .Values.volumes.localHome.persistentVolumeClaim.create }}
+{{ include "jira.volumes.localHome" . }}
+{{- end }}
+{{ include "jira.volumes.sharedHome" . }}
+{{- with .Values.volumes.additional }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
+{{- end }}
+
+{{- define "jira.volumes.localHome" -}}
+{{- if not .Values.volumes.localHome.persistentVolumeClaim.create }}
+- name: local-home
+{{ if .Values.volumes.localHome.customVolume }}
+{{- toYaml .Values.volumes.localHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "jira.volumes.sharedHome" -}}
+- name: shared-home
+{{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
+  persistentVolumeClaim:
+    claimName: {{ include "jira.fullname" . }}-shared-home
+{{ else }}
+{{ if .Values.volumes.sharedHome.customVolume }}
+{{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "jira.volumeClaimTemplates" -}}
+{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
+volumeClaimTemplates:
+- metadata:
+    name: local-home
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .Values.volumes.localHome.persistentVolumeClaim.storageClassName }}
+    storageClassName: {{ .Values.volumes.localHome.persistentVolumeClaim.storageClassName | quote }}
+    {{- end }}
+    {{- with .Values.volumes.localHome.persistentVolumeClaim.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- end }}
