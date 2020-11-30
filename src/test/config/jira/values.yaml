@@ -14,3 +14,5 @@ database:
   type: postgres72
   url: jdbc:postgresql://${helm.release.prefix}-jira-pgsql:5432/jira
   driver: org.postgresql.Driver
+  credentials:
+    secretName: jira-database-credentials

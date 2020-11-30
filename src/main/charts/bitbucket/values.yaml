@@ -31,8 +31,10 @@ serviceAccount:
 
 database:
   # -- The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database
+  # If not specified, then it will need to be provided via browser during initial startup.
   url:
   # -- The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver
+  # If not specified, then it will need to be provided via browser during initial startup.
   driver:
   credentials:
     # -- The name of the Kubernetes Secret that contains the database login credentials.

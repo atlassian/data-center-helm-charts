@@ -11,3 +11,5 @@ confluence:
 database:
   type: postgresql
   url: jdbc:postgresql://${helm.release.prefix}-confluence-pgsql:5432/confluence
+  credentials:
+    secretName: confluence-database-credentials

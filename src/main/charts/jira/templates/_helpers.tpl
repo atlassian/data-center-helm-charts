@@ -174,3 +174,30 @@ volumeClaimTemplates:
     {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "jira.databaseEnvVars" -}}
+{{ with .Values.database.type }}
+- name: ATL_DB_TYPE
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.driver }}
+- name: ATL_DB_DRIVER
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.url }}
+- name: ATL_JDBC_URL
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.credentials.secretName }}
+- name: ATL_JDBC_USER
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.usernameSecretKey }}
+- name: ATL_JDBC_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.passwordSecretKey }}
+{{ end }}
+{{ end }}

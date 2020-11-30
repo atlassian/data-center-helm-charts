@@ -38,22 +38,7 @@ spec:
               value: https
             - name: ATL_TOMCAT_SECURE
               value: "true"
-            - name: ATL_JDBC_URL
-              value: {{ .Values.database.url | quote }}
-            - name: ATL_JDBC_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.credentials.secretName }}
-                  key: {{ .Values.database.credentials.usernameSecretKey }}
-            - name: ATL_JDBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.credentials.secretName }}
-                  key: {{ .Values.database.credentials.passwordSecretKey }}
-            - name: ATL_DB_DRIVER
-              value: {{ .Values.database.driver | quote }}
-            - name: ATL_DB_TYPE
-              value: {{ .Values.database.type | quote }}
+            {{- include "jira.databaseEnvVars" . | nindent 12 }}
             - name: JIRA_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

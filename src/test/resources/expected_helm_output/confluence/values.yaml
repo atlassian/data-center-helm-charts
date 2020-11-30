@@ -1,7 +1,3 @@
 # This file contains chart value overrides for the Helm output unit test
-database:
-  type: postgresql
-  url: jdbc:postgresql://postgresql:5432/confluence
-
 synchrony:
   ingressUrl: https://confluence/synchrony

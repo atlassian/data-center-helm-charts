@@ -1,5 +1,1 @@
 # This file contains chart value overrides for the Helm output unit test
-database:
-  type: postgresql
-  driver: org.postgresql.Driver
-  url: jdbc:postgresql://postgresql:5432/confluence
