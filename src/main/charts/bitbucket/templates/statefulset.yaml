@@ -90,11 +90,13 @@ spec:
               value: {{ .Values.bitbucket.proxy.secure | quote }}
             - name: BITBUCKET_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            {{ with .Values.bitbucket.license.secretName }}
             - name: SETUP_LICENSE
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.bitbucket.license.secretName }}
-                  key: {{ .Values.bitbucket.license.secretKey }}
+                  name: {{ . }}
+                  key: {{ $.Values.bitbucket.license.secretKey }}
+            {{ end }}
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
             - name: SETUP_SYSADMIN_USERNAME

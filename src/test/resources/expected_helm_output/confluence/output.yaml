@@ -285,11 +285,6 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: unittest-confluence-jvm-config
-            - name: ATL_LICENSE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: confluence-license
-                  key: license-key
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:

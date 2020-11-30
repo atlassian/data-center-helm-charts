@@ -1,6 +1,8 @@
 # This file contains overrides for the Confluence Helm chart's values.yaml file
 
 confluence:
+  license:
+    secretName: confluence-license
   additionalJvmArgs:
     - -Datlassian.allow.insecure.url.parameter.login=true
   resources:

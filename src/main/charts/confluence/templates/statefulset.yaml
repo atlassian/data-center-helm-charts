@@ -87,11 +87,13 @@ spec:
                   key: additional_jvm_args
                   name: {{ include "confluence.fullname" . }}-jvm-config
             {{- include "confluence.databaseEnvVars" . | nindent 12 }}
+            {{ with .Values.confluence.license.secretName }}
             - name: ATL_LICENSE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.confluence.license.secretName }}
-                  key: {{ .Values.confluence.license.secretKey }}
+                  name: {{ . }}
+                  key: {{ $.Values.confluence.license.secretKey }}
+            {{ end }}
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:

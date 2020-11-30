@@ -63,8 +63,10 @@ confluence:
     # -- The port on which the Confluence container listens for Hazelcast traffic
     hazelcast: 5701
   license:
-    # -- The name of the Kubernetes Secret which contains the Confluence license key
-    secretName: confluence-license
+    # -- The name of the Kubernetes Secret which contains the Confluence license key.
+    # If specified, then the license will be automatically populated during Confluence setup.
+    # Otherwise, it will need to be provided via the browser after initial startup.
+    secretName:
     # -- The key in the Kubernetes Secret which contains the Confluence license key
     secretKey: license-key
   readinessProbe:
