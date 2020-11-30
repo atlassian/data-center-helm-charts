@@ -102,13 +102,15 @@ Jira and Confluence both require this value to be specified, which declares the
 
 ### Database credentials
 
-The products require that there is a Kubernetes Secret present in the namespace,
-that contains the username and password which the product should use to connect
-to the database.
+All products can have their database connectivity and credentials specified either
+interactively during first-time setup, or automatically by specifying certain configuration
+via Kubernetes.
 
-The default name for this secret, as well as the keys in the secret that contain
-the credentials, are defined in the charts' README, but they can all be changed 
-by overriding those settings.
+Depending on the product, the `database.type`, `database.url` and `database.driver` chart values
+can be provided. In addition, the database username and password can be provided via a Kubernetes secret,
+with the secret name specified with the `database.credentials.secretName` chart value. 
+When all of the required information is provided in this way, the database connectivity configuration screen
+will be bypassed during product setup. 
 
 ## Additional libraries & plugins
 

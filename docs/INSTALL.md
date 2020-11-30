@@ -20,8 +20,6 @@ be operated in multi-node clusters.
 There are a few items that need to be pre-configured in your Kubernetes cluster, which the resources deployed 
 by the Helm charts will expect to be present.
 * Secrets
-   * [all products] there must be a Secret in the target namespace containing
-the username and password that the product should use to connect to the database. 
    * [confluence and bitbucket] there must be a Secret in the target namespace 
 containing the license key for the product. Must be a valid Data Center license.
    * [bitbucket] there must be a Secret in the namespace containing the sysadmin user
