@@ -81,6 +81,7 @@
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
 
         <persistence.enabled>true</persistence.enabled>
+        <db.init.script.file></db.init.script.file>
     </properties>
 
     <build>
