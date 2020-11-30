@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.collection.Array;
 import io.vavr.control.Option;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
@@ -37,6 +38,13 @@ public class Env {
                                         "name", expectedSecretName,
                                         "key", expectedSecretKey)));
 
+        return this;
+    }
+
+    public Env assertDoesNotHaveAnyOf(String... envNames) {
+        assertThat(Array.of(envNames).flatMap(this::findEnv).map(node -> node.path("name").asText()))
+                .describedAs("None of the environment variables %s should be present", Arrays.asList(envNames))
+                .isEmpty();
         return this;
     }
 

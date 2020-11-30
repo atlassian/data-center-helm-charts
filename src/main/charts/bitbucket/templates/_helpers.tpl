@@ -208,3 +208,26 @@ volumeClaimTemplates:
     {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "bitbucket.databaseEnvVars" -}}
+{{ with .Values.database.driver }}
+- name: JDBC_DRIVER
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.url }}
+- name: JDBC_URL
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.credentials.secretName }}
+- name: JDBC_USER
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.usernameSecretKey }}
+- name: JDBC_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.passwordSecretKey }}
+{{ end }}
+{{ end }}

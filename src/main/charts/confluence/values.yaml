@@ -34,12 +34,16 @@ serviceAccount:
 database:
   # -- The type of database being used.
   # Valid values include 'postgresql', 'mysql', 'oracle', 'mssql'.
+  # If not specified, then it will need to be provided via browser during initial startup.
   type:
   # -- The JDBC URL of the database to be used by Confluence and Synchrony, e.g. jdbc:postgresql://host:port/database
+  # If not specified, then it will need to be provided via browser during initial startup.
   url:
   credentials:
     # -- The name of the Kubernetes Secret that contains the database login credentials.
-    secretName: confluence-database-credentials
+    # If specified, then the credentials will be automatically populated during Confluence setup.
+    # Otherwise, they will need to be provided via the browser after initial startup.
+    secretName:
     # -- The key in the Secret used to store the database login username
     usernameSecretKey: username
     # -- The key in the Secret used to store the database login password

@@ -20,8 +20,6 @@ be operated in multi-node clusters.
 There are a few items that need to be pre-configured in your Kubernetes cluster, which the resources deployed 
 by the Helm charts will expect to be present.
 * Secrets
-   * [all products] there must be a Secret in the target namespace containing
-the username and password that the product should use to connect to the database. 
    * [confluence and bitbucket] there must be a Secret in the target namespace 
 containing the license key for the product. Must be a valid Data Center license.
    * [bitbucket] there must be a Secret in the namespace containing the sysadmin user
@@ -117,26 +115,6 @@ it gives the best flexibility.
 
 See [CONFIG.md]() for examples of how to configure the volumes.
 
-## Chart values
-Each product's chart contains a large number of configurable options, most 
-of which are optional, but a few of which are mandatory. These values can all be specified 
-in your `values.yaml`, and which you pass to the `helm install` command.
-
-The mandatory values are one for which there no sensible defaults, and
-must be provided by the installer:
-
-* [all products] `database.url` is the JDBC URL of the database that should be used by the product.
-   * JDBC URLs vary depending on the JDBC driver and database being used, but for
-   postgres an example would be `jdbc:postgresql://host:port/database`
-* [jira and bitbucket] `database.driver` is the Java class name of the JDBC driver to be used
-   * The JDBC driver must already be present in the product's installation
-* [jira and confluence] `database.type` should be one of the valid values as listed in the chart's README
-* [bitbucket] `bitbucket.proxy.fqdn` should be the FQDN of the Bitbucket URL
-
-Each chart's README file documents every configurable value. 
-
-See [CONFIG.md]() for examples of what can be done.
-    
 # Scaling up Data Center
 
 By default, the Helm charts will provision a `StatefulSet` with 1 `replicaCount` of 1.

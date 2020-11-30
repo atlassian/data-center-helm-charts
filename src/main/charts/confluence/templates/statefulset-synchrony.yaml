@@ -56,18 +56,7 @@ spec:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
               value: {{ .Values.synchrony.ingressUrl | quote }}
-            - name: SYNCHRONY_DATABASE_URL
-              value: {{ .Values.database.url }}
-            - name: SYNCHRONY_DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.credentials.secretName }}
-                  key: {{ .Values.database.credentials.usernameSecretKey }}
-            - name: SYNCHRONY_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.credentials.secretName }}
-                  key: {{ .Values.database.credentials.passwordSecretKey }}
+            {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             - name: CLUSTER_JOIN_TYPE
               value: "kubernetes"
       {{- with .Values.nodeSelector }}

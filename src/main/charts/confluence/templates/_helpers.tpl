@@ -249,3 +249,45 @@ volumeClaimTemplates:
     {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "confluence.databaseEnvVars" -}}
+{{ with .Values.database.type }}
+- name: ATL_DB_TYPE
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.url }}
+- name: ATL_JDBC_URL
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.credentials.secretName }}
+- name: ATL_JDBC_USER
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.usernameSecretKey }}
+- name: ATL_JDBC_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.passwordSecretKey }}
+{{ end }}
+{{ end }}
+
+{{- define "synchrony.databaseEnvVars" -}}
+{{ with .Values.database.url }}
+- name: SYNCHRONY_DATABASE_URL
+  value: {{ . | quote }}
+{{ end }}
+{{ with .Values.database.credentials.secretName }}
+- name: SYNCHRONY_DATABASE_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.usernameSecretKey }}
+- name: SYNCHRONY_DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ . }}
+      key: {{ $.Values.database.credentials.passwordSecretKey }}
+{{ end }}
+{{ end }}
