@@ -36,7 +36,9 @@ database:
   driver:
   credentials:
     # -- The name of the Kubernetes Secret that contains the database login credentials.
-    secretName: bitbucket-database-credentials
+    # If specified, then the credentials will be automatically populated during Bitbucket setup.
+    # Otherwise, they will need to be provided via the browser after initial startup.
+    secretName:
     # -- The key in the Secret used to store the database login username
     usernameSecretKey: username
     # -- The key in the Secret used to store the database login password

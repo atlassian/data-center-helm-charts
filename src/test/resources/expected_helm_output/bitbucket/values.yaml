@@ -1,8 +1,4 @@
 # This file contains chart value overrides for the Helm output unit test
-database:
-  driver: org.postgresql.Driver
-  url: jdbc:postgresql://postgresql:5432/bitbucket
-
 bitbucket:
   proxy:
     fqdn: "foo"

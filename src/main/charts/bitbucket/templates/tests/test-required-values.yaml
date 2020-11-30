@@ -16,17 +16,13 @@ spec:
       image: debian:stable-slim
       imagePullPolicy: IfNotPresent
       env:
-        - name: JDBC_DRIVER
-          value: {{ .Values.database.driver | quote }}
-        - name: JDBC_URL
-          value: {{ .Values.database.url | quote }}
         - name: SERVER_PROXY_NAME
           value: {{ .Values.bitbucket.proxy.fqdn | quote }}
       command:
         - /bin/bash
         - -ec
         - |
-          for var in JDBC_DRIVER JDBC_URL SERVER_PROXY_NAME ; do
+          for var in SERVER_PROXY_NAME ; do
             if [ -n "${!var}" ] ; then
               echo "$var is set to ${!var}"
             else

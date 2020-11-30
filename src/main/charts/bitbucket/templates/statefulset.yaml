@@ -79,20 +79,7 @@ spec:
               value: "true"
             - name: HAZELCAST_PORT
               value: {{ .Values.bitbucket.ports.hazelcast | quote }}
-            - name: JDBC_DRIVER
-              value: {{ .Values.database.driver | quote }}
-            - name: JDBC_URL
-              value: {{ .Values.database.url | quote }}
-            - name: JDBC_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.credentials.secretName }}
-                  key: {{ .Values.database.credentials.usernameSecretKey }}
-            - name: JDBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.credentials.secretName }}
-                  key: {{ .Values.database.credentials.passwordSecretKey }}
+            {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
             - name: SERVER_PROXY_NAME
               value: {{ .Values.bitbucket.proxy.fqdn | quote }}
             - name: SERVER_PROXY_PORT

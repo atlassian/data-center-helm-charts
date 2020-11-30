@@ -61,6 +61,17 @@ class DatabaseTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bitbucket")
+    void bitbucket_database_defaults(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertDoesNotHaveAnyOf("JDBC_URL", "JDBC_DRIVER", "JDBC_USER", "JDBC_PASSWORD");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_database(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(

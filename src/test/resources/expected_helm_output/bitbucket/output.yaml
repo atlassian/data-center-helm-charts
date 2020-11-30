@@ -166,20 +166,6 @@ spec:
               value: "true"
             - name: HAZELCAST_PORT
               value: "5701"
-            - name: JDBC_DRIVER
-              value: "org.postgresql.Driver"
-            - name: JDBC_URL
-              value: "jdbc:postgresql://postgresql:5432/bitbucket"
-            - name: JDBC_USER
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-database-credentials
-                  key: username
-            - name: JDBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-database-credentials
-                  key: password
             - name: SERVER_PROXY_NAME
               value: "foo"
             - name: SERVER_PROXY_PORT
@@ -270,63 +256,6 @@ spec:
           echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
   restartPolicy: Never
 ---
-# Source: bitbucket/templates/tests/test-database-connectivity.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "unittest-bitbucket-db-connectivity-test"
-  annotations:
-    "helm.sh/hook": test
-    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-  labels:
-    helm.sh/chart: bitbucket-0.1.0
-    app.kubernetes.io/name: bitbucket
-    app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  serviceAccountName: unittest-bitbucket
-  containers:
-    - name: test
-      image: "atlassian/bitbucket-server:7.7.0-jdk11"
-      imagePullPolicy: IfNotPresent
-      env:
-        - name: JDBC_DRIVER
-          value: "org.postgresql.Driver"
-        - name: JDBC_URL
-          value: "jdbc:postgresql://postgresql:5432/bitbucket"
-        - name: JDBC_USER
-          valueFrom:
-            secretKeyRef:
-              name: bitbucket-database-credentials
-              key: username
-        - name: JDBC_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: bitbucket-database-credentials
-              key: password
-        - name: CLASSPATH
-          value: "/opt/atlassian/bitbucket/app/WEB-INF/lib/*"
-      command:
-        - /bin/bash
-        - -ec
-        - |
-          cat <<EOF | jshell - > output.txt
-          var jdbcDriver = System.getenv("JDBC_DRIVER");
-          var jdbcUrl = System.getenv("JDBC_URL");
-          var jdbcUsername = System.getenv("JDBC_USER");
-          var jdbcPassword = System.getenv("JDBC_PASSWORD");
-          System.out.println("Loading driver " + jdbcDriver);
-          Class.forName(jdbcDriver);
-          System.out.println("Establishing connection to " + jdbcUrl);
-          try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
-             System.out.println("Connection established OK, " + c.getClass());
-          }
-          EOF
-          cat output.txt
-          grep -q "Connection established OK" output.txt
-  restartPolicy: Never
----
 # Source: bitbucket/templates/tests/test-required-values.yaml
 apiVersion: v1
 kind: Pod
@@ -347,17 +276,13 @@ spec:
       image: debian:stable-slim
       imagePullPolicy: IfNotPresent
       env:
-        - name: JDBC_DRIVER
-          value: "org.postgresql.Driver"
-        - name: JDBC_URL
-          value: "jdbc:postgresql://postgresql:5432/bitbucket"
         - name: SERVER_PROXY_NAME
           value: "foo"
       command:
         - /bin/bash
         - -ec
         - |
-          for var in JDBC_DRIVER JDBC_URL SERVER_PROXY_NAME ; do
+          for var in SERVER_PROXY_NAME ; do
             if [ -n "${!var}" ] ; then
               echo "$var is set to ${!var}"
             else
