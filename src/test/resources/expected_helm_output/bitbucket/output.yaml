@@ -176,11 +176,6 @@ spec:
               value: "true"
             - name: BITBUCKET_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"
-            - name: SETUP_LICENSE
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-license
-                  key: license-key
             - name: SETUP_BASEURL
               value: "https://foo"
             - name: SETUP_SYSADMIN_USERNAME

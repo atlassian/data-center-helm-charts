@@ -60,8 +60,10 @@ bitbucket:
     hazelcast: 5701
 
   license:
-    # -- The name of the Kubernetes Secret which contains the Bitbucket license key
-    secretName: bitbucket-license
+    # -- The name of the Kubernetes Secret which contains the Bitbucket license key.
+    # If specified, then the license will be automatically populated during Bitbucket setup.
+    # Otherwise, it will need to be provided via the browser after initial startup.
+    secretName:
     # -- The key in the Kubernetes Secret which contains the Bitbucket license key
     secretKey: license-key
 
