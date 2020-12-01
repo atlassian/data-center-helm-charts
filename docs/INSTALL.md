@@ -19,14 +19,6 @@ be operated in multi-node clusters.
 ## Kubernetes pre-configuration
 There are a few items that need to be pre-configured in your Kubernetes cluster, which the resources deployed 
 by the Helm charts will expect to be present.
-* Secrets
-   * [bitbucket] there must be a Secret in the namespace containing the sysadmin user
-credentials (username, password, display name and email address)
-   * these may all be combined into a single Secret, or can be separate. 
-   * The names of the secrets, and the value keys within those secrets, 
-   can be anything you like, but there are defaults in the charts' `values.yaml` 
-   files. These defaults can be used, otherwise the alternative names must be
-   specified during installation.   
 * Volumes
    * While the Helm charts can be installed without providing any dedicated
    storage, it is *strongly* recommended that Persistent Volumes are provisioned,
