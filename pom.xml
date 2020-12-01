@@ -117,6 +117,17 @@
                 <dockerImage.version>${user.name}</dockerImage.version>
             </properties>
         </profile>
+
+        <profile>
+            <id>default-chart-values</id>
+            <!--
+            Activating this profile will cause the helm_install.sh script to *not* find the integration-test values.yaml
+            files, resulting in the Helm chart being installed with the default values.
+            -->
+            <properties>
+                <chart.testValues.basedir>dummy</chart.testValues.basedir>
+            </properties>
+        </profile>
     </profiles>
 
 </project>

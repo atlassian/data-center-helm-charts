@@ -80,8 +80,12 @@ spec:
             - name: HAZELCAST_PORT
               value: {{ .Values.bitbucket.ports.hazelcast | quote }}
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
+            {{ if .Values.bitbucket.proxy.fqdn }}
             - name: SERVER_PROXY_NAME
               value: {{ .Values.bitbucket.proxy.fqdn | quote }}
+            - name: SETUP_BASEURL
+              value: {{ include "bitbucket.baseUrl" . | quote }}
+            {{ end }}
             - name: SERVER_PROXY_PORT
               value: {{ .Values.bitbucket.proxy.port | quote }}
             - name: SERVER_SCHEME
@@ -97,8 +101,6 @@ spec:
                   name: {{ . }}
                   key: {{ $.Values.bitbucket.license.secretKey }}
             {{ end }}
-            - name: SETUP_BASEURL
-              value: {{ include "bitbucket.baseUrl" . | quote }}
             - name: SETUP_SYSADMIN_USERNAME
               valueFrom:
                 secretKeyRef:

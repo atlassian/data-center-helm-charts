@@ -1,3 +1,1 @@
 # This file contains chart value overrides for the Helm output unit test
-synchrony:
-  ingressUrl: https://confluence/synchrony
