@@ -1,3 +1,4 @@
+{{ if .Values.synchrony.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,3 +18,4 @@ spec:
       name: hazelcast
   selector:
     {{- include "synchrony.selectorLabels" . | nindent 4 }}
+{{ end }}
