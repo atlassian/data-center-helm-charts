@@ -120,9 +120,13 @@
 
         <profile>
             <id>default-chart-values</id>
-                <properties>
-                    <chart.testValues.basedir>dummy</chart.testValues.basedir>
-                </properties>
+            <!--
+            Activating this profile will cause the helm_install.sh script to *not* find the integration-test values.yaml
+            files, resulting in the Helm chart being installed with the default values.
+            -->
+            <properties>
+                <chart.testValues.basedir>dummy</chart.testValues.basedir>
+            </properties>
         </profile>
     </profiles>
 
