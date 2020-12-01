@@ -40,8 +40,7 @@ by the Helm charts will expect to be present.
       * `<product>` can be any one of `jira`, `confluence` or `bitbucket`
       * `<chart-version>` can be omitted if you just wish the latest version of the chart
       * `values.yaml` contains your site-specific configuration information. 
-      This is mandatory, since there are several configuration values that have no defaults.
-      See "Configuration" below.
+      May be omitted, in which case the chart config default will be used.
       * Add `--wait` if you wish the installation command to block until all of the deployed 
       Kubernetes resources are ready, but be aware that this may be waiting for several minutes 
       if anything is mis-configured.   
