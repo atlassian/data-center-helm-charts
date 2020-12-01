@@ -1,4 +1,1 @@
 # This file contains chart value overrides for the Helm output unit test
-bitbucket:
-  proxy:
-    fqdn: "foo"

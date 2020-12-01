@@ -166,8 +166,6 @@ spec:
               value: "true"
             - name: HAZELCAST_PORT
               value: "5701"
-            - name: SERVER_PROXY_NAME
-              value: "foo"
             - name: SERVER_PROXY_PORT
               value: "443"
             - name: SERVER_SCHEME
@@ -176,8 +174,6 @@ spec:
               value: "true"
             - name: BITBUCKET_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"
-            - name: SETUP_BASEURL
-              value: "https://foo"
             - name: SETUP_SYSADMIN_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -249,42 +245,6 @@ spec:
           STATUS=$(curl -s "$STATUS_URL")
           echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
           echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
-  restartPolicy: Never
----
-# Source: bitbucket/templates/tests/test-required-values.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "unittest-bitbucket-required-values-test"
-  annotations:
-    "helm.sh/hook": test
-    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-  labels:
-    helm.sh/chart: bitbucket-0.1.0
-    app.kubernetes.io/name: bitbucket
-    app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  containers:
-    - name: required-values-test
-      image: debian:stable-slim
-      imagePullPolicy: IfNotPresent
-      env:
-        - name: SERVER_PROXY_NAME
-          value: "foo"
-      command:
-        - /bin/bash
-        - -ec
-        - |
-          for var in SERVER_PROXY_NAME ; do
-            if [ -n "${!var}" ] ; then
-              echo "$var is set to ${!var}"
-            else
-              echo "$var is not set"
-              exit 1
-            fi
-          done
   restartPolicy: Never
 ---
 # Source: bitbucket/templates/tests/test-shared-home-permissions.yaml
