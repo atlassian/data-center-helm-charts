@@ -201,3 +201,18 @@ volumeClaimTemplates:
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
 {{ end }}
+
+{{- define "jira.clusteringEnvVars" -}}
+{{ if .Values.jira.clustering.enabled }}
+- name: CLUSTERED
+  value: "true"
+- name: JIRA_NODE_ID
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
+- name: EHCACHE_LISTENER_HOSTNAME
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
+{{ end }}
+{{ end }}

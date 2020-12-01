@@ -258,3 +258,18 @@ volumeClaimTemplates:
 {{ end }}
 {{ end }}
 {{ end }}
+
+{{- define "bitbucket.clusteringEnvVars" -}}
+{{ if .Values.bitbucket.clustering.enabled }}
+- name: KUBERNETES_NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: HAZELCAST_KUBERNETES_SERVICE_NAME
+  value: {{ include "bitbucket.fullname" . | quote }}
+- name: HAZELCAST_NETWORK_KUBERNETES
+  value: "true"
+- name: HAZELCAST_PORT
+  value: {{ .Values.bitbucket.ports.hazelcast | quote }}
+{{ end }}
+{{ end }}

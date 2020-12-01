@@ -41,6 +41,17 @@ public class Env {
         return this;
     }
 
+    public Env assertHasFieldRef(String envName, String expectedFieldPath) {
+        assertThat(findEnv(envName))
+                .describedAs("Expected env '%s' to have a value", envName)
+                .hasValueSatisfying(node ->
+                        assertThat(node.path("valueFrom").path("fieldRef"))
+                                .describedAs("Expected env '%s' to have the expected value", envName)
+                                .isObject(Map.of("fieldPath", expectedFieldPath)));
+
+        return this;
+    }
+
     public Env assertDoesNotHaveAnyOf(String... envNames) {
         assertThat(Array.of(envNames).flatMap(this::findEnv).map(node -> node.path("name").asText()))
                 .describedAs("None of the environment variables %s should be present", Arrays.asList(envNames))

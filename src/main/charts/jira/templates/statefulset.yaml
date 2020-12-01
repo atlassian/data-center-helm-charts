@@ -39,6 +39,7 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
+            {{- include "jira.clusteringEnvVars" . | nindent 12 }}
             - name: JIRA_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
@@ -46,16 +47,6 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: {{ include "jira.fullname" . }}-jvm-config
-            - name: CLUSTERED
-              value: "true"
-            - name: JIRA_NODE_ID
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: EHCACHE_LISTENER_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:

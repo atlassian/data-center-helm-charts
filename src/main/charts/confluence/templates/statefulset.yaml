@@ -69,16 +69,6 @@ spec:
               value: https
             - name: ATL_TOMCAT_SECURE
               value: "true"
-            - name: KUBERNETES_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-              value: {{ include "confluence.fullname" . | quote }}
-            - name: ATL_CLUSTER_TYPE
-              value: "kubernetes"
-            - name: ATL_CLUSTER_NAME
-              value: {{ include "confluence.name" . | quote }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
@@ -86,6 +76,7 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: {{ include "confluence.fullname" . }}-jvm-config
+            {{- include "confluence.clusteringEnvVars" . | nindent 12 }}
             {{- include "confluence.databaseEnvVars" . | nindent 12 }}
             {{ with .Values.confluence.license.secretName }}
             - name: ATL_LICENSE_KEY

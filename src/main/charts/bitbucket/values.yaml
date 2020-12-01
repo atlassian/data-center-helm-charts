@@ -90,6 +90,9 @@ bitbucket:
     scheme: https
     secure: true
 
+  clustering:
+    enabled: false
+
   resources:
     jvm:
       # -- The maximum amount of heap memory that will be used by the Bitbucket JVM
