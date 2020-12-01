@@ -80,6 +80,7 @@ spec:
             - name: HAZELCAST_PORT
               value: {{ .Values.bitbucket.ports.hazelcast | quote }}
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
+            {{- include "bitbucket.sysadminEnvVars" . | nindent 12 }}
             {{ if .Values.bitbucket.proxy.fqdn }}
             - name: SERVER_PROXY_NAME
               value: {{ .Values.bitbucket.proxy.fqdn | quote }}
@@ -101,26 +102,6 @@ spec:
                   name: {{ . }}
                   key: {{ $.Values.bitbucket.license.secretKey }}
             {{ end }}
-            - name: SETUP_SYSADMIN_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.bitbucket.sysadminCredentials.secretName }}
-                  key: {{ .Values.bitbucket.sysadminCredentials.usernameSecretKey }}
-            - name: SETUP_SYSADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.bitbucket.sysadminCredentials.secretName }}
-                  key: {{ .Values.bitbucket.sysadminCredentials.passwordSecretKey }}
-            - name: SETUP_SYSADMIN_DISPLAYNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.bitbucket.sysadminCredentials.secretName }}
-                  key: {{ .Values.bitbucket.sysadminCredentials.displayNameSecretKey }}
-            - name: SETUP_SYSADMIN_EMAILADDRESS
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.bitbucket.sysadminCredentials.secretName }}
-                  key: {{ .Values.bitbucket.sysadminCredentials.emailAddressSecretKey }}
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:

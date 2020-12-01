@@ -231,3 +231,30 @@ volumeClaimTemplates:
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
 {{ end }}
+
+{{- define "bitbucket.sysadminEnvVars" -}}
+{{ with .Values.bitbucket.sysadminCredentials }}
+{{ if .secretName }}
+- name: SETUP_SYSADMIN_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ .secretName }}
+      key: {{ .usernameSecretKey }}
+- name: SETUP_SYSADMIN_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .secretName }}
+      key: {{ .passwordSecretKey }}
+- name: SETUP_SYSADMIN_DISPLAYNAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ .secretName }}
+      key: {{ .displayNameSecretKey }}
+- name: SETUP_SYSADMIN_EMAILADDRESS
+  valueFrom:
+    secretKeyRef:
+      name: {{ .secretName }}
+      key: {{ .emailAddressSecretKey }}
+{{ end }}
+{{ end }}
+{{ end }}

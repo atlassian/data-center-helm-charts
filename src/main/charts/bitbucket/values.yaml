@@ -69,7 +69,9 @@ bitbucket:
 
   sysadminCredentials:
     # -- The name of the Kubernetes Secret which contains the Bitbucket sysadmin credentials
-    secretName: bitbucket-sysadmin-credentials
+    # If specified, then these will be automatically populated during Bitbucket setup.
+    # Otherwise, they will need to be provided via the browser after initial startup.
+    secretName:
     # -- The key in the Kubernetes Secret which contains the sysadmin username
     usernameSecretKey: username
     # -- The key in the Kubernetes Secret which contains the sysadmin password
