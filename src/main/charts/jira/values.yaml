@@ -59,6 +59,10 @@ jira:
     periodSeconds: 5
     # -- The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks
     failureThreshold: 30
+
+  clustering:
+    enabled: false
+
   resources:
     jvm:
       # -- The maximum amount of heap memory that will be used by the Jira JVM

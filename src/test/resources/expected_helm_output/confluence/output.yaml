@@ -31,48 +31,6 @@ data:
   min_heap: 1g
   reserved_code_cache: 512m
 ---
-# Source: confluence/templates/clusterrole.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: unittest-confluence
-  labels:
-    helm.sh/chart: confluence-0.1.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.9.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - endpoints
-      - pods
-      - nodes
-    verbs:
-      - get
-      - list
----
-# Source: confluence/templates/clusterrolebinding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: unittest-confluence
-  labels:
-    helm.sh/chart: confluence-0.1.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.9.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: unittest-confluence
-subjects:
-  - kind: ServiceAccount
-    name: unittest-confluence
-    namespace:  mynamespace
----
 # Source: confluence/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -157,16 +115,6 @@ spec:
               value: https
             - name: ATL_TOMCAT_SECURE
               value: "true"
-            - name: KUBERNETES_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-              value: "unittest-confluence"
-            - name: ATL_CLUSTER_TYPE
-              value: "kubernetes"
-            - name: ATL_CLUSTER_NAME
-              value: "confluence"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

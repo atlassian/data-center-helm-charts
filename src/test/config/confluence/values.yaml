@@ -1,6 +1,8 @@
 # This file contains overrides for the Confluence Helm chart's values.yaml file
 
 confluence:
+  clustering:
+    enabled: true
   license:
     secretName: confluence-license
   additionalJvmArgs:

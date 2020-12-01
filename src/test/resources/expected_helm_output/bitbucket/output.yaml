@@ -27,48 +27,6 @@ data:
   max_heap: 1g
   min_heap: 1g
 ---
-# Source: bitbucket/templates/clusterrole.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: unittest-bitbucket
-  labels:
-    helm.sh/chart: bitbucket-0.1.0
-    app.kubernetes.io/name: bitbucket
-    app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - endpoints
-      - pods
-      - nodes
-    verbs:
-      - get
-      - list
----
-# Source: bitbucket/templates/clusterrolebinding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: unittest-bitbucket
-  labels:
-    helm.sh/chart: bitbucket-0.1.0
-    app.kubernetes.io/name: bitbucket
-    app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: unittest-bitbucket
-subjects:
-  - kind: ServiceAccount
-    name: unittest-bitbucket
-    namespace:  mynamespace
----
 # Source: bitbucket/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -156,16 +114,6 @@ spec:
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
           env:
-            - name: KUBERNETES_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-              value: "unittest-bitbucket"
-            - name: HAZELCAST_NETWORK_KUBERNETES
-              value: "true"
-            - name: HAZELCAST_PORT
-              value: "5701"
             - name: SERVER_PROXY_PORT
               value: "443"
             - name: SERVER_SCHEME

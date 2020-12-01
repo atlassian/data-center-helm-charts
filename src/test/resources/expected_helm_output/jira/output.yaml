@@ -96,16 +96,6 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: unittest-jira-jvm-config
-            - name: CLUSTERED
-              value: "true"
-            - name: JIRA_NODE_ID
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: EHCACHE_LISTENER_HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:

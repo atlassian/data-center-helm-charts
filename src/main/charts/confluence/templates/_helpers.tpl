@@ -295,3 +295,31 @@ volumeClaimTemplates:
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
 {{ end }}
+
+{{- define "confluence.clusteringEnvVars" -}}
+{{ if .Values.confluence.clustering.enabled }}
+- name: KUBERNETES_NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: HAZELCAST_KUBERNETES_SERVICE_NAME
+  value: {{ include "confluence.fullname" . | quote }}
+- name: ATL_CLUSTER_TYPE
+  value: "kubernetes"
+- name: ATL_CLUSTER_NAME
+  value: {{ include "confluence.fullname" . | quote }}
+{{ end }}
+{{ end }}
+
+{{- define "synchrony.clusteringEnvVars" -}}
+{{ if .Values.confluence.clustering.enabled }}
+- name: KUBERNETES_NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: HAZELCAST_KUBERNETES_SERVICE_NAME
+  value: {{ include "synchrony.fullname" . | quote }}
+- name: CLUSTER_JOIN_TYPE
+  value: "kubernetes"
+{{ end }}
+{{ end }}

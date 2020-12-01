@@ -48,8 +48,9 @@ public final class KubeResources {
                 .getOrElseThrow(() -> new AssertionError("No " + kind + " found with name " + name));
     }
 
-    public void assertContains(Kind kind, String name) {
+    public KubeResources assertContains(Kind kind, String name) {
         get(kind, name);
+        return this;
     }
 
     public KubeResource get(Kind kind, String name) {

@@ -45,12 +45,6 @@ spec:
             periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}
           env:
-            - name: KUBERNETES_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-              value: {{ include "synchrony.fullname" . | quote }}
             - name: SYNCHRONY_BIND
               valueFrom:
                 fieldRef:
@@ -58,8 +52,7 @@ spec:
             - name: SYNCHRONY_SERVICE_URL
               value: {{ .Values.synchrony.ingressUrl | quote }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
-            - name: CLUSTER_JOIN_TYPE
-              value: "kubernetes"
+            {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}

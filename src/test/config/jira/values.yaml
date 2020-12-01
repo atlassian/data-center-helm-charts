@@ -1,6 +1,8 @@
 # This file contains overrides for the Jira Helm chart's values.yaml file
 
 jira:
+  clustering:
+    enabled: true
   additionalJvmArgs:
     - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
     - -Djira.websudo.is.disabled=true

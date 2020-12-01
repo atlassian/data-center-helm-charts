@@ -1,4 +1,4 @@
-{{- if .Values.serviceAccount.clusterRole.create -}}
+{{- if and .Values.bitbucket.clustering.enabled .Values.serviceAccount.clusterRole.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
