@@ -174,26 +174,6 @@ spec:
               value: "true"
             - name: BITBUCKET_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"
-            - name: SETUP_SYSADMIN_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-sysadmin-credentials
-                  key: username
-            - name: SETUP_SYSADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-sysadmin-credentials
-                  key: password
-            - name: SETUP_SYSADMIN_DISPLAYNAME
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-sysadmin-credentials
-                  key: displayName
-            - name: SETUP_SYSADMIN_EMAILADDRESS
-              valueFrom:
-                secretKeyRef:
-                  name: bitbucket-sysadmin-credentials
-                  key: emailAddress
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:

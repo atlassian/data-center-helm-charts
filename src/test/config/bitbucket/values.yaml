@@ -9,6 +9,8 @@ database:
 bitbucket:
   license:
     secretName: bitbucket-license
+  sysadminCredentials:
+    secretName: bitbucket-sysadmin-credentials
   additionalJvmArgs:
     - -Dfeature.getting.started.page=false
   resources:
