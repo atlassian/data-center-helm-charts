@@ -25,27 +25,11 @@ metadata:
 data:
   additional_jvm_args: >-
     -Dconfluence.cluster.hazelcast.listenPort=5701
-    -Dsynchrony.service.url=https://confluence/synchrony/v1
+    -Dsynchrony.btf.disabled=true
     -DConfluenceHomeLogAppender.disabled=true
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 512m
----
-# Source: confluence/templates/synchrony-start-script.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: unittest-confluence-synchrony-entrypoint
-data:
-  # The script we use as the entrypoint for the Synchrony container, because there isn't one we can use out of the box.
-  # Note that the classpath ony really needs to contain synchrony-standalone.jar and the JDBC driver JAR, but for simplicitly
-  # we just add every JAR in the Confluence lib directory.
-  start-synchrony.sh: |
-    #!/usr/bin/env bash
-    java \
-       -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
-       synchrony.core \
-       sql
 ---
 # Source: confluence/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89,32 +73,6 @@ subjects:
     name: unittest-confluence
     namespace:  mynamespace
 ---
-# Source: confluence/templates/service-synchrony.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: unittest-confluence-synchrony
-  labels:
-    helm.sh/chart: confluence-0.1.0
-    app.kubernetes.io/name: confluence-synchrony
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.9.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  ports:
-    - port: 80
-      targetPort: http
-      protocol: TCP
-      name: http
-    - port: 5701
-      targetPort: hazelcast
-      protocol: TCP
-      name: hazelcast
-  selector:
-    app.kubernetes.io/name: confluence-synchrony
-    app.kubernetes.io/instance: unittest-confluence
----
 # Source: confluence/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -140,75 +98,6 @@ spec:
   selector:
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
----
-# Source: confluence/templates/statefulset-synchrony.yaml
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: unittest-confluence-synchrony
-  labels:
-    helm.sh/chart: confluence-0.1.0
-    app.kubernetes.io/name: confluence-synchrony
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.9.0-jdk11"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  replicas: 1
-  serviceName: unittest-confluence-synchrony
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: confluence-synchrony
-      app.kubernetes.io/instance: unittest-confluence
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: confluence-synchrony
-        app.kubernetes.io/instance: unittest-confluence
-    spec:
-      serviceAccountName: unittest-confluence
-      terminationGracePeriodSeconds: 1
-      containers:
-        - name: synchrony
-          image: "atlassian/confluence-server:7.9.0-jdk11"
-          imagePullPolicy: IfNotPresent
-          command: ["/scripts/start-synchrony.sh"]
-          volumeMounts:
-            - mountPath: /scripts
-              name: entrypoint-script
-          ports:
-            - name: http
-              containerPort: 8091
-              protocol: TCP
-            - name: hazelcast
-              containerPort: 5701
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              port: 8091
-              path: /heartbeat
-            initialDelaySeconds: 5
-            periodSeconds: 1
-            failureThreshold: 30
-          env:
-            - name: KUBERNETES_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-              value: "unittest-confluence-synchrony"
-            - name: SYNCHRONY_BIND
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-            - name: SYNCHRONY_SERVICE_URL
-              value: "https://confluence/synchrony"
-            - name: CLUSTER_JOIN_TYPE
-              value: "kubernetes"
-      volumes:
-        - name: entrypoint-script
-          configMap:
-            name: unittest-confluence-synchrony-entrypoint
-            defaultMode: 0744
 ---
 # Source: confluence/templates/statefulset.yaml
 apiVersion: apps/v1

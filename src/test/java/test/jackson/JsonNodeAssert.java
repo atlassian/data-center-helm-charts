@@ -39,6 +39,26 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
         return this;
     }
 
+    public JsonNodeAssert hasTextContaining(String expectedTemplate, Object... args) {
+        return hasTextContaining(String.format(expectedTemplate, args));
+    }
+
+    public JsonNodeAssert hasTextContaining(final String expected) {
+        assertNodeIsOfType(STRING);
+        if (!actual.asText().contains(expected)) {
+            failWithMessage("Expected JsonNode's text to contain <%s> but was <%s>", expected, actual.asText());
+        }
+        return this;
+    }
+
+    public JsonNodeAssert hasTextNotContaining(final String expected) {
+        assertNodeIsOfType(STRING);
+        if (actual.asText().contains(expected)) {
+            failWithMessage("Expected JsonNode's text to NOT contain <%s> but was <%s>", expected, actual.asText());
+        }
+        return this;
+    }
+
     public JsonNodeAssert hasValueEqualTo(int expected) {
         assertNodeIsOfType(NUMBER);
         if (!Objects.equals(actual.intValue(), expected)) {

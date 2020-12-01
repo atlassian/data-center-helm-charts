@@ -48,6 +48,16 @@ public final class KubeResources {
                 .getOrElseThrow(() -> new AssertionError("No " + kind + " found with name " + name));
     }
 
+    public void assertContains(Kind kind, String name) {
+        get(kind, name);
+    }
+
+    public KubeResource get(Kind kind, String name) {
+        return getAll(kind)
+                .find(resource -> name.equals(resource.getName()))
+                .getOrElseThrow(() -> new AssertionError("No " + kind + " found with name " + name));
+    }
+
     public Traversable<KubeResource> getAll(Kind kind) {
         return map.get(kind)
                 .getOrElse(Array::empty);
