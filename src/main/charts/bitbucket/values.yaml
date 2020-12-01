@@ -91,6 +91,8 @@ bitbucket:
     secure: true
 
   clustering:
+    # -- Set to true if Data Center clustering should be enabled
+    # This will automatically configure cluster peer discovery between cluster nodes.
     enabled: false
 
   resources:

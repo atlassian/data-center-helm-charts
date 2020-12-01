@@ -112,6 +112,15 @@ with the secret name specified with the `database.credentials.secretName` chart 
 When all of the required information is provided in this way, the database connectivity configuration screen
 will be bypassed during product setup. 
 
+## Clustering
+By default, the Helm charts are will not configure the products for Data Center clustering. 
+
+In order to enable clustering, the appropriate chart value must be set to `true` (`jira.clustering.enabled`, 
+`confluence.clustering.enabled` or `bitbucket.clustering.enabled`) 
+
+In addition, the `shared-home` volume must be correctly configured as a read-write shared filesystem (e.g. NFS,
+AWS EFS, Azure Files)
+
 ## Additional libraries & plugins
 
 The products' Docker images contain the default set of bundled libraries and plugins. 
