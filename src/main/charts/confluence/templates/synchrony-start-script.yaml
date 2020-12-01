@@ -1,3 +1,4 @@
+{{ if .Values.synchrony.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13,3 +14,4 @@ data:
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
        sql
+{{ end }}

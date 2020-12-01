@@ -15,3 +15,6 @@ database:
   url: jdbc:postgresql://${helm.release.prefix}-confluence-pgsql:5432/confluence
   credentials:
     secretName: confluence-database-credentials
+
+synchrony:
+  enabled: true

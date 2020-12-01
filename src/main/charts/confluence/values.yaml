@@ -127,6 +127,10 @@ confluence:
   additionalEnvironmentVariables: []
 
 synchrony:
+  # -- True if Synchrony (i.e. Collaborative Editing) should be enabled.
+  # This will result in a separate StatefulSet and Service to be created for Synchrony.
+  # If disabled, then Collaborative Editing will be disabled in Confluence.
+  enabled: false
   service:
     # -- The port on which the Synchrony Kubernetes service will listen
     port: 80

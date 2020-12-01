@@ -142,7 +142,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
+{{- if .Values.synchrony.enabled -}}
 -Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
+{{- else -}}
+-Dsynchrony.btf.disabled=true
+{{- end -}}
 {{- end }}
 
 {{- define "confluence.sysprop.disableHomeLogAppender" -}}
