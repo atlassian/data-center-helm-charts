@@ -5,58 +5,62 @@ set -e
 # The directory, relative to the git repository root, where the Helm charts are stored
 CHARTS_SRC_DIR="src/main/charts"
 
-# The directory into which the script will export tagged versions of the charts for packaging
-TMP_DIR="target/tags"
-
 # The directory that will contain the generated chart repo files
 # "docs" is the hard-coded directory used by GitHub-Pages (yeah, I know)
 PUBLISH_DIR="docs"
 
-# A function that checks to see if a string is a semver-compliant version number. See https://semver.org/ for the regex.
-isSemver() {
-  if [[ $1 =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*))?$ ]]
-  then
-    true
-  else
-    false
-  fi
-}
+PACKAGE_DIR="target/helm"
 
-# For a given git tag, export the helm charts from git and package them
-packageChartsForTag() {
-  local tag="$1"
+TAG_VERSION=$1
+GITHUB_TOKEN=$2
 
-  echo "Exporting charts from git tag $tag"
-  git archive --prefix="$TMP_DIR/$tag/" "$tag" | tar xf -
-  for chart in "$TMP_DIR/$tag/$CHARTS_SRC_DIR"/*
+if [[ -z $TAG_VERSION ]]
+then
+  echo "Must supply a version string"
+  exit 1
+fi
+
+if [[ -z $GITHUB_TOKEN ]]
+then
+  echo "Must supply a github token"
+  exit 1
+fi
+
+rm -rf "$PACKAGE_DIR"
+
+for chart in "$CHARTS_SRC_DIR"/*
   do
-    echo "Packaging version $tag of chart in $chart"
-    helm package "$chart" --version "$tag" --destination "$PUBLISH_DIR"
+    echo "Packaging chart $chart with version $TAG_VERSION"
+    helm package "$chart" --version "$TAG_VERSION" --destination "$PACKAGE_DIR"
   done
-}
 
-# Iterates over all git tags in the repo, finds those that are valid version numbers,
-# and packages up the Helm charts for those tags.
-discoverAndPackageChartVersions() {
-  rm -rf "$CLONE_DIR"
+echo "Uploading chart packages as Github releases"
+# This will scan $PACKAGE_DIR for the tgz files that 'helm package' just generated, and upload them to the GitHub
+# repo as Release artifacts. GitHub will create corresponding git tags for each chart.
+docker run --user "$(id -u):$(id -g)" \
+  -v "$(pwd)/$PACKAGE_DIR:/releases" \
+  quay.io/helmpack/chart-releaser \
+  cr upload \
+  --package-path /releases \
+  --owner atlassian-labs \
+  --git-repo data-center-helm-charts \
+  --token "$GITHUB_TOKEN"
 
-  echo "Looking for git tags"
-  while read -r tag
-  do
-    if isSemver "$tag"
-    then
-      packageChartsForTag "$tag"
-    else
-      echo "Git tag $tag is not a semver value, skipping"
-    fi
-  done < <(git tag --list)
-}
+echo "Regenerating chart repo index.yaml"
+# This will fetch the index.yaml from the chart repo (NOT the local copy in this git repo), then fetch the list of
+# release artifacts on GitHub, and add any missing releases to the index.yaml file. The updated file is then left in
+# $PUBLISH_DIR for committing to git.
+docker run \
+  --user "$(id -u):$(id -g)" \
+  -v "$(pwd)/$PUBLISH_DIR:/index" \
+  -v "$(pwd)/$PACKAGE_DIR:/packages" \
+  quay.io/helmpack/chart-releaser \
+  cr index \
+  --owner atlassian-labs \
+  --git-repo data-center-helm-charts \
+  --charts-repo https://atlassian-labs.github.io/data-center-helm-charts \
+  --index-path /index/index.yaml \
+  --package-path /packages \
+  --token "$GITHUB_TOKEN"
 
-discoverAndPackageChartVersions
-
-echo "Generating Helm chart repo index"
-helm repo index $PUBLISH_DIR
-
-echo "Adding generated chart repo files to git staging area"
-git add $PUBLISH_DIR/*
-
+git add $PUBLISH_DIR/index.yaml
