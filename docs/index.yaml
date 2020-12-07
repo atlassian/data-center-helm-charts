@@ -1,0 +1,94 @@
+apiVersion: v1
+entries:
+  bitbucket:
+  - apiVersion: v2
+    appVersion: 7.7.0-jdk11
+    created: "2020-12-07T11:50:58.879691883Z"
+    description: A chart for installing Bitbucket DC on Kubernetes
+    digest: 3b47d0731c3cab7a3c64f9e6b8452de0cf7e03827606450e5c53e5337686fcc9
+    home: https://github.com/atlassian-labs/data-center-helm-charts
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Atlassian
+    kubeVersion: '>=1.17.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.2.0/bitbucket-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 7.7.0-jdk11
+    created: "2020-12-07T11:50:58.681732396Z"
+    description: A chart for installing Bitbucket DC on Kubernetes
+    digest: 6623ed4accc7ea687d4264be7a4beb1b93a74a16fad5a8c94c0c2aa06a432932
+    name: bitbucket
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.1.0/bitbucket-0.1.0.tgz
+    version: 0.1.0
+  confluence:
+  - apiVersion: v2
+    appVersion: 7.9.0-jdk11
+    created: "2020-12-07T11:50:59.325610273Z"
+    description: A chart for installing Confluence DC on Kubernetes
+    digest: 39bb5ad3337647d44a90804c90ae78c8f2343257555011a5831b5c037ea3f66c
+    home: https://github.com/atlassian-labs/data-center-helm-charts
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Atlassian
+    kubeVersion: '>=1.17.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.2.0/confluence-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 7.9.0-jdk11
+    created: "2020-12-07T11:50:59.121600703Z"
+    description: A chart for installing Confluence DC on Kubernetes
+    digest: b9f74b996de522a52e17fbff4f8c10864166421daf062e786d70c0a85f1cd89d
+    name: confluence
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.1.0/confluence-0.1.0.tgz
+    version: 0.1.0
+  jira:
+  - apiVersion: v2
+    appVersion: 8.13.0-jdk11
+    created: "2020-12-07T11:50:59.735438399Z"
+    description: A chart for installing Jira DC on Kubernetes
+    digest: 9d5072d1c44247b4f27ae87696eb90892b1492d8c0316fc36580d8e45f94c3f7
+    home: https://github.com/atlassian-labs/data-center-helm-charts
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Atlassian
+    kubeVersion: '>=1.17.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.2.0/jira-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 8.13.0-jdk11
+    created: "2020-12-07T11:50:59.529909073Z"
+    description: A chart for installing Jira DC on Kubernetes
+    digest: 796195b0d401ecba43b98d65be670afc53a74034595a834965309c5f94220649
+    name: jira
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.1.0/jira-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-12-07T11:50:58.374702987Z"
