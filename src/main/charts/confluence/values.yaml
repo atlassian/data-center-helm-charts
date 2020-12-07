@@ -62,6 +62,12 @@ confluence:
     http: 8090
     # -- The port on which the Confluence container listens for Hazelcast traffic
     hazelcast: 5701
+  ingress:
+    # -- The protocol scheme used by the ingress that sends traffic to the application.
+    # This is necessary so that the application generates the correct URLs.
+    scheme: https
+    # -- Set to true if the connection between the Ingress and the application should be considered secure.
+    secure: true
   license:
     # -- The name of the Kubernetes Secret which contains the Confluence license key.
     # If specified, then the license will be automatically populated during Confluence setup.

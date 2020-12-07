@@ -112,7 +112,7 @@ spec:
               mountPath: "/var/atlassian/application-data/shared-home"
           env:
             - name: ATL_TOMCAT_SCHEME
-              value: https
+              value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
             - name: ATL_PRODUCT_HOME_SHARED

@@ -86,7 +86,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
-              value: https
+              value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
             - name: JIRA_SHARED_HOME

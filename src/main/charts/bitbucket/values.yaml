@@ -81,13 +81,16 @@ bitbucket:
     # -- The key in the Kubernetes Secret which contains the sysadmin email address
     emailAddressSecretKey: emailAddress
 
-  proxy:
+  ingress:
     # -- The fully-qualified domain name of the ingress
     fqdn:
     # -- The port number of the ingress
     port: 443
-    # -- note that, if present, the value of x-forwarded-proto header will trump this setting
+    # -- The protocol scheme used by the ingress that sends traffic to the application.
+    # This is necessary so that the application generates the correct URLs.
+    # Note that, if present, the value of x-forwarded-proto header will override this setting.
     scheme: https
+    # -- Set to true if the connection between the Ingress and the application should be considered secure.
     secure: true
 
   clustering:

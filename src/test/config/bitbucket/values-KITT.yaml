@@ -12,7 +12,7 @@ podAnnotations:
   "atlassian.com/business_unit": "server_engineering"
 
 bitbucket:
-  proxy:
+  ingress:
     fqdn: ${helm.release.prefix}-bitbucket.${kitt.ingress.domain}
 
 volumes:
