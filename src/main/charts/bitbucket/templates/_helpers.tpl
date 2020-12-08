@@ -273,3 +273,22 @@ volumeClaimTemplates:
   value: {{ .Values.bitbucket.ports.hazelcast | quote }}
 {{ end }}
 {{ end }}
+
+{{- define "bitbucket.elasticSearchEnvVars" -}}
+{{ with .Values.bitbucket.elasticSearch.baseUrl }}
+- name: PLUGIN_SEARCH_ELASTICSEARCH_BASEURL
+  value: {{ . | quote }}
+{{ end }}
+{{ if .Values.bitbucket.elasticSearch.credentials.secretName }}
+- name: PLUGIN_SEARCH_ELASTICSEARCH_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.bitbucket.elasticSearch.credentials.secretName | quote }}
+      key: {{ .Values.bitbucket.elasticSearch.credentials.usernameSecreyKey | quote }}
+- name: PLUGIN_SEARCH_ELASTICSEARCH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.bitbucket.elasticSearch.credentials.secretName | quote }}
+      key: {{ .Values.bitbucket.elasticSearch.credentials.passwordSecretKey | quote }}
+{{ end }}
+{{ end }}
