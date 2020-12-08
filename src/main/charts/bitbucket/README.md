@@ -27,16 +27,17 @@ Kubernetes: `>=1.17.x-0`
 | bitbucket.additionalJvmArgs | string | `nil` | Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties |
 | bitbucket.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bitbucket container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | bitbucket.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bitbucket container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
+| bitbucket.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | bitbucket.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
+| bitbucket.ingress.fqdn | string | `nil` | The fully-qualified domain name of the ingress |
+| bitbucket.ingress.port | int | `443` | The port number of the ingress |
+| bitbucket.ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. Note that, if present, the value of x-forwarded-proto header will override this setting. |
+| bitbucket.ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Bitbucket license key |
-| bitbucket.license.secretName | string | `"bitbucket-license"` | The name of the Kubernetes Secret which contains the Bitbucket license key |
+| bitbucket.license.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. |
 | bitbucket.ports.hazelcast | int | `5701` |  |
 | bitbucket.ports.http | int | `7990` |  |
 | bitbucket.ports.ssh | int | `7999` |  |
-| bitbucket.proxy.fqdn | string | `nil` | The fully-qualified domain name of the ingress |
-| bitbucket.proxy.port | int | `443` | The port number of the ingress |
-| bitbucket.proxy.scheme | string | `"https"` | note that, if present, the value of x-forwarded-proto header will trump this setting |
-| bitbucket.proxy.secure | bool | `true` |  |
 | bitbucket.resources.container | object | `{}` | Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket container. It is important that if the memory resources are specified here, they must allow for the size of the Bitbucket JVM. That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example. |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM |
 | bitbucket.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Bitbucket JVM |
@@ -45,13 +46,13 @@ Kubernetes: `>=1.17.x-0`
 | bitbucket.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret which contains the sysadmin display name |
 | bitbucket.sysadminCredentials.emailAddressSecretKey | string | `"emailAddress"` | The key in the Kubernetes Secret which contains the sysadmin email address |
 | bitbucket.sysadminCredentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret which contains the sysadmin password |
-| bitbucket.sysadminCredentials.secretName | string | `"bitbucket-sysadmin-credentials"` | The name of the Kubernetes Secret which contains the Bitbucket sysadmin credentials |
+| bitbucket.sysadminCredentials.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Bitbucket sysadmin credentials If specified, then these will be automatically populated during Bitbucket setup. Otherwise, they will need to be provided via the browser after initial startup. |
 | bitbucket.sysadminCredentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret which contains the sysadmin username |
 | database.credentials.passwordSecretKey | string | `"password"` | The key in the Secret used to store the database login password |
-| database.credentials.secretName | string | `"bitbucket-database-credentials"` | The name of the Kubernetes Secret that contains the database login credentials. |
+| database.credentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the database login credentials. If specified, then the credentials will be automatically populated during Bitbucket setup. Otherwise, they will need to be provided via the browser after initial startup. |
 | database.credentials.usernameSecretKey | string | `"username"` | The key in the Secret used to store the database login username |
-| database.driver | string | `nil` | The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver |
-| database.url | string | `nil` | The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database |
+| database.driver | string | `nil` | The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver If not specified, then it will need to be provided via browser during initial startup. |
+| database.url | string | `nil` | The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/bitbucket-server"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
@@ -67,16 +68,19 @@ Kubernetes: `>=1.17.x-0`
 | serviceAccount.name | string | `nil` | Specifies the name of the ServiceAccount to be used by the pods. If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated, otherwise the 'default' ServiceAccount will be used. |
 | tolerations | list | `[]` | Standard Kubernetes tolerations that will be applied to all Bitbucket pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Bitbucket pods. Note that this will not create any corresponding volume mounts; those needs to be defined in bitbucket.additionalVolumeMounts |
-| volumes.localHome.customVolume | object | `{}` | A standard Kubernetes volume definition that should be used for the local-home volume. If defined, this will declared inline with the pod. If not defined, then an emptyDir will be used. |
+| volumes.localHome.customVolume | string | `nil` | When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume. |
 | volumes.localHome.mountPath | string | `"/var/atlassian/application-data/bitbucket"` |  |
-| volumes.localHome.persistentVolumeClaim.enabled | bool | `false` | Indicates if the local-home volume should be backed by a PersistentVolumeClaim. If false (the default) then a volume will be declared inline within the pods. If true, then a PersistentVolumeClaim will be created for each pod. |
+| volumes.localHome.persistentVolumeClaim.create | bool | `false` | If true, then a PersistentVolumeClaim will be created for each local-home volume. |
 | volumes.localHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims. |
 | volumes.localHome.persistentVolumeClaim.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the local-home volume claim. |
-| volumes.sharedHome.customVolume | object | `{}` | A standard Kubernetes volume definition that should be used for the shared-home volume. If defined, this will declared inline with the pod. If not defined, then an emptyDir will be used. |
+| volumes.sharedHome.customVolume | string | `nil` | When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes volume which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume. |
 | volumes.sharedHome.mountPath | string | `"/var/atlassian/application-data/shared-home"` | Specifies the path in the Bitbucket container to which the shared-home volume will be mounted. |
 | volumes.sharedHome.nfsPermissionFixer.command | string | `nil` | By default, the fixer will change the group ownership of the volume's root directory to match the Bitbucket container's GID (2003), and then ensures the directory is group-writeable. If this is not the desired behaviour, command used can be specified here. |
 | volumes.sharedHome.nfsPermissionFixer.enabled | bool | `false` | If enabled, this will alter the shared-home volume's root directory so that Bitbucket can write to it. This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260 |
 | volumes.sharedHome.nfsPermissionFixer.mountPath | string | `"/shared-home"` | The path in the initContainer where the shared-home volume will be mounted |
+| volumes.sharedHome.persistentVolumeClaim.create | bool | `false` | If true, then a PersistentVolumeClaim will be created for the shared-home volume. |
+| volumes.sharedHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims. |
+| volumes.sharedHome.persistentVolumeClaim.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the shared-home volume claim. |
 | volumes.sharedHome.subPath | string | `nil` | Specifies the sub-directory of the shared-home volume which will be mounted in to the Bitbucket container. |
 
 ----------------------------------------------
