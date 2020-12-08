@@ -72,9 +72,9 @@ spec:
             {{- include "bitbucket.clusteringEnvVars" . | nindent 12 }}
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
             {{- include "bitbucket.sysadminEnvVars" . | nindent 12 }}
-            {{ if .Values.bitbucket.ingress.fqdn }}
+            {{ if .Values.bitbucket.ingress.host }}
             - name: SERVER_PROXY_NAME
-              value: {{ .Values.bitbucket.ingress.fqdn | quote }}
+              value: {{ .Values.bitbucket.ingress.host | quote }}
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
             {{ end }}

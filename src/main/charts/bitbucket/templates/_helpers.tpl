@@ -104,7 +104,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "bitbucket.baseUrl" -}}
 {{ $httpPortMismatch := (and (eq .Values.bitbucket.ingress.scheme "http") (ne (int .Values.bitbucket.ingress.port) 80) ) -}}
 {{ $httpsPortMismatch := (and (eq .Values.bitbucket.ingress.scheme "https") (ne (int .Values.bitbucket.ingress.port) 443) ) -}}
-{{ .Values.bitbucket.ingress.scheme }}://{{ .Values.bitbucket.ingress.fqdn -}}
+{{ .Values.bitbucket.ingress.scheme }}://{{ .Values.bitbucket.ingress.host -}}
 {{ if or $httpPortMismatch $httpsPortMismatch }}:{{ .Values.bitbucket.ingress.port }}{{ end }}
 {{- end }}
 

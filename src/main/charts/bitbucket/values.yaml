@@ -82,8 +82,12 @@ bitbucket:
     emailAddressSecretKey: emailAddress
 
   ingress:
-    # -- The fully-qualified domain name of the ingress
-    fqdn:
+    # -- True if an Ingress should be created.
+    create: false
+    # -- The fully-qualified hostname of the Ingress.
+    host:
+    # -- The custom annotations that should be applied to the Ingress.
+    annotations: {}
     # -- The port number of the ingress
     port: 443
     # -- The protocol scheme used by the browser to access the application.

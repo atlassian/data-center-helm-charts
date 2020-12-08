@@ -53,6 +53,12 @@ jira:
     # -- The port on which the Jira container listens for HTTP traffic
     http: 8080
   ingress:
+    # -- True if an Ingress should be created.
+    create: false
+    # -- The fully-qualified hostname of the Ingress.
+    host:
+    # -- The custom annotations that should be applied to the Ingress.
+    annotations: {}
     # -- The protocol scheme used by the browser to access the application.
     # This is necessary so that the application generates the correct URLs.
     scheme: https

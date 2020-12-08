@@ -1,0 +1,21 @@
+{{- if .Values.jira.ingress.create }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "jira.fullname" . }}
+  labels:
+    {{- include "jira.labels" . | nindent 4 }}
+  {{- with .Values.jira.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.jira.ingress.host }}
+      http:
+        paths:
+          - path: "/"
+            backend:
+              serviceName: {{ include "jira.fullname" $ }}
+              servicePort: {{ $.Values.jira.service.port }}
+{{ end }}

@@ -5,11 +5,13 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
+import test.model.Kind;
 import test.model.Product;
 
 import java.util.Map;
 
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
+import static test.jackson.JsonNodeAssert.assertThat;
 
 class IngressTest {
     private Helm helm;
@@ -17,6 +19,19 @@ class IngressTest {
     @BeforeEach
     void initHelm(TestInfo testInfo) {
         helm = new Helm(testInfo);
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void ingress_create(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".ingress.create", "true",
+                product + ".ingress.host", "myhost.mydomain"));
+
+        final var ingress = resources.get(Kind.Ingress);
+
+        assertThat(ingress.getNode("spec", "rules").required(0).path("host"))
+                .hasTextContaining("myhost.mydomain");
     }
 
     @ParameterizedTest

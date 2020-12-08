@@ -1,8 +1,8 @@
-{{- if eq "EKS" .Values.clusterType }}
+{{- if and (eq "EKS" .Values.clusterType) .Values.backdoorServiceNames }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Values.productReleaseName }}
+  name: {{ .Release.Name | quote }}
   labels:
     "app.kubernetes.io/managed-by": "Helm"
     "meta.helm.sh/release-name": {{ .Release.Name | quote }}
@@ -16,7 +16,7 @@ metadata:
     "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
 spec:
   rules:
-    {{- range $serviceName := .Values.ingressNames }}
+    {{- range $serviceName := .Values.backdoorServiceNames }}
     - host: {{ printf "%s.%s" $serviceName $.Values.ingressDomain }}
       http:
         paths:

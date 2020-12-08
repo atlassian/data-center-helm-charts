@@ -13,7 +13,7 @@ podAnnotations:
 
 bitbucket:
   ingress:
-    fqdn: ${helm.release.prefix}-bitbucket.${kitt.ingress.domain}
+    host: ${helm.release.prefix}-bitbucket.${kitt.ingress.domain}
 
 volumes:
   localHome:
