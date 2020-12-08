@@ -86,7 +86,7 @@ bitbucket:
     fqdn:
     # -- The port number of the ingress
     port: 443
-    # -- The protocol scheme used by the ingress that sends traffic to the application.
+    # -- The protocol scheme used by the browser to access the application.
     # This is necessary so that the application generates the correct URLs.
     # Note that, if present, the value of x-forwarded-proto header will override this setting.
     scheme: https

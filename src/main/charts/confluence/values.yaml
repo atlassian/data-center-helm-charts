@@ -63,7 +63,7 @@ confluence:
     # -- The port on which the Confluence container listens for Hazelcast traffic
     hazelcast: 5701
   ingress:
-    # -- The protocol scheme used by the ingress that sends traffic to the application.
+    # -- The protocol scheme used by the browser to access the application.
     # This is necessary so that the application generates the correct URLs.
     scheme: https
     # -- Set to true if the connection between the Ingress and the application should be considered secure.

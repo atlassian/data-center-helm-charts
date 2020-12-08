@@ -53,7 +53,7 @@ jira:
     # -- The port on which the Jira container listens for HTTP traffic
     http: 8080
   ingress:
-    # -- The protocol scheme used by the ingress that sends traffic to the application.
+    # -- The protocol scheme used by the browser to access the application.
     # This is necessary so that the application generates the correct URLs.
     scheme: https
     # -- Set to true if the connection between the Ingress and the application should be considered secure.
