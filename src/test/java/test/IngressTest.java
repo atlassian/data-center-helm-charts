@@ -38,30 +38,51 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bitbucket")
+    void bitbucket_ingress_host(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.host", "myhost.mydomain"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("SERVER_PROXY_NAME", "myhost.mydomain")
+                .assertHasValue("SERVER_PROXY_PORT", "443")
+                .assertHasValue("SETUP_BASEURL", "https://myhost.mydomain");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bitbucket")
+    void bitbucket_ingress_host_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.host", "myhost.mydomain",
+                "ingress.port", "666"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("SERVER_PROXY_NAME", "myhost.mydomain")
+                .assertHasValue("SERVER_PROXY_PORT", "666")
+                .assertHasValue("SETUP_BASEURL", "https://myhost.mydomain:666");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, mode = EXCLUDE, names = "bitbucket")
     void https_disabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.secure", "false",
-                "ingress.scheme", "http"));
+                "ingress.https", "false"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasValue("ATL_TOMCAT_SCHEME", "http")
-                .assertHasValue("ATL_TOMCAT_SECURE", "false");
+                .assertDoesNotHaveAnyOf("ATL_TOMCAT_SCHEME", "ATL_TOMCAT_SECURE");
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bitbucket")
     void https_disabled_bitbucket(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.secure", "false",
-                "ingress.scheme", "http"));
+                "ingress.https", "false"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasValue("SERVER_SCHEME", "http")
-                .assertHasValue("SERVER_SECURE", "false");
+                .assertDoesNotHaveAnyOf("SERVER_SCHEME", "SERVER_SECURE");
     }
 }

@@ -114,8 +114,6 @@ spec:
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
           env:
-            - name: SERVER_PROXY_PORT
-              value: "443"
             - name: SERVER_SCHEME
               value: "https"
             - name: SERVER_SECURE

@@ -34,10 +34,12 @@ spec:
           image: {{ include "jira.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
-              value: {{ .Values.ingress.scheme | quote }}
+              value: "https"
             - name: ATL_TOMCAT_SECURE
-              value: {{ .Values.ingress.secure | quote }}
+              value: "true"
+              {{ end }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
             - name: JIRA_SHARED_HOME
