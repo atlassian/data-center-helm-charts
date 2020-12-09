@@ -8,13 +8,6 @@ serviceAccount:
 ingress:
   create: true
   host: ${helm.release.prefix}-confluence.${eks.ingress.domain}
-  annotations:
-    "kubernetes.io/ingress.class": "nginx"
-    "nginx.ingress.kubernetes.io/affinity": "cookie"
-    "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
-    "nginx.ingress.kubernetes.io/proxy-connect-timeout": "60"
-    "nginx.ingress.kubernetes.io/proxy-read-timeout": "60"
-    "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
 
 synchrony:
   ingressUrl: https://${helm.release.prefix}-confluence.${eks.ingress.domain}/synchrony

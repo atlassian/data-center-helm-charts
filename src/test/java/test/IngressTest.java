@@ -32,6 +32,9 @@ class IngressTest {
 
         assertThat(ingress.getNode("spec", "rules").required(0).path("host"))
                 .hasTextContaining("myhost.mydomain");
+
+        assertThat(ingress.getMetadata().path("annotations"))
+                .isObject(Map.of("kubernetes.io/ingress.class", "nginx"));
     }
 
     @ParameterizedTest
