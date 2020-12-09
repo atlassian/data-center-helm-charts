@@ -98,6 +98,18 @@ bitbucket:
     # This will automatically configure cluster peer discovery between cluster nodes.
     enabled: false
 
+  elasticSearch:
+    # -- The base URL of the external ElasticSearch instance to be used.
+    # If this is defined, then Bitbucket will disable its internal ElasticSearch instance.
+    baseUrl:
+    credentials:
+      # -- The name of the Kubernetes Secret that contains the ElasticSearch credentials.
+      secretName:
+      # -- The key in the the Kubernetes Secret that contains the ElasticSearch username.
+      usernameSecreyKey: username
+      # -- The key in the the Kubernetes Secret that contains the ElasticSearch password.
+      passwordSecretKey: password
+
   resources:
     jvm:
       # -- The maximum amount of heap memory that will be used by the Bitbucket JVM
