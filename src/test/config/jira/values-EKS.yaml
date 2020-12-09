@@ -5,6 +5,10 @@ serviceAccount:
   imagePullSecrets:
     - name: regcred
 
+ingress:
+  create: true
+  host: ${helm.release.prefix}-jira.${eks.ingress.domain}
+
 volumes:
   localHome:
     persistentVolumeClaim:

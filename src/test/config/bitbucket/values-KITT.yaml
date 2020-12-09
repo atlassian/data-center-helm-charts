@@ -11,9 +11,8 @@ serviceAccount:
 podAnnotations:
   "atlassian.com/business_unit": "server_engineering"
 
-bitbucket:
-  ingress:
-    fqdn: ${helm.release.prefix}-bitbucket.${kitt.ingress.domain}
+ingress:
+  host: ${helm.release.prefix}-bitbucket.${kitt.ingress.domain}
 
 volumes:
   localHome:

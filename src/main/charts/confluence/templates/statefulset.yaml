@@ -66,9 +66,9 @@ spec:
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
           env:
             - name: ATL_TOMCAT_SCHEME
-              value: {{ .Values.confluence.ingress.scheme | quote }}
+              value: {{ .Values.ingress.scheme | quote }}
             - name: ATL_TOMCAT_SECURE
-              value: {{ .Values.confluence.ingress.secure | quote }}
+              value: {{ .Values.ingress.secure | quote }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

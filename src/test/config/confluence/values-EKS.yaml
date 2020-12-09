@@ -5,6 +5,10 @@ serviceAccount:
   imagePullSecrets:
     - name: regcred
 
+ingress:
+  create: true
+  host: ${helm.release.prefix}-confluence.${eks.ingress.domain}
+
 synchrony:
   ingressUrl: https://${helm.release.prefix}-confluence.${eks.ingress.domain}/synchrony
 

@@ -3,9 +3,9 @@ serviceAccount:
   imagePullSecrets:
     - name: regcred
 
-bitbucket:
-  ingress:
-    fqdn: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
+ingress:
+  create: true
+  host: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
 
 volumes:
   localHome:

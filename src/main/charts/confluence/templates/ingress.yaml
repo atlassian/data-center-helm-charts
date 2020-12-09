@@ -1,0 +1,35 @@
+{{- if .Values.ingress.create }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "confluence.fullname" . }}
+  labels:
+    {{- include "confluence.labels" . | nindent 4 }}
+  annotations:
+    {{ if .Values.ingress.nginx }}
+    "kubernetes.io/ingress.class": "nginx"
+    "nginx.ingress.kubernetes.io/affinity": "cookie"
+    "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
+    "nginx.ingress.kubernetes.io/proxy-connect-timeout": "60"
+    "nginx.ingress.kubernetes.io/proxy-read-timeout": "60"
+    "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
+    {{- end }}
+    {{- with .Values.ingress.annotations }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: "/"
+            backend:
+              serviceName: {{ include "confluence.fullname" . }}
+              servicePort: {{ $.Values.confluence.service.port }}
+          {{ if .Values.synchrony.enabled }}
+          - path: "/synchrony"
+            backend:
+              serviceName: {{ include "synchrony.fullname" . }}
+              servicePort: {{ $.Values.synchrony.service.port }}
+          {{ end }}
+{{ end }}

@@ -33,10 +33,6 @@ Kubernetes: `>=1.17.x-0`
 | bitbucket.elasticSearch.credentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the ElasticSearch credentials. |
 | bitbucket.elasticSearch.credentials.usernameSecreyKey | string | `"username"` | The key in the the Kubernetes Secret that contains the ElasticSearch username. |
 | bitbucket.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
-| bitbucket.ingress.fqdn | string | `nil` | The fully-qualified domain name of the ingress |
-| bitbucket.ingress.port | int | `443` | The port number of the ingress |
-| bitbucket.ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. Note that, if present, the value of x-forwarded-proto header will override this setting. |
-| bitbucket.ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Bitbucket license key |
 | bitbucket.license.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. |
 | bitbucket.ports.hazelcast | int | `5701` |  |
@@ -60,6 +56,13 @@ Kubernetes: `>=1.17.x-0`
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/bitbucket-server"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
+| ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
+| ingress.create | bool | `false` | True if an Ingress should be created. |
+| ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
+| ingress.port | int | `443` | The port number of the ingress |
+| ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. Note that, if present, the value of x-forwarded-proto header will override this setting. |
+| ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Specify custom annotations to be added to all Bitbucket pods |
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of Bitbucket. |

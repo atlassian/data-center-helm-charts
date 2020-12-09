@@ -81,18 +81,6 @@ bitbucket:
     # -- The key in the Kubernetes Secret which contains the sysadmin email address
     emailAddressSecretKey: emailAddress
 
-  ingress:
-    # -- The fully-qualified domain name of the ingress
-    fqdn:
-    # -- The port number of the ingress
-    port: 443
-    # -- The protocol scheme used by the browser to access the application.
-    # This is necessary so that the application generates the correct URLs.
-    # Note that, if present, the value of x-forwarded-proto header will override this setting.
-    scheme: https
-    # -- Set to true if the connection between the Ingress and the application should be considered secure.
-    secure: true
-
   clustering:
     # -- Set to true if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
@@ -158,6 +146,26 @@ bitbucket:
   # -- Defines any additional environment variables to be passed to the Bitbucket container.
   # See https://hub.docker.com/r/atlassian/bitbucket-server for supported variables.
   additionalEnvironmentVariables: []
+
+ingress:
+  # -- True if an Ingress should be created.
+  create: false
+  # -- True if the created Ingress is to use the Kubernetes ingress-nginx controller.
+  # This will populate the Ingress with annotations for that controller.
+  # Set to false if a different controller is to be used, in which case the annotations need to be specified.
+  nginx: true
+  # -- The fully-qualified hostname of the Ingress.
+  host:
+  # -- The custom annotations that should be applied to the Ingress.
+  annotations: {}
+  # -- The port number of the ingress
+  port: 443
+  # -- The protocol scheme used by the browser to access the application.
+  # This is necessary so that the application generates the correct URLs.
+  # Note that, if present, the value of x-forwarded-proto header will override this setting.
+  scheme: https
+  # -- Set to true if the connection between the Ingress and the application should be considered secure.
+  secure: true
 
 # -- Specify custom annotations to be added to all Bitbucket pods
 podAnnotations: {}

@@ -29,8 +29,6 @@ Kubernetes: `>=1.17.x-0`
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | confluence.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | confluence.gid | string | `"2002"` | The GID used by the Confluence docker image |
-| confluence.ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. |
-| confluence.ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | confluence.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Confluence license key |
 | confluence.license.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Confluence license key. If specified, then the license will be automatically populated during Confluence setup. Otherwise, it will need to be provided via the browser after initial startup. |
 | confluence.ports.hazelcast | int | `5701` | The port on which the Confluence container listens for Hazelcast traffic |
@@ -52,6 +50,12 @@ Kubernetes: `>=1.17.x-0`
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/confluence-server"` |  |
 | image.tag | string | `nil` | The docker image tag to be used. Defaults to the Chart appVersion. |
+| ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
+| ingress.create | bool | `false` | True if an Ingress should be created. |
+| ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
+| ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. |
+| ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Confluence and Synchrony pods |
 | podAnnotations | object | `{}` | Specify additional annotations to be added to all Confluence and Synchrony pods |
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of each of Confluence and Synchrony. Note that because Confluence requires initial manual configuration after the first pod is deployed, and before scaling up to additional pods, this should always be kept as 1. |
