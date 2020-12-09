@@ -46,11 +46,10 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    --set postgresqlPassword="$PRODUCT_NAME" \
    --version "$POSTGRES_CHART_VERSION" \
    bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
- 
-if [ -n "$DB_INIT_SCRIPT_FILE" ]
-then
-  kubectl cp $DB_INIT_SCRIPT_FILE $TARGET_NAMESPACE/$POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
-  kubectl exec ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
+
+if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
+  kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
+  kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
 fi
 
 CHART_TEST_VALUES_DIR=$CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME
@@ -100,13 +99,13 @@ FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
 FUNCTEST_CHART_VALUES=clusterType=$clusterType,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME
 
 ## build values file for expose node services and ingresses
-## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef 
+## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef
 NEWLINE=$'\n'
 backdoorServices="backdoorServiceNames:${NEWLINE}"
 ingressServices="ingressNames:${NEWLINE}"
 ingressServices+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
-for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1)) 
-do 
+for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1))
+do
   backdoorServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
   ingressServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
 done
