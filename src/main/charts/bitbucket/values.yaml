@@ -99,7 +99,8 @@ bitbucket:
     enabled: false
 
   elasticSearch:
-    # -- The base URL of the ElasticSearch instance to be used.
+    # -- The base URL of the external ElasticSearch instance to be used.
+    # If this is defined, then Bitbucket will disable its internal ElasticSearch instance.
     baseUrl:
     credentials:
       # -- The name of the Kubernetes Secret that contains the ElasticSearch credentials.

@@ -276,6 +276,8 @@ volumeClaimTemplates:
 
 {{- define "bitbucket.elasticSearchEnvVars" -}}
 {{ with .Values.bitbucket.elasticSearch.baseUrl }}
+- name: ELASTICSEARCH_ENABLED
+  value: "false"
 - name: PLUGIN_SEARCH_ELASTICSEARCH_BASEURL
   value: {{ . | quote }}
 {{ end }}

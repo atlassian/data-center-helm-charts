@@ -28,7 +28,7 @@ Kubernetes: `>=1.17.x-0`
 | bitbucket.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bitbucket container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | bitbucket.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bitbucket container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | bitbucket.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
-| bitbucket.elasticSearch.baseUrl | string | `nil` | The base URL of the ElasticSearch instance to be used. |
+| bitbucket.elasticSearch.baseUrl | string | `nil` | The base URL of the external ElasticSearch instance to be used. If this is defined, then Bitbucket will disable its internal ElasticSearch instance. |
 | bitbucket.elasticSearch.credentials.passwordSecretKey | string | `"password"` | The key in the the Kubernetes Secret that contains the ElasticSearch password. |
 | bitbucket.elasticSearch.credentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the ElasticSearch credentials. |
 | bitbucket.elasticSearch.credentials.usernameSecreyKey | string | `"username"` | The key in the the Kubernetes Secret that contains the ElasticSearch username. |
