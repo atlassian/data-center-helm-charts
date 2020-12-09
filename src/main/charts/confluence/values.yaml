@@ -171,11 +171,8 @@ ingress:
   host:
   # -- The custom annotations that should be applied to the Ingress.
   annotations: {}
-  # -- The protocol scheme used by the browser to access the application.
-  # This is necessary so that the application generates the correct URLs.
-  scheme: https
-  # -- Set to true if the connection between the Ingress and the application should be considered secure.
-  secure: true
+  # -- True if the browser communicates with the application over HTTPS.
+  https: true
 
 # -- Specify additional annotations to be added to all Confluence and Synchrony pods
 podAnnotations: {}

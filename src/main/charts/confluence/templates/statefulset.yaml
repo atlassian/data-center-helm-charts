@@ -65,10 +65,12 @@ spec:
             {{- include "confluence.additionalLibraries" . | nindent 12 }}
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
           env:
+            {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
-              value: {{ .Values.ingress.scheme | quote }}
+              value: "https"
             - name: ATL_TOMCAT_SECURE
-              value: {{ .Values.ingress.secure | quote }}
+              value: "true"
+            {{ end }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

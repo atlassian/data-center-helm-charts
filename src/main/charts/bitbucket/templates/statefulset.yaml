@@ -76,15 +76,17 @@ spec:
             {{ if .Values.ingress.host }}
             - name: SERVER_PROXY_NAME
               value: {{ .Values.ingress.host | quote }}
+            - name: SERVER_PROXY_PORT
+              value: {{ include "bitbucket.ingressPort" . | quote }}
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
             {{ end }}
-            - name: SERVER_PROXY_PORT
-              value: {{ .Values.ingress.port | quote }}
+            {{ if .Values.ingress.https }}
             - name: SERVER_SCHEME
-              value: {{ .Values.ingress.scheme | quote }}
+              value: "https"
             - name: SERVER_SECURE
-              value: {{ .Values.ingress.secure | quote }}
+              value: "true"
+            {{ end }}
             - name: BITBUCKET_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             {{ with .Values.bitbucket.license.secretName }}
