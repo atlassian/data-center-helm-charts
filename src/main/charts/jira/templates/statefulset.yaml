@@ -35,9 +35,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: ATL_TOMCAT_SCHEME
-              value: {{ .Values.jira.ingress.scheme | quote }}
+              value: {{ .Values.ingress.scheme | quote }}
             - name: ATL_TOMCAT_SECURE
-              value: {{ .Values.jira.ingress.secure | quote }}
+              value: {{ .Values.ingress.secure | quote }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
             - name: JIRA_SHARED_HOME

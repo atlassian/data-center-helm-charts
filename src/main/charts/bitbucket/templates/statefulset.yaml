@@ -72,18 +72,18 @@ spec:
             {{- include "bitbucket.clusteringEnvVars" . | nindent 12 }}
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
             {{- include "bitbucket.sysadminEnvVars" . | nindent 12 }}
-            {{ if .Values.bitbucket.ingress.host }}
+            {{ if .Values.ingress.host }}
             - name: SERVER_PROXY_NAME
-              value: {{ .Values.bitbucket.ingress.host | quote }}
+              value: {{ .Values.ingress.host | quote }}
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
             {{ end }}
             - name: SERVER_PROXY_PORT
-              value: {{ .Values.bitbucket.ingress.port | quote }}
+              value: {{ .Values.ingress.port | quote }}
             - name: SERVER_SCHEME
-              value: {{ .Values.bitbucket.ingress.scheme | quote }}
+              value: {{ .Values.ingress.scheme | quote }}
             - name: SERVER_SECURE
-              value: {{ .Values.bitbucket.ingress.secure | quote }}
+              value: {{ .Values.ingress.secure | quote }}
             - name: BITBUCKET_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             {{ with .Values.bitbucket.license.secretName }}

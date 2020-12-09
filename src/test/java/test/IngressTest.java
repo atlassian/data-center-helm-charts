@@ -25,8 +25,8 @@ class IngressTest {
     @EnumSource
     void ingress_create(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".ingress.create", "true",
-                product + ".ingress.host", "myhost.mydomain"));
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
 
         final var ingress = resources.get(Kind.Ingress);
 
@@ -38,8 +38,8 @@ class IngressTest {
     @EnumSource(value = Product.class, mode = EXCLUDE, names = "bitbucket")
     void https_disabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".ingress.secure", "false",
-                product + ".ingress.scheme", "http"));
+                "ingress.secure", "false",
+                "ingress.scheme", "http"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
@@ -52,8 +52,8 @@ class IngressTest {
     @EnumSource(value = Product.class, names = "bitbucket")
     void https_disabled_bitbucket(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".ingress.secure", "false",
-                product + ".ingress.scheme", "http"));
+                "ingress.secure", "false",
+                "ingress.scheme", "http"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()

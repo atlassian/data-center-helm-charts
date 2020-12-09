@@ -52,18 +52,6 @@ jira:
   ports:
     # -- The port on which the Jira container listens for HTTP traffic
     http: 8080
-  ingress:
-    # -- True if an Ingress should be created.
-    create: false
-    # -- The fully-qualified hostname of the Ingress.
-    host:
-    # -- The custom annotations that should be applied to the Ingress.
-    annotations: {}
-    # -- The protocol scheme used by the browser to access the application.
-    # This is necessary so that the application generates the correct URLs.
-    scheme: https
-    # -- Set to true if the connection between the Ingress and the application should be considered secure.
-    secure: true
   readinessProbe:
     # -- The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running
     initialDelaySeconds: 10
@@ -126,6 +114,19 @@ jira:
   # -- Defines any additional environment variables to be passed to the Jira container.
   # See https://hub.docker.com/r/atlassian/jira-software for supported variables.
   additionalEnvironmentVariables: []
+
+ingress:
+  # -- True if an Ingress should be created.
+  create: false
+  # -- The fully-qualified hostname of the Ingress.
+  host:
+  # -- The custom annotations that should be applied to the Ingress.
+  annotations: {}
+  # -- The protocol scheme used by the browser to access the application.
+  # This is necessary so that the application generates the correct URLs.
+  scheme: https
+  # -- Set to true if the connection between the Ingress and the application should be considered secure.
+  secure: true
 
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}

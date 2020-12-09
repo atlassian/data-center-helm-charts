@@ -31,6 +31,11 @@ Kubernetes: `>=1.17.x-0`
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/jira-software"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
+| ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
+| ingress.create | bool | `false` | True if an Ingress should be created. |
+| ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. |
+| ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | jira.additionalBundledPlugins | list | `[]` | Specifies a list of additional Jira plugins that should be added to the Jira container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | jira.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Jira container. See https://hub.docker.com/r/atlassian/jira-software for supported variables. |
 | jira.additionalJvmArgs | string | `nil` | Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. system properties |
@@ -38,8 +43,6 @@ Kubernetes: `>=1.17.x-0`
 | jira.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Jira container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | jira.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | jira.gid | string | `"2001"` | The GID used by the Jira docker image |
-| jira.ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. |
-| jira.ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic |
 | jira.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks |
 | jira.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running |

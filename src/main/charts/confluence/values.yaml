@@ -62,18 +62,6 @@ confluence:
     http: 8090
     # -- The port on which the Confluence container listens for Hazelcast traffic
     hazelcast: 5701
-  ingress:
-    # -- True if an Ingress should be created.
-    create: false
-    # -- The fully-qualified hostname of the Ingress.
-    host:
-    # -- The custom annotations that should be applied to the Ingress.
-    annotations: {}
-    # -- The protocol scheme used by the browser to access the application.
-    # This is necessary so that the application generates the correct URLs.
-    scheme: https
-    # -- Set to true if the connection between the Ingress and the application should be considered secure.
-    secure: true
   license:
     # -- The name of the Kubernetes Secret which contains the Confluence license key.
     # If specified, then the license will be automatically populated during Confluence setup.
@@ -171,6 +159,19 @@ synchrony:
   # Confluence service will use to communicate directly with Synchrony, so the URL must be resovable both from inside and
   # outside the Kubernetes cluster.
   ingressUrl:
+
+ingress:
+  # -- True if an Ingress should be created.
+  create: false
+  # -- The fully-qualified hostname of the Ingress.
+  host:
+  # -- The custom annotations that should be applied to the Ingress.
+  annotations: {}
+  # -- The protocol scheme used by the browser to access the application.
+  # This is necessary so that the application generates the correct URLs.
+  scheme: https
+  # -- Set to true if the connection between the Ingress and the application should be considered secure.
+  secure: true
 
 # -- Specify additional annotations to be added to all Confluence and Synchrony pods
 podAnnotations: {}

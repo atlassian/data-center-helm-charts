@@ -3,17 +3,16 @@ serviceAccount:
   imagePullSecrets:
     - name: regcred
 
-bitbucket:
-  ingress:
-    create: true
-    host: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
-    annotations:
-      "kubernetes.io/ingress.class": "nginx"
-      "nginx.ingress.kubernetes.io/affinity": "cookie"
-      "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
-      "nginx.ingress.kubernetes.io/proxy-connect-timeout": "60"
-      "nginx.ingress.kubernetes.io/proxy-read-timeout": "60"
-      "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
+ingress:
+  create: true
+  host: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
+  annotations:
+    "kubernetes.io/ingress.class": "nginx"
+    "nginx.ingress.kubernetes.io/affinity": "cookie"
+    "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
+    "nginx.ingress.kubernetes.io/proxy-connect-timeout": "60"
+    "nginx.ingress.kubernetes.io/proxy-read-timeout": "60"
+    "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
 
 volumes:
   localHome:
