@@ -83,12 +83,6 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    ${valueOverrides} \
    "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
-if [ $? -ne 0 ]
-then
-  kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp
-  exit 1;
-fi
-
 # Run the chart's tests
 helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 

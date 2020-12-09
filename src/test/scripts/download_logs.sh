@@ -35,4 +35,6 @@ get_pod_logs "$PRODUCT_RELEASE_NAME"
 get_pod_logs "$POSTGRES_RELEASE_NAME"
 get_ingresses "$PRODUCT_RELEASE_NAME"
 
+kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp > "$LOG_DOWNLOAD_DIR/events.txt"
+
 exit 0
