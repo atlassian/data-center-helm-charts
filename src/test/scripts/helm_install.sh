@@ -83,9 +83,6 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    ${valueOverrides} \
    "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
-# Run the chart's tests
-helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
-
 # Package and install the functest helm chart
 INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
 INGRESS_DOMAIN=${!INGRESS_DOMAIN_VARIABLE_NAME}
@@ -138,3 +135,7 @@ do
      sleep 3
    fi
 done
+
+# Run the chart's tests
+helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
+
