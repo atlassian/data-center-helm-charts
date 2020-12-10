@@ -38,6 +38,23 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource
+    void ingress_create_tls (Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.tlsSecretName", "tls-secret",
+                "ingress.host", "myhost.mydomain"));
+
+        final var ingress = resources.get(Kind.Ingress);
+        assertThat(ingress.getNode("spec", "tls").required(0).path("hosts").required(0))
+                .hasTextContaining("myhost.mydomain");
+
+        assertThat(ingress.getNode("spec", "tls").required(0).path("secretName"))
+                .hasTextContaining("tls-secret");
+
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "bitbucket")
     void bitbucket_ingress_host(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
