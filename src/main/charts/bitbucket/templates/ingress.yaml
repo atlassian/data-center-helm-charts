@@ -18,6 +18,12 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+{{ if and (.Values.ingress.tlsSecretName) (.Values.ingress.host) }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tlsSecretName }}
+{{ end }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:

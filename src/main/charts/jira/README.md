@@ -34,9 +34,9 @@ Kubernetes: `>=1.17.x-0`
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
 | ingress.create | bool | `false` | True if an Ingress should be created. |
 | ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
 | ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
-| ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. |
-| ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
+| ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
 | jira.additionalBundledPlugins | list | `[]` | Specifies a list of additional Jira plugins that should be added to the Jira container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | jira.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Jira container. See https://hub.docker.com/r/atlassian/jira-software for supported variables. |
 | jira.additionalJvmArgs | string | `nil` | Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. system properties |

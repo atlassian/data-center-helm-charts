@@ -59,10 +59,10 @@ Kubernetes: `>=1.17.x-0`
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
 | ingress.create | bool | `false` | True if an Ingress should be created. |
 | ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
 | ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
-| ingress.port | int | `443` | The port number of the ingress |
-| ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. Note that, if present, the value of x-forwarded-proto header will override this setting. |
-| ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
+| ingress.port | string | `nil` | Used to specify a custom port number for the ingress. |
+| ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Specify custom annotations to be added to all Bitbucket pods |
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of Bitbucket. |

@@ -53,9 +53,9 @@ Kubernetes: `>=1.17.x-0`
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
 | ingress.create | bool | `false` | True if an Ingress should be created. |
 | ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
 | ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
-| ingress.scheme | string | `"https"` | The protocol scheme used by the browser to access the application. This is necessary so that the application generates the correct URLs. |
-| ingress.secure | bool | `true` | Set to true if the connection between the Ingress and the application should be considered secure. |
+| ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Confluence and Synchrony pods |
 | podAnnotations | object | `{}` | Specify additional annotations to be added to all Confluence and Synchrony pods |
 | replicaCount | int | `1` | The initial number of pods that should be started at deployment of each of Confluence and Synchrony. Note that because Confluence requires initial manual configuration after the first pod is deployed, and before scaling up to additional pods, this should always be kept as 1. |

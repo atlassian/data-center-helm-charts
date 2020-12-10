@@ -173,6 +173,9 @@ ingress:
   annotations: {}
   # -- True if the browser communicates with the application over HTTPS.
   https: true
+  # -- Secret that contains a TLS private key and certificate.
+  # Optional if Ingress Controller is configured to use one secret for all ingresses
+  tlsSecretName:
 
 # -- Specify additional annotations to be added to all Confluence and Synchrony pods
 podAnnotations: {}
