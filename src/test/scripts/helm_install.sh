@@ -18,6 +18,8 @@ currentContext=$(kubectl config current-context)
 
 echo Current context: $currentContext
 
+# If this fails, you might be using an old version of Bash.
+# Update following https://itnext.io/upgrading-bash-on-macos-7138bd1066ba.
 clusterType=$(case "${currentContext}" in
   *eks*) echo EKS;;
   *aks*) echo AKS;;
