@@ -23,3 +23,6 @@ volumes:
     subPath: ${helm.release.prefix}-confluence # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
     nfsPermissionFixer:
       enabled: true
+
+nodeSelector:
+  node_purpose: ci
