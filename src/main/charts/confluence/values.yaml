@@ -194,7 +194,7 @@ volumes:
           storage: 1Gi
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
     # volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
-    customVolume:
+    customVolume: {}
     mountPath: "/var/atlassian/application-data/confluence"
   sharedHome:
     persistentVolumeClaim:
@@ -208,7 +208,7 @@ volumes:
           storage: 1Gi
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
     # volume which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
-    customVolume:
+    customVolume: {}
     # -- Specifies the path in the Confluence container to which the shared-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/shared-home"
     # -- Specifies the sub-directory of the shared-home volume which will be mounted in to the Confluence container.
