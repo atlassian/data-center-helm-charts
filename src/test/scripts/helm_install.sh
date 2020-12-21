@@ -3,6 +3,18 @@
 set -e
 set -x
 
+getClusterType() {
+  local currentContext=$1
+
+  case "${currentContext}" in
+    *eks*) echo EKS;;
+    *aks*) echo AKS;;
+    *gke*) echo GKE;;
+    *shared-dev*|*default-context*) echo KITT;;
+    *) echo CUSTOM;;
+  esac
+}
+
 if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
   echo "Your Bash version ${BASH_VERSINFO} is too old, update to version 5 or later."
   echo "If you're on OS X, you can follow this guide: https://itnext.io/upgrading-bash-on-macos-7138bd1066ba".
@@ -24,13 +36,7 @@ currentContext=$(kubectl config current-context)
 
 echo Current context: $currentContext
 
-clusterType=$(case "${currentContext}" in
-  *eks*) echo EKS;;
-  *aks*) echo AKS;;
-  *gke*) echo GKE;;
-  *shared-dev*|*default-context*) echo KITT;;
-  *) echo CUSTOM;;
-esac)
+clusterType=$(getClusterType $currentContext)
 
 echo "Cluster type is $clusterType"
 
@@ -38,6 +44,14 @@ echo "Cluster type is $clusterType"
 helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
 
 mkdir -p "$LOG_DOWNLOAD_DIR"
+
+if [ "$START_NFS_SERVER" = true ]; then
+    echo This configuration requires a private NFS server, starting...
+    # todo DCNG-945
+    nfsServer=10.81.3.102
+    echo Detected NFS server IP: $nfsServer
+    valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfsServer "
+fi
 
 # Use the product name for the name of the postgres database, username and password.
 # These must match the credentials stored in the Secret pre-loaded into the namespace,

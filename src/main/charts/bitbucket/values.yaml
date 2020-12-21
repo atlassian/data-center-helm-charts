@@ -186,12 +186,24 @@ volumes:
     customVolume: {}
     mountPath: "/var/atlassian/application-data/bitbucket"
   sharedHome:
+    persistentVolume:
+      # -- If true, then a PersistentVolume will be created for the shared-home volume.
+      create: false
+      # -- Addtional options used when mounting the volume
+      mountOptions: []
+      nfs:
+        # -- The address of the NFS server. It needs to be resolveable by the kubelet, so consider using an IP address.
+        server: ""
+        # -- Specifies the path exported by the NFS server, used in the mount command
+        path: ""
     persistentVolumeClaim:
       # -- If true, then a PersistentVolumeClaim will be created for the shared-home volume.
       create: false
       # -- Specifies the name of the storage class that should be used for the shared-home volume claim.
       storageClassName:
       # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
+      volumeName:
+      # -- Specifies the name of the persistent volume to claim
       resources:
         requests:
           storage: 1Gi

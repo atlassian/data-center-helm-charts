@@ -1,0 +1,21 @@
+{{- if .Values.volumes.sharedHome.persistentVolume.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "bitbucket.fullname" . }}-shared-home-pv
+  labels:
+  {{- include "bitbucket.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  {{- with .Values.volumes.sharedHome.persistentVolume.mountOptions }}
+  mountOptions:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.volumes.sharedHome.persistentVolume.nfs }}
+  nfs:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{ end }}

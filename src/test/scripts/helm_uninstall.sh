@@ -15,12 +15,20 @@ helm uninstall -n "${TARGET_NAMESPACE}" "${FUNCTEST_RELEASE_NAME}"
 helm uninstall -n "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}"
 helm uninstall -n "${TARGET_NAMESPACE}" "${POSTGRES_RELEASE_NAME}"
 
-# delete any and all persistent volume claims by label
-kubectl delete -n "${TARGET_NAMESPACE}" pvc -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}"
+if [ "$START_NFS_SERVER" != true ]; then
+  # we are using a "shared shared home", remove the subdirectory of the shared-home
+  "$THISDIR"/shared_home_browser_install.sh "${TARGET_NAMESPACE}"
+  kubectl exec -n "${TARGET_NAMESPACE}" shared-home-browser -- rm -rf "/shared-home/$PRODUCT_RELEASE_NAME"
+fi
 
-# remove the subdirectory of the shared-home
-"$THISDIR"/shared_home_browser_install.sh "${TARGET_NAMESPACE}"
-kubectl exec -n "${TARGET_NAMESPACE}" shared-home-browser -- rm -rf "/shared-home/$PRODUCT_RELEASE_NAME"
+# delete any and all persistent volumes and claims by label
+# todo DCNG-947
+echo Deleting PVCs, if the uninstall script gets stuck deleting the shared pvc here, run:
+sharedPvcName=$(kubectl get -n dcng pvc -l app.kubernetes.io/instance=pbruski-bitbucket | grep shared | awk '{print $1;}')
+echo kubectl patch pvc -n "${TARGET_NAMESPACE}" "$sharedPvcName" -p "'{\"metadata\":{\"finalizers\":null}}'"
+kubectl delete -n "${TARGET_NAMESPACE}" pvc -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}"
+echo Deleting PVs...
+kubectl delete -n "${TARGET_NAMESPACE}" pv -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}"
 
 # Always exit with a zero status code, to avoid failing the build during uninstall
 exit 0
