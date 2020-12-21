@@ -1,0 +1,41 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: POD_NAME
+spec:
+  selector:
+    role: nfs
+  ports:
+    - name: tcp-2049
+      port: 2049
+      protocol: TCP
+    - name: udp-111
+      port: 111
+      protocol: UDP
+    - name: udp-32767
+      port: 32767
+      protocol: UDP
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: POD_NAME
+  labels:
+    role: nfs
+    app.kubernetes.io/instance: PRODUCT_RELEASE_NAME
+    app.kubernetes.io/name: bitbucket
+spec:
+  containers:
+    - name: nfs-server-container
+      image: ubuntu:latest
+      securityContext:
+        privileged: true
+      command: ["/bin/sh"]
+      args: ["-c", "apt -qq update && DEBIAN_FRONTEND=noninteractive apt install -qq -y nfs-kernel-server runit inotify-tools; mkdir -p /etc/sv/nfs ; runsvdir /etc/sv"]
+      volumeMounts:
+        - mountPath: /srv/nfs
+          name: nfs-export-dir
+  volumes:
+  - name: nfs-export-dir
+    emptyDir: {}

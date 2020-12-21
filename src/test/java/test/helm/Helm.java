@@ -65,7 +65,15 @@ public final class Helm {
                 .redirectError(outputFile.toFile())
                 .start();
         final var exitCode = process.waitFor();
-        assertThat(exitCode).isEqualTo(0);
+
+        assertThat(exitCode)
+                .withFailMessage(() -> {
+                    try {
+                        return String.join("\n", Files.readAllLines(outputFile));
+                    } catch (IOException e) {
+                        return e.getMessage();
+                    }
+                }).isEqualTo(0);
     }
 
     public static String getHelmReleaseName(Product product) {

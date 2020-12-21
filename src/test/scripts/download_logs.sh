@@ -5,35 +5,37 @@ set -x
 source $1
 
 RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
-POSTGRES_RELEASE_NAME=$RELEASE_PREFIX-pgsql
 PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
 
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
-get_pod_logs() {
-    RELEASE_NAME=$1
-    POD_NAMES=$(kubectl -n "${TARGET_NAMESPACE}" get pods --selector app.kubernetes.io/instance="$RELEASE_NAME" --output=jsonpath={.items..metadata.name})
+getPodLogs() {
+    local releaseName=$1
 
-    for POD_NAME in $POD_NAMES
-    do
-      kubectl -n "${TARGET_NAMESPACE}" describe pod "$POD_NAME" > "$LOG_DOWNLOAD_DIR/$POD_NAME.yaml"
-      kubectl -n "${TARGET_NAMESPACE}" logs "$POD_NAME" > "$LOG_DOWNLOAD_DIR/$POD_NAME.log"
+    local podNames=$(kubectl -n "${TARGET_NAMESPACE}" get pods --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
+
+    for podName in $podNames ; do
+      echo Downloading logs from $podName...
+      kubectl -n "${TARGET_NAMESPACE}" describe pod "$podName" > "$LOG_DOWNLOAD_DIR/$podName.yaml"
+      kubectl -n "${TARGET_NAMESPACE}" logs "$podName" > "$LOG_DOWNLOAD_DIR/$podName.log"
     done
 }
 
-get_ingresses() {
-    RELEASE_NAME=$1
-    NAMES=$(kubectl -n "${TARGET_NAMESPACE}" get ingress --selector app.kubernetes.io/instance="$RELEASE_NAME" --output=jsonpath={.items..metadata.name})
+getIngresses() {
+    local releaseName=$1
 
-    for NAME in $NAMES
-    do
-      kubectl -n "${TARGET_NAMESPACE}" describe ingress "$NAME" > "$LOG_DOWNLOAD_DIR/$NAME-ingress.yaml"
+    local ingressNames=$(kubectl -n "${TARGET_NAMESPACE}" get ingressName --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
+
+    for ingressName in $ingressNames; do
+      echo Describing ingress $ingressName...
+      kubectl -n "${TARGET_NAMESPACE}" describe ingressName "$ingressName" > "$LOG_DOWNLOAD_DIR/$ingressName-ingressName.yaml"
     done
 }
 
-get_pod_logs "$PRODUCT_RELEASE_NAME"
-get_pod_logs "$POSTGRES_RELEASE_NAME"
-get_ingresses "$PRODUCT_RELEASE_NAME"
+getPodLogs "$PRODUCT_RELEASE_NAME"
+getPodLogs "$RELEASE_PREFIX-pgsql"
+
+getIngresses "$PRODUCT_RELEASE_NAME"
 
 kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp > "$LOG_DOWNLOAD_DIR/events.txt"
 

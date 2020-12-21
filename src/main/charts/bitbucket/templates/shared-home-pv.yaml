@@ -10,9 +10,18 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteMany
-  {{- with .Values.volumes.sharedHome.persistentVolume.mountOptions }}
   mountOptions:
+  {{- with .Values.volumes.sharedHome.persistentVolume.mountOptions }}
     {{- toYaml . | nindent 4 }}
+  {{- else }}
+    - rw
+    - nfsvers=3
+    - lookupcache=pos
+    - noatime
+    - intr
+    - rsize=32768
+    - wsize=32768
+    - _netdev
   {{- end }}
   {{- with .Values.volumes.sharedHome.persistentVolume.nfs }}
   nfs:
