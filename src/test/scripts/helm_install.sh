@@ -104,7 +104,6 @@ ingressServices+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
 for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1))
 do
   backdoorServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
-  ingressServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
 done
 EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
 

@@ -1,0 +1,26 @@
+{{- if eq "KITT" .Values.clusterType }}
+{{- range $serviceName := .Values.backdoorServiceNames }}
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: {{ $serviceName }}
+  annotations:
+    kubernetes.io/ingress.class: "ingress-internal-01"
+  labels:
+    "app.kubernetes.io/managed-by": "Helm"
+    "meta.helm.sh/release-name": {{ $.Release.Name | quote }}
+    "meta.helm.sh/release-namespace": {{ $.Release.Namespace | quote }}
+spec:
+  virtualhost:
+    fqdn: {{ printf "%s.%s" $serviceName $.Values.ingressDomain }}
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: {{ $serviceName }}
+          port: 80
+      timeoutPolicy:
+        response: 60s
+---
+{{ end }}
+{{ end }}
