@@ -24,11 +24,5 @@ spec:
               serviceName: {{ $serviceName }}
               servicePort: 80
             path: /
-          {{- if eq "confluence" $.Values.product }}
-          - backend:
-              serviceName: {{ $serviceName }}-synchrony
-              servicePort: 80
-            path: /synchrony
-          {{ end }}
     {{ end }}
 {{ end }}
