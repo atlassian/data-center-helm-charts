@@ -81,6 +81,8 @@ confluence:
     # -- Set to true if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
     enabled: false
+    # -- Set to true if the Kubernetes pod name should be used as the end-user-visible name of the Data Center cluster node.
+    usePodNameAsClusterNodeName: true
 
   resources:
     jvm:

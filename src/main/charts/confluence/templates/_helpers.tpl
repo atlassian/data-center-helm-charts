@@ -141,6 +141,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 -Dconfluence.cluster.hazelcast.listenPort={{ .Values.confluence.ports.hazelcast }}
 {{- end }}
 
+{{- define "confluence.sysprop.clusterNodeName" -}}
+-Dconfluence.clusterNodeName.useHostname={{ .Values.confluence.clustering.usePodNameAsClusterNodeName }}
+{{- end }}
+
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
 -Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
