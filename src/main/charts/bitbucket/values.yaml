@@ -201,9 +201,9 @@ volumes:
       create: false
       # -- Specifies the name of the storage class that should be used for the shared-home volume claim.
       storageClassName:
-      # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
-      volumeName:
       # -- Specifies the name of the persistent volume to claim
+      volumeName:
+      # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
       resources:
         requests:
           storage: 1Gi

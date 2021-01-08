@@ -15,6 +15,14 @@ getClusterType() {
   esac
 }
 
+startNfsServer() {
+  local productReleaseName=$1
+  local nfsServerPodName=$2
+  pushd "$THISDIR"/nfs
+  ./startNfsServer.sh "${TARGET_NAMESPACE}" "${productReleaseName}" "${nfsServerPodName}"
+  popd
+}
+
 if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
   echo "Your Bash version ${BASH_VERSINFO} is too old, update to version 5 or later."
   echo "If you're on OS X, you can follow this guide: https://itnext.io/upgrading-bash-on-macos-7138bd1066ba".
@@ -45,12 +53,20 @@ helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
 
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
-if [ "$START_NFS_SERVER" = true ]; then
+chartValueFiles=$(ls $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values.yaml,values-${clusterType}.yaml} 2>/dev/null || true)
+
+if grep -q nfs: ${chartValueFiles} /dev/null; then
     echo This configuration requires a private NFS server, starting...
-    # todo DCNG-945
-    nfsServer=10.81.3.102
-    echo Detected NFS server IP: $nfsServer
-    valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfsServer "
+    nfsServerPodName="${PRODUCT_RELEASE_NAME}-nfs-server"
+    startNfsServer "${PRODUCT_RELEASE_NAME}" "${nfsServerPodName}"
+    nfsServerIp=$(kubectl get pods -n $TARGET_NAMESPACE "$nfsServerPodName" -o json | jq -r .status.podIP)
+    if [ -z "$nfsServerIp" ]; then
+      echo NFS server not found.
+      exit 1
+    fi
+
+    echo Detected NFS server IP: $nfsServerIp
+    valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfsServerIp "
 fi
 
 # Use the product name for the name of the postgres database, username and password.
@@ -72,16 +88,13 @@ if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
   kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
 fi
 
-CHART_TEST_VALUES_DIR=$CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME
-
-for file in ${CHART_TEST_VALUES_DIR}/values.yaml ${CHART_TEST_VALUES_DIR}/values-${clusterType}.yaml ; do
-  [ -f "$file" ] && valueOverrides+="--values $file "
+for chartValueFile in $chartValueFiles; do
+  valueOverrides+="--values $chartValueFile "
 done
 
-test "$PERSISTENT_VOLUMES" = true && valueOverrides+="--set persistence.enabled=true "
-
-[ -n "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
-[ -n "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
+[ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
+[ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
+[ "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
 valueOverrides+="--set image.pullPolicy=Always "
 
 # Ask Helm to generate the YAML that it will send to Kubernetes in the "install" step later, so
@@ -109,7 +122,7 @@ INGRESS_DOMAIN=${!INGRESS_DOMAIN_VARIABLE_NAME}
 FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
 FUNCTEST_CHART_VALUES=clusterType=$clusterType,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME
 
-## build values file for expose node services and ingresses
+## build values chartValueFile for expose node services and ingresses
 ## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef
 NEWLINE=$'\n'
 backdoorServices="backdoorServiceNames:${NEWLINE}"

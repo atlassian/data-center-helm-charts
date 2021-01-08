@@ -12,4 +12,3 @@ DOCKER_IMAGE_VERSION=${dockerImage.version}
 INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 INGRESS_DOMAIN_EKS=${eks.ingress.domain}
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
-START_NFS_SERVER=true
