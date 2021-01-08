@@ -9,7 +9,14 @@ spec:
   accessModes:
     - ReadWriteMany
   {{- if .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName }}
+    {{- if eq "nil" .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName  }}
+  storageClassName: ""
+    {{- else }}
   storageClassName: {{ .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.volumes.sharedHome.persistentVolumeClaim.volumeName }}
+  volumeName: {{ .Values.volumes.sharedHome.persistentVolumeClaim.volumeName | quote }}
   {{- end }}
   {{- with .Values.volumes.sharedHome.persistentVolumeClaim.resources }}
   resources:
