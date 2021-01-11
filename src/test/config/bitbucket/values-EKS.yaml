@@ -16,8 +16,7 @@ volumes:
       create: true
       mountOptions:
         - rw
-        - nfsvers=4.1
-#        - nfsvers=3
+        - nfsvers=3
         - lookupcache=pos
         - noatime
         - intr
@@ -25,8 +24,7 @@ volumes:
         - wsize=32768
         - _netdev
       nfs:
-#        path: "/srv/nfs"
-        path: "/"
+        path: "/srv/nfs"
     persistentVolumeClaim:
       create: true
       storageClassName: ""

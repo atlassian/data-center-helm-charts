@@ -6,15 +6,36 @@ spec:
   selector:
     role: nfs
   ports:
-    - name: tcp-2049
-      port: 2049
-      protocol: TCP
-    - name: udp-111
+    - name: v3-portmapper-udp
       port: 111
       protocol: UDP
-    - name: udp-32767
+    - name: v3-mountd-udp
       port: 32767
       protocol: UDP
+    - name: v3-lockd-udp
+      port: 32768
+      protocol: UDP
+    - name: v3-lockd-tcp
+      port: 32768
+      protocol: TCP
+    - name: v3-rpc-statd-bc-udp
+      port: 32765
+      protocol: UDP
+    - name: v3-rpc-statd-bc-tcp
+      port: 32765
+      protocol: TCP
+    - name: v3-rpc-statd-udp
+      port: 32766
+      protocol: UDP
+    - name: v3-rpc-statd-tcp
+      port: 32766
+      protocol: TCP
+    - name: v4-0-nfs-callback-tcp
+      port: 32764
+      protocol: TCP
+    - name: v4-nfs-tcp
+      port: 2049
+      protocol: TCP
 ---
 
 kind: Pod

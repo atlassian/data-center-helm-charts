@@ -100,9 +100,9 @@ bitbucket:
 
   resources:
     jvm:
-      # -- The maximum amount of heap memory that will be used by the Bitbucket JVM
+      # -- The maximum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the ElasticSearch JVM.
       maxHeap: "1g"
-      # -- The minimum amount of heap memory that will be used by the Bitbucket JVM
+      # -- The minimum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the ElasticSearch JVM.
       minHeap: "1g"
 
     # -- Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket container.

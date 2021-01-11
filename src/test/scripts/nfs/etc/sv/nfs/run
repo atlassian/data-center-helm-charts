@@ -8,5 +8,6 @@ mkdir /run/sendsigs.omit.d
 rpcbind
 
 service nfs-kernel-server start
+service nfs-common start
 
 exec inotifywait -m /srv/nfs
