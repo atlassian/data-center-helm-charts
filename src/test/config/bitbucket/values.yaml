@@ -18,4 +18,4 @@ bitbucket:
   resources:
     container:
       requests:
-        memory: 2G
+        memory: 3G
