@@ -26,9 +26,8 @@ if [ "$shouldCleanNfsPod" != true ]; then
 fi
 
 # delete any and all persistent volumes and claims by label
-# todo DCNG-947
 echo Deleting PVCs, if the uninstall script gets stuck deleting the shared pvc here, run:
-sharedPvcName=$(kubectl get -n dcng pvc -l app.kubernetes.io/instance=pbruski-bitbucket | grep shared | awk '{print $1;}')
+sharedPvcName=$(kubectl get -n dcng pvc -l app.kubernetes.io/instance=$PRODUCT_RELEASE_NAME | grep shared | awk '{print $1;}')
 echo kubectl patch pvc -n "${TARGET_NAMESPACE}" "$sharedPvcName" -p "'{\"metadata\":{\"finalizers\":null}}'"
 kubectl delete -n "${TARGET_NAMESPACE}" pvc -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}"
 echo Deleting PVs...

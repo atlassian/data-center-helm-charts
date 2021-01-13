@@ -59,11 +59,21 @@ if grep -q nfs: ${chartValueFiles} /dev/null; then
     echo This configuration requires a private NFS server, starting...
     nfsServerPodName="${PRODUCT_RELEASE_NAME}-nfs-server"
     startNfsServer "${PRODUCT_RELEASE_NAME}" "${nfsServerPodName}"
-    nfsServerIp=$(kubectl get pods -n $TARGET_NAMESPACE "$nfsServerPodName" -o json | jq -r .status.podIP)
-    if [ -z "$nfsServerIp" ]; then
-      echo NFS server not found.
-      exit 1
-    fi
+
+    for ((try = 0; try < 60; try++)) ; do
+      echo Detecting NFS server IP...
+      nfsServerIp=$(kubectl get pods -n $TARGET_NAMESPACE "$nfsServerPodName" -o json | jq -r .status.podIP)
+
+      if [ -z "$nfsServerIp" ]; then
+        echo NFS server not found.
+        exit 1
+      fi
+
+      if [ "$nfsServerIp" != "null" ] ; then
+        break
+      fi
+      sleep 1
+    done
 
     echo Detected NFS server IP: $nfsServerIp
     valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfsServerIp "
