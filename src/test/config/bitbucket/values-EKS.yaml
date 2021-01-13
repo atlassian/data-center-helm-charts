@@ -14,15 +14,6 @@ volumes:
   sharedHome:
     persistentVolume:
       create: true
-      mountOptions:
-        - rw
-        - nfsvers=3
-        - lookupcache=pos
-        - noatime
-        - intr
-        - rsize=32768
-        - wsize=32768
-        - _netdev
       nfs:
         path: "/srv/nfs"
     persistentVolumeClaim:
