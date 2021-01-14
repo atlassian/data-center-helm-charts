@@ -121,7 +121,7 @@ helm package "$CHART_SRC_PATH" \
    --destination "$HELM_PACKAGE_DIR"
 
 # Install the product's Helm chart
-helm install -n "${TARGET_NAMESPACE}" --wait \
+helm install -n "${TARGET_NAMESPACE}" --wait --debug \
    "$PRODUCT_RELEASE_NAME" \
    ${valueOverrides} \
    "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt

@@ -16,7 +16,7 @@ volumes:
   sharedHome:
     customVolume:
       persistentVolumeClaim:
-        claimName: efs-claim # Pre-provisioned, and shared by all of our pods
+        claimName: ${shared.pvc.name} # Pre-provisioned, and shared by all of our pods
     subPath: ${helm.release.prefix}-jira # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
     nfsPermissionFixer:
       enabled: true
