@@ -1,0 +1,23 @@
+# This file contains overrides for the Jira Helm chart's values.yaml file
+
+# The created service account needs to have the credentials to pull from the Atlassian docker registry
+serviceAccount:
+  imagePullSecrets:
+    - name: regcred
+
+ingress:
+  create: true
+  host: ${helm.release.prefix}-jira.aks.k8s.bbsperf.com
+
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
+  sharedHome:
+    customVolume:
+      persistentVolumeClaim:
+        claimName: atlassian-dc-shared-home-pvc # Pre-provisioned, and shared by all of our pods
+    subPath: ${helm.release.prefix}-jira # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
+
+nodeSelector:
+  node_purpose: ci

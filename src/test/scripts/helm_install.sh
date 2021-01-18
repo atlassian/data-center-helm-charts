@@ -3,14 +3,14 @@
 set -e
 set -x
 
-getClusterType() {
-  local currentContext=$1
+getCurrentClusterType() {
+  local serverAddress=$(kubectl config view --minify -o json | jq -r '.clusters[0].cluster.server')
 
-  case "${currentContext}" in
-    *eks*) echo EKS;;
-    *aks*) echo AKS;;
+  case "${serverAddress}" in
+    *.eks.amazonaws.com*) echo EKS;;
+    *.azmk8s.io*) echo AKS;;
     *gke*) echo GKE;;
-    *shared-dev*|*default-context*) echo KITT;;
+    *.kitt-inf.net*) echo KITT;;
     *) echo CUSTOM;;
   esac
 }
@@ -44,7 +44,7 @@ currentContext=$(kubectl config current-context)
 
 echo Current context: $currentContext
 
-clusterType=$(getClusterType $currentContext)
+clusterType=$(getCurrentClusterType)
 
 echo "Cluster type is $clusterType"
 

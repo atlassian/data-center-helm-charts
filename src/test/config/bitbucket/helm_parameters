@@ -11,6 +11,7 @@ DOCKER_IMAGE_REGISTRY=${dockerImage.registry}
 DOCKER_IMAGE_VERSION=${dockerImage.version}
 INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 INGRESS_DOMAIN_EKS=${eks.ingress.domain}
+INGRESS_DOMAIN_AKS=${aks.ingress.domain}
 # .Values.replicaCount=1, but in here we specify how many nodes we are planning to get to prepare ingress rules for each
 TARGET_REPLICA_COUNT=2
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
