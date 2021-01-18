@@ -93,6 +93,19 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 {{- end }}
 
+{{ define "jira.volumeMounts" }}
+- name: local-home
+  mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+- name: local-home
+  mountPath: {{ .Values.jira.accessLog.mountPath | quote }}
+  subPath: {{ .Values.jira.accessLog.localHomeSubPath | quote }}
+- name: shared-home
+  mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
+  {{- if .Values.volumes.sharedHome.subPath }}
+  subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+  {{- end }}
+{{- end }}
+
 {{/*
 For each additional library declared, generate a volume mount that injects that library into the Jira lib directory
 */}}

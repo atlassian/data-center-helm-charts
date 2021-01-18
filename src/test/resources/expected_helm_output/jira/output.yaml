@@ -125,6 +125,9 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/jira"
+            - name: local-home
+              mountPath: "/opt/atlassian/jira/logs"
+              subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
       volumes:
