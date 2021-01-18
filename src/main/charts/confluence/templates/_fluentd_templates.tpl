@@ -5,7 +5,8 @@
   command: ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-v"]
   volumeMounts:
     - name: local-home
-      mountPath: /application-data
+      mountPath: /application-data/logs
+      subPath: logs
       readOnly: true
     - name: fluentd-config
       mountPath: /fluentd/etc
