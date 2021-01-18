@@ -1,0 +1,15 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: kibana
+  annotations:
+    kubernetes.io/ingress.class: "ingress-internal-01"
+spec:
+  virtualhost:
+    fqdn: kibana-dcng.internal.shared-dev.us-west-2.kitt-inf.net
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: kibana-kibana
+          port: 5601

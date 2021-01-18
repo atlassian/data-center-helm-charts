@@ -57,6 +57,9 @@ confluence:
     type: ClusterIP
   # -- The GID used by the Confluence docker image
   gid: "2002"
+  # -- The umask used by the Confluence process when it creates new files.
+  # Default is 0022, which makes the new files read/writeable by the Confluence user, and readable by everyone else.
+  umask: "0022"
   ports:
     # -- The port on which the Confluence container listens for HTTP traffic
     http: 8090
@@ -178,6 +181,15 @@ ingress:
   # -- Secret that contains a TLS private key and certificate.
   # Optional if Ingress Controller is configured to use one secret for all ingresses
   tlsSecretName:
+
+fluentd:
+  # -- True if the fluentd sidecar should be added to each pod
+  enabled: false
+  # -- The name of the image containing the fluentd sidecar
+  imageName: atlassian/fluentd-elasticsearch:1.0
+  elasticsearch:
+    # -- The hostname of the Elasticsearch service that fluentd should send logs to.
+    hostname:
 
 # -- Specify additional annotations to be added to all Confluence and Synchrony pods
 podAnnotations: {}

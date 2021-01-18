@@ -27,3 +27,9 @@ volumes:
     subPath: ${helm.release.prefix}-confluence # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
     nfsPermissionFixer:
       enabled: true
+
+fluentd:
+  enabled: true
+  imageName: docker.atl-paas.net/kmacleod/fluentd:1
+  elasticsearch:
+    hostname: elasticsearch-master

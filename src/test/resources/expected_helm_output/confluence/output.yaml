@@ -26,7 +26,6 @@ data:
   additional_jvm_args: >-
     -Dconfluence.cluster.hazelcast.listenPort=5701
     -Dsynchrony.btf.disabled=true
-    -DConfluenceHomeLogAppender.disabled=true
     -Dconfluence.clusterNodeName.useHostname=true
   max_heap: 1g
   min_heap: 1g
@@ -116,6 +115,10 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: UMASK
+              value: "0022"
+            - name: SET_PERMISSIONS
+              value: "false"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
