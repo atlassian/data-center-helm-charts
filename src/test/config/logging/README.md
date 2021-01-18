@@ -2,13 +2,7 @@ For aggregation of all logs deployed by the DC products in a given namespace,
 we use shared deployments of Kibana and Elasticsearch in that namespace.
 
 Each DC product is configured with a `fluentd` sidecar which forwards the application logs
-on to Elasticsearch. Since the standard fluent docker image doesn't contain the Elasticsearch
-plugin, we need to build our own image which does, using [this Dockerfile](fluentd/Dockerfile)
-
-    docker build ./fluentd -t docker.atl-paas.net/kmacleod/fluentd:1
-
-This image needs to be named appropriately, and pushed to docker.atl-paas.net so that it can be pulled by K8s. It is
-referred to in the DC product helm chart values file.
+on to Elasticsearch. 
 
 Kibana is installed via Helm chart, using the appropriate values file, e.g. for KITT:
 

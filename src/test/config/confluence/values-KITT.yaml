@@ -30,6 +30,5 @@ volumes:
 
 fluentd:
   enabled: true
-  imageName: docker.atl-paas.net/kmacleod/fluentd:1
   elasticsearch:
     hostname: elasticsearch-master
