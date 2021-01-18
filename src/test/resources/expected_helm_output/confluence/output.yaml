@@ -109,6 +109,9 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/confluence"
+            - name: local-home
+              mountPath: "/opt/atlassian/confluence/logs"
+              subPath: "logs"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
           env:
@@ -116,6 +119,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_TOMCAT_ACCESS_LOG
+              value: "false"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

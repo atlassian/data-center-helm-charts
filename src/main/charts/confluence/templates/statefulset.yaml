@@ -52,13 +52,7 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: local-home
-              mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
-            - name: shared-home
-              mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
-              {{- if .Values.volumes.sharedHome.subPath }}
-              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
-              {{- end }}
+            {{- include "confluence.volumeMounts" . | nindent 12 }}
             {{- with .Values.confluence.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -71,6 +65,8 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
+            - name: ATL_TOMCAT_ACCESS_LOG
+              value: {{ .Values.confluence.accessLog.enabled | quote }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
