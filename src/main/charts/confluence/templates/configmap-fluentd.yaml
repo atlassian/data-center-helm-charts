@@ -9,16 +9,16 @@ data:
   fluent.conf: |
     <source>
       @type tail
-      path /application-data/logs/*.log
+      path /application-data/logs/atlassian-confluence.log*
       read_from_head true
-      tag applogs
+      tag confluence.log
       <parse>
         @type regexp
         expression /^(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) (?<level>[A-Z]+) \[(?<thread>\S+)\] \[(?<logger>\S+)\] (?<method>[\w|\$]+) (?<message>.*)$/
       </parse>
     </source>
 
-    <filter applogs>
+    <filter **>
       @type record_transformer
       <record>
         podname "#{ENV['POD_NAME']}"
@@ -28,11 +28,11 @@ data:
       </record>
     </filter>
 
-    <filter applogs>
+    <filter **>
       @type stdout
     </filter>
 
-    <match applogs>
+    <match **>
       @type elasticsearch
       host {{ .Values.fluentd.elasticsearch.hostname }}
       logstash_format true
