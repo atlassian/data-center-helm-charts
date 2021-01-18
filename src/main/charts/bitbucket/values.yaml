@@ -52,8 +52,12 @@ bitbucket:
     port: 80
     # -- The type of Kubernetes service to use for Jira
     type: ClusterIP
-  # -- The GID used by the Bitbucket docker image
-  gid: "2003"
+  # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2003.
+  # -- Disable when deploying to OpenShift, unless anyuid policy is attached to service account
+  securityContext:
+    enabled: true
+    # -- The GID used by the Bitbucket docker image
+    gid: "2003"
   ports:
     http: 7990
     ssh: 7999

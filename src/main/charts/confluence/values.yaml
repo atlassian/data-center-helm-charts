@@ -55,8 +55,12 @@ confluence:
     port: 80
     # -- The type of Kubernetes service to use for Confluence
     type: ClusterIP
-  # -- The GID used by the Confluence docker image
-  gid: "2002"
+  # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2002.
+  # -- Disable when deploying to OpenShift, unless anyuid policy is attached to a service account
+  securityContext:
+    enabled: true
+    # -- The GID used by the Confluence docker image
+    gid: "2002"
   ports:
     # -- The port on which the Confluence container listens for HTTP traffic
     http: 8090

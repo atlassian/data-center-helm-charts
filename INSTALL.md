@@ -25,9 +25,7 @@ by the Helm charts will expect to be present.
    including a shared read-write volume. See the "Volumes" section below.
 * Ingress controller
    * Because different Kubernetes clusters use different Ingress configurations,
-   the Helm charts will not install an Ingress resource. An ingress controller
-   must be installed in the cluster, and an ingress resource using that controller
-   must be provided post-installation.
+   the Helm charts provide Nginx ingress templates only. By default, *ingress.create* is set to false, an ingress should be created manually after the chart is installed
    
 # Installation
 1. Add the Helm chart repository to your local Helm installation
@@ -65,6 +63,8 @@ examples can be used as a guide.
 
 At a minimum, the ingress needs to support the ability to support long request timeouts, as
 well as session affinity (aka "sticky sessions").
+
+The charts provide a template for Nginx ingress which include all required annotations and optional TLS configuration.
 
 ## Service accounts
 By default, the Helm charts will create a `ServiceAccount`. This can be configured with
@@ -116,5 +116,36 @@ It is important to note, however, that both Jira and Confluence must initially
 be deployed with a `replicaCount` of 1, then be fully configured via the web interface,
 and only once setup is complete can they be scaled up to more replicas.
 
-In the case of Bitbucket, this intermediate step is unecessary, and a BitBucket
-deployment can be configure with a >1 `replicaCount` from the start.
+In the case of Bitbucket, this intermediate step is unnecessary, and a BitBucket
+deployment can be configured with a >1 `replicaCount` from the start.
+
+# OpenShift Support
+
+The Helm charts are vendor agnostic and create objects from standard APIs that OpenShift fully supports.
+
+However, by default, OpenShift will not allow running containers as users specified in the image Dockerfiles
+or **securityContext.fsGroup** in a statefulset/deployment spec. There are a couple of ways to fix it.
+
+## Attach anyuid policies
+If possible, attach anyuid policy to 2 serviceAccounts. Here's an example for a Bitbucket installation.
+Please, note that the service account name vary depending on the DC product:
+
+```shell
+# for Bitbucket pods
+oc adm policy add-scc-to-user anyuid -z bitbucket -n git
+# for NFS permission fixer pod
+oc adm policy add-scc-to-user anyuid -z default -n git
+```
+Typically, *volumes.sharedHome.persistentVolumeClaim.nfsPermissionFixer* needs to be set to true to make volume writable.
+It depends on the storage backend though.
+
+## Set no security context
+
+As an alternative, (if letting containers run as pre-defined users is not possible), set **product_name.securityContext.enabled** to false.
+As a result the container will start as a user with an OpenShift generated ID.
+Typically, NFS permission fixer job isn't required when no security context is set.
+
+## OpenShift Routes
+
+The Helm charts do not have templates for OpenShift routes which are commonly used in OpenShift instead of ingresses.
+Routes need to be manually created after the charts installation. 

@@ -17,8 +17,8 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
-        runAsUser: {{ .Values.bitbucket.gid }}
-        runAsGroup: {{ .Values.bitbucket.gid }}
+        runAsUser: {{ .Values.bitbucket.securityContext.gid }}
+        runAsGroup: {{ .Values.bitbucket.securityContext.gid }}
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home
