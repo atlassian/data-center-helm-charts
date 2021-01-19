@@ -17,8 +17,8 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
-        runAsUser: {{ .Values.confluence.gid }}
-        runAsGroup: {{ .Values.confluence.gid }}
+        runAsUser: {{ .Values.confluence.securityContext.gid }}
+        runAsGroup: {{ .Values.confluence.securityContext.gid }}
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home

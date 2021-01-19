@@ -22,10 +22,12 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: 1
+{{ if .Values.bitbucket.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: 2003 # Makes sure that the shared-home volume mount is writeable by the bitbucket user's GID
+        fsGroup: {{ .Values.bitbucket.securityContext.gid }} # Makes sure that the shared-home volume mount is writeable by the bitbucket user's GID
+{{ end }}
       {{- with .Values.additionalInitContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}
