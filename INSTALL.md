@@ -106,7 +106,7 @@ See [CONFIG.md]() for examples of how to configure the volumes.
 
 # Scaling up Data Center
 
-The Helm charts will provision one `StatefulSet`. In order to scale up or down the cluster `kubctl scale` can be used 
+The Helm charts will provision one `StatefulSet`. In order to scale up or down the cluster `kubectl scale` can be used 
 at runtime to provision a multi-node Data Center cluster, with no further configuration required (although note
 that the Ingress must support cookie-based session affinity in order for the 
 products to work correctly in a multi-node configuration). Here is the syntax for scaling up/down the Data Center cluster:
