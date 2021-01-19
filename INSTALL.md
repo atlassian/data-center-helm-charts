@@ -113,6 +113,3 @@ products to work correctly in a multi-node configuration). Here is the syntax fo
 ```
 kubectl scale statefulsets <statefulsetset-name> --replicas=n
 ```
-
-Please note that `replicaCount` s used by the functest helm chart to create "backdoor" ingress routes to individual cluster nodes. 
-It doesn't affect the number of PODs deployment, it just creates the routes.
