@@ -120,7 +120,7 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             - name: ATL_TOMCAT_ACCESS_LOG
-              value: "false"
+              value: "true"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

@@ -79,7 +79,7 @@ confluence:
 
   accessLog:
     # -- True if access logging should be enabled.
-    enabled: false
+    enabled: true
     # -- The path within the Confluence container where the local-home volume should be mounted in order to capture access logs.
     mountPath: "/opt/atlassian/confluence/logs"
     # -- The subdirectory within the local-home volume where access logs should be stored.
