@@ -14,8 +14,10 @@ import test.model.StatefulSet;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static test.jackson.JsonNodeAssert.assertThat;
+import static test.model.Kind.Job;
 import static test.model.Kind.PersistentVolumeClaim;
 
 /**
@@ -112,6 +114,26 @@ class VolumesTest {
 
         assertThat(getVolume(statefulSet, "shared-home"))
                 .hasValueSatisfying(localHomeVolume -> assertThat(localHomeVolume).isObject(Map.of("hostPath", "/foo/bar")));
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void sharedHome_permissionFixer_enabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.nfsPermissionFixer.enabled", "true"
+        ));
+
+        final var fixerCommand = resources.get(Job, product.getHelmReleaseName() + "-nfs-fixer")
+                .getNode("spec", "template", "spec", "containers")
+                .required(0)
+                .required("command");
+
+        final var fixerCommandString = Array.ofAll(fixerCommand)
+                .map(JsonNode::asText)
+                .mkString(" ");
+
+        assertThat(fixerCommandString)
+                .isEqualTo("sh -c (chgrp %s /shared-home; chmod g+w /shared-home)", product.getContainerGid());
     }
 
 

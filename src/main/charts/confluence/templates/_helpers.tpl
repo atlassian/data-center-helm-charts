@@ -164,7 +164,7 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- if .Values.volumes.sharedHome.nfsPermissionFixer.command }}
 {{ .Values.volumes.sharedHome.nfsPermissionFixer.command }}
 {{- else }}
-{{- printf "(chgrp %s %s; chmod g+w %s)" .Values.confluence.gid .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
+{{- printf "(chgrp %s %s; chmod g+w %s)" .Values.confluence.securityContext.gid .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
 {{- end }}
 {{- end }}
 
