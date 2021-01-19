@@ -21,10 +21,12 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: 1
+{{ if .Values.confluence.securityContext.enabled }}
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Cnfluence container.
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: {{ .Values.confluence.gid }}
+        fsGroup: {{ .Values.confluence.securityContext.gid }}
+{{ end }}
       {{- with .Values.additionalInitContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}

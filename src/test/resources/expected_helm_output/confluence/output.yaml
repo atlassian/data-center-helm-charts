@@ -84,7 +84,7 @@ spec:
       serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 1
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Cnfluence container.
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
         fsGroup: 2002
       containers:

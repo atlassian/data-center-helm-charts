@@ -46,8 +46,12 @@ jira:
     port: 80
     # -- The type of Kubernetes service to use for Jira
     type: ClusterIP
-  # -- The GID used by the Jira docker image
-  gid: "2001"
+  # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2001.
+  # -- Disable when deploying to OpenShift, unless anyuid policy is attached to a service account
+  securityContext:
+    enabled: true
+    # -- The GID used by the Jira docker image
+    gid: "2001"
 
   ports:
     # -- The port on which the Jira container listens for HTTP traffic
