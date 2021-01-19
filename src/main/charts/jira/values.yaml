@@ -60,6 +60,12 @@ jira:
     # -- The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks
     failureThreshold: 30
 
+  accessLog:
+    # -- The path within the Jira container where the local-home volume should be mounted in order to capture access logs.
+    mountPath: "/opt/atlassian/jira/logs"
+    # -- The subdirectory within the local-home volume where access logs should be stored.
+    localHomeSubPath: "log"
+
   clustering:
     # -- Set to true if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.

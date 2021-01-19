@@ -77,6 +77,14 @@ confluence:
     # -- The number of consecutive failures of the Confluence container readiness probe before the pod fails readiness checks
     failureThreshold: 30
 
+  accessLog:
+    # -- True if access logging should be enabled.
+    enabled: true
+    # -- The path within the Confluence container where the local-home volume should be mounted in order to capture access logs.
+    mountPath: "/opt/atlassian/confluence/logs"
+    # -- The subdirectory within the local-home volume where access logs should be stored.
+    localHomeSubPath: "logs"
+
   clustering:
     # -- Set to true if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
@@ -197,6 +205,7 @@ volumes:
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
     # volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
     customVolume: {}
+    # -- The path within the Confluence container which the local-home volume should be mounted.
     mountPath: "/var/atlassian/application-data/confluence"
   sharedHome:
     persistentVolumeClaim:
