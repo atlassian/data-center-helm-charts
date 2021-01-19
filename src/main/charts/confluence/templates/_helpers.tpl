@@ -176,6 +176,11 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 {{- end }}
 
+{{/*
+Defines the volume mounts used by the Confluence container.
+Note that the local-home volume is mounted twice, once for the local-home directory itself, and again
+on Tomcat's logs directory. THis ensures that Tomcat+Confluence logs get captured in the same volume.
+*/}}
 {{ define "confluence.volumeMounts" }}
 - name: local-home
   mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
