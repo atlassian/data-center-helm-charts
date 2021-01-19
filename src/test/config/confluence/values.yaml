@@ -11,6 +11,8 @@ confluence:
     container:
       requests:
         memory: 2G
+  accessLog:
+    enabled: true
 
 database:
   type: postgresql
