@@ -16,4 +16,4 @@ spec:
   volumes:
     - name: shared-home
       persistentVolumeClaim:
-        claimName: efs-claim
+        claimName: ${shared.pvc.name}

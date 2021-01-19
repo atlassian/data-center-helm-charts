@@ -83,13 +83,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: local-home
-              mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
-            - name: shared-home
-              mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
-              {{- if .Values.volumes.sharedHome.subPath }}
-              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
-              {{- end }}
+            {{- include "jira.volumeMounts" . | nindent 12 }}
             {{- with .Values.jira.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
