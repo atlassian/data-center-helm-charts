@@ -80,6 +80,8 @@
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
 
+        <shared.pvc.name>efs-claim</shared.pvc.name>
+
         <persistence.enabled>true</persistence.enabled>
 
         <db.init.script.file/>
