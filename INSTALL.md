@@ -106,15 +106,13 @@ See [CONFIG.md]() for examples of how to configure the volumes.
 
 # Scaling up Data Center
 
-By default, the Helm charts will provision a `StatefulSet` with 1 `replicaCount` of 1.
-The `replicaCount` can be altered at runtime to provision a multi-node 
-Data Center cluster, with no further configuration required (although note
+The Helm charts will provision one `StatefulSet`. In order to scale up or down the cluster `kubctl scale` can be used 
+at runtime to provision a multi-node Data Center cluster, with no further configuration required (although note
 that the Ingress must support cookie-based session affinity in order for the 
-products to work correctly in a multi-node configuration).
+products to work correctly in a multi-node configuration). Here is the syntax for scaling up/down the Data Center cluster:
+```
+kubectl scale statefulsets <statefulsetset-name> --replicas=n
+```
 
-It is important to note, however, that both Jira and Confluence must initially
-be deployed with a `replicaCount` of 1, then be fully configured via the web interface,
-and only once setup is complete can they be scaled up to more replicas.
-
-In the case of Bitbucket, this intermediate step is unecessary, and a BitBucket
-deployment can be configure with a >1 `replicaCount` from the start.
+Please note that `replicaCount` s used by the functest helm chart to create "backdoor" ingress routes to individual cluster nodes. 
+It doesn't affect the number of PODs deployment, it just creates the routes.
