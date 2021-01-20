@@ -116,6 +116,7 @@ spec:
             {{- with .Values.bitbucket.additionalEnvironmentVariables }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+        {{- include "fluentd.container" . | nindent 8 }}
         {{- with .Values.additionalContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -133,4 +134,5 @@ spec:
       {{- end }}
       volumes:
         {{ include "bitbucket.volumes" . | nindent 8 }}
+        {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "bitbucket.volumeClaimTemplates" . | nindent 2 }}

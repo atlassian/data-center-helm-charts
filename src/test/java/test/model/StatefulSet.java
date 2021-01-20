@@ -3,7 +3,6 @@ package test.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.collection.Array;
 import io.vavr.collection.Seq;
-import io.vavr.collection.Traversable;
 
 /**
  * A specialisation of {@link KubeResource} which adds convenience methods for making StatefulSets easier to handle.
@@ -13,12 +12,19 @@ public final class StatefulSet extends KubeResource {
         super(Kind.StatefulSet, node);
     }
 
-    private Traversable<Container> getContainers() {
+    private Seq<Container> getContainers() {
         return Array.ofAll(getPodSpec().required("containers")).map(Container::new);
     }
 
     public Container getContainer() {
         return getContainers().single();
+    }
+
+    public Container getContainer(String name) {
+        return getContainers()
+                .find(c -> name.equals(c.get("name").textValue()))
+                .getOrElseThrow(() ->
+                        new AssertionError("No container found with name " + name));
     }
 
     public JsonNode getPodSpec() {
