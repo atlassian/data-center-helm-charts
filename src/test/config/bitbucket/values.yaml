@@ -19,3 +19,8 @@ bitbucket:
     container:
       requests:
         memory: 3G
+
+fluentd:
+  enabled: true
+  elasticsearch:
+    hostname: elasticsearch-master

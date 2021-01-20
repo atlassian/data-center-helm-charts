@@ -1,0 +1,40 @@
+{{ if .Values.fluentd.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "bitbucket.fullname" . }}-fluentd-config
+  labels:
+  {{- include "bitbucket.labels" . | nindent 4 }}
+data:
+  fluent.conf: |
+    <source>
+      @type tail
+      path /application-data/logs/atlassian-bitbucket.log*
+      read_from_head true
+      tag bitbucket.log
+      <parse>
+        @type regexp
+        expression /^(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) (?<message>.*)$/
+      </parse>
+    </source>
+
+    <filter **>
+      @type record_transformer
+      <record>
+        podname "#{ENV['POD_NAME']}"
+        podnamespace "#{ENV['POD_NAMESPACE']}"
+        podip "#{ENV['POD_IP']}"
+        helmrelease "#{ENV['HELM_RELEASE_NAME']}"
+      </record>
+    </filter>
+
+    <filter **>
+      @type stdout
+    </filter>
+
+    <match **>
+      @type elasticsearch
+      host {{ .Values.fluentd.elasticsearch.hostname }}
+      logstash_format true
+    </match>
+{{ end }}
