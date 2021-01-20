@@ -7,4 +7,8 @@ podAnnotations:
 sysctlInitContainer:
   enabled: false
 
+# We just want one replica for now, to avoid excessive resource utilisation.
+# However, because ES will report a single node cluster as having health status "yellow", we also
+# need to change the readiness probe to be OK with that, rather than requiring "green".
 replicas: 1
+clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
