@@ -69,6 +69,10 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.confluence.accessLog.enabled | quote }}
+            - name: UMASK
+              value: {{ .Values.confluence.umask | quote }}
+            - name: SET_PERMISSIONS
+              value: "false"
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
@@ -103,6 +107,10 @@ spec:
             {{- with .Values.confluence.additionalEnvironmentVariables }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+        {{- include "fluentd.container" . | nindent 8 }}
+        {{- with .Values.additionalContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- with .Values.additionalContainers }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -120,4 +128,5 @@ spec:
       {{- end }}
       volumes:
         {{ include "confluence.volumes" . | nindent 8 }}
+        {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "confluence.volumeClaimTemplates" . | nindent 2 }}

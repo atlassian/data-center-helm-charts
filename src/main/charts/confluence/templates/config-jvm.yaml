@@ -8,7 +8,6 @@ data:
   additional_jvm_args: >-
     {{ include "confluence.sysprop.hazelcastListenPort" . }}
     {{ include "confluence.sysprop.synchronyServiceUrl" . }}
-    {{ include "confluence.sysprop.disableHomeLogAppender" . }}
     {{ include "confluence.sysprop.clusterNodeName" . }}
     {{- range .Values.confluence.additionalJvmArgs }}
     {{ . }}

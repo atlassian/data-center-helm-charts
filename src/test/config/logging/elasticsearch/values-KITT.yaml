@@ -1,0 +1,10 @@
+# https://github.com/elastic/helm-charts/blob/7.x/elasticsearch/README.md
+
+podAnnotations:
+  "atlassian.com/business_unit": "server_engineering"
+
+# Disable the priviliged initContainer that fixes memory settings, we can't do this in KITT
+sysctlInitContainer:
+  enabled: false
+
+replicas: 1

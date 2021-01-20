@@ -1,0 +1,4 @@
+# https://chartcenter.io/elastic/kibana
+
+podAnnotations:
+  "atlassian.com/business_unit": "server_engineering"

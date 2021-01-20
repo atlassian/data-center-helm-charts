@@ -153,10 +153,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 {{- end }}
 
-{{- define "confluence.sysprop.disableHomeLogAppender" -}}
--DConfluenceHomeLogAppender.disabled=true
-{{- end }}
-
 {{/*
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
