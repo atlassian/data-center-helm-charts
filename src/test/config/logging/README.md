@@ -10,7 +10,7 @@ Kibana is installed via Helm chart, using the appropriate values file, e.g. for 
 
 Similarly for Elasticsearch:
 
-    helm install kibana --version 7.10.2 elastic/elasticsearch --values elasticsearch/values-KITT.yaml
+    helm install elasticsearch --version 7.10.2 elastic/elasticsearch --values elasticsearch/values-KITT.yaml
 
 For KITT, you also need to define the HTTPProxy ingress for access to the Kibana UI:
    
