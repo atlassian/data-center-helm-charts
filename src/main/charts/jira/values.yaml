@@ -142,6 +142,15 @@ ingress:
   # Optional if Ingress Controller is configured to use one secret for all ingresses
   tlsSecretName:
 
+fluentd:
+  # -- True if the fluentd sidecar should be added to each pod
+  enabled: false
+  # -- The name of the image containing the fluentd sidecar
+  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  elasticsearch:
+    # -- The hostname of the Elasticsearch service that fluentd should send logs to.
+    hostname:
+
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}
 #  "name": "value"
