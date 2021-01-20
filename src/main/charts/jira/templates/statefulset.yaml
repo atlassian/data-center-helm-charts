@@ -91,9 +91,10 @@ spec:
             {{- end }}
             {{- include "jira.additionalLibraries" . | nindent 12 }}
             {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
+        {{- include "fluentd.container" . | nindent 8 }}
         {{- with .Values.additionalContainers }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
@@ -108,4 +109,5 @@ spec:
       {{- end }}
       volumes:
         {{ include "jira.volumes" . | nindent 8 }}
+        {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "jira.volumeClaimTemplates" . | nindent 2 }}
