@@ -77,7 +77,9 @@
         <kubernetes.target.namespace>dcng</kubernetes.target.namespace>
 
         <kubernetes.ingress.domain>internal.shared-dev.us-west-2.kitt-inf.net</kubernetes.ingress.domain>
+        <aks.ingress.domain>aks.k8s.bbsperf.com</aks.ingress.domain>
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
+<!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
 
         <shared.pvc.name>efs-claim</shared.pvc.name>

@@ -1,4 +1,5 @@
 {{- if .Values.ingress.create }}
+{{/* Change to networking.k8s.io/v1 when k8s 1.19 is the oldest supported version */}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
