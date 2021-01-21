@@ -53,7 +53,9 @@ helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
 
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
-chartValueFiles=$(ls $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values.yaml,values-${clusterType}.yaml} 2>/dev/null || true)
+chartValueFiles=$(for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values.yaml,values-${clusterType}.yaml}; do
+  ls "$file" 2>/dev/null || true
+done)
 
 if grep -q nfs: ${chartValueFiles} /dev/null; then
     echo This configuration requires a private NFS server, starting...
