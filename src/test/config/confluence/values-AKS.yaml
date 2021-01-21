@@ -1,4 +1,4 @@
-# This file contains overrides for the Jira Helm chart's values.yaml file
+# This file contains overrides for the Confluence Helm chart's values.yaml file
 
 # The created service account needs to have the credentials to pull from the Atlassian docker registry
 serviceAccount:
@@ -7,10 +7,13 @@ serviceAccount:
 
 ingress:
   create: true
-  host: ${helm.release.prefix}-jira.${aks.ingress.domain}
+  host: ${helm.release.prefix}-confluence.${aks.ingress.domain}
   nginx: true
   https: true
   tlsSecretName: aks-ingress-tls
+
+synchrony:
+  ingressUrl: https://${helm.release.prefix}-confluence.${aks.ingress.domain}/synchrony
 
 volumes:
   localHome:
@@ -20,7 +23,7 @@ volumes:
     customVolume:
       persistentVolumeClaim:
         claimName: ${shared.pvc.name} # Pre-provisioned, and shared by all of our pods
-    subPath: ${helm.release.prefix}-jira # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
+    subPath: ${helm.release.prefix}-confluence # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
 
 nodeSelector:
   node_purpose: ci
