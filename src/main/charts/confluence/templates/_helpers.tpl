@@ -145,6 +145,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 -Dconfluence.clusterNodeName.useHostname={{ .Values.confluence.clustering.usePodNameAsClusterNodeName }}
 {{- end }}
 
+{{- define "confluence.sysprop.fluentdAppender" -}}
+{{- if .Values.fluentd.enabled -}}
+-Datlassian.logging.cloud.enabled=true
+{{- end -}}
+{{- end }}
+
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
 -Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
