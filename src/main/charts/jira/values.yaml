@@ -65,6 +65,14 @@ jira:
     # This will automatically configure cluster peer discovery between cluster nodes.
     enabled: false
 
+  license:
+    # -- The name of the Kubernetes Secret which contains the Jira license key.
+    # If specified, then the license will be automatically populated during Jira setup.
+    # Otherwise, it will need to be provided via the browser after initial startup.
+    secretName:
+    # -- The key in the Kubernetes Secret which contains the Jira license key
+    secretKey: license-key
+
   resources:
     jvm:
       # -- The maximum amount of heap memory that will be used by the Jira JVM
