@@ -29,6 +29,12 @@ if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
   exit 1
 fi
 
+if ! command -v jq &> /dev/null
+then
+    echo "The 'jq' command line JSON processor is required to run this script."
+    exit 1
+fi
+
 THISDIR=$(dirname "$0")
 
 source $1
