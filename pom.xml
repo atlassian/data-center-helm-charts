@@ -82,7 +82,7 @@
 <!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
 
-        <shared.pvc.name>efs-claim</shared.pvc.name>
+        <shared.pvc.name>atlassian-dc-shared-home-pvc</shared.pvc.name>
 
         <persistence.enabled>true</persistence.enabled>
 
