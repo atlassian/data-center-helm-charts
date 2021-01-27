@@ -37,6 +37,10 @@ getPodLogs "$RELEASE_PREFIX-pgsql"
 
 getIngresses "$PRODUCT_RELEASE_NAME"
 
-kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp > "$LOG_DOWNLOAD_DIR/events.txt"
+#this is the same format as kubectl get events, but with absolute timestamps instead of relative
+filter='.items[] | .firstTimestamp + ".." + .lastTimestamp + "\u0009" + .type + "\u0009" + .reason + "\u0009" + .involvedObject.kind + "/" + .involvedObject.name + "\u0009" + .message'
+
+kubectl get events -n "${TARGET_NAMESPACE}" --sort-by=.metadata.creationTimestamp  -o json | \
+  jq -r "$filter" > "$LOG_DOWNLOAD_DIR/events.txt"
 
 exit 0
