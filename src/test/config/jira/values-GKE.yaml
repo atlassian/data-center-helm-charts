@@ -7,7 +7,7 @@ serviceAccount:
 
 ingress:
   create: true
-  host: ${helm.release.prefix}-jira.${aks.ingress.domain}
+  host: ${helm.release.prefix}-jira.${gke.ingress.domain}
   nginx: true
   https: true
   tlsSecretName: ingress-tls
@@ -21,6 +21,8 @@ volumes:
       persistentVolumeClaim:
         claimName: ${shared.pvc.name} # Pre-provisioned, and shared by all of our pods
     subPath: ${helm.release.prefix}-jira # Since all of our pods share the same PV, we use subpath mounts to prevent interference
+    nfsPermissionFixer:
+      enabled: true
 
 nodeSelector:
   node_purpose: ci

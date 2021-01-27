@@ -10,7 +10,7 @@ ingress:
   host: ${helm.release.prefix}-bitbucket.${aks.ingress.domain}
   nginx: true
   https: true
-  tlsSecretName: aks-ingress-tls
+  tlsSecretName: ingress-tls
 
 volumes:
   localHome:
@@ -20,7 +20,7 @@ volumes:
     customVolume:
       persistentVolumeClaim:
         claimName: ${shared.pvc.name} # Pre-provisioned, and shared by all of our pods
-    subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
+    subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same PV, we use subpath mounts to prevent interference
 
 nodeSelector:
   node_purpose: ci

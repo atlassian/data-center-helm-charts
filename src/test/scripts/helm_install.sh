@@ -7,10 +7,14 @@ getCurrentClusterType() {
   local serverAddress=$(kubectl config view --minify -o json | jq -r '.clusters[0].cluster.server')
 
   case "${serverAddress}" in
-    *.eks.amazonaws.com*) echo EKS;;
-    *.azmk8s.io*) echo AKS;;
-    *gke*) echo GKE;;
-    *.kitt-inf.net*) echo KITT;;
+    *.eks.amazonaws.com*) echo EKS; return;;
+    *.azmk8s.io*) echo AKS; return;;
+    *.kitt-inf.net*) echo KITT; return;;
+  esac
+
+  local clusterName=$(kubectl config view --minify -o json | jq -r '.clusters[0].name')
+  case "$clusterName" in
+    gke*) echo GKE;;
     *) echo CUSTOM;;
   esac
 }

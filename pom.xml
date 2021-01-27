@@ -78,6 +78,7 @@
 
         <kubernetes.ingress.domain>internal.shared-dev.us-west-2.kitt-inf.net</kubernetes.ingress.domain>
         <aks.ingress.domain>aks.k8s.bbsperf.com</aks.ingress.domain>
+        <gke.ingress.domain>gke.k8s.bbsperf.com</gke.ingress.domain>
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
 <!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
