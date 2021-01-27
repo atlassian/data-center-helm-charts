@@ -17,18 +17,21 @@ getPodLogs() {
     for podName in $podNames ; do
       echo Downloading logs from $podName...
       kubectl -n "${TARGET_NAMESPACE}" describe pod "$podName" > "$LOG_DOWNLOAD_DIR/$podName.yaml"
-      kubectl -n "${TARGET_NAMESPACE}" logs "$podName" > "$LOG_DOWNLOAD_DIR/$podName.log"
+      local containers=$(kubectl -n "${TARGET_NAMESPACE}" get pod "$podName" -o 'jsonpath={.spec.containers[*].name}')
+      for container in $containers; do
+        kubectl -n "${TARGET_NAMESPACE}" logs --container="$container" "$podName" > "$LOG_DOWNLOAD_DIR/${podName}--${container}.log"
+      done
     done
 }
 
 getIngresses() {
     local releaseName=$1
 
-    local ingressNames=$(kubectl -n "${TARGET_NAMESPACE}" get ingressName --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
+    local ingressNames=$(kubectl -n "${TARGET_NAMESPACE}" get ingress --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
 
     for ingressName in $ingressNames; do
       echo Describing ingress $ingressName...
-      kubectl -n "${TARGET_NAMESPACE}" describe ingressName "$ingressName" > "$LOG_DOWNLOAD_DIR/$ingressName-ingressName.yaml"
+      kubectl -n "${TARGET_NAMESPACE}" describe ingress "$ingressName" > "$LOG_DOWNLOAD_DIR/$ingressName-ingressName.yaml"
     done
 }
 
