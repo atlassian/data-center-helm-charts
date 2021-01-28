@@ -9,6 +9,7 @@ data:
     {{ include "confluence.sysprop.hazelcastListenPort" . }}
     {{ include "confluence.sysprop.synchronyServiceUrl" . }}
     {{ include "confluence.sysprop.clusterNodeName" . }}
+    {{ include "confluence.sysprop.fluentdAppender" . }}
     {{- range .Values.confluence.additionalJvmArgs }}
     {{ . }}
     {{- end }}

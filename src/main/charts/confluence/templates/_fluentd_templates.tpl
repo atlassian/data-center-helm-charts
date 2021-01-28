@@ -3,11 +3,10 @@
 - name: fluentd
   image: {{ .Values.fluentd.imageName }}
   command: ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-v"]
+  ports:
+    - containerPort: {{ .Values.fluentd.httpPort }}
+      protocol: TCP
   volumeMounts:
-    - name: local-home
-      mountPath: /application-data/logs
-      subPath: logs
-      readOnly: true
     - name: fluentd-config
       mountPath: /fluentd/etc
       readOnly: true
