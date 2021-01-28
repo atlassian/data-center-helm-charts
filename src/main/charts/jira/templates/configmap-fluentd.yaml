@@ -8,14 +8,9 @@ metadata:
 data:
   fluent.conf: |
     <source>
-      @type tail
-      path /application-data/logs/atlassian-jira.log*
-      read_from_head true
-      tag jira.log
-      <parse>
-        @type regexp
-        expression /^(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}[+|-]\d{4}) (?<message>.*)$/
-      </parse>
+      @type http
+      port {{ .Values.fluentd.httpPort }}
+      bind 0.0.0.0
     </source>
 
     <filter **>
@@ -32,9 +27,12 @@ data:
       @type stdout
     </filter>
 
+    {{ if .Values.fluentd.elasticsearch.enabled }}
     <match **>
       @type elasticsearch
       host {{ .Values.fluentd.elasticsearch.hostname }}
       logstash_format true
+      logstash_prefix {{ .Values.fluentd.elasticsearch.indexNamePrefix }}
     </match>
+    {{ end }}
 {{ end }}
