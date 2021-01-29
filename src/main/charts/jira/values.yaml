@@ -155,9 +155,15 @@ fluentd:
   enabled: false
   # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  # -- The port on which the fluentd sidecar will listen
+  httpPort: 9880
   elasticsearch:
+    # -- True if fluentd should send all log events to an elasticsearch service.
+    enabled: true
     # -- The hostname of the Elasticsearch service that fluentd should send logs to.
-    hostname:
+    hostname: elasticsearch
+    # -- The prefix of the elasticsearch index name that will be used
+    indexNamePrefix: jira
 
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}

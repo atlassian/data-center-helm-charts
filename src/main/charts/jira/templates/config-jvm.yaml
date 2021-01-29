@@ -6,6 +6,7 @@ metadata:
     {{- include "jira.labels" . | nindent 4 }}
 data:
   additional_jvm_args: >-
+    {{ include "jira.sysprop.fluentdAppender" . }}
     {{- range .Values.jira.additionalJvmArgs }}
     {{ . }}
     {{- end }}

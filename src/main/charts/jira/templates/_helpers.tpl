@@ -234,3 +234,9 @@ volumeClaimTemplates:
       fieldPath: status.podIP
 {{ end }}
 {{ end }}
+
+{{- define "jira.sysprop.fluentdAppender" -}}
+{{- if .Values.fluentd.enabled -}}
+-Datlassian.logging.cloud.enabled=true
+{{- end -}}
+{{- end }}
