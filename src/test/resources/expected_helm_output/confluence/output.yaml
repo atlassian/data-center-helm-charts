@@ -27,6 +27,7 @@ data:
     -Dconfluence.cluster.hazelcast.listenPort=5701
     -Dsynchrony.btf.disabled=true
     -Dconfluence.clusterNodeName.useHostname=true
+    -Datlassian.logging.cloud.enabled=false
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 512m
