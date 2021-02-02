@@ -35,6 +35,7 @@ kubectl delete -n "${TARGET_NAMESPACE}" pv -l app.kubernetes.io/instance="${PROD
 
 if [ "$shouldCleanNfsPod" = true ]; then
   kubectl delete pod -n "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}-nfs-server"
+  kubectl delete service -n "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}-nfs-server"
 fi
 
 # Always exit with a zero status code, to avoid failing the build during uninstall

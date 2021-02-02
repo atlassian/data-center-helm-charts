@@ -31,7 +31,7 @@ getIngresses() {
 
     for ingressName in $ingressNames; do
       echo Describing ingress $ingressName...
-      kubectl -n "${TARGET_NAMESPACE}" describe ingress "$ingressName" > "$LOG_DOWNLOAD_DIR/$ingressName-ingressName.yaml"
+      kubectl -n "${TARGET_NAMESPACE}" describe ingress "$ingressName" > "$LOG_DOWNLOAD_DIR/ingress-$ingressName.yaml"
     done
 }
 
