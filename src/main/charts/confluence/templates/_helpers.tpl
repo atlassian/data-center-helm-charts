@@ -146,9 +146,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "confluence.sysprop.fluentdAppender" -}}
-{{- if .Values.fluentd.enabled -}}
--Datlassian.logging.cloud.enabled=true
-{{- end -}}
+-Datlassian.logging.cloud.enabled={{.Values.fluentd.enabled}}
 {{- end }}
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
