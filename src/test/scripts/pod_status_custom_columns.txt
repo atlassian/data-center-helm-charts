@@ -1,0 +1,2 @@
+POD             IP              STATUS          CONTAINERS              READY                               IMAGES
+metadata.name   status.podIP    status.phase    spec.containers[*].name status.containerStatuses[*].ready   spec.containers[*].image

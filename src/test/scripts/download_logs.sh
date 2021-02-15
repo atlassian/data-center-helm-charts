@@ -5,6 +5,8 @@ source $1
 RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
 PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
 
+THISDIR=$(dirname "$0")
+
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
 getPodLogs() {
@@ -36,10 +38,12 @@ getIngresses() {
 getResourcesStatus() {
     local releaseName=$1
 
-    echo "Showing status of all Kube resources in namespace ${TARGET_NAMESPACE} for Helm release $releaseName"
+    echo "Status of all pods in namespace ${TARGET_NAMESPACE} for Helm release $releaseName"
+    kubectl get pod -o custom-columns-file="$THISDIR/pod_status_custom_columns.txt" -l "app.kubernetes.io/instance=$releaseName" -n "${TARGET_NAMESPACE}"
+
+    echo "Status of all other Kube resources in namespace ${TARGET_NAMESPACE} for Helm release $releaseName"
 
     for type in pod statefulset service pvc serviceaccount configmap clusterrole clusterrolebinding node; do
-      echo "Status of all $type resources"
       kubectl get $type -o wide --show-kind --ignore-not-found -l "app.kubernetes.io/instance=$releaseName" -n "${TARGET_NAMESPACE}"
     done
 }
