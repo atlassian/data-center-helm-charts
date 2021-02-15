@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 source $1
 
 RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
@@ -34,6 +32,20 @@ getIngresses() {
       kubectl -n "${TARGET_NAMESPACE}" describe ingress "$ingressName" > "$LOG_DOWNLOAD_DIR/ingress-$ingressName.yaml"
     done
 }
+
+getResourcesStatus() {
+    local releaseName=$1
+
+    echo "Showing status of all Kube resources in namespace ${TARGET_NAMESPACE} for Helm release $releaseName"
+
+    for type in pod statefulset service pvc serviceaccount configmap clusterrole clusterrolebinding node; do
+      echo "Status of all $type resources"
+      kubectl get $type -o wide --show-kind --ignore-not-found -l "app.kubernetes.io/instance=$releaseName" -n "${TARGET_NAMESPACE}"
+    done
+}
+
+getResourcesStatus "$PRODUCT_RELEASE_NAME"
+getResourcesStatus "$PRODUCT_RELEASE_NAME-pgsql"
 
 getPodLogs "$PRODUCT_RELEASE_NAME"
 getPodLogs "$RELEASE_PREFIX-pgsql"
