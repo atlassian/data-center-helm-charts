@@ -43,7 +43,7 @@ getResourcesStatus() {
 
     echo "Status of all other Kube resources in namespace ${TARGET_NAMESPACE} for Helm release $releaseName"
 
-    for type in pod statefulset service pvc serviceaccount configmap clusterrole clusterrolebinding node; do
+    for type in statefulset service pvc serviceaccount configmap clusterrole clusterrolebinding node; do
       kubectl get $type -o wide --show-kind --ignore-not-found -l "app.kubernetes.io/instance=$releaseName" -n "${TARGET_NAMESPACE}"
     done
 }
