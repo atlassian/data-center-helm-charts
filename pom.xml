@@ -68,9 +68,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.annotations</groupId>
-            <artifactId>atlassian-annotations</artifactId>
-            <version>${atlassian-annotations.version}</version>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -86,7 +86,6 @@
         <jackson.version>2.12.1</jackson.version>
         <kubernetes-client.version>5.0.1</kubernetes-client.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <atlassian-annotations.version>2.2.1</atlassian-annotations.version>
 
         <dockerImage.registry />
         <dockerImage.version />
