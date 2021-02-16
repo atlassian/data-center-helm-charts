@@ -34,26 +34,44 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.11.3</version>
+            <version>${jackson.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
-            <version>0.10.3</version>
+            <version>${vavr.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr-jackson</artifactId>
-            <version>0.10.3</version>
+            <version>${vavr.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-vavr</artifactId>
-            <version>0.3.0</version>
+            <version>0.4.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-client</artifactId>
+            <version>${kubernetes-client.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -62,8 +80,12 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <junit5.version>5.7.0</junit5.version>
-        <assertj.version>3.17.2</assertj.version>
+        <junit5.version>5.7.1</junit5.version>
+        <assertj.version>3.19.0</assertj.version>
+        <vavr.version>0.10.3</vavr.version>
+        <jackson.version>2.12.1</jackson.version>
+        <kubernetes-client.version>5.0.1</kubernetes-client.version>
+        <slf4j.version>1.7.30</slf4j.version>
 
         <dockerImage.registry />
         <dockerImage.version />
@@ -132,6 +154,26 @@
             <properties>
                 <chart.testValues.basedir>dummy</chart.testValues.basedir>
             </properties>
+        </profile>
+
+        <profile>
+            <id>post-install-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>test/postinstall/*.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <helmParametersFileLocation>${helmParametersFileLocation}</helmParametersFileLocation>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
