@@ -11,8 +11,8 @@ import java.util.Properties;
 final class Utils {
     static Map<String, String> readPropertiesFile(final Path fileLocation) throws IOException {
         final var properties = new Properties();
-        try (var is = Files.newInputStream(fileLocation)) {
-            properties.load(is);
+        try (var reader = Files.newBufferedReader(fileLocation)) {
+            properties.load(reader);
         }
         return HashMap.ofAll(properties)
                 .mapKeys(String.class::cast)
