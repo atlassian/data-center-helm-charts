@@ -1,21 +1,27 @@
 package test.postinstall;
 
 import io.fabric8.kubernetes.api.model.ContainerStatus;
+import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.vavr.Lazy;
+import io.vavr.Tuple;
 import io.vavr.collection.Array;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
+import io.vavr.collection.Traversable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 class PostInstallStatusTest {
@@ -26,16 +32,40 @@ class PostInstallStatusTest {
 
     @Test
     void applicationPodsShouldAllBeRunning() {
-        forEachPodOfStatefulSet((idx, pod) ->
-                assertThat(pod.getStatus().getPhase())
+        forEachPodOfStatefulSet(pod -> {
+            final var podPhase = pod.getStatus().getPhase();
+            if ("pending".equalsIgnoreCase(podPhase)) {
+                schedulingFailure(pod);
+            } else {
+                assertThat(podPhase)
                         .describedAs("Pod %s should be running", pod.getMetadata().getName())
-                        .isEqualToIgnoringCase("running"));
+                        .isEqualToIgnoringCase("Running");
+            }
+        });
+    }
+
+    private void schedulingFailure(Pod pod) {
+        fail(String.format("Pod %s should be running, but has yet to be scheduled. Current remaining node capacity is %s.",
+                pod.getMetadata().getName(), getRemainingNodeCapacityDescription()));
+    }
+
+    private String getRemainingNodeCapacityDescription() {
+        return getNodes(getNodeSelector())
+                .toMap(node -> Tuple.of(
+                        node.getMetadata().getName(),
+                        node.getStatus().getAllocatable().toString()))
+                .mkString(", ");
     }
 
     @Test
     void applicationPodContainersShouldAllBeReady() {
-        forEachPodOfStatefulSet((idx, pod) -> {
+        forEachPodOfStatefulSet(pod -> {
             final var containerStatuses = Array.ofAll(pod.getStatus().getContainerStatuses());
+
+            assumeThat(containerStatuses)
+                    .describedAs("No container statuses present in pod %s", pod.getMetadata().getName())
+                    .isNotEmpty();
+
             final var containerNames = containerStatuses.map(ContainerStatus::getName).mkCharSeq(",");
 
             assertThat(containerStatuses)
@@ -45,32 +75,29 @@ class PostInstallStatusTest {
         });
     }
 
-    @Test
-    void allPersistentVolumeClaimsShouldBeBound() {
-        final var volumeClaims = clientRef.get().persistentVolumeClaims()
-                .withLabel("app.kubernetes.io/instance", helmReleaseName)
-                .list()
-                .getItems();
+    private Map<String, String> getNodeSelector() {
+        return HashMap.ofAll(getStatefulSet()
+                .getSpec().getTemplate().getSpec().getNodeSelector());
+    }
 
-        for (var volumeClaim : volumeClaims) {
-            assertThat(volumeClaim.getStatus().getPhase())
-                    .isEqualToIgnoringCase("bound");
+    private void forEachPodOfStatefulSet(Consumer<Pod> consumer) {
+        final var statefulSet = getStatefulSet();
+
+        final var replicaCount = statefulSet.getStatus().getReplicas();
+
+        for (var idx = 0; idx < replicaCount; idx++) {
+            consumer.accept(getPod(statefulSet.getMetadata().getName() + "-" + idx));
         }
     }
 
-    private void forEachPodOfStatefulSet(BiConsumer<Integer, Pod> consumer) {
+    private StatefulSet getStatefulSet() {
         final var statefulSetName = helmReleaseName;
         final var statefulSet = getStatefulSet(statefulSetName);
 
         assertThat(statefulSet)
                 .describedAs("StatefulSet %s not found", statefulSetName)
                 .isNotNull();
-
-        final var replicaCount = statefulSet.getStatus().getReplicas();
-
-        for (var idx = 0; idx < replicaCount; idx++) {
-            consumer.accept(idx, getPod(statefulSetName + "-" + idx));
-        }
+        return statefulSet;
     }
 
     @Nullable
@@ -80,6 +107,10 @@ class PostInstallStatusTest {
                 .inNamespace(namespaceName)
                 .withName(statefulSetName)
                 .get();
+    }
+
+    private Traversable<Node> getNodes(Map<String, String> nodeSelector) {
+        return Array.ofAll(clientRef.get().nodes().withLabels(nodeSelector.toJavaMap()).list().getItems());
     }
 
     @Nullable
