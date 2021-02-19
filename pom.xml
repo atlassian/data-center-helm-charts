@@ -68,6 +68,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
@@ -86,6 +92,7 @@
         <jackson.version>2.12.1</jackson.version>
         <kubernetes-client.version>5.0.1</kubernetes-client.version>
         <slf4j.version>1.7.30</slf4j.version>
+        <commons-io.version>2.8.0</commons-io.version>
 
         <dockerImage.registry />
         <dockerImage.version />

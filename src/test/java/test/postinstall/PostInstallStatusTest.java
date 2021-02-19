@@ -1,42 +1,76 @@
 package test.postinstall;
 
 import io.fabric8.kubernetes.api.model.ContainerStatus;
+import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import io.vavr.Lazy;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.vavr.collection.Array;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
+import org.assertj.core.description.Description;
+import org.assertj.core.description.LazyTextDescription;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
 import java.nio.file.Path;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
+import static test.postinstall.Utils.netNodesResourceSummary;
 
 class PostInstallStatusTest {
     private static String helmReleaseName;
     private static String namespaceName;
 
-    private static final Lazy<KubernetesClient> clientRef = Lazy.of(DefaultKubernetesClient::new);
+    private static final KubeClient client = new KubeClient();
 
     @Test
     void applicationPodsShouldAllBeRunning() {
-        forEachPodOfStatefulSet((idx, pod) ->
-                assertThat(pod.getStatus().getPhase())
-                        .describedAs("Pod %s should be running", pod.getMetadata().getName())
-                        .isEqualToIgnoringCase("running"));
+        forEachPodOfStatefulSet(pod -> {
+            final var podPhase = pod.getStatus().getPhase();
+
+            // First assert that the phase is not "pending", and if so we show a special failure message
+            assertThat(podPhase)
+                    .describedAs(schedulingFailure(pod))
+                    .isNotEqualToIgnoringCase("pending");
+
+            // otherwise assert that the pod is running
+            assertThat(podPhase)
+                    .describedAs("Pod %s should be running", pod.getMetadata().getName())
+                    .isEqualToIgnoringCase("Running");
+        });
+    }
+
+    private Description schedulingFailure(Pod pod) {
+        return new LazyTextDescription(() -> {
+            final var podSpec = getStatefulSet()
+                    .getSpec()
+                    .getTemplate()
+                    .getSpec();
+            return schedulingFailure(pod.getMetadata().getName(), client.getNodeMetrics(podSpec));
+        });
+    }
+
+    private String schedulingFailure(final String podName, Map<Node, Option<NodeMetrics>> nodeMetrics) {
+        final var resourceSummary = netNodesResourceSummary(nodeMetrics);
+
+        return String.format("Pod %s should be running, but has yet to be scheduled on the cluster. Current node usage is %s",
+                podName, resourceSummary);
     }
 
     @Test
     void applicationPodContainersShouldAllBeReady() {
-        forEachPodOfStatefulSet((idx, pod) -> {
+        forEachPodOfStatefulSet(pod -> {
             final var containerStatuses = Array.ofAll(pod.getStatus().getContainerStatuses());
-            final var containerNames = containerStatuses.map(ContainerStatus::getName).mkCharSeq(",");
+
+            assumeThat(containerStatuses)
+                    .describedAs("No container statuses present in pod %s", pod.getMetadata().getName())
+                    .isNotEmpty();
+
+            final var containerNames = containerStatuses.map(ContainerStatus::getName).mkCharSeq("[", ",", "]");
 
             assertThat(containerStatuses)
                     .extracting(ContainerStatus::getReady)
@@ -45,50 +79,24 @@ class PostInstallStatusTest {
         });
     }
 
-    @Test
-    void allPersistentVolumeClaimsShouldBeBound() {
-        final var volumeClaims = clientRef.get().persistentVolumeClaims()
-                .withLabel("app.kubernetes.io/instance", helmReleaseName)
-                .list()
-                .getItems();
-
-        for (var volumeClaim : volumeClaims) {
-            assertThat(volumeClaim.getStatus().getPhase())
-                    .isEqualToIgnoringCase("bound");
-        }
-    }
-
-    private void forEachPodOfStatefulSet(BiConsumer<Integer, Pod> consumer) {
-        final var statefulSetName = helmReleaseName;
-        final var statefulSet = getStatefulSet(statefulSetName);
-
-        assertThat(statefulSet)
-                .describedAs("StatefulSet %s not found", statefulSetName)
-                .isNotNull();
+    private void forEachPodOfStatefulSet(Consumer<Pod> consumer) {
+        final var statefulSet = getStatefulSet();
 
         final var replicaCount = statefulSet.getStatus().getReplicas();
 
         for (var idx = 0; idx < replicaCount; idx++) {
-            consumer.accept(idx, getPod(statefulSetName + "-" + idx));
+            consumer.accept(client.getPod(statefulSet.getMetadata().getName() + "-" + idx, namespaceName));
         }
     }
 
-    @Nullable
-    private StatefulSet getStatefulSet(String statefulSetName) {
-        return clientRef.get()
-                .apps().statefulSets()
-                .inNamespace(namespaceName)
-                .withName(statefulSetName)
-                .get();
-    }
+    StatefulSet getStatefulSet() {
+        final var statefulSetName = helmReleaseName;
+        final var statefulSet = client.getStatefulSet(statefulSetName, namespaceName);
 
-    @Nullable
-    private Pod getPod(final String podName) {
-        return clientRef.get()
-                .pods()
-                .inNamespace(namespaceName)
-                .withName(podName)
-                .get();
+        assertThat(statefulSet)
+                .describedAs("StatefulSet %s not found", statefulSetName)
+                .isNotNull();
+        return statefulSet;
     }
 
     @BeforeAll
@@ -119,6 +127,6 @@ class PostInstallStatusTest {
 
     @AfterAll
     static void disposeOfClient() {
-        clientRef.forEach(KubernetesClient::close);
+        client.close();
     }
 }
