@@ -2,12 +2,13 @@ package test.postinstall;
 
 import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.Quantity;
+import io.fabric8.kubernetes.api.model.metrics.v1beta1.NodeMetrics;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
-import io.vavr.collection.Traversable;
+import io.vavr.control.Option;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -44,14 +45,19 @@ final class Utils {
         return byteCountToDisplaySize(getAmountInBytes(quantity).toBigInteger());
     }
 
-    static String getRemainingNodeCapacityDescription(final Traversable<Node> nodes) {
-        return nodes.toJavaMap(Utils::getNodeResourceSummary)
+    static String netNodesResourceSummary(final Map<Node, Option<NodeMetrics>> nodes) {
+        return nodes.map(Utils::getNodeResourceSummary)
+                .toJavaMap()
                 .toString();
     }
 
-    private static Tuple2<String, String> getNodeResourceSummary(Node node) {
-        return Tuple.of(
-                node.getMetadata().getName(),
-                getQuantitiesDescription(node.getStatus().getAllocatable()));
+    private static Tuple2<String, String> getNodeResourceSummary(Node node, Option<NodeMetrics> metrics) {
+        final var allocatableDescription = getQuantitiesDescription(node.getStatus().getAllocatable());
+        final var usageDescription = metrics.map(m -> getQuantitiesDescription(m.getUsage()))
+                .getOrElse("metrics unavailable");
+
+        final var description = String.format("usage=[%s], capacity=[%s]", usageDescription, allocatableDescription);
+
+        return Tuple.of(node.getMetadata().getName(), description);
     }
 }
