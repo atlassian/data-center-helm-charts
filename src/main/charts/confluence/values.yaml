@@ -154,6 +154,9 @@ synchrony:
   # This will result in a separate StatefulSet and Service to be created for Synchrony.
   # If disabled, then Collaborative Editing will be disabled in Confluence.
   enabled: false
+  # -- True if Confluence should manage Synchrony rather than create a standalone cluster.
+  # See https://confluence.atlassian.com/doc/possible-confluence-and-synchrony-configurations-958779064.html
+  managed: false
   service:
     # -- The port on which the Synchrony Kubernetes service will listen
     port: 80

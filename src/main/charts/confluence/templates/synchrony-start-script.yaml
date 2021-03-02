@@ -1,4 +1,4 @@
-{{ if .Values.synchrony.enabled }}
+{{ if and .Values.synchrony.enabled (not .Values.synchrony.managed) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

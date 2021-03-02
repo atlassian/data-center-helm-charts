@@ -150,8 +150,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
-{{- if .Values.synchrony.enabled -}}
+{{- if and .Values.synchrony.enabled (not .Values.synchrony.managed) -}}
 -Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
+{{- else if and .Values.synchrony.enabled .Values.synchrony.managed -}}
+-Dsynchrony.btf.disabled=false
 {{- else -}}
 -Dsynchrony.btf.disabled=true
 {{- end -}}

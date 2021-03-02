@@ -1,6 +1,6 @@
 # confluence
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.9.0-jdk11](https://img.shields.io/badge/AppVersion-7.9.0--jdk11-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.9.0-jdk11](https://img.shields.io/badge/AppVersion-7.9.0--jdk11-informational?style=flat-square)
 
 A chart for installing Confluence DC on Kubernetes
 
@@ -22,6 +22,9 @@ Kubernetes: `>=1.17.x-0`
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Confluence pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Confluence and Synchrony pods |
+| confluence.accessLog.enabled | bool | `true` | True if access logging should be enabled. |
+| confluence.accessLog.localHomeSubPath | string | `"logs"` | The subdirectory within the local-home volume where access logs should be stored. |
+| confluence.accessLog.mountPath | string | `"/opt/atlassian/confluence/logs"` | The path within the Confluence container where the local-home volume should be mounted in order to capture access logs. |
 | confluence.additionalBundledPlugins | list | `[]` | Specifies a list of additional Confluence plugins that should be added to the Confluence container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | confluence.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Confluence container. See https://hub.docker.com/r/atlassian/confluence-server for supported variables. |
 | confluence.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. system properties |
@@ -44,11 +47,18 @@ Kubernetes: `>=1.17.x-0`
 | confluence.securityContext.gid | string | `"2002"` | The GID used by the Confluence docker image |
 | confluence.service.port | int | `80` | The port on which the Confluence Kubernetes service will listen |
 | confluence.service.type | string | `"ClusterIP"` | The type of Kubernetes service to use for Confluence |
+| confluence.umask | string | `"0022"` | The umask used by the Confluence process when it creates new files. Default is 0022, which makes the new files read/writeable by the Confluence user, and readable by everyone else. |
 | database.credentials.passwordSecretKey | string | `"password"` | The key in the Secret used to store the database login password |
 | database.credentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the database login credentials. If specified, then the credentials will be automatically populated during Confluence setup. Otherwise, they will need to be provided via the browser after initial startup. |
 | database.credentials.usernameSecretKey | string | `"username"` | The key in the Secret used to store the database login username |
 | database.type | string | `nil` | The type of database being used. Valid values include 'postgresql', 'mysql', 'oracle', 'mssql'. If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Confluence and Synchrony, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
+| fluentd.elasticsearch.enabled | bool | `true` | True if fluentd should send all log events to an elasticsearch service. |
+| fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that fluentd should send logs to. |
+| fluentd.elasticsearch.indexNamePrefix | string | `"confluence"` | The prefix of the elasticsearch index name that will be used |
+| fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
+| fluentd.httpPort | int | `9880` | The port on which the fluentd sidecar will listen |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/confluence-server"` |  |
 | image.tag | string | `nil` | The docker image tag to be used. Defaults to the Chart appVersion. |
@@ -70,6 +80,7 @@ Kubernetes: `>=1.17.x-0`
 | serviceAccount.name | string | `nil` | Specifies the name of the ServiceAccount to be used by the pods. If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated, otherwise the 'default' ServiceAccount will be used. |
 | synchrony.enabled | bool | `false` | True if Synchrony (i.e. Collaborative Editing) should be enabled. This will result in a separate StatefulSet and Service to be created for Synchrony. If disabled, then Collaborative Editing will be disabled in Confluence. |
 | synchrony.ingressUrl | string | `nil` | The base URL of the Synchrony service. This will be the URL that users' browsers will be given to communicate with Synchrony, as well as the URL that the Confluence service will use to communicate directly with Synchrony, so the URL must be resovable both from inside and outside the Kubernetes cluster. |
+| synchrony.managed | bool | `false` | True if Confluence should manage Synchrony rather than create a standalone cluster. See https://confluence.atlassian.com/doc/possible-confluence-and-synchrony-configurations-958779064.html |
 | synchrony.ports.hazelcast | int | `5701` | The port on which the Synchrony container listens for Hazelcast traffic |
 | synchrony.ports.http | int | `8091` | The port on which the Synchrony container listens for HTTP traffic |
 | synchrony.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Synchrony container readiness probe before the pod fails readiness checks |
@@ -80,7 +91,7 @@ Kubernetes: `>=1.17.x-0`
 | tolerations | list | `[]` | Standard Kubernetes tolerations that will be applied to all Confluence and Synchrony pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Confluence pods. Note that this will not create any corresponding volume mounts; those needs to be defined in confluence.additionalVolumeMounts |
 | volumes.localHome.customVolume | object | `{}` | When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume. |
-| volumes.localHome.mountPath | string | `"/var/atlassian/application-data/confluence"` |  |
+| volumes.localHome.mountPath | string | `"/var/atlassian/application-data/confluence"` | The path within the Confluence container which the local-home volume should be mounted. |
 | volumes.localHome.persistentVolumeClaim.create | bool | `false` | If true, then a PersistentVolumeClaim will be created for each local-home volume. |
 | volumes.localHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims. |
 | volumes.localHome.persistentVolumeClaim.storageClassName | string | `nil` | Specifies the name of the storage class that should be used for the local-home volume claim. |

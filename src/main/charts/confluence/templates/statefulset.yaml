@@ -4,6 +4,9 @@ metadata:
   name: {{ include "confluence.fullname" . }}
   labels:
     {{- include "confluence.labels" . | nindent 4 }}
+    {{- if and .Values.synchrony.enabled .Values.synchrony.managed }}
+    {{- include "synchrony.selectorLabels" . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   serviceName: {{ include "confluence.fullname" . }}
@@ -42,6 +45,14 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.confluence.ports.hazelcast }}
               protocol: TCP
+            {{- if and .Values.synchrony.enabled .Values.synchrony.managed }}
+            - name: http-synch
+              containerPort: {{ .Values.synchrony.ports.http }}
+              protocol: TCP
+            - name: hazelcast-synch
+              containerPort: {{ .Values.synchrony.ports.hazelcast }}
+              protocol: TCP
+            {{- end }}
           readinessProbe:
             httpGet:
               port: {{ .Values.confluence.ports.http }}

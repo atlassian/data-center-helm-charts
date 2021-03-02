@@ -1,4 +1,4 @@
-{{ if .Values.synchrony.enabled }}
+{{ if and .Values.synchrony.enabled (not .Values.synchrony.managed) }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -31,10 +31,10 @@ spec:
             - mountPath: /scripts
               name: entrypoint-script
           ports:
-            - name: http
+            - name: http-synch
               containerPort: {{ .Values.synchrony.ports.http }}
               protocol: TCP
-            - name: hazelcast
+            - name: hazelcast-synch
               containerPort: {{ .Values.synchrony.ports.hazelcast }}
               protocol: TCP
           readinessProbe:
