@@ -54,6 +54,9 @@ Kubernetes: `>=1.17.x-0`
 | database.credentials.usernameSecretKey | string | `"username"` | The key in the Secret used to store the database login username |
 | database.driver | string | `nil` | The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
+| fluentd.elasticsearch.hostname | string | `nil` | The hostname of the Elasticsearch service that fluentd should send logs to. |
+| fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/bitbucket-server"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |

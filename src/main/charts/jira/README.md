@@ -28,6 +28,12 @@ Kubernetes: `>=1.17.x-0`
 | database.driver | string | `nil` | The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver If not specified, then it will need to be provided via browser during initial startup. |
 | database.type | string | `nil` | The type of database being used. Valid values include 'postgres72', 'mysql57', 'mysql8', 'oracle10g', 'mssql', 'postgresaurora96' If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Jira, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
+| fluentd.elasticsearch.enabled | bool | `true` | True if fluentd should send all log events to an elasticsearch service. |
+| fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that fluentd should send logs to. |
+| fluentd.elasticsearch.indexNamePrefix | string | `"jira"` | The prefix of the elasticsearch index name that will be used |
+| fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
+| fluentd.httpPort | int | `9880` | The port on which the fluentd sidecar will listen |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/jira-software"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
@@ -37,12 +43,16 @@ Kubernetes: `>=1.17.x-0`
 | ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
 | ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
 | ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
+| jira.accessLog.localHomeSubPath | string | `"log"` | The subdirectory within the local-home volume where access logs should be stored. |
+| jira.accessLog.mountPath | string | `"/opt/atlassian/jira/logs"` | The path within the Jira container where the local-home volume should be mounted in order to capture access logs. |
 | jira.additionalBundledPlugins | list | `[]` | Specifies a list of additional Jira plugins that should be added to the Jira container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | jira.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Jira container. See https://hub.docker.com/r/atlassian/jira-software for supported variables. |
 | jira.additionalJvmArgs | string | `nil` | Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. system properties |
 | jira.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Jira container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | jira.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Jira container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | jira.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
+| jira.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Jira license key |
+| jira.license.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Jira license key. If specified, then the license will be automatically populated during Jira setup. Otherwise, it will need to be provided via the browser after initial startup. |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic |
 | jira.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks |
 | jira.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running |
