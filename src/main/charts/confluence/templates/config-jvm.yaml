@@ -8,6 +8,7 @@ data:
   additional_jvm_args: >-
     {{ include "confluence.sysprop.hazelcastListenPort" . }}
     {{ include "confluence.sysprop.synchronyServiceUrl" . }}
+    {{ include "confluence.sysprop.enable.synchrony.by.default" . }}
     {{ include "confluence.sysprop.clusterNodeName" . }}
     {{ include "confluence.sysprop.fluentdAppender" . }}
     {{ include "confluence.sysprop.debug" . }}
