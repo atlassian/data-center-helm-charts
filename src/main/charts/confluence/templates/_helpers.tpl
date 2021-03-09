@@ -149,6 +149,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 -Datlassian.logging.cloud.enabled={{.Values.fluentd.enabled}}
 {{- end }}
 
+{{- define "confluence.sysprop.enable.synchrony.by.default" -}}
+-Dsynchrony.by.default.enable.collab.editing.if.manually.managed=true
+{{- end -}}
+
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
 -Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
