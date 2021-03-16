@@ -46,6 +46,8 @@ jira:
     port: 80
     # -- The type of Kubernetes service to use for Jira
     type: ClusterIP
+    # -- The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically
+    contextPath: ""
   # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2001.
   # -- Disable when deploying to OpenShift, unless anyuid policy is attached to a service account
   securityContext:
