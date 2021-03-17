@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "crowd.fullname" . }}
+  labels:
+    {{- include "crowd.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "crowd.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "crowd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "crowd.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "crowd.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 1
+{{ if .Values.crowd.securityContext.enabled }}
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: {{ .Values.crowd.securityContext.gid }}
+{{ end }}
+      {{- with .Values.additionalInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: crowd
+          image: {{ include "crowd.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.crowd.ports.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.crowd.ports.hazelcast }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.crowd.ports.http }}
+              path: /status
+            initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
+          {{- with .Values.crowd.resources.container }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- include "crowd.volumeMounts" . | nindent 12 }}
+            {{- with .Values.crowd.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- include "crowd.additionalLibraries" . | nindent 12 }}
+            {{- include "crowd.additionalBundledPlugins" . | nindent 12 }}
+          env:
+            {{ if .Values.ingress.https }}
+            - name: ATL_TOMCAT_SCHEME
+              value: "https"
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            {{ end }}
+            - name: ATL_TOMCAT_ACCESS_LOG
+              value: {{ .Values.crowd.accessLog.enabled | quote }}
+            - name: UMASK
+              value: {{ .Values.crowd.umask | quote }}
+            - name: SET_PERMISSIONS
+              value: "false"
+            - name: ATL_PRODUCT_HOME_SHARED
+              value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: {{ include "crowd.fullname" . }}-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: {{ include "crowd.fullname" . }}-jvm-config
+            - name: JVM_RESERVED_CODE_CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reserved_code_cache
+                  name: {{ include "crowd.fullname" . }}-jvm-config
+            {{- with .Values.crowd.additionalEnvironmentVariables }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- include "fluentd.container" . | nindent 8 }}
+        {{- with .Values.additionalContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{ include "crowd.volumes" . | nindent 8 }}
+        {{ include "fluentd.config.volume" . | nindent 8 }}
+  {{ include "crowd.volumeClaimTemplates" . | nindent 2 }}

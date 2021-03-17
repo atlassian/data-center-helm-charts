@@ -13,7 +13,7 @@ whether it be a managed environment such as Amazon EKS, or a custom, on-premise 
 1. `helm repo add atlassian-data-center https://atlassian-labs.github.io/data-center-helm-charts`
 1. Write a `values.yaml` file to provide your site-specific configuration
 1. Create the required authentication Secrets in your Kubernetes cluster
-1. `helm install <release name> --values <values.yaml> atlassian-data-center/jira` (or `/confluence`, `/bitbucket`)
+1. `helm install <release name> --values <values.yaml> atlassian-data-center/jira` (or `/confluence`, `/crowd`, `/bitbucket`)
 1. `helm test <release name>`
 1. Configure an HTTPS ingress for your deployment
 
