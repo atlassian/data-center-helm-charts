@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "crowd.fullname" . }}
+  labels:
+    {{- include "crowd.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.crowd.service.type }}
+  ports:
+    - port: {{ .Values.crowd.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.crowd.ports.hazelcast }}
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    {{- include "crowd.selectorLabels" . | nindent 4 }}
