@@ -45,7 +45,7 @@ spec:
           readinessProbe:
             httpGet:
               port: {{ .Values.confluence.ports.http }}
-              path: /status
+              path: {{ .Values.confluence.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.confluence.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.confluence.readinessProbe.failureThreshold }}
@@ -66,6 +66,10 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            {{ end }}
+            {{ if .Values.confluence.service.contextPath }}
+            - name: ATL_TOMCAT_CONTEXTPATH
+              value: {{ .Values.confluence.service.contextPath | quote }}
             {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.confluence.accessLog.enabled | quote }}
