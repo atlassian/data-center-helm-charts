@@ -42,10 +42,10 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
               {{ end }}
-            {{ if .Values.confluence.service.contextPath }}
+            {{ if .Values.jira.service.contextPath }}
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.jira.service.contextPath | quote }}
-              {{ end }}
+            {{ end }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
             {{ with .Values.jira.license.secretName }}
@@ -77,8 +77,6 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: {{ include "jira.fullname" . }}-jvm-config
-            - name: ATL_TOMCAT_CONTEXTPATH
-              value: {{ .Values.jira.contextPath }}
             {{- with .Values.jira.additionalEnvironmentVariables }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -89,7 +87,7 @@ spec:
           readinessProbe:
             httpGet:
               port: {{ .Values.jira.ports.http }}
-              path: {{ .Values.confluence.service.contextPath }}/status
+              path: {{ .Values.jira.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
