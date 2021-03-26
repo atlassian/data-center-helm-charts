@@ -25,37 +25,19 @@ class ContextPathTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "confluence")
+    @EnumSource(value = Product.class, names = {"confluence", "jira"})
     void confluence_context_path(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "confluence.service.contextPath", "/confluence"));
+                "confluence.service.contextPath", "/" + product.name()));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/confluence");
+                .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/" + product.name());
 
 
         assertEquals(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
-                "/confluence/status");
+                "/" + product.name() + "/status");
     }
-    
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
-    void jira_context_path(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "jira.service.contextPath", "/jira"));
-
-        resources.getStatefulSet(product.getHelmReleaseName())
-                .getContainer()
-                .getEnv()
-                .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/jira");
-
-
-        assertEquals(resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
-                "/jira/status");
-    }
-  
 }
