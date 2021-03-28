@@ -1,3 +1,8 @@
+## v0.5.0
+* Add multi-node support for Bitbucket, Confluence and Jira
+* Verification of Jira Helm deployments to Azure AKS
+* Additional bug fixes and stability improvements
+* Additional improvements to logging and testing
 ## v0.4.0
 * Add support for HTTP ingresses
 * Add Ingress definition to charts
