@@ -26,9 +26,9 @@ class ContextPathTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"confluence", "jira"})
-    void confluence_context_path(Product product) throws Exception {
+    void test_context_path(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "confluence.service.contextPath", "/" + product.name()));
+                product + ".service.contextPath", "/" + product.name()));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
