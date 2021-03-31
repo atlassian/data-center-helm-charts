@@ -51,12 +51,25 @@ spec:
     - name: nfs-server-container
       image: ubuntu:latest
       securityContext:
-        privileged: true
+        capabilities:
+          add:
+            - SYS_ADMIN
+            - SYS_MODULE
       command: ["/bin/sh"]
-      args: ["-c", "apt -qq update && DEBIAN_FRONTEND=noninteractive apt install -qq -y nfs-kernel-server runit inotify-tools; mkdir -p /etc/sv/nfs ; runsvdir /etc/sv"]
+      args: ["-c", "apt -qq update && DEBIAN_FRONTEND=noninteractive apt install -qq -y nfs-kernel-server runit inotify-tools kmod; mkdir -p /etc/sv/nfs ; runsvdir /etc/sv"]
       volumeMounts:
         - mountPath: /srv/nfs
           name: nfs-export-dir
+        - mountPath: /lib/modules
+          name: lib-modules
+          readOnly: true
+      env:
+        - name: NFS_EXPORT_0
+          value: "/srv/nfs *(rw,subtree_check,fsid=0,no_root_squash)"
   volumes:
   - name: nfs-export-dir
     emptyDir: {}
+  - name: lib-modules
+    hostPath:
+      path: /lib/modules
+      type: Directory
