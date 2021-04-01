@@ -6,13 +6,19 @@ metadata:
   labels:
   {{- include "confluence.labels" . | nindent 4 }}
 data:
+  {{ if .Values.fluentd.customConfigFile }}
+{{- range $key, $value := .Values.fluentd.fluentdConfig }}
+  {{ $key }}: |
+{{ $value | indent 4 }}
+  {{- end }}
+  {{ end }}
+  {{ if .Values.fluentd.defaultConfig }}
   fluent.conf: |
     <source>
       @type http
       port {{ .Values.fluentd.httpPort }}
       bind 0.0.0.0
     </source>
-
     <filter **>
       @type record_transformer
       <record>
@@ -22,11 +28,9 @@ data:
         helmrelease "#{ENV['HELM_RELEASE_NAME']}"
       </record>
     </filter>
-
     <filter **>
       @type stdout
     </filter>
-
     {{ if .Values.fluentd.elasticsearch.enabled }}
     <match **>
       @type elasticsearch
@@ -35,4 +39,5 @@ data:
       logstash_prefix {{ .Values.fluentd.elasticsearch.indexNamePrefix }}
     </match>
     {{ end }}
+  {{ end }}
 {{ end }}

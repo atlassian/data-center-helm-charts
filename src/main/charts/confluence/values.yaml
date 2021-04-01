@@ -199,6 +199,13 @@ ingress:
 fluentd:
   # -- True if the fluentd sidecar should be added to each pod
   enabled: false
+  # -- True if the helm default config for the fluentd.conf should be used with the values specified below
+  defaultConfig: false
+  # -- True if a custom config should be used for fluentd
+  customConfigFile: false
+  # -- Custom fluent.conf file
+  # fluent.conf: |
+  fluentdConfig: {}
   # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   # -- The port on which the fluentd sidecar will listen
@@ -210,7 +217,12 @@ fluentd:
     hostname: elasticsearch
     # -- The prefix of the elasticsearch index name that will be used
     indexNamePrefix: confluence
-
+  # -- Specify custom volumes to be added to fluentd container (e.g. more log sources)
+  extraVolumes: {}
+   # - name: local-home
+   #   mountPath: /opt/atlassian/confluence/logs
+   #   subPath: log
+   #   readOnly: true
 # -- Specify additional annotations to be added to all Confluence and Synchrony pods
 podAnnotations: {}
 #  "name": "value"
