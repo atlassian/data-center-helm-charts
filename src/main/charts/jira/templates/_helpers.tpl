@@ -115,7 +115,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 For each additional library declared, generate a volume mount that injects that library into the Jira lib directory
 */}}
 {{- define "jira.additionalLibraries" -}}
-{{- range .Values.jira.additionalLibraries -}}
+{{- range .Values.jira.additionalLibraries }}
 - name: {{ .volumeName }}
   mountPath: "/opt/atlassian/jira/lib/{{ .fileName }}"
   {{- if .subDirectory }}
@@ -130,7 +130,7 @@ For each additional library declared, generate a volume mount that injects that 
 For each additional plugin declared, generate a volume mount that injects that library into the Jira plugins directory
 */}}
 {{- define "jira.additionalBundledPlugins" -}}
-{{- range .Values.jira.additionalBundledPlugins -}}
+{{- range .Values.jira.additionalBundledPlugins }}
 - name: {{ .volumeName }}
   mountPath: "/opt/atlassian/jira/atlassian-jira/WEB-INF/atlassian-bundled-plugins/{{ .fileName }}"
   {{- if .subDirectory }}
