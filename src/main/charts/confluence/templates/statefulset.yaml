@@ -76,7 +76,7 @@ spec:
             - name: UMASK
               value: {{ .Values.confluence.umask | quote }}
             - name: SET_PERMISSIONS
-              value: "false"
+              value: {{ .Values.confluence.setPermissions | quote }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
