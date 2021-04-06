@@ -32,6 +32,20 @@ spec:
       initContainers:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+      initContainers:
+        - name: nfs-permission-fixer
+          image: alpine
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: {{ .Values.volumes.sharedHome.nfsPermissionFixer.mountPath | quote }}
+              {{- if .Values.volumes.sharedHome.subPath }}
+              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+          {{- end }}
+          command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "bitbucket.image" . | quote }}
