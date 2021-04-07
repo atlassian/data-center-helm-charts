@@ -63,9 +63,6 @@ spec:
         - mountPath: /lib/modules
           name: lib-modules
           readOnly: true
-      env:
-        - name: NFS_EXPORT_0
-          value: "/srv/nfs *(rw,subtree_check,fsid=0,no_root_squash)"
   volumes:
   - name: nfs-export-dir
     emptyDir: {}
