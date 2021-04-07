@@ -27,7 +27,7 @@ class HelmOutputComparisonTest {
 
     /**
      * For each product, this test executes "helm template" and captures the output, comparing it against an expectation file.
-     * his means that every time the Helm charts change, we need to change the expectation files.
+     * This means that every time the Helm charts change, we need to change the expectation files.
      */
     @ParameterizedTest
     @EnumSource(Product.class)
