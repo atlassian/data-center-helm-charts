@@ -1,5 +1,8 @@
 #!/bin/bash
 
+modprobe -v nfs
+modprobe -v nfsd
+
 . /etc/default/nfs-kernel-server
 . /etc/default/nfs-common
 

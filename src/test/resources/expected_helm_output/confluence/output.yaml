@@ -91,6 +91,7 @@ spec:
       initContainers:
         - name: nfs-permission-fixer
           image: alpine
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
           volumeMounts:

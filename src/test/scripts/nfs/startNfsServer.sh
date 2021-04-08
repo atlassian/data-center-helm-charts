@@ -1,9 +1,13 @@
 #!/bin/sh
 
+set -euo pipefail
+
+cd "$(dirname "$0")" || exit 1
+
 targetNamespace=$1
 
 echo Deleting old NFS resources...
-kubectl delete -f "../../../../reference-infrastructure/nfs-server.yaml"
+kubectl delete -f "../../../../reference-infrastructure/nfs-server.yaml" || true
 
 echo Starting NFS deployment...
 kubectl apply -n "${targetNamespace}" -f "../../../../reference-infrastructure/nfs-server.yaml"

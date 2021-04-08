@@ -41,18 +41,17 @@ fi
 
 THISDIR=$(dirname "$0")
 
-source $1
+source "$1"
 
-RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
-PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
-POSTGRES_RELEASE_NAME=$PRODUCT_RELEASE_NAME-pgsql
-FUNCTEST_RELEASE_NAME=$PRODUCT_RELEASE_NAME-functest
-
+RELEASE_PREFIX="$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')"
+PRODUCT_RELEASE_NAME="$RELEASE_PREFIX-$PRODUCT_NAME"
+POSTGRES_RELEASE_NAME="$PRODUCT_RELEASE_NAME-pgsql"
+FUNCTEST_RELEASE_NAME="$PRODUCT_RELEASE_NAME-functest"
 HELM_PACKAGE_DIR=target/helm
 
 currentContext=$(kubectl config current-context)
 
-echo Current context: $currentContext
+echo "Current context: $currentContext"
 
 clusterType=$(getCurrentClusterType)
 
@@ -67,7 +66,7 @@ chartValueFiles=$(for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values.y
   ls "$file" 2>/dev/null || true
 done)
 
-if grep -q nfs: ${chartValueFiles} /dev/null; then
+if grep -q nfs: ${chartValueFiles} /dev/null || grep -q 'nfs[.]' <<<"$EXTRA_PARAMETERS"; then
     echo This configuration requires a private NFS server, starting...
       startNfsServer "${PRODUCT_RELEASE_NAME}"
       nfsServerPodName=$(kubectl get pod -l role=nfs-server -o jsonpath="{.items[0].metadata.name}")
@@ -117,7 +116,8 @@ done
 [ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
 [ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
 [ "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
-valueOverrides+="--set image.pullPolicy=Always "
+[ "$SKIP_IMAGE_PULL" != true ] && valueOverrides+="--set image.pullPolicy=Always "
+[ -n "$EXTRA_PARAMETERS" ] && for i in $EXTRA_PARAMETERS; do valueOverrides+="--set $i "; done
 
 # Ask Helm to generate the YAML that it will send to Kubernetes in the "install" step later, so
 # that we can look at it for diagnostics.
@@ -140,9 +140,9 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
 
 # Package and install the functest helm chart
 INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
-INGRESS_DOMAIN=${!INGRESS_DOMAIN_VARIABLE_NAME}
+INGRESS_DOMAIN="${!INGRESS_DOMAIN_VARIABLE_NAME}"
 FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
-FUNCTEST_CHART_VALUES=clusterType=$clusterType,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME
+FUNCTEST_CHART_VALUES="clusterType=$clusterType,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME"
 
 ## build values chartValueFile for expose node services and ingresses
 ## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef
@@ -175,7 +175,11 @@ helm install --wait \
    "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
-INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${INGRESS_DOMAIN}/"
+if [[ "$clusterType" == "CUSTOM" ]]; then
+  INGRESS_URI="${CUSTOM_INGRESS_URI}"
+else
+  INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${INGRESS_DOMAIN}/"
+fi
 echo "Waiting for $INGRESS_URI to be ready"
 for (( i=0; i<10; ++i ));
 do
