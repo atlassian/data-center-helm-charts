@@ -1,12 +1,16 @@
 #!/bin/sh
 
+set -euo pipefail
+
+cd "$(dirname "$0")" || exit 1
+
 targetNamespace=$1
 productReleaseName=$2
 nfsServerPodName=$3
 
 echo Deleting old NFS resources...
-kubectl delete -n "${targetNamespace}" service "${nfsServerPodName}"
-kubectl delete -n "${targetNamespace}" pod "${nfsServerPodName}"
+kubectl delete -n "${targetNamespace}" service "${nfsServerPodName}" || true
+kubectl delete -n "${targetNamespace}" pod "${nfsServerPodName}" || true
 
 echo Starting NFS pod...
 sed -e "s/POD_NAME/$nfsServerPodName/" -e "s/PRODUCT_RELEASE_NAME/$productReleaseName/" nfs-server.yaml.template | kubectl apply -n "${targetNamespace}" -f -
