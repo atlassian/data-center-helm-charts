@@ -74,6 +74,11 @@ spec:
             {{- end }}
             {{- include "confluence.additionalLibraries" . | nindent 12 }}
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
+            {{- range $i, $n := .Values.additionalConfigMapsSecrets }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
           env:
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME

@@ -80,6 +80,11 @@ spec:
             {{- end }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}
             {{- include "bitbucket.additionalBundledPlugins" . | nindent 12 }}
+            {{- range $i, $n := .Values.additionalConfigMapsSecrets }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
           {{- with .Values.bitbucket.resources.container }}
           resources:
             {{- toYaml . | nindent 12 }}
@@ -147,6 +152,14 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        {{- range $i, $n := .Values.additionalConfigMapsSecrets }}
+        - name: {{ .name }}-{{$i}}
+          {{ .type }}:
+            {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
+            items:
+              - key: {{ .key }}
+                path: {{ .key }}
+        {{ end }}
         {{ include "bitbucket.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "bitbucket.volumeClaimTemplates" . | nindent 2 }}

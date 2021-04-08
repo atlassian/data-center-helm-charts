@@ -18,6 +18,7 @@ Kubernetes: `>=1.17.x-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| additionalConfigMapsSecrets | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Jira pods |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Jira pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
@@ -63,6 +64,7 @@ Kubernetes: `>=1.17.x-0`
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache |
 | jira.securityContext | object | `{"enabled":true,"gid":"2001"}` | Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2001. -- Disable when deploying to OpenShift, unless anyuid policy is attached to a service account |
 | jira.securityContext.gid | string | `"2001"` | The GID used by the Jira docker image |
+| jira.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically |
 | jira.service.port | int | `80` | The port on which the Jira Kubernetes service will listen |
 | jira.service.type | string | `"ClusterIP"` | The type of Kubernetes service to use for Jira |
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Jira pods |
