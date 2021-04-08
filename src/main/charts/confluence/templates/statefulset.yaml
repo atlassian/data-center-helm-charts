@@ -74,7 +74,7 @@ spec:
             {{- end }}
             {{- include "confluence.additionalLibraries" . | nindent 12 }}
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
-            {{- range $i, $n := .Values.addtionalFiles }}
+            {{- range $i, $n := .Values.additionalFiles }}
             - name: {{ .name }}-{{$i}}
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}

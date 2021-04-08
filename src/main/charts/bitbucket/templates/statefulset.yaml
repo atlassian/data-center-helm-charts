@@ -80,7 +80,7 @@ spec:
             {{- end }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}
             {{- include "bitbucket.additionalBundledPlugins" . | nindent 12 }}
-            {{- range $i, $n := .Values.addtionalFiles }}
+            {{- range $i, $n := .Values.additionalFiles }}
             - name: {{ .name }}-{{$i}}
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
@@ -152,7 +152,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        {{- range $i, $n := .Values.addtionalFiles }}
+        {{- range $i, $n := .Values.additionalFiles }}
         - name: {{ .name }}-{{$i}}
           {{ .type }}:
             {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}

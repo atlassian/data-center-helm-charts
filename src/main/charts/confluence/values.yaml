@@ -286,7 +286,7 @@ additionalLabels: {}
 # mountPath is a destination directory in a container and key is file name
 # name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position,
 # for example custom-config-0, keystore-2
-addtionalFiles: []
+additionalFiles: []
 #  - name: custom-config
 #    type: configMap
 #    key: log4j.properties
