@@ -230,7 +230,7 @@ volumes:
     nfsPermissionFixer:
       # -- If enabled, this will alter the shared-home volume's root directory so that Bitbucket can write to it.
       # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
-      enabled: false
+      enabled: true
       # -- The path in the initContainer where the shared-home volume will be mounted
       mountPath: /shared-home
       # -- By default, the fixer will change the group ownership of the volume's root directory to match the Bitbucket

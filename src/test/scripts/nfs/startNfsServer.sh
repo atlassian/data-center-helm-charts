@@ -1,25 +1,20 @@
 #!/bin/sh
 
 targetNamespace=$1
-productReleaseName=$2
-nfsServerPodName=$3
 
 echo Deleting old NFS resources...
-kubectl delete -n "${targetNamespace}" service "${nfsServerPodName}"
-kubectl delete -n "${targetNamespace}" pod "${nfsServerPodName}"
+kubectl delete -f "../../../../reference-infrastructure/nfs-server.yaml"
 
-echo Starting NFS pod...
-sed -e "s/POD_NAME/$nfsServerPodName/" -e "s/PRODUCT_RELEASE_NAME/$productReleaseName/" nfs-server.yaml.template | kubectl apply -n "${targetNamespace}" -f -
+echo Starting NFS deployment...
+kubectl apply -n "${targetNamespace}" -f "../../../../reference-infrastructure/nfs-server.yaml"
 
-echo Waiting until the NFS pod is ready...
-kubectl wait --for=condition=ready pod -n "${targetNamespace}" "${nfsServerPodName}"
+echo Waiting until the NFS deployment is ready...
+podname=$(kubectl get pod -l role=nfs-server -o jsonpath="{.items[0].metadata.name}")
+kubectl wait --for=condition=ready pod -n "${targetNamespace}" "${podname}"
 
 echo Waiting for the container to stabilise...
-while ! kubectl exec -n "${targetNamespace}" "${nfsServerPodName}" -- ps -o cmd | grep -q ^'runsv nfs'; do
+while ! kubectl exec -n "${targetNamespace}" "${podname}" -- ps -o cmd | grep 'mountd' | grep -q '/usr/sbin/rpc.mountd -N 2 -V 3'; do
   sleep 1
 done
-
-echo Starting the NFS server...
-kubectl cp -n "${targetNamespace}" etc "${nfsServerPodName}":/
 
 echo NFS server is up and running.
