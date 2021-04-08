@@ -116,7 +116,7 @@ spec:
             {{- end }}
             {{- include "jira.additionalLibraries" . | nindent 12 }}
             {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
-            {{- range $i, $n := .Values.additionalConfigMapsSecrets }}
+            {{- range $i, $n := .Values.addtionalFiles }}
             - name: {{ .name }}-{{$i}}
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
@@ -138,7 +138,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        {{- range $i, $n := .Values.additionalConfigMapsSecrets }}
+        {{- range $i, $n := .Values.addtionalFiles }}
         - name: {{ .name }}-{{$i}}
           {{ .type }}:
           {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
