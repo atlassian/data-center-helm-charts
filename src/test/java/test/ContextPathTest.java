@@ -25,19 +25,19 @@ class ContextPathTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "confluence")
-    void confluence_context_path(Product product) throws Exception {
+    @EnumSource(value = Product.class, names = {"confluence", "jira"})
+    void test_context_path(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "confluence.service.contextPath", "/confluence"));
+                product + ".service.contextPath", "/" + product.name()));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/confluence");
+                .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/" + product.name());
 
 
         assertEquals(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
-                "/confluence/status");
+                "/" + product.name() + "/status");
     }
 }

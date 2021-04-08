@@ -198,7 +198,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Confluence logs get capture
 For each additional library declared, generate a volume mount that injects that library into the Confluence lib directory
 */}}
 {{- define "confluence.additionalLibraries" -}}
-{{- range .Values.confluence.additionalLibraries -}}
+{{- range .Values.confluence.additionalLibraries }}
 - name: {{ .volumeName }}
   mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/lib/{{ .fileName }}"
   {{- if .subDirectory }}
@@ -213,7 +213,7 @@ For each additional library declared, generate a volume mount that injects that 
 For each additional plugin declared, generate a volume mount that injects that library into the Confluence plugins directory
 */}}
 {{- define "confluence.additionalBundledPlugins" -}}
-{{- range .Values.confluence.additionalBundledPlugins -}}
+{{- range .Values.confluence.additionalBundledPlugins }}
 - name: {{ .volumeName }}
   mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/atlassian-bundled-plugins/{{ .fileName }}"
   {{- if .subDirectory }}
