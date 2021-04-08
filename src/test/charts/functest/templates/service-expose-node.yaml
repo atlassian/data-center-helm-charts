@@ -1,14 +1,18 @@
-{{- range $podName :=  .Values.backdoorServiceNames -}}
+{{- $ingressDomain := .Values.ingressDomain -}}
+{{- range $index, $podName :=  .Values.backdoorServiceNames -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ $podName }}
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 80
       protocol: TCP
       targetPort: http
+      {{- if eq "localhost" $ingressDomain }}
+      nodePort: {{ add 31970 $index }}
+      {{- end }}
   selector:
     statefulset.kubernetes.io/pod-name: {{ $podName }}
 ---
