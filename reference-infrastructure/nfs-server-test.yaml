@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      volumeMounts:
+        - mountPath: "/exports"
+          name: nfs-jar-volume
+
+  volumes:
+    - name: nfs-jar-volume
+      nfs:
+        path: /exports
+        server: a15641317dc3449efb820cd72f87fa86-749869079.ap-southeast-2.elb.amazonaws.com
