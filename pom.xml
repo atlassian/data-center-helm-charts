@@ -96,6 +96,7 @@
 
         <dockerImage.registry />
         <dockerImage.version />
+        <skip.dockerImage.pull>false</skip.dockerImage.pull>
 
         <helm.src.path>${project.basedir}/src/main/charts</helm.src.path>
 
@@ -111,12 +112,15 @@
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
 <!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
+        <custom.ingress.uri />
 
         <shared.pvc.name>atlassian-dc-shared-home-pvc</shared.pvc.name>
 
         <persistence.enabled>true</persistence.enabled>
 
         <db.init.script.file/>
+
+        <extra.parameters />
 
         <!-- The directory in which the helm (un)install script should look for the chart values files for integration testing -->
         <chart.testValues.basedir>${project.build.directory}/config</chart.testValues.basedir>
