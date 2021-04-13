@@ -116,6 +116,11 @@ spec:
             {{- end }}
             {{- include "jira.additionalLibraries" . | nindent 12 }}
             {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
+            {{- range $i, $n := .Values.additionalFiles }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- with .Values.additionalContainers }}
         {{- toYaml . | nindent 8 }}
@@ -133,6 +138,14 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        {{- range $i, $n := .Values.additionalFiles }}
+        - name: {{ .name }}-{{$i}}
+          {{ .type }}:
+          {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
+          items:
+            - key: {{ .key }}
+              path: {{ .key }}
+        {{ end }}
         {{ include "jira.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "jira.volumeClaimTemplates" . | nindent 2 }}
