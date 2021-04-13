@@ -18,7 +18,7 @@ parameters:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nfs-data-pvc
+  name: nfs-server-data-pvc
 spec:
   storageClassName: io1-fast
   accessModes:
@@ -64,7 +64,6 @@ spec:
       containers:
         - name: nfs-server
           image: k8s.gcr.io/volume-nfs:0.8
-#          image: alphayax/docker-volume-nfs:latest
           imagePullPolicy: Always
           ports:
             - name: nfs
@@ -74,17 +73,20 @@ spec:
             - name: rpcbind
               containerPort: 111
           securityContext:
-            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_MODULE
           volumeMounts:
-            - name: nfs-data-pvc
+            - name: nfs-server-data-pvc
               mountPath: /srv/nfs
             - name: nfs-server-conf
               mountPath: /etc/exports.d/
       terminationGracePeriodSeconds: 60
       volumes:
-        - name: nfs-data-pvc
+        - name: nfs-server-data-pvc
           persistentVolumeClaim:
-            claimName: nfs-data-pvc
+            claimName: nfs-server-data-pvc
         - name: nfs-server-conf
           configMap:
             name: nfs-server-conf
@@ -96,5 +98,5 @@ kind: ConfigMap
 metadata:
   name: nfs-server-conf
 data:
-  share: |-
+  share.exports: |-
     /srv/nfs *(rw,subtree_check,fsid=0,no_root_squash)

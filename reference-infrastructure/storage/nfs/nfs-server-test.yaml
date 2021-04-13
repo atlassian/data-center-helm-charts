@@ -1,0 +1,22 @@
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      volumeMounts:
+        - mountPath: "/srv/nfs"
+          name: shared-home-nfs
+
+  volumes:
+    - name: shared-home-nfs
+      nfs:
+        path: /srv/nfs
+        server:  # this needs to be provided manually
