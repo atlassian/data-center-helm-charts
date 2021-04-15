@@ -24,8 +24,13 @@ echo Waiting until the NFS deployment is ready...
 sleep 10
 # Pod might not be ready to query immediately
 kubectl wait --for=condition=available deployment -n "${TARGET_NAMESPACE}" "$PRODUCT_RELEASE_NAME-nfs-server"
-podname=$(kubectl get pod -l role="$PRODUCT_RELEASE_NAME-nfs-server" -o jsonpath="{.items[0].metadata.name}")
-kubectl wait --for=condition=ready pod -n "${TARGET_NAMESPACE}" "${podname}"
+
+POD_ROLE="$PRODUCT_RELEASE_NAME-nfs-server"
+echo Pod role is: "$POD_ROLE"
+
+sleep 10
+podname=$(kubectl get pod -l role=$POD_ROLE -o jsonpath="{.items[0].metadata.name}")
+kubectl wait --for=condition=ready pod -n "${TARGET_NAMESPACE}" "${podname}" --timeout=60s
 
 echo Waiting for the container to stabilise...
 while ! kubectl exec -n "${TARGET_NAMESPACE}" "${podname}" -- ps -o cmd | grep 'mountd' | grep -q '/usr/sbin/rpc.mountd -N 2 -V 3'; do
