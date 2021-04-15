@@ -39,7 +39,7 @@ echo kubectl version...
 kubectl version
 
 echo Print all Pods with name and role
-kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{" |||| role: "}{.metadata.labels.role}{"\n"}{end}'
+kubectl get pods --show-labels
 
 echo Describe [$POD_ROLE]...
 kubectl describe deployments $POD_ROLE
@@ -50,7 +50,7 @@ kubectl get pod -l role=$POD_ROLE -o json
 
 ###
 
-podname=$(kubectl get pod -l role=$POD_ROLE -o jsonpath="{.items[0].metadata.name}")
+podname=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=$POD_ROLE -o jsonpath="{.items[0].metadata.name}")
 kubectl wait --for=condition=ready pod -n "${TARGET_NAMESPACE}" "${podname}" --timeout=60s
 
 echo Waiting for the container to stabilise...
