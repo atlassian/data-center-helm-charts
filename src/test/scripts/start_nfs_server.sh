@@ -28,7 +28,12 @@ kubectl wait --for=condition=available deployment -n "${TARGET_NAMESPACE}" "$PRO
 POD_ROLE="$PRODUCT_RELEASE_NAME-nfs-server"
 echo Pod role is: "$POD_ROLE"
 
+kubectl get pods -n $TARGET_NAMESPACE
+
 sleep 10
+kubectl get deployment -n $TARGET_NAMESPACE
+kubectl get pods -n $TARGET_NAMESPACE
+
 podname=$(kubectl get pod -l role=$POD_ROLE -o jsonpath="{.items[0].metadata.name}")
 kubectl wait --for=condition=ready pod -n "${TARGET_NAMESPACE}" "${podname}" --timeout=60s
 
