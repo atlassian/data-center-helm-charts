@@ -3,27 +3,36 @@
 set -e
 set -x
 
+BASEDIR=$(dirname "$0")
+
 getCurrentClusterType() {
   local serverAddress=$(kubectl config view --minify -o json | jq -r '.clusters[0].cluster.server')
 
   case "${serverAddress}" in
-    *.eks.amazonaws.com*) echo EKS; return;;
-    *.azmk8s.io*) echo AKS; return;;
-    *.kitt-inf.net*) echo KITT; return;;
+  *.eks.amazonaws.com*)
+    echo EKS
+    return
+    ;;
+  *.azmk8s.io*)
+    echo AKS
+    return
+    ;;
+  *.kitt-inf.net*)
+    echo KITT
+    return
+    ;;
   esac
 
   local clusterName=$(kubectl config view --minify -o json | jq -r '.clusters[0].name')
   case "$clusterName" in
-    gke*) echo GKE;;
-    *) echo CUSTOM;;
+  gke*) echo GKE ;;
+  *) echo CUSTOM ;;
   esac
 }
 
 startNfsServer() {
   local productReleaseName=$1
-  pushd "$THISDIR"/nfs
-  ./start_nfs_server.sh "${TARGET_NAMESPACE}" "${productReleaseName}"
-  popd
+  "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${productReleaseName}"
 }
 
 if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
@@ -32,10 +41,9 @@ if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
   exit 1
 fi
 
-if ! command -v jq &> /dev/null
-then
-    echo "The 'jq' command line JSON processor is required to run this script."
-    exit 1
+if ! command -v jq &>/dev/null; then
+  echo "The 'jq' command line JSON processor is required to run this script."
+  exit 1
 fi
 
 THISDIR=$(dirname "$0")
@@ -66,42 +74,42 @@ chartValueFiles=$(for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values.y
 done)
 
 if grep -q nfs: ${chartValueFiles} /dev/null || grep -q 'nfs[.]' <<<"$EXTRA_PARAMETERS"; then
-    echo This configuration requires a private NFS server, starting...
-      startNfsServer "${PRODUCT_RELEASE_NAME}"
-      nfsServerPodName=$(kubectl get pod -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
+  echo This configuration requires a private NFS server, starting...
+  startNfsServer "${PRODUCT_RELEASE_NAME}"
+  nfsServerPodName=$(kubectl get pod -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
 
-    for ((try = 0; try < 60; try++)) ; do
-      echo Detecting NFS server IP...
-      nfsServerIp=$(kubectl get pods -n $TARGET_NAMESPACE "$nfsServerPodName" -o json | jq -r .status.podIP)
+  for ((try = 0; try < 60; try++)); do
+    echo Detecting NFS server IP...
+    nfsServerIp=$(kubectl get pods -n $TARGET_NAMESPACE "$nfsServerPodName" -o json | jq -r .status.podIP)
 
-      if [ -z "$nfsServerIp" ]; then
-        echo NFS server not found.
-        exit 1
-      fi
+    if [ -z "$nfsServerIp" ]; then
+      echo NFS server not found.
+      exit 1
+    fi
 
-      if [ "$nfsServerIp" != "null" ] ; then
-        break
-      fi
-      sleep 1
-    done
+    if [ "$nfsServerIp" != "null" ]; then
+      break
+    fi
+    sleep 1
+  done
 
-    echo Detected NFS server IP: $nfsServerIp
-    valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfsServerIp "
+  echo Detected NFS server IP: $nfsServerIp
+  valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfsServerIp "
 fi
 
 # Use the product name for the name of the postgres database, username and password.
 # These must match the credentials stored in the Secret pre-loaded into the namespace,
 # which the application will use to connect to the database.
 helm install -n "${TARGET_NAMESPACE}" --wait \
-   "$POSTGRES_RELEASE_NAME" \
-   --values "$THISDIR/postgres-values.yaml" \
-   --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
-   --set image.tag="$POSTGRES_APP_VERSION" \
-   --set postgresqlDatabase="$DB_NAME" \
-   --set postgresqlUsername="$PRODUCT_NAME" \
-   --set postgresqlPassword="$PRODUCT_NAME" \
-   --version "$POSTGRES_CHART_VERSION" \
-   bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
+  "$POSTGRES_RELEASE_NAME" \
+  --values "$THISDIR/postgres-values.yaml" \
+  --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
+  --set image.tag="$POSTGRES_APP_VERSION" \
+  --set postgresqlDatabase="$DB_NAME" \
+  --set postgresqlUsername="$PRODUCT_NAME" \
+  --set postgresqlPassword="$PRODUCT_NAME" \
+  --version "$POSTGRES_CHART_VERSION" \
+  bitnami/postgresql >$LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
   kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
@@ -121,21 +129,21 @@ done
 # Ask Helm to generate the YAML that it will send to Kubernetes in the "install" step later, so
 # that we can look at it for diagnostics.
 helm template \
-   "$PRODUCT_RELEASE_NAME" \
-   "$CHART_SRC_PATH" \
-   --debug \
-   ${valueOverrides} \
-    > $LOG_DOWNLOAD_DIR/$PRODUCT_RELEASE_NAME.yaml
+  "$PRODUCT_RELEASE_NAME" \
+  "$CHART_SRC_PATH" \
+  --debug \
+  ${valueOverrides} \
+  >$LOG_DOWNLOAD_DIR/$PRODUCT_RELEASE_NAME.yaml
 
 # Package the product's Helm chart
 helm package "$CHART_SRC_PATH" \
-   --destination "$HELM_PACKAGE_DIR"
+  --destination "$HELM_PACKAGE_DIR"
 
 # Install the product's Helm chart
 helm install -n "${TARGET_NAMESPACE}" --wait \
-   "$PRODUCT_RELEASE_NAME" \
-   ${valueOverrides} \
-   "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+  "$PRODUCT_RELEASE_NAME" \
+  ${valueOverrides} \
+  "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >>$LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 # Package and install the functest helm chart
 INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
@@ -149,29 +157,28 @@ NEWLINE=$'\n'
 backdoorServices="backdoorServiceNames:${NEWLINE}"
 ingressServices="ingressNames:${NEWLINE}"
 ingressServices+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
-for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1))
-do
+for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1)); do
   backdoorServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
 done
 EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
 
-echo "${backdoorServices}${ingressServices}" > ${EXPOSE_NODES_FILE}
+echo "${backdoorServices}${ingressServices}" >${EXPOSE_NODES_FILE}
 
 helm template \
-   "$FUNCTEST_RELEASE_NAME" \
-   "$FUNCTEST_CHART_PATH" \
-   --set "$FUNCTEST_CHART_VALUES" \
-   --values ${EXPOSE_NODES_FILE} \
-   > "$LOG_DOWNLOAD_DIR/$FUNCTEST_RELEASE_NAME.yaml"
+  "$FUNCTEST_RELEASE_NAME" \
+  "$FUNCTEST_CHART_PATH" \
+  --set "$FUNCTEST_CHART_VALUES" \
+  --values ${EXPOSE_NODES_FILE} \
+  >"$LOG_DOWNLOAD_DIR/$FUNCTEST_RELEASE_NAME.yaml"
 
 helm package "$FUNCTEST_CHART_PATH" --destination "$HELM_PACKAGE_DIR"
 
 helm install --wait \
-   -n "${TARGET_NAMESPACE}" \
-   "$FUNCTEST_RELEASE_NAME" \
-   --set "$FUNCTEST_CHART_VALUES" \
-   --values ${EXPOSE_NODES_FILE} \
-   "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
+  -n "${TARGET_NAMESPACE}" \
+  "$FUNCTEST_RELEASE_NAME" \
+  --set "$FUNCTEST_CHART_VALUES" \
+  --values ${EXPOSE_NODES_FILE} \
+  "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
 if [[ "$clusterType" == "CUSTOM" ]]; then
@@ -180,19 +187,17 @@ else
   INGRESS_URI="https://${PRODUCT_RELEASE_NAME}.${INGRESS_DOMAIN}/"
 fi
 echo "Waiting for $INGRESS_URI to be ready"
-for (( i=0; i<10; ++i ));
-do
-   STATUS_CODE=$(curl -s -o /dev/null -w %{http_code} "$INGRESS_URI")
-   echo "Received status code $STATUS_CODE from $INGRESS_URI"
-   if [ "$STATUS_CODE" -lt 400 ]; then
-     echo "Ingress is ready"
-     break
-   else
-     echo "Ingress is not yet ready"
-     sleep 3
-   fi
+for ((i = 0; i < 10; ++i)); do
+  STATUS_CODE=$(curl -s -o /dev/null -w %{http_code} "$INGRESS_URI")
+  echo "Received status code $STATUS_CODE from $INGRESS_URI"
+  if [ "$STATUS_CODE" -lt 400 ]; then
+    echo "Ingress is ready"
+    break
+  else
+    echo "Ingress is not yet ready"
+    sleep 3
+  fi
 done
 
 # Run the chart's tests
 helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
-

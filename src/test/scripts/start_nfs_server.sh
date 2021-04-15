@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-cd "$(dirname "$0")" || exit 1
+BASEDIR=$(dirname "$0")
 
 if [ "$#" -ne 2 ]; then
   echo "We need 2 parameters for the script - kubernetes namespace and helm release name"
@@ -11,7 +11,7 @@ fi
 TARGET_NAMESPACE=$1
 PRODUCT_RELEASE_NAME=$2
 
-ARCH_EXAMPLE_DIR='../../../../reference-infrastructure'
+ARCH_EXAMPLE_DIR="$BASEDIR/../../../reference-infrastructure"
 NFS_SERVER_YAML="${ARCH_EXAMPLE_DIR}/storage/nfs/nfs-server.yaml"
 
 echo Deleting old NFS resources...
