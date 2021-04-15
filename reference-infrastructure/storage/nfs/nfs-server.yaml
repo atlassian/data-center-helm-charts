@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
         - name: nfs-server
-          image: k8s.gcr.io/volume-nfs:0.8
+          image: atlassian/nfs-server-test:latest
           imagePullPolicy: Always
           ports:
             - name: nfs

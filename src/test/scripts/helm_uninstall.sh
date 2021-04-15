@@ -32,13 +32,13 @@ fi
 echo Deleting PVCs, if the uninstall script gets stuck deleting the shared pvc here, run:
 sharedPvcName=$(kubectl get -n ${TARGET_NAMESPACE} pvc -l app.kubernetes.io/instance="$PRODUCT_RELEASE_NAME" | grep shared | awk '{print $1;}')
 echo kubectl patch pvc -n "${TARGET_NAMESPACE}" "$sharedPvcName" -p "'{\"metadata\":{\"finalizers\":null}}'"
-kubectl delete -n "${TARGET_NAMESPACE}" pvc -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}"
+kubectl delete -n "${TARGET_NAMESPACE}" pvc -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}" --ignore-not-found=true
 echo Deleting PVs...
-kubectl delete -n "${TARGET_NAMESPACE}" pv -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}"
+kubectl delete -n "${TARGET_NAMESPACE}" pv -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}" --ignore-not-found=true
 
 pwd
 if [ "$shouldCleanNfsPod" = true ]; then
-  sed -e "s/nfs-server/$PRODUCT_RELEASE_NAME-nfs-server/" $NFS_SERVER_YAML | kubectl delete -n "${targetNamespace}" -f -
+  sed -e "s/nfs-server/$PRODUCT_RELEASE_NAME-nfs-server/" $NFS_SERVER_YAML | kubectl delete -n "${targetNamespace}" --ignore-not-found true -f -
 fi
 
 # Always exit with a zero status code, to avoid failing the build during uninstall
