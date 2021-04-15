@@ -18,7 +18,7 @@ parameters:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nfs-server-data-pvc
+  name: test-nfs-server-data-pvc
 spec:
   storageClassName: io1-fast
   accessModes:
@@ -32,7 +32,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: nfs-server
+  name: test-nfs-server
 spec:
   type: LoadBalancer
   ports:
@@ -43,26 +43,26 @@ spec:
     - name: rpcbind
       port: 111
   selector:
-    role: nfs-server
+    role: test-nfs-server
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nfs-server
+  name: test-nfs-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      role: nfs-server
+      role: test-nfs-server
   template:
     metadata:
       labels:
-        role: nfs-server
+        role: test-nfs-server
     spec:
       containers:
-        - name: nfs-server
+        - name: test-nfs-server
           image: atlassian/nfs-server-test:latest
           imagePullPolicy: Always
           ports:
@@ -78,25 +78,25 @@ spec:
                 - SYS_ADMIN
                 - SYS_MODULE
           volumeMounts:
-            - name: nfs-server-data-pvc
+            - name: test-nfs-server-data-pvc
               mountPath: /srv/nfs
-            - name: nfs-server-conf
+            - name: test-nfs-server-conf
               mountPath: /etc/exports.d/
       terminationGracePeriodSeconds: 60
       volumes:
-        - name: nfs-server-data-pvc
+        - name: test-nfs-server-data-pvc
           persistentVolumeClaim:
-            claimName: nfs-server-data-pvc
-        - name: nfs-server-conf
+            claimName: test-nfs-server-data-pvc
+        - name: test-nfs-server-conf
           configMap:
-            name: nfs-server-conf
+            name: test-nfs-server-conf
 
 ---
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nfs-server-conf
+  name: test-nfs-server-conf
 data:
   share.exports: |-
     /srv/nfs *(rw,subtree_check,fsid=0,no_root_squash)
