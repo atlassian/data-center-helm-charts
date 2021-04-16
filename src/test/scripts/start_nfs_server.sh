@@ -34,23 +34,24 @@ sleep 10
 kubectl get deployment -n $TARGET_NAMESPACE
 kubectl get pods -n $TARGET_NAMESPACE
 
+#####
+#echo kubectl version...
+#kubectl version
+#
+#echo Print all Pods with name and role
+#kubectl get pods --show-labels
+#
+#echo Describe [$POD_ROLE]...
+#kubectl describe deployments $POD_ROLE
+#
+#echo List [$POD_ROLE] items....
+#kubectl get pod -l role=$POD_ROLE -o json
+##kubectl get pod -l role=$POD_ROLE -o jsonpath="{.items[0]}"
+#
 ####
-echo kubectl version...
-kubectl version
-
-echo Print all Pods with name and role
-kubectl get pods --show-labels
-
-echo Describe [$POD_ROLE]...
-kubectl describe deployments $POD_ROLE
-
-echo List [$POD_ROLE] items....
-kubectl get pod -l role=$POD_ROLE -o json
-#kubectl get pod -l role=$POD_ROLE -o jsonpath="{.items[0]}"
-
-###
 
 podname=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=$POD_ROLE -o jsonpath="{.items[0].metadata.name}")
+echo Pod name is [$podname]
 kubectl wait --for=condition=ready pod -n "${TARGET_NAMESPACE}" "${podname}" --timeout=60s
 
 echo Waiting for the container to stabilise...
