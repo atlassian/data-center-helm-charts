@@ -76,7 +76,7 @@ done)
 if grep -q nfs: ${chartValueFiles} /dev/null || grep -q 'nfs[.]' <<<"$EXTRA_PARAMETERS"; then
   echo This configuration requires a private NFS server, starting...
   startNfsServer "${PRODUCT_RELEASE_NAME}"
-  nfsServerPodName=$(kubectl get pod -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
+  nfsServerPodName=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
 
   for ((try = 0; try < 60; try++)); do
     echo Detecting NFS server IP...
