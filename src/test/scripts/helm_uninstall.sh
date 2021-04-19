@@ -37,7 +37,7 @@ echo Deleting PVs...
 kubectl delete -n "${TARGET_NAMESPACE}" pv -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}" --ignore-not-found=true
 
 if [ "$shouldCleanNfsPod" = true ]; then
-  sed -e "s/test-nfs-server/$PRODUCT_RELEASE_NAME-nfs-server/" $NFS_SERVER_YAML | kubectl delete -n "${targetNamespace}" --ignore-not-found=true -f -
+  sed -e "s/test-nfs-server/$PRODUCT_RELEASE_NAME-nfs-server/" $NFS_SERVER_YAML | kubectl delete -n "${TARGET_NAMESPACE}" -f -
 fi
 
 # Always exit with a zero status code, to avoid failing the build during uninstall
