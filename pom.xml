@@ -122,7 +122,7 @@
 
         <extra.parameters />
 
-        <helm.debug>false</helm.debug>
+        <helm.debug>true</helm.debug>
 
         <!-- The directory in which the helm (un)install script should look for the chart values files for integration testing -->
         <chart.testValues.basedir>${project.build.directory}/config</chart.testValues.basedir>
