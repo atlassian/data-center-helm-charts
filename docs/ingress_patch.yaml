@@ -1,5 +1,0 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: 2m
