@@ -156,11 +156,14 @@ ingress:
   create: false
   # -- True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller:
   # https://kubernetes.github.io/ingress-nginx/
-
   # This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller.
   # Set to false if a different controller is to be used, in which case the appropriate annotations for that
   # controller need to be specified.
   nginx: true
+  # -- The max body size to allow. Requests exceeding this size will result
+  # in an 413 error being returned to the client.
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
+  maxBodySize: 10m
   # -- The fully-qualified hostname of the Ingress Resource.
   host:
   # -- The custom annotations that should be applied to the Ingress 

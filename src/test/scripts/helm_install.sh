@@ -48,7 +48,7 @@ PRODUCT_RELEASE_NAME="$RELEASE_PREFIX-$PRODUCT_NAME"
 POSTGRES_RELEASE_NAME="$PRODUCT_RELEASE_NAME-pgsql"
 FUNCTEST_RELEASE_NAME="$PRODUCT_RELEASE_NAME-functest"
 HELM_PACKAGE_DIR=target/helm
-[ $HELM_DEBUG = "true" ] && HELM_DEBUG_OPTION="--debug"
+[ "$HELM_DEBUG" = "true" ] && HELM_DEBUG_OPTION="--debug"
 
 currentContext=$(kubectl config current-context)
 
@@ -103,7 +103,7 @@ helm install -n "${TARGET_NAMESPACE}" --wait \
    --set postgresqlUsername="$PRODUCT_NAME" \
    --set postgresqlPassword="$PRODUCT_NAME" \
    --version "$POSTGRES_CHART_VERSION" \
-   "$HELM_DEBUG_OPTION" \
+   $HELM_DEBUG_OPTION \
    bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
@@ -137,7 +137,7 @@ helm package "$CHART_SRC_PATH" \
 # Install the product's Helm chart
 helm install -n "${TARGET_NAMESPACE}" --wait \
    "$PRODUCT_RELEASE_NAME" \
-   "$HELM_DEBUG_OPTION" \
+   $HELM_DEBUG_OPTION \
    ${valueOverrides} \
    "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
@@ -175,7 +175,7 @@ helm install --wait \
    "$FUNCTEST_RELEASE_NAME" \
    --set "$FUNCTEST_CHART_VALUES" \
    --values ${EXPOSE_NODES_FILE} \
-   "$HELM_DEBUG_OPTION" \
+   $HELM_DEBUG_OPTION \
    "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
@@ -200,6 +200,6 @@ done
 
 # Run the chart's tests
 helm test \
-  "$HELM_DEBUG_OPTION" \
+  $HELM_DEBUG_OPTION \
   "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 
