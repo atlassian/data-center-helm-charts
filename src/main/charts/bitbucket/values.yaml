@@ -249,7 +249,16 @@ nodeSelector: {}
 tolerations: []
 
 # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
-affinity: {}
+affinity:
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: role
+              operator: In
+              values:
+                - test-nfs-server # needs to be the same value as NFS server deployment
+        topologyKey: topology.kubernetes.io/zone
 
 # -- Additional container definitions that will be added to all Bitbucket pods
 additionalContainers: []

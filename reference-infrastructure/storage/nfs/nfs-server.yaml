@@ -94,6 +94,10 @@ spec:
               mountPath: /srv/nfs
             - name: test-nfs-server-conf
               mountPath: /etc/exports.d/
+          resources:
+            requests:
+              cpu: 2000m
+              memory: 4G
       terminationGracePeriodSeconds: 60
       volumes:
         - name: test-nfs-server-data-pvc
