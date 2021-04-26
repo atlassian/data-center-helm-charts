@@ -103,6 +103,7 @@ $ eksctl utils associate-iam-oidc-provider \
      --approve 
 ```
 Then create an IAM policy to limit the permissions to connect to the elasticsearch cluster, but before this we need to set the following environment variables: 
+* KUBE_NAMESPACE : The namespace for kubernetes cluster
 * ES_DOMAIN_NAME : Elasticsearch domain name
 * ES_VERSION : Elasticsearch version 
 * ES_USER : Elasticsearch username
