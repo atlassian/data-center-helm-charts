@@ -149,6 +149,13 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 -Datlassian.logging.cloud.enabled={{.Values.fluentd.enabled}}
 {{- end }}
 
+{{- define "confluence.sysprop.debug" -}}
+{{- if .Values.confluence.jvmDebug.enabled -}}
+-Xdebug
+-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+{{- end }}
+{{- end }}
+
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
 -Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1

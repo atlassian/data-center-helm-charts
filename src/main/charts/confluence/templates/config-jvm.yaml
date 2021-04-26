@@ -10,6 +10,7 @@ data:
     {{ include "confluence.sysprop.synchronyServiceUrl" . }}
     {{ include "confluence.sysprop.clusterNodeName" . }}
     {{ include "confluence.sysprop.fluentdAppender" . }}
+    {{ include "confluence.sysprop.debug" . }}
     {{- range .Values.confluence.additionalJvmArgs }}
     {{ . }}
     {{- end }}
