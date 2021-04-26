@@ -55,6 +55,7 @@ PRODUCT_RELEASE_NAME="$RELEASE_PREFIX-$PRODUCT_NAME"
 POSTGRES_RELEASE_NAME="$PRODUCT_RELEASE_NAME-pgsql"
 FUNCTEST_RELEASE_NAME="$PRODUCT_RELEASE_NAME-functest"
 HELM_PACKAGE_DIR=target/helm
+[ "$HELM_DEBUG" = "true" ] && HELM_DEBUG_OPTION="--debug"
 
 currentContext=$(kubectl config current-context)
 
@@ -101,15 +102,16 @@ fi
 # These must match the credentials stored in the Secret pre-loaded into the namespace,
 # which the application will use to connect to the database.
 helm install -n "${TARGET_NAMESPACE}" --wait \
-  "$POSTGRES_RELEASE_NAME" \
-  --values "$THISDIR/postgres-values.yaml" \
-  --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
-  --set image.tag="$POSTGRES_APP_VERSION" \
-  --set postgresqlDatabase="$DB_NAME" \
-  --set postgresqlUsername="$PRODUCT_NAME" \
-  --set postgresqlPassword="$PRODUCT_NAME" \
-  --version "$POSTGRES_CHART_VERSION" \
-  bitnami/postgresql >$LOG_DOWNLOAD_DIR/helm_install_log.txt
+   "$POSTGRES_RELEASE_NAME" \
+   --values "$THISDIR/postgres-values.yaml" \
+   --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
+   --set image.tag="$POSTGRES_APP_VERSION" \
+   --set postgresqlDatabase="$DB_NAME" \
+   --set postgresqlUsername="$PRODUCT_NAME" \
+   --set postgresqlPassword="$PRODUCT_NAME" \
+   --version "$POSTGRES_CHART_VERSION" \
+   $HELM_DEBUG_OPTION \
+   bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
   kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
@@ -141,9 +143,10 @@ helm package "$CHART_SRC_PATH" \
 
 # Install the product's Helm chart
 helm install -n "${TARGET_NAMESPACE}" --wait \
-  "$PRODUCT_RELEASE_NAME" \
-  ${valueOverrides} \
-  "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >>$LOG_DOWNLOAD_DIR/helm_install_log.txt
+   "$PRODUCT_RELEASE_NAME" \
+   $HELM_DEBUG_OPTION \
+   ${valueOverrides} \
+   "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 # Package and install the functest helm chart
 INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$clusterType"
@@ -174,11 +177,12 @@ helm template \
 helm package "$FUNCTEST_CHART_PATH" --destination "$HELM_PACKAGE_DIR"
 
 helm install --wait \
-  -n "${TARGET_NAMESPACE}" \
-  "$FUNCTEST_RELEASE_NAME" \
-  --set "$FUNCTEST_CHART_VALUES" \
-  --values ${EXPOSE_NODES_FILE} \
-  "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
+   -n "${TARGET_NAMESPACE}" \
+   "$FUNCTEST_RELEASE_NAME" \
+   --set "$FUNCTEST_CHART_VALUES" \
+   --values ${EXPOSE_NODES_FILE} \
+   $HELM_DEBUG_OPTION \
+   "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 
 # wait until the Ingress we just created starts serving up non-error responses - there may be a lag
 if [[ "$clusterType" == "CUSTOM" ]]; then
@@ -200,4 +204,6 @@ for ((i = 0; i < 10; ++i)); do
 done
 
 # Run the chart's tests
-helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
+helm test \
+  $HELM_DEBUG_OPTION \
+  "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
