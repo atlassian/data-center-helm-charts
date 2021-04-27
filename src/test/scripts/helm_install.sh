@@ -5,7 +5,7 @@ set -x
 
 # Many of the variables used in this script are sourced from the
 # parameter file supplied to this script i.e. `helm_parameters'
-# So that these values are available we source them in making
+# So that these values are available the script sources them making
 # them available for use.
 source "$1"
 
@@ -51,7 +51,8 @@ setup() {
   POSTGRES_RELEASE_NAME="$PRODUCT_RELEASE_NAME-pgsql"
   FUNCTEST_RELEASE_NAME="$PRODUCT_RELEASE_NAME-functest"
   HELM_PACKAGE_DIR=target/helm
-  
+  [ "$HELM_DEBUG" = "true" ] && HELM_DEBUG_OPTION="--debug"
+
   currentContext=$(kubectl config current-context)
   
   echo "Current context: $currentContext"
@@ -114,6 +115,7 @@ bootstrap_database() {
      --set postgresqlUsername="$PRODUCT_NAME" \
      --set postgresqlPassword="$PRODUCT_NAME" \
      --version "$POSTGRES_CHART_VERSION" \
+     $HELM_DEBUG_OPTION \
      bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
   
   if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
@@ -185,6 +187,7 @@ install_product() {
   echo "Task 8 - Installing product helm chart." >&2
   helm install -n "${TARGET_NAMESPACE}" --wait \
      "$PRODUCT_RELEASE_NAME" \
+     $HELM_DEBUG_OPTION \
      ${valueOverrides} \
      "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
@@ -197,6 +200,7 @@ install_functional_tests() {
      "$FUNCTEST_RELEASE_NAME" \
      --set "$FUNCTEST_CHART_VALUES" \
      --values ${EXPOSE_NODES_FILE} \
+     $HELM_DEBUG_OPTION \
      "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 }
 
@@ -226,7 +230,9 @@ wait_for_ingress() {
 # Run the chart's tests
 run_tests() {
   echo "Task 11 - Running tests." >&2
-  helm test "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}" 
+  helm test \
+  $HELM_DEBUG_OPTION \
+  "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}" 
 }
 
 # Execute
