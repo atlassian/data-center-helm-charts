@@ -254,6 +254,24 @@ nodeSelector: {}
 tolerations: []
 
 # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
+# Due to the performance requirements it is highly recommended to run all Bitbucket pods
+# in the same availability zone as your dedicated NFS server. To achieve this, you
+# able to define `affinity` and podAffinity` rules that will place all pods into the same zone
+# and therefore minimise the real distance between the application pods and the shared storage.
+# More specific documentation can be found official Affinity and Anti-affinity documentation
+#  https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+#
+# This is an example how to ensure the pods are in the same zone as NFS server that is labeled with `role=nfs-server`:
+#
+#   podAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      - labelSelector:
+#          matchExpressions:
+#            - key: role
+#              operator: In
+#              values:
+#                - nfs-server # needs to be the same value as NFS server deployment
+#        topologyKey: topology.kubernetes.io/zone
 affinity: {}
 
 # -- Additional container definitions that will be added to all Bitbucket pods

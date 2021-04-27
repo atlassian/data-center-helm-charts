@@ -1,3 +1,12 @@
+### TEST TEMPLATE ONLY (works on AWS only)
+###
+### This template serves as an example how to deploy a very simple NFS server providing persistent volumes
+### in read write many mode (as all the application nodes require to access the shared home from one persistent volume).
+### More visual representation can be found in official kubernetes repository:
+### https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs
+
+### For NFS server you should be using fast underlying storage as it will directly impact performance for your Bitbucket
+### instance. Please see documentation specific for your kubernetes cluster infrastructure.
 ---
 
 kind: StorageClass
@@ -15,7 +24,12 @@ parameters:
   iopsPerGB: "10"
   encrypted: "true"
   fsType: ext4
-    
+
+
+### PersistentVolumeClaim will dynamically create the persistent volume based on the defined storageClassName.
+### This will spare you the manual step when you need to create the underlying volume manually and then
+### define PersistentVolume for it. You might still prefer that approach as it will give you more control over
+### your data
 ---
 
 kind: PersistentVolumeClaim
@@ -26,12 +40,12 @@ metadata:
     build.identifier: test-nfs-server
     build.component: nfs-server-pvc
 spec:
-  storageClassName: io1-fast
+  storageClassName: io1-fast # defined above
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 10Gi # make sure you have enough space for your shared home
 
 ---
 
@@ -75,7 +89,7 @@ spec:
     spec:
       containers:
         - name: test-nfs-server
-          image: atlassian/nfs-server-test:latest
+          image: atlassian/nfs-server-test:latest # this is just a testing image not recommended for any other use case
           imagePullPolicy: Always
           ports:
             - name: nfs
