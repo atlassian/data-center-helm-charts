@@ -2,14 +2,15 @@
 
 ### Dislaimer
 
-**This not officially supported functionality**, included examples are provided to serve as a guidance how to create
-a testing environment and shouldn't be used in production. It is highly recommended to understand your specific deployment
-needs and tailor your solution to them.
+**This not officially supported functionality**
+
+The included examples are provided as is and are to be used as guidance on how a testing environment can be stood up. These exampes should not be used in production. 
+
+Before proceedding it is highly recommended that you understand your specific deployment needs and tailor your solution to them.
 
 # Components
 
-For full production deployment you will need to create some common components that
-are then passed as values to the helm chart when installing. These components are:
+For a full production deployment you will need to create some common components that are then passed as values to the helm chart when installing. These components are:
 
 * Shared storage
 * Database
@@ -21,17 +22,13 @@ are then passed as values to the helm chart when installing. These components ar
 
 ### Dedicated NFS server - Bitbucket Data Center requirement
 
-Bitbucket Data Center (Bitbucket DC) uses a shared network file system (NFS) to store its repositories in a common location that is
-accessible to multiple Bitbucket nodes. Due to the high requirements on performance for IO operations, Bitbucket
-requires a dedicated NFS server providing persistence for shared home. This means we are not recommending using 
-[cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms).
-You might opt to use NFS server for other Data Center products, but they don't have the same performance characteristics,
-and it might be beneficial to prefer the resiliency of a managed service rather than a self-managed server.
+Bitbucket Data Center (Bitbucket DC) uses a shared network file system (NFS) to store its repositories in a common location that is accessible to multiple Bitbucket nodes. Due to the high requirements on performance for IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. Based on this, it is not recommeneded that [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) are used.
+
+You might opt to use an NFS server for other Data Center products, but they don't have the same performance characteristics, and it might be beneficial to prefer the resiliency of a managed service over a self-managed server.
  
 #### Requirements
 
-Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of 
-this resource will be highly site-specific, but the example can be used as a guide.
+Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but the example below can be used as a guide.
 
 For more information on setting up Bitbucket Data Center's shared file server, see 
 [Step 2. Provision your shared file system](https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs). This section contains the requirements and recommendations for setting up NFS for Bitbucket Data Center.
@@ -41,16 +38,14 @@ Please read through the
 
 #### Example
 
-We've provided the template [`./storage/nfs/nfs-server.yaml`](./storage/nfs/nfs-server.yaml) as a **reference** on how an 
-NFS server could be set-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the
-defined storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
+We've provided the template [`./storage/nfs/nfs-server.yaml`](./storage/nfs/nfs-server.yaml) as a **reference** on how an NFS server could be stood-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the defined storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
 
+Provision the NFS by issuing the following command:
 ```shell
 kubectl apply -f ./storage/nfs/nfs-server.yaml
 ```
 
-:warning: Please note that the NFS server created with this template is not production ready and should not be used for 
-anything other than testing deployment.
+:warning: Please note that the NFS server created with this template is not production ready and should not be used for anything other than testing deployment.
 
 
 #### Pod affinity
