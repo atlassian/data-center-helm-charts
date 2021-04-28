@@ -1,6 +1,10 @@
-## Deploy Logging Pattern - EFK Stack
+## Disclaimer
 
-A common Kubernetes logging pattern is a combination of Fluent, Elasticsearch, and Kibana which is known as *EFK Stack*. 
+**This is not officially supported functionality.** This document serves as an example for users that would like to enable aggregated logging in their Kubernetes cluster. There are many solutions how to provide this capability and this document just showcases some of the options.
+
+## Logging in Kubernetes environment - EFK Stack
+
+A common Kubernetes logging pattern is a combination of Elasticsearch, Fluent, and Kibana which is known as *EFK Stack*. 
 
 `Fluent` is an open source and multi-platform log processor which collects data/log from different sources, aggregates and forwards them to multiple destinations and is fully compatible with Docker and Kubernetes environments. 
 
@@ -8,7 +12,7 @@ A common Kubernetes logging pattern is a combination of Fluent, Elasticsearch, a
 
 `Kibana` is an open source frontend application that sits on top of Elasticsearch, providing search and data visualization capabilities for data indexed in Elasticsearch.
 
-There are different methods to deploy EFK stack and here we provide two deployment methods, first deploy EFK using helm chart and deploy local elasticsearch on Kubernetes and second using managed elasticsearch (EKS and AWS ES).
+There are different methods to deploy EFK stack and here we provide two deployment methods, first deploy EFK locally on Kubernetes and second using managed elasticsearch outside the Kubernetes cluster. 
 
 ## EFK using local elasticsearch
 
@@ -78,24 +82,24 @@ STATUS: DEPLOYED
 make sure kibana is deployed and then setup port forwarding for kibana:
 ```shell script
 $ kubectl get deployment
-NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
-helm-operator                      1/1     1            1           23d
-ingress-nginx-release-controller   1/1     1            1           82d
-kibana-kibana                      1/1     1            1           125m
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+helm-operator                      1/1           1            1     23m
+ingress-nginx-release-controller   1/1           1            1     22m
+kibana-kibana                      1/1           1            1     25m
 
 $ kubectl port-forward deployment/kibana-kibana 5601
 ```
 Now kibana is accessible in the browser by: http://localhost:5601. To visualise the logs you need to create an index pattern and then see the data in the discovery part. To create the index pattern go to `Management` → `Stack Management` and then select `Kibana` → `Index Patterns`. 
 
-## EFK in EKS using managed AWS Elasticsearch
+## EFK using managed AWS Elasticsearch - (AWS EKS and ES).
 
-In this method elastic search will deploy out of k8s clusters. For this purpose we use fluent bit instead of fluentd which is used for locally deployment for EFK. 
+elasticsearch will deploy as a managed service and lives outside of the kubernetes cluster. For this purpose we use fluent bit instead of fluentd which is used for locally deployment for EFK. 
 
-When a node inside an EKS cluster needs to call AWS APIs, it needs to provide extended permissions. Amazon provided an image of fluent-bit which supports service accounts and using this we no longer need to follow the traditional way. All we need is to have an IAM role for the service account on EKS cluster so using this service account we can provide AWS permission to the containers in any pod that use that service account. So the pods on that node can call AWS APIs.
+When a node inside an EKS cluster needs to call AWS APIs, it needs to provide extended permissions. Amazon provided an image of fluent-bit which supports AWS service accounts and using this we no longer need to follow the traditional way. All we need is to have an IAM role for the AWS service account on EKS cluster so using this service account AWS permission could be provided to the containers in any pod that use that service account. The result is that the pods on that node can call AWS APIs.
 
 `fluentbit` is used to collect and aggregate the data inside the EKS cluster which will communicate with AWS elasticsearch outside of the cluster. 
 
-First step is configure IRSA for `fluentbit` to make sure we have OIDC identity provider to use IAM roles for the service account in the cluster:
+First step is configure IAM Roles for Service Accounts (IRSA) for `fluentbit` to make sure we have OIDC identity provider to use IAM roles for the service account in the cluster:
 
 ```shell script
 $ eksctl utils associate-iam-oidc-provider \
@@ -156,7 +160,7 @@ Tokens:  fluent-bit-token-pgpss
 Events:  <none>
 ```
 
-*Provision an elasticsearch cluster:*  Now it is time to provision a public elasticsearch cluster with Fine-Grained Access Control enabled and a built-in user database:
+*Provision an elasticsearch cluster:* Now it is time to provision a public elasticsearch cluster with Fine-Grained Access Control enabled and a built-in user database:
 ```shell script
 $ cat <<EOF> ~/environment/logging/elasticsearch_domain.json
 {
@@ -231,7 +235,7 @@ $ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
 ]
 '
 ```
-Finally, it is time to deploy fluent bit cluster:
+Finally, it is time to deploy fluent bit deamonset:
 ```shell script
 $ kubectl apply -f src/main/logging/fluentbit.yaml
 ```
