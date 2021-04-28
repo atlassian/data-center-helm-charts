@@ -24,8 +24,27 @@ by the Helm charts will expect to be present.
    storage, it is *strongly* recommended that Persistent Volumes are provisioned,
    including a shared read-write volume. See the "Volumes" section below.
 * Ingress controller
-   * Because different Kubernetes clusters use different Ingress configurations,
-   the Helm charts provide Nginx ingress templates only. By default, *ingress.create* is set to false, an ingress should be created manually after the chart is installed
+   * An [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) must be pre-provisioned prior to using these templates.
+   * The Kubernetes project supports and maintains Ingress Controllers for the major cloud providers including; AWS, GCE and nginx. There are also a number of open-source third party projects available. See [here](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) for details.
+   * Because different Kubernetes clusters use different Ingress configurations/controllers, the Helm charts provide **[Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only**.
+   * The Ingress Resource supplied as part of the Helm charts is geared toward the [Kubernetes ingress-nginx controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
+     - The Ingress Controller
+     - Ingress Controller annotations  
+     - The request max body size 
+   * The Internet-facing (see diagram below) load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forward` headers. This ensures any backend redirects are done so over the correct protocol.   
+   * The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress
+
+![ingress-architecture](./docs/images/ingress.png "Request routing via Ingress")
+
+    0. Inbound client request
+    1. DNS routes request to appropriate LB
+    2. LB forwards request to internal Ingress 
+    3. Ingress controller performs traffic routing lookup via Ingress object(s)
+    4. Ingress forwards request to appropriate service based on Ingress object routing rule
+    5. Service forwards request to appropriate pod
+    6. Pod handles request 
+
+
    
 # Installation
 1. Add the Helm chart repository to your local Helm installation

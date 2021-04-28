@@ -21,16 +21,30 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: 1
-{{ if .Values.confluence.securityContext.enabled }}
+      {{ if .Values.confluence.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
         fsGroup: {{ .Values.confluence.securityContext.gid }}
-{{ end }}
-      {{- with .Values.additionalInitContainers }}
+      {{ end }}
       initContainers:
+        {{- with .Values.additionalInitContainers }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
+        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+        - name: nfs-permission-fixer
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: {{ .Values.volumes.sharedHome.nfsPermissionFixer.mountPath | quote }}
+              {{- if .Values.volumes.sharedHome.subPath }}
+              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+              {{- end }}
+          command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
+        {{- end }}
       containers:
         - name: confluence
           image: {{ include "confluence.image" . | quote }}
@@ -60,6 +74,11 @@ spec:
             {{- end }}
             {{- include "confluence.additionalLibraries" . | nindent 12 }}
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
+            {{- range $i, $n := .Values.additionalFiles }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
           env:
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME

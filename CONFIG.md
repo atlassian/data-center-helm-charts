@@ -15,11 +15,11 @@ volumes:
     emptyDir: {}
 ```
 
-In order to enable the persistent of data stored in these volumes, it is necessary
+In order to enable the persistence of data stored in these volumes, it is necessary
 to replace these volumes with something else.
 
 The recommended way is to enable the use of PersistentVolume and PersistentVolumeClaim
-for both both volumes, using your install-specific `values.yaml` file, for example:
+for both volumes, using your install-specific `values.yaml` file, for example:
 
 ```yaml
 volumes:
@@ -109,7 +109,7 @@ via Kubernetes.
 Depending on the product, the `database.type`, `database.url` and `database.driver` chart values
 can be provided. In addition, the database username and password can be provided via a Kubernetes secret,
 with the secret name specified with the `database.credentials.secretName` chart value. 
-When all of the required information is provided in this way, the database connectivity configuration screen
+When all the required information is provided in this way, the database connectivity configuration screen
 will be bypassed during product setup. 
 
 ## Clustering
@@ -130,7 +130,7 @@ or additional bundled plugins that you need for your installation.
 
 In order for this to work, the additional JAR files need to be available as part
 of a Kubernetes volume. Options here include putting them into the shared-home volume 
-that you already need to have as part of the insallation. Alternatively, you can 
+that you already need to have as part of the installation. Alternatively, you can 
 create a new PV for them, as long as it has `ReadOnlyMany` capability. You
 could even store the files as a `ConfigMap` that gets mounted as a volume, but
 you're likely to run into file size limitations there.
@@ -234,7 +234,7 @@ entries to the product pods.  Use the values `additionalContainers` and
 One use-case for an additional container would be to attach a sidecar container 
 to the product pods.
 
-## Additional labels, tolerations, node selectors, affinity
+## Additional labels, toleration's, node selectors, affinity
 
 The Helm charts also allow you to specify `additionalLabls`, `tolerations`, 
 `nodeSelectors` and `affinities`. These are standard Kubernetes structures 

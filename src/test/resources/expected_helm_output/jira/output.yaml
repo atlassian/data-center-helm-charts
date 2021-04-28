@@ -81,6 +81,16 @@ spec:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
         fsGroup: 2001
+      initContainers:
+        - name: nfs-permission-fixer
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: jira
           image: "atlassian/jira-software:8.13.0-jdk11"
