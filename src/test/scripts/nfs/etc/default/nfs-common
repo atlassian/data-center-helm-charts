@@ -1,1 +1,0 @@
-STATDOPTS="--port 32765 --outgoing-port 32766"
