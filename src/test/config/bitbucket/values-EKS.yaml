@@ -20,6 +20,8 @@ volumes:
       create: true
       storageClassName: ""
       volumeName: ${helm.release.prefix}-bitbucket-shared-home-pv
+    nfsPermissionFixer:
+      enabled: true
 
 affinity:
   podAffinity:
