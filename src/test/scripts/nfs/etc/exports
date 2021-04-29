@@ -1,1 +1,0 @@
-/srv/nfs *(rw,subtree_check,fsid=0,no_root_squash)
