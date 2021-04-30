@@ -1,26 +1,26 @@
 ## Disclaimer
 
-**This is not officially supported functionality.** This document serves as an example for users that would like to enable aggregated logging in their Kubernetes cluster. There are many solutions how to provide this capability and this document just showcases some of the options.
+**This functionality is not officially supported.** This document explains how to enable aggregated logging in your Kubernetes cluster. There are many ways to do this and this document showcases only a few of the options.
 
 ## Logging in Kubernetes environment - EFK Stack
 
-A common Kubernetes logging pattern is a combination of Elasticsearch, fluent, and Kibana which is known as *EFK Stack*. 
+A common Kubernetes logging pattern is the combination of Elasticsearch, Fluentd, and Kibana, known as *EFK Stack*. 
 
-`Fluentd` is an open source and multi-platform log processor which collects data/log from different sources, aggregates and forwards them to multiple destinations and is fully compatible with Docker and Kubernetes environments. 
+`Fluentd` is an open-source and multi-platform log processor that collects data/logs from different sources, aggregates, and forwards them to multiple destinations. It is fully compatible with Docker and Kubernetes environments. 
 
 `Elasticsearch` is a distributed open search and analytics engine for all types of data. 
 
-`Kibana` is an open source frontend application that sits on top of Elasticsearch, providing search and data visualization capabilities for data indexed in Elasticsearch.
+`Kibana` is an open-source front-end application that sits on top of Elasticsearch, providing search and data visualization capabilities for data indexed in Elasticsearch.
 
-There are different methods to deploy EFK stack and here we provide two deployment methods, first deploy EFK locally on Kubernetes and second using managed Elasticsearch outside the Kubernetes cluster. 
+There are different methods to deploy an EFK stack. We provide two deployment methods, the first is deploying EFK locally on Kubernetes, and the second is using managed Elasticsearch outside the Kubernetes cluster. 
 
 ## EFK using local Elasticsearch
 
-This solution deploys all EFK stack inside the Kubernetes cluster. By setting `fluentd.enabled` value to `true` helm  installs fluentd on each of application pod. It means after deployment all product pods will run fluentd which collect all log files and sends them to the fluentd aggregator container. 
+This solution deploys all of the EFK stack inside the Kubernetes cluster. By setting `fluentd.enabled` value to `true`, Helm installs Fluentd on each of application pods. This means that after deployment all the product pods run Fluentd, which collects all the log files and sends them to the Fluentd aggregator container. 
 
-To complete the EFK stack we need to install Elasticsearch cluster and kibana and manage to forward the aggregated datalog to Elasticsearch by fluentd which is already installed. 
+To complete the EFK stack you need to install an Elasticsearch cluster and Kibana, and successfully forward the aggregated datalog to Elasticsearch using Fluentd, which is already installed. 
 
-To start first we install Elasticsearch:
+Follow these steps to install Elasticsearch:
 
 ```shell script
 $ helm repo add elastic https://helm.elastic.co
@@ -30,7 +30,7 @@ $ helm install elasticsearch elastic/elasticsearch
 ...
 ```
 
-Wait until all nodes start and the status change to `Running`:
+Wait until all the nodes start and the status changes to `Running`:
 
 ```shell script
 $ kubectl get pods --namespace=dcd -l app=elasticsearch-master
@@ -41,7 +41,8 @@ elasticsearch-master-2   1/1     Running   0          100m
 $
 $ kubectl port-forward svc/elasticsearch-master 9200
 ```
-make sure Elasticsearch cluster is working as expected:
+Make sure Elasticsearch cluster is working as expected:
+
 ```shell script
 $ curl localhost:9200
 {
@@ -63,7 +64,7 @@ $ curl localhost:9200
 }
 ```
 
-Now we enable `fluentd` and set the `hostname` for Elasticsearch in `values.yaml` as follows:
+Now enable `fluentd` and set the `hostname` for Elasticsearch in `values.yaml` as follows:
 
 ```yaml
 fluentd:
@@ -71,8 +72,7 @@ fluentd:
    elasticsearch:
      hostname: elasticsearch-master
 ```
-
-Now fluentd tries to parse and send the data to Elasticsearch but as it is not installed yet then data get lost. At this point we have log data in installed Elasticsearch and at this point we should install kibana to complete EFK stack deployment:
+Fluentd tries to parse and send the data to Elasticsearch, but since it's not installed yet the data is lost. At this point you have logged data in the installed Elasticsearch, and you should install Kibana to complete the EFK stack deployment:
 
 ```shell script
 $ helm install kibana elastic/kibana
@@ -91,24 +91,24 @@ kibana-kibana                      1/1           1            1     25m
 
 $ kubectl port-forward deployment/kibana-kibana 5601
 ```
-kibana is accessible in the browser on url: http://localhost:5601. To visualise the logs you need to create an index pattern and then see the data in the discovery part. To create the index pattern go to `Management` → `Stack Management` and then select `Kibana` → `Index Patterns`. 
+You can access Kibana via the browser: http://localhost:5601. To visualise the logs you need to create an index pattern and then look at the the data in the discovery part. To create the index pattern go to `Management` → `Stack Management` and then select `Kibana` → `Index Patterns`. 
 
 ## EFK using managed AWS Elasticsearch - (AWS EKS and ES).
 
-Elasticsearch will deploy as a managed service and lives outside of the kubernetes cluster. For this purpose we use fluent bit instead of fluentd which is used for locally deployment for EFK. 
+In this solution Elasticsearch deploys as a managed service and lives outside of the Kubernetes cluster. For this purpose use Fluent Bit instead of Fluentd for local deployment of EFK. 
 
-When a node inside an EKS cluster needs to call AWS APIs, it needs to provide extended permissions. Amazon provided an image of fluent-bit which supports AWS service accounts and using this we no longer need to follow the traditional way. All we need is to have an IAM role for the AWS service account on EKS cluster so using this service account AWS permission could be provided to the containers in any pod that use that service account. The result is that the pods on that node can call AWS APIs.
+When a node inside an EKS cluster needs to call an AWS API, it needs to provide extended permissions. Amazon provides an image of Fluent Bit that supports AWS service accounts,and using this you no longer need to follow the traditional way. All you need is to have an IAM role for the AWS service account on an EKS cluster. So using this service account, an AWS permission can be provided to the containers in any pod that use that service account. The result is that the pods on that node can call AWS APIs.
 
-`fluentbit` is used to collect and aggregate the data inside the EKS cluster which will communicate with AWS Elasticsearch outside of the cluster. 
+`fluentbit` is used to collect and aggregate the data inside the EKS cluster, which communicates with AWS Elasticsearch outside of the cluster. 
 
-First step is configure IAM Roles for Service Accounts (IRSA) for `fluentbit` to make sure we have OIDC identity provider to use IAM roles for the service account in the cluster:
+Your first step is to configure IAM roles for Service Accounts (IRSA) for `fluentbit`, to make sure you have an OIDC identity provider to use IAM roles for the service account in the cluster:
 
 ```shell script
 $ eksctl utils associate-iam-oidc-provider \
      --cluster dcd-ap-southeast-2 \
      --approve 
 ```
-Then create an IAM policy to limit the permissions to connect to the Elasticsearch cluster, but before this we need to set the following environment variables: 
+Then create an IAM policy to limit the permissions to connect to the Elasticsearch cluster. Before this, you need to set the following environment variables: 
 * KUBE_NAMESPACE : The namespace for kubernetes cluster
 * ES_DOMAIN_NAME : Elasticsearch domain name
 * ES_VERSION : Elasticsearch version 
@@ -137,7 +137,7 @@ $ aws iam create-policy  \
      --policy-name fluent-bit-policy \
      --policy-document file://~/environment/logging/fluent-bit-policy.json
 ```
-Next create an IAM role for the service account:
+Next, create an IAM role for the service account:
 
 ```shell script
 eksctl create iamserviceaccount \
@@ -149,7 +149,7 @@ eksctl create iamserviceaccount \
      --override-existing-serviceaccounts
 ```
 
-To confirm that service account with arn of the IAM role is annotated:
+To confirm that the service account with an Amazon Resource Name (ARN) of the IAM role is annotated:
 ```shell script
 $ kubectl describe serviceaccount fluent-bit
 Name: fluent-bit
@@ -162,7 +162,7 @@ Tokens:  fluent-bit-token-pgpss
 Events:  <none>
 ```
 
-*Provision an Elasticsearch cluster:* Now it is time to provision a public Elasticsearch cluster with Fine-Grained Access Control enabled and a built-in user database:
+*Provision an Elasticsearch cluster:* Provision a public Elasticsearch cluster with Fine-Grained Access Control enabled and a built-in user database:
 ```shell script
 $ cat <<EOF> ~/environment/logging/elasticsearch_domain.json
 {
@@ -210,9 +210,9 @@ $ aws es create-elasticsearch-domain \
    --cli-input-json   file://~/environment/logging/es_domain.json
 ```
 
-It takes a while for Elasticsearch clusters to be in an active state. Check AWS Console to see the status of the cluster and continue to the next step when the cluster is ready.
+It takes a while for Elasticsearch clusters to change to an active state. Check the AWS Console to see the status of the cluster, and continue to the next step when the cluster is ready.
 
-*Configure Elasticsearch access:* At this point we need to map roles to users in order to set fine-grained access control because without this mapping all requests to the cluster will result in a permission error. We should add the fluent bit ARN as a backend role to the `all-access` role which is using the Elasticsearch APIs. To find the fluent bit ARN run the following command and export the value of `ARN Role` in to `FLUENTBIT_ROLE` environment variable:
+*Configure Elasticsearch access:* At this point you need to map roles to users in order to set fine-grained access control, because without this mapping all the requests to the cluster will result in permission errors. You should add the Fluent Bit ARN as a backend role to the `all-access` role, which uses the Elasticsearch APIs. To find the Fluent Bit ARN run the following command and export the value of `ARN Role` into the `FLUENTBIT_ROLE` environment variable:
 ```shell script
 $ eksctl get iamserviceaccount --cluster dcd-ap-southeast-2
 [ℹ] eksctl version 0.37.0
@@ -222,7 +222,7 @@ kube-system cluster-autoscaler   arn:aws:iam::887464544476:role/eksctl-dcd-ap-so
 
 $ export FLUENTBIT_ROLE=arn:aws:iam::887464544476:role/eksctl-dcd-ap-southeast-2-addon-iamserviceac-Role1-1RSRFV0BQVE3E
 ```
-then retrieve Elasticsearch endpoint and update the internal database:
+Retrieve the Elasticsearch endpoint and update the internal database:
 ```shell script
 $ export ES_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name ngh-search-domain --output text --query "DomainStatus.Endpoint")
 $ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
@@ -237,14 +237,14 @@ $ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
 ]
 '
 ```
-Finally, it is time to deploy fluent bit deamonset:
+Finally, it is time to deploy Fluent Bit DaemonSet:
 ```shell script
 $ kubectl apply -f src/main/logging/fluentbit.yaml
 ```
-After a few minutes all pods should get up and in running status. Now all steps are completed and you can open kibana to visualise the logs. The endpoint for kibana could be found in Elasticsearch output tab in AWS console or run the following command:
+After a few minutes all pods should be up and in running status. This is the end of the, you can open Kibana to visualise the logs. The endpoint for Kibana can be found in the Elasticsearch output tab in the AWS console, or you can run the following command:
 ```shell script
 $ echo "Kibana URL: https://${ES_ENDPOINT}/_plugin/kibana/" 
 Kibana URL: https://search-domain-uehlb3kxledxykchwexee.ap-southeast-2.es.amazonaws.com/_plugin/kibana/
 ```
 
-The user and password for kibana is the same master user credential which is set in Elasticsearch in the provisioning stage. Open kibana in a browser and after login follow you need to create an index pattern and see the report in the `Discover` page. 
+The user and password for Kibana are the same as the master user credential that is set in Elasticsearch in the provisioning stage. Open Kibana in a browser and after login, create an index pattern and see the report in the `Discover` page. 
