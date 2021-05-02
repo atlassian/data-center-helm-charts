@@ -1,7 +1,7 @@
 # -- The initial number of pods that should be started at deployment of each of Confluence and Synchrony.
 # Note that because Confluence requires initial manual configuration after the first pod is deployed, and before scaling
 # up to additional pods, this should always be kept as 1.
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: atlassian/confluence-server

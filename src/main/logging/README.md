@@ -4,7 +4,7 @@
 
 ## Logging in Kubernetes environment - EFK Stack
 
-A common Kubernetes logging pattern is the combination of Elasticsearch, Fluentd, and Kibana, known as *EFK Stack*. 
+A common Kubernetes logging pattern is the combination of ***Elasticsearch***, ***Fluentd***, and ***Kibana***, known as *EFK Stack*. 
 
 `Fluentd` is an open-source and multi-platform log processor that collects data/logs from different sources, aggregates, and forwards them to multiple destinations. It is fully compatible with Docker and Kubernetes environments. 
 
