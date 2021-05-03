@@ -11,6 +11,9 @@
     - name: fluentd-config
       mountPath: /fluentd/etc
       readOnly: true
+{{- if .Values.fluentd.extraVolumes }}
+  {{ toYaml .Values.fluentd.extraVolumes | indent 4 }}
+{{- end }}
   env:
     - name: POD_NAME
       valueFrom:

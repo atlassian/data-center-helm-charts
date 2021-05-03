@@ -168,10 +168,21 @@ fluentd:
   customConfigFile: false
   # -- Custom fluent.conf file
   # fluent.conf: |
-  fluentdConfig: {}
+  fluentdCustomConfig: ""
+  # fluent.conf: |
+    # <source>
+    #   @type tail
+    #   <parse>
+    #   @type multiline
+    #   format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+    #   </parse>
+    #   path /opt/atlassian/jira/logs/access_log.*
+    #   pos_file /tmp/jiralog.pos
+    #   tag jira-access-logs
+    # </source>
   # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
- # -- The port on which the fluentd sidecar will listen
+  # -- The port on which the fluentd sidecar will listen
   httpPort: 9880
   elasticsearch:
     # -- True if fluentd should send all log events to an elasticsearch service.
@@ -182,10 +193,10 @@ fluentd:
     indexNamePrefix: jira
   # -- Specify custom volumes to be added to fluentd container (e.g. more log sources)
   extraVolumes: {}
-   # - name: local-home
-   #   mountPath: /opt/atlassian/jira/logs
-   #   subPath: log
-   #   readOnly: true
+  # - name: local-home
+  #   mountPath: /opt/atlassian/jira/logs
+  #   subPath: log
+  #   readOnly: true
      
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}

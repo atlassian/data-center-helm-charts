@@ -178,13 +178,39 @@ ingress:
 fluentd:
   # -- True if the fluentd sidecar should be added to each pod
   enabled: false
+  # -- True if the helm default config for the fluentd.conf should be used with the values specified below
+  defaultConfig: false
+  # -- True if a custom config should be used for fluentd
+  customConfigFile: false
+  # -- Custom fluent.conf file
+  # fluent.conf: |
+  fluentdCustomConfig: ""
+  # fluent.conf: |
+  #   <source>
+  #     @type tail
+  #     <parse>
+  #     @type multiline
+  #     format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+  #     </parse>
+  #     path /application-data/logs/atlassian-bitbucket-access.log* 
+  #     pos_file /tmp/bitbucketlog.pos
+  #     tag bitbucket-access-logs
+  #   </source>
   # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   elasticsearch:
+    # -- True if fluentd should send all log events to an elasticsearch service.
+    enabled: true
     # -- The hostname of the Elasticsearch service that fluentd should send logs to.
-    hostname:
+    hostname: elasticsearch
+  # -- pecify custom volumes to be added to fluentd container (e.g. more log sources)
+  extraVolumes: {}
+  # - name: local-home
+  #   mountPath: application-data/logs
+  #   subPath: log
+  #   readOnly: true
 
-# -- Specify custom annotations to be added to all Bitbucket pods
+# -- pecify custom annotations to be added to all Bitbucket pods
 podAnnotations: {}
 #  "name": "value"
 
