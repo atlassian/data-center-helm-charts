@@ -210,7 +210,7 @@ fluentd:
   #   subPath: log
   #   readOnly: true
 
-# -- pecify custom annotations to be added to all Bitbucket pods
+# -- Specify custom annotations to be added to all Bitbucket pods
 podAnnotations: {}
 #  "name": "value"
 
