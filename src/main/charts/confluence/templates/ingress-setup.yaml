@@ -3,7 +3,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "confluence.fullname" . }}
+  name: {{ include "confluence.fullname" . }}-setup
   labels:
     {{- include "confluence.labels" . | nindent 4 }}
   annotations:
@@ -12,9 +12,9 @@ metadata:
     "nginx.ingress.kubernetes.io/affinity": "cookie"
     "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
     "nginx.ingress.kubernetes.io/proxy-body-size": {{ .Values.ingress.maxBodySize }}
-    "nginx.ingress.kubernetes.io/proxy-connect-timeout": "60"
-    "nginx.ingress.kubernetes.io/proxy-read-timeout": "60"
-    "nginx.ingress.kubernetes.io/proxy-send-timeout": "60"
+    "nginx.ingress.kubernetes.io/proxy-connect-timeout": "300"
+    "nginx.ingress.kubernetes.io/proxy-read-timeout": "300"
+    "nginx.ingress.kubernetes.io/proxy-send-timeout": "300"
     {{- end }}
     {{- with .Values.ingress.annotations }}
   {{- toYaml . | nindent 4 }}
@@ -30,14 +30,8 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: "/"
+          - path: "/setup"
             backend:
               serviceName: {{ include "confluence.fullname" . }}
               servicePort: {{ $.Values.confluence.service.port }}
-          {{ if .Values.synchrony.enabled }}
-          - path: "/synchrony"
-            backend:
-              serviceName: {{ include "synchrony.fullname" . }}
-              servicePort: {{ $.Values.synchrony.service.port }}
-          {{ end }}
 {{ end }}
