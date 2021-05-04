@@ -212,7 +212,7 @@ fluentd:
   customConfigFile: false
   # -- Custom fluent.conf file
   # fluent.conf: |
-  fluentdCustomConfig: ""
+  fluentdCustomConfig: {}
   # fluent.conf: |
   #   <source>
   #     @type tail
@@ -236,7 +236,7 @@ fluentd:
     # -- The prefix of the elasticsearch index name that will be used
     indexNamePrefix: confluence
   # -- Specify custom volumes to be added to fluentd container (e.g. more log sources)
-  extraVolumes: {}
+  extraVolumes: []
   # - name: local-home
   #   mountPath: /opt/atlassian/confluence/logs
   #   subPath: log

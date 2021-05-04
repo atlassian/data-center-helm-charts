@@ -182,7 +182,7 @@ fluentd:
   customConfigFile: false
   # -- Custom fluent.conf file
   # fluent.conf: |
-  fluentdCustomConfig: ""
+  fluentdCustomConfig: {}
   # fluent.conf: |
   #   <source>
   #     @type tail
@@ -202,7 +202,7 @@ fluentd:
     # -- The hostname of the Elasticsearch service that fluentd should send logs to.
     hostname: elasticsearch
   # -- pecify custom volumes to be added to fluentd container (e.g. more log sources)
-  extraVolumes: {}
+  extraVolumes: []
   # - name: local-home
   #   mountPath: application-data/logs
   #   subPath: log
