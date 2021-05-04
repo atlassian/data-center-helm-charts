@@ -11,8 +11,7 @@ data:
   {{ $key }}: |
 {{ $value | indent 4 }}
   {{- end }}
-  {{ end }}
-  {{ if .Values.fluentd.defaultConfig }}
+  {{ else }}
   fluent.conf: |
     <source>
       @type tail
@@ -45,5 +44,4 @@ data:
       logstash_format true
     </match>
     {{ end }}
-  {{ end }}
 {{ end }}

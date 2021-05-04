@@ -178,8 +178,6 @@ ingress:
 fluentd:
   # -- True if the fluentd sidecar should be added to each pod
   enabled: false
-  # -- True if the helm default config for the fluentd.conf should be used with the values specified below
-  defaultConfig: false
   # -- True if a custom config should be used for fluentd
   customConfigFile: false
   # -- Custom fluent.conf file
