@@ -48,9 +48,9 @@ database:
 
 bitbucket:
   service:
-    # -- The port on which the BitBucket Kubernetes service will listen
+    # -- The port on which the Bitbucket Kubernetes service will listen
     port: 80
-    # -- The type of Kubernetes service to use for BitBucket
+    # -- The type of Kubernetes service to use for Bitbucket
     type: ClusterIP
   # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2003.
   # -- Disable when deploying to OpenShift, unless anyuid policy is attached to service account
