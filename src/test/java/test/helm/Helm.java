@@ -36,7 +36,9 @@ public final class Helm {
                         getHelmChartPath(product).toString())
                 .start();
         final var exitCode = process.waitFor();
-        System.out.println(new String(process.getInputStream().readAllBytes()));
+        if (exitCode != 0) {
+            System.out.println(new String(process.getInputStream().readAllBytes()));
+        }
         assertThat(exitCode).isEqualTo(0);
     }
 
