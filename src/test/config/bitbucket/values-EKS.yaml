@@ -20,6 +20,20 @@ volumes:
       create: true
       storageClassName: ""
       volumeName: ${helm.release.prefix}-bitbucket-shared-home-pv
+    nfsPermissionFixer:
+      enabled: true
+
+affinity:
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: role
+              operator: In
+              values:
+                - ${helm.release.prefix}-bitbucket-nfs-server # needs to be the same value as NFS server deployment
+        topologyKey: topology.kubernetes.io/zone
+
 
 nodeSelector:
   node_purpose: ci

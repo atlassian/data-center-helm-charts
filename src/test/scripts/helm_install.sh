@@ -4,18 +4,26 @@ set -e
 set -x
 
 # Many of the variables used in this script are sourced from the
-# parameter file supplied to this script i.e. `helm_parameters'
-# So that these values are available the script sources them making
-# them available for use.
+# parameter file supplied to it i.e. `helm_parameters'. As such,
+# 'source' those values in
 source "$1"
 
 get_current_cluster_type() {
   local server_address=$(kubectl config view --minify -o json | jq -r '.clusters[0].cluster.server')
 
   case "${server_address}" in
-    *.eks.amazonaws.com*) echo EKS; return;;
-    *.azmk8s.io*) echo AKS; return;;
-    *.kitt-inf.net*) echo KITT; return;;
+     *.eks.amazonaws.com*)
+    echo EKS
+    return
+    ;;
+  *.azmk8s.io*)
+    echo AKS
+    return
+    ;;
+  *.kitt-inf.net*)
+    echo KITT
+    return
+    ;;
   esac
 
   local cluster_name=$(kubectl config view --minify -o json | jq -r '.clusters[0].name')
