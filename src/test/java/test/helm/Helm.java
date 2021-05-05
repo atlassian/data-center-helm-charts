@@ -30,6 +30,16 @@ public final class Helm {
         return outputFile;
     }
 
+    public void assertLintedHelm(Product product) throws Exception {
+        final var process = new ProcessBuilder()
+                .command("helm", "lint",
+                        getHelmChartPath(product).toString())
+                .start();
+        final var exitCode = process.waitFor();
+        System.out.println(new String(process.getInputStream().readAllBytes()));
+        assertThat(exitCode).isEqualTo(0);
+    }
+
     private static void captureHelmTemplateOutput(Product product, Path valuesFile, Path outputFile) throws Exception {
         final var process = new ProcessBuilder()
                 .command("helm", "template",
