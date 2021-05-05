@@ -61,9 +61,9 @@ setup() {
   HELM_PACKAGE_DIR=target/helm
   [ "$HELM_DEBUG" = "true" ] && HELM_DEBUG_OPTION="--debug"
 
-  currentContext=$(kubectl config current-context)
+  local current_context=$(kubectl config current-context)
   
-  echo "Current context: $currentContext"
+  echo "Current context: $current_context"
   
   CLUSTER_TYPE=$(get_current_cluster_type)
   
@@ -80,14 +80,12 @@ setup() {
 }
 
 bootstrap_nfs() {
+  local BASEDIR=$(dirname "$0")
   echo "Task 4 - Bootstrapping NFS server." >&2
   if grep -q nfs: ${chartValueFiles} /dev/null || grep -q 'nfs[.]' <<<"$EXTRA_PARAMETERS"; then
-    echo "This configuration requires a private NFS server, starting..."
-    local nfs_server_pod_name="${PRODUCT_RELEASE_NAME}-nfs-server"
-    
-    pushd "$THISDIR"/nfs
-    ./startNfsServer.sh "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}" "${nfs_server_pod_name}"
-    popd
+    echo "This configuration requires a private NFS server, starting..."    
+    "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}"
+    local nfs_server_pod_name=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
 
     for ((try = 0; try < 60; try++)) ; do
       echo "Detecting NFS server IP..."
@@ -169,16 +167,16 @@ package_functest_helm_chart() {
   ## build values chartValueFile for expose node services and ingresses
   ## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef
   NEWLINE=$'\n'
-  backdoorServices="backdoorServiceNames:${NEWLINE}"
-  ingressServices="ingressNames:${NEWLINE}"
-  ingressServices+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
+  local backdoor_services="backdoorServiceNames:${NEWLINE}"
+  local ingress_services="ingressNames:${NEWLINE}"
+  ingress_services+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
   for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1))
   do
-    backdoorServices+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
+    backdoor_services+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
   done
   EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
   
-  echo "${backdoorServices}${ingressServices}" > ${EXPOSE_NODES_FILE}
+  echo "${backdoor_services}${ingress_services}" > ${EXPOSE_NODES_FILE}
   
   helm template \
      "$FUNCTEST_RELEASE_NAME" \
