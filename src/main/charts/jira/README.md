@@ -18,8 +18,8 @@ Kubernetes: `>=1.17.x-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Jira pods |
+| additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Jira pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Jira pods |
@@ -38,11 +38,12 @@ Kubernetes: `>=1.17.x-0`
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/jira-software"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
-| ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress. |
-| ingress.create | bool | `false` | True if an Ingress should be created. |
-| ingress.host | string | `nil` | The fully-qualified hostname of the Ingress. |
+| ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress  Resource when not using the Kubernetes ingress-nginx controller. |
+| ingress.create | bool | `false` | True if an Ingress Resource should be created. |
+| ingress.host | string | `nil` | The fully-qualified hostname of the Ingress Resource. |
 | ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
-| ingress.nginx | bool | `true` | True if the created Ingress is to use the Kubernetes ingress-nginx controller. This will populate the Ingress with annotations for that controller. Set to false if a different controller is to be used, in which case the annotations need to be specified. |
+| ingress.maxBodySize | string | `"10m"` | The max body size to allow. Requests exceeding this size will result in an 413 error being returned to the client. https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size |
+| ingress.nginx | bool | `true` | True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller: https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller. Set to false if a different controller is to be used, in which case the appropriate annotations for that controller need to be specified. |
 | ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
 | jira.accessLog.localHomeSubPath | string | `"log"` | The subdirectory within the local-home volume where access logs should be stored. |
 | jira.accessLog.mountPath | string | `"/opt/atlassian/jira/logs"` | The path within the Jira container where the local-home volume should be mounted in order to capture access logs. |

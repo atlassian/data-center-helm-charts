@@ -66,6 +66,8 @@ confluence:
   # -- The umask used by the Confluence process when it creates new files.
   # Default is 0022, which makes the new files read/writeable by the Confluence user, and readable by everyone else.
   umask: "0022"
+  # -- Boolean to define whether to set home directory permissions on startup of Confluence container. Set to false to disable this behaviour.
+  setPermissions: false
   ports:
     # -- The port on which the Confluence container listens for HTTP traffic
     http: 8090
