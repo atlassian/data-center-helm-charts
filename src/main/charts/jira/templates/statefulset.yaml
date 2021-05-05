@@ -98,6 +98,12 @@ spec:
             - name: http
               containerPort: {{ .Values.jira.ports.http }}
               protocol: TCP
+            - name: ehcachePort
+              containerPort: {{ .Values.jira.ports.ehcachePort }} 
+              protocol: TCP 
+            - name: ehcacheObjectPort
+              containerPort: {{ .Values.jira.ports.ehcacheObjectPort }}
+              protocol: TCP
           readinessProbe:
             httpGet:
               port: {{ .Values.jira.ports.http }}
