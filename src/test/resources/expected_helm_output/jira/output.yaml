@@ -126,6 +126,12 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: ehcachePort
+              containerPort: 40001 
+              protocol: TCP 
+            - name: ehcacheObjectPort
+              containerPort: 40011
+              protocol: TCP
           readinessProbe:
             httpGet:
               port: 8080
