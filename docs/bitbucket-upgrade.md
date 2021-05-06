@@ -1,11 +1,11 @@
-##Bitbucket
-Assume a Bitbucket cluster with 3 nodes and all running `Bitbucket 7.9.0-jdk11` and an upgrade to
- `Bitbucket 7.9.1-jdk11` is planned. Here are the steps to complete the upgrade process: 
+##Bitbucket Rolling Upgrade
+Assume a Bitbucket cluster with 3 nodes and all running `Bitbucket xx.xx.0-jdk11` and an upgrade to
+ `Bitbucket xx.xx.1-jdk11` is planned. Here are the steps to complete the upgrade process: 
 
 1. Update the `version` and `appVersion` in helm chart (`src/main/charts/bitbucket/Chart.yaml`):
    ```yaml
    version: 0.1.1
-   appVersion: 7.12.1-jdk11
+   appVersion: xx.xx.1-jdk11
    ```
 1. Create a new version of helm package:
     ```shell script
@@ -33,6 +33,6 @@ To see the history of helm upgrade run this command:
 ```shell script
 $ helm history <release name>
 REVISION UPDATED STATUS CHART APP VERSION DESCRIPTION
-1 Tue May 4 11:56:33 2021 superseded bitbucket-0.6.0 7.9.0-jdk11 Install complete
-2 Tue May 4 12:40:54 2021 deployed bitbucket-0.6.1 7.9.1-jdk11 Upgrade complete
+1 Tue May 4 11:56:33 2021 superseded bitbucket-0.1.0 xx.xx.0-jdk11 Install complete
+2 Tue May 4 12:40:54 2021 deployed bitbucket-0.1.1 xx.xx.1-jdk11 Upgrade complete
 ```

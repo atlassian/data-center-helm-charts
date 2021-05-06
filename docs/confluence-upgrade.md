@@ -1,11 +1,11 @@
-##Confluence
-Suppose we have a Confluence cluster with 3 nodes and all running `Confluence 7.9.0-jdk11` and an upgrade to 
-`Confluence 7.9.1-jdk11` is planned. Here is the steps to complete the upgrade process: 
+##Confluence Rolling Upgrade
+Suppose we have a Confluence cluster with 3 nodes and all running `Confluence xx.xx.0-jdk11` and an upgrade to 
+`Confluence xx.xx.1-jdk11` is planned. Here is the steps to complete the upgrade process: 
 
 1. Update the `version` and `appVersion` in helm chart (`src/main/charts/bitbucket/Chart.yaml`):
  ```yaml
  version: 0.1.1
- appVersion: 7.9.1-jdk11
+ appVersion: xx.xx.1-jdk11
  ```
 
 1. Create a new version of helm package:

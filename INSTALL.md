@@ -135,7 +135,7 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 
 # Rolling Upgrade
 
-To upgrade to a minor version of applications installed by Helm charts see [Rolling Upgrade](docs/RollingUpgrade.md)
+To upgrade to a patch version of applications installed by Helm charts with zero downtime see [Rolling Upgrade](docs/RollingUpgrade.md)
 
 # OpenShift Support
 
