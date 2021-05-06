@@ -123,7 +123,7 @@ it gives the best flexibility.
 
 See [CONFIG.md]() for examples of how to configure the volumes.
 
-# Scaling up Data Center
+# Scaling Data Center
 
 The Helm charts will provision one `StatefulSet`. In order to scale up or down the cluster `kubectl scale` can be used 
 at runtime to provision a multi-node Data Center cluster, with no further configuration required (although note
@@ -132,6 +132,10 @@ products to work correctly in a multi-node configuration). Here is the syntax fo
 ```
 kubectl scale statefulsets <statefulsetset-name> --replicas=n
 ```
+
+# Rolling Upgrade
+
+To upgrade to a minor version of applications installed by Helm charts see [Rolling Upgrade](docs/RollingUpgrade.md)
 
 # OpenShift Support
 
