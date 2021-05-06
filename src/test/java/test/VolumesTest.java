@@ -1,8 +1,6 @@
 package test;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.vavr.collection.Array;
-import io.vavr.control.Option;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
@@ -10,14 +8,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Product;
-import test.model.StatefulSet;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static test.jackson.JsonNodeAssert.assertThat;
-import static test.model.Kind.Job;
 import static test.model.Kind.PersistentVolumeClaim;
 
 /**
@@ -48,7 +43,7 @@ class VolumesTest {
                 statefulSet.getVolumeClaimTemplates().head(),
                 "local-home", "ReadWriteOnce");
 
-        assertThat(getVolume(statefulSet, "local-home"))
+        assertThat(statefulSet.getVolume("local-home"))
                 .describedAs("StatefulSet %s should not have a local-home volume in the pod spec", statefulSet.getName())
                 .isEmpty();
     }
@@ -65,7 +60,7 @@ class VolumesTest {
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
-        assertThat(getVolume(statefulSet, "shared-home"))
+        assertThat(statefulSet.getVolume("shared-home"))
                 .describedAs("StatefulSet %s should not have a local-home volume in the pod spec", statefulSet.getName())
                 .hasValueSatisfying(volume ->
                         assertThat(volume.required("persistentVolumeClaim").required("claimName"))
@@ -81,7 +76,7 @@ class VolumesTest {
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
-        assertThat(getVolume(statefulSet, "local-home"))
+        assertThat(statefulSet.getVolume("local-home"))
                 .hasValueSatisfying(localHomeVolume -> assertThat(localHomeVolume).isObject(Map.of("hostPath", "/foo/bar")));
     }
 
@@ -112,7 +107,7 @@ class VolumesTest {
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
-        assertThat(getVolume(statefulSet, "shared-home"))
+        assertThat(statefulSet.getVolume("shared-home"))
                 .hasValueSatisfying(localHomeVolume -> assertThat(localHomeVolume).isObject(Map.of("hostPath", "/foo/bar")));
     }
 
@@ -121,11 +116,5 @@ class VolumesTest {
                 .hasTextEqualTo(expectedVolumeName);
         assertThat(volumeClaimTemplate.path("spec").path("accessModes"))
                 .isArrayWithChildren(expectedAccessModes);
-    }
-
-    private Option<JsonNode> getVolume(StatefulSet statefulSet, final String volumeName) {
-        final var volumes = statefulSet.getPodSpec().required("volumes");
-        return Array.ofAll(volumes)
-                .find(volume -> volume.path("name").asText().equals(volumeName));
     }
 }

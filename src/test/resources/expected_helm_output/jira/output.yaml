@@ -126,10 +126,10 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-            - name: ehcachePort
+            - name: ehcache
               containerPort: 40001 
               protocol: TCP 
-            - name: ehcacheObjectPort
+            - name: ehcacheobject
               containerPort: 40011
               protocol: TCP
           readinessProbe:
