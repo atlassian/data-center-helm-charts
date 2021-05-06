@@ -6,6 +6,12 @@ metadata:
   labels:
   {{- include "bitbucket.labels" . | nindent 4 }}
 data:
+  {{ if .Values.fluentd.customConfigFile }}
+{{- range $key, $value := .Values.fluentd.fluentdCustomConfig }}
+  {{ $key }}: |
+{{ $value | indent 4 }}
+  {{- end }}
+  {{ else }}
   fluent.conf: |
     <source>
       @type tail
@@ -37,4 +43,5 @@ data:
       host {{ .Values.fluentd.elasticsearch.hostname }}
       logstash_format true
     </match>
+    {{ end }}
 {{ end }}

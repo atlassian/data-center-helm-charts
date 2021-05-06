@@ -208,6 +208,22 @@ ingress:
 fluentd:
   # -- True if the fluentd sidecar should be added to each pod
   enabled: false
+  # -- True if a custom config should be used for fluentd
+  customConfigFile: false
+  # -- Custom fluent.conf file
+  # fluent.conf: |
+  fluentdCustomConfig: {}
+  # fluent.conf: |
+  #   <source>
+  #     @type tail
+  #     <parse>
+  #     @type multiline
+  #     format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+  #     </parse>
+  #     path /opt/atlassian/confluence/logs/access_log.*
+  #     pos_file /tmp/confluencelog.pos
+  #     tag confluence-access-logs
+  #   </source>
   # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   # -- The port on which the fluentd sidecar will listen
@@ -219,7 +235,12 @@ fluentd:
     hostname: elasticsearch
     # -- The prefix of the elasticsearch index name that will be used
     indexNamePrefix: confluence
-
+  # -- Specify custom volumes to be added to fluentd container (e.g. more log sources)
+  extraVolumes: []
+  # - name: local-home
+  #   mountPath: /opt/atlassian/confluence/logs
+  #   subPath: log
+  #   readOnly: true
 # -- Specify additional annotations to be added to all Confluence and Synchrony pods
 podAnnotations: {}
 #  "name": "value"
@@ -296,6 +317,7 @@ additionalLabels: {}
 # name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position,
 # for example custom-config-0, keystore-2
 additionalFiles: []
+
 #  - name: custom-config
 #    type: configMap
 #    key: log4j.properties
