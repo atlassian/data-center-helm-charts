@@ -3,6 +3,7 @@ package test.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.vavr.collection.Array;
 import io.vavr.collection.Seq;
+import io.vavr.control.Option;
 
 /**
  * A specialisation of {@link KubeResource} which adds convenience methods for making StatefulSets easier to handle.
@@ -33,5 +34,14 @@ public final class StatefulSet extends KubeResource {
 
     public Seq<JsonNode> getVolumeClaimTemplates() {
         return Array.ofAll(getSpec().path("volumeClaimTemplates"));
+    }
+
+    public JsonNode getVolumes() {
+        return getPodSpec().required("volumes");
+    }
+
+    public Option<JsonNode> getVolume(String volumeName) {
+        return Array.ofAll(getVolumes())
+                .find(volume -> volume.path("name").asText().equals(volumeName));
     }
 }
