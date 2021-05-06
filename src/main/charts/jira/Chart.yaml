@@ -1,6 +1,6 @@
 apiVersion: v2
 name: jira
-description: A chart for installing Jira DC on Kubernetes
+description: A chart for installing Jira Data Center on Kubernetes
 type: application
 version: 0.1.0
 appVersion: 8.13.6-jdk11
@@ -11,7 +11,9 @@ keywords:
   - Jira Server
   - Jira Data Center
   - Atlassian
-home: https://github.com/atlassian-labs/data-center-helm-charts
+home: https://www.atlassian.com/software/jira
+icon: https://wac-cdn.atlassian.com/dam/jcr:826c97dc-1f5c-4955-bfcc-ea17d6b0c095/jira%20software-icon-gradient-blue.svg?cdnVersion=492
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
+  - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/
 deprecated: false
