@@ -147,10 +147,10 @@ spec:
         {{- range $i, $n := .Values.additionalFiles }}
         - name: {{ .name }}-{{$i}}
           {{ .type }}:
-          {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
-          items:
-            - key: {{ .key }}
-              path: {{ .key }}
+            {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
+            items:
+              - key: {{ .key }}
+                path: {{ .key }}
         {{ end }}
         {{ include "jira.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
