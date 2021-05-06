@@ -58,8 +58,8 @@ jira:
   ports:
     # -- The port on which the Jira container listens for HTTP traffic
     http: 8080
-    ehcachePort: 40001
-    ehcacheObjectPort: 40011 
+    ehcache: 40001
+    ehcacheobject: 40011 
   readinessProbe:
     # -- The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running
     initialDelaySeconds: 10
