@@ -13,15 +13,13 @@ whether it be a managed environment such as Amazon EKS, or a custom, on-premise 
 These charts are **experimental and unsupported**, with the aim of introducing official support once they have been
 stabilized.
 
+If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
+
 ## Installation
 
-To install helm charts, please follow separate installation document:
+[Installation guide](INSTALL.md) - To install helm charts, please follow separate installation document.
 
-[Installation guide](INSTALL.md)
-
-For more details about configuration parameters, visit:
-
-[Configuration guide](CONFIG.md)
+[Configuration guide](CONFIG.md) - For more details about configuration parameters.
 
 ## Contributions
 
