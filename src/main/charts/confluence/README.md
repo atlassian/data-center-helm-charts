@@ -22,6 +22,7 @@ Kubernetes: `>=1.17.x-0`
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Confluence pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
+| additionalHosts | list | `[]` | Additional hosts that should added to each pod's /etc/hosts file |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Confluence and Synchrony pods |
 | confluence.accessLog.enabled | bool | `true` | True if access logging should be enabled. |
 | confluence.accessLog.localHomeSubPath | string | `"logs"` | The subdirectory within the local-home volume where access logs should be stored. |
