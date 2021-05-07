@@ -1,14 +1,15 @@
 # jira
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.13.0-jdk11](https://img.shields.io/badge/AppVersion-8.13.0--jdk11-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.13.6-jdk11](https://img.shields.io/badge/AppVersion-8.13.6--jdk11-informational?style=flat-square)
 
-A chart for installing Jira DC on Kubernetes
+A chart for installing Jira Data Center on Kubernetes
 
-**Homepage:** <https://github.com/atlassian-labs/data-center-helm-charts>
+**Homepage:** <https://www.atlassian.com/software/jira>
 
 ## Source Code
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
+* <https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/>
 
 ## Requirements
 
@@ -29,12 +30,15 @@ Kubernetes: `>=1.17.x-0`
 | database.driver | string | `nil` | The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver If not specified, then it will need to be provided via browser during initial startup. |
 | database.type | string | `nil` | The type of database being used. Valid values include 'postgres72', 'mysql57', 'mysql8', 'oracle10g', 'mssql', 'postgresaurora96' If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Jira, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
+| fluentd.customConfigFile | bool | `false` | True if a custom config should be used for fluentd |
 | fluentd.elasticsearch.enabled | bool | `true` | True if fluentd should send all log events to an elasticsearch service. |
 | fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that fluentd should send logs to. |
 | fluentd.elasticsearch.indexNamePrefix | string | `"jira"` | The prefix of the elasticsearch index name that will be used |
 | fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
+| fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to fluentd container (e.g. more log sources) |
+| fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file fluent.conf: | |
 | fluentd.httpPort | int | `9880` | The port on which the fluentd sidecar will listen |
-| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/jira-software"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
@@ -55,6 +59,8 @@ Kubernetes: `>=1.17.x-0`
 | jira.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | jira.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Jira license key |
 | jira.license.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Jira license key. If specified, then the license will be automatically populated during Jira setup. Otherwise, it will need to be provided via the browser after initial startup. |
+| jira.ports.ehcache | int | `40001` |  |
+| jira.ports.ehcacheobject | int | `40011` |  |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic |
 | jira.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks |
 | jira.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running |

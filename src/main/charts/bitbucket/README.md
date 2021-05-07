@@ -1,14 +1,15 @@
 # bitbucket
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.7.0-jdk11](https://img.shields.io/badge/AppVersion-7.7.0--jdk11-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.12.1-jdk11](https://img.shields.io/badge/AppVersion-7.12.1--jdk11-informational?style=flat-square)
 
-A chart for installing Bitbucket DC on Kubernetes
+A chart for installing Bitbucket Data Center on Kubernetes
 
-**Homepage:** <https://github.com/atlassian-labs/data-center-helm-charts>
+**Homepage:** <https://www.atlassian.com/software/bitbucket>
 
 ## Source Code
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
+* <https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/>
 
 ## Requirements
 
@@ -43,8 +44,8 @@ Kubernetes: `>=1.17.x-0`
 | bitbucket.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the ElasticSearch JVM. |
 | bitbucket.securityContext | object | `{"enabled":true,"gid":"2003"}` | Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2003. -- Disable when deploying to OpenShift, unless anyuid policy is attached to service account |
 | bitbucket.securityContext.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
-| bitbucket.service.port | int | `80` | The port on which the Jira Kubernetes service will listen |
-| bitbucket.service.type | string | `"ClusterIP"` | The type of Kubernetes service to use for Jira |
+| bitbucket.service.port | int | `80` | The port on which the Bitbucket Kubernetes service will listen |
+| bitbucket.service.type | string | `"ClusterIP"` | The type of Kubernetes service to use for Bitbucket |
 | bitbucket.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret which contains the sysadmin display name |
 | bitbucket.sysadminCredentials.emailAddressSecretKey | string | `"emailAddress"` | The key in the Kubernetes Secret which contains the sysadmin email address |
 | bitbucket.sysadminCredentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret which contains the sysadmin password |
@@ -55,9 +56,13 @@ Kubernetes: `>=1.17.x-0`
 | database.credentials.usernameSecretKey | string | `"username"` | The key in the Secret used to store the database login username |
 | database.driver | string | `nil` | The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
-| fluentd.elasticsearch.hostname | string | `nil` | The hostname of the Elasticsearch service that fluentd should send logs to. |
+| fluentd.customConfigFile | bool | `false` | True if a custom config should be used for fluentd |
+| fluentd.elasticsearch.enabled | bool | `true` | True if fluentd should send all log events to an elasticsearch service. |
+| fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that fluentd should send logs to. |
 | fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
-| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
+| fluentd.extraVolumes | list | `[]` | pecify custom volumes to be added to fluentd container (e.g. more log sources) |
+| fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file fluent.conf: | |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/bitbucket-server"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |
