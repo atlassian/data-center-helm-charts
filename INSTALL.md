@@ -135,7 +135,9 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 
 # Rolling Upgrade
 
-To upgrade to a patch version of applications installed by Helm charts with zero downtime see [Rolling Upgrade](docs/RollingUpgrade.md)
+Upgrade with zero downtime can be performed for upgrading to a patch version of application. 
+
+See [Rolling Upgrade](docs/RollingUpgrade.md) for more detail and examples for Bitbucket and Confluence. 
 
 # OpenShift Support
 
