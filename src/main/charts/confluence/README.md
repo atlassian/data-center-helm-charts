@@ -1,14 +1,15 @@
 # confluence
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.9.0-jdk11](https://img.shields.io/badge/AppVersion-7.9.0--jdk11-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.12.0-jdk11](https://img.shields.io/badge/AppVersion-7.12.0--jdk11-informational?style=flat-square)
 
-A chart for installing Confluence DC on Kubernetes
+A chart for installing Confluence Data Center on Kubernetes
 
-**Homepage:** <https://github.com/atlassian-labs/data-center-helm-charts>
+**Homepage:** <https://www.atlassian.com/software/confluence>
 
 ## Source Code
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
+* <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server>
 
 ## Requirements
 
@@ -56,10 +57,13 @@ Kubernetes: `>=1.17.x-0`
 | database.credentials.usernameSecretKey | string | `"username"` | The key in the Secret used to store the database login username |
 | database.type | string | `nil` | The type of database being used. Valid values include 'postgresql', 'mysql', 'oracle', 'mssql'. If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Confluence and Synchrony, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
+| fluentd.customConfigFile | bool | `false` | True if a custom config should be used for fluentd |
 | fluentd.elasticsearch.enabled | bool | `true` | True if fluentd should send all log events to an elasticsearch service. |
 | fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that fluentd should send logs to. |
 | fluentd.elasticsearch.indexNamePrefix | string | `"confluence"` | The prefix of the elasticsearch index name that will be used |
 | fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
+| fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to fluentd container (e.g. more log sources) |
+| fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file fluent.conf: | |
 | fluentd.httpPort | int | `9880` | The port on which the fluentd sidecar will listen |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
