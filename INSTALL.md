@@ -137,7 +137,7 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 
 Upgrade with zero downtime can be performed for upgrading to a patch version of application. 
 
-See [Rolling Upgrade](docs/RollingUpgrade.md) for more detail and examples for Bitbucket and Confluence. 
+See [Rolling Upgrade](docs/RollingUpgrade.md) for more details. 
 
 # OpenShift Support
 
