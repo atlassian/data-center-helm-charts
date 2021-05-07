@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.12.1-jdk11](https://img.shields.io/badge/AppVersion-7.12.1--jdk11-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.12.1-jdk11](https://img.shields.io/badge/AppVersion-7.12.1--jdk11-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
@@ -62,7 +62,7 @@ Kubernetes: `>=1.17.x-0`
 | fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
 | fluentd.extraVolumes | list | `[]` | pecify custom volumes to be added to fluentd container (e.g. more log sources) |
 | fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file fluent.conf: | |
-| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` |  |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/bitbucket-server"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |

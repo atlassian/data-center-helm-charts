@@ -1,6 +1,6 @@
 # jira
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.13.6-jdk11](https://img.shields.io/badge/AppVersion-8.13.6--jdk11-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.13.6-jdk11](https://img.shields.io/badge/AppVersion-8.13.6--jdk11-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
@@ -38,7 +38,7 @@ Kubernetes: `>=1.17.x-0`
 | fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to fluentd container (e.g. more log sources) |
 | fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file fluent.conf: | |
 | fluentd.httpPort | int | `9880` | The port on which the fluentd sidecar will listen |
-| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` |  |
+| fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"atlassian/jira-software"` |  |
 | image.tag | string | `""` | The docker image tag to be used. Defaults to the Chart appVersion. |

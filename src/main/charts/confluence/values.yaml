@@ -224,7 +224,8 @@ fluentd:
   #     pos_file /tmp/confluencelog.pos
   #     tag confluence-access-logs
   #   </source>
-  # -- The name of the image containing the fluentd sidecar
+
+ # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   # -- The port on which the fluentd sidecar will listen
   httpPort: 9880
