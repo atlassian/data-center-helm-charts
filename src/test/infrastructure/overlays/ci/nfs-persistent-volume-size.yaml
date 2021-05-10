@@ -1,0 +1,8 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-server-data-pvc
+spec:
+  resources:
+    requests:
+      storage: 1Gi # make sure you have enough space for your shared home

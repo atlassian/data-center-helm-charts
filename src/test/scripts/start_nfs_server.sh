@@ -11,14 +11,17 @@ fi
 TARGET_NAMESPACE=$1
 PRODUCT_RELEASE_NAME=$2
 
-ARCH_EXAMPLE_DIR="$BASEDIR/../../../reference-infrastructure"
-NFS_SERVER_YAML="${ARCH_EXAMPLE_DIR}/storage/nfs/nfs-server.yaml"
+ARCH_EXAMPLE_DIR="$BASEDIR/../infrastructure"
+NFS_SERVER_YAML="${ARCH_EXAMPLE_DIR}/overlays/ci"
 
 echo Deleting old NFS resources...
-kubectl delete -f $NFS_SERVER_YAML --ignore-not-found=true || true
+if [[ -f "${NFS_SERVER_YAML}/kustomize.yaml" ]]; then
+  kubectl delete -k $NFS_SERVER_YAML --ignore-not-found=true || true
+fi
 
 echo Starting NFS deployment...
-sed -e "s/test-nfs-server/$PRODUCT_RELEASE_NAME-nfs-server/" $NFS_SERVER_YAML | kubectl apply -n "${TARGET_NAMESPACE}" -f -
+sed -e "s/CI_PLAN_ID/$PRODUCT_RELEASE_NAME/g" $NFS_SERVER_YAML/kustomization.yaml.tmp >$NFS_SERVER_YAML/kustomization.yaml
+kubectl apply -k $NFS_SERVER_YAML
 
 echo Waiting until the NFS deployment is ready...
 pod_role="$PRODUCT_RELEASE_NAME-nfs-server"

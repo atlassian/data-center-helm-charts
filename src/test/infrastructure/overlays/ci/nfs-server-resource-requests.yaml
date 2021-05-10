@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-server
+spec:
+  template:
+    spec:
+      containers:
+        - name: nfs-server
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1G
