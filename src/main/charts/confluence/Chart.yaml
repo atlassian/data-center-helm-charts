@@ -1,16 +1,18 @@
 apiVersion: v2
 name: confluence
-description: A chart for installing Confluence DC on Kubernetes
+description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 0.1.0
-appVersion: 7.9.0-jdk11
+version: 0.7.0
+appVersion: 7.12.0-jdk11
 kubeVersion: ">=1.17.x-0"
 keywords:
   - Confluence
   - Confluence Server
   - Confluence Data Center
   - Atlassian
-home: https://github.com/atlassian-labs/data-center-helm-charts
+home: https://www.atlassian.com/software/confluence
+icon: https://wac-cdn.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-813aba614b7a/confluence-icon-gradient-blue.svg?cdnVersion=696
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
+  - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server
 deprecated: false

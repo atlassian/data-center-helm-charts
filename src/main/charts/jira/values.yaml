@@ -58,6 +58,8 @@ jira:
   ports:
     # -- The port on which the Jira container listens for HTTP traffic
     http: 8080
+    ehcache: 40001
+    ehcacheobject: 40011 
   readinessProbe:
     # -- The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running
     initialDelaySeconds: 10
@@ -162,6 +164,23 @@ ingress:
 fluentd:
   # -- True if the fluentd sidecar should be added to each pod
   enabled: false
+  # -- True if a custom config should be used for fluentd
+  customConfigFile: false
+  # -- Custom fluent.conf file
+  # fluent.conf: |
+  fluentdCustomConfig: {}
+  # fluent.conf: |
+    # <source>
+    #   @type tail
+    #   <parse>
+    #   @type multiline
+    #   format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+    #   </parse>
+    #   path /opt/atlassian/jira/logs/access_log.*
+    #   pos_file /tmp/jiralog.pos
+    #   tag jira-access-logs
+    # </source>
+
   # -- The name of the image containing the fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   # -- The port on which the fluentd sidecar will listen
@@ -173,7 +192,13 @@ fluentd:
     hostname: elasticsearch
     # -- The prefix of the elasticsearch index name that will be used
     indexNamePrefix: jira
-
+  # -- Specify custom volumes to be added to fluentd container (e.g. more log sources)
+  extraVolumes: []
+  # - name: local-home
+  #   mountPath: /opt/atlassian/jira/logs
+  #   subPath: log
+  #   readOnly: true
+     
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}
 #  "name": "value"

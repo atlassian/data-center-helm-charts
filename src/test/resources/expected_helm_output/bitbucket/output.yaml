@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-0.1.0
+    helm.sh/chart: bitbucket-0.7.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-jvm-config
   labels:
-    helm.sh/chart: bitbucket-0.1.0
+    helm.sh/chart: bitbucket-0.7.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -33,10 +33,10 @@ kind: Service
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-0.1.0
+    helm.sh/chart: bitbucket-0.7.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -63,10 +63,10 @@ kind: StatefulSet
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-0.1.0
+    helm.sh/chart: bitbucket-0.7.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -99,7 +99,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2003 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket-server:7.7.0-jdk11"
+          image: "atlassian/bitbucket-server:7.12.1-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -160,10 +160,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bitbucket-0.1.0
+    helm.sh/chart: bitbucket-0.7.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -192,10 +192,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bitbucket-0.1.0
+    helm.sh/chart: bitbucket-0.7.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.7.0-jdk11"
+    app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
