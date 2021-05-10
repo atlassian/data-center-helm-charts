@@ -21,3 +21,4 @@ TARGET_REPLICA_COUNT=2
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
 EXTRA_PARAMETERS="${extra.parameters}"
 HELM_DEBUG=${helm.debug}
+CUSTOM_NFS_SERVER_TYPE=${custom.nfs.server.type}

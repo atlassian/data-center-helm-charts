@@ -10,9 +10,10 @@ fi
 
 TARGET_NAMESPACE=$1
 PRODUCT_RELEASE_NAME=$2
+[ "$CUSTOM_NFS_SERVER_TYPE" ] && CUSTOM_NFS_CONFIG="-$CUSTOM_NFS_SERVER_TYPE"
 
 ARCH_EXAMPLE_DIR="$BASEDIR/../../../reference-infrastructure"
-NFS_SERVER_YAML="${ARCH_EXAMPLE_DIR}/storage/nfs/nfs-server-local.yaml"
+NFS_SERVER_YAML="${ARCH_EXAMPLE_DIR}/storage/nfs/nfs-server${CUSTOM_NFS_CONFIG}.yaml"
 
 echo Deleting old NFS resources...
 kubectl delete -f $NFS_SERVER_YAML --ignore-not-found=true || true

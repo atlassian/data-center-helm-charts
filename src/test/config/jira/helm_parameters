@@ -17,3 +17,4 @@ INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 TARGET_REPLICA_COUNT=2
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
 HELM_DEBUG=${helm.debug}
+CUSTOM_NFS_SERVER_TYPE=${custom.nfs.server.type}
