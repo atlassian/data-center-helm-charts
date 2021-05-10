@@ -4,12 +4,13 @@ set -euo pipefail
 
 BASEDIR=$(dirname "$0")
 
-if [ "$#" -ne 2 ]; then
-  echo "We need 2 parameters for the script - kubernetes namespace and helm release name"
+if [ "$#" -lt 2 ]; then
+  echo "We need at least 2 parameters for the script - kubernetes namespace, helm release name and optional custom NFS config type "
 fi
 
 TARGET_NAMESPACE=$1
 PRODUCT_RELEASE_NAME=$2
+CUSTOM_NFS_SERVER_TYPE=$3
 [ "$CUSTOM_NFS_SERVER_TYPE" ] && CUSTOM_NFS_CONFIG="-$CUSTOM_NFS_SERVER_TYPE"
 
 ARCH_EXAMPLE_DIR="$BASEDIR/../../../reference-infrastructure"
