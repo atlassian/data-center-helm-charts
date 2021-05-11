@@ -124,8 +124,6 @@
 
         <helm.debug>true</helm.debug>
 
-        <custom.nfs.server.type/>
-
         <!-- The directory in which the helm (un)install script should look for the chart values files for integration testing -->
         <chart.testValues.basedir>${project.build.directory}/config</chart.testValues.basedir>
     </properties>

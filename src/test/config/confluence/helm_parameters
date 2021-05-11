@@ -21,4 +21,3 @@ SKIP_IMAGE_PULL=${skip.dockerImage.pull}
 EXTRA_PARAMETERS="${extra.parameters}"
 CUSTOM_INGRESS_URI="${custom.ingress.uri}"
 INGRESS_DOMAIN_CUSTOM="${kubernetes.ingress.domain}"
-CUSTOM_NFS_SERVER_TYPE=${custom.nfs.server.type}
