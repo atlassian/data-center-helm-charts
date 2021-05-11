@@ -35,7 +35,7 @@ get_current_cluster_type() {
 
 startNfsServer() {
   local productReleaseName=$1
-  "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${productReleaseName}" "$CUSTOM_NFS_SERVER_TYPE"
+  "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${productReleaseName}"
 }
 
 if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
