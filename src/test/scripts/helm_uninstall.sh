@@ -11,8 +11,7 @@ PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
 POSTGRES_RELEASE_NAME=$PRODUCT_RELEASE_NAME-pgsql
 FUNCTEST_RELEASE_NAME=$PRODUCT_RELEASE_NAME-functest
 
-ARCHITECTURE_EXAMPLE_DIR='../../../reference-infrastructure'
-NFS_SERVER_YAML="${ARCHITECTURE_EXAMPLE_DIR}/storage/nfs/nfs-server.yaml"
+NFS_SERVER_YAML="$BASEDIR/../infrastructure/storage/test-nfs-server.yaml"
 
 helm uninstall -n "${TARGET_NAMESPACE}" "${FUNCTEST_RELEASE_NAME}" || true
 helm uninstall -n "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}" || true
