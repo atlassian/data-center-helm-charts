@@ -135,7 +135,7 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 
 # Rolling Upgrade
 
-Upgrade with zero downtime can be performed for upgrading to a patch version of application. 
+You can upgrade to a patch version of the application with zero downtime.
 
 See [Rolling Upgrade](docs/RollingUpgrade.md) for more details. 
 
