@@ -153,6 +153,9 @@ confluence:
   # See https://hub.docker.com/r/atlassian/confluence-server for supported variables.
   additionalEnvironmentVariables: []
 
+  jvmDebug:
+    enabled: false
+
 synchrony:
   # -- True if Synchrony (i.e. Collaborative Editing) should be enabled.
   # This will result in a separate StatefulSet and Service to be created for Synchrony.
