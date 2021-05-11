@@ -154,6 +154,7 @@ confluence:
   additionalEnvironmentVariables: []
 
   jvmDebug:
+    # -- If set to true, Confluence JVM will be started with debugging port open.
     enabled: false
 
 synchrony:
