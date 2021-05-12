@@ -16,3 +16,7 @@ sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server
 deprecated: false
+dependencies:
+  - name: common
+    version: "^0.0.5"
+    repository: "https://charts.helm.sh/incubator/"

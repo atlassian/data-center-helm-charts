@@ -1,31 +1,13 @@
 {{- if .Values.ingress.create }}
-{{/* Change to networking.k8s.io/v1 when k8s 1.19 is the oldest supported version */}}
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
+{{- include "confluence.ingress" (list . "confluence.regular.ingress") -}}
+{{- end -}}
+{{- define "confluence.regular.ingress" -}}
 metadata:
-  name: {{ include "confluence.fullname" . }}-setup
-  labels:
-    {{- include "confluence.labels" . | nindent 4 }}
   annotations:
-    {{ if .Values.ingress.nginx }}
-    "kubernetes.io/ingress.class": "nginx"
-    "nginx.ingress.kubernetes.io/affinity": "cookie"
-    "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
-    "nginx.ingress.kubernetes.io/proxy-body-size": {{ .Values.ingress.maxBodySize }}
     "nginx.ingress.kubernetes.io/proxy-connect-timeout": "300"
     "nginx.ingress.kubernetes.io/proxy-read-timeout": "300"
     "nginx.ingress.kubernetes.io/proxy-send-timeout": "300"
-    {{- end }}
-    {{- with .Values.ingress.annotations }}
-  {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
-{{ if and (.Values.ingress.tlsSecretName) (.Values.ingress.host) }}
-  tls:
-    - hosts:
-        - {{ .Values.ingress.host }}
-      secretName: {{ .Values.ingress.tlsSecretName }}
-{{ end }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:
@@ -34,4 +16,4 @@ spec:
             backend:
               serviceName: {{ include "confluence.fullname" . }}
               servicePort: {{ $.Values.confluence.service.port }}
-{{ end }}
+{{- end -}}
