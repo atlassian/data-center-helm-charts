@@ -33,17 +33,6 @@ get_current_cluster_type() {
   esac
 }
 
-startNfsServer() {
-  local productReleaseName=$1
-  "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${productReleaseName}"
-}
-
-if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
-  echo "Your Bash version ${BASH_VERSINFO} is too old, update to version 5 or later."
-  echo "If you're on OS X, you can follow this guide: https://itnext.io/upgrading-bash-on-macos-7138bd1066ba".
-  exit 1
-fi
-
 check_bash_version() {
   echo "Task 1 - Checking Bash version." >&2
   if [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
