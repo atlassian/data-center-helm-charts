@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,13 +19,37 @@ import static org.assertj.core.api.Assertions.assertThat;
  * A wrapper around the helm CLI tool, which we use for rendering a chart's templates and capturing the output.
  */
 public final class Helm {
+
     private final TestInfo testInfo;
+
+    private static Map<Product, Boolean> dependencyUpdatedByProduct = new ConcurrentHashMap<>();
 
     public Helm(TestInfo testInfo) {
         this.testInfo = testInfo;
     }
 
+    /**
+     * Each product chart must fetch it's dependencies before it's packaged.
+     * It's enough to do this only once for each product.
+     */
+    public static void updateHelmDependenciesIfNeeded(Product product)  throws Exception {
+        if (dependencyUpdatedByProduct.getOrDefault(product, false)) {
+            return;
+        }
+        final var process = new ProcessBuilder()
+                .command("helm", "dependency", "update",
+                        getHelmChartPath(product).toString())
+                .start();
+        final var exitCode = process.waitFor();
+        if (exitCode != 0) {
+            System.out.println(new String(process.getInputStream().readAllBytes()));
+        }
+        dependencyUpdatedByProduct.put(product, true);
+        assertThat(exitCode).isEqualTo(0);
+    }
+
     public Path captureHelmTemplateOutput(Product product, Path valuesFile) throws Exception {
+        updateHelmDependenciesIfNeeded(product);
         final var outputFile = getHelmTemplateOutputFile(product);
         captureHelmTemplateOutput(product, valuesFile, outputFile);
         return outputFile;
@@ -43,6 +68,7 @@ public final class Helm {
     }
 
     private static void captureHelmTemplateOutput(Product product, Path valuesFile, Path outputFile) throws Exception {
+        updateHelmDependenciesIfNeeded(product);
         final var process = new ProcessBuilder()
                 .command("helm", "template",
                         product.getHelmReleaseName(),
@@ -65,6 +91,7 @@ public final class Helm {
     }
 
     private static void captureHelmTemplateOutput(Product product, Path outputFile, Map<String, String> values) throws Exception {
+        updateHelmDependenciesIfNeeded(product);
         final var process = new ProcessBuilder()
                 .command("helm", "template",
                         product.getHelmReleaseName(),
