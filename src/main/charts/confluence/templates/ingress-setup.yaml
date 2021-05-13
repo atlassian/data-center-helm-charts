@@ -1,7 +1,7 @@
 {{- if .Values.ingress.create }}
-{{- include "confluence.ingress" (list . "confluence.regular.ingress") -}}
+{{- include "confluence.ingress" (list . "confluence.setup.ingress") -}}
 {{- end -}}
-{{- define "confluence.regular.ingress" -}}
+{{- define "confluence.setup.ingress" -}}
 metadata:
   name: {{ include "confluence.fullname" . }}-setup
   annotations:
