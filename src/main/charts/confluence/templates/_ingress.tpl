@@ -3,7 +3,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "confluence.fullname" . }}
+  name: {}
   labels:
     {{- include "confluence.labels" . | nindent 4 }}
   annotations:
