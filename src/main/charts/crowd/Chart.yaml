@@ -1,16 +1,19 @@
 apiVersion: v2
 name: crowd
-description: A chart for installing Crowd DC on Kubernetes
+description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 0.1.0
+version: 0.7.0
 appVersion: 4.3.0-jdk11
 kubeVersion: ">=1.17.x-0"
 keywords:
   - Crowd
   - Crowd Server
   - Crowd Data Center
+  - Crowd DC
   - Atlassian
-home: https://github.com/atlassian-labs/data-center-helm-charts
+home: https://www.atlassian.com/software/crowd
+icon: https://wac-cdn.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-813aba614b7a/confluence-icon-gradient-blue.svg?cdnVersion=696
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
+  - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
 deprecated: false
