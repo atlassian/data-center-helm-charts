@@ -1,0 +1,5 @@
+# This file contains chart value overrides for the Helm output unit test
+volumes:
+  sharedHome:
+    nfsPermissionFixer:
+      enabled: true

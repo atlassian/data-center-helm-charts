@@ -21,20 +21,20 @@ spec:
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: 1
-{{ if .Values.crowd.securityContext.enabled }}
+      {{ if .Values.crowd.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
         fsGroup: {{ .Values.crowd.securityContext.gid }}
-{{ end }}
-      {{- with .Values.additionalInitContainers }}
+      {{ end }}
       initContainers:
+        {{- with .Values.additionalInitContainers }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
-      initContainers:
+        {{- end }}
+        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: alpine
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
           volumeMounts:
@@ -42,9 +42,9 @@ spec:
               mountPath: {{ .Values.volumes.sharedHome.nfsPermissionFixer.mountPath | quote }}
               {{- if .Values.volumes.sharedHome.subPath }}
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
-          {{- end }}
+              {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
-      {{- end }}
+        {{- end }}
       containers:
         - name: crowd
           image: {{ include "crowd.image" . | quote }}
@@ -75,10 +75,10 @@ spec:
             {{- include "crowd.additionalLibraries" . | nindent 12 }}
             {{- include "crowd.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
-             - name: {{ .name }}-{{$i}}
-               mountPath: {{ .mountPath }}/{{ .key }}
-               subPath: {{ .key }}
-             {{ end }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
           env:
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
@@ -129,6 +129,14 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        {{- range $i, $n := .Values.additionalFiles }}
+        - name: {{ .name }}-{{$i}}
+          {{ .type }}:
+            {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
+            items:
+              - key: {{ .key }}
+                path: {{ .key }}
+        {{ end }}
         {{ include "crowd.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "crowd.volumeClaimTemplates" . | nindent 2 }}

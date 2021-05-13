@@ -1,0 +1,268 @@
+---
+# Source: crowd/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unittest-crowd
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: crowd/templates/config-jvm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-crowd-jvm-config
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+data:
+  additional_jvm_args: >-
+    -Dcrowd.cluster.hazelcast.listenPort=5701
+    -Dcrowd.clusterNodeName.useHostname=true
+    -Datlassian.logging.cloud.enabled=false
+  max_heap: 1g
+  min_heap: 1g
+  reserved_code_cache: 512m
+---
+# Source: crowd/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-crowd
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 5701
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+---
+# Source: crowd/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unittest-crowd
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  serviceName: unittest-crowd
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crowd
+      app.kubernetes.io/instance: unittest-crowd
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: crowd
+        app.kubernetes.io/instance: unittest-crowd
+    spec:
+      serviceAccountName: unittest-crowd
+      terminationGracePeriodSeconds: 1
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: 2004
+      initContainers:
+        - name: nfs-permission-fixer
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
+      containers:
+        - name: crowd
+          image: "atlassian/crowd:4.2.2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8095
+              protocol: TCP
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: 8095
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 30
+          volumeMounts:
+            - name: local-home
+              mountPath: "/var/atlassian/application-data/crowd"
+            - name: local-home
+              mountPath: "/opt/atlassian/crowd/logs"
+              subPath: "logs"
+            - name: shared-home
+              mountPath: "/var/atlassian/application-data/crowd/shared"
+          env:
+            - name: ATL_TOMCAT_SCHEME
+              value: "https"
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            - name: ATL_TOMCAT_ACCESS_LOG
+              value: "true"
+            - name: UMASK
+              value: "0022"
+            - name: SET_PERMISSIONS
+              value: "false"
+            - name: ATL_PRODUCT_HOME_SHARED
+              value: "/var/atlassian/application-data/crowd/shared"
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: unittest-crowd-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: unittest-crowd-jvm-config
+            - name: JVM_RESERVED_CODE_CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: reserved_code_cache
+                  name: unittest-crowd-jvm-config
+      volumes:
+        - name: local-home
+          emptyDir: {}
+        - name: shared-home
+          emptyDir: {}
+---
+# Source: crowd/templates/tests/test-application-status.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-crowd-application-status-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: alpine
+      env:
+        - name: STATUS_URL
+          value: "http://unittest-crowd:80/crowd/status"
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          apk add -q jq curl
+          STATUS=$(curl -s "$STATUS_URL")
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+          echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+  restartPolicy: Never
+---
+# Source: crowd/templates/tests/test-shared-home-permissions.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-crowd-shared-home-permissions-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: debian:stable-slim
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        runAsUser: 2004
+        runAsGroup: 2004
+      volumeMounts:
+        - name: shared-home
+          mountPath: /shared-home
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          ls -ld /shared-home
+          echo "Creating temporary file in shared home as user $(id -u):$(id -g)"
+          touch /shared-home/permissions-test
+          ls -l /shared-home/permissions-test
+          rm /shared-home/permissions-test
+  volumes:
+    - name: shared-home
+      emptyDir: {}
+  restartPolicy: Never
+---
+# Source: crowd/templates/nfs-permission-fixer.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: unittest-crowd-nfs-fixer
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: unittest-crowd-nfs-fixer
+      labels:
+        helm.sh/chart: crowd-0.7.0
+        app.kubernetes.io/name: crowd
+        app.kubernetes.io/instance: unittest-crowd
+        app.kubernetes.io/version: "4.3.0-jdk11"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: nfs-fixer
+          image: alpine
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
+      volumes:
+        - name: shared-home
+          emptyDir: {}
