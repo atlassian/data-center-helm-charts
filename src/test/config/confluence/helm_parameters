@@ -17,3 +17,7 @@ INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 TARGET_REPLICA_COUNT=2
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
 HELM_DEBUG=${helm.debug}
+SKIP_IMAGE_PULL=${skip.dockerImage.pull}
+EXTRA_PARAMETERS="${extra.parameters}"
+CUSTOM_INGRESS_URI="${custom.ingress.uri}"
+INGRESS_DOMAIN_CUSTOM="${kubernetes.ingress.domain}"

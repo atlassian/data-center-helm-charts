@@ -27,6 +27,10 @@ spec:
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
         fsGroup: {{ .Values.confluence.securityContext.gid }}
       {{ end }}
+      hostAliases:
+        {{- with .Values.additionalHosts }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       initContainers:
         {{- with .Values.additionalInitContainers }}
         {{- toYaml . | nindent 8 }}

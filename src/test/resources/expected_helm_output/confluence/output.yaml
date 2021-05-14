@@ -26,6 +26,7 @@ data:
   additional_jvm_args: >-
     -Dconfluence.cluster.hazelcast.listenPort=5701
     -Dsynchrony.btf.disabled=true
+    -Dsynchrony.by.default.enable.collab.editing.if.manually.managed=true
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
   max_heap: 1g
@@ -88,6 +89,7 @@ spec:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
         fsGroup: 2002
+      hostAliases:
       initContainers:
         - name: nfs-permission-fixer
           image: alpine

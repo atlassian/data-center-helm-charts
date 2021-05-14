@@ -23,6 +23,7 @@ Kubernetes: `>=1.17.x-0`
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Confluence pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
+| additionalHosts | list | `[]` | Additional hosts that should added to each pod's /etc/hosts file |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Confluence and Synchrony pods |
 | confluence.accessLog.enabled | bool | `true` | True if access logging should be enabled. |
 | confluence.accessLog.localHomeSubPath | string | `"logs"` | The subdirectory within the local-home volume where access logs should be stored. |
@@ -30,6 +31,7 @@ Kubernetes: `>=1.17.x-0`
 | confluence.additionalBundledPlugins | list | `[]` | Specifies a list of additional Confluence plugins that should be added to the Confluence container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | confluence.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Confluence container. See https://hub.docker.com/r/atlassian/confluence-server for supported variables. |
 | confluence.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. system properties |
+| confluence.jvmDebug.enabled | bool | `false` | If set to `true`, Confluence JVM will be started in debug mode (on port 5005). Kubernetes port forwarding feature could be used to attach a debugger to the JVM. |
 | confluence.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Confluence container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | confluence.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
