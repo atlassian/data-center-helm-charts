@@ -143,10 +143,6 @@ package_product_helm_chart() {
   [ "$SKIP_IMAGE_PULL" != true ] && valueOverrides+="--set image.pullPolicy=Always "
   [ -n "$EXTRA_PARAMETERS" ] && for i in $EXTRA_PARAMETERS; do valueOverrides+="--set $i "; done
 
-  # This line is needed to download all chart dependencies, if any
-  helm dependency update \
-    "$CHART_SRC_PATH"
-
   # Ask Helm to generate the YAML that it will send to Kubernetes in the "install" step later, so
   # that we can look at it for diagnostics.
   helm template \
