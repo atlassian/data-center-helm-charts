@@ -25,6 +25,17 @@ public enum Product {
             return "2002";
         }
     },
+    crowd {
+        @Override
+        public String getDockerImageName() {
+            return "atlassian/crowd";
+        }
+
+        @Override
+        public String getContainerGid() {
+            return "2004";
+        }
+    },
     bitbucket {
         @Override
         public String getDockerImageName() {

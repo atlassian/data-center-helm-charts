@@ -1,0 +1,20 @@
+# This file contains overrides for the crowd Helm chart's values.yaml file
+
+crowd:
+  clustering:
+    enabled: true
+  resources:
+    container:
+      requests:
+        memory: 2G
+  accessLog:
+    enabled: true
+
+database:
+  type: postgresql
+  url: jdbc:postgresql://${helm.release.prefix}-crowd-pgsql:5432/crowd
+  credentials:
+    secretName: crowd-database-credentials
+
+synchrony:
+  enabled: true

@@ -10,10 +10,11 @@ keywords:
   - Jira Software
   - Jira Server
   - Jira Data Center
+  - Jira DC
   - Atlassian
 home: https://www.atlassian.com/software/jira
 icon: https://wac-cdn.atlassian.com/dam/jcr:826c97dc-1f5c-4955-bfcc-ea17d6b0c095/jira%20software-icon-gradient-blue.svg?cdnVersion=492
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
-  - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/
+  - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
 deprecated: false
