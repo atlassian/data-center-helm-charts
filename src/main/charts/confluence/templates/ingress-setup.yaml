@@ -3,7 +3,6 @@
 {{- end -}}
 {{- define "confluence.regular.ingress" -}}
 metadata:
-  name: {{ include "confluence.fullname" . }}-setup
   annotations:
     "nginx.ingress.kubernetes.io/proxy-connect-timeout": "300"
     "nginx.ingress.kubernetes.io/proxy-read-timeout": "300"
