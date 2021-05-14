@@ -1,10 +1,8 @@
+# This workflow releases new version of helm charts
 name: Release Charts
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   release:

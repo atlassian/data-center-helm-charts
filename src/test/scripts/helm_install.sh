@@ -62,18 +62,18 @@ setup() {
   [ "$HELM_DEBUG" = "true" ] && HELM_DEBUG_OPTION="--debug"
 
   local current_context=$(kubectl config current-context)
-  
+
   echo "Current context: $current_context"
-  
+
   CLUSTER_TYPE=$(get_current_cluster_type)
-  
+
   echo "Cluster type is $CLUSTER_TYPE"
-  
+
   # Install the bitnami postgresql Helm chart
   helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
-  
+
   mkdir -p "$LOG_DOWNLOAD_DIR"
-  
+
   chartValueFiles=$(for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values.yaml,values-${CLUSTER_TYPE}.yaml}; do
     ls "$file" 2>/dev/null || true
   done)
@@ -83,7 +83,7 @@ bootstrap_nfs() {
   local BASEDIR=$(dirname "$0")
   echo "Task 4 - Bootstrapping NFS server." >&2
   if grep -q nfs: ${chartValueFiles} /dev/null || grep -q 'nfs[.]' <<<"$EXTRA_PARAMETERS"; then
-    echo "This configuration requires a private NFS server, starting..."    
+    echo "This configuration requires a private NFS server, starting..."
     "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}"
     local nfs_server_pod_name=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
 
@@ -123,11 +123,11 @@ bootstrap_database() {
      --version "$POSTGRES_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
      bitnami/postgresql > $LOG_DOWNLOAD_DIR/helm_install_log.txt
-  
+
   if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
     kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
     kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
-  fi 
+  fi
 }
 
 # Package the product's Helm chart
@@ -136,13 +136,13 @@ package_product_helm_chart() {
   for chartValueFile in $chartValueFiles; do
     valueOverrides+="--values $chartValueFile "
   done
-  
+
   [ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
   [ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
   [ "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
   [ "$SKIP_IMAGE_PULL" != true ] && valueOverrides+="--set image.pullPolicy=Always "
   [ -n "$EXTRA_PARAMETERS" ] && for i in $EXTRA_PARAMETERS; do valueOverrides+="--set $i "; done
-  
+
   # Ask Helm to generate the YAML that it will send to Kubernetes in the "install" step later, so
   # that we can look at it for diagnostics.
   helm template \
@@ -151,7 +151,7 @@ package_product_helm_chart() {
      --debug \
      ${valueOverrides} \
       > $LOG_DOWNLOAD_DIR/$PRODUCT_RELEASE_NAME.yaml
-  
+
   helm package "$CHART_SRC_PATH" \
      --destination "$HELM_PACKAGE_DIR"
 }
@@ -163,7 +163,7 @@ package_functest_helm_chart() {
   INGRESS_DOMAIN="${!INGRESS_DOMAIN_VARIABLE_NAME}"
   FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
   FUNCTEST_CHART_VALUES="clusterType=$CLUSTER_TYPE,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME"
-  
+
   ## build values chartValueFile for expose node services and ingresses
   ## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef
   NEWLINE=$'\n'
@@ -175,16 +175,16 @@ package_functest_helm_chart() {
     backdoor_services+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
   done
   EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
-  
+
   echo "${backdoor_services}${ingress_services}" > ${EXPOSE_NODES_FILE}
-  
+
   helm template \
      "$FUNCTEST_RELEASE_NAME" \
      "$FUNCTEST_CHART_PATH" \
      --set "$FUNCTEST_CHART_VALUES" \
      --values ${EXPOSE_NODES_FILE} \
      > "$LOG_DOWNLOAD_DIR/$FUNCTEST_RELEASE_NAME.yaml"
-  
+
   helm package "$FUNCTEST_CHART_PATH" --destination "$HELM_PACKAGE_DIR"
 }
 
@@ -238,7 +238,7 @@ run_tests() {
   echo "Task 11 - Running tests." >&2
   helm test \
   $HELM_DEBUG_OPTION \
-  "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}" 
+  "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 }
 
 # Execute

@@ -153,6 +153,10 @@ confluence:
   # See https://hub.docker.com/r/atlassian/confluence-server for supported variables.
   additionalEnvironmentVariables: []
 
+  jvmDebug:
+    # -- If set to true, Confluence JVM will be started with debugging port 5005 open.
+    enabled: false
+
 synchrony:
   # -- True if Synchrony (i.e. Collaborative Editing) should be enabled.
   # This will result in a separate StatefulSet and Service to be created for Synchrony.
@@ -331,3 +335,12 @@ additionalFiles: []
 #    type: secret
 #    key: keystore.jks
 #    mountPath: /var/ssl
+
+# -- Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file. See
+# https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ for more
+# information.
+additionalHosts: []
+#  - ip: "127.0.0.1"
+#    hostnames:
+#    - "foo.local"
+#    - "bar.local"
