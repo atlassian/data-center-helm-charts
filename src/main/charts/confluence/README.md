@@ -1,14 +1,15 @@
 # confluence
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.9.0-jdk11](https://img.shields.io/badge/AppVersion-7.9.0--jdk11-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.12.0-jdk11](https://img.shields.io/badge/AppVersion-7.12.0--jdk11-informational?style=flat-square)
 
-A chart for installing Confluence DC on Kubernetes
+A chart for installing Confluence Data Center on Kubernetes
 
-**Homepage:** <https://github.com/atlassian-labs/data-center-helm-charts>
+**Homepage:** <https://www.atlassian.com/software/confluence>
 
 ## Source Code
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
+* <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server>
 
 ## Requirements
 
@@ -22,6 +23,7 @@ Kubernetes: `>=1.17.x-0`
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Confluence pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
+| additionalHosts | list | `[]` | Additional hosts that should added to each pod's /etc/hosts file |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Confluence and Synchrony pods |
 | confluence.accessLog.enabled | bool | `true` | True if access logging should be enabled. |
 | confluence.accessLog.localHomeSubPath | string | `"logs"` | The subdirectory within the local-home volume where access logs should be stored. |
@@ -29,6 +31,7 @@ Kubernetes: `>=1.17.x-0`
 | confluence.additionalBundledPlugins | list | `[]` | Specifies a list of additional Confluence plugins that should be added to the Confluence container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | confluence.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Confluence container. See https://hub.docker.com/r/atlassian/confluence-server for supported variables. |
 | confluence.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. system properties |
+| confluence.jvmDebug.enabled | bool | `false` | If set to `true`, Confluence JVM will be started in debug mode (on port 5005). Kubernetes port forwarding feature could be used to attach a debugger to the JVM. |
 | confluence.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Confluence container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | confluence.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
@@ -56,10 +59,13 @@ Kubernetes: `>=1.17.x-0`
 | database.credentials.usernameSecretKey | string | `"username"` | The key in the Secret used to store the database login username |
 | database.type | string | `nil` | The type of database being used. Valid values include 'postgresql', 'mysql', 'oracle', 'mssql'. If not specified, then it will need to be provided via browser during initial startup. |
 | database.url | string | `nil` | The JDBC URL of the database to be used by Confluence and Synchrony, e.g. jdbc:postgresql://host:port/database If not specified, then it will need to be provided via browser during initial startup. |
+| fluentd.customConfigFile | bool | `false` | True if a custom config should be used for fluentd |
 | fluentd.elasticsearch.enabled | bool | `true` | True if fluentd should send all log events to an elasticsearch service. |
 | fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that fluentd should send logs to. |
 | fluentd.elasticsearch.indexNamePrefix | string | `"confluence"` | The prefix of the elasticsearch index name that will be used |
 | fluentd.enabled | bool | `false` | True if the fluentd sidecar should be added to each pod |
+| fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to fluentd container (e.g. more log sources) |
+| fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file fluent.conf: | |
 | fluentd.httpPort | int | `9880` | The port on which the fluentd sidecar will listen |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The name of the image containing the fluentd sidecar |
 | image.pullPolicy | string | `"IfNotPresent"` |  |

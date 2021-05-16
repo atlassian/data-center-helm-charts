@@ -33,6 +33,7 @@ class HelmOutputComparisonTest {
     @EnumSource(Product.class)
     void helm_template_output_matches_expectations(final Product product) throws Exception {
         final var expectedHelmOutput = getExpectedHelmTemplateOutputFile(product);
+        stripBlankLines(expectedHelmOutput);
 
         final var actualOutputFile = helm.captureHelmTemplateOutput(product, getHelmValuesFile(product));
 

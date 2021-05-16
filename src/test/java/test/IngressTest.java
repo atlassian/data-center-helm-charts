@@ -1,11 +1,13 @@
 package test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Kind;
+import test.model.KubeResource;
 import test.model.Product;
 
 import java.util.Map;
@@ -28,13 +30,15 @@ class IngressTest {
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain"));
 
-        final var ingress = resources.get(Kind.Ingress);
+        final var ingresses = resources.getAll(Kind.Ingress);
 
-        assertThat(ingress.getNode("spec", "rules").required(0).path("host"))
-                .hasTextContaining("myhost.mydomain");
+        for (KubeResource ingress : ingresses) {
+            assertThat(ingress.getNode("spec", "rules").required(0).path("host"))
+                    .hasTextContaining("myhost.mydomain");
 
-        assertThat(ingress.getMetadata().path("annotations"))
-                .isObject(Map.of("kubernetes.io/ingress.class", "nginx"));
+            assertThat(ingress.getMetadata().path("annotations"))
+                    .isObject(Map.of("kubernetes.io/ingress.class", "nginx"));
+        }
     }
 
     @ParameterizedTest
@@ -45,13 +49,14 @@ class IngressTest {
                 "ingress.tlsSecretName", "tls-secret",
                 "ingress.host", "myhost.mydomain"));
 
-        final var ingress = resources.get(Kind.Ingress);
-        assertThat(ingress.getNode("spec", "tls").required(0).path("hosts").required(0))
-                .hasTextContaining("myhost.mydomain");
+        final var ingresses = resources.getAll(Kind.Ingress);
+        for (KubeResource ingress : ingresses) {
+            assertThat(ingress.getNode("spec", "tls").required(0).path("hosts").required(0))
+                    .hasTextContaining("myhost.mydomain");
 
-        assertThat(ingress.getNode("spec", "tls").required(0).path("secretName"))
-                .hasTextContaining("tls-secret");
-
+            assertThat(ingress.getNode("spec", "tls").required(0).path("secretName"))
+                    .hasTextContaining("tls-secret");
+        }
     }
 
     @ParameterizedTest
@@ -101,5 +106,17 @@ class IngressTest {
                 .getContainer()
                 .getEnv()
                 .assertDoesNotHaveAnyOf("SERVER_SCHEME", "SERVER_SECURE");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_has_exactly_2_ingresses(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        // This is because Connie provisions a regular ingress + an ingress for /setup paths with increased timeout
+        Assertions.assertEquals(2, ingresses.size());
     }
 }

@@ -1,48 +1,46 @@
 ---
-# Source: confluence/templates/serviceaccount.yaml
+# Source: crowd/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: unittest-confluence
+  name: unittest-crowd
   labels:
-    helm.sh/chart: confluence-0.7.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.12.0-jdk11"
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
-# Source: confluence/templates/config-jvm.yaml
+# Source: crowd/templates/config-jvm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: unittest-confluence-jvm-config
+  name: unittest-crowd-jvm-config
   labels:
-    helm.sh/chart: confluence-0.7.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.12.0-jdk11"
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
-    -Dconfluence.cluster.hazelcast.listenPort=5701
-    -Dsynchrony.btf.disabled=true
-    -Dsynchrony.by.default.enable.collab.editing.if.manually.managed=true
-    -Dconfluence.clusterNodeName.useHostname=true
+    -Dcrowd.cluster.hazelcast.listenPort=5701
+    -Dcrowd.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 512m
 ---
-# Source: confluence/templates/service.yaml
+# Source: crowd/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: unittest-confluence
+  name: unittest-crowd
   labels:
-    helm.sh/chart: confluence-0.7.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.12.0-jdk11"
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -56,40 +54,39 @@ spec:
       protocol: TCP
       name: hazelcast
   selector:
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
 ---
-# Source: confluence/templates/statefulset.yaml
+# Source: crowd/templates/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: unittest-confluence
+  name: unittest-crowd
   labels:
-    helm.sh/chart: confluence-0.7.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.12.0-jdk11"
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
-  serviceName: unittest-confluence
+  serviceName: unittest-crowd
   selector:
     matchLabels:
-      app.kubernetes.io/name: confluence
-      app.kubernetes.io/instance: unittest-confluence
+      app.kubernetes.io/name: crowd
+      app.kubernetes.io/instance: unittest-crowd
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: confluence
-        app.kubernetes.io/instance: unittest-confluence
+        app.kubernetes.io/name: crowd
+        app.kubernetes.io/instance: unittest-crowd
     spec:
-      serviceAccountName: unittest-confluence
+      serviceAccountName: unittest-crowd
       terminationGracePeriodSeconds: 1
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: 2002
-      hostAliases:
+        fsGroup: 2004
       initContainers:
         - name: nfs-permission-fixer
           image: alpine
@@ -99,33 +96,33 @@ spec:
           volumeMounts:
             - name: shared-home
               mountPath: "/shared-home"
-          command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
+          command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
       containers:
-        - name: confluence
-          image: "atlassian/confluence-server:7.12.0-jdk11"
+        - name: crowd
+          image: "atlassian/crowd:4.2.2"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 8090
+              containerPort: 8095
               protocol: TCP
             - name: hazelcast
               containerPort: 5701
               protocol: TCP
           readinessProbe:
             httpGet:
-              port: 8090
-              path: /status
+              port: 8095
+              path: /
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
           volumeMounts:
             - name: local-home
-              mountPath: "/var/atlassian/application-data/confluence"
+              mountPath: "/var/atlassian/application-data/crowd"
             - name: local-home
-              mountPath: "/opt/atlassian/confluence/logs"
+              mountPath: "/opt/atlassian/crowd/logs"
               subPath: "logs"
             - name: shared-home
-              mountPath: "/var/atlassian/application-data/shared-home"
+              mountPath: "/var/atlassian/application-data/crowd/shared"
           env:
             - name: ATL_TOMCAT_SCHEME
               value: "https"
@@ -138,46 +135,41 @@ spec:
             - name: SET_PERMISSIONS
               value: "false"
             - name: ATL_PRODUCT_HOME_SHARED
-              value: "/var/atlassian/application-data/shared-home"
-            - name: JVM_SUPPORT_RECOMMENDED_ARGS
-              valueFrom:
-                configMapKeyRef:
-                  key: additional_jvm_args
-                  name: unittest-confluence-jvm-config
+              value: "/var/atlassian/application-data/crowd/shared"
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: unittest-confluence-jvm-config
+                  name: unittest-crowd-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: unittest-confluence-jvm-config
+                  name: unittest-crowd-jvm-config
             - name: JVM_RESERVED_CODE_CACHE_SIZE
               valueFrom:
                 configMapKeyRef:
                   key: reserved_code_cache
-                  name: unittest-confluence-jvm-config
+                  name: unittest-crowd-jvm-config
       volumes:
         - name: local-home
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
 ---
-# Source: confluence/templates/tests/test-application-status.yaml
+# Source: crowd/templates/tests/test-application-status.yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "unittest-confluence-application-status-test"
+  name: "unittest-crowd-application-status-test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-0.7.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.12.0-jdk11"
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -185,7 +177,7 @@ spec:
       image: alpine
       env:
         - name: STATUS_URL
-          value: "http://unittest-confluence:80/status"
+          value: "http://unittest-crowd:80/crowd/status"
       command:
         - /bin/sh
         - -ec
@@ -196,19 +188,19 @@ spec:
           echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
   restartPolicy: Never
 ---
-# Source: confluence/templates/tests/test-shared-home-permissions.yaml
+# Source: crowd/templates/tests/test-shared-home-permissions.yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "unittest-confluence-shared-home-permissions-test"
+  name: "unittest-crowd-shared-home-permissions-test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-0.7.0
-    app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.12.0-jdk11"
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -217,8 +209,8 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
-        runAsUser: 2002
-        runAsGroup: 2002
+        runAsUser: 2004
+        runAsGroup: 2004
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home
@@ -235,3 +227,42 @@ spec:
     - name: shared-home
       emptyDir: {}
   restartPolicy: Never
+---
+# Source: crowd/templates/nfs-permission-fixer.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: unittest-crowd-nfs-fixer
+  labels:
+    helm.sh/chart: crowd-0.7.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: unittest-crowd-nfs-fixer
+      labels:
+        helm.sh/chart: crowd-0.7.0
+        app.kubernetes.io/name: crowd
+        app.kubernetes.io/instance: unittest-crowd
+        app.kubernetes.io/version: "4.3.0-jdk11"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: nfs-fixer
+          image: alpine
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
+      volumes:
+        - name: shared-home
+          emptyDir: {}

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "confluence.fullname" . }}
+  name: {{ include "crowd.fullname" . }}
   labels:
-    {{- include "confluence.labels" . | nindent 4 }}
+    {{- include "crowd.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "confluence.fullname" . }}
+  serviceName: {{ include "crowd.fullname" . }}
   selector:
     matchLabels:
-      {{- include "confluence.selectorLabels" . | nindent 6 }}
+      {{- include "crowd.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -17,20 +17,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "confluence.selectorLabels" . | nindent 8 }}
+        {{- include "crowd.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "confluence.serviceAccountName" . }}
+      serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: 1
-      {{ if .Values.confluence.securityContext.enabled }}
+      {{ if .Values.crowd.securityContext.enabled }}
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: {{ .Values.confluence.securityContext.gid }}
+        fsGroup: {{ .Values.crowd.securityContext.gid }}
       {{ end }}
-      hostAliases:
-        {{- with .Values.additionalHosts }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
       initContainers:
         {{- with .Values.additionalInitContainers }}
         {{- toYaml . | nindent 8 }}
@@ -50,34 +46,34 @@ spec:
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
       containers:
-        - name: confluence
-          image: {{ include "confluence.image" . | quote }}
+        - name: crowd
+          image: {{ include "crowd.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.confluence.ports.http }}
+              containerPort: {{ .Values.crowd.ports.http }}
               protocol: TCP
             - name: hazelcast
-              containerPort: {{ .Values.confluence.ports.hazelcast }}
+              containerPort: {{ .Values.crowd.ports.hazelcast }}
               protocol: TCP
           readinessProbe:
             httpGet:
-              port: {{ .Values.confluence.ports.http }}
-              path: {{ .Values.confluence.service.contextPath }}/status
-            initialDelaySeconds: {{ .Values.confluence.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.confluence.readinessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.confluence.readinessProbe.failureThreshold }}
-          {{- with .Values.confluence.resources.container }}
+              port: {{ .Values.crowd.ports.http }}
+              path: /
+            initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
+          {{- with .Values.crowd.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- include "confluence.volumeMounts" . | nindent 12 }}
-            {{- with .Values.confluence.additionalVolumeMounts }}
+            {{- include "crowd.volumeMounts" . | nindent 12 }}
+            {{- with .Values.crowd.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- include "confluence.additionalLibraries" . | nindent 12 }}
-            {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
+            {{- include "crowd.additionalLibraries" . | nindent 12 }}
+            {{- include "crowd.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
             - name: {{ .name }}-{{$i}}
               mountPath: {{ .mountPath }}/{{ .key }}
@@ -90,48 +86,30 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
-            {{ if .Values.confluence.service.contextPath }}
-            - name: ATL_TOMCAT_CONTEXTPATH
-              value: {{ .Values.confluence.service.contextPath | quote }}
-            {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
-              value: {{ .Values.confluence.accessLog.enabled | quote }}
+              value: {{ .Values.crowd.accessLog.enabled | quote }}
             - name: UMASK
-              value: {{ .Values.confluence.umask | quote }}
+              value: {{ .Values.crowd.umask | quote }}
             - name: SET_PERMISSIONS
-              value: {{ .Values.confluence.setPermissions | quote }}
+              value: "false"
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
-            - name: JVM_SUPPORT_RECOMMENDED_ARGS
-              valueFrom:
-                configMapKeyRef:
-                  key: additional_jvm_args
-                  name: {{ include "confluence.fullname" . }}-jvm-config
-            {{- include "confluence.clusteringEnvVars" . | nindent 12 }}
-            {{- include "confluence.databaseEnvVars" . | nindent 12 }}
-            {{ with .Values.confluence.license.secretName }}
-            - name: ATL_LICENSE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ . }}
-                  key: {{ $.Values.confluence.license.secretKey }}
-            {{ end }}
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "confluence.fullname" . }}-jvm-config
+                  name: {{ include "crowd.fullname" . }}-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "confluence.fullname" . }}-jvm-config
+                  name: {{ include "crowd.fullname" . }}-jvm-config
             - name: JVM_RESERVED_CODE_CACHE_SIZE
               valueFrom:
                 configMapKeyRef:
                   key: reserved_code_cache
-                  name: {{ include "confluence.fullname" . }}-jvm-config
-            {{- with .Values.confluence.additionalEnvironmentVariables }}
+                  name: {{ include "crowd.fullname" . }}-jvm-config
+            {{- with .Values.crowd.additionalEnvironmentVariables }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
         {{- include "fluentd.container" . | nindent 8 }}
@@ -159,6 +137,6 @@ spec:
               - key: {{ .key }}
                 path: {{ .key }}
         {{ end }}
-        {{ include "confluence.volumes" . | nindent 8 }}
+        {{ include "crowd.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
-  {{ include "confluence.volumeClaimTemplates" . | nindent 2 }}
+  {{ include "crowd.volumeClaimTemplates" . | nindent 2 }}
