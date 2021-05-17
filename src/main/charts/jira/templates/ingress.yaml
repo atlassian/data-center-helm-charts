@@ -30,7 +30,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: "/"
+          - path: {{ .Values.ingress.path }}
             backend:
               serviceName: {{ include "jira.fullname" $ }}
               servicePort: {{ $.Values.jira.service.port }}
