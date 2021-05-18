@@ -14,4 +14,3 @@ data:
     {{- end }}
   max_heap: {{ .Values.crowd.resources.jvm.maxHeap }}
   min_heap: {{ .Values.crowd.resources.jvm.minHeap }}
-  reserved_code_cache: {{ .Values.crowd.resources.jvm.reservedCodeCache }}
