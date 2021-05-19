@@ -24,7 +24,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
-    -XX:ActiveProcessorCount=1
+    -XX:ActiveProcessorCount=2
   max_heap: 1g
   min_heap: 512m
 ---

@@ -27,7 +27,7 @@ data:
     -Dcrowd.cluster.hazelcast.listenPort=5701
     -Dcrowd.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
-    -XX:ActiveProcessorCount=1
+    -XX:ActiveProcessorCount=2
   max_heap: 768m
   min_heap: 384m
 ---

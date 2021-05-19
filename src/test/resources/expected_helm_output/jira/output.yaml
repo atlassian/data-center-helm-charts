@@ -25,7 +25,7 @@ metadata:
 data:
   additional_jvm_args: >-
     -Datlassian.logging.cloud.enabled=false
-    -XX:ActiveProcessorCount=1
+    -XX:ActiveProcessorCount=2
   max_heap: 768m
   min_heap: 384m
   reserved_code_cache: 512m
