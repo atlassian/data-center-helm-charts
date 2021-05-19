@@ -71,6 +71,10 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
   serviceName: unittest-bitbucket
   selector:
     matchLabels:
@@ -129,6 +133,10 @@ spec:
               cpu: "1"
               memory: 2G
           env:
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: SERVER_SCHEME
               value: "https"
             - name: SERVER_SECURE
