@@ -139,6 +139,8 @@ ingress:
   maxBodySize: 10m
   # -- The fully-qualified hostname of the Ingress Resource.
   host:
+  # -- The base path for the ingress rule.
+  path: "/"
   # -- The custom annotations that should be applied to the Ingress
   # Resource when not using the Kubernetes ingress-nginx controller.
   annotations: {}
