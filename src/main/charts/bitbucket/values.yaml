@@ -122,7 +122,7 @@ bitbucket:
     #    memory: "2G"
       requests:
         # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
-        cpu: "1"
+        cpu: "2"
         memory: "2G"
 
   # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties

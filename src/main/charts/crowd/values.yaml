@@ -92,7 +92,7 @@ crowd:
     #    cpu: "1"
     #    memory: "1G"
       requests:
-        cpu: "1"
+        cpu: "2"
         memory: "1G"
 
   # -- Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g. system properties
