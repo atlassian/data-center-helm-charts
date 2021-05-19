@@ -30,7 +30,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: "/setup"
+          - path: "{{ .Values.ingress.path }}/setup"
             backend:
               serviceName: {{ include "confluence.fullname" . }}
               servicePort: {{ $.Values.confluence.service.port }}

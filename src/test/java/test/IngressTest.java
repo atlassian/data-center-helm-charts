@@ -28,13 +28,17 @@ class IngressTest {
     void ingress_create(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
-                "ingress.host", "myhost.mydomain"));
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/mypath"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
 
         for (KubeResource ingress : ingresses) {
             assertThat(ingress.getNode("spec", "rules").required(0).path("host"))
                     .hasTextContaining("myhost.mydomain");
+
+            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                    .hasTextContaining("/mypath");
 
             assertThat(ingress.getMetadata().path("annotations"))
                     .isObject(Map.of("kubernetes.io/ingress.class", "nginx"));

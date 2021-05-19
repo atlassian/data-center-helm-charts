@@ -30,7 +30,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: "/"
+          - path: {{ .Values.ingress.path }}
             backend:
               serviceName: {{ include "bitbucket.fullname" $ }}
               servicePort: {{ $.Values.bitbucket.service.port }}
