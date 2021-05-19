@@ -117,7 +117,7 @@ spec:
             failureThreshold: 30
           resources:
             requests:
-              cpu: "1"
+              cpu: "2"
               memory: 1G
           volumeMounts:
             - name: local-home
