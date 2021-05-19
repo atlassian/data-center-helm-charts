@@ -104,7 +104,7 @@ bitbucket:
 
   resources:
     jvm:
-      # -- JVM memory arguments below are based on the defaults defined for the Jira docker container, see:
+      # -- JVM memory arguments below are based on the defaults defined for the Bitbucket docker container, see:
       # https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/
       #
       # -- The maximum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the Elasticsearch JVM.
