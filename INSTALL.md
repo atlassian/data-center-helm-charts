@@ -132,6 +132,7 @@ products to work correctly in a multi-node configuration). Here is the syntax fo
 ```
 kubectl scale statefulsets <statefulsetset-name> --replicas=n
 ```
+For details on the `cpu` and `memory` requirements of the product `StatfulSets` see [Resource requests and limits](docs/resource_management/RESOURCE_SCALING.md) 
 
 # Rolling Upgrade
 
