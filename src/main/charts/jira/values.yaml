@@ -99,13 +99,13 @@ jira:
     # It is important that if the memory resources are specified here, they must allow for the size of the Jira JVM.
     # That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated.
     # Allowing for (maxHeap+codeCache)*1.5 would be an example.
-    container: {}
-    #  limits:
-    #    cpu: "4"
-    #    memory: "2G"
-    #  requests:
-    #    cpu: "4"
-    #    memory: "2G"
+    container: 
+      limits:
+        cpu: "4"
+        memory: "2G"
+      requests:
+        cpu: "4"
+        memory: "2G"
 
   # -- Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. system properties
   additionalJvmArgs:

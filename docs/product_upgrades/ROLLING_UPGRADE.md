@@ -24,7 +24,7 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
 ```  
 
 ## BitBucket Rolling Upgrade
-To learn about rolling upgrade in Bitbucket see [Bitbucket RollingUpgrade](bitbucket-upgrade.md)
+To learn about rolling upgrade in Bitbucket see [Bitbucket RollingUpgrade](BITBUCKET_UPGRADE.md)
 
 ## Confluence Rolling Upgrade
-To learn about rolling upgrade in Confluence see [Confluence RollingUpgrade](confluence-upgrade.md)
+To learn about rolling upgrade in Confluence see [Confluence RollingUpgrade](CONFLUENCE_UPGRADE.md)

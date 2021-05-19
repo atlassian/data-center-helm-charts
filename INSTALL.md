@@ -137,7 +137,7 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 
 You can upgrade to a patch version of the application with zero downtime.
 
-See [Rolling Upgrade](docs/RollingUpgrade.md) for more details. 
+See [Rolling Upgrade](docs/product_upgrades/ROLLING_UPGRADE.md) for more details. 
 
 # OpenShift Support
 
