@@ -1,8 +1,6 @@
 # Resource requests and limits
 To ensure that Kubernetes appropriately schedules resources, the respective product `values.yaml` are configured with default `cpu` and `memory` [resource request values](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-:warning: The default values defined in the product `values.yaml` are representative of small product workloads. For larger workloads please see<?LINK IN NASSER>
-
 ## Resource requests
 The default resource request that are used for each product are defined below. Using the [formula](#Memory-request-sizing), the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
 
