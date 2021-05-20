@@ -9,7 +9,7 @@ A chart for installing Confluence Data Center on Kubernetes
 ## Source Code
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
-* <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server>
+* <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/>
 
 ## Requirements
 
@@ -21,9 +21,9 @@ Kubernetes: `>=1.17.x-0`
 |-----|------|---------|-------------|
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Confluence pods |
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container configMap and secret are two available types (camelCase is important!) mountPath is a destination directory in a container and key is file name name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position, for example custom-config-0, keystore-2 |
+| additionalHosts | list | `[]` |  |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Confluence pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
-| additionalHosts | list | `[]` | Additional hosts that should added to each pod's /etc/hosts file |
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Confluence and Synchrony pods |
 | confluence.accessLog.enabled | bool | `true` | True if access logging should be enabled. |
 | confluence.accessLog.localHomeSubPath | string | `"logs"` | The subdirectory within the local-home volume where access logs should be stored. |
@@ -31,11 +31,11 @@ Kubernetes: `>=1.17.x-0`
 | confluence.additionalBundledPlugins | list | `[]` | Specifies a list of additional Confluence plugins that should be added to the Confluence container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | confluence.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Confluence container. See https://hub.docker.com/r/atlassian/confluence-server for supported variables. |
 | confluence.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. system properties |
-| confluence.jvmDebug.enabled | bool | `false` | If set to `true`, Confluence JVM will be started in debug mode (on port 5005). Kubernetes port forwarding feature could be used to attach a debugger to the JVM. |
 | confluence.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Confluence container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | confluence.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | confluence.clustering.usePodNameAsClusterNodeName | bool | `true` | Set to true if the Kubernetes pod name should be used as the end-user-visible name of the Data Center cluster node. |
+| confluence.jvmDebug.enabled | bool | `false` | If set to true, Confluence JVM will be started with debugging port 5005 open. |
 | confluence.license.secretKey | string | `"license-key"` | The key in the Kubernetes Secret which contains the Confluence license key |
 | confluence.license.secretName | string | `nil` | The name of the Kubernetes Secret which contains the Confluence license key. If specified, then the license will be automatically populated during Confluence setup. Otherwise, it will need to be provided via the browser after initial startup. |
 | confluence.ports.hazelcast | int | `5701` | The port on which the Confluence container listens for Hazelcast traffic |
@@ -77,6 +77,7 @@ Kubernetes: `>=1.17.x-0`
 | ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
 | ingress.maxBodySize | string | `"10m"` | The max body size to allow. Requests exceeding this size will result in an 413 error being returned to the client. https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size |
 | ingress.nginx | bool | `true` | True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller: https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller. Set to false if a different controller is to be used, in which case the appropriate annotations for that controller need to be specified. |
+| ingress.path | string | `"/"` | The base path for the ingress rule. |
 | ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
 | nodeSelector | object | `{}` | Standard Kubernetes node-selectors that will be applied to all Confluence and Synchrony pods |
 | podAnnotations | object | `{}` | Specify additional annotations to be added to all Confluence and Synchrony pods |
