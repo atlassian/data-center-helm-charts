@@ -9,7 +9,7 @@ A chart for installing Jira Data Center on Kubernetes
 ## Source Code
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
-* <https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/>
+* <https://bitbucket.org/atlassian-docker/docker-atlassian-jira/>
 
 ## Requirements
 
@@ -48,6 +48,7 @@ Kubernetes: `>=1.17.x-0`
 | ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
 | ingress.maxBodySize | string | `"10m"` | The max body size to allow. Requests exceeding this size will result in an 413 error being returned to the client. https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size |
 | ingress.nginx | bool | `true` | True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller: https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller. Set to false if a different controller is to be used, in which case the appropriate annotations for that controller need to be specified. |
+| ingress.path | string | `"/"` | The base path for the ingress rule. |
 | ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
 | jira.accessLog.localHomeSubPath | string | `"log"` | The subdirectory within the local-home volume where access logs should be stored. |
 | jira.accessLog.mountPath | string | `"/opt/atlassian/jira/logs"` | The path within the Jira container where the local-home volume should be mounted in order to capture access logs. |
