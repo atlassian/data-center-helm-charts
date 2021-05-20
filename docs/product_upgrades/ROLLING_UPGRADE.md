@@ -23,7 +23,7 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
     type: OnDelete
 ```  
 
-## BitBucket Rolling Upgrade
+## Bitbucket Rolling Upgrade
 To learn about rolling upgrade in Bitbucket see [Bitbucket RollingUpgrade](BITBUCKET_UPGRADE.md)
 
 ## Confluence Rolling Upgrade

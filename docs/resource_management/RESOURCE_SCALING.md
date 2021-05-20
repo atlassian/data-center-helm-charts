@@ -1,13 +1,13 @@
 # Scaling The Products
-To run the product in high performance and stable in Kubernetes, the infrastructure should configure properly. This will 
-happen by combination of defining the resource request for each pod the number of pods in the product cluster. 
+To run the product stable and smooth in Kubernetes, the infrastructure should be configured properly. This will 
+happen by combination of proper resource requests for each pod the number of pods in the product cluster. 
 
-The default values in the provided helm chart is designed to handle small datasets. 
-To keep the performance steady the product should scale up based on size of dataset. 
+The default values in the provided helm charts are defined based on handling the small datasets. 
+To keep the performance steady the product should scale up based on the size of dataset. 
 Here is [Data Center infrastructure recommendations](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html) 
  for enterprise size of products on AWS. This can give an idea for scaling the infrastructure in Kubernetes. 
  
-Scaling product can be done by adding the number of pods that run the product within the cluster(horizontal scaling) 
+Scaling the product can be done by adding the number of pods that run the product within the cluster(horizontal scaling) 
 and/or increasing the resources of each pod that run the product(vertical scaling).
    
 
@@ -21,9 +21,9 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 ```
 For details on the `cpu` and `memory` requirements of the product `StatfulSets` see [Resource requests and limits](#resource-requests-and-limits) 
 
-##Vertical Scaling
+## Vertical Scaling
 Vertical Scaling is possible by changing the attributed resources (cpu and memory request/limit) of each node in the cluster. 
-Notice scaling up/down a living pod will result by terminating the existed pod and replace by a new pod with the scaled 
+Notice scaling up/down a living pod will result by terminating the existing pod and replacing it with a new pod with the scaled 
 resources. 
 
 ### Resource requests and limits
