@@ -29,9 +29,10 @@ data:
     -Dsynchrony.by.default.enable.collab.editing.if.manually.managed=true
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
+    -XX:ActiveProcessorCount=2
   max_heap: 1g
   min_heap: 1g
-  reserved_code_cache: 512m
+  reserved_code_cache: 256m
 ---
 # Source: confluence/templates/service.yaml
 apiVersion: v1
@@ -118,6 +119,10 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2G
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/confluence"

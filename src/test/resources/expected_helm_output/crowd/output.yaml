@@ -27,9 +27,9 @@ data:
     -Dcrowd.cluster.hazelcast.listenPort=5701
     -Dcrowd.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
-  max_heap: 1g
-  min_heap: 1g
-  reserved_code_cache: 512m
+    -XX:ActiveProcessorCount=2
+  max_heap: 768m
+  min_heap: 384m
 ---
 # Source: crowd/templates/service.yaml
 apiVersion: v1
@@ -115,6 +115,10 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
+          resources:
+            requests:
+              cpu: "2"
+              memory: 1G
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/crowd"
@@ -145,11 +149,6 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: unittest-crowd-jvm-config
-            - name: JVM_RESERVED_CODE_CACHE_SIZE
-              valueFrom:
-                configMapKeyRef:
-                  key: reserved_code_cache
                   name: unittest-crowd-jvm-config
       volumes:
         - name: local-home
