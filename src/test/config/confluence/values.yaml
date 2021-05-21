@@ -7,10 +7,7 @@ confluence:
     secretName: confluence-license
   additionalJvmArgs:
     - -Datlassian.allow.insecure.url.parameter.login=true
-  resources:
-    container:
-      requests:
-        memory: 2G
+    - -XX:ActiveProcessorCount=1
   accessLog:
     enabled: true
 

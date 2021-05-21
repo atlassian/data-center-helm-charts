@@ -24,8 +24,9 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
+    -XX:ActiveProcessorCount=2
   max_heap: 1g
-  min_heap: 1g
+  min_heap: 512m
 ---
 # Source: bitbucket/templates/service.yaml
 apiVersion: v1
@@ -127,6 +128,10 @@ spec:
               mountPath: "/var/atlassian/application-data/bitbucket"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2G
           env:
             - name: KUBE_POD_NAME
               valueFrom:
