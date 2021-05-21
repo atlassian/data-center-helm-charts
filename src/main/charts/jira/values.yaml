@@ -149,7 +149,7 @@ ingress:
   # -- The max body size to allow. Requests exceeding this size will result
   # in an 413 error being returned to the client.
   # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
-  maxBodySize: 10m
+  maxBodySize: 250m
   # -- The fully-qualified hostname of the Ingress Resource.
   host:
   # -- The custom annotations that should be applied to the Ingress 
