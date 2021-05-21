@@ -11,7 +11,7 @@ image:
 
 serviceAccount:
   # -- Specifies the name of the ServiceAccount to be used by the pods.
-  # If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
+  # If not specified, but the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
   # otherwise the 'default' ServiceAccount will be used.
   name:
   # -- true if a ServiceAccount should be created, or false if it already exists
@@ -22,13 +22,13 @@ serviceAccount:
 database:
   # -- The type of database being used.
   # Valid values include 'postgres72', 'mysql57', 'mysql8', 'oracle10g', 'mssql', 'postgresaurora96'
-  # If not specified, then it will need to be provided via browser during initial startup.
+  # If not specified, then it will need to be provided via the browser during initial startup.
   type:
   # -- The JDBC URL of the database to be used by Jira, e.g. jdbc:postgresql://host:port/database
-  # If not specified, then it will need to be provided via browser during initial startup.
+  # If not specified, then it will need to be provided via the browser during initial startup.
   url:
   # -- The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver
-  # If not specified, then it will need to be provided via browser during initial startup.
+  # If not specified, then it will need to be provided via the browser during initial startup.
   driver:
   credentials:
     # -- The name of the Kubernetes Secret that contains the database login credentials.
@@ -63,7 +63,7 @@ jira:
   readinessProbe:
     # -- The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running
     initialDelaySeconds: 10
-    # -- How often (in seconds) the Jira container readiness robe will run
+    # -- How often (in seconds) the Jira container readiness probe will run
     periodSeconds: 5
     # -- The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks
     failureThreshold: 30
@@ -80,11 +80,11 @@ jira:
     enabled: false
 
   license:
-    # -- The name of the Kubernetes Secret which contains the Jira license key.
+    # -- The name of the Kubernetes Secret that contains the Jira license key.
     # If specified, then the license will be automatically populated during Jira setup.
     # Otherwise, it will need to be provided via the browser after initial startup.
     secretName:
-    # -- The key in the Kubernetes Secret which contains the Jira license key
+    # -- The key in the Kubernetes Secret that contains the Jira license key
     secretKey: license-key
 
   resources:
@@ -113,7 +113,7 @@ jira:
 #    - -Dfruit=lemon
 
   # -- Specifies a list of additional Java libraries that should be added to the Jira container.
-  # Each item in the list should specify the name of the volume which contain the library, as well as the name of the
+  # Each item in the list should specify the name of the volume that contains the library, as well as the name of the
   # library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which
   # directory in the volume contains the library file.
   additionalLibraries: []
@@ -164,9 +164,9 @@ ingress:
   tlsSecretName:
 
 fluentd:
-  # -- True if the fluentd sidecar should be added to each pod
+  # -- True if the Fluentd sidecar should be added to each pod
   enabled: false
-  # -- True if a custom config should be used for fluentd
+  # -- True if a custom config should be used for Fluentd
   customConfigFile: false
   # -- Custom fluent.conf file
   # fluent.conf: |
@@ -183,18 +183,18 @@ fluentd:
     #   tag jira-access-logs
     # </source>
 
-  # -- The name of the image containing the fluentd sidecar
+  # -- The name of the image containing the Fluentd sidecar
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
-  # -- The port on which the fluentd sidecar will listen
+  # -- The port on which the Fluentd sidecar will listen
   httpPort: 9880
   elasticsearch:
-    # -- True if fluentd should send all log events to an elasticsearch service.
+    # -- True if Fluentd should send all log events to an Elasticsearch service.
     enabled: true
-    # -- The hostname of the Elasticsearch service that fluentd should send logs to.
+    # -- The hostname of the Elasticsearch service that Fluentd should send logs to.
     hostname: elasticsearch
-    # -- The prefix of the elasticsearch index name that will be used
+    # -- The prefix of the Elasticsearch index name that will be used
     indexNamePrefix: jira
-  # -- Specify custom volumes to be added to fluentd container (e.g. more log sources)
+  # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
   extraVolumes: []
   # - name: local-home
   #   mountPath: /opt/atlassian/jira/logs
@@ -217,7 +217,7 @@ volumes:
         requests:
           storage: 1Gi
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
-    # volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
+    # volume that will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
     customVolume: {}
     # -- Specifies the path in the Jira container to which the local-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/jira"
@@ -232,11 +232,11 @@ volumes:
         requests:
           storage: 1Gi
     # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
-    # volume which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
+    # volume, which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
     customVolume: {}
     # -- Specifies the path in the Jira container to which the shared-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/shared-home"
-    # -- Specifies the sub-directory of the shared-home volume which will be mounted in to the Jira container.
+    # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the Jira container.
     subPath:
     nfsPermissionFixer:
       # -- If enabled, this will alter the shared-home volume's root directory so that Jira can write to it.
@@ -274,8 +274,8 @@ additionalLabels: {}
 # -- Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container
 # configMap and secret are two available types (camelCase is important!)
 # mountPath is a destination directory in a container and key is file name
-# name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position,
-# for example custom-config-0, keystore-2
+# name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name and index position,
+# for example, custom-config-0, keystore-2
 additionalFiles: []
 #  - name: custom-config
 #    type: configMap
