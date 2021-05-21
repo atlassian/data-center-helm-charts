@@ -5,7 +5,7 @@ import io.vavr.collection.Array;
 import io.vavr.collection.Seq;
 
 /**
- * Reprents a single Kubernetes resource descriptor.
+ * Represents a single Kubernetes resource descriptor.
  */
 public class KubeResource {
     private final Kind kind;

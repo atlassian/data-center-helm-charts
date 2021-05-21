@@ -104,11 +104,6 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: {{ include "crowd.fullname" . }}-jvm-config
-            - name: JVM_RESERVED_CODE_CACHE_SIZE
-              valueFrom:
-                configMapKeyRef:
-                  key: reserved_code_cache
-                  name: {{ include "crowd.fullname" . }}-jvm-config
             {{- with .Values.crowd.additionalEnvironmentVariables }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

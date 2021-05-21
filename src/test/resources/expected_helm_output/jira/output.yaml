@@ -25,8 +25,9 @@ metadata:
 data:
   additional_jvm_args: >-
     -Datlassian.logging.cloud.enabled=false
-  max_heap: 1g
-  min_heap: 1g
+    -XX:ActiveProcessorCount=2
+  max_heap: 768m
+  min_heap: 384m
   reserved_code_cache: 512m
 ---
 # Source: jira/templates/service.yaml
@@ -139,6 +140,10 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2G
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/jira"

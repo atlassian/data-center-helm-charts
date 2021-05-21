@@ -15,6 +15,7 @@ bitbucket:
     secretName: bitbucket-sysadmin-credentials
   additionalJvmArgs:
     - -Dfeature.getting.started.page=false
+    - -XX:ActiveProcessorCount=1
   resources:
     container:
       requests:
