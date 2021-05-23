@@ -4,10 +4,8 @@ For optimum performance and stability the appropriate resource `requests` and `l
 ## Horizontal scaling
 The Helm charts provision one `StatefulSet` by default. The number of replicas within this StatefulSet can be altered either declaratively or intrinsically:
 
-:warning: The Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration
-
 #### Declaratively
-1. Update `values.yaml` by modifying the `replicaCount` appropriately
+1. Update `values.yaml` by modifying the `replicaCount` appropriately. Note that the Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration
 2. Apply the patch:
 ```shell
 helm upgrade <release> <chart> -f <values file>
