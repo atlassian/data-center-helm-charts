@@ -1,15 +1,27 @@
 # Product scaling
-For optimum performance and stability the appropriate resource `request` for each pod, and the number of pods in the product cluster should be carefully considered. Kubernetes provides a means for horizontally and vertically scaling the pods within a cluster, these approaches are described below.
+For optimum performance and stability the appropriate resource `requests` should be defined for each pod, and the number of pods in the product cluster should be carefully considered. Kubernetes provides means for horizontal and vertical scaling of the deployed pods within a cluster, these approaches are described below.
 
 ## Horizontal scaling
-The Helm charts provision one `StatefulSet` by default. In order to horizontally scale up or down the cluster `kubectl scale` can be used at runtime to provision a multi-node Data Center cluster, with no further configuration required (although note that the Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration). Here is the syntax for scaling up/down the Data Center cluster:
+The Helm charts provision one `StatefulSet` by default. In order to horizontally scale up or down the cluster `kubectl scale` can be used at runtime to provision a multi-node Data Center cluster, with no further configuration required (note that the Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration). 
+
+The cluster can be scaled either declaratively or intrinsically:
+
+#### Declaratively
+1. Update `values.yaml` by modifying the `replicaCount` appropriately
+2. Apply the patch:
+```shell
+helm upgrade <release> <chart> -f <values file>
 ```
+
+#### Intrinsically
+```shell
 kubectl scale statefulsets <statefulsetset-name> --replicas=n
 ```
-For details on the `cpu` and `memory` requirements see [Resource requests and limits](#Resource-requests-and-limits) 
+
+For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see sections; [Vertical Scaling](#Vertical-scaling), and [Resource requests and limits](#Resource-requests-and-limits) below.
 
 ## Vertical scaling
-The resource `requests` and `limits` for a `StatefulSet` can be defined either post product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values
+The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
 
 ### Prior to deployment
 Before performing a helm install update the appropriate products `values.yaml` `container` stanza with the desired `requests` and `limits` values i.e. 
@@ -39,10 +51,10 @@ Using `kubectl edit` on the appropriate `StatefulSet` the respective `cpu` and `
 
 
 ## Resource requests and limits
-To ensure that Kubernetes appropriately schedules resources, the respective product `values.yaml` are configured with default `cpu` and `memory` [resource request values](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To ensure that Kubernetes appropriately schedules resources, the respective product `values.yaml` is configured with default `cpu` and `memory` [resource request values](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 #### Resource requests
-The default resource requests that are used for each product are defined below. Take note that these values are geared toward small data sets. For larger enterprise deployments refer to the data  enter infrastructure recommendations [here](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html) .  Using the [formula](#Memory-request-sizing), the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
+The default resource requests that are used for each product are defined below. Take note that these values are geared toward small data sets. For larger enterprise deployments refer to the data center infrastructure recommendations [here](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html). Using the [formula](#Memory-request-sizing), the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
 
 | Product  | CPU   |  Memory |
 |----------|:-----:|------:|
