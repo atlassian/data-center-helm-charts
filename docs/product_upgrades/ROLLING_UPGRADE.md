@@ -3,7 +3,7 @@
 ## Kubernetes update strategies
 Kubernetes provides two strategies to update applications managed by `statefulset` controllers:
 
-### RollingUpdate:
+### Rolling Update:
 The pods will be upgraded one by one until all pods run containers with the updated template. The upgrade is managed by 
 Kubernetes and the user has limited control during the upgrade process, after having modified the template. This is the default 
 upgrade strategy in Kubernetes. 
@@ -23,7 +23,7 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
     type: OnDelete
 ```  
 
-## BitBucket Rolling Upgrade
+## Bitbucket Rolling Upgrade
 To learn about rolling upgrade in Bitbucket see [Bitbucket RollingUpgrade](BITBUCKET_UPGRADE.md)
 
 ## Confluence Rolling Upgrade
