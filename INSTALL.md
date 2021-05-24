@@ -121,7 +121,7 @@ capability. Typically, this will be a NFS volume provided as part of your infras
 engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). While this entails a higher up-front setup effort, 
 it gives the best flexibility.
 
-See [CONFIG.md]() for examples of how to configure the volumes.
+See [CONFIG.md](CONFIG.md) for examples of how to configure the volumes.
 
 # Scaling Data Center
 
