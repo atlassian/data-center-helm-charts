@@ -7,7 +7,7 @@ jira:
     - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
     - -Djira.websudo.is.disabled=true 
     - -Datlassian.allow.insecure.url.parameter.login=true
-    - -XX:ActiveProcessorCount=1
+    - -XX:ActiveProcessorCount=2
 database:
   type: postgres72
   url: jdbc:postgresql://${helm.release.prefix}-jira-pgsql:5432/jira
