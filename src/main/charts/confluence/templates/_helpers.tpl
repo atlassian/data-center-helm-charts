@@ -220,6 +220,21 @@ For each additional library declared, generate a volume mount that injects that 
 {{- end }}
 
 {{/*
+For each additional Synchrony library declared, generate a volume mount that injects that library into the Confluence lib directory
+*/}}
+{{- define "synchrony.additionalLibraries" -}}
+{{- range .Values.synchrony.additionalLibraries }}
+- name: {{ .volumeName }}
+  mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/lib/{{ .fileName }}"
+  {{- if .subDirectory }}
+  subPath: {{ printf "%s/%s" .subDirectory .fileName | quote }}
+  {{- else }}
+  subPath: {{ .fileName | quote }}
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
 For each additional plugin declared, generate a volume mount that injects that library into the Confluence plugins directory
 */}}
 {{- define "confluence.additionalBundledPlugins" -}}
