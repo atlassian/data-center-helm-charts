@@ -4,28 +4,38 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md) 
 [![Maven unit tests](https://github.com/atlassian-labs/data-center-helm-charts/actions/workflows/maven.yml/badge.svg)](https://github.com/atlassian-labs/data-center-helm-charts/actions/workflows/maven.yml)
 
-This project contains [Helm charts](https://helm.sh/) for Atlassian's [Data Center products](https://www.atlassian.com/enterprise/data-center).
-The charts will allow the Data Center products to be easily installed and operated within a Kubernetes cluster,
-whether it be a managed environment such as Amazon EKS, or a custom, on-premise system.
+This project contains [Helm charts](https://helm.sh/) for installing Atlassian's [Jira Data Center](https://www.atlassian.com/enterprise/data-center/jira), [Confluence Data Center](https://www.atlassian.com/enterprise/data-center/confluence), and [Bitbucket Data Center](https://www.atlassian.com/enterprise/data-center/bitbucket) on [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/). 
 
-This project contains [Helm charts] for installing Atlassian's Jira Data Center, Confluence Data Center, and Bitbucket Data Center on Kubernetes. 
+Use the charts to easily install and operate Data Center products within a Kubernetes cluster of your choice. It can be a managed environment, such as Amazon EKS and Azure Kubernetes Service (AKS), or a custom on-premise system.
 
 ## Support disclaimer
 
-These charts are **experimental and unsupported**, with the aim of introducing official support once they have been
+These Helm charts are **experimental and unsupported**, with the goal of introducing official support once they have been
 stabilized.
+
+The platforms documented on [PLATFORMS.md](docs/PLATFORMS.md) **are not officially supported** as part of the Atlassian Data Center products, and should be used only as examples.
+
+The functionality described in [LOGGING.md](docs/LOGGING.md) **is not officially supported**, use it as an example only.
 
 If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
 
-## Installation
 
-[Installation guide](INSTALL.md) - To install helm charts, please follow separate installation document.
+## Deployment
 
-[Configuration guide](CONFIG.md) - For more details about configuration parameters.
+* [Prerequisites and setup guide](docs/PREREQUISITES.md) - make sure you have everything you need before installing the Helm charts
+* [Configuration guide](docs/CONFIGURATION.md) - for details about configuration parameters
+* [Installation guide](docs/INSTALLATION.md) - the steps to install the Helm charts
+* [Operation guide](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
+* [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
+* [Examples](docs/examples)
+  * [How to deploy an EFK stack to Kubernetes](docs/examples/LOGGING.md)
+  * [Implementation for an NFS Server for Bitbucket](docs/examples/NFS_BITBUCKET.md)
+  
 
 ## Contributions
 
 Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details. 
+
 
 ## License
 
