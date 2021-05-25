@@ -76,7 +76,7 @@ spec:
             name: {{ include "synchrony.fullname" . }}-entrypoint
             defaultMode: 0744
         {{ include "confluence.volumes.sharedHome" . | nindent 8 }}
-        { { - with .Values.volumes.additional } }
-        { { - toYaml . | nindent 8 } }
-        { { - end } }
+        {{ with .Values.volumes.additional }}
+        {{ toYaml . | nindent 8 }}
+        {{ end }}
 {{ end }}
