@@ -8,6 +8,8 @@ This project contains [Helm charts](https://helm.sh/) for Atlassian's [Data Cent
 The charts will allow the Data Center products to be easily installed and operated within a Kubernetes cluster,
 whether it be a managed environment such as Amazon EKS, or a custom, on-premise system.
 
+This project contains [Helm charts] for installing Atlassian's Jira Data Center, Confluence Data Center, and Bitbucket Data Center on Kubernetes. 
+
 ## Support disclaimer
 
 These charts are **experimental and unsupported**, with the aim of introducing official support once they have been
