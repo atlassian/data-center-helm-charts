@@ -121,23 +121,17 @@ capability. Typically, this will be a NFS volume provided as part of your infras
 engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). While this entails a higher up-front setup effort, 
 it gives the best flexibility.
 
-See [CONFIG.md]() for examples of how to configure the volumes.
+See [CONFIG.md](CONFIG.md) for examples of how to configure the volumes.
 
 # Scaling Data Center
 
-The Helm charts will provision one `StatefulSet`. In order to scale up or down the cluster `kubectl scale` can be used 
-at runtime to provision a multi-node Data Center cluster, with no further configuration required (although note
-that the Ingress must support cookie-based session affinity in order for the 
-products to work correctly in a multi-node configuration). Here is the syntax for scaling up/down the Data Center cluster:
-```
-kubectl scale statefulsets <statefulsetset-name> --replicas=n
-```
+To learn more about scale the Data Center see [Scaling The Products](docs/resource_management/RESOURCE_SCALING.md). 
 
 # Rolling Upgrade
 
 You can upgrade to a patch version of the application with zero downtime.
 
-See [Rolling Upgrade](docs/RollingUpgrade.md) for more details. 
+See [Rolling Upgrade](docs/product_upgrades/ROLLING_UPGRADE.md) for more details. 
 
 # OpenShift Support
 

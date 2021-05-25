@@ -7,7 +7,7 @@ confluence:
     secretName: confluence-license
   additionalJvmArgs:
     - -Datlassian.allow.insecure.url.parameter.login=true
-    - -XX:ActiveProcessorCount=1
+    - -XX:ActiveProcessorCount=2
   accessLog:
     enabled: true
 

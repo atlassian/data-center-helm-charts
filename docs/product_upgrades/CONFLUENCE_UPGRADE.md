@@ -15,7 +15,7 @@ Suppose we have a Confluence cluster with 3 nodes, all running `Confluence xx.xx
  ```
 3. From the admin page click on *Rolling Upgrade* and set the Confluence in Upgrade mode:
 
- ![upgrade-mode](./images/confluence-upgrade-1.png)
+ ![upgrade-mode](../images/confluence-upgrade-1.png)
 
 4. Run helm upgrade command with the desired number of nodes after upgrade (replicaCount):
  ```shell script
@@ -24,10 +24,10 @@ Suppose we have a Confluence cluster with 3 nodes, all running `Confluence xx.xx
 
 5. Upgrade will start by terminating one pod and creating a new pod with an updated version. 
 
- ![upgrade-mode](./images/confluence-upgrade-2.png)
+ ![upgrade-mode](../images/confluence-upgrade-2.png)
 
 6. After the new pod is up and running, the next pod will be upgraded until all pods are upgraded to the new version. 
 
 7. After all pods activated with the new version, finalize the upgrade:
 
-    ![upgrade-mode](./images/confluence-upgrade-3.png)
+    ![upgrade-mode](../images/confluence-upgrade-3.png)

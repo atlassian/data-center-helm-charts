@@ -35,7 +35,7 @@ spec:
               serviceName: {{ include "confluence.fullname" . }}
               servicePort: {{ $.Values.confluence.service.port }}
           {{ if .Values.synchrony.enabled }}
-          - path: "{{ .Values.ingress.path }}/synchrony"
+          - path: "{{ trimSuffix "/" .Values.ingress.path }}/synchrony"
             backend:
               serviceName: {{ include "synchrony.fullname" . }}
               servicePort: {{ $.Values.synchrony.service.port }}
