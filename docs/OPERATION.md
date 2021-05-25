@@ -76,10 +76,13 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
 ```  
 
 ### Bitbucket Rolling Upgrade
-To learn about rolling upgrade in Bitbucket see [Bitbucket RollingUpgrade](product_upgrades/BITBUCKET_UPGRADE.md)
+To learn about rolling upgrade in Bitbucket see [Bitbucket Rolling Upgrade](product_upgrades/BITBUCKET_UPGRADE.md)
 
 ### Confluence Rolling Upgrade
-To learn about rolling upgrade in Confluence see [Confluence RollingUpgrade](product_upgrades/CONFLUENCE_UPGRADE.md)
+To learn about rolling upgrade in Confluence see [Confluence Rolling Upgrade](product_upgrades/CONFLUENCE_UPGRADE.md)
+
+### Jira Rolling Upgrade
+To learn about rolling upgrade in Jira see [Jira Rolling Upgrade](product_upgrades/JIRA_UPGRADE.md)
 
 ## Examples
 ### Logging
