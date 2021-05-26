@@ -188,6 +188,14 @@ synchrony:
   # Confluence service will use to communicate directly with Synchrony, so the URL must be resovable both from inside and
   # outside the Kubernetes cluster.
   ingressUrl:
+  # -- Specifies a list of additional Java libraries that should be added to the Synchrony container.
+  # Each item in the list should specify the name of the volume which contain the library, as well as the name of the
+  # library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which
+  # directory in the volume contains the library file.
+  additionalLibraries: []
+#    - volumeName:
+#      subDirectory:
+#      fileName:
 
 ingress:
   # -- True if an Ingress Resource should be created.
@@ -201,7 +209,7 @@ ingress:
   # -- The max body size to allow. Requests exceeding this size will result
   # in an 413 error being returned to the client.
   # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
-  maxBodySize: 10m
+  maxBodySize: 250m
   # -- The fully-qualified hostname of the Ingress Resource.
   host:
   # -- The base path for the ingress rule.

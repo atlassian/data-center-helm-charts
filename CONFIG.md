@@ -160,6 +160,11 @@ If you're not using the `shared-home` volume, then you can declare your own cust
 volume in the "Additional Volumes" section below, then declare the libraries as above
 (but with your custom volume name).
 
+## Request body size
+By default the maximum allowed size for the request body is set to 250MB. If the size in a request exceeds the maximum 
+size of the client request body, an 413 error will be returned to the client. If the maximum request body can be 
+configured by changing the value of `maxBodySize` in 'values.yaml'.
+
 ## Resources
 
 The Helm charts allow you to specify container-level CPU and memory resources,

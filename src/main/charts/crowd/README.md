@@ -1,6 +1,6 @@
 # crowd
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.3.0-jdk11](https://img.shields.io/badge/AppVersion-4.3.0--jdk11-informational?style=flat-square)
+![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.3.0-jdk11](https://img.shields.io/badge/AppVersion-4.3.0--jdk11-informational?style=flat-square)
 
 A chart for installing Crowd Data Center on Kubernetes
 
@@ -29,7 +29,8 @@ Kubernetes: `>=1.17.x-0`
 | crowd.accessLog.mountPath | string | `"/opt/atlassian/crowd/logs"` | The path within the Crowd container where the local-home volume should be mounted in order to capture access logs. |
 | crowd.additionalBundledPlugins | list | `[]` | Specifies a list of additional Crowd plugins that should be added to the Crowd container. These are specified in the same manner as the additionalLibraries field, but the files will be loaded as bundled plugins rather than as libraries. |
 | crowd.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Crowd container. See https://hub.docker.com/r/atlassian/crowd for supported variables. |
-| crowd.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g. system properties |
+| crowd.additionalJvmArgs | list | `["-XX:ActiveProcessorCount=2"]` | Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g. system properties |
+| crowd.additionalJvmArgs[0] | string | `"-XX:ActiveProcessorCount=2"` | The value defined for ActiveProcessorCount should correspond to that provided for 'container.requests.cpu' see: https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE |
 | crowd.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Crowd container. Each item in the list should specify the name of the volume which contain the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. |
 | crowd.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Crowd container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | crowd.clustering.enabled | bool | `false` | Set to true if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
@@ -39,10 +40,9 @@ Kubernetes: `>=1.17.x-0`
 | crowd.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks |
 | crowd.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Crowd container readiness probe, after which the probe will start running |
 | crowd.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container readiness robe will run |
-| crowd.resources.container | object | `{}` | Specifies the standard Kubernetes resource requests and/or limits for the Crowd container. It is important that if the memory resources are specified here, they must allow for the size of the Crowd JVM. That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example. |
-| crowd.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Crowd JVM |
-| crowd.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Crowd JVM |
-| crowd.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Crowd JVM code cache |
+| crowd.resources.container | object | `{"requests":{"cpu":"2","memory":"1G"}}` | Specifies the standard Kubernetes resource requests and/or limits for the Crowd container. It is important that if the memory resources are specified here, they must allow for the size of the Crowd JVM. That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated. Allowing for maxHeap * 1.5 would be an example. |
+| crowd.resources.jvm.maxHeap | string | `"768m"` | JVM memory arguments below are based on the defaults defined for the Crowd docker container, see: https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/ -- The maximum amount of heap memory that will be used by the Crowd JVM |
+| crowd.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Crowd JVM |
 | crowd.securityContext | object | `{"enabled":true,"gid":"2004"}` | Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2002. -- Disable when deploying to OpenShift, unless anyuid policy is attached to a service account |
 | crowd.securityContext.gid | string | `"2004"` | The GID used by the Crowd docker image |
 | crowd.service.port | int | `80` | The port on which the Crowd Kubernetes service will listen |
@@ -61,7 +61,7 @@ Kubernetes: `>=1.17.x-0`
 | ingress.create | bool | `false` | True if an Ingress Resource should be created. |
 | ingress.host | string | `nil` | The fully-qualified hostname of the Ingress Resource. |
 | ingress.https | bool | `true` | True if the browser communicates with the application over HTTPS. |
-| ingress.maxBodySize | string | `"10m"` | The max body size to allow. Requests exceeding this size will result in an 413 error being returned to the client. https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size |
+| ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an 413 error being returned to the client. https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size |
 | ingress.nginx | bool | `true` | True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller: https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller. Set to false if a different controller is to be used, in which case the appropriate annotations for that controller need to be specified. |
 | ingress.path | string | `"/"` | The base path for the ingress rule. |
 | ingress.tlsSecretName | string | `nil` | Secret that contains a TLS private key and certificate. Optional if Ingress Controller is configured to use one secret for all ingresses |
