@@ -61,7 +61,7 @@ spec:
 ```
 
 #### 3. Update values.yaml
-Update the `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 [above](2.-Create-Persistent-Volume-Claim)
+Update the `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 above
 
 ```yaml
 volumes:
@@ -71,7 +71,7 @@ volumes:
         claimName: "ebs-pvc" 
 ```
 
-:info:  Attaching multiple pods to a single EBS volume is not possible (a `Multi-Attach error for volume` will be raised) nor is it advised. As such you will need to create a separate EBS/PV/PVC for each additional pod that you want to add to the cluster. This is approach may suit single pod clusters but is obviously very cumbersome for multi pod clustered deployments. For such situations [dynamic provisioning](#Dynamic-provisioning) should be used.
+:information_source:  Attaching multiple pods to a single EBS volume is not possible (a `Multi-Attach error for volume` will be raised) nor is it advised. As such you will need to create a separate EBS/PV/PVC for each additional pod that you want to add to the cluster. This is approach may suit single pod clusters but is obviously very cumbersome for multi pod clustered deployments. For such situations [dynamic provisioning](#Dynamic-provisioning) should be used.
 
 ---
 
@@ -96,7 +96,7 @@ volumeBindingMode: WaitForFirstConsumer
 ```
 
 #### 2. Update values.yaml
-Update the `localHome` `storageClassName` value within `values.yaml` to the name of the Storage Class created in step 1 [above](1.-Create-Storage-Class)
+Update the `localHome` `storageClassName` value within `values.yaml` to the name of the Storage Class created in step 1 above
 
 ```yaml
 volumes:
