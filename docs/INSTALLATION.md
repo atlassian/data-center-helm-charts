@@ -1,3 +1,5 @@
+# Installation #
+
 Use these instructions to install your Atlassian product using the Helm charts. Make sure you have followed the [PREREQUISITES](docs/PREREQUISITES) guide before you proceed with the installation.
 
 #### 1. Add the Helm chart repository to your local Helm installation: ####
