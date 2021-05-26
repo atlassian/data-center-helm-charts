@@ -2,9 +2,9 @@
 
 ### Dislaimer
 
-**This not officially supported functionality**
+**This functionality is not officially supported.**
 
-The included examples are provided as is and are to be used as guidance on how a testing environment can be stood up. These exampes should not be used in production. 
+The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These exampes should not be used in production. 
 
 Before proceedding it is highly recommended that you understand your specific deployment needs and tailor your solution to them.
 
