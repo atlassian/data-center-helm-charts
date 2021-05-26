@@ -15,7 +15,7 @@ Additional details on static EFS provisioning can be found [here](https://github
 2. Create a Persistent Volume Claim
 3. Update `values.yaml` to utilise Persistent Volume Claim
 
-**1. Create Persistent Volume**
+#### 1. Create Persistent Volume
 Create a persistent volume for the pre-provisioned EFS filesystem by providing the `<efs-id>`. The EFS id can be identified using the CLI command below with the appropriate region
 
 ```yaml
@@ -46,7 +46,7 @@ spec:
     volumeHandle: <efs-id>
 ```
 
-**2. Create Persistent Volume Claim**
+#### 2. Create Persistent Volume Claim
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -63,8 +63,8 @@ spec:
       storage: 1Gi
 ```
 
-**3. Update values.yaml**
-Update `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 above
+#### 3. Update values.yaml
+Update the `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 [above](2.-Create-Persistent-Volume-Claim)
 
 ```yaml
 volumes:
@@ -89,7 +89,7 @@ Additional details on dynamic EFS provisioning can be found [here](https://githu
 1. Create a Storage Class
 2. Update `values.yaml` to utilise Storage Class
 
-**1. Create Storage Class**
+#### 1. Create Storage Class
 Create a Storage Class for the pre-provisioned EFS filesystem by providing the `<efs-id>`. The EFS id can be identified using the CLI command with appropriate region
 
 ```yaml
@@ -108,8 +108,8 @@ parameters:
   directoryPerms: "700"
 ```
 
-**2. Update values.yaml**
-Update `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 above
+#### 2. Update values.yaml
+Update the `localHome` `storageClassName` value within `values.yaml` to the name of the Storage Class created in step 1 [above](1.-Create-Storage-Class)
 
 ```yaml
 volumes:
@@ -122,5 +122,7 @@ volumes:
 ---
 
 # Resources
+Some useful resources on provisioning shared storage with the AWS CSI Driver
+
 - https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html
 - https://aws.amazon.com/blogs/containers/introducing-efs-csi-dynamic-provisioning/

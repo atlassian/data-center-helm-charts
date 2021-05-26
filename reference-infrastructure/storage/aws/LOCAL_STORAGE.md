@@ -15,7 +15,7 @@ Additional details on static EBS provisioning can be found [here](https://github
 2. Create a Persistent Volume Claim
 3. Update `values.yaml` to utilise Persistent Volume Claim
 
-**1. Create Persistent Volume**
+#### 1. Create Persistent Volume
 ```yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -42,9 +42,9 @@ spec:
                 - ap-southeast-2a
 ```
 
-Note that the use of node affinity. Because the EBS volume is created in `ap-southeast-2a` only a node in the same `AZ` can consume this persistent volume.
+Note the use of node affinity. Because the EBS volume is created in `ap-southeast-2a` only a node in the same `AZ` can consume this persistent volume.
 
-**2. Create Persistent Volume Claim**
+#### 2. Create Persistent Volume Claim
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -60,8 +60,8 @@ spec:
       storage: 1Gi
 ```
 
-**3. Update values.yaml**
-Update `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 above
+#### 3. Update values.yaml
+Update the `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 [above](2.-Create-Persistent-Volume-Claim)
 
 ```yaml
 volumes:
@@ -71,12 +71,12 @@ volumes:
         claimName: "ebs-pvc" 
 ```
 
-:warning: Multiple pods cannot attach to a single EBS volume, as such scaling the `StatefulSet` count from `1+n` will result in a `Multi-Attach error for volume` . For clustered deployments dynamic provisioning of EBS volumes is required. See [Dynamic storage](#Dynamic-storage)
+:info:  Attaching multiple pods to a single EBS volume is not possible (a `Multi-Attach error for volume` will be raised) nor is it advised. As such you will need to create a separate EBS/PV/PVC for each additional pod that you want to add to the cluster. This is approach may suit single pod clusters but is obviously very cumbersome for multi pod clustered deployments. For such situations [dynamic provisioning](#Dynamic-provisioning) should be used.
 
 ---
 
 ## Dynamic provisioning
-An example detailing how an EBS volumes can be created and consumed using dynamic provisioning.
+An example detailing how an EBS volume(s) can be created and consumed using dynamic provisioning.
 
 ### Pre-requisites
 1. [EBS](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) CSI driver is [installed](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) within the k8s cluster. Ensure that `enableVolumeScheduling=true` is set when installing, see [here](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/tree/master/examples/kubernetes/dynamic-provisioning) for additional details.
@@ -85,7 +85,7 @@ An example detailing how an EBS volumes can be created and consumed using dynami
 1. Create a Storage Class
 2. Update `values.yaml` to utilise Storage Class
 
-**1. Create Storage class**
+#### 1. Create Storage Class
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -95,8 +95,8 @@ provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
 ```
 
-**2. Update values.yaml**
-Update `localHome` `storageClassName` value within `values.yaml` to the name of the Storage Class created in step 1 above
+#### 2. Update values.yaml
+Update the `localHome` `storageClassName` value within `values.yaml` to the name of the Storage Class created in step 1 [above](1.-Create-Storage-Class)
 
 ```yaml
 volumes:
@@ -109,6 +109,8 @@ volumes:
 ---
 
 # Resources
+Some useful resources on provisioning local storage with the AWS CSI Driver
+
 - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
 - https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
 - https://aws.amazon.com/blogs/containers/introducing-efs-csi-dynamic-provisioning/
