@@ -54,7 +54,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: ebs-pv
-	volumeName: ebs-pv
+  volumeName: ebs-pv
   resources:
     requests:
       storage: 1Gi
