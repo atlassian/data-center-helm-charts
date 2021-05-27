@@ -30,7 +30,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The Ingress resource provided as part of the Helm charts is geared toward the [Kubernetes ingress-nginx controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
 
-   * Please refer to [CONFIGURATION.md](docs/CONFIGURATION.md) for more information about the Ingress Controller.
+   * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the Ingress Controller.
 
 4. Provision a database:
 
