@@ -15,7 +15,7 @@ stabilized.
 
 The platforms documented on [PLATFORMS.md](docs/PLATFORMS.md) **are not officially supported** as part of the Atlassian Data Center products, and should be used only as examples.
 
-The functionality described in [LOGGING.md](docs/LOGGING.md) **is not officially supported**, use it as an example only.
+All the functionality described in [examples](docs/examples) **is not officially supported**, use it as examples only.
 
 If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
 
@@ -28,8 +28,12 @@ If you find any issue or you have a feedback regarding the helm charts, please [
 * [Operation guide](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
 * [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
 * [Examples](docs/examples)
-  * [How to deploy an EFK stack to Kubernetes](docs/examples/LOGGING.md)
-  * [Implementation for an NFS Server for Bitbucket](docs/examples/NFS_BITBUCKET.md)
+  * [How to deploy an EFK stack to Kubernetes](docs/examples/logging/efk/EFK.md)
+  * [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
+  * [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md)
+  * [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)
+
+
   
 
 ## Contributions
