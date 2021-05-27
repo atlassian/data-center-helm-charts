@@ -1,3 +1,4 @@
+# Configuration #
 ## Namespace
 
 The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
