@@ -16,6 +16,12 @@ Additional details on static EBS provisioning can be found [here](https://github
 3. Update `values.yaml` to utilise Persistent Volume Claim
 
 #### 1. Create Persistent Volume
+Create a Persistent Volume for the pre-provisioned EBS by providing the `<ebs-volume-id>`. The EBS id can be identified using the CLI command with appropriate region
+
+```bash
+aws ec2 describe-volumes --query "Volumes[*].VolumeId" --region ap-southeast-2
+```
+
 ```yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -30,7 +36,7 @@ spec:
   storageClassName: ebs-pv
   csi:
     driver: ebs.csi.aws.com
-    volumeHandle: vol-01ced17b3b13299bc
+    volumeHandle: <ebs-volume-id>
     fsType: xfs
   nodeAffinity:
     required:
