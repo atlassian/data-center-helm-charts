@@ -52,7 +52,7 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
 
 #### 4. Test your deployed product ####
 
-Wait a few minutes to make sure the Kubernetes resources in the release are running, then test your deployed product:
+Make sure the service pod/s are running, then test your deployed product:
 
    `helm test <release-name> --logs -n --namespace <namespace>`
 
