@@ -11,6 +11,8 @@ data:
     #!/usr/bin/env bash
 
     java \
+       -Xss{{ .Values.synchrony.resources.jvm.stackSize }} -Xmx{{ .Values.synchrony.resources.jvm.maxHeap }} \
+       -XX:ActiveProcessorCount={{ .Values.synchrony.resources.container.requests.cpu }} \
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
        sql
