@@ -1,5 +1,5 @@
-# Prerequisites #
-## Requirements ##
+# Prerequisites 
+## Requirements 
 
 In order to deploy Atlassian’s Data Center products, the following is required:
 1. An understanding of Kubernetes and Helm concepts
@@ -8,7 +8,7 @@ In order to deploy Atlassian’s Data Center products, the following is required
 4. Helm v 3.3 or later
 5. Resource requests and limits for each product are detailed in [REQUESTS_AND_LIMITS.md](/docs/resource_management/REQUESTS_AND_LIMITS.md) 
 
-## Environment setup ##
+## Environment setup 
 
 Before installing the Data Center Helm charts you need to set up your environment:
 
