@@ -52,6 +52,12 @@ bitbucket:
     port: 80
     # -- The type of Kubernetes service to use for Bitbucket
     type: ClusterIP
+    annotations: {}
+  sshService:
+    enabled: false
+    port: 22
+    type: LoadBalancer
+    annotations: {}
   # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2003.
   # -- Disable when deploying to OpenShift, unless anyuid policy is attached to service account
   securityContext:
