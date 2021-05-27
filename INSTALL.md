@@ -32,7 +32,7 @@ by the Helm charts will expect to be present.
      - Ingress Controller annotations  
      - The request max body size 
    * The Internet-facing (see diagram below) load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
-   * :warning: When the [ingress-nginx](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) controller is sitting behind another L7 proxy / load balancer that is setting these headers `X-Forwarded-*`, ensure that the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option is applied to the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
+   * :warning: When the [ingress-nginx](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) controller is sitting behind another L7 proxy / load balancer that is setting these `X-Forwarded-*` headers, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
    * The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress
 
 ![ingress-architecture](./docs/images/ingress.png "Request routing via Ingress")
