@@ -22,8 +22,8 @@ If you find any issue or you have a feedback regarding the helm charts, please [
 
 ## Deployment
 
-* [Prerequisites and setup guide](docs/PREREQUISITES.md) - make sure you have everything you need before installing the Helm charts
-* [Configuration guide](docs/CONFIGURATION.md) - for details about configuration parameters
+* [Prerequisites and setup guide](docs/PREREQUISITES.md) - everything you need to do before installing the Helm charts
+* [Configuration guide](docs/CONFIGURATION.md) - details about configuration parameters
 * [Installation guide](docs/INSTALLATION.md) - the steps to install the Helm charts
 * [Operation guide](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
 * [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
