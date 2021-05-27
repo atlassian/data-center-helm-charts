@@ -1,6 +1,6 @@
 # Installation #
 
-Use these instructions to install your Atlassian product using the Helm charts. Make sure you have followed the [PREREQUISITES](docs/PREREQUISITES) guide before you proceed with the installation.
+Use these instructions to install your Atlassian product using the Helm charts. Make sure you have followed the [Prerequisites guide](PREREQUISITES.md) before you proceed with the installation.
 
 #### 1. Add the Helm chart repository to your local Helm installation: ####
 
@@ -62,3 +62,11 @@ Wait a few minutes to make sure the Kubernetes resources in the release are runn
 #### 5. Complete your product setup ####
 
 Open your product in a web browser. If your product is Bitbucket your setup is complete and you will get straight to the login page. For the rest of the products, complete the setup according to the instructions you will find on the product’s web page. 
+
+## Uninstall ##
+#### Uninstall your chosen product: ####
+ `helm uninstall <release-name> atlassian-data-center/<product>`
+
+   * `<release-name>` is the name you chose for your deployment
+
+   * `<product>` can be jira, confluence, bitbucket or crowd
