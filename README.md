@@ -6,7 +6,7 @@
 
 This project contains [Helm charts](https://helm.sh/) for installing Atlassian's [Jira Data Center](https://www.atlassian.com/enterprise/data-center/jira), [Confluence Data Center](https://www.atlassian.com/enterprise/data-center/confluence), and [Bitbucket Data Center](https://www.atlassian.com/enterprise/data-center/bitbucket) on [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/). 
 
-Use the charts to easily install and operate Data Center products within a Kubernetes cluster of your choice. It can be a managed environment, such as Amazon EKS and Azure Kubernetes Service (AKS), or a custom on-premise system.
+Use the charts to easily install and operate Data Center products within a Kubernetes cluster of your choice. It can be a managed environment, such as [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system.
 
 ## Support disclaimer
 
