@@ -46,7 +46,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The database service may be deployed within the same Kubernetes cluster as the Data Center product, or elsewhere.
 
-   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the **Database connectivity** section in [CONFIGURATION.md](docs/CONFIGURATION.md).
+   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the **Database connectivity** section in [CONFIGURATION.md](CONFIGURATION.md).
 
 5. Configure a shared-home volume:
 
@@ -56,6 +56,6 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
 
-   * Please refer to [CONFIGURATION.md](docs/CONFIGURATION.md) for more information about the volumes.
+   * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the volumes.
 
 You can now continue to the [installation guide](INSTALLATION.md), or dive deeper into the [configuration](CONFIGURATION.md) options.
