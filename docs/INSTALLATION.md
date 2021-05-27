@@ -1,8 +1,8 @@
-# Installation #
+# Installation 
 
 Use these instructions to install your Atlassian product using the Helm charts. Make sure you have followed the [Prerequisites guide](PREREQUISITES.md) before you proceed with the installation.
 
-#### 1. Add the Helm chart repository to your local Helm installation: ####
+#### 1. Add the Helm chart repository to your local Helm installation:
 
 Add the Helm chart repository to your local Helm installation:
 
@@ -11,7 +11,7 @@ Add the Helm chart repository to your local Helm installation:
    * Substitute `atlassian-data-center` with whatever name you wish
 
 
-#### 2. Create and update the `values.yaml` file of the product you’re installing: ####
+#### 2. Create and update the `values.yaml` file of the product you’re installing:
 
 Create the file:
 
@@ -34,7 +34,7 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
   * **Shared home**: 
 
 
-#### 3. Install your chosen product: ####
+#### 3. Install your chosen product: 
 
    `helm install <release-name> atlassian-data-center/<product> --namespace <namespace> --version <chart-version> --values values.yaml`
 
@@ -50,7 +50,7 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
 
    * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may be waiting for several minutes if anything is mis-configured.
 
-#### 4. Test your deployed product ####
+#### 4. Test your deployed product 
 
 Make sure the service pod/s are running, then test your deployed product:
 
@@ -59,12 +59,12 @@ Make sure the service pod/s are running, then test your deployed product:
    * This will run some basic smoke tests against the deployed release.
    * If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
 
-#### 5. Complete your product setup ####
+#### 5. Complete your product setup 
 
 Open your product in a web browser. If your product is Bitbucket your setup is complete and you will get straight to the login page. For the rest of the products, complete the setup according to the instructions you will find on the product’s web page. 
 
-## Uninstall ##
-#### Uninstall your chosen product: ####
+## Uninstall 
+#### Uninstall your chosen product: 
  `helm uninstall <release-name> atlassian-data-center/<product>`
 
    * `<release-name>` is the name you chose for your deployment
