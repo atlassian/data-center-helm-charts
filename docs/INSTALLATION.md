@@ -8,8 +8,6 @@ Add the Helm chart repository to your local Helm installation:
 
    `helm repo add atlassian-data-center https://atlassian-labs.github.io/data-center-helm-chart`
 
-   * Substitute `atlassian-data-center` with whatever name you wish
-
 
 #### 2. Create and update the `values.yaml` file of the product you’re installing:
 
