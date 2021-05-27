@@ -77,7 +77,7 @@ volumes:
         claimName: "ebs-pvc" 
 ```
 
-:information_source:  Attaching multiple pods to a single EBS volume is not possible (a `Multi-Attach error for volume` will be raised) nor is it advised. As such you will need to create a separate EBS/PV/PVC for each additional pod that you want to add to the cluster. This is approach may suit single pod clusters but is obviously very cumbersome for multi pod clustered deployments. For such situations [dynamic provisioning](#Dynamic-provisioning) should be used.
+:information_source:  Attaching multiple pods to a single EBS volume is not possible (a `Multi-Attach error for volume` will be raised) nor is it advised. As such you will need to create a separate EBS/PV/PVC for each additional pod that you want to add to the cluster. This approach may suit single pod clusters but is obviously very cumbersome for multi pod clustered deployments. For such situations [dynamic provisioning](#Dynamic-provisioning) should be used.
 
 ---
 
