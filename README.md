@@ -27,7 +27,7 @@ If you find any issue or you have a feedback regarding the helm charts, please [
 * [Installation guide](docs/INSTALLATION.md) - the steps to install the Helm charts
 * [Operation guide](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
 * [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
-* [Examples](docs/examples)
+* [Examples](docs/examples/)
   * [How to deploy an EFK stack to Kubernetes](docs/examples/logging/efk/EFK.md)
   * [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
   * [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md)
