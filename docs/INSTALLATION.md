@@ -21,7 +21,7 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
    
   * **Database**: If you provide all the required information via the `values.yaml` file, you will be able to bypass the database connectivity configuration during the product setup. To do this, update the `database` stanza in the `values.yaml` file:
    
-    1. Update the `url` of the database. This is the Java Database Connectivity (JDBC) URL of the database to be used by the application. The format of this URL depends on the JDBC driver being used, but we provide some examples in [CONFIGURATION.md](docs/CONFIGURATION).
+    1. Update the `url` of the database. This is the Java Database Connectivity (JDBC) URL of the database to be used by the application. The format of this URL depends on the JDBC driver being used, but we provide some examples in [CONFIGURATION.md](CONFIGURATION.md).
     2. For Jira and Bitbucket: update the `driver` to be used. This is the Java class name of the JDBC driver to be used, for example `org.postgresql.Driver`.
     3. For Jira and Confluence: update the database `type`. This is the type of the database, for example `mssql`. 
     4. Update the `secretName` that is under `credentials`. You can provide the database username and password via a Kubernetes secret, with the secret name specified here.
