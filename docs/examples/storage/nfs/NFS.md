@@ -38,7 +38,7 @@ Please read through the
 
 #### Example
 
-We've provided the template [`./storage/nfs/nfs-server.yaml`](./storage/nfs/nfs-server.yaml) as a **reference** on how an NFS server could be stood-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the defined storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
+We've provided the template [`nfs-server.yaml`](nfs-server.yaml) as a **reference** on how an NFS server could be stood-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the defined storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
 
 Provision the NFS by issuing the following command:
 ```shell
@@ -50,6 +50,5 @@ kubectl apply -f ./storage/nfs/nfs-server.yaml
 
 #### Pod affinity
 
-It is **highly recommended** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use Affinity rules -
-a standard kubernetes functionality. Please read the [documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-closely and use the suitable affinity definition in `affinity: {}` definition in the `values.yaml` file.
+It is **highly recommended** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use affinity rules -
+a standard kubernetes functionality. You can read the [Kubernetes affinity documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) and use the suitable affinity definition in the `affinity: {}` definition in the `values.yaml` file.
