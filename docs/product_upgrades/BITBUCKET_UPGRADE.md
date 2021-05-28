@@ -17,7 +17,7 @@ Suppose we have a Bitbucket cluster with 3 nodes, all running `Bitbucket xx.xx.0
 
 1. Run helm upgrade command with the desired number of nodes after upgrade (replicaCount):
     ```shell script
-    $ helm upgrade -n dcd --wait <release name> --set replicaCount=3 target/helm/bitbucket-0.1.1.tgz --reuse-values
+    $ helm upgrade --wait <release name> --set replicaCount=3 target/helm/bitbucket-0.1.1.tgz --reuse-values
     ```
 
 1. Upgrade will start by terminating one pod and creating a new pod with an updated version. 
