@@ -7,6 +7,8 @@ Use these instructions to install your Atlassian product using the Helm charts. 
 Add the Helm chart repository to your local Helm installation:
 
    `helm repo add atlassian-data-center https://atlassian-labs.github.io/data-center-helm-chart`
+   
+   `helm repo update`
 
 
 #### 2. Create and update the `values.yaml` file of the product you’re installing:
@@ -29,12 +31,10 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
     1. Change the `create` value to `true`
     2. Add a value to `host`. The ingress rules will apply to the host you provide. Hosts can be precise matches (for example “foo.bar.com”) or a wildcard (for example “*.foo.com”).  
       
-  * **Persistent storage**: Each Data Center node has its own `local-home` volume, and all nodes in the Data Center cluster share a single `shared-home` volume. By default, the Helm charts will configure all of these volumes as `emptyDir` volumes, but this is suitable only for running a single Data Center node for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-node Data Center clusters to operate correctly.
+  * **Persistent storage**: Each Data Center pod has its own `local-home` volume, and each pod within a cluster can utilize a single `shared-home` volume. By default, the Helm charts will configure all of these volumes as `emptyDir` volumes, but this is suitable only for running a single Data Center node for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-node Data Center clusters to operate correctly.
      * For more details, please refer to the **Volumes** section of the [configuration guide](CONFIGURATION.md).
      * You can also refer to our examples of AWS storage: [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md) and [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)    
     * Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
-
-
 
 
 #### 3. Install your chosen product: 
