@@ -10,6 +10,12 @@ An example detailing how an existing EFS filesystem can be created and consumed 
 
 Additional details on static EFS provisioning can be found [here](https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/examples/kubernetes/static_provisioning)
 
+Confirm that the EFS CSI driver has been installed by running
+
+```shell
+kubectl get csidriver
+```
+
 ### Provisioning
 1. Create a Persistent Volume
 2. Create a Persistent Volume Claim
@@ -64,7 +70,7 @@ spec:
 ```
 
 #### 3. Update values.yaml
-Update the `localHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 above
+Update the `sharedHome` `claimName` value within `values.yaml` to the name of the Persistent Volume Claim created in step 2 above
 
 ```yaml
 volumes:
@@ -73,53 +79,6 @@ volumes:
       persistentVolumeClaim:
         claimName: "efs-pvc" 
 ```
-
----
-
-## Dynamic provisioning
-An example detailing how an existing EFS filesystem can be created and consumed using dynamic provisioning.
-
-## Pre-requisites
-1. [EFS](https://github.com/kubernetes-sigs/aws-efs-csi-driver) CSI driver is [installed](https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html) within the k8s cluster.
-2. A physical EFS filesystem has been [provisioned](https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html#efs-create-filesystem)
-
-Additional details on dynamic EFS provisioning can be found [here](https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/examples/kubernetes/dynamic_provisioning) and [here](https://aws.amazon.com/blogs/containers/introducing-efs-csi-dynamic-provisioning/)
-
-### Provisioning
-1. Create a Storage Class
-2. Update `values.yaml` to utilise Storage Class
-
-#### 1. Create Storage Class
-Create a Storage Class for the pre-provisioned EFS filesystem by providing the `<efs-id>`. The EFS id can be identified using the CLI command with appropriate region
-
-```yaml
-aws efs describe-file-systems --query "FileSystems[*].FileSystemId" --region ap-southeast-2
-```
-
-```yaml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: efs-sc
-provisioner: efs.csi.aws.com
-parameters:
-  provisioningMode: efs-ap
-  fileSystemId: <efs-id>
-  directoryPerms: "700"
-```
-
-#### 2. Update values.yaml
-Update the `localHome` `storageClassName` value within `values.yaml` to the name of the Storage Class created in step 1 above
-
-```yaml
-volumes:
-  sharedHome:
-    persistentVolumeClaim:
-      create: true
-      storageClassName: "efs-sc"
-```
-
----
 
 # Resources
 Some useful resources on provisioning shared storage with the AWS CSI Driver
