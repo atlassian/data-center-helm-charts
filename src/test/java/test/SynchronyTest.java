@@ -41,10 +41,9 @@ class SynchronyTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
-    void synchrony_params(Product product) throws Exception {
+    void synchrony_entrypoint(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "synchrony.enabled", "true",
-                "synchrony.ingressUrl", "https://mysynchrony"
+                "synchrony.enabled", "true"
         ));
 
         final var entrypoint = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-synchrony-entrypoint")
