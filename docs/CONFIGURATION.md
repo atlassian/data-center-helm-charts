@@ -4,8 +4,51 @@
 The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
 If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
-## Volumes
+## Ingress
+Once the Helm chart has been installed, a suitable HTTP/HTTPS ingress needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.
 
+The exact details of the ingress resource will be highly site-specific. 
+
+At a minimum, the ingress needs to support the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
+
+The charts provide a template for ingress-nginx rules, which include all required annotations and optional TLS configuration.
+* An [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers) must be pre-provisioned prior to using these templates.
+* The Kubernetes project supports and maintains Ingress Controllers for the major cloud providers including; AWS, GCE and nginx. There are also a number of [open-source third party projects](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers) available.
+* Because different Kubernetes clusters use different Ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) **templates only**.
+* The Ingress Resource provided as part of the Helm charts is geared toward the [Kubernetes ingress-nginx controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
+   * The Ingress Controller
+   * Ingress Controller annotations
+   * The request max body size
+* The Internet-facing (see diagram below) load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
+* When the [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) controller is sitting behind another L7 proxy / load balancer that is setting these `X-Forwarded-*` headers, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
+* The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress.
+
+![ingress-architecture](./images/ingress.png "Request routing via Ingress")
+
+    0. Inbound client request
+    1. DNS routes request to appropriate LB
+    2. LB forwards request to internal Ingress 
+    3. Ingress controller performs traffic routing lookup via Ingress object(s)
+    4. Ingress forwards request to appropriate service based on Ingress object routing rule
+    5. Service forwards request to appropriate pod
+    6. Pod handles request 
+
+
+
+## Volumes
+The Data Center products make use of filesystem storage. Each DC node has its own "local-home" volume, and all nodes in the DC cluster share a single "shared-home" volume.
+
+By default, the Helm charts will configure all of these volumes as ephemeral "emptyDir" volumes. This makes it possible to install the charts without configuring any volume management, but comes with two big caveats:
+
+Any data stored in the local-home or shared-home will be lost every time a pod starts. Whilst the data that is stored in local-home can generally be regenerated (e.g. from the database), this can be very a very expensive process that sometimes required manual intervention.
+
+The shared-home volume will not actually be shared between multiple nodes in the DC cluster. Whilst this may not immediately prevent scaling the DC cluster up to multiple nodes, certain critical functionality of the products relies on the shared filesystem working as expected.
+
+For these reasons, the default volume configuration of the Helm charts is suitable only for running a single DC node for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-node DC clusters to operate correctly.
+
+While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes `PersistentVolumes` and `PersistentVolumeClaims`. The `local-home` volume requires a `PersistentVolume` with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a `PersistentVolume` with `ReadWriteMany (RWX)` capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). While this entails a higher upfront setup effort, it gives the best flexibility.
+
+### Volumes configuration
 By default, the charts will configure the `local-home` and `shared-home` volues as follows:
 
 ```yaml
@@ -16,10 +59,12 @@ volumes:
     emptyDir: {}
 ```
 
+As explained above, this default configuration is suitable only for testing purposes. Proper volume management needs to be configured.
+
 In order to enable the persistence of data stored in these volumes, it is necessary
 to replace these volumes with something else.
 
-The recommended way is to enable the use of PersistentVolume and PersistentVolumeClaim
+The recommended way is to enable the use of `PersistentVolume` and `PersistentVolumeClaim`
 for both volumes, using your install-specific `values.yaml` file, for example:
 
 ```yaml
@@ -32,14 +77,14 @@ volumes:
       create: true
 ```
 
-This will result in each pod in the StatefulSet creating a `local-home` `PersistentVolumeClaim`
-of type `ReadWriteOnce`, and a single PVC of type `ReadWriteMany` being created for the shared-home.
+This will result in each pod in the `StatefulSet` creating a `local-home` `PersistentVolumeClaim`
+of type `ReadWriteOnce`, and a single `PersistentVolumeClaim` of type `ReadWriteMany` being created for the `shared-home`.
 
-For each PVC created by the chart, a suitable `PersistentVolume` needs to be made available prior 
+For each `PersistentVolumeClaim` created by the chart, a suitable `PersistentVolume` needs to be made available prior 
 to installation. These can be provisioned either statically or dynamically, using an 
 auto-provisioner.
 
-An alternative to PersistentVolumeClaims is to use inline volume definitions,
+An alternative to `PersistentVolumeClaims` is to use inline volume definitions,
 either for `local-home` or `shared-home` (or both), for example:
 
 ```yaml
@@ -57,7 +102,38 @@ volumes:
 
 Generally, any valid Kubernetes volume resource definition can be substituted
 here. However, as mentioned previously, externalising the volume definitions
-using PersistentVolumes is the strongly recommended approach.
+using `PersistentVolumes` is the strongly recommended approach.
+
+### Volumes examples
+
+1. Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](examples/storage/nfs/NFS.md).
+2. We have an example detailing how an existing EFS filesystem can be created and consumed using static provisioning: [Shared storage - utilizing AWS EFS-backed filesystem](examples/storage/aws/SHARED_STORAGE.md).
+3. You can also refer to an example on how a Kubernetes cluster and helm deployment can be configured to utilize AWS EBS backed volumes: [Local storage - utilizing AWS EBS-backed volumes](examples/storage/aws/LOCAL_STORAGE.md).
+
+## Additional volumes
+
+In additional to the `local-home` and `shared-home` volumes that are
+always attached to the product pods, you can attach your own volumes for
+your own purposes, and mount them into the product container. 
+Use the `additionalVolumes` and `additionalVolumeMounts` values to both attach 
+the volumes and mount them in to the product container.
+
+This might be useful if, for example, you have a custom plugin that requires its 
+own filesystem storage.
+
+Example:
+
+```yaml
+jira:
+   additionalVolumeMounts:
+      - volumeName: my-volume
+        mountPath: /path/to/mount
+
+additionalVolumes:
+  - name: my-volume
+    persistentVolumeClaim:
+       claimName: my-volume-claim
+```
 
 ## Database connectivity
 
@@ -204,32 +280,10 @@ need to take account of that.  A safe rule-of-thumb would be for the container
 to request 2x the value of the max heap for the JVM.
 
 This requirement to configure both the container memory and JVM heap will
-hopefully be removed by [SCALE-37](https://jira.atlassian.com/browse/SCALE-37).
+hopefully be removed.
 
-## Additional volumes
+You can read more about [resource scaling](resource_management/RESOURCE_SCALING.md#vertical-scaling---adding-resources) and [resource requests and limits](resource_management/REQUESTS_AND_LIMITS.md).
 
-In additional to the `local-home` and `shared-home` volumes that are
-always attached to the product pods, you can attach your own volumes for
-your own purposes, and mount them into the product container. 
-Use the `additionalVolumes` and `additionalVolumeMounts` values to both attach 
-the volumes and mount them in to the product container.
-
-This might be useful if, for example, you have a custom plugin that requires its 
-own filesystem storage.
-
-Example:
-
-```yaml
-jira:
-   additionalVolumeMounts:
-      - volumeName: my-volume
-        mountPath: /path/to/mount
-
-additionalVolumes:
-  - name: my-volume
-    persistentVolumeClaim:
-       claimName: my-volume-claim
-```
 
 ## Additional containers
 
