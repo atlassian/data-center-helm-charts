@@ -45,3 +45,7 @@ Some useful resources on provisioning local storage with the AWS CSI Driver
 - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
 - https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
 - https://aws.amazon.com/blogs/containers/introducing-efs-csi-dynamic-provisioning/
+
+***
+* Go back to [README.md](../../../../README.md)
+* Go back to the [operation guide](../../../OPERATION.md)
