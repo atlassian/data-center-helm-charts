@@ -59,4 +59,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the volumes.
 
-You can now continue to the [installation guide](INSTALLATION.md), or dive deeper into the [configuration](CONFIGURATION.md) options.
+You can now:
+* Continue to the [installation guide](INSTALLATION.md)
+* Dive deeper into the [configuration](CONFIGURATION.md) options
+* Go back to [README.md](../README.md)
