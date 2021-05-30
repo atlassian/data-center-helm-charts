@@ -31,3 +31,8 @@ Typically, NFS permission fixer job isn't required when no security context is s
 
 The Helm charts do not have templates for OpenShift routes that are commonly used in OpenShift instead of ingresses.
 Routes need to be manually created after the charts installation. 
+
+***
+* Go back to the [installation guide](INSTALLATION.md)
+* Dive deeper into the [configuration](CONFIGURATION.md) options
+* Go back to [README.md](../README.md)
