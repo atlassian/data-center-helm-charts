@@ -31,3 +31,7 @@ Suppose we have a Confluence cluster with 3 nodes, all running `Confluence xx.xx
 7. After all pods activated with the new version, finalize the upgrade:
 
     ![upgrade-mode](../images/confluence-upgrade-3.png)
+
+***
+* Go back to [README.md](../../README.md)
+* Go back to the [operation guide](../OPERATION.md)
