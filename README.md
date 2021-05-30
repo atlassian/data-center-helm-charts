@@ -20,7 +20,7 @@ All the functionality described in [examples](docs/examples) **is not officially
 If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
 
 
-## User guide
+## Using the Helm charts
 
 * [Prerequisites and setup](docs/PREREQUISITES.md) - everything you need to do before installing the Helm charts
 * [Configuration](docs/CONFIGURATION.md) - details about configuration parameters
