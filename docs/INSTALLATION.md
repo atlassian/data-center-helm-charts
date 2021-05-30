@@ -74,3 +74,10 @@ Open your product in a web browser. If your product is Bitbucket your setup is c
    * `<release-name>` is the name you chose for your deployment
 
    * `<product>` can be jira, confluence, bitbucket or crowd
+
+***
+
+* Continue to the [operation guide](OPERATION.md)
+* Go back to the [prerequisites](PREREQUISITES.md) 
+* Dive deeper into the [configuration](CONFIGURATION.md) options 
+* Go back to [README.md](../README.md)
