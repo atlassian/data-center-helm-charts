@@ -303,7 +303,6 @@ that will be included in the pods.
 
 ***
 
-You can now:
 * Continue to the [installation guide](INSTALLATION.md)
 * Go back to the [prerequisites](PREREQUISITES.md) 
 * Go back to [README.md](../README.md)
