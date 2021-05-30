@@ -1,8 +1,4 @@
 # Configuration 
-## Namespace
-
-The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
-If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
 ## Ingress
 Once the Helm chart has been installed, a suitable HTTP/HTTPS ingress needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.
@@ -189,6 +185,11 @@ with the secret name specified with the `database.credentials.secretName` chart 
 When all the required information is provided in this way, the database connectivity configuration screen
 will be bypassed during product setup. 
 
+## Namespace
+
+The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
+If you wish, you can run multiple Helm releases of the same product in the same namespace.
+
 ## Clustering
 By default, the Helm charts are will not configure the products for Data Center clustering. 
 
@@ -299,3 +300,10 @@ to the product pods.
 The Helm charts also allow you to specify `additionalLabls`, `tolerations`, 
 `nodeSelectors` and `affinities`. These are standard Kubernetes structures 
 that will be included in the pods. 
+
+***
+
+You can now:
+* Continue to the [installation guide](INSTALLATION.md)
+* Go back to the [prerequisites](PREREQUISITES.md) 
+* Go back to [README.md](../README.md)
