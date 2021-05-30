@@ -252,5 +252,5 @@ Kibana URL: https://search-domain-uehlb3kxledxykchwexee.ap-southeast-2.es.amazon
 The user and password for Kibana are the same as the master user credential that is set in Elasticsearch in the provisioning stage. Open Kibana in a browser and after login, create an index pattern and see the report in the `Discover` page. 
 
 ***
-* Go back to [README.md](../README.md)
-* Go back to the [operation guide](OPERATE.md)
+* Go back to [README.md](../../../../README.md)
+* Go back to the [operation guide](../../../OPERATION.md)
