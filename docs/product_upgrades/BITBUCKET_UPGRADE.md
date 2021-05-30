@@ -36,3 +36,7 @@ REVISION UPDATED STATUS CHART APP VERSION DESCRIPTION
 1 Tue May 4 11:56:33 2021 superseded bitbucket-0.1.0 xx.xx.0-jdk11 Install complete
 2 Tue May 4 12:40:54 2021 deployed bitbucket-0.1.1 xx.xx.1-jdk11 Upgrade complete
 ```
+
+***
+* Go back to [README.md](../../README.md)
+* Go back to the [operation guide](../OPERATION.md)
