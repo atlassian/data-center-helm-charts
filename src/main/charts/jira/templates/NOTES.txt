@@ -13,4 +13,16 @@ To see the custom values you used for this release:
 
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
+{{ if .Values.ingress.create -}}
+Service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
+{{- else if contains "ClusterIP"  .Values.jira.service.type -}}
+Get the product URL by running these commands in the same shell:
+  Step 1: Get the pod name
+    $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  Step 2: forward pod port to localhost
+    $ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.jira.ports.http }}
+  Step 3: Access {{ .Chart.Name }} on localhost:
+    http://localhost:{{ .Values.jira.ports.http }}/{{ .Chart.Name }}
+{{- end }}
+
 For further documentation, see https://github.com/atlassian-labs/data-center-helm-charts/tree/master/docs
