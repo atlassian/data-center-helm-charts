@@ -13,4 +13,4 @@ Follow the [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/lat
 2. [EC2 instance type](https://aws.amazon.com/ec2/instance-types/) - the instance type to be used for the nodes that make up the cluster  
 3. Number of nodes - Guidance on the resource dimensions that should be used for these nodes can be found [here](https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/resource_management/REQUESTS_AND_LIMITS.md)
 
-> Having established a cluster continue with provisioning the [pre-requisite infrastructure](PREREQUISITES.md)
+> Having established a cluster continue with provisioning the [pre-requisite infrastructure](../PREREQUISITES.md)
