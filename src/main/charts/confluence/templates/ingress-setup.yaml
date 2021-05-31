@@ -1,6 +1,5 @@
 {{- if .Values.ingress.create }}
-{{/* Change to networking.k8s.io/v1 when k8s 1.19 is the oldest supported version */}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "confluence.fullname" . }}-setup
@@ -31,7 +30,10 @@ spec:
       http:
         paths:
           - path: "{{ trimSuffix "/" .Values.ingress.path }}/setup"
+            pathType: Prefix
             backend:
-              serviceName: {{ include "confluence.fullname" . }}
-              servicePort: {{ $.Values.confluence.service.port }}
+              service:
+                name: {{ include "confluence.fullname" . }}
+                port:
+                  number: {{ $.Values.confluence.service.port }}
 {{ end }}
