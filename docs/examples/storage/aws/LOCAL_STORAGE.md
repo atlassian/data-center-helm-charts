@@ -1,5 +1,5 @@
 # Local storage
-This readme provides examples on how a Kubernetes cluster and helm deployment can be configured to utilize AWS EBS backed volumes.
+This file provides examples on how a Kubernetes cluster and helm deployment can be configured to utilize AWS EBS backed volumes.
 
 ## Dynamic provisioning
 Due to the ephemeral nature of Kubernetes pods we advise dynamic provisioning be used for creating and consuming EBS volume(s)

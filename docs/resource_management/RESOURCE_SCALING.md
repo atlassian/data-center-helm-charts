@@ -1,7 +1,7 @@
 # Product scaling
 For optimum performance and stability the appropriate resource `requests` and `limits` should be defined for each pod. The number of pods in the product cluster should also be carefully considered. Kubernetes provides means for horizontal and vertical scaling of the deployed pods within a cluster, these approaches are described below.
 
-## Horizontal scaling
+## Horizontal scaling - adding replicas
 The Helm charts provision one `StatefulSet` by default. The number of replicas within this StatefulSet can be altered either declaratively or intrinsically. Note that the Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration.
 
 #### Declaratively
@@ -18,7 +18,7 @@ kubectl scale statefulsets <statefulsetset-name> --replicas=n
 
 For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#Vertical-scaling) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found [here](REQUESTS_AND_LIMITS.md).
 
-## Vertical scaling
+## Vertical scaling - adding resources
 The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
 
 ### Prior to deployment
@@ -46,3 +46,8 @@ helm upgrade <release> <chart> -f <values file>
 
 #### Intrinsically
 Using `kubectl edit` on the appropriate `StatefulSet` the respective `cpu` and `memory` values can be modified. Saving the changes will then result in the existing product pod(s) being re-provisioned with the updated values.
+
+***
+* Go back to [README.md](../../README.md)
+* Go back to the [operation guide](../OPERATION.md)
+
