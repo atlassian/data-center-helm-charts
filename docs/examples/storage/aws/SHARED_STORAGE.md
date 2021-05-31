@@ -1,10 +1,10 @@
 # Shared storage
-This readme provides examples on how a Kubernetes cluster and helm deployment can be configured to utilize an AWS EFS backed filesystem.
+This file provides examples on how a Kubernetes cluster and helm deployment can be configured to utilize an AWS EFS backed filesystem.
 
 ## Static provisioning
 An example detailing how an existing EFS filesystem can be created and consumed using static provisioning.
 
-## Pre-requisites
+## Prerequisites
 1. [EFS](https://github.com/kubernetes-sigs/aws-efs-csi-driver) CSI driver is [installed](https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html) within the k8s cluster.
 2. A physical EFS filesystem has been [provisioned](https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html#efs-create-filesystem)
 

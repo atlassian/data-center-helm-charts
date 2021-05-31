@@ -1,10 +1,10 @@
-# Example infrastructure
+# Implementation of an NFS Server for Bitbucket
 
 ### Dislaimer
 
-**This not officially supported functionality**
+**This functionality is not officially supported.**
 
-The included examples are provided as is and are to be used as guidance on how a testing environment can be stood up. These exampes should not be used in production. 
+The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These exampes should not be used in production. 
 
 Before proceedding it is highly recommended that you understand your specific deployment needs and tailor your solution to them.
 
@@ -18,7 +18,7 @@ For a full production deployment you will need to create some common components 
 
 ## Shared storage
 
-### Cloud managed shared storage
+### Cloud managed shared storage 
 
 ### Dedicated NFS server - Bitbucket Data Center requirement
 
@@ -38,7 +38,7 @@ Please read through the
 
 #### Example
 
-We've provided the template [`./storage/nfs/nfs-server.yaml`](./storage/nfs/nfs-server.yaml) as a **reference** on how an NFS server could be stood-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the defined storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
+We've provided the template [`nfs-server.yaml`](nfs-server.yaml) as a **reference** on how an NFS server could be stood-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the defined storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
 
 Provision the NFS by issuing the following command:
 ```shell
@@ -50,6 +50,5 @@ kubectl apply -f ./storage/nfs/nfs-server.yaml
 
 #### Pod affinity
 
-It is **highly recommended** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use Affinity rules -
-a standard kubernetes functionality. Please read the [documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-closely and use the suitable affinity definition in `affinity: {}` definition in the `values.yaml` file.
+It is **highly recommended** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use affinity rules -
+a standard kubernetes functionality. You can read the [Kubernetes affinity documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) and use the suitable affinity definition in the `affinity: {}` definition in the `values.yaml` file.
