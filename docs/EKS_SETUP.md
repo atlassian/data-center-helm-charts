@@ -7,7 +7,7 @@ Consider [installing](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.ht
 ## Manual creation
 Follow the [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) for details on creating an EKS cluster. 
 
-> :information_source: It's always a good idea to consider the following points before creating the cluster:
+> :information_source:  It's always a good idea to consider the following points before creating the cluster:
 
 1. [Geographical region](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) - where will the cluster reside
 2. [EC2 instance type](https://aws.amazon.com/ec2/instance-types/) - the instance type to be used for the nodes that make up the cluster  
