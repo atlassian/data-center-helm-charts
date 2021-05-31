@@ -15,7 +15,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 1. Install tools: 
    1. [Helm](https://helm.sh/docs/intro/install/)
    2. [kubectl](https://kubernetes.io/docs/tasks/tools/)
-2. Create and connect to the Kubernetes cluster of your choice, for example [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system.
+2. Create and connect to the Kubernetes cluster of your choice, for example [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system. Details on setting up k8s clusters can be found [here](EKS_SETUP.md).
 
    * In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 
