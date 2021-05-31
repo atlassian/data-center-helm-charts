@@ -13,7 +13,7 @@ A chart for installing Bitbucket Data Center on Kubernetes
 
 ## Requirements
 
-Kubernetes: `>=1.17.x-0`
+Kubernetes: `>=1.19.x-0`
 
 ## Values
 
