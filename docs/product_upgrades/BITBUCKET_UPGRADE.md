@@ -1,42 +1,45 @@
-## Bitbucket Rolling Upgrade
-Suppose we have a Bitbucket cluster with 3 nodes, all running `Bitbucket xx.xx.0-jdk11`, and an upgrade to
- `Bitbucket xx.xx.1-jdk11` is planned. Use these steps to complete the upgrade process: 
+# Bitbucket Rolling Upgrade
+Let's say we have Bitbucket version `7.6.0` deployed to our Kubernetes cluster, and we want to upgrade it to version
+`7.6.1`, which we'll call the *target version*. You can substitute the target version for the one you need, as long as
+it's newer than the current one.
 
-1. Update the `version` and `appVersion` in the Helm chart (`src/main/charts/bitbucket/Chart.yaml`):
-   ```yaml
-   version: 0.1.1
-   appVersion: xx.xx.1-jdk11
-   ```
-1. Create a new version of the Helm package:
-    ```shell script
-    $ helm package src/main/charts/bitbucket --destination target/helm
-    This will create target/helm/bitbucket-0.1.1.tgz 
-    ```
-1. From the admin page click on *Rolling Upgrade* and set the Bitbucket to Upgrade mode:
-    ![upgrade-mode](../images/bitbucket-upgrade-1.png)
+## 1. Find tag of the target image
 
-1. Run helm upgrade command with the desired number of nodes after upgrade (replicaCount):
-    ```shell script
-    $ helm upgrade --wait <release name> --set replicaCount=3 target/helm/bitbucket-0.1.1.tgz --reuse-values
-    ```
+Go to [atlassian/bitbucket-server](https://hub.docker.com/r/atlassian/bitbucket-server/tags)
+Docker Hub page to pick a tag that matches your target version.
 
-1. Upgrade will start by terminating one pod and creating a new pod with an updated version. 
-    ![upgrade-mode](../images/bitbucket-upgrade-2.png)
+In the example we're running Bitbucket using the `7.6.0-jdk11` tag, and we'll be upgrading to `7.6.1-jdk11` - our *target*.
 
-1. After the new pod is up and running, the next pod will be upgraded until all pods are upgraded to the new version. 
+## 2. Put Bitbucket into upgrade mode
 
-1. After all pods are activated with the new version, finalize the upgrade.
-    ![upgrade-mode](../images/bitbucket-upgrade-3.png)
+From the admin page click on **Rolling Upgrade** and set the Bitbucket to Upgrade mode:
 
-To see the history of the Helm upgrade, run this command:
+  ![upgrade-mode](../images/bitbucket-upgrade-1.png)
 
-```shell script
-$ helm history <release name>
-REVISION UPDATED STATUS CHART APP VERSION DESCRIPTION
-1 Tue May 4 11:56:33 2021 superseded bitbucket-0.1.0 xx.xx.0-jdk11 Install complete
-2 Tue May 4 12:40:54 2021 deployed bitbucket-0.1.1 xx.xx.1-jdk11 Upgrade complete
-```
+## 3. Run the upgrade using Helm
+
+Run Helm *upgrade* command with your release name (`<release-name>`) and the target image from a previous step
+(`<target-tag>`). For more details, consult the [Helm documentation](https://helm.sh/docs/).
+
+ ```shell script
+ $ helm upgrade <release-name>  atlassian-data-center/bitbucket --wait --reuse-values --set image.tag=<target-tag>
+ ```
+
+If you used `kubectl scale` after installing the Helm chart, you'll need to add `--set
+replicaCount=<number-of-bb-nodes>` to the command. Otherwise, the deployment will be scaled back to the original
+number which, most likely, is one node.
+
+## 4. Wait for the upgrade to finish
+The pods will be re-created with the updated version, one at a time.
+
+![upgrade-mode](../images/bitbucket-upgrade-2.png)
+
+## 5. Finalize the upgrade
+After all pods are active with the new version, finalize the upgrade:
+
+![upgrade-mode](../images/bitbucket-upgrade-3.png)
 
 ***
 * Go back to [README.md](../../README.md)
 * Go back to the [operation guide](../OPERATION.md)
+
