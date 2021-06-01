@@ -15,13 +15,12 @@ Before installing the Data Center Helm charts you need to set up your environmen
 1. Install tools: 
    1. [Helm](https://helm.sh/docs/intro/install/)
    2. [kubectl](https://kubernetes.io/docs/tasks/tools/)
-2. Create and connect to the Kubernetes cluster of your choice, for example [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system. Details on setting up k8s clusters can be found [here](cloud/EKS_SETUP.md).
-
+2. [Create and connect to the Kubernetes cluster](examples/cluster/CLOUD_PROVIDERS.md) of your choice, for example [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system.
    * In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 
    * It is up to you to set up security policies
 
-3. Provision an [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
+3. [Provision an Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
 
    * The Kubernetes project supports and maintains [Ingress Controllers for the major cloud providers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#additional-controllers) including; AWS, GCE and nginx. There are also a number of open-source third party projects available.
 
@@ -33,7 +32,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the Ingress Controller.
 
-4. Provision a database:
+4. [Provision a database](examples/database/CLOUD_PROVIDERS.md):
 
    * Must be of a type and version supported by the Data Center product you wish to install
 
@@ -49,7 +48,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the **Database connectivity** section in [CONFIGURATION.md](CONFIGURATION.md).
 
-5. Configure a shared-home volume:
+5. [Configure a shared-home volume](examples/storage):
 
    * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
 
