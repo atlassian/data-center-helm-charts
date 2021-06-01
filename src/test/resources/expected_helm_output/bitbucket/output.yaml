@@ -39,6 +39,7 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "7.12.1-jdk11"
     app.kubernetes.io/managed-by: Helm
+  annotations:
 spec:
   type: ClusterIP
   ports:
