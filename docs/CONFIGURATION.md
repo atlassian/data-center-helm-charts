@@ -1,22 +1,21 @@
 # Configuration 
 
 ## Ingress
-Once the Helm chart has been installed, a suitable HTTP/HTTPS ingress needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.
+A suitable HTTP/HTTPS ingress needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.
 
 The exact details of the ingress resource will be highly site-specific. 
 
 At a minimum, the ingress needs to support the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
 
-The charts provide a template for ingress-nginx rules, which include all required annotations and optional TLS configuration.
-* An [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers) must be pre-provisioned prior to using these templates.
-* The Kubernetes project supports and maintains Ingress Controllers for the major cloud providers including; AWS, GCE and nginx. There are also a number of [open-source third party projects](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers) available.
-* Because different Kubernetes clusters use different Ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) **templates only**.
-* The Ingress Resource provided as part of the Helm charts is geared toward the [Kubernetes ingress-nginx controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
-   * The Ingress Controller
+The charts provide a template for [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) rules, which include all required annotations and optional TLS configuration. Some key considerations to note when configuring the controller are:
+
+* The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
+   * Whether the NGINX Ingress Controller should be used
    * Ingress Controller annotations
-   * The request max body size
+   * The request max body size0
+   * The hostname of the ingress resource
 * The Internet-facing (see diagram below) load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
-* When the [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) controller is sitting behind another L7 proxy / load balancer that is setting these `X-Forwarded-*` headers, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
+* When the NGINX Ingress Controller controller is sitting behind another L7 proxy / load balancer that is setting these `X-Forwarded-*` headers, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
 * The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress.
 
 ![ingress-architecture](./images/ingress.png "Request routing via Ingress")

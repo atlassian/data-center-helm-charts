@@ -28,7 +28,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * An [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress/) is not installed by default when you install the Helm charts, but the charts do provide a template for an ingress resource. In order for the Ingress resource to work, the cluster must have an ingress controller running, such as [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/). 
 
-   * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
+   * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) (an alternative controller can of course be used) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
 
    * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the Ingress Controller.
 
