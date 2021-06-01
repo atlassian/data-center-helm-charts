@@ -188,7 +188,7 @@ synchrony:
       # -- The maximum amount of heap memory that will be used by the Synchrony JVM
       maxHeap: "1g"
       # -- The minimum amount of heap memory that will be used by the Synchrony JVM
-      minHeap: "1g"
+      minHeap: "2g"
       # -- The memory allocated for the Synchrony stack
       stackSize: "2048k"
     container: 
