@@ -22,7 +22,7 @@ Get the product URL by running these commands in the same shell:
   Step 2: forward pod port to localhost
     $ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.jira.ports.http }}
   Step 3: Access {{ .Chart.Name }} on localhost:
-    http://localhost:{{ .Values.jira.ports.http }}/{{ .Chart.Name }}
+    http://localhost:{{ .Values.jira.ports.http }}
 {{- end }}
 
 For further documentation, see https://github.com/atlassian-labs/data-center-helm-charts/tree/master/docs
