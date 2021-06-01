@@ -27,7 +27,7 @@ spec:
   selector:
     {{- include "bitbucket.selectorLabels" . | nindent 4 }}
 
-{{/*This describes a K8s service for comunicating with the ssh port on Bitbucket*/}}
+{{/* This describes a K8s service for communicating with the ssh port on Bitbucket */}}
 {{- if .Values.bitbucket.sshService.enabled }}
 ---
 apiVersion: v1
