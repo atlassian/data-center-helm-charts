@@ -28,3 +28,7 @@ To learn about rolling upgrade in Bitbucket see [Bitbucket RollingUpgrade](BITBU
 
 ## Confluence Rolling Upgrade
 To learn about rolling upgrade in Confluence see [Confluence RollingUpgrade](CONFLUENCE_UPGRADE.md)
+
+***
+* Go back to [README.md](../../README.md)
+* Go back to the [operation guide](../OPERATION.md)

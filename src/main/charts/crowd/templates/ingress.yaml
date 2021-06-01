@@ -1,6 +1,5 @@
 {{- if .Values.ingress.create }}
-{{/* Change to networking.k8s.io/v1 when k8s 1.19 is the oldest supported version */}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "crowd.fullname" . }}
@@ -31,7 +30,10 @@ spec:
       http:
         paths:
           - path: {{ .Values.ingress.path }}
+            pathType: Prefix
             backend:
-              serviceName: {{ include "crowd.fullname" . }}
-              servicePort: {{ $.Values.crowd.service.port }}
+              service:
+                name: {{ include "crowd.fullname" . }}
+                port:
+                  number: {{ $.Values.crowd.service.port }}
 {{ end }}
