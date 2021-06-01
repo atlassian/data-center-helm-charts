@@ -10,12 +10,12 @@ At a minimum, the ingress needs to support the ability to support long request t
 The charts provide a template for [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) rules, which include all required annotations and optional TLS configuration. Some key considerations to note when configuring the controller are:
 
 * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
-   * Whether the NGINX Ingress Controller should be used
+   * Usage of the NGINX Ingress Controller 
    * Ingress Controller annotations
-   * The request max body size0
+   * The request max body size
    * The hostname of the ingress resource
-* The Internet-facing (see diagram below) load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
-* When the NGINX Ingress Controller controller is sitting behind another L7 proxy / load balancer that is setting these `X-Forwarded-*` headers, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
+* When installed, and based on the supplied [configuration](https://kubernetes.github.io/ingress-nginx/deploy/), the NGINX Ingress Controller will provision an Internet-facing (see diagram below) load balancer on your behalf. The LB should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
+* If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
 * The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress.
 
 ![ingress-architecture](./images/ingress.png "Request routing via Ingress")
