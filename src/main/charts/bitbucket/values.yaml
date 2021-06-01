@@ -53,10 +53,15 @@ bitbucket:
     # -- The type of Kubernetes service to use for Bitbucket
     type: ClusterIP
     annotations: {}
+  # -- Enable or disable an additional service for exposing SSH for external access.
+  # Disable when the SSH service is exposed through the ingress controller, or enable if the ingress controller does
+  # not support TCP.
   sshService:
     enabled: false
+    # -- Port to expose the SSH service on.
     port: 22
     type: LoadBalancer
+    # -- Annotations for the SSH service. Useful if a load balancer controller needs extra annotations.
     annotations: {}
   # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2003.
   # -- Disable when deploying to OpenShift, unless anyuid policy is attached to service account
