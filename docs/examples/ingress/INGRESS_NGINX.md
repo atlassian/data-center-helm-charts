@@ -1,13 +1,13 @@
 # NGINX Ingress Controller - Provisioning and usage
-> **NOTE:** These instructions are for reference purposes only. They were used for the development and testing of the Atlassian Helm Charts and are specific to AWS deployments.  
+> **NOTE:** These instructions are for reference purposes only. They are used for development and testing purposes only and are specific to AWS deployments.  
 
 Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/)
 
-## Prerequisistes
-Our testing was performed on AWS and so these prerequisistes and instructions are tailored toward it. However, at a high level, the same prerequisistes and instructions will apply to other cloud providers
+## Prerequisites
+Our testing was performed on AWS and so these Prerequisites and instructions are tailored toward it. However, at a high level, the same Prerequisites and instructions will apply to other cloud providers
 
 * Provision a new TLS certificate (Amazon Certificate Manager) 
-* Provision a new DNS record (Amazon Route53) to associate with the TLS certificate. This DNS record should be used to configure Ingress resource, where the `ingress.host` property in the product `values.yaml` is updated with its value.
+* Provision a new DNS record (Amazon Route53) to associate with the TLS certificate. This DNS record should be used to configure the Ingress resource, where the `ingress.host` property in the product `values.yaml` is updated with its value.
 
 ## Controller installation
 We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx). You can also use the instructions below.
@@ -21,7 +21,7 @@ helm repo update
 
 ### 2. Update ingress-config.yaml
 Appropriately update the provided config below. The annotations defined within the config will cause the Helm installation to provision an AWS application load balancer on your behalf. 
-> Ensure the appropriate ARN is supplied for the TLS certificate created under [Prerequisistes](#Prerequisistes)
+> Ensure the appropriate ARN is supplied for the TLS certificate created under [Prerequisites](#Prerequisites)
 ```yaml
 controller:
   config:
@@ -55,7 +55,7 @@ helm install <release name> ingress-nginx/ingress-nginx --values ingress-config.
 ```
 
 ### 4. DNS record to LB wiring
-Once the controller is installed you will need to associate the DNS record created as part of the [Prerequisistes](#Prerequisistes) with the auto provisioned AWS LB that was created when installing the controller. To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
+Once the controller is installed you will need to associate the DNS record created as part of the [Prerequisites](#Prerequisites) with the auto provisioned AWS LB that was created when installing the controller. To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
 kubectl get service | grep ingress-nginx    
 ```
@@ -65,7 +65,7 @@ NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP
 ingress-nginx-controller             LoadBalancer   10.100.22.16    b834z142d8118406795a34df35e10b17-38927090.eu-west-1.elb.amazonaws.com   80:32615/TCP,443:31787/TCP   76m
 ingress-nginx-controller-admission   ClusterIP      10.100.5.36     <none>                                                                  443/TCP                      76m
 ```
-Take not of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a value update the DNS record in Route53 so that it routes traffic to it.
+Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a value update the DNS record in Route53 so that it routes traffic to it.
 
 ## Ingress resource config
 Prior to [installing](../../INSTALLATION.md) the Atlassian products using the Helm charts, ensure that the `ingress` stanza within the product `values.yaml` has been updated accordingly for the `ingress-nginx` controller. These properties will configure an appropriate ingress resource for the controller i.e.
