@@ -1,7 +1,7 @@
 # Preparing an EKS cluster
 Instructions for creating a Kubernetes cluster using [Amazon EKS](https://aws.amazon.com/eks/).
 
-## Pre-requisties
+## Prerequisites
 Consider installing and configuring [eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html) allowing for CLI interaction with an EKS cluster.
 
 ## Manual creation

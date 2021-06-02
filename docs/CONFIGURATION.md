@@ -1,14 +1,13 @@
 # Configuration 
 
 ## Ingress
-A suitable HTTP/HTTPS ingress needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.
+A suitable HTTP/HTTPS ingress controller needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.  The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/). We also provide [example instructions](examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
 
-The exact details of the ingress resource will be highly site-specific. 
+The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller. 
 
-At a minimum, the ingress needs to support the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
+Some key considerations to note when configuring the controller are:
 
-The charts provide a template for [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) rules, which include all required annotations and optional TLS configuration. Some key considerations to note when configuring the controller are:
-
+* At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
 * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
    * Usage of the NGINX Ingress Controller 
    * Ingress Controller annotations

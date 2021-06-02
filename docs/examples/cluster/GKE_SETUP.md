@@ -1,7 +1,7 @@
 # Preparing an GKE cluster
 Instructions for creating a Kubernetes cluster using [Google GKE](https://cloud.google.com/kubernetes-engine).
 
-## Pre-requisties
+## Prerequisites
 Consider installing and configuring [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) allowing for CLI interaction with an GKE cluster.
 
 ## Manual creation

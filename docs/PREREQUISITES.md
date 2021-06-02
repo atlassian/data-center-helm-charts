@@ -19,10 +19,10 @@ Before installing the Data Center Helm charts you need to set up your environmen
    * In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 
    * It is up to you to set up security policies
+   
+3. [Provision an Ingress Controller](examples/ingress/CONTROLLERS.md) in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
 
-3. [Provision an Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
-
-   * The Kubernetes project supports and maintains ingress Controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source third party projects available.
+   * The Kubernetes project supports and maintains ingress Controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source third party projects [available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
    * Because different Kubernetes clusters use different Ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only.
 
