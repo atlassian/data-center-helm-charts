@@ -46,6 +46,8 @@ controller:
     externalTrafficPolicy: "Local"
 ```
 
+> **NOTE:** Bitbucket requires additional config to allow for `SSH` access. See [here](????????) for detailed instructions
+
 ### 3. Install
 Using the update config in [Step 2.](#Update-config.yaml) install the controller
 ```shell
@@ -76,6 +78,7 @@ ingress:
   path: "/"
   https: true
 ```
+
 ## Uninstall
 The controller can be un-installed by running
 ```shell
