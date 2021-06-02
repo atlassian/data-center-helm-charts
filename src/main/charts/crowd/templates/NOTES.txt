@@ -1,4 +1,4 @@
-Thank you for installing {{ .Chart.Name }}.
+Thank you for installing {{ title .Chart.Name }}.
 
 Your release is named {{ .Release.Name }}, and resides in namespace {{ .Release.Namespace }}.
 
@@ -14,9 +14,9 @@ To see the custom values you used for this release:
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
 {{ if .Values.ingress.create -}}
-Service URL of {{ .Chart.Name }}: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
+{{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
 {{- else if contains "ClusterIP"  .Values.crowd.service.type -}}
-Get the {{ .Chart.Name }} URL by running these commands in the same shell:
+Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
   Step 1: Get the pod name
     $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   Step 2 (Optional): Check the exported pod name
@@ -25,7 +25,7 @@ Get the {{ .Chart.Name }} URL by running these commands in the same shell:
     $ kubectl get pod $POD_NAME
   Step 4: Wait for pods up and running, then forward pod port to localhost.
     $ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.crowd.ports.http }}
-  Step 5: Access {{ .Chart.Name }} on localhost:
+  Step 5: Access {{ title .Chart.Name }} on localhost:
     http://localhost:{{ .Values.crowd.ports.http }}
 {{- end }}
 
