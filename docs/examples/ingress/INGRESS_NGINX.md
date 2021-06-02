@@ -19,7 +19,7 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 ```
 
-### 2. Update ingress-config.yaml
+### 2. Create a custom config yaml
 Appropriately update the provided config below. This configuration will auto provision an AWS L7 ELB (Application Load Balancer) with SSL Termination.
 > Ensure the appropriate ARN is supplied for the TLS certificate created under [Prerequisites](#Prerequisites)
 ```yaml
@@ -45,7 +45,6 @@ controller:
         "service.beta.kubernetes.io/aws-load-balancer-ssl-cert": "<arn_for_tls_cert>"
     externalTrafficPolicy: "Local"
 ```
-
 > **NOTE:** Bitbucket requires additional config to allow for `SSH` access. See [here](????????) for detailed instructions
 
 ### 3. Install
