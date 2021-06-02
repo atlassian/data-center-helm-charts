@@ -38,4 +38,21 @@ class SynchronyTest {
                 .hasTextContaining("-Dsynchrony.service.url=https://mysynchrony/v1")
                 .hasTextNotContaining("synchrony.btf.disabled");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_entrypoint(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true"
+        ));
+
+        final var entrypoint = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-synchrony-entrypoint")
+                .getNode("data", "start-synchrony.sh");
+
+        assertThat(entrypoint)
+                .hasTextContaining("-Xss2048k")
+                .hasTextContaining("-Xms1g")
+                .hasTextContaining("-Xmx2g")
+                .hasTextContaining("-XX:ActiveProcessorCount=2");
+    }
 }
