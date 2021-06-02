@@ -185,16 +185,16 @@ synchrony:
     failureThreshold: 30
   resources:
     jvm:
-      # -- The maximum amount of heap memory that will be used by the Synchrony JVM
-      maxHeap: "1g"
       # -- The minimum amount of heap memory that will be used by the Synchrony JVM
-      minHeap: "2g"
+      minHeap: "1g"
+      # -- The maximum amount of heap memory that will be used by the Synchrony JVM
+      maxHeap: "2g"
       # -- The memory allocated for the Synchrony stack
       stackSize: "2048k"
     container: 
       requests:
         cpu: "2"
-        memory: "2G"
+        memory: "2.5G"
   # -- The base URL of the Synchrony service.
   # This will be the URL that users' browsers will be given to communicate with Synchrony, as well as the URL that the
   # Confluence service will use to communicate directly with Synchrony, so the URL must be resovable both from inside and
