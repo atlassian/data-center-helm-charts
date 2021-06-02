@@ -51,7 +51,8 @@ class SynchronyTest {
 
         assertThat(entrypoint)
                 .hasTextContaining("-Xss2048k")
-                .hasTextContaining("-Xmx1g")
+                .hasTextContaining("-Xms1g")
+                .hasTextContaining("-Xmx2g")
                 .hasTextContaining("-XX:ActiveProcessorCount=2");
     }
 }
