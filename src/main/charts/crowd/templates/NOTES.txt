@@ -14,9 +14,9 @@ To see the custom values you used for this release:
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
 {{ if .Values.ingress.create -}}
-Service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
+Service URL of {{ .Chart.Name }}: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
 {{- else if contains "ClusterIP"  .Values.crowd.service.type -}}
-Get the product URL by running these commands in the same shell:
+Get the {{ .Chart.Name }} URL by running these commands in the same shell:
   Step 1: Get the pod name
     $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   Step 2 (Optional): Check the exported pod name

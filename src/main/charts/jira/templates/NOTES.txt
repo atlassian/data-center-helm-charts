@@ -14,14 +14,18 @@ To see the custom values you used for this release:
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
 {{ if .Values.ingress.create -}}
-Service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
+Service URL of {{ .Chart.Name }}: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
 {{- else if contains "ClusterIP"  .Values.jira.service.type -}}
-Get the product URL by running these commands in the same shell:
+Get the {{ .Chart.Name }} URL by running these commands in the same shell:
   Step 1: Get the pod name
     $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  Step 2: forward pod port to localhost
+  Step 2 (Optional): Check the exported pod name
+    $ echo $POD_NAME
+  Step 3 (Optional): Check the pod status
+    $ kubectl get pod $POD_NAME
+  Step 4: Wait for pods up and running, then forward pod port to localhost
     $ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.jira.ports.http }}
-  Step 3: Access {{ .Chart.Name }} on localhost:
+  Step 5: Access {{ .Chart.Name }} on localhost:
     http://localhost:{{ .Values.jira.ports.http }}
 {{- end }}
 
