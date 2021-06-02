@@ -6,7 +6,6 @@ In order to deploy Atlassian’s Data Center products, the following is required
 2. A Kubernetes cluster, running Kubernetes 1.19 or later
 3. kubectl 1.19 or later, must be compatible with your cluster
 4. Helm v 3.3 or later
-5. Resource requests and limits for each product are detailed in [REQUESTS_AND_LIMITS.md](/docs/resource_management/REQUESTS_AND_LIMITS.md) 
 
 ## Environment setup 
 
@@ -30,7 +29,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) (an alternative controller can of course be used) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
 
-   * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the Ingress Controller.
+   * For more information about the Ingress Controller please refer to the [Ingress section](CONFIGURATION.md#Ingress) of the Configuration guide.
 
 4. [Provision a database](examples/database/CLOUD_PROVIDERS.md):
 
@@ -48,7 +47,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The database service may be deployed within the same Kubernetes cluster as the Data Center product, or elsewhere.
 
-   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the **Database connectivity** [section](CONFIGURATION.md#database-connectivity).
+   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the [Database connectivity section](CONFIGURATION.md#database-connectivity) of the Configuration guide.
 
 5. [Configure a shared-home volume](examples/storage):
 
@@ -58,7 +57,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
 
-   * Please refer to [CONFIGURATION.md](CONFIGURATION.md) for more information about the volumes.
+   * For more information about volumes please refer to the [Volumes section](CONFIGURATION.md#Volumes) of the Configuration guide. 
 
 ***
 * Continue to the [installation guide](INSTALLATION.md)
