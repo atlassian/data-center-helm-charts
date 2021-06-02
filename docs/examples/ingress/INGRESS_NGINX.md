@@ -20,7 +20,7 @@ helm repo update
 ```
 
 ### 2. Update ingress-config.yaml
-Appropriately update the provided config below. The annotations defined within the config will cause the Helm installation to provision an AWS application load balancer on your behalf. 
+Appropriately update the provided config below. This configuration will auto provision an AWS L7 ELB (Application Load Balancer) with SSL Termination.
 > Ensure the appropriate ARN is supplied for the TLS certificate created under [Prerequisites](#Prerequisites)
 ```yaml
 controller:
