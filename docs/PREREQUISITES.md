@@ -41,6 +41,8 @@ Before installing the Data Center Helm charts you need to set up your environmen
       ii. [Jira supported databases](https://confluence.atlassian.com/adminjiraserver/supported-platforms-938846830.html#Supportedplatforms-Databases)
       
       iii. [Bitbucket supported databases](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-databasesDatabases)
+   
+      iv: [Crowd supported databases](https://confluence.atlassian.com/crowd/supported-platforms-191851.html#SupportedPlatforms-Databases)
 
    * Must be reachable from the product deployed within your Kubernetes cluster. 
 
