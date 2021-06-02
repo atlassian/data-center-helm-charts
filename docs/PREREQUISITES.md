@@ -49,7 +49,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the [Database connectivity section](CONFIGURATION.md#database-connectivity) of the Configuration guide.
 
-5. [Configure a shared-home volume](examples/storage):
+5. [Configure a shared-home volume](examples/storage/STORAGE.md):
 
    * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
 
