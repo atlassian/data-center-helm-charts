@@ -1,16 +1,16 @@
 # NGINX Ingress Controller - Provisioning and usage
 > **NOTE:** These instructions are for reference purposes only. They are used for development and testing purposes only and are specific to AWS deployments.  
 
-Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/)
+Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
 
 ## Prerequisites
-Our testing was performed on AWS and so these Prerequisites and instructions are tailored toward it. However, at a high level, the same Prerequisites and instructions will apply to other cloud providers
+Testing was performed on AWS and so these prerequisites and instructions are tailored toward it. However, at a high level, the same details will apply to other cloud providers.
 
 * Provision a new TLS certificate (Amazon Certificate Manager) 
-* Provision a new DNS record (Amazon Route53) to associate with the TLS certificate. This DNS record should be used to configure the Ingress resource, where the `ingress.host` property in the product `values.yaml` is updated with its value.
+* Provision a new DNS record (Amazon Route53) and associate the TLS certificate with it. This DNS record will be used to configure the Ingress resource, see [Ingress resource config](#Ingress-resource-config) below.
 
 ## Controller installation
-We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx). You can also use the instructions below.
+We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx). You can also use the instructions below which are based on the official ones.
 
 ### 1. Add repo
 Add the `ingress-nginx` Helm repo
@@ -45,7 +45,7 @@ controller:
         "service.beta.kubernetes.io/aws-load-balancer-ssl-cert": "<arn_for_tls_cert>"
     externalTrafficPolicy: "Local"
 ```
-> **NOTE:** Bitbucket requires additional config to allow for `SSH` access. See [here](????????) for detailed instructions
+> **NOTE:** Bitbucket requires additional config to allow for `SSH` access. See [here](????????) for detailed instructions.
 
 ### 3. Install
 Using the update config in [Step 2.](#Update-config.yaml) install the controller
