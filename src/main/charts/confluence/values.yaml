@@ -165,7 +165,7 @@ synchrony:
   # -- True if Synchrony (i.e. collaborative editing) should be enabled.
   # This will result in a separate StatefulSet and Service to be created for Synchrony.
   # If disabled, then collaborative editing will be disabled in Confluence.
-  enabled: true
+  enabled: false
   service:
     # -- The port on which the Synchrony Kubernetes service will listen
     port: 80
