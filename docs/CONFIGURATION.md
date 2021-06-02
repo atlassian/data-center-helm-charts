@@ -144,7 +144,13 @@ on the JDBC driver being used, but some examples are:
 | Postgres | `org.postgresql.Driver` | `jdbc:postgresql://<dbhost>:5432/<dbname>` |   
 | MySQL | `com.mysql.jdbc.Driver` | `jdbc:mysql://<dbhost>/<dbname>` |   
 | SQL Server | `com.microsoft.sqlserver.jdbc.SQLServerDriver` | `jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>` |   
-| Oracle | `oracle.jdbc.OracleDriver` | `jdbc:oracle:thin:@<dbhost>:1521:<SID>` |   
+| Oracle | `oracle.jdbc.OracleDriver` | `jdbc:oracle:thin:@<dbhost>:1521:<SID>` |
+
+> **NOTE:** With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
+>  * [Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html)
+>  * [Confluence](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup)
+>  * [Bitbucket](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html)
+>  * [Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html)
 
 ### `database.driver`
 
@@ -161,8 +167,8 @@ installation (see below).
 
 ### `database.type`
 
-Jira and Confluence both require this value to be specified, which declares the
-"flavour" of database system being used. The acceptable values for this include:
+Jira and Confluence both require this value to be specified, this declares the
+database engine to be used. The acceptable values for this include:
 
 | Vendor | Jira | Confluence  |   
 |---|---|---|

@@ -1,4 +1,4 @@
-# NGINX Ingress Controller - Provisioning and usage
+# NGINX Ingress Controller on AWS - Provisioning and usage
 > **NOTE:** These instructions are for reference purposes only. They are used for development and testing purposes only and are specific to AWS deployments.  
 
 Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
