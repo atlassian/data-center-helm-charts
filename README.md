@@ -10,15 +10,16 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
 ## Support disclaimer
 
-These Helm charts are **experimental and unsupported**, with the goal of introducing official support once they have been
+These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
 stabilized.
 
 The platforms documented on [PLATFORMS.md](docs/PLATFORMS.md) **are not officially supported** as part of the Atlassian Data Center products, and should be used only as examples.
 
 All the functionality described in [examples](docs/examples) **is not officially supported**, use it as examples only.
 
-If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
+## Feedback
 
+If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new) in this repository. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
 
 ## Using the Helm charts
 
