@@ -6,7 +6,7 @@ Use these instructions to install your Atlassian product using the Helm charts. 
 
 Add the Helm chart repository to your local Helm installation:
 
-   `helm repo add atlassian-data-center https://atlassian-labs.github.io/data-center-helm-chart`
+   `helm repo add atlassian-data-center https://atlassian-labs.github.io/data-center-helm-charts`
    
    `helm repo update`
 
