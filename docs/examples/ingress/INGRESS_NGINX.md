@@ -6,8 +6,8 @@ Official instructions for deploying and configuring the controller can be found 
 ## Prerequisites
 Testing was performed on AWS and so these prerequisites and instructions are tailored toward it. However, at a high level, the same details will apply to other cloud providers.
 
-* Provision a new TLS certificate (Amazon Certificate Manager) 
-* Provision a new DNS record (Amazon Route53) and associate the TLS certificate with it. This DNS record will be used to configure the Ingress resource, see [Ingress resource config](#Ingress-resource-config) below.
+1. Provision a new DNS record (Amazon Route53). This DNS record will be used to configure the Ingress resource, see [Ingress resource config](#Ingress-resource-config) below.
+2. Provision a new TLS certificate (Amazon Certificate Manager) for the DNS record.
 
 ## Controller installation
 We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx). You can also use the instructions below which are based on the official ones.

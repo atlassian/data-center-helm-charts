@@ -46,7 +46,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The database service may be deployed within the same Kubernetes cluster as the Data Center product, or elsewhere.
 
-   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the **Database connectivity** section in [CONFIGURATION.md](CONFIGURATION.md).
+   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the **Database connectivity** [section](CONFIGURATION.md#database-connectivity).
 
 5. [Configure a shared-home volume](examples/storage):
 
