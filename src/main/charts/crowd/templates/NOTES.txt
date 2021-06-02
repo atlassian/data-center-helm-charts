@@ -15,17 +15,15 @@ To see the custom values you used for this release:
 
 {{ if .Values.ingress.create -}}
 {{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}
-{{- else if contains "ClusterIP"  .Values.crowd.service.type -}}
+{{- else if contains "ClusterIP" .Values.crowd.service.type -}}
 Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
   Step 1: Get the pod name
     $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  Step 2 (Optional): Check the exported pod name
-    $ echo $POD_NAME
-  Step 3 (Optional): Check the pod status
-    $ kubectl get pod $POD_NAME
-  Step 4: Wait for pods up and running, then forward pod port to localhost.
+  Step 2 (Optional): Check if the pod name has been exported successfully and the pod status
+    $ echo POD_NAME: $POD_NAME && echo POD_STATUS: $(kubectl get pod $POD_NAME)
+  Step 3: Wait for pods up and running, then forward pod port to localhost.
     $ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.crowd.ports.http }}
-  Step 5: Access {{ title .Chart.Name }} on localhost:
+  Step 4: Access {{ title .Chart.Name }} on localhost:
     http://localhost:{{ .Values.crowd.ports.http }}
 {{- end }}
 
