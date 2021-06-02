@@ -10,10 +10,10 @@ Database creation comprises of 2 steps:
 1. Initialize the database server
 2. Create a database user and corresponding database
 
-###1. Initialize database server
+### 1. Initialize database server
 Follow the [Creating an Amazon RDS DB instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateDBInstance.html) guide for details on standing up an RDS DB server.
 
-###2. Create database
+### 2. Create database
 For details on creating the database user and database itself follow the appropriate guide below:
  * [Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html)
  * [Confluence](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup)
