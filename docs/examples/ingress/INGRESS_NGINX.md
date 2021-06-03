@@ -42,6 +42,7 @@ controller:
         "service.beta.kubernetes.io/aws-load-balancer-backend-protocol": "tcp"
         "service.beta.kubernetes.io/aws-load-balancer-proxy-protocol": "*"
         "service.beta.kubernetes.io/aws-load-balancer-ssl-ports": "https"
+        "service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout": 3600
         "service.beta.kubernetes.io/aws-load-balancer-ssl-cert": "<arn_for_tls_cert>"
     externalTrafficPolicy: "Local"
 ```
