@@ -37,15 +37,9 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
     * Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
  
  * **Bitbucket Secrets**: If you specify the names of the [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) that contain the Bitbucket license key and the Bitbucket sysadmin credentials, you will be able to bypass the license and the admin user configurations during the Bitbucket setup. To do this, update the `bitbucket` stanza in the `values.yaml` file:
-    * Specify `bitbucket.license.*` and `bitbucket.sysadminCredentials.*` like so:
-      ```
-      bitbucket:
-        license:
-          secretName: bitbucket-license
-        sysadminCredentials:
-          secretName: bitbucket-sysadmin-credentials
-      ```
-   * [Create the secrets](https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret) with the keys containing the properties also defined with the `bitbucket.license.*` properties. For example, the property `bitbucket.sysadminCredentials.displayNameSecretKey` defaults to `displayName`, so the secret bitbucket-sysadmin-credentials has to contain a property `displayName`.
+    * Update the `secretName` that is under `license` and the `secretName` that is under `sysadminCredentials`. You can provide the Bitbucket license key and sysadmin credentials via a Kubernetes secret, with the secret name specified here.
+    
+   * [Create the secrets](https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret) with the keys defined in the `values.yaml` file.
 
 #### 3. Install your chosen product: 
 
