@@ -13,7 +13,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 These Helm charts are **experimental and unsupported**, with the goal of introducing official support once they have been
 stabilized.
 
-The documented [platforms](docs/PLATFORMS.md) **are not officially supported** and should be used only as examples.
+The documented [platforms](docs/PLATFORMS.md) **are not officially supported** and should be used only for example purposes.
 
 All the functionality described in [examples](docs/examples) **is not officially supported**, use them for reference material only.
 
