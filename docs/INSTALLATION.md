@@ -19,7 +19,7 @@ Create the file:
 
 Update the `values.yaml` based on what you provisioned as part of the prerequisites:
    
-  * **Database**: If you provide all the required information via the `values.yaml` file, you will be able to bypass the database connectivity configuration during the product setup. To do this, update the `database` stanza in the `values.yaml` file:
+  * **Database**: If you provide all the required database information via the `values.yaml` file, you will be able to bypass the database connectivity configuration during the product setup. To do this, update the `database` stanza in the `values.yaml` file:
    
     1. Update the `url` of the database. This is the Java Database Connectivity (JDBC) URL of the database to be used by the application. The format of this URL depends on the JDBC driver being used, but we provide some examples in [CONFIGURATION.md](CONFIGURATION.md).
     2. For Jira and Bitbucket: update the `driver` to be used. This is the Java class name of the JDBC driver to be used, for example `org.postgresql.Driver`.
@@ -35,7 +35,17 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
      * For more details, please refer to the **Volumes** section of the [configuration guide](CONFIGURATION.md).
      * You can also refer to our examples of AWS storage: [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md) and [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)    
     * Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
-
+ 
+ * **Bitbucket Secrets**: If you specify the names of the [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) that contain the Bitbucket license key and the Bitbucket sysadmin credentials, you will be able to bypass the license and the admin user configurations during the Bitbucket setup. To do this, update the `bitbucket` stanza in the `values.yaml` file:
+    * Specify `bitbucket.license.*` and `bitbucket.sysadminCredentials.*` like so:
+      ```
+      bitbucket:
+        license:
+          secretName: bitbucket-license
+        sysadminCredentials:
+          secretName: bitbucket-sysadmin-credentials
+      ```
+   * [Create the secrets](https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret) with the keys containing the properties also defined with the `bitbucket.license.*` properties. For example, the property `bitbucket.sysadminCredentials.displayNameSecretKey` defaults to `displayName`, so the secret bitbucket-sysadmin-credentials has to contain a property `displayName`.
 
 #### 3. Install your chosen product: 
 
