@@ -17,7 +17,7 @@ The documented [platforms](docs/PLATFORMS.md) **are not officially supported** a
 
 All the functionality described in [examples](docs/examples) **is not officially supported**, use them for reference material only.
 
-If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
+If you find any issues, or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
 
 
 ## Using the Helm charts
