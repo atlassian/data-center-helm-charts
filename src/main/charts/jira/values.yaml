@@ -75,9 +75,9 @@ jira:
     localHomeSubPath: "log"
 
   clustering:
-    # -- Set to true if Data Center clustering should be enabled
+    # -- Set to false to disable Data Center clustering
     # This will automatically configure cluster peer discovery between cluster nodes.
-    enabled: false
+    enabled: true
 
   license:
     # -- The name of the Kubernetes Secret that contains the Jira license key.

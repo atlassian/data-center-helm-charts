@@ -31,6 +31,48 @@ data:
   max_heap: 768m
   min_heap: 384m
 ---
+# Source: crowd/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: unittest-crowd
+  labels:
+    helm.sh/chart: crowd-0.10.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+      - pods
+      - nodes
+    verbs:
+      - get
+      - list
+---
+# Source: crowd/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: unittest-crowd
+  labels:
+    helm.sh/chart: crowd-0.10.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: unittest-crowd
+subjects:
+  - kind: ServiceAccount
+    name: unittest-crowd
+    namespace:  mynamespace
+---
 # Source: crowd/templates/service.yaml
 apiVersion: v1
 kind: Service

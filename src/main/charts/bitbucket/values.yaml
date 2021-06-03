@@ -97,9 +97,9 @@ bitbucket:
     emailAddressSecretKey: emailAddress
 
   clustering:
-    # -- Set to true if Data Center clustering should be enabled
+    # -- Set to false to disable Data Center clustering
     # This will automatically configure cluster peer discovery between cluster nodes.
-    enabled: false
+    enabled: true
 
   elasticSearch:
     # -- The base URL of the external ElasticSearch instance to be used.

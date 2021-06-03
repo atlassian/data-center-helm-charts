@@ -97,9 +97,9 @@ confluence:
     localHomeSubPath: "logs"
 
   clustering:
-    # -- Set to true if Data Center clustering should be enabled
+    # -- Set to false to disable Data Center clustering
     # This will automatically configure cluster peer discovery between cluster nodes.
-    enabled: false
+    enabled: true
     # -- Set to true if the Kubernetes pod name should be used as the end-user-visible name of the Data Center cluster node.
     usePodNameAsClusterNodeName: true
 
