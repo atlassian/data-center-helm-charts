@@ -33,6 +33,7 @@ If you find any issue, please [raise a ticket](https://github.com/atlassian-labs
   * [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
   * [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md)
   * [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)
+  * [SSH service in Bitbucket on Kubernetes](docs/examples/ssh/SSH_BITBUCKET.md)
 
 
   
