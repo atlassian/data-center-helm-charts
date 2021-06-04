@@ -13,7 +13,7 @@ Some key considerations to note when configuring the controller are:
    * Ingress Controller annotations
    * The request max body size
    * The hostname of the ingress resource
-* When installed, and based on the supplied [configuration](https://kubernetes.github.io/ingress-nginx/deploy/), the NGINX Ingress Controller will provision an Internet-facing (see diagram below) load balancer on your behalf. The LB should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
+* When installed, with the supplied [configuration](https://kubernetes.github.io/ingress-nginx/deploy/), the NGINX Ingress Controller will provision an Internet-facing (see diagram below) load balancer on your behalf. The LB should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
 * If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
 * The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress.
 
