@@ -3,6 +3,28 @@ entries:
   bitbucket:
   - apiVersion: v2
     appVersion: 7.12.1-jdk11
+    created: "2021-06-01T10:24:24.875323466Z"
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 24bfad742a7d728b0628955fa833fabe1517f6bffb5448c37fc021efaba5dabf
+    home: https://www.atlassian.com/software/bitbucket
+    icon: https://wac-cdn.atlassian.com/dam/jcr:bf39fc40-3871-491f-98e3-fb2293f57a00/bitbucket-icon-gradient-blue.svg?cdnVersion=696
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.10.0/bitbucket-0.10.0.tgz
+    version: 0.10.0
+  - apiVersion: v2
+    appVersion: 7.12.1-jdk11
     created: "2021-05-25T06:48:58.1237891Z"
     description: A chart for installing Bitbucket Data Center on Kubernetes
     digest: b36b2938dffb57aa6532eb9a166b1687a769335ab8e850ca579de9d4e9f3b46a
@@ -86,6 +108,28 @@ entries:
     - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.6.0/bitbucket-0.6.0.tgz
     version: 0.6.0
   confluence:
+  - apiVersion: v2
+    appVersion: 7.12.0-jdk11
+    created: "2021-06-01T10:24:25.188524498Z"
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 7a9829a2e7dabdfe2749656330b476b3c06c7c9f2d092147fcd0aa5085b4c96a
+    home: https://www.atlassian.com/software/confluence
+    icon: https://wac-cdn.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-813aba614b7a/confluence-icon-gradient-blue.svg?cdnVersion=696
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.10.0/confluence-0.10.0.tgz
+    version: 0.10.0
   - apiVersion: v2
     appVersion: 7.12.0-jdk11
     created: "2021-05-25T06:48:58.4735723Z"
@@ -173,6 +217,28 @@ entries:
   crowd:
   - apiVersion: v2
     appVersion: 4.3.0-jdk11
+    created: "2021-06-01T10:24:25.525269207Z"
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: f991c7f7b0f71df76b05297f8ce8e9f55c56b5aeb551ce458162ca9fe878c303
+    home: https://www.atlassian.com/software/crowd
+    icon: https://wac-cdn.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-813aba614b7a/confluence-icon-gradient-blue.svg?cdnVersion=696
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.10.0/crowd-0.10.0.tgz
+    version: 0.10.0
+  - apiVersion: v2
+    appVersion: 4.3.0-jdk11
     created: "2021-05-25T06:48:58.8447249Z"
     description: A chart for installing Crowd Data Center on Kubernetes
     digest: 8cb81bb1a8a935ec807000e740609d869635b376aedaf319a9948d60e43adf49
@@ -238,6 +304,29 @@ entries:
     - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - apiVersion: v2
+    appVersion: 8.13.6-jdk11
+    created: "2021-06-01T10:24:25.836628681Z"
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 9765fd389198558ffb910c719251b469106b549580f3e32e98d5e44478fe4fda
+    home: https://www.atlassian.com/software/jira
+    icon: https://wac-cdn.atlassian.com/dam/jcr:826c97dc-1f5c-4955-bfcc-ea17d6b0c095/jira%20software-icon-gradient-blue.svg?cdnVersion=492
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.10.0/jira-0.10.0.tgz
+    version: 0.10.0
   - apiVersion: v2
     appVersion: 8.13.6-jdk11
     created: "2021-05-25T06:48:59.1769467Z"
@@ -326,4 +415,4 @@ entries:
     urls:
     - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2021-05-25T06:48:59.1771475Z"
+generated: "2021-06-01T10:24:25.836697077Z"

@@ -1,0 +1,22 @@
+{{/* This describes a K8s service for communicating with the ssh port on Bitbucket */}}
+{{- if .Values.bitbucket.sshService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bitbucket.fullname" . }}-ssh
+  labels:
+    {{- include "bitbucket.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.bitbucket.sshService.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.bitbucket.sshService.type }}
+  ports:
+    - port: {{ .Values.bitbucket.sshService.port }}
+      targetPort: ssh
+      protocol: TCP
+      name: ssh
+  selector:
+    {{- include "bitbucket.selectorLabels" . | nindent 4 }}
+{{ end }}

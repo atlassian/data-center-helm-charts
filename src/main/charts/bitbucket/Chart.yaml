@@ -2,9 +2,9 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 0.9.0
+version: 0.10.0
 appVersion: 7.12.1-jdk11
-kubeVersion: ">=1.17.x-0"
+kubeVersion: ">=1.19.x-0"
 keywords:
   - Bitbucket
   - Bitbucket Server
@@ -12,7 +12,7 @@ keywords:
   - Bitbucket DC
   - Atlassian
 home: https://www.atlassian.com/software/bitbucket
-icon: https://wac-cdn.atlassian.com/dam/jcr:bf39fc40-3871-491f-98e3-fb2293f57a00/bitbucket-icon-gradient-blue.svg?cdnVersion=696
+icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bitbucket.svg
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
