@@ -19,7 +19,7 @@ metadata:
 data:
   7999: "ssh-test/bitbucket:ssh"
 ```
-Nex, we have to edit the `deployment` of the ingress controller and add the `--tcp-services-configmap` option:
+Next, we have to edit the `deployment` of the ingress controller and add the `--tcp-services-configmap` option:
 * Execute:
    `kubectl edit deployment <name of ingress-nginx deployment>` 
 * Add this line in the args of the container spec:
