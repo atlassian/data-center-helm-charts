@@ -5,6 +5,10 @@ metadata:
   name: {{ include "bitbucket.fullname" . }}
   labels:
     {{- include "bitbucket.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.bitbucket.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.bitbucket.service.type }}
   ports:
