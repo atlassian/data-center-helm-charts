@@ -1,6 +1,6 @@
 # Installation 
 
-Use these instructions to install your Atlassian product using the Helm charts. Make sure you have followed the [Prerequisites guide](PREREQUISITES.md) before you proceed with the installation.
+Use these instructions to install your Atlassian product using the Helm charts. Before you proceed with the installation, make sure you have followed the [Prerequisites guide](PREREQUISITES.md).
 
 ## 1. Add the Helm chart repository
 
@@ -16,22 +16,22 @@ helm repo update
 
 ## 2. Obtain `values.yaml`
 
-Obtain default product `values.yaml` from chart:
+Obtain the default product `values.yaml` file from the chart:
 ```shell
 helm show values atlassian-data-center/<product> > values.yaml
 ```
 
 ## 3. Configure database
-Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the database provisioned as part of the [Prerequisites](PREREQUISITES.md). 
+Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the usage of the database provisioned as part of the [Prerequisites](PREREQUISITES.md). 
 
-> Providing all the required DB values means database connectivity configuration during the product setup will be bypassed.
+> If you provide all the required database values, you will bypass the database connectivity configuration during the product setup.
 
 First, create a K8s secret to store the connectivity details of the database:
 ```shell
 kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
 ``` 
 
-Using the K8s secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` for additional details on how to configure the remaining DB values:
+Using the [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/), update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` for additional details on how to configure the remaining database values:
 ```yaml
 database:
   type: <db_type>
@@ -45,7 +45,7 @@ database:
 > For additional information on how the above values should be configured, refer to the [database connectivity guide](CONFIGURATION.md#Database-connectivity).
     
 ## 4. Configure Ingress
-Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the Ingress controller provisioned as part of the [Prerequisites](PREREQUISITES.md). The values supplied here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` for additional details on how to configure the Ingress resource:
+Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` for additional details on how to configure the Ingress resource:
 
 ```yaml
 ingress:
@@ -58,7 +58,7 @@ ingress:
   https: true
   tlsSecretName:
 ```
-> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress), and an example of how to set up a controller can be found [here](examples/ingress/CONTROLLERS.md).
+> Additional details on Ingress controllers are documented in the [Ingress section of the configuration guide](CONFIGURATION.md#Ingress), and you can use our [example of how to set up a controller](examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
@@ -71,7 +71,7 @@ volumes:
         claimName: <pvc_name>
 ```
 
-Although not required, local storage for the pods can also be configured at this stage. A `StorageClass` will need to be pre-provisioned to utilize this feature, see [here for an example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass` update `values.yaml` to make use of it: 
+Although not required, local storage for the pods can also be configured at this stage. A `StorageClass` will need to be pre-provisioned to utilize this feature, as you can see in the [local storage example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
 
 ```yaml
 volumes:
