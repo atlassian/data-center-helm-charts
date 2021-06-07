@@ -109,7 +109,7 @@ helm test <release-name> --logs --namespace <namespace>
 * This will run some basic smoke tests against the deployed release.
 * If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
 
-## 8. Complete your product setup 
+## 8. Complete product setup 
 
 Using the service URL supplied by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 
