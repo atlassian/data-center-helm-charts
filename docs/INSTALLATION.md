@@ -78,7 +78,7 @@ volumes:
   localHome:
     persistentVolumeClaim:
       create: true
-      storageClassName: "ebs-sc"
+      storageClassName: <storage-class-name>
 ```
 
 > For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes).
