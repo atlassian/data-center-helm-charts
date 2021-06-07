@@ -101,7 +101,6 @@ helm install <release-name> atlassian-data-center/<product> --namespace <namespa
 ## 7. Test your deployed product 
 
 Make sure the service pod/s are running, then test your deployed product:
-
 ```shell
 helm test <release-name> --logs --namespace <namespace>
 ```
