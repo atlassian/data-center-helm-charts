@@ -14,8 +14,6 @@ Update the repo:
 helm repo update
 ```
 
-
-
 ## 2. Obtain `values.yaml`
 
 Obtain default `values.yaml` from chart:
@@ -24,17 +22,16 @@ helm show values atlassian-data-center/<product> > values.yaml
 ```
 
 ## 3. Configure database
+Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the database provisioned as part of the [Prerequisites](PREREQUISITES.md). 
 
-Using `values.yaml` obtained in [step 2.](#Obtain-values.yaml) configure usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md#Provision-a-database). 
+> Providing all the required DB values means database connectivity configuration during the product setup will be bypassed.
 
-> Providing all the required information here means database connectivity configuration during the product setup will be bypassed.
-
-Create a K8s secret to store the connectivity details of the database:
+First, create a K8s secret to store the connectivity details of the database:
 ```shell
 kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
 ``` 
 
-Using the K8s secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary withing the `values.yaml` for additional details on how to configure the remaining values:
+Using the K8s secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` for additional details on how to configure the remaining DB values:
 ```shell
 database:
   type: <db_type>
@@ -48,61 +45,100 @@ database:
 > For additional information on how the above values should be configured, refer to the [database connectivity guide](CONFIGURATION.md#Database-connectivity).
     
 ## 4. Configure Ingress
+Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the Ingress controller provisioned as part of the [Prerequisites](PREREQUISITES.md).
 
-  * **Ingress controller**: The Helm charts provide a template for an ingress resource. To use the template update the `ingress` stanza in the `values.yaml` file: 
-  
-    1. Change the `create` value to `true`
-    2. Add a value to `host`. The ingress rules will apply to the host you provide. Hosts can be precise matches (for example “foo.bar.com”) or a wildcard (for example “*.foo.com”).
+> The values supplied here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` for additional details on how to configure the Ingress resource:
+
+```shell
+ingress:
+  create: true #1. Setting true here will create an Ingress resource
+  nginx: true #2. If using the ingress-nginx controller set this property to true
+  maxBodySize: 250m
+  host: <dns_host_name> #2. Hosts can be precise matches (for example “foo.bar.com”) or a wildcard (for example “*.foo.com”).
+  path: "/"
+  annotations: {}
+  https: true
+  tlsSecretName:
+```
     
 ## 5. Configure persistent storage
-      
-  * **Persistent storage**: Each Data Center pod has its own `local-home` volume, and each pod within a cluster can utilize a single `shared-home` volume. By default, the Helm charts will configure all of these volumes as `emptyDir` volumes, but this is suitable only for running a single Data Center node for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-node Data Center clusters to operate correctly.
-     * For more details, please refer to the **Volumes** section of the [configuration guide](CONFIGURATION.md).
-     * You can also refer to our examples of AWS storage: [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md) and [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)    
-    * Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
- 
- * **Bitbucket Secrets**: If you specify the names of the [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) that contain the Bitbucket license key and the Bitbucket sysadmin credentials, you will be able to bypass the license and the admin user configurations during the Bitbucket setup. To do this, update the `bitbucket` stanza in the `values.yaml` file:
-    * Update the `secretName` that is under `license` and the `secretName` that is under `sysadminCredentials`. You can provide the Bitbucket license key and sysadmin credentials via a Kubernetes secret, with the secret name specified here.
-    
-   * [Create the secrets](https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret) with the keys defined in the `values.yaml` file.
+Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
 
+```shell
+volumes:
+  sharedHome:
+    customVolume:
+      persistentVolumeClaim:
+        claimName: <pvc_name>
+```
+
+> For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes).
+    
+> **NOTE:** Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](examples/storage/nfs/NFS.md)
+    
 ## 6. Install your chosen product: 
 
-   `helm install <release-name> atlassian-data-center/<product> --namespace <namespace> --version <chart-version> --values values.yaml`
+```shell
+helm install <release-name> atlassian-data-center/<product> --namespace <namespace> --version <chart-version> --values values.yaml
+```
 
-   * `<release-name>` is the name of your deployment and is up to you, or you can use `--generate-name`.
+* `<release-name>` is the name of your deployment and is up to you, or you can use `--generate-name`.
+* `<product>` can be jira, confluence, bitbucket or crowd.
+* `<namespace>` is optional. You can use namespaces to organize clusters into virtual sub-clusters.
+* `<chart-version>` is optional, and can be omitted if you just want to use the latest version of the chart.
+* `values.yaml` is optional and contains your site-specific configuration information. If omitted, the chart config default will be used.
+* Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may be waiting for several minutes if anything is mis-configured.
 
-   * `<product>` can be jira, confluence, bitbucket or crowd.
-
-   * `<namespace>` is optional. You can use namespaces to organize clusters into virtual sub-clusters.
-
-   * `<chart-version>` is optional, and can be omitted if you just want to use the latest version of the chart.
-
-   * `values.yaml` is optional and contains your site-specific configuration information. If omitted, the chart config default will be used.
-
-   * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may be waiting for several minutes if anything is mis-configured.
-
-
-#### 4. Test your deployed product 
+## 7. Test your deployed product 
 
 Make sure the service pod/s are running, then test your deployed product:
 
-   `helm test <release-name> --logs --namespace <namespace>`
+```shell
+helm test <release-name> --logs --namespace <namespace>
+```
 
-   * This will run some basic smoke tests against the deployed release.
-   * If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
+* This will run some basic smoke tests against the deployed release.
+* If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
 
-## 7. Complete your product setup 
+## 8. Complete your product setup 
 
 Open your product in a web browser. If your product is Bitbucket your setup is complete and you will get straight to the login page. For the rest of the products, complete the setup according to the instructions you will find on the product’s web page. 
 
 # Uninstall  
- `helm uninstall <release-name> atlassian-data-center/<product>`
+```shell
+helm uninstall <release-name> atlassian-data-center/<product>
+```
 
-   * `<release-name>` is the name you chose for your deployment
+* `<release-name>` is the name you chose for your deployment
+* `<product>` can be jira, confluence, bitbucket or crowd
 
-   * `<product>` can be jira, confluence, bitbucket or crowd
+# Additional updates - Bitbucket
+Bitbucket is slightly different for the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2.](#Obtain-values.yaml) need to be updated.
 
+Create a K8s secret to hold the Bitbucket license:
+```shell
+kubectl create secret generic <license_secret_name> --from-literal=license-key='<bitbucket_license_key>'
+```
+Create a K8s secret to hold the Bitbucket system administrator credentials:
+```shell
+kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
+```
+
+Update the `values.yaml` with secrets:
+```shell
+license:
+  secretName: <secret_name>
+  secretKey: license-key
+  
+...
+
+sysadminCredentials:
+  secretName: <sysadmin_creds_secret_name>
+  usernameSecretKey: username
+  passwordSecretKey: password
+  displayNameSecretKey: displayName
+  emailAddressSecretKey: emailAddress
+```
 ***
 
 * Continue to the [operation guide](OPERATION.md)
