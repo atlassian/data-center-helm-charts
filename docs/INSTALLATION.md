@@ -32,7 +32,7 @@ kubectl create secret generic <secret_name> --from-literal=username='<db_usernam
 ``` 
 
 Using the K8s secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` for additional details on how to configure the remaining DB values:
-```shell
+```yaml
 database:
   type: <db_type>
   url: <jdbc_url>
@@ -47,7 +47,7 @@ database:
 ## 4. Configure Ingress
 Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the Ingress controller provisioned as part of the [Prerequisites](PREREQUISITES.md). The values supplied here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` for additional details on how to configure the Ingress resource:
 
-```shell
+```yaml
 ingress:
   create: true #1. Setting true here will create an Ingress resource
   nginx: true #2. If using the ingress-nginx controller set this property to true
@@ -63,7 +63,7 @@ ingress:
 ## 5. Configure persistent storage
 Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
 
-```shell
+```yaml
 volumes:
   sharedHome:
     customVolume:
@@ -124,7 +124,7 @@ kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=userna
 ```
 
 Update the `values.yaml` with secrets:
-```shell
+```yaml
 license:
   secretName: <secret_name>
   secretKey: license-key
