@@ -26,7 +26,7 @@ Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure th
 
 > If you provide all the required database values, you will bypass the database connectivity configuration during the product setup.
 
-First, create a K8s secret to store the connectivity details of the database:
+First, create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) to store the connectivity details of the database:
 ```shell
 kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
 ``` 
