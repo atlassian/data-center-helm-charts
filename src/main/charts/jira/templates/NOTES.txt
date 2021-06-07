@@ -39,4 +39,12 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- end }}
 {{- end }}
 
+{{ if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume}}
+{{- else }}
+#################################################################################
+######              WARNING: Persistent volume is not used!!!               #####
+######      You will lose your data when the Server pod is terminated.      #####
+#################################################################################
+{{- end }}
+
 For further documentation, see https://github.com/atlassian-labs/data-center-helm-charts/tree/master/docs
