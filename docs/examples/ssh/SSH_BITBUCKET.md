@@ -8,25 +8,25 @@ If you don’t need your deployment to have the SSH service available on the sam
 
 ## Steps for creating the LoadBalancer service 
 1. Enable the SSH service in the `values.yaml` file:
-```
-bitbucket:
-  sshService:
-    enabled: true
-```
+   ```
+   bitbucket:
+     sshService:
+       enabled: true
+   ```
 
 2. Add DNS annotaion in the `values.yaml` file. On a deployment using AWS, assuming you have [external-dns](https://github.com/kubernetes-sigs/external-dns) configured, you can add these annotations to automatically set up the DNS name for the SSH service: 
-```
-bitbucket:
-   annotations:
-      external-dns.alpha.kubernetes.io/hostname: bitbucket-ssh.example.com
-```
-This step is optional, you can set up the DNS name manually.
+   ```
+   bitbucket:
+      annotations:
+         external-dns.alpha.kubernetes.io/hostname: bitbucket-ssh.example.com
+   ```
+   This step is optional, you can set up the DNS name manually.
 
 3. Apply new values: 
 
-```
-bitbucket:
-  additionalEnvironmentVariables:
-    - name: PLUGIN_SSH_BASEURL
-      value: ssh://bitbucket-ssh.example.com/
-```
+   ```
+   bitbucket:
+     additionalEnvironmentVariables:
+       - name: PLUGIN_SSH_BASEURL
+         value: ssh://bitbucket-ssh.example.com/
+   ```
