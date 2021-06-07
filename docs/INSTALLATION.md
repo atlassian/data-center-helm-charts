@@ -101,7 +101,7 @@ helm test <release-name> --logs --namespace <namespace>
 
 ## 8. Complete your product setup 
 
-Open your product in a web browser. If your product is Bitbucket your setup is complete and you will get straight to the login page. For the rest of the products, complete the setup according to the instructions you will find on the product’s web page. 
+Using the service URL supplied by Helm post install open your product in a web browser. If the product is Bitbucket your setup will be complete (provided all values have been supplied, [see Ancillary updates below](#Ancillary-updates---Bitbucket)), and you will be taken straight to the login page. For the rest of the products, complete the setup according to the instructions you will find on the product’s web page. 
 
 # Uninstall  
 ```shell
