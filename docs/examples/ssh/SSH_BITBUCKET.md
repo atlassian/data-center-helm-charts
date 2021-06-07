@@ -19,14 +19,10 @@ If you don’t need your deployment to have the SSH service available on the sam
    bitbucket:
       annotations:
          external-dns.alpha.kubernetes.io/hostname: bitbucket-ssh.example.com
-   ```
-   This step is optional, you can set up the DNS name manually.
-
-3. Apply new values: 
-
-   ```
-   bitbucket:
-     additionalEnvironmentVariables:
+      additionalEnvironmentVariables:
        - name: PLUGIN_SSH_BASEURL
          value: ssh://bitbucket-ssh.example.com/
    ```
+   This step is optional, you can set up the DNS name manually.
+
+3. Apply new values.
