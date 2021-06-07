@@ -71,6 +71,16 @@ volumes:
         claimName: <pvc_name>
 ```
 
+Although not required, local storage for the pods can also be configured at this stage. A `StorageClass` will need to be pre-provisioned to utilize this feature, see [here for an example](examples/storage/aws/LOCAL_STORAGE.md)
+
+```yaml
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
+      storageClassName: "ebs-sc"
+```
+
 > For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes).
     
 > **NOTE:** Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](examples/storage/nfs/NFS.md)
@@ -101,7 +111,7 @@ helm test <release-name> --logs --namespace <namespace>
 
 ## 8. Complete your product setup 
 
-Using the service URL supplied by Helm post install, open your product in a web browser. If the product is Bitbucket your setup will be complete (provided all values have been supplied, [see Ancillary updates below](#Ancillary-updates---Bitbucket)), and you will be taken straight to the login page. For the rest of the products, complete the setup according to the instructions presented as part of the setup wizard. 
+Using the service URL supplied by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 
 # Uninstall  
 ```shell
@@ -111,33 +121,6 @@ helm uninstall <release-name> atlassian-data-center/<product>
 * `<release-name>` is the name you chose for your deployment
 * `<product>` can be jira, confluence, bitbucket or crowd
 
-# Ancillary updates - Bitbucket
-Bitbucket is slightly different for the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2.](#Obtain-values.yaml) need to be updated.
-
-Create a K8s secret to hold the Bitbucket license:
-```shell
-kubectl create secret generic <license_secret_name> --from-literal=license-key='<bitbucket_license_key>'
-```
-Create a K8s secret to hold the Bitbucket system administrator credentials:
-```shell
-kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
-```
-
-Update the `values.yaml` with secrets:
-```yaml
-license:
-  secretName: <secret_name>
-  secretKey: license-key
-  
-...
-
-sysadminCredentials:
-  secretName: <sysadmin_creds_secret_name>
-  usernameSecretKey: username
-  passwordSecretKey: password
-  displayNameSecretKey: displayName
-  emailAddressSecretKey: emailAddress
-```
 ***
 
 * Continue to the [operation guide](OPERATION.md)
