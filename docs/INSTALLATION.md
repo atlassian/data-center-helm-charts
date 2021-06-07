@@ -16,7 +16,7 @@ helm repo update
 
 ## 2. Obtain `values.yaml`
 
-Obtain default `values.yaml` from chart:
+Obtain default product `values.yaml` from chart:
 ```shell
 helm show values atlassian-data-center/<product> > values.yaml
 ```
@@ -45,9 +45,7 @@ database:
 > For additional information on how the above values should be configured, refer to the [database connectivity guide](CONFIGURATION.md#Database-connectivity).
     
 ## 4. Configure Ingress
-Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the Ingress controller provisioned as part of the [Prerequisites](PREREQUISITES.md).
-
-> The values supplied here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` for additional details on how to configure the Ingress resource:
+Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure the Ingress controller provisioned as part of the [Prerequisites](PREREQUISITES.md). The values supplied here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` for additional details on how to configure the Ingress resource:
 
 ```shell
 ingress:
@@ -60,6 +58,7 @@ ingress:
   https: true
   tlsSecretName:
 ```
+> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress). An example of how to set up a controller can be found [here](examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
@@ -112,7 +111,7 @@ helm uninstall <release-name> atlassian-data-center/<product>
 * `<release-name>` is the name you chose for your deployment
 * `<product>` can be jira, confluence, bitbucket or crowd
 
-# Additional updates - Bitbucket
+# Ancillary updates - Bitbucket
 Bitbucket is slightly different for the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2.](#Obtain-values.yaml) need to be updated.
 
 Create a K8s secret to hold the Bitbucket license:
