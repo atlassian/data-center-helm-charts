@@ -62,7 +62,7 @@ Update the `values.yaml` based on what you provisioned as part of the prerequisi
 
 Make sure the service pod/s are running, then test your deployed product:
 
-   `helm test <release-name> --logs -n --namespace <namespace>`
+   `helm test <release-name> -n --namespace <namespace>`
 
    * This will run some basic smoke tests against the deployed release.
    * If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
