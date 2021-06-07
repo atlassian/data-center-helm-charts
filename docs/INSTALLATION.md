@@ -58,7 +58,7 @@ ingress:
   https: true
   tlsSecretName:
 ```
-> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress). An example of how to set up a controller can be found [here](examples/ingress/CONTROLLERS.md).
+> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress), and an example of how to set up a controller can be found [here](examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
