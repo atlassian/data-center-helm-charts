@@ -32,8 +32,8 @@ Using `values.yaml` obtained in [step 2.](#Obtain-values.yaml) configure usage o
 Create a K8s secret to store the connectivity details of the database:
 ```shell
 kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
-```
-   
+``` 
+
 Using the K8s secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary withing the `values.yaml` for additional details on how to configure the remaining values:
 ```shell
 database:
@@ -45,7 +45,7 @@ database:
     usernameSecretKey: username
     passwordSecretKey: password
 ```
-> For additional information on how the above values should be configured, refer to the [database connectivity guide](CONFIGURATION.md#Database-connectivity)
+> For additional information on how the above values should be configured, refer to the [database connectivity guide](CONFIGURATION.md#Database-connectivity).
     
 ## 4. Configure Ingress
 
@@ -60,7 +60,11 @@ database:
      * For more details, please refer to the **Volumes** section of the [configuration guide](CONFIGURATION.md).
      * You can also refer to our examples of AWS storage: [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md) and [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)    
     * Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
-
+ 
+ * **Bitbucket Secrets**: If you specify the names of the [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) that contain the Bitbucket license key and the Bitbucket sysadmin credentials, you will be able to bypass the license and the admin user configurations during the Bitbucket setup. To do this, update the `bitbucket` stanza in the `values.yaml` file:
+    * Update the `secretName` that is under `license` and the `secretName` that is under `sysadminCredentials`. You can provide the Bitbucket license key and sysadmin credentials via a Kubernetes secret, with the secret name specified here.
+    
+   * [Create the secrets](https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret) with the keys defined in the `values.yaml` file.
 
 ## 6. Install your chosen product: 
 
