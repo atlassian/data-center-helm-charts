@@ -43,7 +43,7 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- else }}
 #################################################################################
 ######              WARNING: Persistent volume is not used!!!               #####
-######      You will lose your data when the Server pod is terminated.      #####
+######         You will lose your data when the pod is terminated.          #####
 #################################################################################
 {{- end }}
 
