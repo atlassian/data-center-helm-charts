@@ -21,12 +21,15 @@ All the functionality described in [examples](docs/examples) **is not officially
 
 If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new) in this repository. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
 
-## Using the Helm charts
+## Installing the Helm charts
 
 * [Prerequisites and setup](docs/PREREQUISITES.md) - everything you need to do before installing the Helm charts
-* [Configuration](docs/CONFIGURATION.md) - details about configuration parameters
 * [Installation](docs/INSTALLATION.md) - the steps to install the Helm charts
+
+## Additional content
+
 * [Operation](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
+* [Configuration](docs/CONFIGURATION.md) - a deep dive into the configuration parameters
 * [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
 * [Examples](docs/examples/)
   * [How to deploy an EFK stack to Kubernetes](docs/examples/logging/efk/EFK.md)
