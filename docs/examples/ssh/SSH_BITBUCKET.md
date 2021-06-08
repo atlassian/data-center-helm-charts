@@ -6,7 +6,7 @@ Depending on the need of your deployment, SSH access can be provided through two
 1. Opening the TCP port through the ingress controller - This option should be used if the SSH service is required to be available on the same DNS name as the HTTP service.
 2. Creating a separate Kubernetes `LoadBalancer` service - This option is available if the ingress controller does not support TCP connections, or if you don’t need your deployment to have the SSH service available on the same DNS name as the HTTP service.
 
-## Controller config for SSH connections
+## NGINX Ingress controller config for SSH connections
 We can follow the official documentation for the NGINX Ingress controller for this: [Exposing TCP and UDP services - NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/).
 
 >**NOTE:** These instructions should be performed in the same namespace in which the Ingress controller resides.
