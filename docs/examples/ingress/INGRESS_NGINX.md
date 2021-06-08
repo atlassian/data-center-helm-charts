@@ -6,7 +6,7 @@
 These instructions are composed of 3 high-level parts:
 
 1. Controller installation and configuration
-2. Certificate issuer installation and configuration
+2. Certificate manager installation and configuration
 3. Ingress resource configuration
 
 ## Controller installation and configuration
@@ -49,7 +49,7 @@ Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a va
 
 > **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
-## Certificate issuer installation and configuration
+## Certificate manager installation and configuration
 K8s certificate management is handled using [cert-manager](https://cert-manager.io/).
 
 ### 1. Install cert-manager
