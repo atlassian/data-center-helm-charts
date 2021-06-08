@@ -121,7 +121,7 @@ ingress:
   host: <dns_record>
   path: "/"
   annotations:
-    cert-manager.io/issuer: "letsencrypt-prod" # Using [Let's Encrypt](https://letsencrypt.org/
+    cert-manager.io/issuer: "letsencrypt-prod" # Using https://letsencrypt.org/
   https: true
   tlsSecretName: tls-certificate
 ```
