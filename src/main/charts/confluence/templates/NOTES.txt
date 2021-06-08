@@ -42,7 +42,7 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{ if not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume ) }}
 #################################################################################
 ######              WARNING: Persistent volume is not used!!!               #####
-######         You will lose your data when the pod is terminated.          #####
+######            Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
 
