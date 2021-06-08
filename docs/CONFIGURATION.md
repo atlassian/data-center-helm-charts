@@ -1,7 +1,7 @@
 # Configuration 
 
 ## Ingress
-A suitable HTTP/HTTPS ingress controller needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.  The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/). We also provide [example instructions](examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
+In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/). We also provide [example instructions](examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
 
 The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller. 
 
@@ -13,9 +13,9 @@ Some key considerations to note when configuring the controller are:
    * Ingress Controller annotations
    * The request max body size
    * The hostname of the ingress resource
-* When installed, with the supplied [configuration](https://kubernetes.github.io/ingress-nginx/deploy/), the NGINX Ingress Controller will provision an Internet-facing (see diagram below) load balancer on your behalf. The LB should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
+* When installed, with the provided [configuration](https://kubernetes.github.io/ingress-nginx/deploy/), the NGINX Ingress Controller will provision an internet-facing (see diagram below) load balancer on your behalf. The load blancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
 * If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
-* The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress.
+* The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
 
 ![ingress-architecture](./images/ingress.png "Request routing via Ingress")
 

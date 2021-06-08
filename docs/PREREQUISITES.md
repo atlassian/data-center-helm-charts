@@ -21,15 +21,15 @@ Before installing the Data Center Helm charts you need to set up your environmen
    
 3. [Provision an Ingress Controller](examples/ingress/CONTROLLERS.md) in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
 
-   * The Kubernetes project supports and maintains ingress Controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source third party projects [available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
+   * The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-   * Because different Kubernetes clusters use different Ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only.
+   * Because different Kubernetes clusters use different ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only.
 
    * An [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress/) is not installed by default when you install the Helm charts, but the charts do provide a template for an ingress resource. In order for the Ingress resource to work, the cluster must have an ingress controller running, such as [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/). 
 
-   * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) (an alternative controller can of course be used) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
+   * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) (an alternative controller can be used) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
 
-   * For more information about the Ingress Controller please refer to the [Ingress section](CONFIGURATION.md#Ingress) of the Configuration guide.
+   * For more information about the ingress controller please refer to the [Ingress section](CONFIGURATION.md#Ingress) of the Configuration guide.
 
 4. [Provision a database](examples/database/CLOUD_PROVIDERS.md):
 
@@ -45,7 +45,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * Must be reachable from the product deployed within your Kubernetes cluster. 
 
-   * The database service may be deployed within the same Kubernetes cluster as the Data Center product, or elsewhere.
+   * The database service may be deployed within the same Kubernetes cluster as the Data Center product or elsewhere.
 
    * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the [Database connectivity section](CONFIGURATION.md#database-connectivity) of the Configuration guide.
 
