@@ -1,5 +1,5 @@
 # NGINX Ingress Controller - with TLS termination
-[NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/) with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/) and certificates from [Let's Encrypt](https://letsencrypt.org/)
+[NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/) with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/) and certificates from [Let's Encrypt](https://letsencrypt.org/).
 
 > **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
 
