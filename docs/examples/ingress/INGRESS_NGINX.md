@@ -7,6 +7,7 @@ These instructions are composed of 2 high-level parts:
 
 1. Controller installation and configuration
 2. Certificate issuer installation and configuration
+3. Ingress resource configuration
 
 ## Controller installation and configuration
 We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx). You can also use the instructions below.
@@ -15,6 +16,9 @@ We recommend installing the controller using its official [Helm Charts](https://
 Add the `ingress-nginx` Helm repo:
 ```shell
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+```
+Update the repo:
+```shell
 helm repo update
 ```
 
@@ -42,26 +46,9 @@ Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a va
 > **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
 ## Certificate issuer installation and configuration
-Now that the Ingress controller is setup, it can be configured for TLS termination by configuring a Ingress resource.
-
-### 1. Ingress resource config
-For TLS cert auto-provisioning and TLS termination update the `ingress` stanza within the products `values.yaml`:
-```yaml
-ingress:
-  create: true
-  nginx: true
-  maxBodySize: 250m
-  host: <dns_record>
-  path: "/"
-  annotations:
-    cert-manager.io/issuer: "letsencrypt-prod" # Using [Let's Encrypt](https://letsencrypt.org/
-  https: true
-  tlsSecretName: tls-certificate
-```
-
-### 2. Install certificate manager
 K8s certificate management is handled using cert-manager(https://cert-manager.io/)
 
+### 2. Install cert-manager
 Create a new namespace for the cert-manager resources
 ```shell
 kubectl create namespace cert-manager
@@ -116,6 +103,24 @@ spec:
       - http01:
           ingress:
             class: nginx
+```
+
+## Ingress resource configuration
+Now that the Ingress controller and certificate manager are setup the Ingress resource can be configured accordingly by updating the `values.yaml`.
+
+### 1. Ingress resource config
+For TLS cert auto-provisioning and TLS termination update the `ingress` stanza within the products `values.yaml`:
+```yaml
+ingress:
+  create: true
+  nginx: true
+  maxBodySize: 250m
+  host: <dns_record>
+  path: "/"
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-prod" # Using [Let's Encrypt](https://letsencrypt.org/
+  https: true
+  tlsSecretName: tls-certificate
 ```
 
 > Having created the Ingress controller continue with provisioning the [pre-requisite infrastructure](../../PREREQUISITES.md).
