@@ -31,12 +31,19 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
   Step 1: Get the pod name
     $ export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   Step 2 (Optional): Check if the pod name has been exported successfully and the pod status
-    $ echo POD_NAME: $POD_NAME && echo POD_STATUS: $(kubectl get pod $POD_NAME)
+    $ echo POD_NAME: $POD_NAME && echo POD_STATUS: $(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}')
   Step 3: Wait for pods up and running, then forward pod port to localhost
     $ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.confluence.ports.http }}
   Step 4: Access {{ title .Chart.Name }} on localhost:
     http://localhost:{{ .Values.confluence.ports.http }}
 {{- end }}
+{{- end }}
+
+{{ if not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume ) }}
+#################################################################################
+######              WARNING: Persistent volume is not used!!!               #####
+######            Data will be lost when the pod is terminated.             #####
+#################################################################################
 {{- end }}
 
 For further documentation, see https://github.com/atlassian-labs/data-center-helm-charts/tree/master/docs
