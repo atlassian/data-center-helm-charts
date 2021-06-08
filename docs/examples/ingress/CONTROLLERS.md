@@ -3,4 +3,4 @@ In order for the provided Ingress resource to work, your Kubernetes cluster must
 
 Examples of how these controllers can be installed and configured for use with the Atlassian Helm charts can be found below:
 
-* [NGINX Ingress Controller on AWS](INGRESS_NGINX.md)
+* [NGINX Ingress Controller](INGRESS_NGINX.md)
