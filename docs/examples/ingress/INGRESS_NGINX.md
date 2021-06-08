@@ -21,9 +21,13 @@ helm repo update
 ```
 
 ### 3. Install controller
+Create a new namespace for the Ingress controller:
+```shell
+kubectl create namespace ingress
+```
 Install the controller using Helm:
 ```shell
-helm install <release name> ingress-nginx/ingress-nginx
+helm install <release name> ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 4. DNS setup
@@ -44,7 +48,7 @@ Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a va
 > **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
 ## Certificate issuer installation and configuration
-K8s certificate management is handled using cert-manager(https://cert-manager.io/)
+K8s certificate management is handled using [cert-manager](https://cert-manager.io/).
 
 ### 2. Install cert-manager
 Create a new namespace for the cert-manager resources
@@ -78,7 +82,7 @@ kubectl get pods --namespace cert-manager
 ```
 
 ### 3. Create certificate issuer
-Using the yaml spec below create the certificate `Issuer` resource
+Using the yaml spec below create and apply the certificate `Issuer` resource
 > Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
 
 ```yaml
@@ -101,6 +105,10 @@ spec:
       - http01:
           ingress:
             class: nginx
+```
+Install the `Issuer` resource
+```shell
+kubectl apply -f issuer.yaml
 ```
 
 ## Ingress resource configuration
