@@ -1,9 +1,7 @@
 # NGINX Ingress Controller - With TLS termination
-> **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only!
+> **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
 
-Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
-
-These instructions are composed of 2 high-level parts:
+These instructions are composed of 3 high-level parts:
 
 1. Controller installation and configuration
 2. Certificate issuer installation and configuration
@@ -81,7 +79,7 @@ kubectl get pods --namespace cert-manager
 
 ### 3. Create certificate issuer
 Using the yaml spec below create the certificate `Issuer` resource
-> Ensure that the certificate issuer s installed in the same namespace that the Atlassian product will be deployed to.
+> Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
 
 ```yaml
 apiVersion: cert-manager.io/v1
