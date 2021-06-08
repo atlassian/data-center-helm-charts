@@ -52,7 +52,7 @@ Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a va
 ## Certificate issuer installation and configuration
 K8s certificate management is handled using [cert-manager](https://cert-manager.io/).
 
-### 2. Install cert-manager
+### 1. Install cert-manager
 Add the cert manager repo
 ```shell
 helm repo add jetstack https://charts.jetstack.io
@@ -78,7 +78,7 @@ Confirm the cert-manager is appropriately installed:
 kubectl get pods --namespace cert-manager
 ```
 
-### 3. Create certificate issuer
+### 2. Create certificate issuer
 Using the yaml spec below create and apply the certificate `Issuer` resource
 > Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
 
