@@ -1,4 +1,4 @@
-# NGINX Ingress Controller - With TLS termination
+# NGINX Ingress Controller - with TLS termination
 > **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
 
 These instructions are composed of 3 high-level parts:
@@ -33,7 +33,7 @@ helm install <release name> ingress-nginx/ingress-nginx --namespace ingress
 ### 3. DNS setup
 Manually provision a new DNS record (as described) via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns).
 
-Once created associate the DNS record with the auto provisioned Load Balancer that was created in [Step 3. above](#3.-Install). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
+Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 3. above](#3.-Install). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
 kubectl get service | grep ingress-nginx    
 ```
@@ -51,11 +51,6 @@ Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a va
 K8s certificate management is handled using [cert-manager](https://cert-manager.io/).
 
 ### 2. Install cert-manager
-Create a new namespace for the cert-manager resources
-```shell
-kubectl create namespace cert-manager
-```
-
 Add the cert manager repo
 ```shell
 helm repo add jetstack https://charts.jetstack.io
