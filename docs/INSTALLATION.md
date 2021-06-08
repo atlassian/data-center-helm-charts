@@ -49,16 +49,17 @@ Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure th
 
 ```yaml
 ingress:
-  create: true #1. Setting true here will create an Ingress resource
-  nginx: true #2. If using the ingress-nginx controller set this property to true
+  create: true
+  nginx: true
   maxBodySize: 250m
-  host: <dns_host_name> #2. Hosts can be precise matches (for example “foo.bar.com”) or a wildcard (for example “*.foo.com”).
+  host: <dns_record>
   path: "/"
-  annotations: {}
+  annotations:
+    cert-manager.io/issuer: <certificate_issuer>
   https: true
-  tlsSecretName:
+  tlsSecretName: <tls_certificate_name>
 ```
-> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress), and an example of how to set up a controller can be found [here](examples/ingress/CONTROLLERS.md).
+> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress), and an example of how to set up a controller with TLS termination can be found [here](examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 Using the `values.yaml` obtained in [step 2.](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
