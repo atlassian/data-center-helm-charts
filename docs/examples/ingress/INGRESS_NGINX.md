@@ -20,7 +20,7 @@ Update the repo:
 helm repo update
 ```
 
-### 3. Install controller
+### 2. Install controller
 Create a new namespace for the Ingress controller:
 ```shell
 kubectl create namespace ingress
@@ -30,7 +30,7 @@ Install the controller using Helm:
 helm install <release name> ingress-nginx/ingress-nginx --namespace ingress
 ```
 
-### 4. DNS setup
+### 3. DNS setup
 Manually provision a new DNS record (as described) via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns).
 
 Once created associate the DNS record with the auto provisioned Load Balancer that was created in [Step 3. above](#3.-Install). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
