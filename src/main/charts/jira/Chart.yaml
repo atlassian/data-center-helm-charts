@@ -2,8 +2,8 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 0.10.0
-appVersion: 8.13.6-jdk11
+version: 0.11.0
+appVersion: 8.13.7-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Jira
@@ -18,3 +18,13 @@ sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
 deprecated: false
+annotations:
+  artifacthub.io/changes: |
+    - kind: changed
+      description: Changed Jira version to 8.13.7-jdk11
+    - kind: addded
+      description: Add warning to NOTES when no persistent volumes are configured
+    - kind: addded
+      description: Print service URL after helm installation
+    - kind: added
+      description: Improved documentation
