@@ -22,7 +22,7 @@ nodeGroups:
     ssh: # enable SSH using SSM
       enableSsm: true
 ```
-Adding the config above to a file named `config.yaml`, provision the cluster: 
+Adding the config above to a file named `config.yaml` provision the cluster: 
 
 ```shell
 eksctl create cluster -f config.yaml
