@@ -5,7 +5,28 @@ This example provides instructions for creating a Kubernetes cluster using [Amaz
 We recommend installing and configuring [eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html), allowing for CLI interaction with the EKS cluster.
 
 ## Manual creation
-Follow the [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) for details on creating an EKS cluster. 
+Follow the [Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) for details on creating an EKS cluster. Or, using the `ClusterConfig` below as an example, deploy a K8s cluster with `eksctl` in ~20 minutes:
+
+```yaml
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: atlassian-cluster
+  region: ap-southeast-2
+
+nodeGroups:
+  - name: ng-1
+    instanceType: m5.large
+    desiredCapacity: 2
+    ssh: # enable SSH using SSM
+      enableSsm: true
+```
+Adding the config above to a file named `config.yaml`, provision the cluster: 
+
+```shell
+eksctl create cluster -f config.yaml
+```
 
 > It's always a good idea to consider the following points before creating the cluster:
 
