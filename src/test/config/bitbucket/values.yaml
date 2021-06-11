@@ -8,7 +8,7 @@ database:
 
 bitbucket:
   clustering:
-    enabled: true
+    enabled: ${clustering.enabled}
   license:
     secretName: bitbucket-license
   sysadminCredentials:

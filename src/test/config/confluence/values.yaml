@@ -2,7 +2,7 @@
 
 confluence:
   clustering:
-    enabled: true
+    enabled: ${clustering.enabled}
   license:
     secretName: confluence-license
   additionalJvmArgs:
