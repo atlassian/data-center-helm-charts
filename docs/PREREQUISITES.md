@@ -14,7 +14,8 @@ Before installing the Data Center Helm charts you need to set up your environmen
 1. Install tools: 
    1. [Helm](https://helm.sh/docs/intro/install/)
    2. [kubectl](https://kubernetes.io/docs/tasks/tools/)
-2. [Create and connect to the Kubernetes cluster](examples/cluster/CLOUD_PROVIDERS.md) of your choice, for example [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system.
+   
+2. [Create and connect to the Kubernetes cluster](examples/cluster/CLOUD_PROVIDERS.md)
    * In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 
    * It is up to you to set up security policies
@@ -23,9 +24,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-   * Because different Kubernetes clusters use different ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only.
-
-   * An [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress/) is not installed by default when you install the Helm charts, but the charts do provide a template for an ingress resource. In order for the Ingress resource to work, the cluster must have an ingress controller running, such as [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/). 
+   * Because different Kubernetes clusters use different ingress configurations/controllers, the Helm charts provide [Ingress Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only.
 
    * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) (an alternative controller can be used) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
 

@@ -29,11 +29,11 @@ kubectl create namespace ingress
 ```
 Install the controller using Helm:
 ```shell
-helm install <release name> ingress-nginx/ingress-nginx --namespace ingress
+helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 3. DNS setup
-Manually provision a new DNS record (as described) via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns).
+Manually provision a new DNS record via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns).
 
 Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 3. above](#3.-Install). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
@@ -41,11 +41,10 @@ kubectl get service | grep ingress-nginx
 ```
 the output of this command should look something like...
 ```shell
-NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP
 ingress-nginx-controller             LoadBalancer   10.100.22.16    b834z142d8118406795a34df35e10b17-38927090.eu-west-1.elb.amazonaws.com   80:32615/TCP,443:31787/TCP   76m
 ingress-nginx-controller-admission   ClusterIP      10.100.5.36     <none>                                                                  443/TCP                      76m
 ```
-Take note of the `LoadBalancer` under the `EXTERNAL-IP` column, using it as a value update the DNS record so that traffic is routed to it.
+Take note of the `LoadBalancer` and using it as a value update the DNS record so that traffic is routed to it.
 
 > **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
