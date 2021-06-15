@@ -17,9 +17,6 @@ The documented [platforms](docs/PLATFORMS.md) **are not officially supported** a
 
 All the functionality described in [examples](docs/examples) **is not officially supported**, use them for reference material only.
 
-## Feedback
-
-If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new) in this repository. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
 
 ## Installing the Helm charts
 
@@ -38,12 +35,14 @@ If you find any issue, please [raise a ticket](https://github.com/atlassian-labs
   * [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)
   * [SSH service in Bitbucket on Kubernetes](docs/examples/ssh/SSH_BITBUCKET.md)
 
+## Feedback
 
+If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new) in this repository. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
   
 
 ## Contributions
 
-Contributions are welcome. Please see [contributing for details](CONTRIBUTING.md). 
+Contributions are welcome. [Find out how to contribute](CONTRIBUTING.md). 
 
 
 ## License
