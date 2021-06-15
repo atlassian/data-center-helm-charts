@@ -12,7 +12,7 @@ keywords:
   - Crowd DC
   - Atlassian
 home: https://www.atlassian.com/software/crowd
-icon: https://wac-cdn.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-813aba614b7a/confluence-icon-gradient-blue.svg?cdnVersion=696
+icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/

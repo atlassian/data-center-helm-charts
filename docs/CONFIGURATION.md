@@ -1,23 +1,21 @@
 # Configuration 
 
 ## Ingress
-Once the Helm chart has been installed, a suitable HTTP/HTTPS ingress needs to be installed in order to make the product available from outside of the Kubernetes cluster. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a 3rd-party ingress controller and resource definition must be provided.
+In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/). We also provide [example instructions](examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
 
-The exact details of the ingress resource will be highly site-specific. 
+The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller. 
 
-At a minimum, the ingress needs to support the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
+Some key considerations to note when configuring the controller are:
 
-The charts provide a template for ingress-nginx rules, which include all required annotations and optional TLS configuration.
-* An [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers) must be pre-provisioned prior to using these templates.
-* The Kubernetes project supports and maintains Ingress Controllers for the major cloud providers including; AWS, GCE and nginx. There are also a number of [open-source third party projects](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers) available.
-* Because different Kubernetes clusters use different Ingress configurations/controllers, the Helm charts provide [Ingress Resource/Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) **templates only**.
-* The Ingress Resource provided as part of the Helm charts is geared toward the [Kubernetes ingress-nginx controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
-   * The Ingress Controller
+* At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
+* The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
+   * Usage of the NGINX Ingress Controller 
    * Ingress Controller annotations
    * The request max body size
-* The Internet-facing (see diagram below) load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
-* When the [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) controller is sitting behind another L7 proxy / load balancer that is setting these `X-Forwarded-*` headers, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
-* The diagram below provides a high-level overview of how external requests are routed via an internet-facing LB to the correct service via Ingress.
+   * The hostname of the ingress resource
+* When installed, with the provided [configuration](https://kubernetes.github.io/ingress-nginx/deploy/), the NGINX Ingress Controller will provision an internet-facing (see diagram below) load balancer on your behalf. The load blancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
+* If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers) option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
+* The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
 
 ![ingress-architecture](./images/ingress.png "Request routing via Ingress")
 
@@ -146,7 +144,13 @@ on the JDBC driver being used, but some examples are:
 | Postgres | `org.postgresql.Driver` | `jdbc:postgresql://<dbhost>:5432/<dbname>` |   
 | MySQL | `com.mysql.jdbc.Driver` | `jdbc:mysql://<dbhost>/<dbname>` |   
 | SQL Server | `com.microsoft.sqlserver.jdbc.SQLServerDriver` | `jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>` |   
-| Oracle | `oracle.jdbc.OracleDriver` | `jdbc:oracle:thin:@<dbhost>:1521:<SID>` |   
+| Oracle | `oracle.jdbc.OracleDriver` | `jdbc:oracle:thin:@<dbhost>:1521:<SID>` |
+
+> **NOTE:** With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
+>  * [Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html)
+>  * [Confluence](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup)
+>  * [Bitbucket](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html)
+>  * [Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html)
 
 ### `database.driver`
 
@@ -163,8 +167,8 @@ installation (see below).
 
 ### `database.type`
 
-Jira and Confluence both require this value to be specified, which declares the
-"flavour" of database system being used. The acceptable values for this include:
+Jira and Confluence both require this value to be specified, this declares the
+database engine to be used. The acceptable values for this include:
 
 | Vendor | Jira | Confluence  |   
 |---|---|---|

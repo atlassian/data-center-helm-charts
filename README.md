@@ -1,4 +1,4 @@
-# Data Center Helm Charts
+# Atlassian Data Center Helm Charts
 
 [![Atlassian license](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE) 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md) 
@@ -10,38 +10,43 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
 ## Support disclaimer
 
-These Helm charts are **experimental and unsupported**, with the goal of introducing official support once they have been
+These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
 stabilized.
 
-The platforms documented on [PLATFORMS.md](docs/PLATFORMS.md) **are not officially supported** as part of the Atlassian Data Center products, and should be used only as examples.
+The documented [platforms](docs/PLATFORMS.md) **are not officially supported** and should be used only for example purposes.
 
-All the functionality described in [examples](docs/examples) **is not officially supported**, use it as examples only.
+All the functionality described in [examples](docs/examples) **is not officially supported**, use them for reference material only.
 
-If you find any issue or you have a feedback regarding the helm charts, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new).
+## Feedback
 
+If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new) in this repository. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
 
-## Using the Helm charts
+## Installing the Helm charts
 
 * [Prerequisites and setup](docs/PREREQUISITES.md) - everything you need to do before installing the Helm charts
-* [Configuration](docs/CONFIGURATION.md) - details about configuration parameters
 * [Installation](docs/INSTALLATION.md) - the steps to install the Helm charts
+
+## Additional content
+
 * [Operation](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
+* [Configuration](docs/CONFIGURATION.md) - a deep dive into the configuration parameters
 * [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
 * [Examples](docs/examples/)
   * [How to deploy an EFK stack to Kubernetes](docs/examples/logging/efk/EFK.md)
   * [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
   * [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md)
   * [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)
+  * [SSH service in Bitbucket on Kubernetes](docs/examples/ssh/SSH_BITBUCKET.md)
 
 
   
 
 ## Contributions
 
-Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details. 
+Contributions are welcome. Please see [contributing for details](CONTRIBUTING.md). 
 
 
 ## License
 
 Copyright (c) [2021] Atlassian and others.
-Apache 2.0 licensed, see [LICENSE](LICENSE) file.
+Apache 2.0 licensed, see [license](LICENSE) file.

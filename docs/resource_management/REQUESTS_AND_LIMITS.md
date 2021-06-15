@@ -18,7 +18,17 @@ Request sizing must allow for the size of the product `JVM`. That means the `max
 ```
 
 ### Resource limits
-Environmental and hardware constraints are different for each deployment, therefore the product `values.yaml` do not provide a resource [`limit`](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container) definition. Resource usage limits can be defined by updating the commented out `resources.container.limits` stanza within the appropriate product `values.yaml`.
+Environmental and hardware constraints are different for each deployment, therefore the product `values.yaml` do not provide a resource [`limit`](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container) definition. Resource usage limits can be defined by updating the commented out `resources.container.limits` stanza within the appropriate product `values.yaml`, for example:
+
+```yaml
+container:
+  limits:
+    cpu: "2"
+    memory: "4G"
+  requests:
+    cpu: "2" 
+    memory: "2G"
+```
 
 
 ***
