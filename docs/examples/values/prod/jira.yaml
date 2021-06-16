@@ -3,12 +3,14 @@
 # up to additional pods, this should always be kept as 1.
 replicaCount: 1
 
+# - Image configuration #################################################################################################
 image:
   repository: atlassian/jira-software
   pullPolicy: IfNotPresent
   # -- The docker image tag to be used. Defaults to the Chart appVersion.
   tag: ""
-
+  
+# - Service configuration ###############################################################################################
 serviceAccount:
   # -- Specifies the name of the ServiceAccount to be used by the pods.
   # If not specified, but the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
@@ -19,6 +21,7 @@ serviceAccount:
   # -- The list of image pull secrets that should be added to the created ServiceAccount
   imagePullSecrets: []
 
+# - Database configuration (REQUIRED FOR PROD) ##########################################################################
 database:
   # -- The type of database being used.
   # Valid values include 'postgres72', 'mysql57', 'mysql8', 'oracle10g', 'mssql', 'postgresaurora96'
@@ -26,7 +29,7 @@ database:
   type: postgres72
   # -- The JDBC URL of the database to be used by Jira, e.g. jdbc:postgresql://host:port/database
   # If not specified, then it will need to be provided via the browser during initial startup.
-  url: jdbc:postgresql://jira-postgres-2.c8hzuxrqaglj.eu-west-1.rds.amazonaws.com/jira
+  url: jdbc:postgresql://postgres.k8s.com:5432/jira
   # -- The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver
   # If not specified, then it will need to be provided via the browser during initial startup.
   driver: org.postgresql.Driver
@@ -39,7 +42,88 @@ database:
     usernameSecretKey: username
     # -- The key in the Secret used to store the database login password
     passwordSecretKey: password
+                               
+# - Ingress configuration (REQUIRED FOR PROD) ###########################################################################
+ingress:
+  # -- True if an Ingress Resource should be created.
+  create: true
+  # -- True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller:
+  # https://kubernetes.github.io/ingress-nginx/
+  # This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller.
+  # Set to false if a different controller is to be used, in which case the appropriate annotations for that
+  # controller need to be specified.
+  nginx: true
+  # -- The max body size to allow. Requests exceeding this size will result
+  # in an 413 error being returned to the client.
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
+  maxBodySize: 250m
+  # -- The fully-qualified hostname of the Ingress Resource.
+  host: jira.k8s.com 
+  # -- The base path for the ingress rule.
+  path: "/"
+  # -- The custom annotations that should be applied to the Ingress 
+  # Resource when not using the Kubernetes ingress-nginx controller.
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-prod" 
+  # -- True if the browser communicates with the application over HTTPS.
+  https: true
+  # -- Secret that contains a TLS private key and certificate.
+  # Optional if Ingress Controller is configured to use one secret for all ingresses
+  tlsSecretName: tls-certificate
 
+# - Volume configuration (REQUIRED FOR PROD) ############################################################################
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      # -- If true, then a PersistentVolumeClaim will be created for each local-home volume.
+      create: true
+      # -- Specifies the name of the storage class that should be used for the local-home volume claim.
+      storageClassName: "ebs-sc"
+      # -- Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims.
+      resources:
+        requests:
+          storage: 1Gi
+    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
+    # volume that will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
+    customVolume: {}
+    # -- Specifies the path in the Jira container to which the local-home volume will be mounted.
+    mountPath: "/var/atlassian/application-data/jira"
+  sharedHome:
+    persistentVolumeClaim:
+      # -- If true, then a PersistentVolumeClaim will be created for the shared-home volume.
+      create: false
+      # -- Specifies the name of the storage class that should be used for the shared-home volume claim.
+      storageClassName:
+      # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
+      resources:
+        requests:
+          storage: 1Gi
+    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
+    # volume, which will be used for the shared-home volume. If not defined, then defaults to an emptyDir 
+    # (i.e. unshared) volume.
+    customVolume: 
+      persistentVolumeClaim:
+        claimName: "efs-pvc" 
+    # -- Specifies the path in the Jira container to which the shared-home volume will be mounted.
+    mountPath: "/var/atlassian/application-data/shared-home"
+    # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the Jira container.
+    subPath:
+    nfsPermissionFixer:
+      # -- If enabled, this will alter the shared-home volume's root directory so that Jira can write to it.
+      # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
+      enabled: true
+      # -- The path in the initContainer where the shared-home volume will be mounted
+      mountPath: /shared-home
+      # -- By default, the fixer will change the group ownership of the volume's root directory to match the Jira
+      # container's GID (2001), and then ensures the directory is group-writeable. If this is not the desired behaviour,
+      # command used can be specified here.
+      command:
+  # -- Defines additional volumes that should be applied to all Jira pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in jira.additionalVolumeMounts
+  additional: []
+
+# - Jira configuration ##################################################################################################
 jira:
   service:
     # -- The port on which the Jira Kubernetes service will listen
@@ -141,33 +225,7 @@ jira:
   # See https://hub.docker.com/r/atlassian/jira-software for supported variables.
   additionalEnvironmentVariables: []
 
-ingress:
-  # -- True if an Ingress Resource should be created.
-  create: true
-  # -- True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller:
-  # https://kubernetes.github.io/ingress-nginx/
-  # This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller.
-  # Set to false if a different controller is to be used, in which case the appropriate annotations for that
-  # controller need to be specified.
-  nginx: true
-  # -- The max body size to allow. Requests exceeding this size will result
-  # in an 413 error being returned to the client.
-  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
-  maxBodySize: 250m
-  # -- The fully-qualified hostname of the Ingress Resource.
-  host: jira.k8s.com 
-  # -- The base path for the ingress rule.
-  path: "/"
-  # -- The custom annotations that should be applied to the Ingress 
-  # Resource when not using the Kubernetes ingress-nginx controller.
-  annotations:
-    cert-manager.io/issuer: "letsencrypt-prod" 
-  # -- True if the browser communicates with the application over HTTPS.
-  https: true
-  # -- Secret that contains a TLS private key and certificate.
-  # Optional if Ingress Controller is configured to use one secret for all ingresses
-  tlsSecretName: tls-certificate
-
+# - Fluend configuration ################################################################################################
 fluentd:
   # -- True if the Fluentd sidecar should be added to each pod
   enabled: false
@@ -205,60 +263,11 @@ fluentd:
   #   mountPath: /opt/atlassian/jira/logs
   #   subPath: log
   #   readOnly: true
-     
+
+# -  Misc. configuration ################################################################################################
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}
 #  "name": "value"
-
-volumes:
-  localHome:
-    persistentVolumeClaim:
-      # -- If true, then a PersistentVolumeClaim will be created for each local-home volume.
-      create: true
-      # -- Specifies the name of the storage class that should be used for the local-home volume claim.
-      storageClassName: "ebs-sc"
-      # -- Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims.
-      resources:
-        requests:
-          storage: 1Gi
-    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
-    # volume that will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
-    customVolume: {}
-    # -- Specifies the path in the Jira container to which the local-home volume will be mounted.
-    mountPath: "/var/atlassian/application-data/jira"
-  sharedHome:
-    persistentVolumeClaim:
-      # -- If true, then a PersistentVolumeClaim will be created for the shared-home volume.
-      create: false
-      # -- Specifies the name of the storage class that should be used for the shared-home volume claim.
-      storageClassName:
-      # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
-      resources:
-        requests:
-          storage: 1Gi
-    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
-    # volume, which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
-    customVolume: 
-      persistentVolumeClaim:
-        claimName: "efs-pvc" 
-    # -- Specifies the path in the Jira container to which the shared-home volume will be mounted.
-    mountPath: "/var/atlassian/application-data/shared-home"
-    # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the Jira container.
-    subPath:
-    nfsPermissionFixer:
-      # -- If enabled, this will alter the shared-home volume's root directory so that Jira can write to it.
-      # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
-      enabled: false
-      # -- The path in the initContainer where the shared-home volume will be mounted
-      mountPath: /shared-home
-      # -- By default, the fixer will change the group ownership of the volume's root directory to match the Jira
-      # container's GID (2001), and then ensures the directory is group-writeable. If this is not the desired behaviour,
-      # command used can be specified here.
-      command:
-  # -- Defines additional volumes that should be applied to all Jira pods.
-  # Note that this will not create any corresponding volume mounts;
-  # those needs to be defined in jira.additionalVolumeMounts
-  additional: []
 
 # -- Standard Kubernetes node-selectors that will be applied to all Jira pods
 nodeSelector: {}
