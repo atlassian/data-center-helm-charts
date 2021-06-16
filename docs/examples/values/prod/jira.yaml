@@ -3,14 +3,14 @@
 # up to additional pods, this should always be kept as 1.
 replicaCount: 1
 
-# - Image configuration #################################################################################################
+# - Image configuration (CONFIG OPTIONAL) ###############################################################################
 image:
   repository: atlassian/jira-software
   pullPolicy: IfNotPresent
   # -- The docker image tag to be used. Defaults to the Chart appVersion.
   tag: ""
   
-# - Service configuration ###############################################################################################
+# - Service configuration (CONFIG OPTIONAL) #############################################################################
 serviceAccount:
   # -- Specifies the name of the ServiceAccount to be used by the pods.
   # If not specified, but the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
@@ -21,7 +21,7 @@ serviceAccount:
   # -- The list of image pull secrets that should be added to the created ServiceAccount
   imagePullSecrets: []
 
-# - Database configuration (REQUIRED FOR PROD) ##########################################################################
+# - Database configuration (CONFIG REQUIRED FOR PROD) ###################################################################
 database:
   # -- The type of database being used.
   # Valid values include 'postgres72', 'mysql57', 'mysql8', 'oracle10g', 'mssql', 'postgresaurora96'
@@ -43,7 +43,7 @@ database:
     # -- The key in the Secret used to store the database login password
     passwordSecretKey: password
                                
-# - Ingress configuration (REQUIRED FOR PROD) ###########################################################################
+# - Ingress configuration (CONFIG REQUIRED FOR PROD) ####################################################################
 ingress:
   # -- True if an Ingress Resource should be created.
   create: true
@@ -71,7 +71,7 @@ ingress:
   # Optional if Ingress Controller is configured to use one secret for all ingresses
   tlsSecretName: tls-certificate
 
-# - Volume configuration (REQUIRED FOR PROD) ############################################################################
+# - Volume configuration (CONFIG REQUIRED FOR PROD) #####################################################################
 volumes:
   localHome:
     persistentVolumeClaim:
@@ -123,7 +123,7 @@ volumes:
   # those needs to be defined in jira.additionalVolumeMounts
   additional: []
 
-# - Jira configuration ##################################################################################################
+# - Jira configuration (CONFIG OPTIONAL) ################################################################################
 jira:
   service:
     # -- The port on which the Jira Kubernetes service will listen
@@ -225,7 +225,7 @@ jira:
   # See https://hub.docker.com/r/atlassian/jira-software for supported variables.
   additionalEnvironmentVariables: []
 
-# - Fluend configuration ################################################################################################
+# - Fluend configuration (CONFIG OPTIONAL) ##############################################################################
 fluentd:
   # -- True if the Fluentd sidecar should be added to each pod
   enabled: false
@@ -264,7 +264,7 @@ fluentd:
   #   subPath: log
   #   readOnly: true
 
-# -  Misc. configuration ################################################################################################
+# -  Misc. configuration (CONFIG OPTIONAL) ##############################################################################
 # -- Specify custom annotations to be added to all Jira pods
 podAnnotations: {}
 #  "name": "value"
