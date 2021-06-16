@@ -1,0 +1,349 @@
+# -- The initial number of pods that should be started at deployment of Bitbucket.
+replicaCount: 1
+
+image:
+  repository: atlassian/bitbucket-server
+  pullPolicy: IfNotPresent
+  # -- The docker image tag to be used. Defaults to the Chart appVersion.
+  tag: ""
+
+serviceAccount:
+  # -- Specifies the name of the ServiceAccount to be used by the pods.
+  # If not specified, but the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
+  # otherwise the 'default' ServiceAccount will be used.
+  name:
+  # -- true if a ServiceAccount should be created, or false if it already exists
+  create: true
+  # -- The list of image pull secrets that should be added to the created ServiceAccount
+  imagePullSecrets: []
+  clusterRole:
+    # -- Specifies the name of the ClusterRole that will be created if the "serviceAccount.clusterRole.create" flag is set.
+    # If not specified, a name will be auto-generated.
+    name:
+    # -- true if a ClusterRole should be created, or false if it already exists
+    create: true
+  clusterRoleBinding:
+    # -- Specifies the name of the ClusterRoleBinding that will be created if the "serviceAccount.clusterRoleBinding.create" flag is set
+    # If not specified, a name will be auto-generated.
+    name:
+    # -- true if a ClusterRoleBinding should be created, or false if it already exists
+    create: true
+
+database:
+  # -- The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database
+  # If not specified, then it will need to be provided via the browser during initial startup.
+  url: jdbc:postgresql://bitbucket-postgres-2.c8hzuxrqaglj.eu-west-1.rds.amazonaws.com/bitbucket
+  # -- The Java class name of the JDBC driver to be used, e.g. org.postgresql.Driver
+  # If not specified, then it will need to be provided via the browser during initial startup.
+  driver: org.postgresql.Driver
+  credentials:
+    # -- The name of the Kubernetes Secret that contains the database login credentials.
+    # If specified, then the credentials will be automatically populated during Bitbucket setup.
+    # Otherwise, they will need to be provided via the browser after initial startup.
+    secretName: bitbucket-db-secret
+    # -- The key in the Secret used to store the database login username
+    usernameSecretKey: username
+    # -- The key in the Secret used to store the database login password
+    passwordSecretKey: password
+
+bitbucket:
+  service:
+    # -- The port on which the Bitbucket Kubernetes service will listen
+    port: 80
+    # -- The type of Kubernetes service to use for Bitbucket
+    type: ClusterIP
+    annotations: {}
+  # -- Enable or disable an additional service for exposing SSH for external access.
+  # Disable when the SSH service is exposed through the ingress controller, or enable if the ingress controller does
+  # not support TCP.
+  sshService:
+    enabled: false
+    # -- Port to expose the SSH service on.
+    port: 22
+    type: LoadBalancer
+    # -- Annotations for the SSH service. Useful if a load balancer controller needs extra annotations.
+    annotations: {}
+  # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2003.
+  # -- Disable when deploying to OpenShift, unless anyuid policy is attached to service account
+  securityContext:
+    enabled: true
+    # -- The GID used by the Bitbucket docker image
+    gid: "2003"
+  ports:
+    http: 7990
+    ssh: 7999
+    hazelcast: 5701
+
+  license:
+    # -- The name of the Kubernetes Secret that contains the Bitbucket license key.
+    # If specified, then the license will be automatically populated during Bitbucket setup.
+    # Otherwise, it will need to be provided via the browser after initial startup.
+    secretName: bitbucket-license
+    # -- The key in the Kubernetes Secret that contains the Bitbucket license key
+    secretKey: license-key
+
+  sysadminCredentials:
+    # -- The name of the Kubernetes Secret that contains the Bitbucket sysadmin credentials
+    # If specified, then these will be automatically populated during Bitbucket setup.
+    # Otherwise, they will need to be provided via the browser after initial startup.
+    secretName: bitbucket-sysadmin-creds
+    # -- The key in the Kubernetes Secret that contains the sysadmin username
+    usernameSecretKey: username
+    # -- The key in the Kubernetes Secret that contains the sysadmin password
+    passwordSecretKey: password
+    # -- The key in the Kubernetes Secret that contains the sysadmin display name
+    displayNameSecretKey: displayName
+    # -- The key in the Kubernetes Secret that contains the sysadmin email address
+    emailAddressSecretKey: emailAddress
+
+  clustering:
+    # -- Set to true if Data Center clustering should be enabled
+    # This will automatically configure cluster peer discovery between cluster nodes.
+    enabled: true
+
+  elasticSearch:
+    # -- The base URL of the external ElasticSearch instance to be used.
+    # If this is defined, then Bitbucket will disable its internal ElasticSearch instance.
+    baseUrl:
+    credentials:
+      # -- The name of the Kubernetes Secret that contains the ElasticSearch credentials.
+      secretName:
+      # -- The key in the the Kubernetes Secret that contains the ElasticSearch username.
+      usernameSecreyKey: username
+      # -- The key in the the Kubernetes Secret that contains the ElasticSearch password.
+      passwordSecretKey: password
+
+  resources:
+    jvm:
+      # -- JVM memory arguments below are based on the defaults defined for the Bitbucket docker container, see:
+      # https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/
+      #
+      # -- The maximum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the Elasticsearch JVM.
+      maxHeap: "1g"
+      # -- The minimum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the Elasticsearch JVM.
+      minHeap: "512m"
+
+    # -- Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket container.
+    # It is important that if the memory resources are specified here, they must allow for the size of the Bitbucket JVM.
+    # That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated.
+    # Allowing for maxHeap * 1.5 would be an example.
+    container:
+    #  limits:
+    #    cpu: "1"
+    #    memory: "2G"
+      requests:
+        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        memory: "2G"
+
+  # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties
+  additionalJvmArgs:
+    # -- The value defined for ActiveProcessorCount should correspond to that provided for 'container.requests.cpu'
+    # see: https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
+    - -XX:ActiveProcessorCount=2
+
+  # -- Specifies a list of additional Java libraries that should be added to the Bitbucket container.
+  # Each item in the list should specify the name of the volume that contains the library, as well as the name of the
+  # library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which
+  # directory in the volume contains the library file.
+  additionalLibraries: []
+  #  - volumeName:
+  #    subDirectory:
+  #    fileName:
+
+  # -- Specifies a list of additional Bitbucket plugins that should be added to the Bitbucket container.
+  # These are specified in the same manner as the additionalLibraries field, but the files will be loaded
+  # as bundled plugins rather than as libraries.
+  additionalBundledPlugins: []
+  #  - volumeName:
+  #    subDirectory:
+  #    fileName:
+
+  # -- Defines any additional volumes mounts for the Bitbucket container.
+  # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
+  additionalVolumeMounts: []
+
+  # -- Defines any additional environment variables to be passed to the Bitbucket container.
+  # See https://hub.docker.com/r/atlassian/bitbucket-server for supported variables.
+  additionalEnvironmentVariables: []
+
+ingress:
+  # -- True if an Ingress Resource should be created.
+  create: true
+  # -- True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller:
+  # https://kubernetes.github.io/ingress-nginx/
+  # This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller.
+  # Set to false if a different controller is to be used, in which case the appropriate annotations for that
+  # controller need to be specified.
+  nginx: true
+  # -- The max body size to allow. Requests exceeding this size will result
+  # in an 413 error being returned to the client.
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
+  maxBodySize: 250m
+  # -- The fully-qualified hostname of the Ingress Resource.
+  host: bitbucket.k8s.com
+  # -- The base path for the ingress rule.
+  path: "/"
+  # -- The custom annotations that should be applied to the Ingress 
+  # Resource when not using the Kubernetes ingress-nginx controller.
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-prod" 
+  # -- True if the browser communicates with the application over HTTPS.
+  https: true
+  # -- Secret that contains a TLS private key and certificate.
+  # Optional if Ingress Controller is configured to use one secret for all ingresses
+  tlsSecretName: tls-certificate
+
+fluentd:
+  # -- True if the Fluentd sidecar should be added to each pod
+  enabled: false
+  # -- True if a custom config should be used for Fluentd
+  customConfigFile: false
+  # -- Custom fluent.conf file
+  # fluent.conf: |
+  fluentdCustomConfig: {}
+  # fluent.conf: |
+  #   <source>
+  #     @type tail
+  #     <parse>
+  #     @type multiline
+  #     format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+  #     </parse>
+  #     path /application-data/logs/atlassian-bitbucket-access.log* 
+  #     pos_file /tmp/bitbucketlog.pos
+  #     tag bitbucket-access-logs
+  #   </source>
+
+  # -- The name of the image containing the Fluentd sidecar
+  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  elasticsearch:
+    # -- True if Fluentd should send all log events to an Elasticsearch service.
+    enabled: true
+    # -- The hostname of the Elasticsearch service that Fluentd should send logs to.
+    hostname: elasticsearch
+  # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
+  extraVolumes: []
+  # - name: local-home
+  #   mountPath: application-data/logs
+  #   subPath: log
+  #   readOnly: true
+
+# -- Specify custom annotations to be added to all Bitbucket pods
+podAnnotations: {}
+#  "name": "value"
+
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      # -- If true, then a PersistentVolumeClaim will be created for each local-home volume.
+      create: true
+      # -- Specifies the name of the storage class that should be used for the local-home volume claim.
+      storageClassName: "ebs-sc"
+      # -- Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims.
+      resources:
+        requests:
+          storage: 1Gi
+    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
+    # volume, which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
+    customVolume: {}
+    mountPath: "/var/atlassian/application-data/bitbucket"
+  sharedHome:
+    persistentVolume:
+      # -- If true, then a PersistentVolume will be created for the shared-home volume.
+      create: false
+      # -- Addtional options used when mounting the volume
+      mountOptions: []
+      nfs:
+        # -- The address of the NFS server. It needs to be resolveable by the kubelet, so consider using an IP address.
+        server: ""
+        # -- Specifies the path exported by the NFS server, used in the mount command
+        path: ""
+    persistentVolumeClaim:
+      # -- If true, then a PersistentVolumeClaim will be created for the shared-home volume.
+      create: false
+      # -- Specifies the name of the storage class that should be used for the shared-home volume claim.
+      storageClassName:
+      # -- Specifies the name of the persistent volume to claim
+      volumeName:
+      # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
+      resources:
+        requests:
+          storage: 1Gi
+    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
+    # volume, which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
+    customVolume: 
+      persistentVolumeClaim:
+        claimName: "efs-pvc" 
+    # -- Specifies the path in the Bitbucket container to which the shared-home volume will be mounted.
+    mountPath: "/var/atlassian/application-data/shared-home"
+    # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the Bitbucket container.
+    subPath:
+    nfsPermissionFixer:
+      # -- If enabled, this will alter the shared-home volume's root directory so that Bitbucket can write to it.
+      # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
+      enabled: false
+      # -- The path in the initContainer where the shared-home volume will be mounted
+      mountPath: /shared-home
+      # -- By default, the fixer will change the group ownership of the volume's root directory to match the Bitbucket
+      # container's GID (2003), and then ensures the directory is group-writeable. If this is not the desired behaviour,
+      # command used can be specified here.
+      command:
+  # -- Defines additional volumes that should be applied to all Bitbucket pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those need to be defined in bitbucket.additionalVolumeMounts
+  additional: []
+
+# -- Standard Kubernetes node-selectors that will be applied to all Bitbucket pods
+nodeSelector: {}
+
+# -- Standard Kubernetes tolerations that will be applied to all Bitbucket pods
+tolerations: []
+
+# -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
+# Due to the performance requirements it is highly recommended to run all Bitbucket pods
+# in the same availability zone as your dedicated NFS server. To achieve this, you
+# can define `affinity` and `podAffinity` rules that will place all pods into the same zone,
+# and therefore minimise the real distance between the application pods and the shared storage.
+# More specific documentation can be found in the official Affinity and Anti-affinity documentation:
+#  https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+#
+# This is an example on how to ensure the pods are in the same zone as NFS server that is labeled with `role=nfs-server`:
+#
+#   podAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      - labelSelector:
+#          matchExpressions:
+#            - key: role
+#              operator: In
+#              values:
+#                - nfs-server # needs to be the same value as NFS server deployment
+#        topologyKey: topology.kubernetes.io/zone
+affinity: {}
+
+# -- Additional container definitions that will be added to all Bitbucket pods
+additionalContainers: []
+
+# -- Additional initContainer definitions that will be added to all Bitbucket pods
+additionalInitContainers: []
+
+# -- Additional labels that should be applied to all resources
+additionalLabels: {}
+
+# -- Additional existing ConfigMaps and Secrets not managed by Helm, which should be mounted into server container
+# configMap and secret are two available types (camelCase is important!)
+# mountPath is a destination directory in a container, and key is the file name
+# name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name and the index position,
+# for example, custom-config-0, keystore-2
+additionalFiles: []
+#  - name: custom-config
+#    type: configMap
+#    key: log4j.properties
+#    mountPath:  /var/atlassian
+#  - name: custom-config
+#    type: configMap
+#    key: web.xml
+#    mountPath: /var/atlassian
+#  - name: keystore
+#    type: secret
+#    key: keystore.jks
+#    mountPath: /var/ssl
+

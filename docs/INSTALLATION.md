@@ -20,6 +20,11 @@ Obtain the default product `values.yaml` file from the chart:
 ```shell
 helm show values atlassian-data-center/<product> > values.yaml
 ```
+> Production examples of the `values.yaml` that have been configured with details of the [Prerequisites](PREREQUISITES.md) can be found below: 
+> * [Jira](examples/values/prod/jira.yaml)
+> * [Confluence](examples/values/prod/crowd.yaml)
+> * [Bitbucket](examples/values/prod/bitbucket.yaml)
+> * [Crowd](examples/values/prod/crowd.yaml)
 
 ## 3. Configure database
 Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the usage of the database provisioned as part of the [Prerequisites](PREREQUISITES.md). 
