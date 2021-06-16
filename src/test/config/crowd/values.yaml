@@ -2,7 +2,7 @@
 
 crowd:
   clustering:
-    enabled: true
+    enabled: ${clustering.enabled}
   resources:
     container:
       requests:
