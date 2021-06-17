@@ -14,7 +14,7 @@ image:
   
 # - Service configuration (OPTIONAL) ####################################################################################
 serviceAccount:
-  # -- 'true' if a ServiceAccount should be created, or 'false' if it already exists
+  # -- Set to 'true' if a ServiceAccount should be created, or 'false' if it already exists
   create: true
   # -- The name of the ServiceAccount to be used by the pods. If not specified, but 
   # the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name 
@@ -176,7 +176,7 @@ ingress:
   # -- The custom annotations that should be applied to the Ingress Resource 
   # when NOT using the Kubernetes ingress-nginx controller.
   annotations: {}
-  # -- 'true' if browser communication with the application should be TLS (HTTPS) enforced.
+  # -- Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced.
   https: true
   # -- The name of the Kubernetes Secret that contains the TLS private key and corresponding 
   # certificate. When utilised, TLS termination occurs at the ingress point where traffic to 
@@ -228,7 +228,7 @@ jira:
     localHomeSubPath: "log"
 
   clustering:
-    # -- Set to true if Data Center clustering should be enabled
+    # -- Set to 'true' if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
     enabled: false
 
@@ -304,9 +304,9 @@ jira:
 
 # - Fluend configuration (OPTIONAL) #####################################################################################
 fluentd:
-  # -- True if the Fluentd sidecar should be added to each pod
+  # -- Set to 'true' if the Fluentd sidecar should be added to each pod
   enabled: false
-  # -- True if a custom config should be used for Fluentd
+  # -- Set to 'true' if a custom config should be used for Fluentd
   customConfigFile: false
   # -- Custom fluent.conf file
   # fluent.conf: |
@@ -328,7 +328,7 @@ fluentd:
   # -- The port on which the Fluentd sidecar will listen
   httpPort: 9880
   elasticsearch:
-    # -- True if Fluentd should send all log events to an Elasticsearch service.
+    # -- Set to 'true' if Fluentd should send all log events to an Elasticsearch service.
     enabled: true
     # -- The hostname of the Elasticsearch service that Fluentd should send logs to.
     hostname: elasticsearch
