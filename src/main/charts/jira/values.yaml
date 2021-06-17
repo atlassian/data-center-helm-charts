@@ -367,4 +367,4 @@ additionalFiles: []
 #  - name: keystore
 #    type: secret
 #    key: keystore.jks
-#    mountPath: /var/ss
+#    mountPath: /var/ssl
