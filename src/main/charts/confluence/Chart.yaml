@@ -2,8 +2,8 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 0.10.0
-appVersion: 7.12.0-jdk11
+version: 0.11.0
+appVersion: 7.12.2-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -17,3 +17,17 @@ sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
 deprecated: false
+annotations:
+  artifacthub.io/changes: |
+    - kind: changed
+      description: Changed Confluence version to 7.12.2-jdk11
+    - kind: added
+      description: Add warning to NOTES when no persistent volumes are configured
+    - kind: added
+      description: Print service URL after helm installation
+    - kind: fixed
+      description: Mount additional libraries in DB connectivity pod
+    - kind: added
+      description: Add resources stanza for Synchrony and inject values into startup
+    - kind: added
+      description: Improved documentation
