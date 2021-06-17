@@ -70,7 +70,7 @@ database:
     # -- The key ('username') in the Secret used to store the database login username
     usernameSecretKey: username
     # -- The key ('password') in the Secret used to store the database login password
-    passwordSecretKey: password                               
+    passwordSecretKey: password
 
 # - Volume configuration (REQUIRED FOR PRODUCTION) ######################################################################
 # By default, the charts will configure the local-home and shared-home as ephemeral volumes i.e. 
