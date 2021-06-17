@@ -6,7 +6,8 @@ replicaCount: 1
 
 # - Image configuration (OPTIONAL) ######################################################################################
 image:
-  repository: atlassian/jira-software # https://hub.docker.com/r/atlassian/jira-software
+  # https://hub.docker.com/r/atlassian/jira-software
+  repository: atlassian/jira-software 
   pullPolicy: IfNotPresent
   # -- The docker image tag to be used. Defaults to the Chart appVersion.
   tag: ""
@@ -341,6 +342,7 @@ fluentd:
   #   readOnly: true
   
 # -  Misc. configuration (OPTIONAL) #####################################################################################
+
 # -- Custom annotations that will be applied to all Jira pods
 podAnnotations: {}
 #  "name": "value"
