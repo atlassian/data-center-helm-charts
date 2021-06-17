@@ -71,8 +71,8 @@ database:
 
 # - Volume configuration (REQUIRED FOR PRODUCTION) ######################################################################
 # By default, the charts will configure the local-home and shared-home as ephemeral volumes i.e. 
-# 'emptyDir: {}'. For production purposes this is not ideal and so local-home and shared-home 
-# should both be configured appropriately. Additional detail:
+# 'emptyDir: {}'. This is fine for evaluation purposes but for production deployments this is not 
+# ideal and so local-home and shared-home should both be configured appropriately. Additional detail:
 # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#volumes-configuration
 volumes:
   # -- A volume for local-home is required for key data that help define how Jira works. 
