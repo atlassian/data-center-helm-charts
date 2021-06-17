@@ -5,7 +5,6 @@
 replicaCount: 1
 
 # - Image configuration (OPTIONAL) ######################################################################################
-# The Docker image configuration.
 image:
   repository: atlassian/jira-software # https://hub.docker.com/r/atlassian/jira-software
   pullPolicy: IfNotPresent
@@ -13,8 +12,6 @@ image:
   tag: ""
   
 # - Service configuration (OPTIONAL) ####################################################################################
-# Pod identity and access control. Additonal detail:
-# https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # -- 'true' if a ServiceAccount should be created, or 'false' if it already exists
   create: true
@@ -80,6 +77,8 @@ database:
 volumes:
   # -- A volume for local-home is required for key data that help define how Jira works. 
   localHome:
+    # -- Dynamic provisioning. Additional detail: 
+    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/LOCAL_STORAGE.md
     persistentVolumeClaim:
       # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically 
       # created for each pod based on the 'StorageClassName' supplied below.          
@@ -90,15 +89,23 @@ volumes:
       resources:
         requests:
           storage: 1Gi
+    # -- Static provisioning
     # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     # a standard Kubernetes volume that will be used for the local-home volume(s). If not defined, 
-    # then an 'emptyDir' volume is utilised. 
+    # then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify the
+    # bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. Additional detail:
+    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     customVolume: {}
+    # persistentVolumeClaim:
+    #   claimName: "<pvc>" 
+    
     # -- Specifies the path in the Jira container to which the local-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/jira"
     
   # -- A volume for shared-home is required by Jira to effectively operate in multi-node environment
   sharedHome:
+    # -- Dynamic provisioning. Additional detail: 
+    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/LOCAL_STORAGE.md
     persistentVolumeClaim:
       # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically 
       # created for shared-home based on the 'StorageClassName' supplied below.
@@ -109,10 +116,16 @@ volumes:
       resources:
         requests:
           storage: 1Gi
-    # -- When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
+    # -- Static provisioning
+    # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     # a standard Kubernetes volume that will be used for the shared-home volume. If not defined, 
-    # then defaults to an emptyDir (i.e. unshared) volume.
+    # then an 'emptyDir' volume is utilised. (i.e. unshared). Having provisioned a 'PersistentVolume', 
+    # specify the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. Additional detail:
+    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     customVolume: {}
+    # persistentVolumeClaim:
+    #   claimName: "<pvc>"
+    
     # -- Specifies the path in the Jira container to which the shared-home volume will be mounted.
     mountPath: "/var/atlassian/application-data/shared-home"
     # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the Jira container.
@@ -151,7 +164,6 @@ ingress:
   nginx: true
   # -- The max body size to allow. Requests exceeding this size will result
   # in an 413 error being returned to the client.
-  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
   maxBodySize: 250m
   # -- The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on 
   # this hostname will be routed by the Ingress Resource to the appropriate backend Service's
