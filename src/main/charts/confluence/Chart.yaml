@@ -21,9 +21,9 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Changed Confluence version to 7.12.2-jdk11
-    - kind: addded
+    - kind: added
       description: Add warning to NOTES when no persistent volumes are configured
-    - kind: addded
+    - kind: added
       description: Print service URL after helm installation
     - kind: fixed
       description: Mount additional libraries in DB connectivity pod

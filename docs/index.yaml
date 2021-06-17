@@ -3,9 +3,9 @@ entries:
   bitbucket:
     - annotations:
         artifacthub.io/changes: |-
-          - kind: addded
+          - kind: added
             description: Add warning to NOTES when no persistent volumes are configured
-          - kind: addded
+          - kind: added
             description: Print service URL after helm installation
           - kind: added
             description: Add Bitbucket SSH service and custom annotations
@@ -144,9 +144,9 @@ entries:
         artifacthub.io/changes: |
           - kind: changed
             description: Changed Confluence version to 7.12.2-jdk11
-          - kind: addded
+          - kind: added
             description: Add warning to NOTES when no persistent volumes are configured
-          - kind: addded
+          - kind: added
             description: Print service URL after helm installation
           - kind: fixed
             description: Mount additional libraries in DB connectivity pod
@@ -285,9 +285,9 @@ entries:
   crowd:
     - annotations:
         artifacthub.io/changes: |-
-          - kind: addded
+          - kind: added
             description: Add warning to NOTES when no persistent volumes are configured
-          - kind: addded
+          - kind: added
             description: Print service URL after helm installation
           - kind: added
             description: Improved documentation
@@ -406,9 +406,9 @@ entries:
         artifacthub.io/changes: |-
           - kind: changed
             description: Changed Jira version to 8.13.7-jdk11
-          - kind: addded
+          - kind: added
             description: Add warning to NOTES when no persistent volumes are configured
-          - kind: addded
+          - kind: added
             description: Print service URL after helm installation
           - kind: added
             description: Improved documentation

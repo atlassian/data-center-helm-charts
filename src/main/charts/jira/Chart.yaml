@@ -22,9 +22,9 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Changed Jira version to 8.13.7-jdk11
-    - kind: addded
+    - kind: added
       description: Add warning to NOTES when no persistent volumes are configured
-    - kind: addded
+    - kind: added
       description: Print service URL after helm installation
     - kind: added
       description: Improved documentation
