@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 0.10.0
+version: 0.11.0
 appVersion: 7.12.1-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -17,3 +17,13 @@ sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
 deprecated: false
+annotations:
+  artifacthub.io/changes: |
+    - kind: addded
+      description: Add warning to NOTES when no persistent volumes are configured
+    - kind: addded
+      description: Print service URL after helm installation
+    - kind: added
+      description: Add Bitbucket SSH service and custom annotations
+    - kind: added
+      description: Improved documentation
