@@ -28,13 +28,9 @@ spec:
         fsGroup: {{ .Values.confluence.securityContext.gid }}
       {{ end }}
       hostAliases:
-        {{- with .Values.additionalHosts }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "confluence.additionalHosts" . | nindent 8 }}
       initContainers:
-        {{- with .Values.additionalInitContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "confluence.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: alpine
@@ -73,9 +69,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "confluence.volumeMounts" . | nindent 12 }}
-            {{- with .Values.confluence.additionalVolumeMounts }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "confluence.additionalVolumeMounts" . | nindent 12 }}
             {{- include "confluence.additionalLibraries" . | nindent 12 }}
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
@@ -131,13 +125,9 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: {{ include "confluence.fullname" . }}-jvm-config
-            {{- with .Values.confluence.additionalEnvironmentVariables }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "confluence.additionalEnvironmentVariables" . | nindent 12 }}
         {{- include "fluentd.container" . | nindent 8 }}
-        {{- with .Values.additionalContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "confluence.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
