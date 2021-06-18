@@ -24,7 +24,8 @@
 ## The initial number of Jira pods that should be started at deployment time. 
 ## Note: Jira requires manual configuration via the browser after the first pod is 
 ## deployed. This configuration must be completed before scaling up additional pods. 
-## As such this value should always be kept as 1.
+## As such this value should always be kept as 1, but can be altered once Jira 
+## configuration is complete.
 ##
 replicaCount: 1
 
