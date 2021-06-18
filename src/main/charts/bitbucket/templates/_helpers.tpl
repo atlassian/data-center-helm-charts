@@ -132,6 +132,38 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 
 {{/*
+Defining additional init containers here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "bitbucket.additionalInitContainers" -}}
+{{- range .Values.additionalInitContainers }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional containers here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "bitbucket.additionalContainers" -}}
+{{- range .Values.additionalContainers }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional volume mounts here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "bitbucket.additionalVolumeMounts" -}}
+{{- range .Values.bitbucket.additionalVolumeMounts }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional environment variables here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "bitbucket.additionalEnvironmentVariables" -}}
+{{- range .Values.bitbucket.additionalEnvironmentVariables }}
+{{- end }}
+{{- end }}
+
+{{/*
 For each additional library declared, generate a volume mount that injects that library into the Bitbucket lib directory
 */}}
 {{- define "bitbucket.additionalLibraries" -}}
