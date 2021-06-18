@@ -303,14 +303,14 @@ jira:
   additionalEnvironmentVariables: []
 
 # - Fluentd configuration (OPTIONAL) #####################################################################################
-# Jira log collection and aggregation can be enabled using Flunetd. This config assumes an existing ELK stack has
-# been stood up and is available.
+# Jira log collection and aggregation can be enabled using Flunetd. This config assumes an 
+# existing ELK stack has been stood up and is available.
 # https://www.fluentd.org/
 fluentd:
   # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   enabled: false
-  # -- Set to 'true' if a custom config should be used for Fluentd. If enabled this config must 
-  # supplied via the 'fluentdCustomConfig' property below.
+  # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) should be used 
+  # for Fluentd. If enabled this config must supplied via the 'fluentdCustomConfig' property below.
   customConfigFile: false
   # -- Custom fluent.conf file
   fluentdCustomConfig: {}
