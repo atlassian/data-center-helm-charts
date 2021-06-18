@@ -97,7 +97,7 @@ Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/s
 kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
 ```
 Update the `values.yaml` file with the secrets:
-```shell
+```yaml
 license:
   secretName: <secret_name>
   secretKey: license-key
