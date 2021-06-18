@@ -62,7 +62,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
 
-   * For more information about volumes please refer to the [Volumes section](CONFIGURATION.md#Volumes) of the Configuration guide. 
+   * For more information about volumes please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes). 
   
 
 ***
