@@ -287,8 +287,10 @@ jira:
   #    fileName:
 
   # -- Specifies a list of additional Jira plugins that should be added to the Jira container.
-  # These are specified in the same manner as the additionalLibraries field, but the files will be loaded
-  # as bundled plugins rather than as libraries.
+  # Note: Plugins installed via this method will appear as bundled plugins rather than user 
+  # plugins. An alternative to this method is to install the plugins via "Manage Apps" in the 
+  # product system administration UI. These should be specified in the same manner as the 
+  # 'additionalLibraries' property
   additionalBundledPlugins: []
   #  - volumeName:
   #    subDirectory:
