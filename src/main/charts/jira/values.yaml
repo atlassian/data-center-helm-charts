@@ -62,7 +62,7 @@ serviceAccount:
 ## Database configuration - Required
 ##
 ## Jira requires a backend database. The configuration below can be used to define the database to use
-## and its connection details. Additional detail:
+## and its connection details.
 ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#database-connectivity
 ##
 database: 
@@ -76,7 +76,6 @@ database:
     # - 'oracle10g'
     # - 'mssql'
     # - 'postgresaurora96'
-    # Additional detail: 
     # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasetype
   ##
   type: 
@@ -88,14 +87,12 @@ database:
     # - 'jdbc:mysql://<dbhost>/<dbname>'
     # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
     # - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
-    # Additional detail: 
     # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasejdbcurl
   ##
   url:
    
   ## The Java class name of the JDBC driver to be used, e.g. 'org.postgresql.Driver'
   ## If not specified, then it will need to be provided via the browser during initial startup.
-  ## Additional detail:
   ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasedriver
   ##
   driver:
@@ -110,7 +107,6 @@ database:
     ## via the browser during initial startup. Example of creating a Kubernetes secret below:
     ## 'kubectl create secret generic <secret-name> --from-literal=username=<username> \
     ## --from-literal=password=<password>'
-    ## Additional detail:
     ## https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     ##
     secretName:
@@ -127,7 +123,7 @@ database:
 ##
 ## By default, the charts will configure the local-home and shared-home as ephemeral volumes i.e. 
 ## 'emptyDir: {}'. This is fine for evaluation purposes but for production deployments this is not 
-## ideal and so local-home and shared-home should both be configured appropriately. Additional detail:
+## ideal and so local-home and shared-home should both be configured appropriately.
 ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#volumes-configuration
 ##
 volumes:
@@ -136,7 +132,7 @@ volumes:
   ## 
   localHome:
   
-    ## Dynamic provisioning. Additional detail: 
+    ## Dynamic provisioning. 
     ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/LOCAL_STORAGE.md
     ##
     persistentVolumeClaim:
@@ -160,7 +156,7 @@ volumes:
     ## When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     ## a standard Kubernetes volume that will be used for the local-home volume(s). If not defined, 
     ## then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify the
-    ## bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. Additional detail:
+    ## bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
     ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     ##
     customVolume: {}
@@ -175,7 +171,7 @@ volumes:
   ##
   sharedHome:
   
-    ## Dynamic provisioning. Additional detail: 
+    ## Dynamic provisioning.
     ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/LOCAL_STORAGE.md
     ##
     persistentVolumeClaim:
@@ -199,7 +195,7 @@ volumes:
     ## When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     ## a standard Kubernetes volume that will be used for the shared-home volume. If not defined, 
     ## then an 'emptyDir' volume is utilised. (i.e. unshared). Having provisioned a 'PersistentVolume', 
-    ##specify the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. Additional detail:
+    ##specify the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
     ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     ##
     customVolume: {}
@@ -244,7 +240,7 @@ volumes:
 ##
 ## To make the Atlassian product available from outside of the Kubernetes cluster an Ingress 
 ## Controller should be pre-provisioned. With this in place the configuration below can be used
-## to configure an appropriate Ingress Resource. Additional detail:
+## to configure an appropriate Ingress Resource.
 ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#ingress
 ##
 ingress:
@@ -294,7 +290,6 @@ ingress:
   ##
   ## Usage is optional, and depends on your use case. The Ingress Controller itself can also 
   ## be configured with a TLS secret for all Ingress Resources.
-  ## Additional detail:
   ## https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets
   ## https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ##
@@ -350,7 +345,6 @@ jira:
     ehcacheobject: 40011
      
   ## Confirm that Jira is up and running with a ReadinessProbe
-  ## Additional detail:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
   readinessProbe:
   
@@ -399,7 +393,6 @@ jira:
     ## Otherwise, it will need to be provided via the browser after initial startup.
     ## Example of creating a Kubernetes secret:
     ## 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> 
-    ## Additional detail:
     ## https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     ##
     secretName:
@@ -413,7 +406,7 @@ jira:
   resources:
   
     ## JVM Memory / Heap Size definitions. Thes values below are based on the 
-    ## defaults defined for the Jira docker container. Additional detail:
+    ## defaults defined for the Jira docker container.
     ## https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/#markdown-header-memory-heap-size
     ##
     jvm:
@@ -451,7 +444,7 @@ jira:
   additionalJvmArgs:
   
     ## The value defined for ActiveProcessorCount should correspond to that provided 
-    ## for 'container.requests.cpu'. Additional detail:
+    ## for 'container.requests.cpu'.
     ## https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
     ##
     - -XX:ActiveProcessorCount=2
