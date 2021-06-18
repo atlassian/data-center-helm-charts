@@ -33,9 +33,7 @@ spec:
         fsGroup: {{ .Values.bitbucket.securityContext.gid }} # Makes sure that the shared-home volume mount is writeable by the bitbucket user's GID
       {{ end }}
       initContainers:
-        {{- with .Values.additionalInitContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: alpine
@@ -79,9 +77,7 @@ spec:
               {{- if .Values.volumes.sharedHome.subPath }}
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
-            {{- with .Values.bitbucket.additionalVolumeMounts }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "bitbucket.additionalVolumeMounts" . | nindent 12 }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}
             {{- include "bitbucket.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
@@ -140,13 +136,9 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: {{ include "bitbucket.fullname" . }}-jvm-config
-            {{- with .Values.bitbucket.additionalEnvironmentVariables }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
         {{- include "fluentd.container" . | nindent 8 }}
-        {{- with .Values.additionalContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "bitbucket.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
