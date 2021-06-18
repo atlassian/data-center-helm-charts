@@ -28,9 +28,7 @@ spec:
         fsGroup: {{ .Values.crowd.securityContext.gid }}
       {{ end }}
       initContainers:
-        {{- with .Values.additionalInitContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "crowd.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: alpine
@@ -69,9 +67,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "crowd.volumeMounts" . | nindent 12 }}
-            {{- with .Values.crowd.additionalVolumeMounts }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "crowd.additionalVolumeMounts" . | nindent 12 }}
             {{- include "crowd.additionalLibraries" . | nindent 12 }}
             {{- include "crowd.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
@@ -104,13 +100,9 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: {{ include "crowd.fullname" . }}-jvm-config
-            {{- with .Values.crowd.additionalEnvironmentVariables }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "crowd.additionalEnvironmentVariables" . | nindent 12 }}
         {{- include "fluentd.container" . | nindent 8 }}
-        {{- with .Values.additionalContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "crowd.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}

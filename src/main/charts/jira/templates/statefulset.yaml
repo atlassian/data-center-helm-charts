@@ -28,9 +28,7 @@ spec:
         fsGroup: {{ .Values.jira.securityContext.gid }}
       {{ end }}
       initContainers:
-        {{- with .Values.additionalInitContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "jira.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: alpine
@@ -91,9 +89,7 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: {{ include "jira.fullname" . }}-jvm-config
-            {{- with .Values.jira.additionalEnvironmentVariables }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "jira.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http
               containerPort: {{ .Values.jira.ports.http }}
@@ -117,9 +113,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "jira.volumeMounts" . | nindent 12 }}
-            {{- with .Values.jira.additionalVolumeMounts }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "jira.additionalVolumeMounts" . | nindent 12 }}
             {{- include "jira.additionalLibraries" . | nindent 12 }}
             {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
@@ -128,9 +122,7 @@ spec:
               subPath: {{ .key }}
             {{ end }}
         {{- include "fluentd.container" . | nindent 8 }}
-        {{- with .Values.additionalContainers }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "jira.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
