@@ -41,7 +41,7 @@ image:
   ##
   tag: ""
   
-## Service configuration
+## ServiceAccount configuration
 ##
 serviceAccount:
 
