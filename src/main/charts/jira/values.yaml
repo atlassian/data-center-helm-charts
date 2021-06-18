@@ -20,6 +20,9 @@
 #
 # Additional details on pre-provisioning an ingress controller:
 # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#4-configure-ingress
+#
+##
+
 
 ## The initial number of Jira pods that should be started at deployment time. 
 ## Note: Jira requires manual configuration via the browser after the first pod is 
@@ -53,7 +56,7 @@ serviceAccount:
   ##
   create: true
   
-  ## -- The name of the ServiceAccount to be used by the pods. If not specified, but 
+  ## The name of the ServiceAccount to be used by the pods. If not specified, but 
   ## the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name 
   ## will be auto-generated, otherwise the 'default' ServiceAccount will be used.
   ##
@@ -436,7 +439,7 @@ jira:
     container:
       
       requests:
-        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        cpu: "2" ## If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
         memory: "2G"
       #  limits:
       #    cpu: "1"
