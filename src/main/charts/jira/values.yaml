@@ -303,7 +303,9 @@ ingress:
 ## Jira configuration 
 ##
 jira:
-
+  
+  ## Service configuration
+  ##
   service:
   
     ## The port on which the Jira Kubernetes Service will listen
@@ -439,9 +441,9 @@ jira:
       requests:
         cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
         memory: "2G"
-  #  limits:
-  #    cpu: "1"
-  #    memory: "2G"
+      #  limits:
+      #    cpu: "1"
+      #    memory: "2G"
 
   ## Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. 
   # system properties.
