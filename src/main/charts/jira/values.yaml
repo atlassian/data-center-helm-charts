@@ -302,14 +302,17 @@ jira:
   # See https://hub.docker.com/r/atlassian/jira-software for supported variables.
   additionalEnvironmentVariables: []
 
-# - Fluend configuration (OPTIONAL) #####################################################################################
+# - Fluentd configuration (OPTIONAL) #####################################################################################
+# Jira log collection and aggregation can be enabled using Flunetd. This config assumes an existing ELK stack has
+# been stood up and is availble.
+# https://www.fluentd.org/
 fluentd:
-  # -- Set to 'true' if the Fluentd sidecar should be added to each pod
+  # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   enabled: false
-  # -- Set to 'true' if a custom config should be used for Fluentd
+  # -- Set to 'true' if a custom config should be used for Fluentd. If enabled this config must 
+  # supplied via the 'fluentdCustomConfig' property below.
   customConfigFile: false
   # -- Custom fluent.conf file
-  # fluent.conf: |
   fluentdCustomConfig: {}
   # fluent.conf: |
     # <source>
@@ -323,7 +326,7 @@ fluentd:
     #   tag jira-access-logs
     # </source>
 
-  # -- The name of the image containing the Fluentd sidecar
+  # -- The Fluentd sidecar image
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   # -- The port on which the Fluentd sidecar will listen
   httpPort: 9880
