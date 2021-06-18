@@ -72,7 +72,7 @@ volumes:
         claimName: <pvc_name>
 ```
 
-Although not required, local storage for the pods can also be configured at this stage. A `StorageClass` will need to be pre-provisioned to utilize this feature, as you can see in the [local storage example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
+Local storage for the pods can also be configured at this stage. A `StorageClass` will need to be pre-provisioned to utilize this feature, as you can see in the [local storage example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
 
 ```yaml
 volumes:
@@ -97,7 +97,7 @@ Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/s
 kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
 ```
 Update the `values.yaml` file with the secrets:
-```shell
+```yaml
 license:
   secretName: <secret_name>
   secretKey: license-key

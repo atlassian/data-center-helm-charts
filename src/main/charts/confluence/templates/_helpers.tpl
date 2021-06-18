@@ -235,6 +235,46 @@ For each additional Synchrony library declared, generate a volume mount that inj
 {{- end }}
 
 {{/*
+Defining additional init containers here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalInitContainers" -}}
+{{- range .Values.additionalInitContainers }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional hosts here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalHosts" -}}
+{{- range .Values.additionalHosts }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional containers here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalContainers" -}}
+{{- range .Values.additionalContainers }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional volume mounts here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalVolumeMounts" -}}
+{{- range .Values.confluence.additionalVolumeMounts }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional environment variables here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalEnvironmentVariables" -}}
+{{- range .Values.confluence.additionalEnvironmentVariables }}
+{{- end }}
+{{- end }}
+
+{{/*
 For each additional plugin declared, generate a volume mount that injects that library into the Confluence plugins directory
 */}}
 {{- define "confluence.additionalBundledPlugins" -}}
