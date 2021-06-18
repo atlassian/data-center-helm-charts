@@ -3,6 +3,9 @@
 # HEADS UP! 
 #
 # Sections declared as 'Required' must be configured for production based deployments. 
+#
+# data loss may occur if not appropriately configured!
+# 
 # These sections are:
 # - database
 # - volumes
