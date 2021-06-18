@@ -1,9 +1,9 @@
 ## Atlassian Jira Data Center Helm values
 # 
-# NOTE
+# HEADS UP! 
 #
-# Sections declared as 'Required' must be configured for production based
-# deployments. These sections are:
+# Sections declared as 'Required' must be configured for production based deployments. 
+# These sections are:
 # - database
 # - volumes
 #
