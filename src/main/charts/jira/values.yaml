@@ -2,7 +2,7 @@
 # 
 # HEADS UP! 
 #
-# Data loss will occur if sections declared as 'Required' are not configured appropriately!
+# Data loss will occur if sections declared as 'REQUIRED' are not configured appropriately!
 # These sections are:
 # - database
 # - volumes
@@ -68,7 +68,7 @@ serviceAccount:
   imagePullSecrets: []
   # - name: secretName
 
-## Required - Database configuration
+## REQUIRED - Database configuration
 ##
 ## Jira requires a backend database. The configuration below can be used to define the 
 ## database to use and its connection details.
@@ -134,7 +134,7 @@ database:
     ##
     passwordSecretKey: password
 
-## Required - Volume configuration
+## REQUIRED - Volume configuration
 ##
 ## By default, the charts will configure the local-home and shared-home as ephemeral 
 ## volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production 
