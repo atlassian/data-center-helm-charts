@@ -537,6 +537,10 @@ fluentd:
   ##
   enabled: false
   
+  ## The Fluentd sidecar image
+  ##
+  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  
   ## Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) 
   ## should be used for Fluentd. If enabled this config must supplied via the 
   ## 'fluentdCustomConfig' property below.
@@ -557,10 +561,6 @@ fluentd:
     #   pos_file /tmp/jiralog.pos
     #   tag jira-access-logs
     # </source>
-
-  ## The Fluentd sidecar image
-  ##
-  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
   
   ## The port on which the Fluentd sidecar will listen
   ##
