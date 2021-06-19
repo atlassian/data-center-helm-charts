@@ -223,12 +223,11 @@ volumes:
           
     ## Static provisioning of shared-home using K8s PV's and PVC's
     ##
-    ## When 'persistentVolumeClaim.create' is 'false', then this value can be used to 
-    ## define a standard K8s volume that will be used for the shared-home volume. If not 
-    ## defined, then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', 
-    ## specify the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
+    ## When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
+    ## a standard K8s volume that will be used for the shared-home volume. If not defined, 
+    ## then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify 
+    ## the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
-    ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     ##
     customVolume: {}
     # persistentVolumeClaim:
