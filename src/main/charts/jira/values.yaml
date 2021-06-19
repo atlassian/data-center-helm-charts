@@ -629,6 +629,7 @@ additionalInitContainers: []
 ## Additional labels that should be applied to all resources
 ##
 additionalLabels: {}
+#  name: <value>
 
 ## Additional existing ConfigMaps and Secrets not managed by Helm that should be 
 ## mounted into service container. Configuration details below (camelCase is important!):
