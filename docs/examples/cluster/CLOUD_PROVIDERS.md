@@ -1,6 +1,5 @@
 # Provisioning Kubernetes clusters on cloud-based providers
-Installation and configuration instructions for cloud providers can be found below:
-
+Here are installation and configuration instructions for cloud providers:
 * [Amazon EKS](EKS_SETUP.md) 
 * [Google GKE](GKE_SETUP.md)
 * [Azure AKS](AKS_SETUP.md)
