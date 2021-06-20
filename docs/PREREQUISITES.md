@@ -16,14 +16,14 @@ Before installing the Data Center Helm charts you need to set up your environmen
    2. [Install kubectl](https://kubernetes.io/docs/tasks/tools/)
    
 2. Create and connect to the Kubernetes cluster
-   * You can refer to our examples on [provisioning Kubernetes clusters on cloud-based providers](examples/cluster/CLOUD_PROVIDERS.md).
+   * See examples on [provisioning Kubernetes clusters on cloud-based providers](examples/cluster/CLOUD_PROVIDERS.md).
    * In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 
    * It is up to you to set up security policies
    
 3. Provision an Ingress Controller
 
-   * You can refer to our example on [provisioning an NGINX Ingress Controller](examples/ingress/CONTROLLERS.md).
+   * See an example on [provisioning an NGINX Ingress Controller](examples/ingress/CONTROLLERS.md).
    * This step is necessary in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
    * The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
@@ -35,7 +35,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 4. Provision a database
 
-   * You can refer to our example on [provisioning databases on cloud-based providers](examples/database/CLOUD_PROVIDERS.md).
+   * See an example on [provisioning databases on cloud-based providers](examples/database/CLOUD_PROVIDERS.md).
 
    * Must be of a type and version supported by the Data Center product you wish to install:
 
@@ -55,14 +55,14 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 5. Configure a shared-home volume
 
-   * You can refer to our examples on [creating shared storage](examples/storage/STORAGE.md).
+   * See examples on [creating shared storage](examples/storage/STORAGE.md).
    * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
 
    * The `shared-home` volume must be correctly configured as a read-write shared filesystem (e.g. NFS, AWS EFS, Azure Files)
 
    * The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
 
-   * For more information about volumes please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes). 
+   * For more information about volumes see [Volumes section of the configuration guide](CONFIGURATION.md#Volumes). 
   
 
 ***
