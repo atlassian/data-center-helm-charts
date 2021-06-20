@@ -19,19 +19,19 @@ Before installing the Data Center Helm charts you need to set up your environmen
    * See examples on [provisioning Kubernetes clusters on cloud-based providers](examples/cluster/CLOUD_PROVIDERS.md).
    * In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 
-   * It is up to you to set up security policies
+   * It is up to you to set up security policies.
    
 3. Provision an Ingress Controller
 
    * See an example on [provisioning an NGINX Ingress Controller](examples/ingress/CONTROLLERS.md).
-   * This step is necessary in order to make the Atlassian product available from outside of the Kubernetes cluster after deployment. 
+   * This step is necessary in order to make your Atlassian product available from outside of the Kubernetes cluster after deployment. 
    * The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme), [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme) and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme). There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
    * Because different Kubernetes clusters use different ingress configurations/controllers, the Helm charts provide [Ingress Object](https://kubernetes.io/docs/concepts/services-networking/ingress/) templates only.
 
-   * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) (an alternative controller can be used) and can be configured via the `ingress` stanza in the appropriate `values.yaml`. 
+   * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/) and can be configured via the `ingress` stanza in the appropriate `values.yaml` (an alternative controller can be used).
 
-   * For more information about the ingress controller please refer to the [Ingress section](CONFIGURATION.md#Ingress) of the Configuration guide.
+   * For more information about the Ingress controller go to the [Ingress section of the configuration guide](CONFIGURATION.md#Ingress).
 
 4. Provision a database
 
@@ -51,7 +51,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The database service may be deployed within the same Kubernetes cluster as the Data Center product or elsewhere.
 
-   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information please refer to the [Database connectivity section](CONFIGURATION.md#database-connectivity) of the Configuration guide.
+   * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information go to the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
 
 5. Configure a shared-home volume
 
@@ -62,7 +62,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
    * The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
 
-   * For more information about volumes see [Volumes section of the configuration guide](CONFIGURATION.md#Volumes). 
+   * For more information about volumes go to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes). 
   
 
 ***
