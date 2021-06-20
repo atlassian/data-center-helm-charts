@@ -178,14 +178,13 @@ volumes:
     ##
     ## NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for 
     ## pods is not recommended. Dymamic provisioning described above is the prescribed 
-    # approach.
+    ## approach.
     ##
     ## When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     ## a standard K8s volume that will be used for the local-home volume(s). If not defined, 
     ## then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify 
     ## the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
-    ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     ##
     customVolume: {}
     # persistentVolumeClaim:
@@ -232,6 +231,7 @@ volumes:
     ## then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify 
     ## the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
+    ## https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
     ##
     customVolume: {}
     # persistentVolumeClaim:
@@ -390,6 +390,7 @@ jira:
      
   ## Confirm that Jira is up and running with a ReadinessProbe
   ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
+  ##
   readinessProbe:
   
     ## The initial delay (in seconds) for the Jira container readiness probe, 
@@ -484,7 +485,7 @@ jira:
       #    memory: "2G"
 
   ## Specifies a list of additional arguments that can be passed to the Jira JVM, e.g. 
-  # system properties.
+  ## system properties.
   ##
   additionalJvmArgs:
   
