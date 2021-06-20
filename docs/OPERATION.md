@@ -95,7 +95,7 @@ Bitbucket Data Center (Bitbucket DC) uses a shared network file system (NFS) to 
 
 Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but we provide an example implementation of [NFS Server for Bitbucket](examples/storage/nfs/NFS.md), which can be used as a guide.
 
-### Examples of provisioning storage with the AWS CSI Driver
+#### Examples of provisioning storage with the AWS CSI Driver
  * [Local storage - utilizing AWS EBS-backed volumes](examples/storage/aws/LOCAL_STORAGE.md)
  * [Shared storage - utilizing AWS EFS-backed filesystem](examples/storage/aws/SHARED_STORAGE.md)
 
