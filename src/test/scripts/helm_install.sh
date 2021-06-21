@@ -100,8 +100,13 @@ bootstrap_nfs() {
       sleep 1
     done
 
-    echo Detected NFS server IP: $nfs_server_ip
-    valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfs_server_ip "
+    if [ -n "$nfs_nfs_server_ip" ] && [ "$nfs_server_ip" != "null" ]; then
+      echo Detected NFS server IP: $nfs_server_ip
+      valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfs_server_ip "
+    else
+      echo "NFS server IP not found."
+      exit 1
+    fi
   fi
 }
 
