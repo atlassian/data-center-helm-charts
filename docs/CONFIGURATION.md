@@ -92,7 +92,7 @@ volumes:
       nfs:
         server: mynfsserver
         path: /export/path
-````
+```
 
 Generally, any valid Kubernetes volume resource definition can be substituted
 here. However, as mentioned previously, externalising the volume definitions
