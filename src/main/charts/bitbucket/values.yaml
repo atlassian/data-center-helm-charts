@@ -11,7 +11,7 @@
 # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#3-configure-database
 # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#4-configure-ingress
 #
-# To manage external access to the Jira instance, an ingress resource can also be configured 
+# To manage external access to the Bitbucket instance, an ingress resource can also be configured 
 # under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
 #
 # Additional details on pre-provisioning an ingress controller can be found here:
@@ -402,11 +402,11 @@ bitbucket:
   ##
   service:
   
-    ## The port on which the Jira K8s Service will listen
+    ## The port on which the Bitbucket K8s Service will listen
     ##
     port: 80
     
-    ## The type of K8s service to use for Jira
+    ## The type of K8s service to use for Bitbucket
     ##
     type: ClusterIP
     
@@ -459,7 +459,7 @@ bitbucket:
     ##
     http: 7990
     
-    ## The port on which the Jira container listens for SSH traffic
+    ## The port on which the Bitbucket container listens for SSH traffic
     ##
     ssh: 7999
     
@@ -480,7 +480,7 @@ bitbucket:
     ##
     secretName:
     
-    ## The key in the K8s Secret that contains the Jira license key
+    ## The key in the K8s Secret that contains the Bitbucket license key
     ##
     secretKey: license-key
 
@@ -569,7 +569,7 @@ bitbucket:
     
     ## Specifies the standard K8s resource requests and/or limits for the Bitbucket 
     ## container. It is important that if the memory resources are specified here, 
-    ## they must allow for the size of the Jira JVM. That means the maximum heap 
+    ## they must allow for the size of the Bitbucket JVM. That means the maximum heap 
     ## size, the reserved code cache size, plus other JVM overheads, must be 
     ## accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example.
     ##
@@ -605,7 +605,7 @@ bitbucket:
   #    fileName:
 
   ## Specifies a list of additional Bitbucket plugins that should be added to the 
-  ## Jira container. Note plugins installed via this method will appear as 
+  ## Bitbucket container. Note plugins installed via this method will appear as 
   ## bundled plugins rather than user plugins. An alternative to this method 
   ## is to install the plugins via "Manage Apps" in the product system 
   ## administration UI. These should be specified in the same manner as the 
@@ -622,7 +622,7 @@ bitbucket:
   ##
   additionalVolumeMounts: []
 
-  ## Defines any additional environment variables to be passed to the Jira 
+  ## Defines any additional environment variables to be passed to the Bitbucket 
   ## container. See https://hub.docker.com/r/atlassian/bitbucket-server for 
   ## supported variables.
   ##
@@ -685,17 +685,17 @@ fluentd:
   #   subPath: log
   #   readOnly: true
 
-## Custom annotations that will be applied to all Jira pods
+## Custom annotations that will be applied to all Bitbucket pods
 ##
 podAnnotations: {}
 #  name: <value>
 
-## Standard K8s node-selectors that will be applied to all Jira pods
+## Standard K8s node-selectors that will be applied to all Bitbucket pods
 ##
 nodeSelector: {}
 #  name: <value>
 
-## Standard K8s tolerations that will be applied to all Jira pods
+## Standard K8s tolerations that will be applied to all Bitbucket pods
 ##
 tolerations: []
 # - effect: <name>
@@ -723,13 +723,13 @@ tolerations: []
 ##        topologyKey: topology.kubernetes.io/zone
 affinity: {}
 
-## Additional container definitions that will be added to all Jira pods
+## Additional container definitions that will be added to all Bitbucket pods
 ##
 additionalContainers: []
 #  - name: <name>
 #    image: <image>:<tag>
 
-## Additional initContainer definitions that will be added to all Jira pods
+## Additional initContainer definitions that will be added to all Bitbucket pods
 ##
 additionalInitContainers: []
 #  - name: <name>
