@@ -716,7 +716,6 @@ fluentd:
   #     tag confluence-access-logs
   #   </source>
 
-  
   ## The port on which the Fluentd sidecar will listen
   ##
   httpPort: 9880
