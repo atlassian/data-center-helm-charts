@@ -32,7 +32,8 @@ replicaCount: 1
 #
 image:
 
-  # -- https://hub.docker.com/r/atlassian/jira-software
+  # -- The Docker Confluence Docker image to use
+  # https://hub.docker.com/r/atlassian/jira-software
   #
   repository: atlassian/jira-software 
   
