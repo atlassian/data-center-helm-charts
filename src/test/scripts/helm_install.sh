@@ -94,7 +94,7 @@ bootstrap_nfs() {
         exit 1
       fi
 
-      if [ "$nfs_server_ip" != "null" ] ; then
+      if [ -n "$nfs_nfs_server_ip" ] && [ "$nfs_server_ip" != "null" ] ; then
         break
       fi
       sleep 1
