@@ -28,7 +28,7 @@
 #
 replicaCount: 1
 
-# -- Image configuration 
+# Image configuration 
 #
 image:
 
