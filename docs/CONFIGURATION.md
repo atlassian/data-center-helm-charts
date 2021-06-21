@@ -236,7 +236,9 @@ This will mount the `lib1.jar` and `lib2.jar` in the appropriate place in
 the container.
 
 Similarly, use `additionalBundledPlugins` to load product plugins into the
-container.
+container. Note: Plugins installed via this method will appear as system plugins
+rather than user plugins. An alternative to this method is to install the
+plugins via "Manage Apps" in the product system administration UI.
 
 If you're not using the `shared-home` volume, then you can declare your own custom 
 volume in the "Additional Volumes" section below, then declare the libraries as above
