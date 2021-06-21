@@ -643,6 +643,7 @@ additionalLabels: {}
   # 'mountPath' - The destination directory in a container.
 ## VolumeMount and Volumes are added with this name and index position, for example; 
 ## custom-config-0, keystore-2
+#
 additionalFiles: []
 #  - name: custom-config
 #    type: configMap
