@@ -39,7 +39,7 @@ replicaCount: 1
 ##
 image:
 
-  ## https://hub.docker.com/r/atlassian/bitbucket
+  ## https://hub.docker.com/r/atlassian/bitbucket-server
   ##
   repository: atlassian/bitbucket-server
   
