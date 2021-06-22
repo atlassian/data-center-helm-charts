@@ -131,7 +131,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalVolumeMounts" -}}
-{{- range .Values.jira.additionalVolumeMounts }}
+{{- with .Values.jira.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

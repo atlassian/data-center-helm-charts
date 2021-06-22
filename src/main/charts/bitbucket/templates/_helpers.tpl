@@ -151,7 +151,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "bitbucket.additionalVolumeMounts" -}}
-{{- range .Values.bitbucket.additionalVolumeMounts }}
+{{- with .Values.bitbucket.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

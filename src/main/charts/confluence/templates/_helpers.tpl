@@ -262,7 +262,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}
-{{- range .Values.confluence.additionalVolumeMounts }}
+{{- with .Values.confluence.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

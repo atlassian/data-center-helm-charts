@@ -182,7 +182,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalVolumeMounts" -}}
-{{- range .Values.crowd.additionalVolumeMounts }}
+{{- with .Values.crowd.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

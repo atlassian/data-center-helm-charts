@@ -124,6 +124,22 @@ class VolumesTest {
                 .hasTextEqualTo("my-volume-pvc");
     }
 
+    @ParameterizedTest
+    @EnumSource
+    void additionalVolumeMounts(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname+".additionalVolumeMounts[0].name", "my-volume-mount",
+                pname+".additionalVolumeMounts[0].mountPath", "/my-volume-path",
+                pname+".additionalVolumeMounts[0].subPath", "extra_path"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var mount = statefulSet.getVolumeMount("my-volume-mount").get();
+        assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
+        assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
+    }
+
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
         assertThat(volumeClaimTemplate.path("metadata").path("name"))
                 .hasTextEqualTo(expectedVolumeName);
