@@ -35,3 +35,8 @@ eksctl create cluster -f config.yaml
 3. Number of nodes - guidance on the resource dimensions that should be used for these nodes can be found in [Requests and limits](https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/resource_management/REQUESTS_AND_LIMITS.md).
 
 > Having established a cluster, continue with provisioning the [prerequisite infrastructure](../../PREREQUISITES.md).
+
+***
+* Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to [README.md](../../../README.md)
+

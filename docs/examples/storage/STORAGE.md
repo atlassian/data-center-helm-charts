@@ -8,3 +8,8 @@ Jira, Confluence and Crowd can all be configured with an EFS backed shared solut
 
 ## NFS  
 See the [NFS example](nfs/NFS.md) for details on creating shared storage for Bitbucket.
+
+***
+* Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to the [installation guide](../../INSTALLATION.md)
+* Go back to [README.md](../../../README.md)
