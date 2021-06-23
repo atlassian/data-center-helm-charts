@@ -45,4 +45,12 @@ public final class StatefulSet extends KubeResource {
                 .find(volume -> volume.path("name").asText().equals(volumeName));
     }
 
+    public JsonNode getInitContainers() {
+        return getPodSpec().required("initContainers");
+    }
+
+    public Option<JsonNode> getInitContainer(String name) {
+        return Array.ofAll(getInitContainers())
+                .find(volume -> volume.path("name").asText().equals(name));
+    }
 }

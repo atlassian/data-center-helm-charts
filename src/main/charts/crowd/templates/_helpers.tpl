@@ -166,7 +166,8 @@ For each additional library declared, generate a volume mount that injects that 
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalInitContainers" -}}
-{{- range .Values.additionalInitContainers }}
+{{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

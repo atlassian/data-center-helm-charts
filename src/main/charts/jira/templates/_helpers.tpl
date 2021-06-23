@@ -115,7 +115,8 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalInitContainers" -}}
-{{- range .Values.additionalInitContainers }}
+{{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

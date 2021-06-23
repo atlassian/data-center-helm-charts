@@ -154,6 +154,20 @@ class VolumesTest {
         env.assertHasValue("MY_ENV_VAR", "env-value");
     }
 
+    @ParameterizedTest
+    @EnumSource
+    void additionalInitContainers(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "additionalInitContainers[0].name", "my_init_container",
+                "additionalInitContainers[0].image", "my_init_image"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var icontainer = statefulSet.getInitContainer("my_init_container").get();
+        assertThat(icontainer.path("image")).hasTextEqualTo("my_init_image");
+    }
+
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
         assertThat(volumeClaimTemplate.path("metadata").path("name"))
                 .hasTextEqualTo(expectedVolumeName);

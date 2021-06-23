@@ -238,7 +238,8 @@ For each additional Synchrony library declared, generate a volume mount that inj
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalInitContainers" -}}
-{{- range .Values.additionalInitContainers }}
+{{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
