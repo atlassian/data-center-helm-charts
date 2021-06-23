@@ -72,7 +72,7 @@ volumes:
         claimName: <pvc_name>
 ```
 
-Each pod will also require their own `local-home` storage. This can be configured with a `StorageClass`, as can be seen in the [local home example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
+Each pod will also require its own `local-home` storage. This can be configured with a `StorageClass`, as can be seen in the [local home example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
 
 ```yaml
 volumes:
