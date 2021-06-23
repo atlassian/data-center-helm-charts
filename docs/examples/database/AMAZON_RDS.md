@@ -17,3 +17,7 @@ For details on creating the database user and database itself follow the appropr
  * [Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html)
 
 > Once you create a database continue with provisioning the [prerequisite infrastructure](../../PREREQUISITES.md).
+
+***
+* Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to [README.md](../../../README.md)
