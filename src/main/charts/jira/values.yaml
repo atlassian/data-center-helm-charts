@@ -91,7 +91,7 @@ database:
   type: 
   
   # -- The jdbc URL of the database. If not specified, then it will need to be provided 
-  # via the browser during manual configuration post deployment. Example URL's include:
+  # via the browser during manual configuration post deployment. Example URLs include:
    # - 'jdbc:postgresql://<dbhost>:5432/<dbname>'
    # - 'jdbc:mysql://<dbhost>/<dbname>'
    # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
@@ -175,7 +175,7 @@ volumes:
         requests:
           storage: 1Gi
           
-    # -- Static provisioning of local-home using K8s PV's and PVC's
+    # -- Static provisioning of local-home using K8s PVs and PVCs
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for 
     # pods is not recommended. Dymamic provisioning described above is the prescribed 
@@ -225,7 +225,7 @@ volumes:
         requests:
           storage: 1Gi
           
-    # -- Static provisioning of shared-home using K8s PV's and PVC's
+    # -- Static provisioning of shared-home using K8s PVs and PVCs
     #
     # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     # a standard K8s volume that will be used for the shared-home volume. If not defined, 
