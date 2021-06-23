@@ -45,15 +45,4 @@ public final class StatefulSet extends KubeResource {
                 .find(volume -> volume.path("name").asText().equals(volumeName));
     }
 
-    public JsonNode getVolumeMounts() {
-        return getPodSpec()
-                .required("containers")
-                .get(0)
-                .required("volumeMounts");
-    }
-
-    public Option<JsonNode> getVolumeMount(String mountName) {
-        return Array.ofAll(getVolumeMounts())
-                .find(volume -> volume.path("name").asText().equals(mountName));
-    }
 }

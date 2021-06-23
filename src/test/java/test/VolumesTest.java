@@ -135,7 +135,7 @@ class VolumesTest {
         ));
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        final var mount = statefulSet.getVolumeMount("my-volume-mount").get();
+        final var mount = statefulSet.getContainer().getVolumeMount("my-volume-mount");
         assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
         assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
     }
