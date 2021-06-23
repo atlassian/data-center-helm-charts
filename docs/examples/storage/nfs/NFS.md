@@ -55,5 +55,6 @@ a standard kubernetes functionality. You can read the [Kubernetes affinity docum
 
 ***
 * Go back to the [prerequisites](../../../PREREQUISITES.md)
+* Go back to the [installation guide](../../../INSTALLATION.md)
 * Go back to [README.md](../../../../README.md)
 
