@@ -11,4 +11,5 @@ See the [NFS example](nfs/NFS.md) for details on creating shared storage for Bit
 
 ***
 * Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to the [installation guide](../../INSTALLATION.md)
 * Go back to [README.md](../../../README.md)
