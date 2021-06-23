@@ -191,7 +191,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalEnvironmentVariables" -}}
-{{- range .Values.crowd.additionalEnvironmentVariables }}
+{{- with .Values.crowd.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

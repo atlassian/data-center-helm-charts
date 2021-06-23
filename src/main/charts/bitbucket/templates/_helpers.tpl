@@ -160,7 +160,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "bitbucket.additionalEnvironmentVariables" -}}
-{{- range .Values.bitbucket.additionalEnvironmentVariables }}
+{{- with .Values.bitbucket.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

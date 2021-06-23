@@ -271,7 +271,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalEnvironmentVariables" -}}
-{{- range .Values.confluence.additionalEnvironmentVariables }}
+{{- with .Values.confluence.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

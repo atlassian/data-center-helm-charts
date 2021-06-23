@@ -140,7 +140,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalEnvironmentVariables" -}}
-{{- range .Values.jira.additionalEnvironmentVariables }}
+{{- with .Values.jira.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
