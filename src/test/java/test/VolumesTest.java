@@ -140,34 +140,6 @@ class VolumesTest {
         assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
     }
 
-    @ParameterizedTest
-    @EnumSource
-    void additionalEnvironmentVariables(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".additionalEnvironmentVariables[0].name", "MY_ENV_VAR",
-                pname+".additionalEnvironmentVariables[0].value", "env-value"
-        ));
-
-        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        final var env = statefulSet.getContainer().getEnv();
-        env.assertHasValue("MY_ENV_VAR", "env-value");
-    }
-
-    @ParameterizedTest
-    @EnumSource
-    void additionalInitContainers(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "additionalInitContainers[0].name", "my_init_container",
-                "additionalInitContainers[0].image", "my_init_image"
-        ));
-
-        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        final var icontainer = statefulSet.getInitContainer("my_init_container").get();
-        assertThat(icontainer.path("image")).hasTextEqualTo("my_init_image");
-    }
-
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
         assertThat(volumeClaimTemplate.path("metadata").path("name"))
                 .hasTextEqualTo(expectedVolumeName);
