@@ -144,7 +144,8 @@ Defining additional init containers here instead of in values.yaml to allow temp
 Defining additional containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "bitbucket.additionalContainers" -}}
-{{- range .Values.additionalContainers }}
+{{- with .Values.additionalContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

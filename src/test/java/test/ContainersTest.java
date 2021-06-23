@@ -53,4 +53,18 @@ class ContainersTest {
         final var icontainer = statefulSet.getInitContainer("my_init_container").get();
         assertThat(icontainer.path("image")).hasTextEqualTo("my_init_image");
     }
+
+    @ParameterizedTest
+    @EnumSource
+    void additionalContainers(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "additionalContainers[0].name", "my_container",
+                "additionalContainers[0].image", "my_image"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var icontainer = statefulSet.getContainer("my_container");
+        assertThat(icontainer.get("image")).hasTextEqualTo("my_image");
+    }
 }

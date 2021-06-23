@@ -255,7 +255,8 @@ Defining additional hosts here instead of in values.yaml to allow template overr
 Defining additional containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalContainers" -}}
-{{- range .Values.additionalContainers }}
+{{- with .Values.additionalContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
