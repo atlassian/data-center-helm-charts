@@ -243,7 +243,7 @@ volumes:
         requests:
           storage: 1Gi
           
-    # -- Static provisioning of shared-home using K8s PV's and PVC's
+    # -- Static provisioning of shared-home using K8s PVs and PVCs
     #
     # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
     # a standard K8s volume that will be used for the shared-home volume. If not defined, 
