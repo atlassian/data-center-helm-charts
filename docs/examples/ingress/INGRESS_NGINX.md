@@ -128,4 +128,8 @@ ingress:
 ## Bitbucket SSH configuration
 > **NOTE:** Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../ssh/SSH_BITBUCKET.md) for details.
 
-> Having created the Ingress controller continue with provisioning the [pre-requisite infrastructure](../../PREREQUISITES.md).
+> Having created the Ingress controller continue with provisioning the [prerequisite infrastructure](../../PREREQUISITES.md).
+
+***
+* Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to [README.md](../../../README.md)
