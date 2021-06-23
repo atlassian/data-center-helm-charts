@@ -2,7 +2,7 @@
 
 jira:
   clustering:
-    enabled: true
+    enabled: ${clustering.enabled}
   additionalJvmArgs:
     - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
     - -Djira.websudo.is.disabled=true 

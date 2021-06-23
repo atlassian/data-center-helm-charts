@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jvm-config
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -37,7 +37,7 @@ kind: Service
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -63,7 +63,7 @@ kind: StatefulSet
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -165,7 +165,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -196,7 +196,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -233,7 +233,7 @@ kind: Job
 metadata:
   name: unittest-crowd-nfs-fixer
   labels:
-    helm.sh/chart: crowd-0.10.0
+    helm.sh/chart: crowd-0.11.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "4.3.0-jdk11"
@@ -246,7 +246,7 @@ spec:
     metadata:
       name: unittest-crowd-nfs-fixer
       labels:
-        helm.sh/chart: crowd-0.10.0
+        helm.sh/chart: crowd-0.11.0
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
         app.kubernetes.io/version: "4.3.0-jdk11"

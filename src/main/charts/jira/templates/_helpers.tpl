@@ -112,6 +112,38 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 {{- end }}
 
 {{/*
+Defining additional init containers here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "jira.additionalInitContainers" -}}
+{{- range .Values.additionalInitContainers }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional containers here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "jira.additionalContainers" -}}
+{{- range .Values.additionalContainers }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional volume mounts here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "jira.additionalVolumeMounts" -}}
+{{- range .Values.jira.additionalVolumeMounts }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional environment variables here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "jira.additionalEnvironmentVariables" -}}
+{{- range .Values.jira.additionalEnvironmentVariables }}
+{{- end }}
+{{- end }}
+
+{{/*
 For each additional library declared, generate a volume mount that injects that library into the Jira lib directory
 */}}
 {{- define "jira.additionalLibraries" -}}

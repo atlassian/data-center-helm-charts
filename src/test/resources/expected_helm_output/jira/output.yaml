@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-0.10.0
+    helm.sh/chart: jira-0.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.6-jdk11"
+    app.kubernetes.io/version: "8.13.7-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-0.10.0
+    helm.sh/chart: jira-0.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.6-jdk11"
+    app.kubernetes.io/version: "8.13.7-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -36,10 +36,10 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-0.10.0
+    helm.sh/chart: jira-0.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.6-jdk11"
+    app.kubernetes.io/version: "8.13.7-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -58,10 +58,10 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-0.10.0
+    helm.sh/chart: jira-0.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.6-jdk11"
+    app.kubernetes.io/version: "8.13.7-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -94,7 +94,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: jira
-          image: "atlassian/jira-software:8.13.6-jdk11"
+          image: "atlassian/jira-software:8.13.7-jdk11"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -167,10 +167,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-0.10.0
+    helm.sh/chart: jira-0.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.6-jdk11"
+    app.kubernetes.io/version: "8.13.7-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -199,10 +199,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-0.10.0
+    helm.sh/chart: jira-0.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.6-jdk11"
+    app.kubernetes.io/version: "8.13.7-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

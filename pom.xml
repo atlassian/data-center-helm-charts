@@ -117,6 +117,7 @@
         <shared.pvc.name>atlassian-dc-shared-home-pvc</shared.pvc.name>
 
         <persistence.enabled>true</persistence.enabled>
+        <clustering.enabled>true</clustering.enabled>
 
         <db.init.script.file/>
 
