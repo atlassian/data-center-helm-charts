@@ -1,6 +1,6 @@
 # Installation 
 
-Use these instructions to install your Atlassian product using the Helm charts. Before you proceed with the installation, make sure you have followed the [Prerequisites guide](PREREQUISITES.md).
+Follow these instructions to install your Atlassian product using the Helm charts. Before you proceed with the installation, make sure you have followed the [Prerequisites guide](PREREQUISITES.md).
 
 ## 1. Add the Helm chart repository
 
@@ -22,16 +22,16 @@ helm show values atlassian-data-center/<product> > values.yaml
 ```
 
 ## 3. Configure database
-Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the usage of the database provisioned as part of the [Prerequisites](PREREQUISITES.md). 
+Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
 
-> If you provide all the required database values, you will bypass the database connectivity configuration during the product setup.
+> By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
 
-Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) to store the connectivity details of the database:
+Create a Kubernetes secret to store the connectivity details of the database:
 ```shell
 kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
 ``` 
 
-Using the [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/), update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` file for additional details on how to configure the remaining database values:
+Using the Kubernetes secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` file for additional details on how to configure the remaining database values:
 ```yaml
 database:
   type: <db_type>
@@ -42,10 +42,12 @@ database:
     usernameSecretKey: username
     passwordSecretKey: password
 ```
-> For additional information on how the above values should be configured, refer to the [database connectivity section](CONFIGURATION.md#Database-connectivity).
+> For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#Database-connectivity).
+
+> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
     
 ## 4. Configure Ingress
-Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated commentary within the `values.yaml` file for additional details on how to configure the Ingress resource:
+Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
 
 ```yaml
 ingress:
@@ -59,7 +61,9 @@ ingress:
   https: true
   tlsSecretName: <tls_certificate_name>
 ```
-> Additional details on Ingress controllers are documented [here](CONFIGURATION.md#Ingress), and an example of how to set up a controller can be found [here](examples/ingress/CONTROLLERS.md).
+> For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#Ingress). 
+
+> See an example of [how to set up a controller](examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the `shared-home` that was provisioned as part of the [Prerequisites](PREREQUISITES.md). See [shared home example](examples/storage/aws/SHARED_STORAGE.md).
@@ -82,17 +86,17 @@ volumes:
       storageClassName: <storage-class-name>
 ```
 
-> For more details, please refer to the [Volumes section](CONFIGURATION.md#Volumes).
+> For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes).
     
 > **NOTE:** Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](examples/storage/nfs/NFS.md).
     
 ## 6. Configure license and sysadmin credentials for Bitbucket
-Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#Obtain-values.yaml) need to be updated.
-Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) to hold the Bitbucket license:
+Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#Obtain-values.yaml).
+Create a Kubernetes secret to hold the Bitbucket license:
 ```shell
 kubectl create secret generic <license_secret_name> --from-literal=license-key='<bitbucket_license_key>'
 ```
-Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) to hold the Bitbucket system administrator credentials:
+Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
 ```shell
 kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
 ```
@@ -110,7 +114,7 @@ sysadminCredentials:
   emailAddressSecretKey: emailAddress
 ```
 
-## 7. Install your chosen product: 
+## 7. Install your chosen product
 
 ```shell
 helm install <release-name> atlassian-data-center/<product> --namespace <namespace> --version <chart-version> --values values.yaml
@@ -143,11 +147,11 @@ helm uninstall <release-name> atlassian-data-center/<product>
 ```
 
 * `<release-name>` is the name you chose for your deployment
-* `<product>` can be jira, confluence, bitbucket or crowd
+* `<product>` can be jira, confluence, bitbucket, or crowd
 
 ***
 
 * Continue to the [operation guide](OPERATION.md)
 * Go back to the [prerequisites](PREREQUISITES.md) 
-* Dive deeper into the [configuration](CONFIGURATION.md) options 
+* Dive deeper into the [configuration options](CONFIGURATION.md) 
 * Go back to [README.md](../README.md)
