@@ -120,7 +120,7 @@ database:
   type:
   
   # -- The jdbc URL of the database. If not specified, then it will need to be provided 
-  # via the browser during manual configuration post deployment. Example URL's include:
+  # via the browser during manual configuration post deployment. Example URLs include:
    # - 'jdbc:postgresql://<dbhost>:5432/<dbname>'
    # - 'jdbc:mysql://<dbhost>/<dbname>'
    # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
