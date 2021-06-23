@@ -7,4 +7,5 @@ Here is an example of how these controllers can be installed and configured for 
 
 ***
 * Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to the [installation guide](../../INSTALLATION.md)
 * Go back to [README.md](../../../README.md)
