@@ -6,7 +6,7 @@
 
 The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These exampes should not be used in production. 
 
-Before proceedding it is highly recommended that you understand your specific deployment needs and tailor your solution to them.
+Before proceeding it is highly recommended that you understand your specific deployment needs and tailor your solution to them.
 
 # Components
 
@@ -52,3 +52,8 @@ kubectl apply -f ./storage/nfs/nfs-server.yaml
 
 It is **highly recommended** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use affinity rules -
 a standard kubernetes functionality. You can read the [Kubernetes affinity documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) and use the suitable affinity definition in the `affinity: {}` definition in the `values.yaml` file.
+
+***
+* Go back to the [prerequisites](../../../PREREQUISITES.md)
+* Go back to [README.md](../../../../README.md)
+
