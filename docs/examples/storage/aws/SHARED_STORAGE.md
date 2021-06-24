@@ -77,7 +77,7 @@ volumes:
   sharedHome:
     customVolume:
       persistentVolumeClaim:
-        claimName: "my-shared-vol-pvc" 
+        claimName: "my-shared-vol-pvc"
 ```
 
 # Resources
