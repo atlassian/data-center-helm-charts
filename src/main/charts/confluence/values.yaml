@@ -193,7 +193,7 @@ volumes:
         requests:
           storage: 1Gi
           
-    # -- Static provisioning of local-home using K8s PV's and PVC's
+    # -- Static provisioning of local-home using K8s PVs and PVCs
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for 
     # pods is not recommended. Dynamic provisioning described above is the prescribed
