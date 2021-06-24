@@ -9,7 +9,7 @@
 #
 # Additional details on pre-provisioning these required resources can be found here:
 # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#3-configure-database
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#4-configure-ingress
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#5-configure-persistent-storage
 #
 # To manage external access to the Bitbucket instance, an ingress resource can also be configured 
 # under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
@@ -39,7 +39,7 @@ replicaCount: 1
 #
 image:
 
-  # -- The Docker Confluence Docker image to use
+  # -- The Confluence Docker image to use
   # https://hub.docker.com/r/atlassian/bitbucket-server
   #
   repository: atlassian/bitbucket-server
@@ -525,8 +525,8 @@ bitbucket:
   # 
   elasticSearch:
   
-    # -- The base URL of the external ElasticSearch instance to be used. If this is defined, 
-    # then Bitbucket will disable its internal ElasticSearch instance.
+    # -- The base URL of the external Elasticsearch instance to be used. If this is defined,
+    # then Bitbucket will disable its internal Elasticsearch instance.
     #
     baseUrl:
     
@@ -534,7 +534,7 @@ bitbucket:
     #
     credentials:
     
-      # -- The name of the Kubernetes Secret that contains the ElasticSearch credentials.
+      # -- The name of the Kubernetes Secret that contains the Elasticsearch credentials.
       # Example of creating a credentials K8s secret below:
       # 'kubectl create secret generic <secret-name> --from-literal=username=<username> \
       # --from-literal=password=<password>'
@@ -542,11 +542,11 @@ bitbucket:
       #
       secretName:
       
-      # -- The key in the the Kubernetes Secret that contains the ElasticSearch username.
+      # -- The key in the the Kubernetes Secret that contains the Elasticsearch username.
       #
       usernameSecreyKey: username
       
-      # -- The key in the the Kubernetes Secret that contains the ElasticSearch password.
+      # -- The key in the the Kubernetes Secret that contains the Elasticsearch password.
       #
       passwordSecretKey: password
 
@@ -554,7 +554,7 @@ bitbucket:
   #
   resources:
     
-    # JVM Memory / Heap Size definitions. Thes values below are based on the 
+    # JVM Memory / Heap Size definitions. These values below are based on the
     # defaults defined for the Bitbucket docker container.
     # https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/
     #
@@ -585,9 +585,9 @@ bitbucket:
         # -- Initial Memory request by Bitbucket pod
         #
         memory: "2G"
-      #  limits:
-      #    cpu: "1"
-      #    memory: "2G"
+#     limits:
+#       cpu: "1"
+#       memory: "2G"
 
   # Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. 
   # system properties.
@@ -637,7 +637,7 @@ bitbucket:
 
 # Fluentd configuration 
 #
-# Bitbucket log collection and aggregation can be enabled using Flunetd. This config 
+# Bitbucket log collection and aggregation can be enabled using Flunetd. This config
 # assumes an existing ELK stack has been stood up and is available.
 # https://www.fluentd.org/
 #
@@ -757,6 +757,7 @@ additionalLabels: {}
 # custom-config-0, keystore-2
 #
 additionalFiles: []
+# Examples:
 #  - name: custom-config
 #    type: configMap
 #    key: log4j.properties
@@ -769,4 +770,3 @@ additionalFiles: []
 #    type: secret
 #    key: keystore.jks
 #    mountPath: /var/ssl
-
