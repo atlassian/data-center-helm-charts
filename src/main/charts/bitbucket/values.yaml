@@ -585,9 +585,9 @@ bitbucket:
         # -- Initial Memory request by Bitbucket pod
         #
         memory: "2G"
-#     limits:
-#       cpu: "1"
-#       memory: "2G"
+      #  limits:
+      #    cpu: "2"
+      #    memory: "2G"
 
   # Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. 
   # system properties.
