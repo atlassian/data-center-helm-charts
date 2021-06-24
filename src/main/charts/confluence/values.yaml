@@ -9,7 +9,7 @@
 #
 # Additional details on pre-provisioning these required resources can be found here:
 # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#3-configure-database
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#4-configure-ingress
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#5-configure-persistent-storage
 #
 # To manage external access to the Confluence instance, an ingress resource can also be configured 
 # under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
@@ -31,7 +31,7 @@ replicaCount: 1
 #
 image:
 
-  # -- The Docker Confluence Docker image to use
+  # -- The Confluence Docker image to use
   # https://hub.docker.com/r/atlassian/confluence-server
   #
   repository: atlassian/confluence-server
@@ -196,7 +196,7 @@ volumes:
     # -- Static provisioning of local-home using K8s PV's and PVC's
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for 
-    # pods is not recommended. Dymamic provisioning described above is the prescribed 
+    # pods is not recommended. Dynamic provisioning described above is the prescribed
     # approach.
     #
     # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
@@ -522,7 +522,7 @@ confluence:
         #
         memory: "2G"
       #  limits:
-      #    cpu: "1"
+      #    cpu: "2"
       #    memory: "2G"
 
   # --  Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. 
@@ -687,7 +687,7 @@ synchrony:
 
 # Fluentd configuration 
 #
-# Confluence log collection and aggregation can be enabled using Flunetd. This config 
+# Confluence log collection and aggregation can be enabled using Fluentd. This config
 # assumes an existing ELK stack has been stood up and is available.
 # https://www.fluentd.org/
 #

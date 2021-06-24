@@ -4,6 +4,8 @@
 
 A chart for installing Confluence Data Center on Kubernetes
 
+For installation please follow [the documentation in the repository](https://github.com/atlassian-labs/data-center-helm-charts/blob/master/README.md).
+
 **Homepage:** <https://www.atlassian.com/software/confluence>
 
 ## Source Code
@@ -59,7 +61,7 @@ Kubernetes: `>=1.19.x-0`
 | database.credentials.secretName | string | `nil` | The name of the K8s Secret that contains the database login credentials. If the secret is specified, then the credentials will be automatically utilised on  Confluence startup. If the secret is not provided, then the credentials will need to be  provided via the browser during manual configuration post deployment.   Example of creating a database credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | database.credentials.usernameSecretKey | string | `"username"` | The key ('username') in the Secret used to store the database login username |
 | database.type | string | `nil` | The database type that should be used. If not specified, then it will need to be  provided via the browser during manual configuration post deployment. Valid values  include: - 'postgresql' - 'mysql' - 'oracle' - 'mssql' https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasetype |
-| database.url | string | `nil` | The jdbc URL of the database. If not specified, then it will need to be provided  via the browser during manual configuration post deployment. Example URL's include: - 'jdbc:postgresql://<dbhost>:5432/<dbname>' - 'jdbc:mysql://<dbhost>/<dbname>' - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>' - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>' https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasejdbcurl |
+| database.url | string | `nil` | The jdbc URL of the database. If not specified, then it will need to be provided  via the browser during manual configuration post deployment. Example URLs include: - 'jdbc:postgresql://<dbhost>:5432/<dbname>' - 'jdbc:mysql://<dbhost>/<dbname>' - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>' - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>' https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasejdbcurl |
 | fluentd.customConfigFile | bool | `false` | Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default)  should be used for Fluentd. If enabled this config must supplied via the  'fluentdCustomConfig' property below. |
 | fluentd.elasticsearch.enabled | bool | `true` | Set to 'true' if Fluentd should send all log events to an Elasticsearch service. |
 | fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that Fluentd should send logs to. |
@@ -70,7 +72,7 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen  |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"atlassian/confluence-server"` | The Docker Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
+| image.repository | string | `"atlassian/confluence-server"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |
@@ -107,12 +109,12 @@ Kubernetes: `>=1.19.x-0`
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony |
 | tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Confluence pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Confluence pods. Note that this will not create any corresponding volume mounts; those needs to be defined in confluence.additionalVolumeMounts |
-| volumes.localHome.customVolume | object | `{}` | Static provisioning of local-home using K8s PV's and PVC's NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for  pods is not recommended. Dymamic provisioning described above is the prescribed  approach. When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the local-home volume(s). If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static |
+| volumes.localHome.customVolume | object | `{}` | Static provisioning of local-home using K8s PV's and PVC's NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for  pods is not recommended. Dynamic provisioning described above is the prescribed approach. When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the local-home volume(s). If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static |
 | volumes.localHome.mountPath | string | `"/var/atlassian/application-data/confluence"` | Specifies the path in the Confluence container to which the local-home volume will be  mounted.      |
 | volumes.localHome.persistentVolumeClaim.create | bool | `false` | If 'true', then a 'PersistentVolume' and 'PersistentVolumeClaim' will be dynamically  created for each pod based on the 'StorageClassName' supplied below.    |
 | volumes.localHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard K8s resource requests and/or limits for the local-home  volume claims. |
 | volumes.localHome.persistentVolumeClaim.storageClassName | string | `nil` | Specify the name of the 'StorageClass' that should be used for the local-home  volume claim. |
-| volumes.sharedHome.customVolume | object | `{}` | Static provisioning of shared-home using K8s PV's and PVC's When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the shared-home volume. If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md |
+| volumes.sharedHome.customVolume | object | `{}` | Static provisioning of shared-home using K8s PVs and PVCs When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the shared-home volume. If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md |
 | volumes.sharedHome.mountPath | string | `"/var/atlassian/application-data/shared-home"` | Specifies the path in the Confluence container to which the shared-home volume will be  mounted. |
 | volumes.sharedHome.nfsPermissionFixer.command | string | `nil` | By default, the fixer will change the group ownership of the volume's root directory  to match the Confluence container's GID (2002), and then ensures the directory is  group-writeable. If this is not the desired behaviour, command used can be specified  here. |
 | volumes.sharedHome.nfsPermissionFixer.enabled | bool | `false` | If 'true', this will alter the shared-home volume's root directory so that Confluence  can write to it. This is a workaround for a K8s bug affecting NFS volumes:  https://github.com/kubernetes/examples/issues/260 |
@@ -121,6 +123,3 @@ Kubernetes: `>=1.19.x-0`
 | volumes.sharedHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard K8s resource requests and/or limits for the shared-home  volume claims. |
 | volumes.sharedHome.persistentVolumeClaim.storageClassName | string | `nil` | Specify the name of the 'StorageClass' that should be used for the 'shared-home'  volume claim. |
 | volumes.sharedHome.subPath | string | `nil` | Specifies the sub-directory of the shared-home volume that will be mounted in to the  Confluence container. |
-
-----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)
