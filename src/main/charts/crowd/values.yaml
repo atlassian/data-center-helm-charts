@@ -1,104 +1,252 @@
-# -- The initial number of pods that should be started at deployment of each of Crowd.
-# Note that because Crowd requires initial manual configuration after the first pod is deployed, and before scaling
-# up to additional pods, this should always be kept as 1.
+## Atlassian Crowd Data Center Helm values
+# 
+# HEADS UP! 
+#
+# Data loss will occur if sections declared as 'REQUIRED' are not configured appropriately!
+# These sections are:
+# - database
+# - volumes
+#
+# Additional details on pre-provisioning these required resources can be found here:
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#3-configure-database
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#5-configure-persistent-storage
+#
+# To manage external access to the Crowd instance, an ingress resource can also be configured 
+# under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
+#
+# Additional details on pre-provisioning an ingress controller can be found here:
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#4-configure-ingress
+#
+##
+
+# -- The initial number of Crowd pods that should be started at deployment time. 
+# Note that Crowd requires manual configuration via the browser post deployment 
+# after the first pod is deployed. This configuration must be completed before 
+# scaling up additional pods. As such this value should always be kept as 1, 
+# but can be altered once manual configuration is complete.
+#
 replicaCount: 1
 
+# -- Image configuration
+#
 image:
+
+  # -- The Docker Crowd Docker image to use
+  # https://hub.docker.com/r/atlassian/crowd
+  #
   repository: atlassian/crowd
+
+  # -- Image pull policy
+  #
   pullPolicy: IfNotPresent
-  # -- The docker image tag to be used. Defaults to the Chart appVersion.
+
+  # -- The docker image tag to be used
+  #
   tag: 4.2.2
 
+# K8s ServiceAccount configuration. Give fine-grained identity and authorization
+# to Pods
+#
 serviceAccount:
-  # -- Specifies the name of the ServiceAccount to be used by the pods.
-  # If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
-  # otherwise the 'default' ServiceAccount will be used.
-  name:
-  # -- true if a ServiceAccount should be created, or false if it already exists
+
+  # -- Set to 'true' if a ServiceAccount should be created, or 'false' if it
+  # already exists.
+  #
   create: true
-  # -- The list of image pull secrets that should be added to the created ServiceAccount
+
+  # -- The name of the ServiceAccount to be used by the pods. If not specified, but
+  # the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name
+  # will be auto-generated, otherwise the 'default' ServiceAccount will be used.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  #
+  name:
+
+  # -- For Docker images hosted in private registries, define the list of image pull
+  # secrets that should be utilized by the created ServiceAccount
+  # https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  #
   imagePullSecrets: []
+  # - name: secretName
+
+    # Define permissions
+    # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+    #
   clusterRole:
-    # -- Specifies the name of the ClusterRole that will be created if the "serviceAccount.clusterRole.create" flag is set.
-    # If not specified, a name will be auto-generated.
-    name:
-    # -- true if a ClusterRole should be created, or false if it already exists
-    create: true
-  clusterRoleBinding:
-    # -- Specifies the name of the ClusterRoleBinding that will be created if the "serviceAccount.clusterRoleBinding.create" flag is set
-    # If not specified, a name will be auto-generated.
-    name:
-    # -- true if a ClusterRoleBinding should be created, or false if it already exists
+
+    # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
+    # already exists.
+    #
     create: true
 
+    # -- The name of the ClusterRole to be used. If not specified, but
+    # the "serviceAccount.clusterRole.create" flag is set to 'true',
+    # then the ClusterRole name will be auto-generated.
+    #
+    name:
+
+  # Grant permissions defined in ClusterRole
+  # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding
+  #
+  clusterRoleBinding:
+
+    # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
+    # already exists.
+    #
+    create: true
+
+    # -- The name of the ClusterRoleBinding to be created. If not specified, but
+    # the "serviceAccount.clusterRoleBinding.create" flag is set to 'true',
+    # then the ClusterRoleBinding name will be auto-generated.
+    #
+    name:
+
+# Crowd configuration
+#
 crowd:
+
+  # K8s Crowd Service configuration
+  #
   service:
-    # -- The port on which the Crowd Kubernetes service will listen
+
+    # -- The port on which the Crowd K8s Service will listen
+    #
     port: 80
-    # -- The type of Kubernetes service to use for Crowd
+
+    # -- The type of K8s service to use for Crowd
+    #
     type: ClusterIP
-  # -- Enable or disable security context in StatefulSet template spec. Enabled by default with UID 2002.
-  # -- Disable when deploying to OpenShift, unless anyuid policy is attached to a service account
+
+  # Enable or disable security context in StatefulSet template spec. Enabled
+  # by default with UID 2002. Disable when deploying to OpenShift, unless anyuid
+  # policy is attached to a service account.
+  #
   securityContext:
+
+    # -- Set to 'true' to enable the security context
+    #
     enabled: true
+
     # -- The GID used by the Crowd docker image
+    #
     gid: "2004"
+
   # -- The umask used by the Crowd process when it creates new files.
-  # Default is 0022, which makes the new files read/writeable by the Crowd user, and readable by everyone else.
+  # The default is 0022. This gives the new files:
+    #  - read/write permissions for the Crowd user
+    #  - read permissions for everyone else.
+  #
   umask: "0022"
+
+  # Port definitions
+  #
   ports:
+
     # -- The port on which the Crowd container listens for HTTP traffic
+    #
     http: 8095
+
     # -- The port on which the Crowd container listens for Hazelcast traffic
+    #
     hazelcast: 5701
+
+  # Confirm that Crowd is up and running with a ReadinessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
+  #
   readinessProbe:
-    # -- The initial delay (in seconds) for the Crowd container readiness probe, after which the probe will start running
+
+    # -- The initial delay (in seconds) for the Crowd container readiness probe,
+    # after which the probe will start running.
+    #
     initialDelaySeconds: 10
-    # -- How often (in seconds) the Crowd container readiness robe will run
+
+    # -- How often (in seconds) the Crowd container readiness probe will run
+    #
     periodSeconds: 5
-    # -- The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks
+
+    # -- The number of consecutive failures of the Crowd container readiness probe
+    # before the pod fails readiness checks.
+    #
     failureThreshold: 30
 
+  # Crowd log configuration
+  #
   accessLog:
-    # -- True if access logging should be enabled.
+
+    # -- Set to 'true' if access logging should be enabled.
+    #
     enabled: true
-    # -- The path within the Crowd container where the local-home volume should be mounted in order to capture access logs.
+
+    # -- The path within the Crowd container where the local-home volume should be
+    # mounted in order to capture access logs.
+    #
     mountPath: "/opt/atlassian/crowd/logs"
-    # -- The subdirectory within the local-home volume where access logs should be stored.
+
+    # -- The subdirectory within the local-home volume where access logs should be
+    # stored.
+    #
     localHomeSubPath: "logs"
 
+  # Data Center clustering
+  #
   clustering:
-    # -- Set to true if Data Center clustering should be enabled
+
+    # -- Set to 'true' if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
+    #
     enabled: false
-    # -- Set to true if the Kubernetes pod name should be used as the end-user-visible name of the Data Center cluster node.
+
+    # -- Set to 'true' if the K8s pod name should be used as the end-user-visible
+    # name of the Data Center cluster node.
+    #
     usePodNameAsClusterNodeName: true
 
+  # Crowd Pod resource requests
+  #
   resources:
-    jvm:
-      # -- JVM memory arguments below are based on the defaults defined for the Crowd docker container, see:
-      # https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/
-      #
-      # -- The maximum amount of heap memory that will be used by the Crowd JVM
-      maxHeap: "768m"
-      # -- The minimum amount of heap memory that will be used by the Crowd JVM
-      minHeap: "384m"
-    # -- Specifies the standard Kubernetes resource requests and/or limits for the Crowd container.
-    # It is important that if the memory resources are specified here, they must allow for the size of the Crowd JVM.
-    # That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated.
-    # Allowing for maxHeap * 1.5 would be an example.
-    container: 
-    #  limits:
-    #    cpu: "1"
-    #    memory: "1G"
-      requests:
-        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
-        memory: "1G"
 
-  # -- Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g. system properties
-  additionalJvmArgs: 
-    # -- The value defined for ActiveProcessorCount should correspond to that provided for 'container.requests.cpu'
-    # see: https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
+    # JVM Memory / Heap Size definitions. These values below are based on the
+    # defaults defined for the Crowd docker container.
+    # https://bitbucket.org/atlassian-docker/docker-atlassian-crowd-server/src/master/#markdown-header-memory-heap-size
+    #
+    jvm:
+
+      # -- The maximum amount of heap memory that will be used by the Crowd JVM
+      #
+      maxHeap: "768m"
+
+      # -- The minimum amount of heap memory that will be used by the Crowd JVM
+      #
+      minHeap: "384m"
+
+    # Specifies the standard K8s resource requests and/or limits for the Crowd
+    # container. It is important that if the memory resources are specified here,
+    # they must allow for the size of the Crowd JVM. That means the maximum heap
+    # size, the reserved code cache size, plus other JVM overheads, must be
+    # accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example.
+    #
+    container: 
+
+      requests:
+        # -- Initial CPU request by Crowd pod
+        #
+        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+
+        # -- Initial Memory request by Crowd pod
+        #
+        memory: "1G"
+        #  limits:
+        #    cpu: "2"
+        #    memory: "1G"
+
+  # --  Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g.
+  # system properties.
+  #
+  additionalJvmArgs:
+
+    # The value defined for ActiveProcessorCount should correspond to that provided
+    # for 'container.requests.cpu'.
+    # https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
+    #
     - -XX:ActiveProcessorCount=2
 
   # -- Specifies a list of additional Java libraries that should be added to the Crowd container.
@@ -126,122 +274,318 @@ crowd:
   # See https://hub.docker.com/r/atlassian/crowd for supported variables.
   additionalEnvironmentVariables: []
 
+# Ingress configuration
+#
+# To make the Atlassian product available from outside of the K8s cluster an Ingress
+# Controller should be pre-provisioned. With this in place the configuration below
+# can be used to configure an appropriate Ingress Resource.
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#ingress
+#
 ingress:
-  # -- True if an Ingress Resource should be created.
+
+  # -- Set to 'true' if an Ingress Resource should be created. This depends on a
+  # pre-provisioned Ingress Controller being available.
+  #
   create: false
-  # -- True if the created Ingress Resource is to use the Kubernetes ingress-nginx controller:
+
+  # -- Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'
+  # controller.
   # https://kubernetes.github.io/ingress-nginx/
-  # This will populate the Ingress Resource with annotations for the Kubernetes ingress-nginx controller.
-  # Set to false if a different controller is to be used, in which case the appropriate annotations for that
-  # controller need to be specified.
+  #
+  # This will populate the Ingress Resource with annotations that are specific to
+  # the K8s ingress-nginx controller. Set to 'false' if a different controller is
+  # to be used, in which case the appropriate annotations for that controller must
+  # be specified below under 'ingress.annotations'.
+  #
   nginx: true
+
   # -- The max body size to allow. Requests exceeding this size will result
-  # in an 413 error being returned to the client.
-  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#custom-max-body-size
+  # in an HTTP 413 error being returned to the client.
+  #
   maxBodySize: 250m
-  # -- The fully-qualified hostname of the Ingress Resource.
+
+  # -- The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on
+  # this hostname will be routed by the Ingress Resource to the appropriate backend
+  # Service.
+  #
   host:
-  # -- The base path for the ingress rule.
+
+  # -- The base path for the Ingress Resource. For example '/crowd'. Based on a
+  # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
+  # 'company.k8s.com/crowd'
+  #
   path: "/"
-  # -- The custom annotations that should be applied to the Ingress
-  # Resource when not using the Kubernetes ingress-nginx controller.
+
+  # -- The custom annotations that should be applied to the Ingress Resource
+  # when NOT using the K8s ingress-nginx controller.
+  #
   annotations: {}
-  # -- True if the browser communicates with the application over HTTPS.
+
+  # -- Set to 'true' if browser communication with the application should be TLS
+  # (HTTPS) enforced.
+  #
   https: true
-  # -- Secret that contains a TLS private key and certificate.
-  # Optional if Ingress Controller is configured to use one secret for all ingresses
+
+  # -- The name of the K8s Secret that contains the TLS private key and corresponding
+  # certificate. When utilised, TLS termination occurs at the ingress point where
+  # traffic to the Service and it's Pods is in plaintext.
+  #
+  # Usage is optional and depends on your use case. The Ingress Controller itself
+  # can also be configured with a TLS secret for all Ingress Resources.
+  # https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets
+  # https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  #
   tlsSecretName:
 
+# Fluentd configuration
+#
+# Crowd log collection and aggregation can be enabled using Fluentd. This config
+# assumes an existing ELK stack has been stood up and is available.
+# https://www.fluentd.org/
+#
 fluentd:
-  # -- True if the fluentd sidecar should be added to each pod
+
+  # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
+  #
   enabled: false
-  # -- The name of the image containing the fluentd sidecar
+
+  # -- The Fluentd sidecar image
+  #
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
-  # -- The port on which the fluentd sidecar will listen
+
+  # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default)
+  # should be used for Fluentd. If enabled this config must supplied via the
+  # 'fluentdCustomConfig' property below.
+  #
+  customConfigFile: false
+
+  # -- Custom fluent.conf file
+  #
+  fluentdCustomConfig: { }
+  # fluent.conf: |
+  #   <source>
+  #     @type tail
+  #     <parse>
+  #     @type multiline
+  #     format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+  #     </parse>
+  #     path /opt/atlassian/crowd/logs/access_log.*
+  #     pos_file /tmp/crowdlog.pos
+  #     tag crowd-access-logs
+  #   </source>
+
+  # -- The port on which the Fluentd sidecar will listen
+  # 
   httpPort: 9880
+
+  # Elasticsearch config based on your ELK stack
+  #
   elasticsearch:
-    # -- True if fluentd should send all log events to an elasticsearch service.
+
+    # -- Set to 'true' if Fluentd should send all log events to an Elasticsearch service.
+    #
     enabled: true
-    # -- The hostname of the Elasticsearch service that fluentd should send logs to.
+
+    # -- The hostname of the Elasticsearch service that Fluentd should send logs to.
+    #
     hostname: elasticsearch
-    # -- The prefix of the elasticsearch index name that will be used
+
+    # -- The prefix of the Elasticsearch index name that will be used
+    #
     indexNamePrefix: crowd
 
-# -- Specify additional annotations to be added to all Crowd pods
-podAnnotations: {}
-#  "name": "value"
+    # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
+    #
+    extraVolumes: [ ]
+    # - name: local-home
+    #   mountPath: /opt/atlassian/crowd/logs
+    #   subPath: log
+    #   readOnly: true
 
+
+# REQUIRED - Volume configuration
+#
+# By default, the charts will configure the local-home and shared-home as ephemeral
+# volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production
+# deployments this is not ideal and so local-home and shared-home should both be configured
+# appropriately.
+# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#volumes-configuration
+#
 volumes:
   localHome:
+
+    # Each pod requires its own volume for 'local-home'. This is needed for key data
+    # that help define how Crowd works.
+    # https://crowd.atlassian.com/doc/crowd-home-and-other-important-directories-590259707.html
+    #
     persistentVolumeClaim:
-      # -- If true, then a PersistentVolumeClaim will be created for each local-home volume.
+
+      # -- If 'true', then a 'PersistentVolume' and 'PersistentVolumeClaim' will be dynamically
+      # created for each pod based on the 'StorageClassName' supplied below.
+      #
       create: false
-      # -- Specifies the name of the storage class that should be used for the local-home volume claim.
+
+      # -- Specify the name of the 'StorageClass' that should be used for the local-home
+      # volume claim.
+      #
       storageClassName:
-      # -- Specifies the standard Kubernetes resource requests and/or limits for the local-home volume claims.
+
+      # -- Specifies the standard K8s resource requests and/or limits for the local-home
+      # volume claims.
+      #
       resources:
         requests:
           storage: 1Gi
-    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
-    # volume which will be used for the local-home volumes. If not defined, then defaults to an emptyDir volume.
+
+    # -- Static provisioning of local-home using K8s PVs and PVCs
+    #
+    # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for
+    # pods is not recommended. Dynamic provisioning described above is the prescribed
+    # approach.
+    #
+    # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define
+    # a standard K8s volume that will be used for the local-home volume(s). If not defined,
+    # then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify
+    # the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
+    #
     customVolume: {}
-    # -- The path within the Crowd container which the local-home volume should be mounted.
+    # persistentVolumeClaim:
+    #   claimName: "<pvc>"
+
+    # -- Specifies the path in the Crowd container to which the local-home volume will be
+    # mounted.
+    #
     mountPath: "/var/atlassian/application-data/crowd"
+
+  # A volume for 'shared-home' is required by Crowd to effectively operate in multi-node
+  # environment
+  # https://crowd.atlassian.com/doc/set-up-a-crowd-data-center-cluster-982322030.html#SetupaCrowdDataCentercluster-Setupandconfigureyourcluster
+  #
   sharedHome:
+
+    # Dynamic provisioning of local-home using the K8s Storage Classes
+    #
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
+    #
     persistentVolumeClaim:
-      # -- If true, then a PersistentVolumeClaim will be created for the shared-home volume.
+
+      # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically
+      # created for shared-home based on the 'StorageClassName' supplied below.
+      #
       create: false
-      # -- Specifies the name of the storage class that should be used for the shared-home volume claim.
+
+      # -- Specify the name of the 'StorageClass' that should be used for the 'shared-home'
+      # volume claim.
+      #
       storageClassName:
-      # -- Specifies the standard Kubernetes resource requests and/or limits for the shared-home volume claims.
+
+      # -- Specifies the standard K8s resource requests and/or limits for the shared-home
+      # volume claims.
+      #
       resources:
         requests:
           storage: 1Gi
-    # -- When persistentVolumeClaim.create is false, then this value can be used to define a standard Kubernetes
-    # volume which will be used for the shared-home volume. If not defined, then defaults to an emptyDir (i.e. unshared) volume.
+
+    # -- Static provisioning of shared-home using K8s PVs and PVCs
+    #
+    # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define
+    # a standard K8s volume that will be used for the shared-home volume. If not defined,
+    # then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify
+    # the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
+    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
+    #
     customVolume: {}
-    # -- Specifies the path in the Crowd container to which the shared-home volume will be mounted.
+    # persistentVolumeClaim:
+    #   claimName: "<pvc>"
+
+    # -- Specifies the path in the Crowd container to which the shared-home volume will be
+    # mounted.
+    #
     mountPath: "/var/atlassian/application-data/crowd/shared"
-    # -- Specifies the sub-directory of the shared-home volume which will be mounted in to the Crowd container.
+
+    # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the
+    # Crowd container.
+    #
     subPath:
+
+    # Modify permissions on shared-home
+    #
     nfsPermissionFixer:
-      # -- If enabled, this will alter the shared volume's root directory so that Crowd can write to it.
-      # This is a workaround for a Kubernetes bug affecting NFS volumes: https://github.com/kubernetes/examples/issues/260
+
+      # -- If 'true', this will alter the shared-home volume's root directory so that Crowd
+      # can write to it. This is a workaround for a K8s bug affecting NFS volumes:
+      # https://github.com/kubernetes/examples/issues/260
+      #
       enabled: false
-      # -- The path in the initContainer where the shared-home volume will be mounted
+
+      # -- The path in the K8s initContainer where the shared-home volume will be mounted
+      #
       mountPath: /shared-home
-      # -- By default, the fixer will change the group ownership of the volume's root directory to match the Crowd
-      # container's GID (2002), and then ensures the directory is group-writeable. If this is not the desired behaviour,
-      # command used can be specified here.
+
+      # -- By default, the fixer will change the group ownership of the volume's root directory
+      # to match the Crowd container's GID (2002), and then ensures the directory is
+      # group-writeable. If this is not the desired behaviour, command used can be specified
+      # here.
+      #
       command:
+
   # -- Defines additional volumes that should be applied to all Crowd pods.
   # Note that this will not create any corresponding volume mounts;
   # those needs to be defined in crowd.additionalVolumeMounts
+  #
   additional: []
 
-# -- Standard Kubernetes node-selectors that will be applied to all Crowd pods
+
+# -- Custom annotations that will be applied to all Crowd pods
+#
+podAnnotations: {}
+#  "name": <value>
+
+# -- Standard K8s node-selectors that will be applied to all Crowd pods
+#
 nodeSelector: {}
+#  "name": <value>
 
-# -- Standard Kubernetes tolerations that will be applied to all Crowd pods
+# -- Standard K8s tolerations that will be applied to all Crowd pods
+#
 tolerations: []
+# - effect: <name>
+#   operator: <operator>
+#   key: <key>
 
-# -- Standard Kubernetes affinities that will be applied to all Crowd pods
+# -- Standard K8s affinities that will be applied to all Crowd pods
+#
 affinity: {}
+#  name: <value>
 
 # -- Additional container definitions that will be added to all Crowd pods
+#
 additionalContainers: []
+#  - name: <name>
+#    image: <image>:<tag>
 
 # -- Additional initContainer definitions that will be added to all Crowd pods
+#
 additionalInitContainers: []
+#  - name: <name>
+#    image: <image>:<tag>
 
 # -- Additional labels that should be applied to all resources
+#
 additionalLabels: {}
+#  name: <value>
 
-# -- Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container
-# configMap and secret are two available types (camelCase is important!)
-# mountPath is a destination directory in a container and key is file name
-# name references existing ConfigMap or secret name. VolumeMount and Volumes are added with this name + index position,
-# for example custom-config-0, keystore-2
+# -- Additional existing ConfigMaps and Secrets not managed by Helm that should be
+# mounted into service container. Configuration details below (camelCase is important!):
+  # 'name'      - References existing ConfigMap or secret name.
+  # 'type'      - 'configMap' or 'secret'
+  # 'key'       - The file name.
+# 'mountPath' - The destination directory in a container.
+# VolumeMount and Volumes are added with this name and index position, for example;
+# custom-config-0, keystore-2
+#
 additionalFiles: []
 #  - name: custom-config
 #    type: configMap
@@ -255,3 +599,11 @@ additionalFiles: []
 #    type: secret
 #    key: keystore.jks
 #    mountPath: /var/ssl
+
+# -- Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file.
+# https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+additionalHosts: []
+#  - ip: "127.0.0.1"
+#    hostnames:
+#    - "foo.local"
+#    - "bar.local"
