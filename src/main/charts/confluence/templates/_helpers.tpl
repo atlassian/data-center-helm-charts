@@ -238,7 +238,8 @@ For each additional Synchrony library declared, generate a volume mount that inj
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalInitContainers" -}}
-{{- range .Values.additionalInitContainers }}
+{{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -254,7 +255,8 @@ Defining additional hosts here instead of in values.yaml to allow template overr
 Defining additional containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalContainers" -}}
-{{- range .Values.additionalContainers }}
+{{- with .Values.additionalContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -262,7 +264,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}
-{{- range .Values.confluence.additionalVolumeMounts }}
+{{- with .Values.confluence.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -270,7 +273,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalEnvironmentVariables" -}}
-{{- range .Values.confluence.additionalEnvironmentVariables }}
+{{- with .Values.confluence.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
