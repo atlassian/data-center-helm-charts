@@ -166,7 +166,8 @@ For each additional library declared, generate a volume mount that injects that 
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalInitContainers" -}}
-{{- range .Values.additionalInitContainers }}
+{{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -174,7 +175,8 @@ Defining additional init containers here instead of in values.yaml to allow temp
 Defining additional containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalContainers" -}}
-{{- range .Values.additionalContainers }}
+{{- with .Values.additionalContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -182,7 +184,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalVolumeMounts" -}}
-{{- range .Values.crowd.additionalVolumeMounts }}
+{{- with .Values.crowd.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -190,7 +193,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalEnvironmentVariables" -}}
-{{- range .Values.crowd.additionalEnvironmentVariables }}
+{{- with .Values.crowd.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

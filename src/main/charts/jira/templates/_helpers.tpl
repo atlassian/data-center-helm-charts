@@ -115,7 +115,8 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalInitContainers" -}}
-{{- range .Values.additionalInitContainers }}
+{{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -123,7 +124,8 @@ Defining additional init containers here instead of in values.yaml to allow temp
 Defining additional containers here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalContainers" -}}
-{{- range .Values.additionalContainers }}
+{{- with .Values.additionalContainers }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -131,7 +133,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalVolumeMounts" -}}
-{{- range .Values.jira.additionalVolumeMounts }}
+{{- with .Values.jira.additionalVolumeMounts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
@@ -139,7 +142,8 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalEnvironmentVariables" -}}
-{{- range .Values.jira.additionalEnvironmentVariables }}
+{{- with .Values.jira.additionalEnvironmentVariables }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

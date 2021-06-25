@@ -36,7 +36,7 @@ class VolumesTest {
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         assertThat(statefulSet.getVolumeClaimTemplates())
-                .describedAs("StatefulSet %s should have a single volumeClaimTempate", statefulSet.getName())
+                .describedAs("StatefulSet %s should have a single volumeClaimTemplate", statefulSet.getName())
                 .hasSize(1);
 
         verifyVolumeClaimTemplate(
@@ -109,6 +109,35 @@ class VolumesTest {
 
         assertThat(statefulSet.getVolume("shared-home"))
                 .hasValueSatisfying(localHomeVolume -> assertThat(localHomeVolume).isObject(Map.of("hostPath", "/foo/bar")));
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void additionalVolumeDefinition(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.additional[0].name", "my-volume",
+                "volumes.additional[0].persistentVolumeClaim.claimName", "my-volume-pvc"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getVolume("my-volume").get().path("persistentVolumeClaim").path("claimName"))
+                .hasTextEqualTo("my-volume-pvc");
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void additionalVolumeMounts(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname+".additionalVolumeMounts[0].name", "my-volume-mount",
+                pname+".additionalVolumeMounts[0].mountPath", "/my-volume-path",
+                pname+".additionalVolumeMounts[0].subPath", "extra_path"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var mount = statefulSet.getContainer().getVolumeMount("my-volume-mount");
+        assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
+        assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
     }
 
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
