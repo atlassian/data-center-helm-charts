@@ -66,7 +66,7 @@ ingress:
 > See an example of [how to set up a controller](examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
-Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure usage of the shared home provisioned as part of the [Prerequisites](PREREQUISITES.md).
+Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the `shared-home` that was provisioned as part of the [Prerequisites](PREREQUISITES.md). See [shared home example](examples/storage/aws/SHARED_STORAGE.md).
 
 ```yaml
 volumes:
@@ -76,7 +76,7 @@ volumes:
         claimName: <pvc_name>
 ```
 
-Local storage for the pods can also be configured at this stage. A `StorageClass` will need to be pre-provisioned to utilize this feature, as you can see in the [local storage example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
+Each pod will also require its own `local-home` storage. This can be configured with a `StorageClass`, as can be seen in the [local home example](examples/storage/aws/LOCAL_STORAGE.md). Having created the `StorageClass`, update `values.yaml` to make use of it: 
 
 ```yaml
 volumes:
