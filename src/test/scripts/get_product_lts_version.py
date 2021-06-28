@@ -3,17 +3,17 @@ import urllib.request
 import json
 
 known_lts_version = {
-	'jira-software':'8.13.7',
-	'confluence':'7.12.2',
-	'stash':'7.12.1',
+	'jira-software': '8.13.8',
+	'confluence': '7.12.2',
+	'stash': '7.12.1',
 }
 
+
 def get_lts_version(argv):
-	lts_version=''
 	product = argv[0].lower()
 	if product == 'jira':
 		product = 'jira-software'
-	elif product == 'bitbucket' :
+	elif product == 'bitbucket':
 		product = 'stash'
 
 	if product in known_lts_version:
@@ -26,12 +26,10 @@ def get_lts_version(argv):
 			enterprise_edition = [x for x in jsdata if x['edition'].lower() == 'enterprise']
 			sortedData = sorted(enterprise_edition, key=lambda k:cversion(k['version']), reverse=True)
 
-			if len(sortedData)>0 :
+			if len(sortedData) > 0:
 				lts_version = sortedData[0]['version']
-			# print (f"Succeed!  LTS Version for {argv[0]} is {lts_version}")
 			else:
 				lts_version = known_lts_version[product]
-			# print(f"Failed to find the LTS Version for {product} dynamically. It is replaced by '{known_lts_version[product]}'")
 
 			# as currently latest lts versoin of bitbucket and confluence don't support k8s
 			# we use none-lts version of those products in the test
@@ -44,14 +42,14 @@ def get_lts_version(argv):
 	else:
 		lts_version = 'unknown'
 
-	print (lts_version)
 	return lts_version
+
 
 def cversion(version):
 	vers = [int(v) for v in version.split(".")]
-	mapped_ver=''
+	mapped_ver = ''
 	for i in range(max(len(vers)-1, 4)):
-		if(len(vers)>i):
+		if len(vers) > i:
 			mapped_ver = f'{mapped_ver}{str(vers[i]).zfill(5)}'
 		else:
 			mapped_ver = f'{mapped_ver}00000'
