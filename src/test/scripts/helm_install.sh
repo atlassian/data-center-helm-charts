@@ -141,6 +141,8 @@ package_product_helm_chart() {
 
   [ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
   [ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
+  # Assign DOCKER_LTS_VERSION env variable to image.tag if is defined. This value will be override by
+  # dockerImage.version ($DOCKER_IMAGE_VERSION) if is defined.
   dockerVersion=''
   [ "$DOCKER_LTS_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_LTS_VERSION "
   [ "$DOCKER_IMAGE_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_IMAGE_VERSION "
@@ -248,13 +250,6 @@ run_tests() {
   "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 }
 
-# Get LTS product version
-get_lts_product_version() {
-$PRODUCT_NAME
-lts_product_version = 'xxx'
-valueOverrides += "--set appVersion=" + $lts_product_version
-}
-
 
 # Execute
 check_bash_version
@@ -264,7 +259,6 @@ bootstrap_nfs
 bootstrap_database
 package_product_helm_chart
 package_functest_helm_chart
-get_lts_product_version
 install_product
 install_functional_tests
 wait_for_ingress
