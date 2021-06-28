@@ -203,7 +203,6 @@ install_product() {
      $HELM_DEBUG_OPTION \
      ${valueOverrides} \
      "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
-
 }
 
 # Install the functest helm chart
