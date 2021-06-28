@@ -202,8 +202,7 @@ install_product() {
      "$PRODUCT_RELEASE_NAME" \
      $HELM_DEBUG_OPTION \
      ${valueOverrides} \
-     "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz \
-     --set appVersion="7.9.1-jdk11" >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+     "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 
 }
 
@@ -249,7 +248,6 @@ run_tests() {
   $HELM_DEBUG_OPTION \
   "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 }
-
 
 # Execute
 check_bash_version
