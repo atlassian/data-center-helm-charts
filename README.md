@@ -16,6 +16,13 @@ stabilized.
 
 Also, we **don’t officially support** the functionality described in the [examples](docs/examples) or the documented [platforms](docs/PLATFORMS.md). You should use them for reference only. 
 
+## Architecture
+
+The Atlassian Data Center Helm charts will provision and deploy the necessary Kubernetes resources required for running an Atlassian Data Center product within a Kubernetes cluster. The Helm charts rely a number of cloud based [prerequisites](./docs/PREREQUISITES.md) to be in place before installation. 
+
+The diagram below provides a high-level overview of what a typical deployment might look like when using these Helm charts. A set of pre-provisioned resources have been stood up using a favoured cloud provider providing physical backing to those logical resources provisioned into the Kuberentes cluster itself.   
+
+![architecture](./docs/images/k8s-overview.png "Request routing via Ingress")
 
 ## Installing the Helm charts
 
