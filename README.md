@@ -18,7 +18,7 @@ Also, we **don’t officially support** the functionality described in the [exam
 
 ## Architecture
 
-The diagram below provides a high-level overview of what a typical deployment might look like when using the Atlassian Data Center Helm charts:
+The diagram below provides a high level overview of what a typical deployment might look like when using the Atlassian Data Center Helm charts:
 
 ![architecture](./docs/images/k8s-overview.png "Request routing via Ingress")
 
