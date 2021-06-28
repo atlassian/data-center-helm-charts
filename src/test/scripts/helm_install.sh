@@ -3,6 +3,8 @@
 set -e
 set -x
 
+[ "$DOCKER_LTS_VERSION" ] && echo DOCKER_LTS_VERSION=$DOCKER_LTS_VERSION
+
 # Many of the variables used in this script are sourced from the
 # parameter file supplied to it i.e. `helm_parameters'. As such,
 # 'source' those values in
@@ -139,7 +141,10 @@ package_product_helm_chart() {
 
   [ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
   [ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
-  [ "$DOCKER_IMAGE_VERSION" ] && valueOverrides+="--set image.tag=$DOCKER_IMAGE_VERSION "
+  dockerVersion=''
+  [ "$DOCKER_LTS_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_LTS_VERSION "
+  [ "$DOCKER_IMAGE_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_IMAGE_VERSION "
+  valueOverrides += $dockerVersion
   [ "$SKIP_IMAGE_PULL" != true ] && valueOverrides+="--set image.pullPolicy=Always "
   [ -n "$EXTRA_PARAMETERS" ] && for i in $EXTRA_PARAMETERS; do valueOverrides+="--set $i "; done
 
@@ -195,7 +200,9 @@ install_product() {
      "$PRODUCT_RELEASE_NAME" \
      $HELM_DEBUG_OPTION \
      ${valueOverrides} \
-     "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+     "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz \
+     --set appVersion="7.9.1-jdk11" >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+
 }
 
 # Install the functest helm chart
@@ -241,6 +248,14 @@ run_tests() {
   "$PRODUCT_RELEASE_NAME" -n "${TARGET_NAMESPACE}"
 }
 
+# Get LTS product version
+get_lts_product_version() {
+$PRODUCT_NAME
+lts_product_version = 'xxx'
+valueOverrides += "--set appVersion=" + $lts_product_version
+}
+
+
 # Execute
 check_bash_version
 check_for_jq
@@ -249,6 +264,7 @@ bootstrap_nfs
 bootstrap_database
 package_product_helm_chart
 package_functest_helm_chart
+get_lts_product_version
 install_product
 install_functional_tests
 wait_for_ingress
