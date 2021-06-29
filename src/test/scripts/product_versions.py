@@ -2,7 +2,7 @@ import sys
 import urllib.request
 import json
 
-known_lts_version = {
+known_supported_version = {
 	'jira-software': '8.13.8',
 	'confluence': '7.12.2',
 	'stash': '7.12.1',
@@ -16,7 +16,7 @@ def get_lts_version(argv):
 	elif product == 'bitbucket':
 		product = 'stash'
 
-	if product in known_lts_version:
+	if product in known_supported_version:
 		url = f"https://my.atlassian.com/download/feeds/archived/{product}.json"
 
 		try:
@@ -24,19 +24,19 @@ def get_lts_version(argv):
 			fdata = fl.read()
 			jsdata = json.loads(fdata[10:len(fdata)-1].decode("utf-8"))
 			lts_versions = [x for x in jsdata if x['edition'].lower() == 'enterprise']
-			sortedData = sorted(lts_versions, key=lambda k:cversion(k['version']), reverse=True)
+			sortedVersions = sorted(lts_versions, key=lambda k:cversion(k['version']), reverse=True)
 
-			if len(sortedData) > 0:
-				lts_version = sortedData[0]['version']
+			if len(sortedVersions) > 0:
+				lts_version = sortedVersions[0]['version']
 			else:
-				lts_version = known_lts_version[product]
+				lts_version = known_supported_version[product]
 
 			# as currently latest lts version of bitbucket and confluence don't support k8s
 			# we use non-lts version of those products in the test
-			if cversion(lts_version) < cversion(known_lts_version[product]):
-				lts_version = known_lts_version[product]
+			if cversion(lts_version) < cversion(known_supported_version[product]):
+				lts_version = known_supported_version[product]
 		except:
-			lts_version = known_lts_version[product]
+			lts_version = known_supported_version[product]
 
 		lts_version = f"{lts_version}-jdk11"
 	else:
