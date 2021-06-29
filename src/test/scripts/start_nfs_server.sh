@@ -26,7 +26,7 @@ pod_name=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=$pod_role -o jsonpat
 echo Pod name is [$pod_name]
 kubectl wait --for=condition=ready pod -n "${TARGET_NAMESPACE}" "${pod_name}" --timeout=60s
 
-echo Waiting for the container to stabilise...
+echo Waiting for the NFS pod to stabilise...
 while ! kubectl exec -n "${TARGET_NAMESPACE}" "${pod_name}" -- ps -o cmd | grep 'mountd' | grep -q '/usr/sbin/rpc.mountd -N 2 -V 3'; do
   sleep 1
 done

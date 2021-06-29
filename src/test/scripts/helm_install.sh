@@ -87,10 +87,10 @@ bootstrap_nfs() {
     "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}"
 
     for ((try = 0; try < 60; try++)) ; do
-      echo "Detecting NFS server Service IP..."
+      echo "Detecting NFS K8s Service IP..."
       local nfs_server_ip
       if ! nfs_server_ip="$(kubectl get service -n $TARGET_NAMESPACE "${PRODUCT_RELEASE_NAME}-nfs-server" -o jsonpath='{.spec.clusterIP}')"; then
-        echo "NFS server not found."
+        echo "NFS K8s Service IP not found!"
         exit 1
       fi
       
@@ -102,10 +102,10 @@ bootstrap_nfs() {
     done
 
     if [ -n "$nfs_server_ip" ] && [ "$nfs_server_ip" != "null" ]; then
-      echo Detected NFS server IP: $nfs_server_ip
+      echo "Detected NFS K8s Service IP: ${nfs_server_ip}"
       valueOverrides+="--set volumes.sharedHome.persistentVolume.nfs.server=$nfs_server_ip "
     else
-      echo "NFS server IP not found."
+      echo "NFS K8s Service IP not found!"
       exit 1
     fi
   fi
