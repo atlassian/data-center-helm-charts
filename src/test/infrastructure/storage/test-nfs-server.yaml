@@ -56,10 +56,8 @@ metadata:
   labels:
     build.identifier: CI_PLAN_ID
     build.component: nfs-server-service
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: nfs
       port: 2049
