@@ -6,7 +6,7 @@ set -x
 [ "$DOCKER_LTS_VERSION" ] && echo DOCKER_LTS_VERSION=$DOCKER_LTS_VERSION
 
 # Many of the variables used in this script are sourced from the
-# parameter file supplied to it i.e. `helm_parameters'. As such,
+# parameter file provided to it, i.e. `helm_parameters'. As such,
 # 'source' those values in
 source "$1"
 
@@ -111,8 +111,8 @@ bootstrap_nfs() {
 
 bootstrap_database() {
   echo "Task 5 - Bootstrapping database server." >&2
-  # Use the product name for the name of the postgres database, username and password.
-  # These must match the credentials stored in the Secret pre-loaded into the namespace,
+  # Use the product name for the name of the postgres database, username, and password.
+  # These must match the credentials stored in the Secret preloaded into the namespace,
   # which the application will use to connect to the database.
   helm install -n "${TARGET_NAMESPACE}" --wait \
      "$POSTGRES_RELEASE_NAME" \
@@ -141,8 +141,8 @@ package_product_helm_chart() {
 
   [ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
   [ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
-  # Assign DOCKER_LTS_VERSION env variable to image.tag if is defined. This value will be override by
-  # dockerImage.version ($DOCKER_IMAGE_VERSION) if is defined.
+  # Assign DOCKER_LTS_VERSION env variable to image.tag if defined. This value will be overriden by
+  # dockerImage.version ($DOCKER_IMAGE_VERSION) if defined.
   dockerVersion=''
   [ "$DOCKER_LTS_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_LTS_VERSION "
   [ "$DOCKER_IMAGE_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_IMAGE_VERSION "
@@ -163,7 +163,7 @@ package_product_helm_chart() {
      --destination "$HELM_PACKAGE_DIR"
 }
 
-# Package the functest helm chart
+# Package the functest Helm chart
 package_functest_helm_chart() {
   echo "Task 7 - Packaging functional tests helm chart." >&2
   INGRESS_DOMAIN_VARIABLE_NAME="INGRESS_DOMAIN_$CLUSTER_TYPE"
@@ -171,7 +171,7 @@ package_functest_helm_chart() {
   FUNCTEST_CHART_PATH="$THISDIR/../charts/functest"
   FUNCTEST_CHART_VALUES="clusterType=$CLUSTER_TYPE,ingressDomain=$INGRESS_DOMAIN,productReleaseName=$PRODUCT_RELEASE_NAME,product=$PRODUCT_NAME"
 
-  ## build values chartValueFile for expose node services and ingresses
+  ## Build values chartValueFile to expose node services and ingresses
   ## to create routes to individual nodes; disabled if TARGET_REPLICA_COUNT is undef
   NEWLINE=$'\n'
   local backdoor_services="backdoorServiceNames:${NEWLINE}"
@@ -205,7 +205,7 @@ install_product() {
      "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
-# Install the functest helm chart
+# Install the functest Helm chart
 install_functional_tests() {
   echo "Task 9 - Installing functional tests." >&2
   helm install --wait \
@@ -217,7 +217,7 @@ install_functional_tests() {
      "$HELM_PACKAGE_DIR/functest-0.1.0.tgz"
 }
 
-# wait until the Ingress we just created starts serving up non-error responses - there may be a lag
+# Wait until the Ingress we just created starts serving up non-error responses - there may be a lag
 wait_for_ingress() {
   echo "Task 10 - Waiting for Ingress to come up." >&2
   if [[ "$CLUSTER_TYPE" == "CUSTOM" ]]; then
