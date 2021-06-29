@@ -46,11 +46,11 @@ def get_lts_version(argv):
 
 
 def cversion(version):
-	vers = [int(v) for v in version.split(".")]
+	vers = version.split(".")
 	mapped_ver = ''
 	for i in range(max(len(vers)-1, 4)):
 		if len(vers) > i:
-			mapped_ver = f'{mapped_ver}{str(vers[i]).zfill(5)}'
+			mapped_ver = f'{mapped_ver}{vers[i].zfill(5)}'
 		else:
 			mapped_ver = f'{mapped_ver}00000'
 	return mapped_ver
