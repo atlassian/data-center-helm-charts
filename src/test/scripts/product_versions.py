@@ -31,8 +31,8 @@ def get_lts_version(argv):
 			else:
 				lts_version = known_supported_version[product]
 
-			# as currently latest lts version of bitbucket and confluence don't support k8s
-			# we use non-lts version of those products in the test
+			# Currently latest lts version of Bitbucket and Confluence don't support K8s
+			# We use non-lts version of those products in the test
 			if cversion(lts_version) < cversion(known_supported_version[product]):
 				lts_version = known_supported_version[product]
 		except:
@@ -46,17 +46,17 @@ def get_lts_version(argv):
 
 
 def cversion(version):
-	# this method converts the version to a unified string to be used for sort and compare versions correctly
-	# e.g: '7.12.1' => '00007000120000100000'
+	# This method converts the version to a unified string to be used to sort and compare versions correctly
+	# E.g: '7.12.1' => '00007000120000100000'
 	#      '7.3.19' => '00007000030001900000'
 	vers = version.split(".")
 	mapped_ver = ''
 	for i in range(max(len(vers)-1, 4)):
 		if len(vers) > i:
-			# add zero in left side of version part and make a fixed size of 5 for each part
+			# Add zero on left side of version part and make a fixed size of 5 for each part
 			mapped_ver += vers[i].zfill(5)
 		else:
-			# add '00000' if build/patch/minor part of version are missing
+			# Add '00000' if build/patch/minor part of version are missing
 			mapped_ver += '00000'
 	return mapped_ver
 
