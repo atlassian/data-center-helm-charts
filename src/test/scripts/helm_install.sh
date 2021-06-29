@@ -146,7 +146,7 @@ package_product_helm_chart() {
   dockerVersion=''
   [ "$DOCKER_LTS_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_LTS_VERSION "
   [ "$DOCKER_IMAGE_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_IMAGE_VERSION "
-  valueOverrides += $dockerVersion
+  valueOverrides+=$dockerVersion
   [ "$SKIP_IMAGE_PULL" != true ] && valueOverrides+="--set image.pullPolicy=Always "
   [ -n "$EXTRA_PARAMETERS" ] && for i in $EXTRA_PARAMETERS; do valueOverrides+="--set $i "; done
 
