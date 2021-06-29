@@ -23,16 +23,16 @@ def get_lts_version(argv):
 			fl = urllib.request.urlopen(url)
 			fdata = fl.read()
 			jsdata = json.loads(fdata[10:len(fdata)-1].decode("utf-8"))
-			enterprise_edition = [x for x in jsdata if x['edition'].lower() == 'enterprise']
-			sortedData = sorted(enterprise_edition, key=lambda k:cversion(k['version']), reverse=True)
+			lts_versions = [x for x in jsdata if x['edition'].lower() == 'enterprise']
+			sortedData = sorted(lts_versions, key=lambda k:cversion(k['version']), reverse=True)
 
 			if len(sortedData) > 0:
 				lts_version = sortedData[0]['version']
 			else:
 				lts_version = known_lts_version[product]
 
-			# as currently latest lts versoin of bitbucket and confluence don't support k8s
-			# we use none-lts version of those products in the test
+			# as currently latest lts version of bitbucket and confluence don't support k8s
+			# we use non-lts version of those products in the test
 			if cversion(lts_version) < cversion(known_lts_version[product]):
 				lts_version = known_lts_version[product]
 		except:
