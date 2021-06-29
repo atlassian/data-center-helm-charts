@@ -50,9 +50,9 @@ def cversion(version):
 	mapped_ver = ''
 	for i in range(max(len(vers)-1, 4)):
 		if len(vers) > i:
-			mapped_ver = f'{mapped_ver}{vers[i].zfill(5)}'
+			mapped_ver += vers[i].zfill(5)
 		else:
-			mapped_ver = f'{mapped_ver}00000'
+			mapped_ver += '00000'
 	return mapped_ver
 
 
