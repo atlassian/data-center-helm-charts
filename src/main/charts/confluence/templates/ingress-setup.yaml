@@ -36,4 +36,11 @@ spec:
                 name: {{ include "confluence.fullname" . }}
                 port:
                   number: {{ $.Values.confluence.service.port }}
+          - path: "{{ trimSuffix "/" .Values.ingress.path }}/bootstrap"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "confluence.fullname" . }}
+                port:
+                  number: {{ $.Values.confluence.service.port }}
 {{ end }}
