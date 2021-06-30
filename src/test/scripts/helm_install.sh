@@ -144,8 +144,8 @@ package_product_helm_chart() {
   # Assign DOCKER_LTS_VERSION env variable to image.tag if defined. This value will be overriden by
   # dockerImage.version ($DOCKER_IMAGE_VERSION) if defined.
   dockerVersion=''
-  [ "$DOCKER_LTS_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_LTS_VERSION "
-  [ "$DOCKER_IMAGE_VERSION" ] && dockerVersion+="--set image.tag=$DOCKER_IMAGE_VERSION "
+  [ "$DOCKER_LTS_VERSION" ] && dockerVersion="--set image.tag=$DOCKER_LTS_VERSION "
+  [ "$DOCKER_IMAGE_VERSION" ] && dockerVersion="--set image.tag=$DOCKER_IMAGE_VERSION "
   valueOverrides+=$dockerVersion
   [ "$SKIP_IMAGE_PULL" != true ] && valueOverrides+="--set image.pullPolicy=Always "
   [ -n "$EXTRA_PARAMETERS" ] && for i in $EXTRA_PARAMETERS; do valueOverrides+="--set $i "; done
