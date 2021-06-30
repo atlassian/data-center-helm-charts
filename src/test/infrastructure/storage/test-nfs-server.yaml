@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
         - name: CI_PLAN_ID
-          image: atlassian/nfs-server-test:latest # this is just a testing image not recommended for any other use case
+          image: k8s.gcr.io/volume-nfs:0.8 # this is just a testing image not recommended for any other use case
           imagePullPolicy: Always
           ports:
             - name: nfs
