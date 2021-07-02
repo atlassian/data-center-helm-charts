@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nfs-server
-          image: docker.atl-paas.net/drathbone/my-nfs-image
+          image: docker.atl-paas.net/atlassian/centos-nfs-server-test
           imagePullPolicy: Always
           ports:
             - name: nfs
@@ -23,32 +23,14 @@ spec:
               containerPort: 20048
             - name: rpcbind
               containerPort: 111
-            - name: rpcstatd
-              containerPort: 43515
           securityContext:
             privileged: true
           volumeMounts:
             - mountPath: /exports
-              name: mypvc        
-            - mountPath: /etc/exports.d/
-              name: nfs-server-config
+              name: mypvc
       volumes:
         - name: mypvc
           persistentVolumeClaim:
             claimName: nfs-ebs-claim
-        - name: nfs-server-config
-          configMap:
-            name: nfs-server-config
       imagePullSecrets:
-        - name: "regcred"
-            
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: dylan
-  name: nfs-server-config
-data:
-  share.exports: |-
-    /exports *(rw,subtree_check,fsid=0,no_root_squash)
+        - name: "regcred"        

@@ -6,8 +6,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-# By not specifying a storage class an empty dir{} will be used
-#  storageClassName: nfs-ebs-sc
+  # By not specifying a storage class an empty dir{} will be used
+  #  storageClassName: nfs-ebs-sc
   resources:
     requests:
       storage: 4Gi
