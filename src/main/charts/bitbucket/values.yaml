@@ -233,12 +233,11 @@ volumes:
     #
     persistentVolume:
     
-      # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically 
-      # created for shared-home based on the 'StorageClassName' supplied below.
+      # -- If 'true', then the a PV for the NFS configuration below will be created
       #
-      create: false
+      create: true
       
-      # -- Addtional options used when mounting the NFS volume
+      # -- Additional options used when mounting the NFS volume
       # 
       mountOptions: []
       
@@ -246,34 +245,34 @@ volumes:
       #
       nfs:
       
-        # -- The address of the NFS server. It needs to be resolveable by the kubelet, 
+        # -- The address of the NFS server. It needs to be resolvable by the kubelet, 
         # so consider using an IP address.
         #
-        server: ""
+        server: "10.100.217.164"
         
         # -- Specifies the path exported by the NFS server, used in the mount command
         #
-        path: ""
+        path: "/exports"
         
-    # Dynamic provisioning of local-home using the K8s Storage Classes
+    # Dynamic provisioning of shared-home using the K8s Storage Classes
     #
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
     #    
     persistentVolumeClaim:
     
-      # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically 
-      # created for shared-home based on the 'StorageClassName' supplied below.
+      # -- If 'true', then a 'PersistentVolumeClaim' will be created for the PV defined 
+      # above.
       #
-      create: false
+      create: true
       
       # -- Specify the name of the 'StorageClass' that should be used for the 'shared-home' 
       #volume claim.
       #
-      storageClassName:
+      storageClassName: ""
       
       # -- Specifies the name of the persistent volume to claim
       #
-      volumeName:
+      volumeName: "dylan-bb-bitbucket-shared-home-pv"
      
       # -- Specifies the standard K8s resource requests and/or limits for the shared-home 
       #volume claims.
@@ -313,7 +312,7 @@ volumes:
       # can write to it. This is a workaround for a K8s bug affecting NFS volumes: 
       # https://github.com/kubernetes/examples/issues/260
       #
-      enabled: false
+      enabled: true
       
       # -- The path in the K8s initContainer where the shared-home volume will be mounted
       #
@@ -479,7 +478,7 @@ bitbucket:
     # 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> 
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
-    secretName:
+    secretName: bitbucket-license
     
     # -- The key in the K8s Secret that contains the Bitbucket license key
     #
@@ -494,7 +493,7 @@ bitbucket:
     # If specified, then these will be automatically populated during Bitbucket setup.
     # Otherwise, they will need to be provided via the browser after initial startup.
     #
-    secretName:
+    secretName: bitbucket-sysadmin-credentials
     
     # -- The key in the Kubernetes Secret that contains the sysadmin username
     #
@@ -519,7 +518,7 @@ bitbucket:
     # -- Set to 'true' if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
     #
-    enabled: false
+    enabled: true
 
   # Elasiticsearch config
   # 
@@ -580,11 +579,11 @@ bitbucket:
         
         # -- Initial CPU request by Bitbucket pod
         #
-        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        cpu: "1" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
         
         # -- Initial Memory request by Bitbucket pod
         #
-        memory: "2G"
+        memory: "1G"
       #  limits:
       #    cpu: "2"
       #    memory: "2G"

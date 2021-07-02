@@ -22,6 +22,7 @@ spec:
     - rsize=32768
     - wsize=32768
     - _netdev
+    - nolock
   {{- end }}
   {{- with .Values.volumes.sharedHome.persistentVolume.nfs }}
   nfs:
