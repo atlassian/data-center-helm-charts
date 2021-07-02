@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: dylan
+  name: nfs-server
+spec:
+  ports:
+    - name: nfs
+      port: 2049
+    - name: mountd
+      port: 20048
+    - name: rpcbind
+      port: 111
+    - name: rpcstatd
+      port: 43515 
+  selector:
+    role: nfs-server

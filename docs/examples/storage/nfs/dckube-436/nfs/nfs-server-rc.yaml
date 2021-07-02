@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  namespace: dylan
+  name: nfs-server
+spec:
+  replicas: 1
+  selector:
+    role: nfs-server
+  template:
+    metadata:
+      labels:
+        role: nfs-server
+    spec:
+      containers:
+        - name: nfs-server
+          image: docker.atl-paas.net/drathbone/my-nfs-image
+          imagePullPolicy: Always
+          ports:
+            - name: nfs
+              containerPort: 2049
+            - name: mountd
+              containerPort: 20048
+            - name: rpcbind
+              containerPort: 111
+            - name: rpcstatd
+              containerPort: 43515
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /exports
+              name: mypvc        
+            - mountPath: /etc/exports.d/
+              name: nfs-server-config
+      volumes:
+        - name: mypvc
+          persistentVolumeClaim:
+            claimName: nfs-ebs-claim
+        - name: nfs-server-config
+          configMap:
+            name: nfs-server-config
+      imagePullSecrets:
+        - name: "regcred"
+            
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: dylan
+  name: nfs-server-config
+data:
+  share.exports: |-
+    /exports *(rw,subtree_check,fsid=0,no_root_squash)

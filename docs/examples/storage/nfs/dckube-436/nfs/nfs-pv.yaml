@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: dylan
+  name: nfs
+spec:
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.100.11.91
+    path: "/"

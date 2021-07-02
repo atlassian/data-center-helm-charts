@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: dylan
+  name: nfs-ebs-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+# By not specifying a storage class an empty dir{} will be used
+#  storageClassName: nfs-ebs-sc
+  resources:
+    requests:
+      storage: 4Gi
