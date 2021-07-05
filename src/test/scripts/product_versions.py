@@ -54,8 +54,10 @@ def get_lts_version(argv):
 
 
 def loadJSON(fdata):
-	json_str = re.search("\[(.*?)\]", fdata.decode("utf-8")).group(1)
-	return json.loads(f"[{json_str}]")
+	result = re.search("\[(.*?)\]", fdata.decode("utf-8"))
+	if result is None:
+		return ""
+	return json.loads(f"[{result.group(1)}]")
 
 
 def cversion(version):
