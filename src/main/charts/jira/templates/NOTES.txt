@@ -41,7 +41,7 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 
 {{ if not ( or .Values.volumes.localHome.persistentVolumeClaim.create .Values.volumes.localHome.customVolume ) }}
 #################################################################################
-######      WARNING: Persistent volume is not used for Local Home!!!       #####
+######      WARNING: Persistent volume is not used for Local Home!!!        #####
 ######            Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
