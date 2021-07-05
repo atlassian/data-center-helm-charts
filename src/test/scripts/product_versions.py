@@ -22,15 +22,15 @@ def get_lts_version(argv):
 
 		try:
 			# load archived feeds
-			fdata_a = urllib.request.urlopen(url_archived).read()
-			jsdata = loadJSON(fdata_a)
+			archive_feeds = urllib.request.urlopen(url_archived).read()
+			feeds = loadJSON(archive_feeds)
 
 			# load current feeds and append to archive
-			fdata_c = urllib.request.urlopen(url_current).read()
-			jsdata += loadJSON(fdata_c)
+			current_feeds = urllib.request.urlopen(url_current).read()
+			feeds += loadJSON(current_feeds)
 
 			# Filter all LTS versions and sort based on version
-			lts_versions = [x for x in jsdata if x['edition'].lower() == 'enterprise']
+			lts_versions = [x for x in feeds if x['edition'].lower() == 'enterprise']
 			sortedVersions = sorted(lts_versions, key=lambda k:cversion(k['version']), reverse=True)
 
 			if len(sortedVersions) > 0:
