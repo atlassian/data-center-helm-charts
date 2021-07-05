@@ -57,7 +57,7 @@ def loadJSON(fdata):
 	result = re.search("\[.*\]", fdata.decode("utf-8"))
 	if result is None:
 		return ""
-	return json.loads(f"[{result.group(1)}]")
+	return json.loads(result.group(0))
 
 
 def cversion(version):
