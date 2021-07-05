@@ -1,6 +1,7 @@
 import sys
 import urllib.request
 import json
+import re
 
 known_supported_version = {
 	'jira-software': '8.13.8',
@@ -15,18 +16,25 @@ def get_lts_version(argv):
 		product = 'jira-software'
 	elif product == 'bitbucket':
 		product = 'stash'
-
 	if product in known_supported_version:
-		url = f"https://my.atlassian.com/download/feeds/archived/{product}.json"
+		url_archived = f"https://my.atlassian.com/download/feeds/archived/{product}.json"
+		url_current = f"https://my.atlassian.com/download/feeds/current/{product}.json"
 
 		try:
-			fl = urllib.request.urlopen(url)
-			fdata = fl.read()
-			jsdata = json.loads(fdata[10:len(fdata)-1].decode("utf-8"))
-			lts_versions = [x for x in jsdata if x['edition'].lower() == 'enterprise']
+			# load archived feeds
+			archive_feeds = urllib.request.urlopen(url_archived).read()
+			feeds = loadJSON(archive_feeds)
+
+			# load current feeds and append to archive
+			current_feeds = urllib.request.urlopen(url_current).read()
+			feeds += loadJSON(current_feeds)
+
+			# Filter all LTS versions and sort based on version
+			lts_versions = [x for x in feeds if x['edition'].lower() == 'enterprise']
 			sortedVersions = sorted(lts_versions, key=lambda k:cversion(k['version']), reverse=True)
 
 			if len(sortedVersions) > 0:
+				# Pick the latest LTS product version
 				lts_version = sortedVersions[0]['version']
 			else:
 				lts_version = known_supported_version[product]
@@ -43,6 +51,13 @@ def get_lts_version(argv):
 		lts_version = 'unknown'
 
 	return lts_version
+
+
+def loadJSON(fdata):
+	result = re.search("\[.*\]", fdata.decode("utf-8"))
+	if result is None:
+		return []
+	return json.loads(result.group(0))
 
 
 def cversion(version):
