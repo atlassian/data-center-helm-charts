@@ -56,7 +56,7 @@ def get_lts_version(argv):
 def loadJSON(fdata):
 	result = re.search("\[.*\]", fdata.decode("utf-8"))
 	if result is None:
-		return ""
+		return []
 	return json.loads(result.group(0))
 
 
