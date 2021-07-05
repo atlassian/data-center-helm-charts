@@ -1,6 +1,7 @@
 import sys
 import urllib.request
 import json
+import re
 
 known_supported_version = {
 	'jira-software': '8.13.8',
@@ -22,11 +23,11 @@ def get_lts_version(argv):
 		try:
 			# load archived feeds
 			fdata_a = urllib.request.urlopen(url_archived).read()
-			jsdata = json.loads(fdata_a[10:len(fdata_a)-1].decode("utf-8"))
+			jsdata = loadJSON(fdata_a)
 
 			# load current feeds and append to archive
 			fdata_c = urllib.request.urlopen(url_current).read()
-			jsdata += json.loads(fdata_c[10:len(fdata_c)-1].decode("utf-8"))
+			jsdata += loadJSON(fdata_c)
 
 			# Filter all LTS versions and sort based on version
 			lts_versions = [x for x in jsdata if x['edition'].lower() == 'enterprise']
@@ -50,6 +51,11 @@ def get_lts_version(argv):
 		lts_version = 'unknown'
 
 	return lts_version
+
+
+def loadJSON(fdata):
+	json_str = re.search("\[(.*?)\]", fdata.decode("utf-8")).group(1)
+	return json.loads(f"[{json_str}]")
 
 
 def cversion(version):
