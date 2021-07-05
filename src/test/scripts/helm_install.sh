@@ -114,7 +114,7 @@ bootstrap_database() {
   # Use the product name for the name of the postgres database, username, and password.
   # These must match the credentials stored in the Secret preloaded into the namespace,
   # which the application will use to connect to the database.
-  helm install -n "${TARGET_NAMESPACE}" --wait \
+  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
      "$POSTGRES_RELEASE_NAME" \
      --values "$THISDIR/postgres-values.yaml" \
      --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
@@ -198,7 +198,7 @@ package_functest_helm_chart() {
 # Install the product's Helm chart
 install_product() {
   echo "Task 8 - Installing product helm chart." >&2
-  helm install -n "${TARGET_NAMESPACE}" --wait \
+  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
      "$PRODUCT_RELEASE_NAME" \
      $HELM_DEBUG_OPTION \
      ${valueOverrides} \
@@ -208,7 +208,7 @@ install_product() {
 # Install the functest Helm chart
 install_functional_tests() {
   echo "Task 9 - Installing functional tests." >&2
-  helm install --wait \
+  helm install --wait --timeout 15m \
      -n "${TARGET_NAMESPACE}" \
      "$FUNCTEST_RELEASE_NAME" \
      --set "$FUNCTEST_CHART_VALUES" \
