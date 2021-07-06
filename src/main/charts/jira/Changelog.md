@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.12.0 
+
+![AppVersion: 8.13.7-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.13.7-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCKUBE-437: Wording improvement for warning in NOTES when PV is not used (#199) 
+* DCKUBE-390: Improve readability of Jira values.yaml file (#179) 
+* Defining the following values in the helpers template for each chart, to allow template overrides: (#173)
+
+### Default value changes
+
+There has been major improvement in the documentation for the keys in `values.yaml` file but there isn't any functional change. 
+
 ## 0.11.0 
 
 **Release date:** 2021-06-09
