@@ -32,12 +32,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 * [Operation](docs/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
 * [Configuration](docs/CONFIGURATION.md) - a deep dive into the configuration parameters
 * [Platforms support](docs/PLATFORMS.md) - how to allow support for different platforms
-* [Examples](docs/examples/)
-  * [How to deploy an EFK stack to Kubernetes](docs/examples/logging/efk/EFK.md)
-  * [Implementation of an NFS Server for Bitbucket](docs/examples/storage/nfs/NFS.md)
-  * [Local storage - utilizing AWS EBS-backed volumes](docs/examples/storage/aws/LOCAL_STORAGE.md)
-  * [Shared storage - utilizing AWS EFS-backed filesystem](docs/examples/storage/aws/SHARED_STORAGE.md)
-  * [SSH service in Bitbucket on Kubernetes](docs/examples/ssh/SSH_BITBUCKET.md)
+* [Examples](docs/examples/examples.md) - various configuration examples
 
 ## Feedback
 

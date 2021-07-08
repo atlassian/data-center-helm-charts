@@ -18,9 +18,9 @@ For a full production deployment you will need to create some common components 
 
 ## Shared storage
 
-### Cloud managed shared storage 
+### Cloud-managed shared storage 
 
-### Dedicated NFS server - Bitbucket Data Center requirement
+#### Dedicated NFS server - Bitbucket Data Center requirement
 
 Bitbucket Data Center (Bitbucket DC) uses a shared network file system (NFS) to store its repositories in a common location that is accessible to multiple Bitbucket nodes. Due to the high requirements on performance for IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. Based on this, it is not recommeneded that [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) are used.
 
