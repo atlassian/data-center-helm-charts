@@ -58,6 +58,12 @@ spec:
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.jira.service.contextPath | quote }}
             {{ end }}
+            {{ if .Values.ingress.host }}
+            - name: ATL_PROXY_NAME
+              value: {{ .Values.ingress.host | quote }}
+            - name: ATL_PROXY_PORT
+              value: {{ include "jira.ingressPort" . | quote }}
+            {{ end }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
             {{ with .Values.jira.license.secretName }}

@@ -34,6 +34,24 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Create default value for ingress port
+*/}}
+{{- define "jira.ingressPort" -}}
+{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- end }}
+
+{{/*
+Create default value for ingress path
+*/}}
+{{- define "jira.ingressPath" -}}
+{{- if .Values.ingress.path -}}
+{{- .Values.ingress.path -}}
+{{- else -}}
+{{ default ( "/" ) .Values.jira.service.contextPath -}}
+{{- end }}
+{{- end }}
+
+{{/*
 The name of the service account to be used.
 If the name is defined in the chart values, then use that,
 else if we're creating a new service account then use the name of the Helm release,
