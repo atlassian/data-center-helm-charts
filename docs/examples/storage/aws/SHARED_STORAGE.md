@@ -32,7 +32,7 @@ aws efs describe-file-systems --query "FileSystems[*].FileSystemId" --region ap-
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: efs-pv
+  name: my-shared-vol-pv
 spec:
   capacity:
     storage: 1Gi
@@ -57,13 +57,13 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: efs-pvc
+  name: my-shared-vol-pvc
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: efs-pv
   volumeMode: Filesystem
-  volumeName: efs-pv
+  volumeName: my-shared-vol-pv
   resources:
     requests:
       storage: 1Gi
@@ -77,7 +77,7 @@ volumes:
   sharedHome:
     customVolume:
       persistentVolumeClaim:
-        claimName: "efs-pvc" 
+        claimName: "my-shared-vol-pvc"
 ```
 
 # Resources

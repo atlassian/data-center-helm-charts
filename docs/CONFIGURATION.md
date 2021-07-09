@@ -92,7 +92,7 @@ volumes:
       nfs:
         server: mynfsserver
         path: /export/path
-````
+```
 
 Generally, any valid Kubernetes volume resource definition can be substituted
 here. However, as mentioned previously, externalising the volume definitions
@@ -106,11 +106,11 @@ using `PersistentVolumes` is the strongly recommended approach.
 
 ## Additional volumes
 
-In additional to the `local-home` and `shared-home` volumes that are
-always attached to the product pods, you can attach your own volumes for
-your own purposes, and mount them into the product container. 
-Use the `additionalVolumes` and `additionalVolumeMounts` values to both attach 
-the volumes and mount them in to the product container.
+In additional to the `local-home` and `shared-home` volumes that are always
+attached to the product pods, you can attach your own volumes for your own
+purposes, and mount them into the product container.  Use the `additional`
+(under `volumes`) and `additionalVolumeMounts` values to both attach the volumes
+and mount them in to the product container.
 
 This might be useful if, for example, you have a custom plugin that requires its 
 own filesystem storage.
@@ -123,10 +123,11 @@ jira:
       - volumeName: my-volume
         mountPath: /path/to/mount
 
-additionalVolumes:
-  - name: my-volume
-    persistentVolumeClaim:
-       claimName: my-volume-claim
+volumes:
+  additional:
+    - name: my-volume
+      persistentVolumeClaim:
+         claimName: my-volume-claim
 ```
 
 ## Database connectivity
