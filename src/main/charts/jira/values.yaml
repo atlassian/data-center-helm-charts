@@ -313,9 +313,9 @@ ingress:
    
   # -- The base path for the Ingress Resource. For example '/jira'. Based on a 
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of 
-  # 'company.k8s.com/jira'
+  # 'company.k8s.com/jira'. Default value is 'jira.service.contextpath'
   #
-  path: "/"
+  path:
   
   # -- The custom annotations that should be applied to the Ingress Resource 
   # when NOT using the K8s ingress-nginx controller.
