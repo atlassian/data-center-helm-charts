@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nfs-server.fullname" . }}
+  labels:
+  {{- include "nfs-server.labels" . | nindent 4 }}
+data:
+  share.exports: |-
+    /srv/nfs *(rw,subtree_check,insecure,fsid=0,no_root_squash)

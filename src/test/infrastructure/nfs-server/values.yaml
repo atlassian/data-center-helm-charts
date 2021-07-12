@@ -1,0 +1,81 @@
+# Default values for nfs-server.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+#image:
+#  repository: erichough/nfs-server
+#  pullPolicy: IfNotPresent
+#  # Overrides the image tag whose default is the chart appVersion.
+#  tag: ""
+
+
+image:
+  repository: docker.atl-paas.net/atlassian/nfs-server-test
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "wkritzinger"
+
+imagePullSecrets:
+  - name: regcred
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  capabilities:
+    add:
+      # SYS_ADMIN is needed for NFS to mount certain directories
+      - SYS_ADMIN
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # ClusterIP is required
+  type: ClusterIP
+  # clusterIP has to be specified for test
+  clusterIP: "172.20.237.125"
+  nfsPort: 2049
+  mountdPort: 20048
+  rpcbindPort: 111
+  statdPort: 32765
+  statdOutgoingPort: 32766
+  lockdPort: 32767
+
+persistence:
+  annotations: {}
+  # size: 1Gi
+  # storageClassName: "gp2"
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
