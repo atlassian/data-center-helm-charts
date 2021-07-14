@@ -6,6 +6,8 @@ Thank you for considering a contribution to Data Center Helm Charts. Pull reques
 * Follow the existing style
 * Separate unrelated changes into multiple pull requests
 
+Follow the [development setup](DEVELOPMENT.md).
+
 See the existing issues for things to start contributing.
 
 For bigger changes, please make sure you start a discussion first by creating an issue and explaining the intended change.
