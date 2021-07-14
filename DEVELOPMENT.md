@@ -7,7 +7,7 @@ Repository contains repository hook definition to auto-generate chart documentat
 ### Installation
 
 1. Install `pre-commit` following [official instructions](https://pre-commit.com/#install).
-2. In the repository root run `pre-commit install` which will install the hooks.
+2. In the repository root run `pre-commit install`, which will install the hooks.
 
 ### Usage
 
