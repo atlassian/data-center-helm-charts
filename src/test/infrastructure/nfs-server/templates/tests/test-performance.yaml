@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: "{{ include "nfs-server.fullname" . }}-test-nfs"
+  name: "{{ include "nfs-server.fullname" . }}-perf-nfs"
   labels:
     {{- include "nfs-server.labels" . | nindent 4 }}
   annotations:
@@ -30,7 +30,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: "{{ include "nfs-server.fullname" . }}-test-nfs"
+  name: "{{ include "nfs-server.fullname" . }}-perf-nfs"
   labels:
     {{- include "nfs-server.labels" . | nindent 4 }}
   annotations:
@@ -43,13 +43,13 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: "{{ include "nfs-server.fullname" . }}-test-nfs"
+  volumeName: "{{ include "nfs-server.fullname" . }}-perf-nfs"
   storageClassName: ""
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "nfs-server.fullname" . }}-test-nfs"
+  name: "{{ include "nfs-server.fullname" . }}-perf-nfs"
   labels:
     {{- include "nfs-server.labels" . | nindent 4 }}
   annotations:
@@ -57,27 +57,41 @@ metadata:
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
 spec:
   containers:
-    - name: lock-test
-      image: busybox
-      command: ['sh']
+    - name: bonnie
+      image: polinux/bonnie
       args:
-        - "-c"
-        - |
-          set -euo pipefail
-          ls -l /nfs
-          echo "Acquiring lock..."
-          {
-            flock -x 3
-            echo "Acquired lock."
-            echo "Locked content." >&3
-          } 3>>/nfs/test.txt
-          cat /nfs/test.txt
-          rm /nfs/test.txt
+        - bonnie++
+        - -d
+        - /nfs
+        - -u
+        - root
+        - -r
+        - "512"
+        - -z
+        - "1234"
+        - -n
+        - "100"
+        - -s
+        - "1g"
       volumeMounts:
         - mountPath: /nfs
           name: data
+  # Same zone but different node
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ include "nfs-server.fullname" . }}
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ include "nfs-server.fullname" . }}
+          topologyKey: topology.kubernetes.io/zone
   volumes:
     - name: data
       persistentVolumeClaim:
-        claimName: "{{ include "nfs-server.fullname" . }}-test-nfs"
+        claimName: "{{ include "nfs-server.fullname" . }}-perf-nfs"
   restartPolicy: Never

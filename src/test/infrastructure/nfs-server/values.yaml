@@ -39,7 +39,8 @@ podSecurityContext: {}
 securityContext:
   capabilities:
     add:
-      # SYS_ADMIN is needed for NFS to mount certain directories
+      - DAC_READ_SEARCH
+      - SYS_RESOURCE
       - SYS_ADMIN
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
@@ -59,8 +60,8 @@ service:
 
 persistence:
   annotations: {}
-  # size: 1Gi
-  # storageClassName: "gp2"
+  size: 20Gi
+  storageClassName: "gp2"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
