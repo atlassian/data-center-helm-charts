@@ -4,15 +4,9 @@
 
 replicaCount: 1
 
-#image:
-#  repository: erichough/nfs-server
-#  pullPolicy: IfNotPresent
-#  # Overrides the image tag whose default is the chart appVersion.
-#  tag: ""
-
-
 image:
   repository: docker.atl-paas.net/atlassian/nfs-server-test
+  #pullPolicy: IfNotPresent
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "wkritzinger"
@@ -21,6 +15,9 @@ imagePullSecrets:
   - name: regcred
 nameOverride: ""
 fullnameOverride: ""
+
+# The path that should be exported by the NFS server
+exportPath: /srv/nfs
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -41,16 +38,12 @@ securityContext:
     add:
       - DAC_READ_SEARCH
       - SYS_RESOURCE
-      - SYS_ADMIN
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   # ClusterIP is required
   type: ClusterIP
-  # clusterIP has to be specified for test
-  clusterIP: "172.20.237.125"
+  # If you want to run `helm test`, set this to a specific IP so the test can mount the NFS export at the correct IP
+  #clusterIP: "172.20.237.125"
   nfsPort: 2049
   mountdPort: 20048
   rpcbindPort: 111
@@ -60,7 +53,7 @@ service:
 
 persistence:
   annotations: {}
-  size: 20Gi
+  size: 5Gi
   storageClassName: "gp2"
 
 resources: {}

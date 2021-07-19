@@ -87,11 +87,10 @@ bootstrap_nfs() {
   if grep -q nfs: ${chartValueFiles} /dev/null || grep -q 'nfs[.]' <<<"$EXTRA_PARAMETERS"; then
     echo "This configuration requires a private NFS server, starting..."
     "$BASEDIR"/start_nfs_server.sh "${TARGET_NAMESPACE}" "${PRODUCT_RELEASE_NAME}"
-    local nfs_server_pod_name=$(kubectl get pod -n "${TARGET_NAMESPACE}" -l role=${PRODUCT_RELEASE_NAME}-nfs-server -o jsonpath="{.items[0].metadata.name}")
 
     for ((try = 0; try < 60; try++)) ; do
       echo "Detecting NFS server IP..."
-      local nfs_server_ip=$(kubectl get pods -n $TARGET_NAMESPACE "$nfs_server_pod_name" -o json | jq -r .status.podIP)
+      local nfs_server_ip=$(kubectl get service -l "app.kubernetes.io/instance=$PRODUCT_RELEASE_NAME-nfs" -o jsonpath='{.items[0].spec.clusterIP}')
 
       if [ -z "$nfs_server_ip" ]; then
         echo "NFS server not found."

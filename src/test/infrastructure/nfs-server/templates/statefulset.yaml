@@ -43,6 +43,8 @@ spec:
               value: "{{ .Values.service.statdOutgoingPort }}"
             - name: LOCKD_PORT
               value: "{{ .Values.service.lockdPort }}"
+            - name: EXPORT_PATH
+              value: "{{ .Values.exportPath }}"
           ports:
           - name: nfs
             containerPort: {{ .Values.service.nfsPort }}
@@ -80,25 +82,25 @@ spec:
           - name: lockd-udp
             containerPort: {{ .Values.service.lockdPort }}
             protocol: UDP
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /*/}}
-{{/*              port: http*/}}
-{{/*          readinessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /*/}}
-{{/*              port: http*/}}
+          livenessProbe:
+            exec:
+              command:
+                - /usr/local/bin/docker-entrypoint.sh
+                - healthcheck
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          startupProbe:
+            exec:
+              command:
+                - /usr/local/bin/docker-entrypoint.sh
+                - healthcheck
+            failureThreshold: 30
+            periodSeconds: 1
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: {{ include "nfs-server.fullname" . }}-config
-              mountPath: /etc/exports.d/
             - name: data
               mountPath: /srv/nfs
-      volumes:
-        - name: {{ include "nfs-server.fullname" . }}-config
-          configMap:
-            name: {{ include "nfs-server.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
