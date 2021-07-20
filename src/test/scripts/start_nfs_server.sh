@@ -16,6 +16,6 @@ helm uninstall -n "$TARGET_NAMESPACE" "$PRODUCT_RELEASE_NAME-nfs" 2>/dev/null ||
 kubectl delete -n "$TARGET_NAMESPACE" pvc -l "app.kubernetes.io/instance=$PRODUCT_RELEASE_NAME-nfs" --ignore-not-found=true 2>/dev/null || true
 
 echo Starting NFS deployment...
-helm install "$PRODUCT_RELEASE_NAME-nfs" "$BASEDIR/../infrastructure/nfs-server" --debug --wait --timeout 15m
+helm install -n "$TARGET_NAMESPACE" "$PRODUCT_RELEASE_NAME-nfs" "$BASEDIR/../infrastructure/nfs-server" --debug --wait --timeout 15m
 
 echo NFS server is up and running.
