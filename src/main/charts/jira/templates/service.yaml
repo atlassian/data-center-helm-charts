@@ -4,6 +4,10 @@ metadata:
   name: {{ include "jira.fullname" . }}
   labels:
     {{- include "jira.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.jira.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.jira.service.type }}
   ports:
