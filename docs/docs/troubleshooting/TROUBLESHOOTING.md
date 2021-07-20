@@ -1,15 +1,15 @@
 # Troubleshooting and investigation tips
 
-This guide contains general tips how to investigate deployment that doesn't work correctly.
+This guide contains general tips on how to investigate application deployment that doesn't work correctly.
 
 ## General tips
 
-First it is important to gather information that will help you better understand where to focus your investigation efforts.
+First, it is important to gather the information that will help you better understand where to focus your investigation efforts.
 The next section assumes you've followed the [installation](../installation/INSTALLATION.md) and [configuration](../installation/CONFIGURATION.md) guide, and you cannot access the installed product service. 
 
-For installation troubleshooting you will need to access the kubernetes cluster and have enough permissions to follow the commands below.
+For installation troubleshooting, you will need to access the Kubernetes cluster and have enough permissions to follow the commands below.
 
-It is highly recommended reading through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/). 
+It is highly recommended to read through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/). 
 Especially the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/) has great starting tips.
 
 Note: some commands include `RELEASE_NAME` and `NAMESPACE`. Replace it with the helm release name and namespace specified when running `helm install`.
@@ -23,7 +23,7 @@ If you waited long enough (more than 10 minutes), and the service is still not a
 
 ### Helm release verification 
 
-1. Run `helm list --all-namespaces` to get list of all installed chart releases.
+1. Run `helm list --all-namespaces` to get the list of all installed chart releases.
     * You should be able to see your installation in the list.
     * The status for the release should be `deployed`.
 2. Run `helm test RELEASE_NAME -n NAMESPACE`
@@ -54,7 +54,7 @@ You can read the output and make sure it doesn't contain an error or exception.
 
 Follow the [official guide](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/) for more details.
 
-Get list of pods and their state:
+Get the list of pods and their state:
 
 ```shell
 kubectl get RELEASE_NAME -n NAMESPACE -o wide
