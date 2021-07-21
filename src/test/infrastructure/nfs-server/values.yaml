@@ -33,9 +33,9 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-podEnvironmentVariables:
-  - name: DEBUG
-    value: 'true'
+podEnvironmentVariables: []
+#  - name: DEBUG
+#    value: 'true'
 
 securityContext:
   capabilities:
@@ -47,7 +47,7 @@ service:
   # ClusterIP is required
   type: ClusterIP
   # If you want to run `helm test`, set this to a specific IP so the test can mount the NFS export at the correct IP
-  #clusterIP: "172.20.237.125"
+  # clusterIP: "172.16.0.1"
   nfsPort: 2049
   mountdPort: 20048
   rpcbindPort: 111

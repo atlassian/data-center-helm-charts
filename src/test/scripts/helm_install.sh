@@ -90,7 +90,7 @@ bootstrap_nfs() {
 
     for ((try = 0; try < 60; try++)) ; do
       echo "Detecting NFS server IP..."
-      local nfs_server_ip=$(kubectl get service -l "app.kubernetes.io/instance=$PRODUCT_RELEASE_NAME-nfs" -o jsonpath='{.items[0].spec.clusterIP}')
+      local nfs_server_ip=$(kubectl get service -n "${TARGET_NAMESPACE}" -l "app.kubernetes.io/instance=$PRODUCT_RELEASE_NAME-nfs" -o jsonpath='{.items[0].spec.clusterIP}')
 
       if [ -z "$nfs_server_ip" ]; then
         echo "NFS server not found."
