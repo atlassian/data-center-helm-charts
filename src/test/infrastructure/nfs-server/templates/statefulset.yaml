@@ -45,6 +45,9 @@ spec:
               value: "{{ .Values.service.lockdPort }}"
             - name: EXPORT_PATH
               value: "{{ .Values.exportPath }}"
+            {{- with .Values.podEnvironmentVariables }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
           - name: nfs
             containerPort: {{ .Values.service.nfsPort }}

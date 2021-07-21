@@ -33,6 +33,10 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
+podEnvironmentVariables:
+  - name: DEBUG
+    value: 'true'
+
 securityContext:
   capabilities:
     add:
