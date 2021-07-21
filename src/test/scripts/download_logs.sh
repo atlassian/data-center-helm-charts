@@ -2,7 +2,7 @@
 
 set -x
 
-source $1
+source "$1"
 
 RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
 PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
@@ -12,7 +12,7 @@ mkdir -p "$LOG_DOWNLOAD_DIR"
 getPodLogs() {
     local releaseName=$1
 
-    local podNames=$(kubectl -n "${TARGET_NAMESPACE}" get pods --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
+    local podNames=$(kubectl -n "${TARGET_NAMESPACE}" get pods --selector "app.kubernetes.io/instance in ($releaseName, $releaseName-nfs)" --output=jsonpath={.items..metadata.name})
 
     for podName in $podNames ; do
       echo Downloading logs from $podName...
