@@ -38,7 +38,7 @@ getIngresses() {
 getServices() {
     local releaseName="$1"
 
-    local serviceNames=$(kubectl -n "${TARGET_NAMESPACE}" get ingress --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
+    local serviceNames=$(kubectl -n "${TARGET_NAMESPACE}" get service --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
 
     for serviceName in $serviceNames; do
       echo Describing service $serviceName...
@@ -48,7 +48,7 @@ getServices() {
 
 getPodLogs "$PRODUCT_RELEASE_NAME"
 getPodLogs "$PRODUCT_RELEASE_NAME-nfs"
-getPodLogs "$RELEASE_PREFIX-pgsql"
+getPodLogs "$PRODUCT_RELEASE_NAME-pgsql"
 
 getIngresses "$PRODUCT_RELEASE_NAME"
 getServices "$PRODUCT_RELEASE_NAME"
