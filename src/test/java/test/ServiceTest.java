@@ -40,4 +40,22 @@ class ServiceTest {
         assertThat(service.getPort("http"))
                 .hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(1234));
     }
+
+    @ParameterizedTest
+    @EnumSource(Product.class)
+    void service_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.annotations.testAnnotation1", "test1",
+                product + ".service.annotations.testAnnotation1\\.property", "test1.1",
+                product + ".service.annotations.testAnnotation2", "test2"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getMetadata().path("annotations")).isObject(Map.of(
+                "testAnnotation1", "test1",
+                "testAnnotation1.property", "test1.1",
+                "testAnnotation2", "test2"
+        ));
+    }
 }
