@@ -14,6 +14,6 @@ INGRESS_DOMAIN_EKS=${eks.ingress.domain}
 INGRESS_DOMAIN_GKE=${gke.ingress.domain}
 INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 # .Values.replicaCount=1, but in here we specify how many nodes we are planning to get to prepare ingress rules for each
-TARGET_REPLICA_COUNT=2
+TARGET_REPLICA_COUNT=${target.replica.count}
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
 HELM_DEBUG=${helm.debug}
