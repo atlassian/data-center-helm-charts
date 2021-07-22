@@ -42,6 +42,19 @@ class SynchronyTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_disabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "false"
+        ));
+
+        final var sysProps = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config")
+                .getNode("data", "additional_jvm_args");
+
+        assertThat(sysProps).hasTextContaining("synchrony.btf.disabled");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
     void synchrony_entrypoint(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true"
