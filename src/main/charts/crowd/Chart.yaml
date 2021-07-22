@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 0.12.0
+version: 0.13.0
 appVersion: 4.3.0-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -19,9 +19,8 @@ sources:
 deprecated: false
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: Defining the following values in the helpers template for each chart, to allow template overrides
-    - kind: fixed
-      description: Wording improvement for warning in NOTES when PV is not used (#199)
-    - kind: fixed
-      description: Improve readability of values.yaml
+    - kind: changed
+      description: Volume docs updates
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188

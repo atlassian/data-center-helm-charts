@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.13.0
+
+![AppVersion: 7.12.2-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.12.2-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCKUBE-527: Fix Synchrony resource requests and limits (#210)
+* DCKUBE-54: Volume docs updates (#188)
+
+
 ## 0.12.0
 
 ![AppVersion: 7.12.2-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.12.2-jdk11&color=success&logo=)
