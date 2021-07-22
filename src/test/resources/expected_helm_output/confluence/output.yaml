@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jvm-config
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -60,7 +60,7 @@ kind: Service
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -86,7 +86,7 @@ kind: Service
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -112,7 +112,7 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -180,7 +180,7 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -293,7 +293,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
@@ -324,7 +324,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-0.12.0
+    helm.sh/chart: confluence-0.13.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.12.2-jdk11"
