@@ -29,4 +29,15 @@ public final class Container {
 
     }
 
+    public JsonNode getResources() {
+        return get("resources");
+    }
+
+    public JsonNode getRequests() {
+        return getResources().path("requests");
+    }
+
+    public JsonNode getLimits() {
+        return getResources().path("limits");
+    }
 }
