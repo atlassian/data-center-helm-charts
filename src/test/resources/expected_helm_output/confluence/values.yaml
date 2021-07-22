@@ -3,3 +3,6 @@ volumes:
   sharedHome:
     nfsPermissionFixer:
       enabled: true
+
+synchrony:
+  enabled: true

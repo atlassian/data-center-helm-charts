@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Kind;
 import test.model.Product;
+import test.model.StatefulSet;
 
 import java.util.Map;
 
@@ -41,6 +42,19 @@ class SynchronyTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_disabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "false"
+        ));
+
+        final var sysProps = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config")
+                .getNode("data", "additional_jvm_args");
+
+        assertThat(sysProps).hasTextContaining("synchrony.btf.disabled");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
     void synchrony_entrypoint(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true"
@@ -54,5 +68,27 @@ class SynchronyTest {
                 .hasTextContaining("-Xms1g")
                 .hasTextContaining("-Xmx2g")
                 .hasTextContaining("-XX:ActiveProcessorCount=2");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.resources.container.requests.cpu", "10",
+                "synchrony.resources.container.requests.memory", "10GB",
+                "synchrony.resources.container.limits.cpu", "20",
+                "synchrony.resources.container.limits.memory", "20GB"
+        ));
+
+        StatefulSet synchronySts = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+
+        // verify requests
+        assertThat(synchronySts.getContainer("synchrony").getRequests().path("cpu")).hasValueEqualTo(10);
+        assertThat(synchronySts.getContainer("synchrony").getRequests().path("memory")).hasTextEqualTo("10GB");
+
+        // verify limits
+        assertThat(synchronySts.getContainer("synchrony").getLimits().path("cpu")).hasValueEqualTo(20);
+        assertThat(synchronySts.getContainer("synchrony").getLimits().path("memory")).hasTextEqualTo("20GB");
     }
 }

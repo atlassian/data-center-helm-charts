@@ -49,6 +49,10 @@ spec:
             initialDelaySeconds: {{ .Values.synchrony.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}
+          {{- with .Values.synchrony.resources.container }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           env:
             - name: SYNCHRONY_BIND
               valueFrom:
