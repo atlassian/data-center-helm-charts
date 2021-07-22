@@ -118,6 +118,14 @@
 
         <persistence.enabled>true</persistence.enabled>
         <clustering.enabled>true</clustering.enabled>
+        <!--
+            Number of instance replicas to start during initial setup. This value is currently only used by Bitbucket,
+            other products' values.yaml ignore this property. Other products need to perform additional setup steps on
+            a single node after Helm chart installation.
+        -->
+        <replica.count>2</replica.count>
+        <!-- Expected number of replicas after instance has been started -->
+        <target.replica.count>2</target.replica.count>
 
         <db.init.script.file/>
 

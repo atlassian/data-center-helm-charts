@@ -1,0 +1,97 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "{{ include "nfs-server.fullname" . }}-perf-nfs"
+  labels:
+    {{- include "nfs-server.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  mountOptions:
+    - nfsvers=3
+    - lookupcache=pos
+    - noatime
+    - intr
+    - rsize=32768
+    - wsize=32768
+    - _netdev
+  nfs:
+    server:  {{ .Values.service.clusterIP }}
+    path: /srv/nfs
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: "{{ include "nfs-server.fullname" . }}-perf-nfs"
+  labels:
+    {{- include "nfs-server.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: "{{ include "nfs-server.fullname" . }}-perf-nfs"
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "nfs-server.fullname" . }}-perf-nfs"
+  labels:
+    {{- include "nfs-server.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  containers:
+    - name: bonnie
+      image: polinux/bonnie
+      args:
+        - bonnie++
+        - -d
+        - /nfs
+        - -u
+        - root
+        - -r
+        - "512"
+        - -z
+        - "1234"
+        - -n
+        - "100"
+        - -s
+        - "1g"
+      volumeMounts:
+        - mountPath: /nfs
+          name: data
+  # Same zone but different node
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ include "nfs-server.fullname" . }}
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ include "nfs-server.fullname" . }}
+          topologyKey: topology.kubernetes.io/zone
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: "{{ include "nfs-server.fullname" . }}-perf-nfs"
+  restartPolicy: Never

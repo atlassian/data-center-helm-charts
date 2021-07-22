@@ -37,11 +37,8 @@ affinity:
   podAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
-          matchExpressions:
-            - key: role
-              operator: In
-              values:
-                - ${helm.release.prefix}-bitbucket-nfs-server # needs to be the same value as NFS server deployment
+          matchLabels:
+            app.kubernetes.io/instance: ${helm.release.prefix}-bitbucket-nfs # needs to be the same value as NFS server deployment
         topologyKey: topology.kubernetes.io/zone
 
 

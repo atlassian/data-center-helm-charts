@@ -2,7 +2,7 @@
 
 set -x
 
-source $1
+source "$1"
 
 RELEASE_PREFIX=$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')
 PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
@@ -10,7 +10,7 @@ PRODUCT_RELEASE_NAME=$RELEASE_PREFIX-$PRODUCT_NAME
 mkdir -p "$LOG_DOWNLOAD_DIR"
 
 getPodLogs() {
-    local releaseName=$1
+    local releaseName="$1"
 
     local podNames=$(kubectl -n "${TARGET_NAMESPACE}" get pods --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
 
@@ -25,7 +25,7 @@ getPodLogs() {
 }
 
 getIngresses() {
-    local releaseName=$1
+    local releaseName="$1"
 
     local ingressNames=$(kubectl -n "${TARGET_NAMESPACE}" get ingress --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
 
@@ -35,10 +35,24 @@ getIngresses() {
     done
 }
 
+getServices() {
+    local releaseName="$1"
+
+    local serviceNames=$(kubectl -n "${TARGET_NAMESPACE}" get service --selector app.kubernetes.io/instance="$releaseName" --output=jsonpath={.items..metadata.name})
+
+    for serviceName in $serviceNames; do
+      echo Describing service $serviceName...
+      kubectl -n "${TARGET_NAMESPACE}" describe ingress "$serviceName" > "$LOG_DOWNLOAD_DIR/service-$serviceName.yaml"
+    done
+}
+
 getPodLogs "$PRODUCT_RELEASE_NAME"
-getPodLogs "$RELEASE_PREFIX-pgsql"
+getPodLogs "$PRODUCT_RELEASE_NAME-nfs"
+getPodLogs "$PRODUCT_RELEASE_NAME-pgsql"
 
 getIngresses "$PRODUCT_RELEASE_NAME"
+getServices "$PRODUCT_RELEASE_NAME"
+getServices "$PRODUCT_RELEASE_NAME-nfs"
 
 #this is the same format as kubectl get events, but with absolute timestamps instead of relative
 filter='.items[] | .firstTimestamp + ".." + .lastTimestamp + "\u0009" + .type + "\u0009" + .reason + "\u0009" + .involvedObject.kind + "/" + .involvedObject.name + "\u0009" + .message'

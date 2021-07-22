@@ -1,5 +1,7 @@
 # This file contains overrides for the Bitbucket Helm chart's values.yaml file
 
+replicaCount: ${replica.count}
+
 database:
   url: jdbc:postgresql://${helm.release.prefix}-bitbucket-pgsql:5432/bitbucket
   driver: org.postgresql.Driver
