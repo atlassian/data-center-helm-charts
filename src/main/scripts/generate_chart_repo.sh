@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
 
 # The directory, relative to the git repository root, where the Helm charts are stored
 CHARTS_SRC_DIR="src/main/charts"
@@ -11,14 +12,7 @@ PUBLISH_DIR="docs"
 
 PACKAGE_DIR="target/helm"
 
-TAG_VERSION=$1
-GITHUB_TOKEN=$2
-
-if [[ -z $TAG_VERSION ]]
-then
-  echo "Must supply a version string"
-  exit 1
-fi
+GITHUB_TOKEN=$1
 
 if [[ -z $GITHUB_TOKEN ]]
 then
@@ -28,10 +22,10 @@ fi
 
 rm -rf "$PACKAGE_DIR"
 
-for chart in "$CHARTS_SRC_DIR"/*
+for chart in "$CHARTS_SRC_DIR"/*/
   do
-    echo "Packaging chart $chart with version $TAG_VERSION"
-    helm package "$chart" --version "$TAG_VERSION" --destination "$PACKAGE_DIR"
+    echo "Packaging chart $chart"
+    helm package "$chart" --destination "$PACKAGE_DIR"
   done
 
 echo "Uploading chart packages as Github releases"
@@ -39,8 +33,10 @@ echo "Uploading chart packages as Github releases"
 # repo as Release artifacts. GitHub will create corresponding git tags for each chart.
 docker run --user "$(id -u):$(id -g)" \
   -v "$(pwd)/$PACKAGE_DIR:/releases" \
+  --entrypoint cr \
+  --rm \
   quay.io/helmpack/chart-releaser \
-  cr upload \
+  upload \
   --package-path /releases \
   --owner atlassian-labs \
   --git-repo data-center-helm-charts \
@@ -54,8 +50,10 @@ docker run \
   --user "$(id -u):$(id -g)" \
   -v "$(pwd)/$PUBLISH_DIR:/index" \
   -v "$(pwd)/$PACKAGE_DIR:/packages" \
+  --entrypoint cr \
+  --rm \
   quay.io/helmpack/chart-releaser \
-  cr index \
+  index \
   --owner atlassian-labs \
   --git-repo data-center-helm-charts \
   --charts-repo https://atlassian-labs.github.io/data-center-helm-charts \
