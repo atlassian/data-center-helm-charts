@@ -1,18 +1,21 @@
 ---
 
 master:
+  replicas: 1
   podAnnotations:
     "atlassian.com/business_unit": "server_engineering"
   persistence:
     enabled: false
 
 data:
+  replicas: 1
   podAnnotations:
     "atlassian.com/business_unit": "server_engineering"
   persistence:
     enabled: false
 
 coordinating:
+  replicas: 1
   podAnnotations:
     "atlassian.com/business_unit": "server_engineering"
 
