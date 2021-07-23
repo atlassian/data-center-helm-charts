@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 0.13.0
+version: 0.14.0
 appVersion: 8.13.9-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -19,14 +19,10 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
 deprecated: false
 annotations:
+  artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-    - kind: added
-      description: Added Jira Proxy information to helm chart
+    - kind: security
+      description: Update Jira version to 8.13.9-jdk11
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/202
-    - kind: changed
-      description: Volume docs updates
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
