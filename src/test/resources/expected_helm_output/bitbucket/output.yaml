@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bitbucket-0.13.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.12.1-jdk11"
+    app.kubernetes.io/version: "7.14.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bitbucket-0.13.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.12.1-jdk11"
+    app.kubernetes.io/version: "7.14.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -37,7 +37,7 @@ metadata:
     helm.sh/chart: bitbucket-0.13.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.12.1-jdk11"
+    app.kubernetes.io/version: "7.14.1-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -68,7 +68,7 @@ metadata:
     helm.sh/chart: bitbucket-0.13.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.12.1-jdk11"
+    app.kubernetes.io/version: "7.14.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -105,7 +105,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2003 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket-server:7.12.1-jdk11"
+          image: "atlassian/bitbucket-server:7.14.1-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -177,7 +177,7 @@ metadata:
     helm.sh/chart: bitbucket-0.13.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.12.1-jdk11"
+    app.kubernetes.io/version: "7.14.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -209,7 +209,7 @@ metadata:
     helm.sh/chart: bitbucket-0.13.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.12.1-jdk11"
+    app.kubernetes.io/version: "7.14.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
