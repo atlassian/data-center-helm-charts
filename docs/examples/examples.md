@@ -22,6 +22,9 @@ See examples of local and shared storage:
 * NFS
   * [Implementation of an NFS Server for Bitbucket](storage/nfs/NFS.md)
 
+## Elasticsearch
+* See our [recommendations for Bitbucket Elasticsearch](elasticsearch/BITBUCKET_ELASTICSEARCH.md)
+
 ## Logging
 * See an example of [how to deploy an EFK stack to Kubernetes](logging/efk/EFK.md)
 
