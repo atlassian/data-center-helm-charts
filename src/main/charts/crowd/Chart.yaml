@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 0.13.0
+version: 0.14.0
 appVersion: 4.3.5-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Volume docs updates
+      description: Update Crowd version to 4.3.5-jdk11
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212

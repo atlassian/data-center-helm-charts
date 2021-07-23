@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 0.13.0
+version: 0.14.0
 appVersion: 7.14.1-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -19,13 +19,8 @@ sources:
 deprecated: false
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: Bitbucket NFS server chart
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/205
     - kind: changed
-      description: Volume docs updates
+      description: Update Bitbucket version to 7.14.1-jdk11
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
