@@ -23,4 +23,5 @@ bitbucket:
       requests:
         memory: 3G
 
-
+  elasticSearch:
+    baseUrl: http://${helm.release.prefix}-bitbucket-elasticsearch-master:9200

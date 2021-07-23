@@ -61,6 +61,7 @@ setup() {
   RELEASE_PREFIX="$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')"
   PRODUCT_RELEASE_NAME="$RELEASE_PREFIX-$PRODUCT_NAME"
   POSTGRES_RELEASE_NAME="$PRODUCT_RELEASE_NAME-pgsql"
+  ELASTICSEARCH_RELEASE_NAME="$PRODUCT_RELEASE_NAME-elasticsearch"
   FUNCTEST_RELEASE_NAME="$PRODUCT_RELEASE_NAME-functest"
   HELM_PACKAGE_DIR=target/helm
   [ "$HELM_DEBUG" = "true" ] && HELM_DEBUG_OPTION="--debug"
@@ -132,6 +133,22 @@ bootstrap_database() {
     kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
     kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
   fi
+}
+
+bootstrap_elasticsearch() {
+  echo "Task $((tasknum+=1)) - Bootstrapping Elasticsearch cluster." >&2
+  if ! grep -qi elasticsearch: ${chartValueFiles} /dev/null && ! grep -qi 'elasticsearch[.]' <<<"$EXTRA_PARAMETERS"; then
+      echo "!! No Elasticsearch configuration, skipping"
+      return
+  fi
+
+  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
+     "$ELASTICSEARCH_RELEASE_NAME" \
+     --values "$THISDIR/elasticsearch-values.yaml" \
+     --set image.tag="$ELASTICSEARCH_APP_VERSION" \
+     --version "$ELASTICSEARCH_CHART_VERSION" \
+     $HELM_DEBUG_OPTION \
+     bitnami/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
 # Package the product's Helm chart
@@ -256,6 +273,7 @@ check_for_jq
 setup
 bootstrap_nfs
 bootstrap_database
+bootstrap_elasticsearch
 package_product_helm_chart
 package_functest_helm_chart
 install_product
