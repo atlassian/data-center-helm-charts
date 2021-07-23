@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: crowd/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -40,7 +40,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -66,7 +66,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -168,7 +168,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -199,7 +199,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -236,7 +236,7 @@ metadata:
     helm.sh/chart: crowd-0.13.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "4.3.0-jdk11"
+    app.kubernetes.io/version: "4.3.5-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": pre-install
@@ -249,7 +249,7 @@ spec:
         helm.sh/chart: crowd-0.13.0
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
-        app.kubernetes.io/version: "4.3.0-jdk11"
+        app.kubernetes.io/version: "4.3.5-jdk11"
         app.kubernetes.io/managed-by: Helm
     spec:
       restartPolicy: Never
