@@ -10,7 +10,7 @@ The next section assumes you've followed the [installation](../installation/INST
 For installation troubleshooting, you will need to access the Kubernetes cluster and have enough permissions to follow the commands below.
 
 We highly recommend that you read through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/). 
-For great starting tips read [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/).
+For great starting tips read the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/).
 
 >Note: some commands include `RELEASE_NAME` and `NAMESPACE`. Replace them with the Helm release name and namespace specified when running `helm install`.
 
