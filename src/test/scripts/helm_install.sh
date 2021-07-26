@@ -141,10 +141,11 @@ bootstrap_elasticsearch() {
       echo "!! No Elasticsearch configuration, skipping"
       return
   fi
+  ES_CHART_VALUES="$THISDIR/../infrastructure/elasticsearch/elasticsearch-values.yaml"
 
   helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
      "$ELASTICSEARCH_RELEASE_NAME" \
-     --values "$THISDIR/elasticsearch-values.yaml" \
+     --values $ES_CHART_VALUES \
      --set image.tag="$ELASTICSEARCH_APP_VERSION" \
      --version "$ELASTICSEARCH_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
