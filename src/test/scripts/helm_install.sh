@@ -117,9 +117,10 @@ bootstrap_database() {
   # Use the product name for the name of the postgres database, username, and password.
   # These must match the credentials stored in the Secret preloaded into the namespace,
   # which the application will use to connect to the database.
+  PSQL_CHART_VALUES="$THISDIR/../infrastructure/postgres/postgres-values.yaml"
   helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
      "$POSTGRES_RELEASE_NAME" \
-     --values "$THISDIR/postgres-values.yaml" \
+     --values $PSQL_CHART_VALUES \
      --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
      --set image.tag="$POSTGRES_APP_VERSION" \
      --set postgresqlDatabase="$DB_NAME" \
@@ -141,10 +142,11 @@ bootstrap_elasticsearch() {
       echo "!! No Elasticsearch configuration, skipping"
       return
   fi
+  ES_CHART_VALUES="$THISDIR/../infrastructure/elasticsearch/elasticsearch-values.yaml"
 
   helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
      "$ELASTICSEARCH_RELEASE_NAME" \
-     --values "$THISDIR/elasticsearch-values.yaml" \
+     --values $ES_CHART_VALUES \
      --set image.tag="$ELASTICSEARCH_APP_VERSION" \
      --version "$ELASTICSEARCH_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
