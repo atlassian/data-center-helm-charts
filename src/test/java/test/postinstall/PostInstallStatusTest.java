@@ -13,8 +13,9 @@ import org.assertj.core.description.LazyTextDescription;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
+import test.model.Product;
 
-import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,10 @@ import static test.postinstall.Utils.*;
 
 class PostInstallStatusTest {
     private static final KubeClient client = new KubeClient();
+
+    static boolean isBitbucket() {
+        return productIs(Product.bitbucket);
+    }
 
     @Test
     void applicationPodsShouldAllBeRunning() {
@@ -76,9 +81,32 @@ class PostInstallStatusTest {
         });
     }
 
-    private void forEachPodOfStatefulSet(Consumer<Pod> consumer) {
-        final var statefulSet = getStatefulSet();
+    @Test
+    @EnabledIf("isBitbucket")
+    void elasticSearchIsRunning() {
+        var esSetName = getRelease() + "-" + "elasticsearch-master";
+        forEachPodOfStatefulSet(esSetName, pod -> {
+            final var podPhase = pod.getStatus().getPhase();
 
+            // First assert that the phase is not "pending", and if so we show a special failure message
+            assertThat(podPhase)
+                    .describedAs(schedulingFailure(pod))
+                    .isNotEqualToIgnoringCase("pending");
+
+            // otherwise assert that the pod is running
+            assertThat(podPhase)
+                    .describedAs("Pod %s should be running", pod.getMetadata().getName())
+                    .isEqualToIgnoringCase("Running");
+        });
+
+    }
+
+    private void forEachPodOfStatefulSet(Consumer<Pod> consumer) {
+        forEachPodOfStatefulSet(getRelease(), consumer);
+    }
+
+    private void forEachPodOfStatefulSet(String statefulSetName, Consumer<Pod> consumer) {
+        final var statefulSet = getStatefulSet(statefulSetName);
         final var replicaCount = statefulSet.getStatus().getReplicas();
 
         for (var idx = 0; idx < replicaCount; idx++) {
@@ -87,7 +115,10 @@ class PostInstallStatusTest {
     }
 
     StatefulSet getStatefulSet() {
-        final var statefulSetName = getRelease();
+        return getStatefulSet(getRelease());
+    }
+
+    StatefulSet getStatefulSet(String statefulSetName) {
         final var statefulSet = client.getStatefulSet(statefulSetName, getNS());
 
         assertThat(statefulSet)

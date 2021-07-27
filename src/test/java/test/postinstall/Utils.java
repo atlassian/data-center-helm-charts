@@ -103,4 +103,13 @@ final class Utils {
         return helmParameters.get().get("release").get();
     }
 
+    static Product getProduct() {
+        var str = helmParameters.get().get("product").get();
+        return Product.valueOf(str);
+    }
+
+    static boolean productIs(Product product) {
+        return product == getProduct();
+    }
+
 }
