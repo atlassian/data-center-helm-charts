@@ -129,8 +129,6 @@ class PostInstallStatusTest {
 
     @BeforeAll
     static void configure() throws Exception {
-        loadHelmParameters();
-
         assumeThat(getRelease())
                 .describedAs("Cannot run test without Helm release name")
                 .isNotEmpty();

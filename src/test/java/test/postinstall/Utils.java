@@ -14,8 +14,6 @@ import test.model.Product;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.fabric8.kubernetes.api.model.Quantity.getAmountInBytes;
@@ -65,33 +63,35 @@ final class Utils {
         return Tuple.of(node.getMetadata().getName(), description);
     }
 
-    private static AtomicReference<Map<String, String>> helmParameters = new AtomicReference<>();
-    static void loadHelmParameters() throws IOException {
-        final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
-        if (helmParametersFileLocation != null) {
-            final var fileParameters = Utils.readPropertiesFile(Path.of(helmParametersFileLocation));
+    private final static AtomicReference<Map<String, String>> helmParameters = new AtomicReference<>(loadHelmParameters());
+    private static Map<String, String> loadHelmParameters() {
+        try {
+            final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
+            if (helmParametersFileLocation != null) {
+                final var fileParameters = Utils.readPropertiesFile(Path.of(helmParametersFileLocation));
 
-            var productName = fileParameters.get("PRODUCT_NAME").get();
-            var prefix = fileParameters.get("RELEASE_PREFIX").get();
-            var ns = fileParameters.get("TARGET_NAMESPACE").get();
-            var helmReleaseName = Array.of(prefix, productName).mkString("-");
+                final var productName = fileParameters.get("PRODUCT_NAME").get();
+                var prefix = fileParameters.get("RELEASE_PREFIX").get();
+                var ns = fileParameters.get("TARGET_NAMESPACE").get();
+                var helmReleaseName = Array.of(prefix, productName).mkString("-");
 
-            var params = HashMap.of(
-                    "product", productName,
-                    "prefix", prefix,
-                    "release", helmReleaseName,
-                    "ns", ns
-            );
-            helmParameters.set(params);
+                return HashMap.of(
+                        "product", productName,
+                        "prefix", prefix,
+                        "release", helmReleaseName,
+                        "ns", ns
+                );
 
-        } else {
-            var params = HashMap.of(
-                    "product", System.getProperty("helmProduct"),
-                    "prefix", System.getProperty("helmProduct"),
-                    "release", System.getProperty("helmRelease"),
-                    "ns", System.getProperty("namespace")
-            );
-            helmParameters.set(params);
+            } else {
+                return HashMap.of(
+                        "product", System.getProperty("helmProduct"),
+                        "prefix", System.getProperty("helmProduct"),
+                        "release", System.getProperty("helmRelease"),
+                        "ns", System.getProperty("namespace")
+                );
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -104,7 +104,7 @@ final class Utils {
     }
 
     static Product getProduct() {
-        var str = helmParameters.get().get("product").get();
+        final var str = helmParameters.get().get("product").get();
         return Product.valueOf(str);
     }
 
