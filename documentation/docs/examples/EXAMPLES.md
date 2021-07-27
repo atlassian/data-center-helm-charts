@@ -1,6 +1,7 @@
 # Examples 
 
-Use the examples we provide as reference only, we don’t offer official support for them. 
+!!!warning "Support disclaimer"
+    Use the examples we provide as reference only, we don’t offer official support for them. 
 
 ## Kubernetes clusters 
 See examples of provisioning Kubernetes clusters on cloud-based providers:

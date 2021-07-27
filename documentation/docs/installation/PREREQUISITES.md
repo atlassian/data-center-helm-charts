@@ -3,21 +3,20 @@
 
 In order to deploy Atlassian’s Data Center products, the following is required:
 
-1. An understanding of Kubernetes and Helm concepts
-2. A Kubernetes cluster, running Kubernetes 1.19 or later
-3. kubectl 1.19 or later, must be compatible with your cluster
-4. Helm v 3.3 or later
+!!!example "Required tools"
+      1. An understanding of Kubernetes and Helm concepts
+      2. A Kubernetes cluster, running Kubernetes 1.19 or later
+      3. kubectl 1.19 or later, must be compatible with your cluster
+      4. Helm v 3.3 or later
 
 ## Environment setup 
 
 Before installing the Data Center Helm charts you need to set up your environment:
 
-
-
 ### Install tools 
 
-1. [Install Helm](https://helm.sh/docs/intro/install/)
-2. [Install kubectl](https://kubernetes.io/docs/tasks/tools/)
+1. [Install Helm](https://helm.sh/docs/intro/install/){.external}
+2. [Install kubectl](https://kubernetes.io/docs/tasks/tools/){.external}
 
 ### Create and connect to the Kubernetes cluster
 
@@ -38,10 +37,17 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 * See an example of [provisioning databases on cloud-based providers](../examples/database/CLOUD_PROVIDERS.md).
 * Must be of a type and version supported by the Data Center product you wish to install:
-      1. [Confluence supported databases](https://confluence.atlassian.com/doc/supported-platforms-207488198.html#SupportedPlatforms-Databases)
-      2. [Jira supported databases](https://confluence.atlassian.com/adminjiraserver/supported-platforms-938846830.html#Supportedplatforms-Databases)
-      3. [Bitbucket supported databases](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-databasesDatabases)
-      4. [Crowd supported databases](https://confluence.atlassian.com/crowd/supported-platforms-191851.html#SupportedPlatforms-Databases)
+  
+=== "Jira"
+      [Supported databases](https://confluence.atlassian.com/adminjiraserver/supported-platforms-938846830.html#Supportedplatforms-Databases)
+=== "Confluence"
+      [Supported databases](https://confluence.atlassian.com/doc/supported-platforms-207488198.html#SupportedPlatforms-Databases)
+=== "Bitbucket"
+      [Supported databases](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-databasesDatabases)
+=== "Crowd"
+      [Supported databases](https://confluence.atlassian.com/crowd/supported-platforms-191851.html#SupportedPlatforms-Databases)
+
+
 * Must be reachable from the product deployed within your Kubernetes cluster. 
 * The database service may be deployed within the same Kubernetes cluster as the Data Center product or elsewhere.
 * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information go to the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).

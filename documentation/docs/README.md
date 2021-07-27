@@ -20,7 +20,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
     stabilized.
     
-    Also, we **don’t officially support** the functionality described in the [examples](examples/examples.md) or the documented [platforms](PLATFORMS.md). You should use them for reference only. 
+    Also, we **don’t officially support** the functionality described in the [examples](examples/EXAMPLES.md) or the documented [platforms](platforms/PLATFORMS.md). You should use them for reference only. 
 
 ## Architecture
 
@@ -37,8 +37,8 @@ The diagram below provides a high level overview of what a typical deployment mi
 
 * [Operation](operations/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
 * [Configuration](installation/CONFIGURATION.md) - a deep dive into the configuration parameters
-* [Platforms support](PLATFORMS.md) - how to allow support for different platforms
-* [Examples](examples/examples.md) - various configuration examples
+* [Platforms support](platforms/PLATFORMS.md) - how to allow support for different platforms
+* [Examples](examples/EXAMPLES.md) - various configuration examples
 
 ## Feedback
 

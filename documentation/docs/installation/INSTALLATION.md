@@ -7,31 +7,37 @@ Follow these instructions to install your Atlassian product using the Helm chart
 Add the Helm chart repository to your local Helm installation:
 
 ```shell
-helm repo add atlassian-data-center https://atlassian-labs.github.io/data-center-helm-charts
+helm repo add atlassian-data-center \
+ https://atlassian-labs.github.io/data-center-helm-charts
 ```
+
 Update the repo:
-```shell:
+
+```shell
 helm repo update
 ```
 
 ## 2. Obtain `values.yaml`
 
 Obtain the default product `values.yaml` file from the chart:
+
 ```shell
 helm show values atlassian-data-center/<product> > values.yaml
 ```
 
 ## 3. Configure database
-Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
+Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
 
 > By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
 
 Create a Kubernetes secret to store the connectivity details of the database:
+
 ```shell
 kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
 ``` 
 
 Using the Kubernetes secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` file for additional details on how to configure the remaining database values:
+
 ```yaml
 database:
   type: <db_type>
@@ -42,6 +48,7 @@ database:
     usernameSecretKey: username
     passwordSecretKey: password
 ```
+
 > For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#Database-connectivity).
 
 > Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
@@ -61,11 +68,13 @@ ingress:
   https: true
   tlsSecretName: <tls_certificate_name>
 ```
+
 > For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#Ingress). 
 
 > See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
+
 Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the `shared-home` that was provisioned as part of the [Prerequisites](PREREQUISITES.md). See [shared home example](../examples/storage/aws/SHARED_STORAGE.md).
 
 ```yaml
@@ -91,16 +100,22 @@ volumes:
 > **NOTE:** Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
     
 ## 6. Configure license and sysadmin credentials for Bitbucket
+
 Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#Obtain-values.yaml).
 Create a Kubernetes secret to hold the Bitbucket license:
+
 ```shell
 kubectl create secret generic <license_secret_name> --from-literal=license-key='<bitbucket_license_key>'
 ```
+
 Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
+
 ```shell
 kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
 ```
+
 Update the `values.yaml` file with the secrets:
+
 ```yaml
 license:
   secretName: <secret_name>
@@ -117,7 +132,11 @@ sysadminCredentials:
 ## 7. Install your chosen product
 
 ```shell
-helm install <release-name> atlassian-data-center/<product> --namespace <namespace> --version <chart-version> --values values.yaml
+helm install <release-name> \
+             atlassian-data-center/<product> \
+             --namespace <namespace> \
+             --version <chart-version> \
+             --values values.yaml
 ```
 
 * `<release-name>` is the name of your deployment and is up to you, or you can use `--generate-name`.
@@ -130,6 +149,7 @@ helm install <release-name> atlassian-data-center/<product> --namespace <namespa
 ## 8. Test your deployed product 
 
 Make sure the service pod/s are running, then test your deployed product:
+
 ```shell
 helm test <release-name> --logs --namespace <namespace>
 ```
@@ -142,6 +162,7 @@ helm test <release-name> --logs --namespace <namespace>
 Using the service URL provided by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 
 # Uninstall  
+
 ```shell
 helm uninstall <release-name> atlassian-data-center/<product>
 ```

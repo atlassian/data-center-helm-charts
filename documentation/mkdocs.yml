@@ -5,14 +5,12 @@ theme:
   logo: assets/images/atlassian-logo.svg
   palette:
     - scheme: default
-      primary: deep purple
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/lightbulb-outline
         name: Switch to dark mode
     - scheme: slate
-      accent: yellow
       toggle:
-        icon: material/toggle-switch
+        icon: material/lightbulb
         name: Switch to light mode
   features:
     - header.autohide

@@ -1,4 +1,4 @@
-# Logging in a Kubernetes environment - EFK Stack
+# Logging in a Kubernetes environment
 
 !!!warning Disclaimer
     **This functionality is not officially supported.** This document explains how to enable aggregated logging in your Kubernetes cluster. There are many ways to do this and this document showcases only a few of the options.
@@ -94,7 +94,7 @@ $ kubectl port-forward deployment/kibana-kibana 5601
 ```
 You can access Kibana via the browser: http://localhost:5601. To visualise the logs you need to create an index pattern and then look at the the data in the discovery part. To create the index pattern go to `Management` → `Stack Management` and then select `Kibana` → `Index Patterns`. 
 
-## EFK using managed AWS Elasticsearch - (AWS EKS and ES).
+## Managed Elasticsearch in AWS
 
 In this solution Elasticsearch deploys as a managed service and lives outside of the Kubernetes cluster. For this purpose use Fluent Bit instead of Fluentd for local deployment of EFK. 
 

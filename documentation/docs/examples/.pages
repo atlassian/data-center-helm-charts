@@ -1,0 +1,11 @@
+collapse_single_pages: true
+nav:
+    - EXAMPLES.md
+    - Kubernetes Cluster: cluster
+    - database
+    - ingress
+    - storage
+    - SSH (Bitbucket): ssh
+    - Elasticsearch (Bitbucket): elasticsearch
+    - logging
+    - ...
