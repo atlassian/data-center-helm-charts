@@ -9,10 +9,14 @@ import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import io.vavr.control.Option;
+import test.model.Product;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static io.fabric8.kubernetes.api.model.Quantity.getAmountInBytes;
 import static java.nio.file.Files.newBufferedReader;
@@ -60,4 +64,43 @@ final class Utils {
 
         return Tuple.of(node.getMetadata().getName(), description);
     }
+
+    private static AtomicReference<Map<String, String>> helmParameters = new AtomicReference<>();
+    static void loadHelmParameters() throws IOException {
+        final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
+        if (helmParametersFileLocation != null) {
+            final var fileParameters = Utils.readPropertiesFile(Path.of(helmParametersFileLocation));
+
+            var productName = fileParameters.get("PRODUCT_NAME").get();
+            var prefix = fileParameters.get("RELEASE_PREFIX").get();
+            var ns = fileParameters.get("TARGET_NAMESPACE").get();
+            var helmReleaseName = Array.of(prefix, productName).mkString("-");
+
+            var params = HashMap.of(
+                    "product", productName,
+                    "prefix", prefix,
+                    "release", helmReleaseName,
+                    "ns", ns
+            );
+            helmParameters.set(params);
+
+        } else {
+            var params = HashMap.of(
+                    "product", System.getProperty("helmProduct"),
+                    "prefix", System.getProperty("helmProduct"),
+                    "release", System.getProperty("helmRelease"),
+                    "ns", System.getProperty("namespace")
+            );
+            helmParameters.set(params);
+        }
+    }
+
+    static String getNS() {
+        return helmParameters.get().get("ns").get();
+    }
+
+    static String getRelease() {
+        return helmParameters.get().get("release").get();
+    }
+
 }

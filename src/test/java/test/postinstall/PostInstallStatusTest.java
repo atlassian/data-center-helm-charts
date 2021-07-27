@@ -19,12 +19,9 @@ import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
-import static test.postinstall.Utils.netNodesResourceSummary;
+import static test.postinstall.Utils.*;
 
 class PostInstallStatusTest {
-    private static String helmReleaseName;
-    private static String namespaceName;
-
     private static final KubeClient client = new KubeClient();
 
     @Test
@@ -85,13 +82,13 @@ class PostInstallStatusTest {
         final var replicaCount = statefulSet.getStatus().getReplicas();
 
         for (var idx = 0; idx < replicaCount; idx++) {
-            consumer.accept(client.getPod(statefulSet.getMetadata().getName() + "-" + idx, namespaceName));
+            consumer.accept(client.getPod(statefulSet.getMetadata().getName() + "-" + idx, getNS()));
         }
     }
 
     StatefulSet getStatefulSet() {
-        final var statefulSetName = helmReleaseName;
-        final var statefulSet = client.getStatefulSet(statefulSetName, namespaceName);
+        final var statefulSetName = getRelease();
+        final var statefulSet = client.getStatefulSet(statefulSetName, getNS());
 
         assertThat(statefulSet)
                 .describedAs("StatefulSet %s not found", statefulSetName)
@@ -101,26 +98,12 @@ class PostInstallStatusTest {
 
     @BeforeAll
     static void configure() throws Exception {
-        final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
-        if (helmParametersFileLocation != null) {
-            final var helmParameters = Utils.readPropertiesFile(Path.of(helmParametersFileLocation));
+        loadHelmParameters();
 
-            helmReleaseName = Array.empty()
-                    .appendAll(helmParameters.get("RELEASE_PREFIX"))
-                    .appendAll(helmParameters.get("PRODUCT_NAME"))
-                    .mkString("-");
-            namespaceName = Array.empty()
-                    .appendAll(helmParameters.get("TARGET_NAMESPACE"))
-                    .mkString();
-        } else {
-            helmReleaseName = System.getProperty("helmRelease");
-            namespaceName = System.getProperty("namespace");
-        }
-
-        assumeThat(helmReleaseName)
+        assumeThat(getRelease())
                 .describedAs("Cannot run test without Helm release name")
                 .isNotEmpty();
-        assumeThat(namespaceName)
+        assumeThat(getNS())
                 .describedAs("Cannot run test without namespace name")
                 .isNotEmpty();
     }
