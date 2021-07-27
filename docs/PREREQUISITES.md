@@ -11,7 +11,7 @@ In order to deploy Atlassian’s Data Center products, the following is required
 
 Before installing the Data Center Helm charts you need to set up your environment:
 
-1. Install tools 
+1. Install tools
    1. [Install Helm](https://helm.sh/docs/intro/install/)
    2. [Install kubectl](https://kubernetes.io/docs/tasks/tools/)
    

@@ -1,0 +1,5 @@
+a[target="_blank"]::after, a.external::after {
+  content: url("../../icons/link_external.svg");
+  margin: 0 2px 0 2px;
+  vertical-align: super;
+}

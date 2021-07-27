@@ -1,0 +1,45 @@
+site_name: Atlassian DC Helm Charts
+theme:
+  name: material
+  favicon: assets/images/favicon.png
+  logo: assets/images/atlassian-logo.svg
+  palette:
+    - scheme: default
+      primary: deep purple
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      accent: yellow
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - header.autohide
+    - search.suggest
+    - search.highlight
+    - navigation.instant
+    - navigation.tabs
+#  icon:
+#    repo: fontawesome/brands/github
+repo_url: https://github.com/atlassian-labs/data-center-helm-charts
+repo_name: atlassian-labs/data-center-helm-charts
+plugins:
+#  - git-revision-date
+  - search
+  - awesome-pages
+  - minify:
+      minify_html: true
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - meta
+  - admonition
+  - attr_list
+  - toc:
+      # insert a blank space before the character
+      permalink: " ¶"
+extra_css:
+  - assets/stylesheets/extra.css
