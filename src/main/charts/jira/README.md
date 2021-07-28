@@ -37,7 +37,7 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.elasticsearch.enabled | bool | `true` | Set to 'true' if Fluentd should send all log events to an Elasticsearch service. |
 | fluentd.elasticsearch.hostname | string | `"elasticsearch"` | The hostname of the Elasticsearch service that Fluentd should send logs to. |
 | fluentd.elasticsearch.indexNamePrefix | string | `"jira"` | The prefix of the Elasticsearch index name that will be used |
-| fluentd.enabled | bool | `true` | Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod |
+| fluentd.enabled | bool | `false` | Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod |
 | fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to Fluentd container (e.g. more log sources) |
 | fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file |
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen |

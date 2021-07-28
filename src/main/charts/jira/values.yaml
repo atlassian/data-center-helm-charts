@@ -551,7 +551,7 @@ fluentd:
 
   # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   #
-  enabled: true
+  enabled: false
   
   # -- The Fluentd sidecar image
   #
