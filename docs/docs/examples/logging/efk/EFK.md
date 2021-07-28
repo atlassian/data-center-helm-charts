@@ -3,7 +3,7 @@
 !!!warning Disclaimer
     **This functionality is not officially supported.** This document explains how to enable aggregated logging in your Kubernetes cluster. There are many ways to do this and this document showcases only a few of the options.
 
-## EFK Stack
+## EFK stack
 
 A common Kubernetes logging pattern is the combination of ***Elasticsearch***, ***Fluentd***, and ***Kibana***, known as *EFK Stack*. 
 

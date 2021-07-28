@@ -1,4 +1,4 @@
-# Bitbucket Rolling Upgrade
+# Bitbucket rolling upgrade
 Let's say we have Bitbucket version `7.6.0` deployed to our Kubernetes cluster, and we want to upgrade it to version
 `7.6.1`, which we'll call the *target version*. You can substitute the target version for the one you need, as long as
 it's newer than the current one.
