@@ -256,7 +256,7 @@ volumes:
       # can write to it. This is a workaround for a K8s bug affecting NFS volumes: 
       # https://github.com/kubernetes/examples/issues/260
       #
-      enabled: false
+      enabled: true
       
       # -- The path in the K8s initContainer where the shared-home volume will be mounted
       #
@@ -482,11 +482,11 @@ jira:
       
         # -- Initial CPU request by Jira pod
         #
-        cpu: "2" # If changing the cpu value update 'ActiveProcessorCount' below
+        cpu: "1" # If changing the cpu value update 'ActiveProcessorCount' below
         
         # -- Initial Memory request by Jira pod
         #
-        memory: "2G"
+        memory: "1G"
       #  limits:
       #    cpu: "2"
       #    memory: "2G"
@@ -547,11 +547,16 @@ fluentd:
 
   # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   #
-  enabled: false
+  enabled: true
   
   # -- The Fluentd sidecar image
   #
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+
+  # -- The command used to start fluentd. If not supplied the default command 
+  # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
+  #
+  command:
   
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) 
   # should be used for Fluentd. If enabled this config must supplied via the 

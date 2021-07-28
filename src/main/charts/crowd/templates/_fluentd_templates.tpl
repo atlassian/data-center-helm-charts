@@ -2,7 +2,7 @@
 {{ if .Values.fluentd.enabled }}
 - name: fluentd
   image: {{ .Values.fluentd.imageName }}
-  command: ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-v"]
+  command: ["sh", "-c", {{ include "fluentd.start.command" . | quote }}]
   ports:
     - containerPort: {{ .Values.fluentd.httpPort }}
       protocol: TCP
