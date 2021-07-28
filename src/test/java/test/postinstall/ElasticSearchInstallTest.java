@@ -33,7 +33,8 @@ class ElasticSearchInstallTest {
     private static final KubeClient client = new KubeClient();
 
     // See helm_install.sh for where this host is generated.
-    static final String esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0.kube.deplops.com";
+    static final String ingressDomain = getIngressDomain(client.getClusterType());
+    static final String esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0."+ingressDomain;
 
 
     @Test

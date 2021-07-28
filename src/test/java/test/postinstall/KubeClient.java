@@ -15,6 +15,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import test.model.ClusterType;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -28,6 +29,19 @@ final class KubeClient implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(KubeClient.class);
 
     private final Lazy<KubernetesClient> clientRef = Lazy.of(DefaultKubernetesClient::new);
+
+    ClusterType getClusterType() {
+        final var host = client().getMasterUrl().getHost();
+        if (host.contains("eks.amazonaws.com")) {
+            return ClusterType.EKS;
+        } else if (host.contains("azmk8s.io")) {
+            return ClusterType.AKS;
+        } else if (host.contains("kitt-inf.net")) {
+            return ClusterType.KITT;
+        } else {
+            return ClusterType.UNKNOWN;
+        }
+    }
 
     io.vavr.collection.Map<Node, Option<NodeMetrics>> getNodeMetrics(final PodSpec podSpec) {
         return getNodes(podSpec.getNodeSelector())

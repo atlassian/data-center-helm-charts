@@ -9,6 +9,7 @@ import io.vavr.collection.Array;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import io.vavr.control.Option;
+import test.model.ClusterType;
 import test.model.Product;
 
 import java.io.IOException;
@@ -21,6 +22,12 @@ import static java.nio.file.Files.newBufferedReader;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 
 final class Utils {
+
+    static Map<String, String> readPropertiesFile() throws IOException {
+        final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
+        return Utils.readPropertiesFile(Path.of(helmParametersFileLocation));
+    }
+
     static Map<String, String> readPropertiesFile(final Path fileLocation) throws IOException {
         final var properties = new Properties();
         try (var reader = newBufferedReader(fileLocation)) {
@@ -112,4 +119,12 @@ final class Utils {
         return product == getProduct();
     }
 
+    static String getIngressDomain(ClusterType cluster) {
+        try {
+            var props = readPropertiesFile();
+            return props.get("INGRESS_DOMAIN_"+cluster.name()).get();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
