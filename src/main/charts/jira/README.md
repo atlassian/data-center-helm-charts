@@ -69,8 +69,8 @@ Kubernetes: `>=1.19.x-0`
 | jira.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Jira container readiness probe  before the pod fails readiness checks. |
 | jira.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Jira container readiness probe,  after which the probe will start running. |
 | jira.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Jira container readiness probe will run |
-| jira.resources.container.requests.cpu | string | `"1"` | Initial CPU request by Jira pod |
-| jira.resources.container.requests.memory | string | `"1G"` | Initial Memory request by Jira pod |
+| jira.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Jira pod |
+| jira.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Jira pod |
 | jira.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Jira JVM |
 | jira.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Jira JVM |
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache |
@@ -95,7 +95,7 @@ Kubernetes: `>=1.19.x-0`
 | volumes.sharedHome.customVolume | object | `{}` | Static provisioning of shared-home using K8s PVs and PVCs When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the shared-home volume. If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md |
 | volumes.sharedHome.mountPath | string | `"/var/atlassian/application-data/shared-home"` | Specifies the path in the Jira container to which the shared-home volume will be  mounted. |
 | volumes.sharedHome.nfsPermissionFixer.command | string | `nil` | By default, the fixer will change the group ownership of the volume's root directory  to match the Jira container's GID (2001), and then ensures the directory is  group-writeable. If this is not the desired behaviour, command used can be specified  here. |
-| volumes.sharedHome.nfsPermissionFixer.enabled | bool | `true` | If 'true', this will alter the shared-home volume's root directory so that Jira  can write to it. This is a workaround for a K8s bug affecting NFS volumes:  https://github.com/kubernetes/examples/issues/260 |
+| volumes.sharedHome.nfsPermissionFixer.enabled | bool | `false` | If 'true', this will alter the shared-home volume's root directory so that Jira  can write to it. This is a workaround for a K8s bug affecting NFS volumes:  https://github.com/kubernetes/examples/issues/260 |
 | volumes.sharedHome.nfsPermissionFixer.mountPath | string | `"/shared-home"` | The path in the K8s initContainer where the shared-home volume will be mounted |
 | volumes.sharedHome.persistentVolumeClaim.create | bool | `false` | If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically  created for shared-home based on the 'StorageClassName' supplied below. |
 | volumes.sharedHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard K8s resource requests and/or limits for the shared-home  volume claims. |
