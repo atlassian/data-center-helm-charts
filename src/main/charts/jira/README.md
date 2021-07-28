@@ -76,6 +76,7 @@ Kubernetes: `>=1.19.x-0`
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache |
 | jira.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
 | jira.securityContext.gid | string | `"2001"` | The GID used by the Jira docker image |
+| jira.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | jira.service.contextPath | string | `nil` | The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | jira.service.port | int | `80` | The port on which the Jira K8s Service will listen |
 | jira.service.type | string | `"ClusterIP"` | The type of K8s service to use for Jira |
@@ -88,7 +89,7 @@ Kubernetes: `>=1.19.x-0`
 | tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Jira pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Jira pods. Note that this will not create any corresponding volume mounts; those needs to be defined in jira.additionalVolumeMounts |
 | volumes.localHome.customVolume | object | `{}` | Static provisioning of local-home using K8s PVs and PVCs NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for  pods is not recommended. Dynamic provisioning described above is the prescribed approach. When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the local-home volume(s). If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static |
-| volumes.localHome.mountPath | string | `"/var/atlassian/application-data/jira"` | Specifies the path in the Jira container to which the local-home volume will be  mounted. |
+| volumes.localHome.mountPath | string | `"/var/atlassian/application-data/jira"` | Specifies the path in the Jira container to which the local-home volume will be mounted. |
 | volumes.localHome.persistentVolumeClaim.create | bool | `false` | If 'true', then a 'PersistentVolume' and 'PersistentVolumeClaim' will be dynamically  created for each pod based on the 'StorageClassName' supplied below.           |
 | volumes.localHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard K8s resource requests and/or limits for the local-home  volume claims. |
 | volumes.localHome.persistentVolumeClaim.storageClassName | string | `nil` | Specify the name of the 'StorageClass' that should be used for the local-home  volume claim. |

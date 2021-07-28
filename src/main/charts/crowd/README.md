@@ -48,6 +48,7 @@ Kubernetes: `>=1.19.x-0`
 | crowd.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Crowd JVM |
 | crowd.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
 | crowd.securityContext.gid | string | `"2004"` | The GID used by the Crowd docker image |
+| crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen |
 | crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd |
 | crowd.umask | string | `"0022"` | The umask used by the Crowd process when it creates new files. The default is 0022. This gives the new files:  - read/write permissions for the Crowd user  - read permissions for everyone else. |

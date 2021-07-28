@@ -41,6 +41,7 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "8.13.9-jdk11"
     app.kubernetes.io/managed-by: Helm
+  annotations:
 spec:
   type: ClusterIP
   ports:

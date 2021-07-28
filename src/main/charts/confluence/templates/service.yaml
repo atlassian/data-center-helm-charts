@@ -4,6 +4,10 @@ metadata:
   name: {{ include "confluence.fullname" . }}
   labels:
     {{- include "confluence.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.confluence.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.confluence.service.type }}
   ports:

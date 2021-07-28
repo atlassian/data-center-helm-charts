@@ -191,7 +191,7 @@ volumes:
     # persistentVolumeClaim:
     #   claimName: "<pvc>" 
     
-    # -- Specifies the path in the Jira container to which the local-home volume will be 
+    # -- Specifies the path in the Jira container to which the local-home volume will be
     # mounted.
     #
     mountPath: "/var/atlassian/application-data/jira"
@@ -358,6 +358,10 @@ jira:
     # will be set automatically.
     #
     contextPath:
+
+    # -- Additional annotations to apply to the Service
+    #
+    annotations: {}
     
   # Enable or disable security context in StatefulSet template spec. Enabled 
   # by default with UID 2001. Disable when deploying to OpenShift, unless anyuid 
