@@ -63,7 +63,7 @@ final class Utils {
         return Tuple.of(node.getMetadata().getName(), description);
     }
 
-    private final static AtomicReference<Map<String, String>> helmParameters = new AtomicReference<>(loadHelmParameters());
+    private final static Map<String, String> helmParameters = loadHelmParameters();
     private static Map<String, String> loadHelmParameters() {
         try {
             final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
@@ -96,15 +96,15 @@ final class Utils {
     }
 
     static String getNS() {
-        return helmParameters.get().get("ns").get();
+        return helmParameters.get("ns").get();
     }
 
     static String getRelease() {
-        return helmParameters.get().get("release").get();
+        return helmParameters.get("release").get();
     }
 
     static Product getProduct() {
-        final var str = helmParameters.get().get("product").get();
+        final var str = helmParameters.get("product").get();
         return Product.valueOf(str);
     }
 
