@@ -554,9 +554,9 @@ fluentd:
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
 
   # -- The command used to start fluentd. If not supplied the default command 
-  # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
+  # will be used: "fluentd -c /fluentd/etc/fluent.conf -v "
   #
-  command:
+  command: 
   
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) 
   # should be used for Fluentd. If enabled this config must supplied via the 
