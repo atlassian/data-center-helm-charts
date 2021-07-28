@@ -13,6 +13,7 @@ import test.model.ClusterType;
 import test.model.Product;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
@@ -124,7 +125,7 @@ final class Utils {
             var props = readPropertiesFile();
             return props.get("INGRESS_DOMAIN_"+cluster.name()).get();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 }
