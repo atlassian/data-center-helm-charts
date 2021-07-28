@@ -2,4 +2,4 @@
 target
 *.iml
 \#*\#
-documentation/site
+docs/site
