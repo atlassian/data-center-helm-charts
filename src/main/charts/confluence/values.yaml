@@ -27,7 +27,7 @@
 #
 replicaCount: 1
 
-# Image configuration 
+# Image configuration
 #
 image:
 
@@ -376,6 +376,10 @@ confluence:
     # will be set automatically.
     #
     contextPath:
+
+    # -- Additional annotations to apply to the Service
+    #
+    annotations: {}
   
   # Enable or disable security context in StatefulSet template spec. Enabled 
   # by default with UID 2002. Disable when deploying to OpenShift, unless anyuid 

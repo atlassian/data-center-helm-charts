@@ -116,6 +116,10 @@ crowd:
     #
     type: ClusterIP
 
+    # -- Additional annotations to apply to the Service
+    #
+    annotations: {}
+
   # Enable or disable security context in StatefulSet template spec. Enabled
   # by default with UID 2002. Disable when deploying to OpenShift, unless anyuid
   # policy is attached to a service account.

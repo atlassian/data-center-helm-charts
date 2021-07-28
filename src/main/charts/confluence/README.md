@@ -52,6 +52,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.resources.jvm.reservedCodeCache | string | `"256m"` | The memory reserved for the Confluence JVM code cache |
 | confluence.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
 | confluence.securityContext.gid | string | `"2002"` | The GID used by the Confluence docker image |
+| confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen |
 | confluence.service.type | string | `"ClusterIP"` | The type of K8s service to use for Confluence |
