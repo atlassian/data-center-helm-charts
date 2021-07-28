@@ -1,8 +1,8 @@
 site_name: Atlassian DC Helm Charts
 theme:
   name: material
-  favicon: assets/images/favicon.png
-  logo: assets/images/atlassian-logo.svg
+  favicon: assets/logos/favicon.png
+  logo: assets/logos/atlassian-logo.svg
   palette:
     - scheme: default
       toggle:
