@@ -5,8 +5,3 @@
 ## Platforms
 
 * [OpenShift](OPENSHIFT.md)
-
-***
-* Go back to the [installation guide](../installation/INSTALLATION.md)
-* Dive deeper into the [configuration](../installation/CONFIGURATION.md) options
-* Go back to [README.md](../README.md)

@@ -169,10 +169,3 @@ helm uninstall <release-name> atlassian-data-center/<product>
 
 * `<release-name>` is the name you chose for your deployment
 * `<product>` can be jira, confluence, bitbucket, or crowd
-
-***
-
-* Continue to the [operation guide](../operations/OPERATION.md)
-* Go back to the [prerequisites](PREREQUISITES.md) 
-* Dive deeper into the [configuration options](CONFIGURATION.md) 
-* Go back to [README.md](../README.md)

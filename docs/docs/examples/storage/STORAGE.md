@@ -7,8 +7,3 @@ Atlassian's Data Center products require a shared storage solution to effectivel
 Jira, Confluence and Crowd can all be configured with an EFS-backed shared solution. For details on how this can be set up, see the [AWS EFS example](aws/SHARED_STORAGE.md). 
 ## NFS  
 For details on creating shared storage for Bitbucket, see the [NFS example](nfs/NFS.md).
-
-***
-* Go back to the [prerequisites](../../installation/PREREQUISITES.md)
-* Go back to the [installation guide](../../installation/INSTALLATION.md)
-* Go back to [README.md](../../README.md)

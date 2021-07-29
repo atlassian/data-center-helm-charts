@@ -52,9 +52,3 @@ kubectl apply -f ./storage/nfs/nfs-server.yaml
 
 It is **highly recommended** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use affinity rules -
 a standard kubernetes functionality. You can read the [Kubernetes affinity documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external} and use the suitable affinity definition in the `affinity: {}` definition in the `values.yaml` file.
-
-***
-* Go back to the [prerequisites](../../../installation/PREREQUISITES.md)
-* Go back to the [installation guide](../../../installation/INSTALLATION.md)
-* Go back to [README.md](../../../README.md)
-

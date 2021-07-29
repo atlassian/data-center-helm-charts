@@ -29,9 +29,3 @@ container:
     cpu: "2" 
     memory: "2G"
 ```
-
-
-***
-* Go back to [README.md](../../README.md)
-* Go back to the [operation guide](../OPERATION.md)
-* Go back to [prerequisites](../../installation/PREREQUISITES.md)

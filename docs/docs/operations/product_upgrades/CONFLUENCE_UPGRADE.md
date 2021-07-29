@@ -38,7 +38,3 @@ The pods will be re-created with the updated version, one at a time.
 After all pods activated with the new version, finalize the upgrade:
 
 ![upgrade-mode](../../assets/images/confluence-upgrade-3.png)
-
-***
-* Go back to [README.md](/)
-* Go back to the [operation guide](../OPERATION.md)

@@ -319,9 +319,3 @@ to the product pods.
 The Helm charts also allow you to specify `additionalLabls`, `tolerations`, 
 `nodeSelectors` and `affinities`. These are standard Kubernetes structures 
 that will be included in the pods. 
-
-***
-
-* Continue to the [installation guide](INSTALLATION.md)
-* Go back to the [prerequisites](PREREQUISITES.md) 
-* Go back to [README.md](../README.md)

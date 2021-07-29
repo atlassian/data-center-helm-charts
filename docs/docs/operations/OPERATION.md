@@ -53,8 +53,3 @@ Prior to installing the Helm chart, a suitable NFS shared storage solution must 
 #### Examples of provisioning storage with the AWS CSI Driver
  * [Local storage - utilizing AWS EBS-backed volumes](../examples/storage/aws/LOCAL_STORAGE.md)
  * [Shared storage - utilizing AWS EFS-backed filesystem](../examples/storage/aws/SHARED_STORAGE.md)
-
-***
-* Go back to the [installation guide](../installation/INSTALLATION.md)
-* Dive deeper into the [configuration](../installation/CONFIGURATION.md) options
-* Go back to [README.md](../README.md)

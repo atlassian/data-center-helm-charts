@@ -23,7 +23,3 @@ For details on creating the database user and database itself follow the appropr
  
 
 > Once you create a database continue with provisioning the [prerequisite infrastructure](../../installation/PREREQUISITES.md).
-
-***
-* Go back to the [prerequisites](../../installation/PREREQUISITES.md)
-* Go back to [README.md](../../README.md)

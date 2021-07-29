@@ -53,8 +53,3 @@ For existing deployments the `requests` and `limits` values can be dynamically u
 
 === "Imperatively"
       Using `kubectl edit` on the appropriate `StatefulSet` the respective `cpu` and `memory` values can be modified. Saving the changes will then result in the existing product pod(s) being re-provisioned with the updated values.
-
-***
-* Go back to [README.md](../../README.md)
-* Go back to the [operation guide](../OPERATION.md)
-
