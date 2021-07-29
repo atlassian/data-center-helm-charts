@@ -9,12 +9,12 @@ help:
 .DEFAULT_GOAL := help
 
 doc-docker:
-		@docker build -t squidfunk/mkdocs-material docs/build/
+	@docker build -t squidfunk/mkdocs-material docs/build/
 
 doc-build:
-	    @docker run --rm -it -v ${PWD}/docs:/docs squidfunk/mkdocs-material build
+	@docker run --rm -it -v ${PWD}/docs:/docs squidfunk/mkdocs-material build
 
 doc-serve:
-		@docker run --rm -it -v ${PWD}/docs:/docs squidfunk/mkdocs-material serve
+	@docker run --rm -it -v ${PWD}/docs:/docs squidfunk/mkdocs-material serve
 
 docs: doc-docker doc-serve
