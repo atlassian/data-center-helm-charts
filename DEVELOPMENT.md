@@ -12,3 +12,18 @@ Repository contains repository hook definition to auto-generate chart documentat
 ### Usage
 
 When you have the pre-commit hook installed and `commit` a file, it will run the pre-commit hook. If there is a change generated in the `README.md`, the hook will fail and notify you about the new change. You can review the changes and run the `commit` again, now it should pass.
+
+
+# Technical documentation
+
+## Setup
+
+Technical documentation is produced by `mkdocs` python library. The documentation and necessary files are located in `/docs/` folder.
+
+## How to work with documentation
+
+To make the work with the documentation easy, there is a `Makefile` in the project root folder. To start the server just run:
+
+    make docs
+
+This will create a docker image locally, process the files and start the live server providing documentation. You should be able to open http://127.0.0.1:8000/ in your browser. If you make any change to the documentation in the `/docs/` folder, it will be picked up by the server and browser will automatically reload.
