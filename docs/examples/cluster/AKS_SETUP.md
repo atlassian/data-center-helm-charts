@@ -11,4 +11,5 @@ Follow the [Azure Kubernetes Service Quickstart](https://docs.microsoft.com/en-a
 
 ***
 * Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to the [examples](../EXAMPLES.md)
 * Go back to [README.md](../../../README.md)
