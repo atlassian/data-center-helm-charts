@@ -31,7 +31,8 @@ See examples of local and shared storage:
 ## SSH
 * See an example of [SSH service in Bitbucket on Kubernetes](ssh/SSH_BITBUCKET.md)
 
-
+***
+* Go back to [README.md](../../README.md)
 
 
 
