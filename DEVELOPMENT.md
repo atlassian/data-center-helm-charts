@@ -27,3 +27,7 @@ To make the work with the documentation easy, there is a `Makefile` in the proje
     make docs
 
 This will create a docker image locally, process the files and start the live server providing documentation. You should be able to open http://127.0.0.1:8000/ in your browser. If you make any change to the documentation in the `/docs/` folder, it will be picked up by the server and browser will automatically reload.
+
+## Deployment
+
+Documentation is automatically deployed to [official documentation](https://atlassian-labs.github.io/data-center-helm-charts/) with Github Pages. Any change that is merged into the default branch will trigger Github Actions that builds the static documentation site and pushes it to `gh-pages` branch. This branch is then deployed by Github Pages.
