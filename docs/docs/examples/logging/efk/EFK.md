@@ -23,13 +23,13 @@ To complete the EFK stack you need to install an Elasticsearch cluster and Kiban
 
 Follow these steps to install Elasticsearch:
 
-    ```shell
-    $ helm repo add elastic https://helm.elastic.co
-    "elastic" has been added to your repositories
-    
-    $ helm install elasticsearch elastic/elasticsearch
-    ...
-    ```
+```shell
+$ helm repo add elastic https://helm.elastic.co
+"elastic" has been added to your repositories
+
+$ helm install elasticsearch elastic/elasticsearch
+...
+```
 
 Wait until all the nodes start and the status changes to `Running`:
 
