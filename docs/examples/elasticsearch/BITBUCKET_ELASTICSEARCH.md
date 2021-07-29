@@ -66,3 +66,7 @@ bitbucket:
       passwordSecretKey: password
 ```
 > Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+
+***
+* Go back to [README.md](../../../README.md)
+* Go back to the [examples](../EXAMPLES.md)
