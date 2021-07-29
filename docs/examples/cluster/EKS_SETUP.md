@@ -38,5 +38,6 @@ eksctl create cluster -f config.yaml
 
 ***
 * Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to [examples](../EXAMPLES.md)
 * Go back to [README.md](../../../README.md)
 
