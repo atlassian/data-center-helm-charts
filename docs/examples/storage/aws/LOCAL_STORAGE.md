@@ -49,5 +49,6 @@ Some useful resources on provisioning local storage with the AWS CSI Driver
 ***
 * Go back to the [prerequisites](../../../PREREQUISITES.md)
 * Go back to the [installation guide](../../../INSTALLATION.md)
+* Go back to the [examples](../../EXAMPLES.md)
 * Go back to [README.md](../../../../README.md)
 
