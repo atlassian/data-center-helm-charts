@@ -49,12 +49,12 @@ database:
     passwordSecretKey: password
 ```
 
-> For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#Database-connectivity).
+> For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
 
 > Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
     
 ## 4. Configure Ingress
-Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external} provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
+Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external} provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
 
 ```yaml
 ingress:
@@ -69,13 +69,13 @@ ingress:
   tlsSecretName: <tls_certificate_name>
 ```
 
-> For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#Ingress). 
+> For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#ingress). 
 
 > See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 
-Using the `values.yaml` file obtained in [step 2](#Obtain-values.yaml), configure the `shared-home` that was provisioned as part of the [Prerequisites](PREREQUISITES.md). See [shared home example](../examples/storage/aws/SHARED_STORAGE.md).
+Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the `shared-home` that was provisioned as part of the [Prerequisites](PREREQUISITES.md). See [shared home example](../examples/storage/aws/SHARED_STORAGE.md).
 
 ```yaml
 volumes:
@@ -95,13 +95,13 @@ volumes:
       storageClassName: <storage-class-name>
 ```
 
-> For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes).
+> For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
     
 > **NOTE:** Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
     
 ## 6. Configure license and sysadmin credentials for Bitbucket
 
-Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#Obtain-values.yaml).
+Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml).
 Create a Kubernetes secret to hold the Bitbucket license:
 
 ```shell

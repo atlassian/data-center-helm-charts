@@ -31,7 +31,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 * The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme){.external}, [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme){.external} and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme){.external}. There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external}.
 * Because different Kubernetes clusters use different ingress configurations/controllers, the Helm charts provide [Ingress Object](https://kubernetes.io/docs/concepts/services-networking/ingress/){.external} templates only.
 * The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml` (an alternative controller can be used).
-* For more information about the Ingress controller go to the [Ingress section of the configuration guide](CONFIGURATION.md#Ingress).
+* For more information about the Ingress controller go to the [Ingress section of the configuration guide](CONFIGURATION.md#ingress).
 
 ### Provision a database
 
@@ -61,4 +61,4 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 * The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
 
-* For more information about volumes go to the [Volumes section of the configuration guide](CONFIGURATION.md#Volumes). 
+* For more information about volumes go to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes). 

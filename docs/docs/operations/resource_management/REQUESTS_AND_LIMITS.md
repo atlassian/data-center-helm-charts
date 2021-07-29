@@ -2,7 +2,7 @@
 To ensure that Kubernetes appropriately schedules resources, the respective product `values.yaml` is configured with default `cpu` and `memory` [resource request values](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/){.external} .
 
 ## Resource requests
-The default resource requests that are used for each product are defined below. Take note that these values are geared toward small data sets. For larger enterprise deployments refer to the data center infrastructure recommendations [here](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html){.external} . Using the [formula](#Memory-request-sizing) below, the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
+The default resource requests that are used for each product are defined below. Take note that these values are geared toward small data sets. For larger enterprise deployments refer to the data center infrastructure recommendations [here](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html){.external} . Using the [formula](#memory-request-sizing) below, the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
 
 | Product  | CPU   |  Memory |
 |----------|:-----:|------:|

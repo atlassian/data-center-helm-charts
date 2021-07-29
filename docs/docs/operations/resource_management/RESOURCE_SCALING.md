@@ -13,15 +13,13 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       ```
 
 === "Imperatively"
-
       ```shell
       kubectl scale statefulsets <statefulsetset-name> --replicas=n
       ```
 
 !!!note "Initial cluster size"
     **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
-
-For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#Vertical-scaling) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [REQUESTS_AND_LIMITS.md](REQUESTS_AND_LIMITS.md).
+For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md) page.
 
 ## Vertical scaling - adding resources
 The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
