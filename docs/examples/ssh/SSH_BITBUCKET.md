@@ -103,3 +103,6 @@ bitbucket:
     - name: PLUGIN_SSH_BASEURL
       value: ssh://bitbucket-ssh.example.com/
 ```
+***
+* Go back to [README.md](../../../README.md)
+* Go back to the [examples](../EXAMPLES.md)
