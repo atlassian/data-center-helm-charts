@@ -253,4 +253,5 @@ The user and password for Kibana are the same as the master user credential that
 
 ***
 * Go back to [README.md](../../../../README.md)
+* Go back to the [examples](../../EXAMPLES.md)
 * Go back to the [operation guide](../../../OPERATION.md)
