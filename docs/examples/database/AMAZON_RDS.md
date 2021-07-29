@@ -20,4 +20,5 @@ For details on creating the database user and database itself follow the appropr
 
 ***
 * Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to the [examples](../EXAMPLES.md)
 * Go back to [README.md](../../../README.md)
