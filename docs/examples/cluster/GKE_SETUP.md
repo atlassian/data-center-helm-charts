@@ -11,4 +11,5 @@ Follow the [How-to guides](https://cloud.google.com/kubernetes-engine/docs/how-t
 
 ***
 * Go back to the [prerequisites](../../PREREQUISITES.md)
+* Go back to [examples](../EXAMPLES.md)
 * Go back to [README.md](../../../README.md)
