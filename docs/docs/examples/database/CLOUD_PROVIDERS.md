@@ -11,4 +11,4 @@ Database deployment and configuration instructions for cloud providers can be fo
 
 ***
 * Go back to the [prerequisites](../../installation/PREREQUISITES.md)
-* Go back to [README.md](/)
+* Go back to [README.md](../../README.md)

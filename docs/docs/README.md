@@ -1,7 +1,3 @@
----
-title: Introduction
----
-
 # Atlassian Data Center Helm Charts
 
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/atlassian-data-center)](https://artifacthub.io/packages/search?repo=atlassian-data-center)
@@ -42,7 +38,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 
 ## Feedback
 
-If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
+If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
   
 
 ## Contributions
@@ -52,5 +48,4 @@ Contributions are welcome. [Find out how to contribute](https://github.com/atlas
 
 ## License
 
-Copyright (c) [2021] Atlassian and others.
 Apache 2.0 licensed, see [license file](https://github.com/atlassian-labs/data-center-helm-charts/blob/master/LICENSE){.external}.

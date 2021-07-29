@@ -8,4 +8,4 @@ Here is an example of how these controllers can be installed and configured for 
 ***
 * Go back to the [prerequisites](../../installation/PREREQUISITES.md)
 * Go back to the [installation guide](../../installation/INSTALLATION.md)
-* Go back to [README.md](/)
+* Go back to [README.md](../../README.md)

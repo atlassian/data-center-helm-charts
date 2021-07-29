@@ -18,3 +18,7 @@ a[target="_blank"]::after, a.external::after {
     margin: 0 2px 0 2px;
     vertical-align: super;
 }
+
+.atl-bright-color {
+    color: #0065FF !important;
+}

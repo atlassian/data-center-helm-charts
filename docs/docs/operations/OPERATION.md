@@ -1,61 +1,16 @@
 # Operation
 Once you have [installed your product](../installation/INSTALLATION.md), use this document if you want to scale your product, update your product, or see what examples we have.
 
-## Product scaling
-For optimum performance and stability the appropriate resource `requests` and `limits` should be defined for each pod. The number of pods in the product cluster should also be carefully considered. Kubernetes provides means for horizontal and vertical scaling of the deployed pods within a cluster, these approaches are described below.
+## Managing resources
 
-### Horizontal scaling - adding pods
-The Helm charts provision one `StatefulSet` by default. The number of replicas within this StatefulSet can be altered either declaratively or intrinsically. Note that the Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration.
+You can scale your application by [adding additonal pods](resource_management/RESOURCE_SCALING.md) or by [managing available resources with requests and limits](resource_management/RESOURCE_SCALING.md).
 
-#### Declaratively
-1. Update `values.yaml` by modifying the `replicaCount` appropriately.
-2. Apply the patch:
-```shell
-helm upgrade <release> <chart> -f <values file>
-```
+## Upgrading application
 
-#### Intrinsically
-```shell
-kubectl scale statefulsets <statefulsetset-name> --replicas=n
-```
-Note: Confluence, Jira, and Cloud all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the replicaCount found in the values.yaml and should always be kept as 1.
-
-For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#Vertical-scaling) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [REQUESTS_AND_LIMITS.md](resource_management/REQUESTS_AND_LIMITS.md).
-
-### Vertical scaling - adding resources
-The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
-
-#### Prior to deployment
-Before performing a helm install update the appropriate products `values.yaml` `container` stanza with the desired `requests` and `limits` values i.e. 
-```yaml
- container: 
-  limits:
-    cpu: "4"
-    memory: "4G"
-  requests:
-    cpu: "2"
-    memory: "2G"
-```
-
-#### Post deployment
-For existing deployments the `requests` and `limits` values can be dynamically updated either declaratively or intrinsically 
-
-#### Declaratively
-This the preferred approach as it keeps the state of the cluster, and the helm charts themselves in sync.
-1. Update `values.yaml` appropriately
-2. Apply the patch:
-```shell
-helm upgrade <release> <chart> -f <values file>
-```
-
-#### Intrinsically
-Using `kubectl edit` on the appropriate `StatefulSet` the respective `cpu` and `memory` values can be modified. Saving the changes will then result in the existing product pod(s) being re-provisioned with the updated values.
-
-## Product update
 ### Kubernetes update strategies
 Kubernetes provides two strategies to update applications managed by `statefulset` controllers:
 
-#### Rolling Update:
+#### Rolling update
 The pods will be upgraded one by one until all pods run containers with the updated template. The upgrade is managed by 
 Kubernetes and the user has limited control during the upgrade process, after having modified the template. This is the default 
 upgrade strategy in Kubernetes. 
@@ -65,7 +20,7 @@ the nodes in that partition.
 
 The default implementation is based on *RollingUpdate* strategy with no *partition* defined. 
 
-#### OnDelete: 
+#### OnDelete strategy
 In this strategy users select the pod to upgrade by deleting it, and Kubernetes will replace it by creating a new pod
  based on the updated template. To select this strategy the following should be replaced with the current 
  implementation of `updateStrategy` in the `statefulset` spec:
@@ -75,14 +30,14 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
     type: OnDelete
 ```  
 
-### Bitbucket Rolling Upgrade
-To learn about rolling upgrade in Bitbucket see [Bitbucket Rolling Upgrade](product_upgrades/BITBUCKET_UPGRADE.md)
+### Rolling upgrade
 
-### Confluence Rolling Upgrade
-To learn about rolling upgrade in Confluence see [Confluence Rolling Upgrade](product_upgrades/CONFLUENCE_UPGRADE.md)
-
-### Jira Rolling Upgrade
-To learn about rolling upgrade in Jira see [Jira Rolling Upgrade](product_upgrades/JIRA_UPGRADE.md)
+=== "Jira"
+       To learn about rolling upgrade in Jira see [Jira rolling upgrade](product_upgrades/JIRA_UPGRADE.md)
+=== "Confluence"
+       To learn about rolling upgrade in Confluence see [Confluence rolling upgrade](product_upgrades/CONFLUENCE_UPGRADE.md)
+=== "Bitbucket"
+       To learn about rolling upgrade in Bitbucket see [Bitbucket rolling upgrade](product_upgrades/BITBUCKET_UPGRADE.md)
 
 ## Examples
 ### Logging
@@ -102,4 +57,4 @@ Prior to installing the Helm chart, a suitable NFS shared storage solution must 
 ***
 * Go back to the [installation guide](../installation/INSTALLATION.md)
 * Dive deeper into the [configuration](../installation/CONFIGURATION.md) options
-* Go back to [README.md](/)
+* Go back to [README.md](../README.md)

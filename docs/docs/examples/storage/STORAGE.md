@@ -11,4 +11,4 @@ For details on creating shared storage for Bitbucket, see the [NFS example](nfs/
 ***
 * Go back to the [prerequisites](../../installation/PREREQUISITES.md)
 * Go back to the [installation guide](../../installation/INSTALLATION.md)
-* Go back to [README.md](/)
+* Go back to [README.md](../../README.md)

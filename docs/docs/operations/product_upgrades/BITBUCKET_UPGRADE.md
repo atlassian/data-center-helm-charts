@@ -40,6 +40,6 @@ After all pods are active with the new version, finalize the upgrade:
 ![upgrade-mode](../../assets/images/bitbucket-upgrade-3.png)
 
 ***
-* Go back to [README.md](/)
+* Go back to [README.md](../../README.md)
 * Go back to the [operation guide](../OPERATION.md)
 

@@ -8,7 +8,7 @@ Depending on the need of your deployment, SSH access can be provided through two
 2. Creating a separate Kubernetes `LoadBalancer` service - This option is available if the ingress controller does not support TCP connections, or if you don’t need your deployment to have the SSH service available on the same DNS name as the HTTP service.
 
 ## NGINX Ingress controller config for SSH connections
-We can follow the official documentation for the NGINX Ingress controller for this: [Exposing TCP and UDP services - NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/).
+We can follow the official documentation for the NGINX Ingress controller for this: [Exposing TCP and UDP services - NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/){.external}.
 
 >**NOTE:** These instructions should be performed in the same namespace in which the Ingress controller resides.
 
@@ -95,7 +95,7 @@ bitbucket:
   sshService:
     enabled: true
 ```
-On a deployment using AWS, assuming you have [external-dns](https://github.com/kubernetes-sigs/external-dns) configured, you can add these annotations to automatically set up the DNS name for the SSH service:
+On a deployment using AWS, assuming you have [external-dns](https://github.com/kubernetes-sigs/external-dns){.external} configured, you can add these annotations to automatically set up the DNS name for the SSH service:
 ```yaml
 bitbucket:
   sshService:

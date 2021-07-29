@@ -8,4 +8,4 @@ Here are installation and configuration instructions for cloud providers:
 
 ***
 * Go back to the [prerequisites](../../installation/PREREQUISITES.md)
-* Go back to [README.md](/)
+* Go back to [README.md](../../README.md)

@@ -1,7 +1,7 @@
 # NGINX Ingress Controller - with TLS termination
-[NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/) with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/) and certificates from [Let's Encrypt](https://letsencrypt.org/).
+[NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/){.external} with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/){.external} and certificates from [Let's Encrypt](https://letsencrypt.org/){.external}.
 
-> **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/).
+> **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
 
 These instructions are composed of 3 high-level parts:
 
@@ -10,7 +10,7 @@ These instructions are composed of 3 high-level parts:
 3. Ingress resource configuration
 
 ## Controller installation and configuration
-We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx). You can also use the instructions below.
+We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx){.external}. You can also use the instructions below.
 
 ### 1. Add controller repo
 Add the `ingress-nginx` Helm repo:
@@ -33,7 +33,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 3. DNS setup
-Manually provision a new DNS record via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns).
+Manually provision a new DNS record via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}.
 
 Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 3. above](#3.-Install). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
@@ -49,7 +49,7 @@ Take note of the `LoadBalancer` and using it as a value update the DNS record so
 > **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
 ## Certificate manager installation and configuration
-K8s certificate management is handled using [cert-manager](https://cert-manager.io/).
+K8s certificate management is handled using [cert-manager](https://cert-manager.io/){.external}.
 
 ### 1. Install cert-manager
 Add the cert manager repo

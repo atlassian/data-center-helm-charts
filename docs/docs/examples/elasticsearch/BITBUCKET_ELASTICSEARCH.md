@@ -3,9 +3,9 @@ While Bitbucket has its own internal Elasticsearch instance, we highly recommend
 
 ## Installing and configuring Elasticsearch in your Kubernetes cluster
 ### Installing Elasticsearch into your Kubernetes cluster
-Choose a version of Elasticsearch that is supported by the [version of Bitbucket you are installing](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-additional-toolsAdditionaltools). For Bitbucket 7.14 the latest supported Elasticsearch version is 7.9.3, so we will target that.
+Choose a version of Elasticsearch that is supported by the [version of Bitbucket you are installing](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-additional-toolsAdditionaltools){.external}. For Bitbucket 7.14 the latest supported Elasticsearch version is 7.9.3, so we will target that.
 
-There are official [Helm charts for Elasticsearch 7.9.3](https://artifacthub.io/packages/helm/elastic/elasticsearch/7.9.3). Following the documentation there add the Elasticsearch Helm charts repository, then install it:
+There are official [Helm charts for Elasticsearch 7.9.3](https://artifacthub.io/packages/helm/elastic/elasticsearch/7.9.3){.external}. Following the documentation there add the Elasticsearch Helm charts repository, then install it:
 
 `helm repo add elastic https://helm.elastic.co`
 
@@ -28,7 +28,7 @@ If you have configured authentication in the deployed Elasticsearch you will als
       usernameSecreyKey: username
       passwordSecretKey: password
 ```
-> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
 
 
 
@@ -65,4 +65,4 @@ bitbucket:
       usernameSecreyKey: username
       passwordSecretKey: password
 ```
-> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
