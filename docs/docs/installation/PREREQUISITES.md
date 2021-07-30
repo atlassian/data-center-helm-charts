@@ -3,10 +3,10 @@
 
 In order to deploy Atlassian’s Data Center products, the following is required:
 
-      1. An understanding of Kubernetes and Helm concepts
-      2. A Kubernetes cluster, running Kubernetes 1.19 or later
-      3. kubectl 1.19 or later, must be compatible with your cluster
-      4. Helm v 3.3 or later
+1. An understanding of Kubernetes and Helm concepts
+2. A Kubernetes cluster, running Kubernetes 1.19 or later
+3. kubectl 1.19 or later, must be compatible with your cluster
+4. Helm v 3.3 or later
 
 ## Environment setup 
 
