@@ -49,13 +49,12 @@ to size your NFS server accordingly to your instance needs.
 
 #### Example
 
-We've provided the template [`nfs-server.yaml`](nfs-server.yaml) as a **reference** on how an NFS server could
-be stood-up to work in conjunction with a Bitbucket deployment. This template works only in AWS as the defined 
-storage class is AWS specific but if you comment out the `StorageClass` definition, the template should be generic.
+We've provided the template [`nfs-server-example`](nfs-server-example) as a **reference** on how an NFS server could
+be stood-up to work in conjunction with a Bitbucket deployment. 
 
 Provision the NFS by issuing the following command:
 ```shell
-kubectl apply -f ./storage/nfs/nfs-server.yaml
+helm install nfs-server-example nfs-server-example
 ```
 
 :warning: Please note that the NFS server created with this template is not production ready and should not be 

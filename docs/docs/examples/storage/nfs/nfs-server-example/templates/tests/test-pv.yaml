@@ -5,6 +5,7 @@ metadata:
   name: "{{ include "nfs-server.fullname" . }}-test-nfs"
   labels:
     {{- include "nfs-server.labels" . | nindent 4 }}
+    "app.kubernetes.io/component": "test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-weight": "-5"
@@ -24,7 +25,11 @@ spec:
     - wsize=32768
     - _netdev
   nfs:
-    server:  {{ .Values.service.clusterIP }}
+    {{- with (lookup "v1" "Service" .Release.Namespace (include "nfs-server.fullname" .)) }}
+    server: {{ .spec.clusterIP }}
+    {{- else }}
+    server: {{ .Values.test.nfsHostname | default .Values.service.clusterIP | default (printf "%s.%s.svc.cluster.local" (include "nfs-server.fullname" .) .Release.Namespace) }}
+    {{- end}}
     path: /srv/nfs
 ---
 kind: PersistentVolumeClaim
@@ -33,6 +38,7 @@ metadata:
   name: "{{ include "nfs-server.fullname" . }}-test-nfs"
   labels:
     {{- include "nfs-server.labels" . | nindent 4 }}
+    "app.kubernetes.io/component": "test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-weight": "-5"
@@ -45,39 +51,3 @@ spec:
       storage: 1Gi
   volumeName: "{{ include "nfs-server.fullname" . }}-test-nfs"
   storageClassName: ""
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "{{ include "nfs-server.fullname" . }}-test-nfs"
-  labels:
-    {{- include "nfs-server.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": test
-    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-spec:
-  containers:
-    - name: lock-test
-      image: busybox
-      command: ['sh']
-      args:
-        - "-c"
-        - |
-          set -euo pipefail
-          ls -l /nfs
-          echo "Acquiring lock..."
-          {
-            flock -x 3
-            echo "Acquired lock."
-            echo "Locked content." >&3
-          } 3>>/nfs/test.txt
-          cat /nfs/test.txt
-          rm /nfs/test.txt
-      volumeMounts:
-        - mountPath: /nfs
-          name: data
-  volumes:
-    - name: data
-      persistentVolumeClaim:
-        claimName: "{{ include "nfs-server.fullname" . }}-test-nfs"
-  restartPolicy: Never
