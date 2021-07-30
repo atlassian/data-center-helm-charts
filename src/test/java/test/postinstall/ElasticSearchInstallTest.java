@@ -27,14 +27,24 @@ import static test.postinstall.Utils.*;
 @EnabledIf("isBitbucket")
 class ElasticSearchInstallTest {
     static boolean isBitbucket() {
-        return productIs(Product.bitbucket);
+        try {
+            return productIs(Product.bitbucket);
+        } catch (Exception e) {
+        };
+        return false;
     }
 
-    private static final KubeClient client = new KubeClient();
+    private static KubeClient client;
+    private static String esIngressBase;
 
-    // See helm_install.sh for where this host is generated.
-    static final String ingressDomain = getIngressDomain(client.getClusterType());
-    static final String esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0."+ingressDomain;
+    @BeforeAll
+    static void initKubeClient() {
+        client = new KubeClient();
+
+        // See helm_install.sh for where this host is generated.
+        final var ingressDomain = getIngressDomain(client.getClusterType());
+        esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0."+ingressDomain;
+    }
 
 
     @Test
