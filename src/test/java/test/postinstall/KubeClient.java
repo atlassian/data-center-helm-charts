@@ -15,14 +15,33 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import test.model.ClusterType;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static test.postinstall.Utils.getNS;
+import static test.postinstall.Utils.getRelease;
 
 final class KubeClient implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(KubeClient.class);
 
     private final Lazy<KubernetesClient> clientRef = Lazy.of(DefaultKubernetesClient::new);
+
+    ClusterType getClusterType() {
+        final var host = client().getMasterUrl().getHost();
+        if (host.contains("eks.amazonaws.com")) {
+            return ClusterType.EKS;
+        } else if (host.contains("azmk8s.io")) {
+            return ClusterType.AKS;
+        } else if (host.contains("kitt-inf.net")) {
+            return ClusterType.KITT;
+        } else {
+            return ClusterType.UNKNOWN;
+        }
+    }
 
     io.vavr.collection.Map<Node, Option<NodeMetrics>> getNodeMetrics(final PodSpec podSpec) {
         return getNodes(podSpec.getNodeSelector())
@@ -63,6 +82,32 @@ final class KubeClient implements AutoCloseable {
                 .inNamespace(namespaceName)
                 .withName(podName)
                 .get();
+    }
+
+    void forEachPodOfStatefulSet(Consumer<Pod> consumer) {
+        forEachPodOfStatefulSet(getRelease(), consumer);
+    }
+
+    void forEachPodOfStatefulSet(String statefulSetName, Consumer<Pod> consumer) {
+        final var statefulSet = getStatefulSet(statefulSetName);
+        final var replicaCount = statefulSet.getStatus().getReplicas();
+
+        for (var idx = 0; idx < replicaCount; idx++) {
+            consumer.accept(getPod(statefulSet.getMetadata().getName() + "-" + idx, getNS()));
+        }
+    }
+
+    StatefulSet getStatefulSet() {
+        return getStatefulSet(getRelease());
+    }
+
+    StatefulSet getStatefulSet(String statefulSetName) {
+        final var statefulSet = getStatefulSet(statefulSetName, getNS());
+
+        assertThat(statefulSet)
+                .describedAs("StatefulSet %s not found", statefulSetName)
+                .isNotNull();
+        return statefulSet;
     }
 
     private KubernetesClient client() {

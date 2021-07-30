@@ -14,22 +14,18 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
-import static test.postinstall.Utils.netNodesResourceSummary;
+import static test.postinstall.Utils.*;
 
 class PostInstallStatusTest {
-    private static String helmReleaseName;
-    private static String namespaceName;
-
     private static final KubeClient client = new KubeClient();
 
     @Test
     void applicationPodsShouldAllBeRunning() {
-        forEachPodOfStatefulSet(pod -> {
+        client.forEachPodOfStatefulSet(pod -> {
             final var podPhase = pod.getStatus().getPhase();
 
             // First assert that the phase is not "pending", and if so we show a special failure message
@@ -46,7 +42,7 @@ class PostInstallStatusTest {
 
     private Description schedulingFailure(Pod pod) {
         return new LazyTextDescription(() -> {
-            final var podSpec = getStatefulSet()
+            final var podSpec = client.getStatefulSet()
                     .getSpec()
                     .getTemplate()
                     .getSpec();
@@ -63,7 +59,7 @@ class PostInstallStatusTest {
 
     @Test
     void applicationPodContainersShouldAllBeReady() {
-        forEachPodOfStatefulSet(pod -> {
+        client.forEachPodOfStatefulSet(pod -> {
             final var containerStatuses = Array.ofAll(pod.getStatus().getContainerStatuses());
 
             assumeThat(containerStatuses)
@@ -79,48 +75,12 @@ class PostInstallStatusTest {
         });
     }
 
-    private void forEachPodOfStatefulSet(Consumer<Pod> consumer) {
-        final var statefulSet = getStatefulSet();
-
-        final var replicaCount = statefulSet.getStatus().getReplicas();
-
-        for (var idx = 0; idx < replicaCount; idx++) {
-            consumer.accept(client.getPod(statefulSet.getMetadata().getName() + "-" + idx, namespaceName));
-        }
-    }
-
-    StatefulSet getStatefulSet() {
-        final var statefulSetName = helmReleaseName;
-        final var statefulSet = client.getStatefulSet(statefulSetName, namespaceName);
-
-        assertThat(statefulSet)
-                .describedAs("StatefulSet %s not found", statefulSetName)
-                .isNotNull();
-        return statefulSet;
-    }
-
     @BeforeAll
     static void configure() throws Exception {
-        final var helmParametersFileLocation = System.getProperty("helmParametersFileLocation");
-        if (helmParametersFileLocation != null) {
-            final var helmParameters = Utils.readPropertiesFile(Path.of(helmParametersFileLocation));
-
-            helmReleaseName = Array.empty()
-                    .appendAll(helmParameters.get("RELEASE_PREFIX"))
-                    .appendAll(helmParameters.get("PRODUCT_NAME"))
-                    .mkString("-");
-            namespaceName = Array.empty()
-                    .appendAll(helmParameters.get("TARGET_NAMESPACE"))
-                    .mkString();
-        } else {
-            helmReleaseName = System.getProperty("helmRelease");
-            namespaceName = System.getProperty("namespace");
-        }
-
-        assumeThat(helmReleaseName)
+        assumeThat(getRelease())
                 .describedAs("Cannot run test without Helm release name")
                 .isNotEmpty();
-        assumeThat(namespaceName)
+        assumeThat(getNS())
                 .describedAs("Cannot run test without namespace name")
                 .isNotEmpty();
     }

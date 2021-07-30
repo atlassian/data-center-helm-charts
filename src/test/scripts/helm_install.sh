@@ -198,12 +198,17 @@ package_functest_helm_chart() {
   local backdoor_services="backdoorServiceNames:${NEWLINE}"
   local ingress_services="ingressNames:${NEWLINE}"
   ingress_services+="- ${PRODUCT_RELEASE_NAME}${NEWLINE}"
-  for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1))
-  do
+  for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1)); do
     backdoor_services+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
   done
+  if [[ ! -z "$ES_CHART_VALUES" ]]; then
+    echo "Elasticsearch is being deployed, adding a backdoor"
+    backdoor_services+="- ${PRODUCT_RELEASE_NAME}-elasticsearch-master-0${NEWLINE}"
+  fi
   EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
 
+  echo "Defining ingress/backdoor services as:"
+  echo "${backdoor_services}${ingress_services}"
   echo "${backdoor_services}${ingress_services}" > ${EXPOSE_NODES_FILE}
 
   helm template \
