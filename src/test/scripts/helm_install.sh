@@ -138,8 +138,11 @@ bootstrap_database() {
 
 bootstrap_elasticsearch() {
   echo "Task $((tasknum+=1)) - Bootstrapping Elasticsearch cluster." >&2
-  if [[ -z "$ELASTICSEARCH_CHART_VERSION" ]]; then
-      echo "No Elasticsearch chart defined, skipping provisioning"
+  if grep -qi elasticsearch: ${chartValueFiles} /dev/null || grep -qi 'elasticsearch[.]' <<<"$EXTRA_PARAMETERS"; then
+      HAS_ES_CONFIG=1
+  fi
+  if [[ -z "$ELASTICSEARCH_CHART_VERSION" || -z "$HAS_ES_CONFIG"  ]]; then
+      echo "No Elasticsearch chart or config defined, skipping provisioning"
       return
   fi
   ES_CHART_VALUES="$THISDIR/../infrastructure/elasticsearch/elasticsearch-values.yaml"
