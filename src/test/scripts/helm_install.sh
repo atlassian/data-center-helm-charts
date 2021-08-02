@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+HELM_PARAMETERS_FILE=$1
+
 set -e
 set -x
 
@@ -10,7 +12,7 @@ tasknum=0
 # Many of the variables used in this script are sourced from the
 # parameter file provided to it, i.e. `helm_parameters'. As such,
 # 'source' those values in
-source "$1"
+source "$HELM_PARAMETERS_FILE"
 
 get_current_cluster_type() {
   local server_address=$(kubectl config view --minify -o json | jq -r '.clusters[0].cluster.server')
@@ -141,7 +143,7 @@ bootstrap_elasticsearch() {
   if grep -qi elasticsearch: ${chartValueFiles} /dev/null || grep -qi 'elasticsearch[.]' <<<"$EXTRA_PARAMETERS"; then
       HAS_ES_CONFIG=1
   fi
-  if [[ -z "$ELASTICSEARCH_CHART_VERSION" || -z "$HAS_ES_CONFIG"  ]]; then
+  if [[ "$ELASTICSEARCH_DEPLOY" != "true" || -z "$HAS_ES_CONFIG"  ]]; then
       echo "No Elasticsearch chart or config defined, skipping provisioning"
       return
   fi
@@ -154,6 +156,9 @@ bootstrap_elasticsearch() {
      --version "$ELASTICSEARCH_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
      bitnami/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+
+  # Flag as installed for post-install tests.
+  echo "\nELASTICSEARCH_INSTALLED=1" > "$HELM_PARAMETERS_FILE"
 }
 
 # Package the product's Helm chart

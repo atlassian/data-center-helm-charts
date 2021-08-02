@@ -24,14 +24,10 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.hamcrest.Matchers.*;
 import static test.postinstall.Utils.*;
 
-@EnabledIf("isBitbucket")
+@EnabledIf("isESDeployed")
 class ElasticSearchInstallTest {
-    static boolean isBitbucket() {
-        try {
-            return productIs(Product.bitbucket);
-        } catch (Exception e) {
-        };
-        return false;
+    static boolean isESDeployed() {
+        return productIs(Product.bitbucket) && esInstalled();
     }
 
     private static KubeClient client;
@@ -45,7 +41,6 @@ class ElasticSearchInstallTest {
         final var ingressDomain = getIngressDomain(client.getClusterType());
         esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0."+ingressDomain;
     }
-
 
     @Test
     void elasticSearchIsRunning() {
