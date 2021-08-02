@@ -1,0 +1,24 @@
+:root {
+
+    --md-primary-fg-color: #0052CC;
+    --md-primary-fg-color--light: #FFFFFF;
+    --md-primary-fg-color--dark: #172B4D;
+}
+
+[data-md-color-scheme="slate"] {
+    --md-primary-fg-color: #172B4D;
+    --md-primary-fg-color--light: #ECB7B7;
+    --md-primary-fg-color--dark: #091E42;
+
+    --md-typeset-a-color: #4C9AFF
+}
+
+a[target="_blank"]::after, a.external::after {
+    content: url("../../icons/link_external.svg");
+    margin: 0 2px 0 2px;
+    vertical-align: super;
+}
+
+.atl-bright-color {
+    color: #0065FF !important;
+}

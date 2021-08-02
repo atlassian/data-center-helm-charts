@@ -1,0 +1,6 @@
+nav:
+    - Introduction: README.md
+    - Installation: installation
+    - Operations: operations
+    - Examples: examples
+    - Platforms: platforms

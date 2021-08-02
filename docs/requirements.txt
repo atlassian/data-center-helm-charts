@@ -1,0 +1,3 @@
+mkdocs-material
+mkdocs-minify-plugin
+mkdocs-awesome-pages-plugin

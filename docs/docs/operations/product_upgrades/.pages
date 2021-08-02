@@ -1,0 +1,4 @@
+nav:
+    - Jira: JIRA_UPGRADE.md
+    - Confluence: CONFLUENCE_UPGRADE.md
+    - Bitbucket: BITBUCKET_UPGRADE.md
