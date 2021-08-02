@@ -141,6 +141,10 @@
 
         <!-- The directory in which the helm (un)install script should look for the chart values files for integration testing -->
         <chart.testValues.basedir>${project.build.directory}/config</chart.testValues.basedir>
+
+        <!-- Deploy standalone Elasticsearch for BB? -->
+        <chart.testValues.es.deploy>true</chart.testValues.es.deploy>
+
     </properties>
 
     <build>
@@ -150,11 +154,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M5</version>
-                    <configuration>
-                      <excludes>
-                        <exclude>test/postinstall/*.java</exclude>
-                      </excludes>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -186,6 +185,7 @@
             -->
             <properties>
                 <chart.testValues.basedir>dummy</chart.testValues.basedir>
+                <chart.testValues.es.deploy>false</chart.testValues.es.deploy>
             </properties>
         </profile>
 
