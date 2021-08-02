@@ -123,6 +123,17 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 {{- end }}
 
+{{/*
+The command that should be run to start the fluentd service
+*/}}
+{{- define "fluentd.start.command" -}}
+{{- if .Values.fluentd.command }}
+{{ .Values.fluentd.command }}
+{{- else }}
+{{- print "exec fluentd -c /fluentd/etc/fluent.conf -v" }}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.image" -}}
 {{- if .Values.image.registry -}}
 {{ .Values.image.registry}}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}

@@ -650,6 +650,16 @@ fluentd:
   # -- The Fluentd sidecar image
   #
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+
+  # -- The command used to start Fluentd. If not supplied the default command 
+  # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
+  #
+  # Note: The custom command can be free-form, however pay particular attention to
+  # the process that should ultimately be left running in the container. This process
+  # should be invoked with 'exec' so that signals are appropriately propagated to it,
+  # for instance SIGTERM. An example of how such a command may look is:
+  # "<command 1> && <command 2> && exec <primary command>"
+  command:
   
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) 
   # should be used for Fluentd. If enabled this config must supplied via the 

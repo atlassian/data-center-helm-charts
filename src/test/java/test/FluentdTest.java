@@ -36,4 +36,37 @@ class FluentdTest {
         assertThat(config)
                 .contains("host myelastic");
     }
+
+    @ParameterizedTest
+    @EnumSource
+    void fluentd_uses_default_start_command(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true"
+        ));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer("fluentd");
+
+        final var fluentdStartCommand = resources.getStatefulSet(product.getHelmReleaseName()).getContainer("fluentd").get("command").toString();
+
+        assertThat(fluentdStartCommand)
+                .contains("fluentd -c /fluentd/etc/fluent.conf -v");
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void fluentd_uses_custom_start_command(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true",
+                "fluentd.command", "gem install fluent-plugin-elasticsearch && fluentd -c /fluentd/etc/fluent.conf -v"
+        ));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer("fluentd");
+
+        final var fluentdStartCommand = resources.getStatefulSet(product.getHelmReleaseName()).getContainer("fluentd").get("command").toString();
+
+        assertThat(fluentdStartCommand)
+                .contains("gem install fluent-plugin-elasticsearch && fluentd -c /fluentd/etc/fluent.conf -v");
+    }
 }
