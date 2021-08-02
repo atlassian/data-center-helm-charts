@@ -42,6 +42,9 @@ markdown_extensions:
 extra_css:
   - assets/stylesheets/extra.css
 extra:
+  analytics:
+    provider: google
+    property: G-FZ7HCVNVPY
   social:
     - icon: fontawesome/brands/atlassian
       link: https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes
