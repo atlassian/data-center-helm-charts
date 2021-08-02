@@ -22,7 +22,7 @@ Technical documentation is produced by `mkdocs` python library. The documentatio
 
 ## How to work with documentation
 
-To make the work with the documentation easy, there is a `Makefile` in the project root folder. To start the server just run:
+To make working with the documentation easier, there is a `Makefile` in the project root folder. To start the server just run:
 
     make docs
 
