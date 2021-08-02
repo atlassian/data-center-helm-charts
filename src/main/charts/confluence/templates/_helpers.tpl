@@ -185,7 +185,7 @@ The command that should be run to start the fluentd service
 {{- if .Values.fluentd.command }}
 {{ .Values.fluentd.command }}
 {{- else }}
-{{- print "fluentd -c /fluentd/etc/fluent.conf -v" }}
+{{- print "exec fluentd -c /fluentd/etc/fluent.conf -v" }}
 {{- end }}
 {{- end }}
 
