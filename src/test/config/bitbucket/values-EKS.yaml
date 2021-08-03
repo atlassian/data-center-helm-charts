@@ -12,7 +12,7 @@ bitbucket:
     enabled: true
     annotations:
       external-dns.alpha.kubernetes.io/hostname: ${helm.release.prefix}-bitbucket-ssh.${eks.ingress.domain}
-      service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
+      service.beta.kubernetes.io/aws-load-balancer-internal: '${eks.ssh.internal}'
   additionalEnvironmentVariables:
     - name: PLUGIN_SSH_BASEURL
       value: ssh://${helm.release.prefix}-bitbucket-ssh.${eks.ingress.domain}/

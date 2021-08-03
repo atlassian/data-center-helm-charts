@@ -118,6 +118,7 @@
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
 <!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
+        <eks.ssh.internal>true</eks.ssh.internal>
         <custom.ingress.uri />
 
         <shared.pvc.name>atlassian-dc-shared-home-pvc</shared.pvc.name>
