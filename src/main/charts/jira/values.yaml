@@ -8,14 +8,14 @@
 # - volumes
 #
 # Additional details on pre-provisioning these required resources can be found here:
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#3-configure-database
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#5-configure-persistent-storage
+# https://atlassian-labs.github.io/data-center-helm-charts/installation/INSTALLATION/#3-configure-database
+# https://atlassian-labs.github.io/data-center-helm-charts/installation/INSTALLATION/#5-configure-persistent-storage
 #
 # To manage external access to the Jira instance, an ingress resource can also be configured 
 # under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
 #
 # Additional details on pre-provisioning an ingress controller can be found here:
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/INSTALLATION.md#4-configure-ingress
+# https://atlassian-labs.github.io/data-center-helm-charts/installation/INSTALLATION/#4-configure-ingress
 #
 ##
 
@@ -73,7 +73,7 @@ serviceAccount:
 #
 # Jira requires a backend database. The configuration below can be used to define the 
 # database to use and its connection details.
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#database-connectivity
+# https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#database-connectivity
 #
 database: 
 
@@ -86,7 +86,7 @@ database:
    # - 'oracle10g'
    # - 'mssql'
    # - 'postgresaurora96'
-  # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasetype
+  # https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#databasetype
   #
   type: 
   
@@ -96,7 +96,7 @@ database:
    # - 'jdbc:mysql://<dbhost>/<dbname>'
    # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
    # - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
-  # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasejdbcurl
+  # https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#databaseurl
   #
   url:
    
@@ -107,7 +107,7 @@ database:
    # - 'com.mysql.jdbc.Driver'
    # - 'oracle.jdbc.OracleDriver'
    # - 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
-  # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#databasedriver
+  #https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#databasedriver
   #
   driver:
    
@@ -141,7 +141,7 @@ database:
 # volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production 
 # deployments this is not ideal and so local-home and shared-home should both be configured 
 # appropriately.
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#volumes-configuration
+# https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#volumes-configuration
 #
 volumes:
 
@@ -154,7 +154,7 @@ volumes:
     # Dynamic provisioning of local-home using the K8s Storage Classes
     #
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
-    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/LOCAL_STORAGE.md
+    # https://atlassian-labs.github.io/data-center-helm-charts/examples/storage/aws/LOCAL_STORAGE/
     #
     persistentVolumeClaim:
     
@@ -232,7 +232,7 @@ volumes:
     # then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify 
     # the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
-    # https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/examples/storage/aws/SHARED_STORAGE.md
+    # https://atlassian-labs.github.io/data-center-helm-charts/examples/storage/aws/SHARED_STORAGE/
     #
     customVolume: {}
     # persistentVolumeClaim:
@@ -280,7 +280,7 @@ volumes:
 # To make the Atlassian product available from outside of the K8s cluster an Ingress 
 # Controller should be pre-provisioned. With this in place the configuration below 
 # can be used to configure an appropriate Ingress Resource. 
-# https://github.com/atlassian-labs/data-center-helm-charts/blob/master/docs/CONFIGURATION.md#ingress
+# https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#ingress
 #
 ingress:
 
