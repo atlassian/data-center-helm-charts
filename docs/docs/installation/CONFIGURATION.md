@@ -136,17 +136,17 @@ volumes:
 The products need to be supplied with the information they need to connect to the 
 database service. Configuration for each product is mostly the same, with some small differences.
 
-### `database.jdbcUrl`
+### `database.url`
 
 All products require the JDBC URL of the database. The format if this URL depends
 on the JDBC driver being used, but some examples are:
 
-| Vendor | JDBC driver class  | Example JDBC URL  |   
-|---|---|---|
-| Postgres | `org.postgresql.Driver` | `jdbc:postgresql://<dbhost>:5432/<dbname>` |   
-| MySQL | `com.mysql.jdbc.Driver` | `jdbc:mysql://<dbhost>/<dbname>` |   
-| SQL Server | `com.microsoft.sqlserver.jdbc.SQLServerDriver` | `jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>` |   
-| Oracle | `oracle.jdbc.OracleDriver` | `jdbc:oracle:thin:@<dbhost>:1521:<SID>` |
+| Vendor        | JDBC driver class                               | Example JDBC URL                                        |   
+|---            |---                                              |---                                                      |
+| Postgres      | `org.postgresql.Driver`                         | `jdbc:postgresql://<dbhost>:5432/<dbname>`              |   
+| MySQL         | `com.mysql.jdbc.Driver`                         | `jdbc:mysql://<dbhost>/<dbname>`                        |   
+| SQL Server    | `com.microsoft.sqlserver.jdbc.SQLServerDriver`  | `jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>`  |   
+| Oracle        | `oracle.jdbc.OracleDriver`                      | `jdbc:oracle:thin:@<dbhost>:1521:<SID>`                 |
 
 > **NOTE:** With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
 >  * [Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html){.external}

@@ -37,7 +37,7 @@ Manually provision a new DNS record via your cloud provider or using [external-d
 
 Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 2. above](#2-install-controller). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
-kubectl get service | grep ingress-nginx    
+kubectl get service -n ingress | grep ingress-nginx
 ```
 the output of this command should look something like...
 ```shell
