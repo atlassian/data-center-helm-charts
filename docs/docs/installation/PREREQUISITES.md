@@ -20,7 +20,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 ### Create and connect to the Kubernetes cluster
 
 * See examples of [provisioning Kubernetes clusters on cloud-based providers](../examples/cluster/CLOUD_PROVIDERS.md).
-* In order to install the charts to your Kubernetes cluster, your kubernetes client config must be configured appropriately, and you must have the necessary permissions.
+* In order to install the charts to your Kubernetes cluster, your Kubernetes client config must be configured appropriately, and you must have the necessary permissions.
 * It is up to you to set up security policies.
 
 ### Provision an Ingress Controller
