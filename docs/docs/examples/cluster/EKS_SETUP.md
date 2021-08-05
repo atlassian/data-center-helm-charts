@@ -15,8 +15,8 @@ metadata:
   name: atlassian-cluster
   region: ap-southeast-2
 
-nodeGroups:
-  - name: ng-1
+managedNodeGroups:
+  - name: jira
     instanceType: m5.large
     desiredCapacity: 2
     ssh: # enable SSH using SSM
