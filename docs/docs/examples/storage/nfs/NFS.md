@@ -4,7 +4,7 @@
 
     **This functionality is not officially supported.**
     
-    The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These exampes should not be used in production. 
+    The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These examples should not be used in production. 
     
     Before you proceed we highly recommend that you understand your specific deployment needs and tailor your solution to them.
 
