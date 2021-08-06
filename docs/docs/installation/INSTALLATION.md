@@ -30,7 +30,7 @@ Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configu
 
 > By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
 
-> If you are migrating an existing Data Center product to Kubernetes, use the values of your product's database.
+> If you are migrating an existing Data Center product to Kubernetes, use the values of your product's database. See [Migration guide](MIGRATION.md).
 
 Create a Kubernetes secret to store the connectivity details of the database:
 
@@ -99,7 +99,7 @@ volumes:
 
 > For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
 
-> If you are migrating an existing Data Center product to Kubernetes, use the values of your product's shared home.
+> If you are migrating an existing Data Center product to Kubernetes, use the values of your product's shared home. See [Migration guide](MIGRATION.md).
     
 > **NOTE:** Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
     
