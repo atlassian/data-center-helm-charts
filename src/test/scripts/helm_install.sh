@@ -156,9 +156,6 @@ bootstrap_elasticsearch() {
      --version "$ELASTICSEARCH_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
      bitnami/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
-
-  # Flag as installed for post-install tests.
-  echo "\nELASTICSEARCH_INSTALLED=1" > "$HELM_PARAMETERS_FILE"
 }
 
 # Package the product's Helm chart

@@ -12,10 +12,12 @@ import org.assertj.core.description.Description;
 import org.assertj.core.description.LazyTextDescription;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import test.model.Product;
 
+import java.lang.annotation.Repeatable;
 import java.util.function.Consumer;
 
 import static io.restassured.RestAssured.*;
@@ -55,12 +57,24 @@ class ElasticSearchInstallTest {
 
     @Test
     void elasticSearchBeingUsed() {
-        // Relies on the backdoor ingress controller installed by helm_install.sh.
-        // If this changes an alternative would be to use the fabric8 client ExecWatch/ExecListener to
-        // invoke curl from a pod.
-        final var indexURL = esIngressBase + "/_cat/indices?format=json";
-        when().get(indexURL).then()
-                .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
+        int retries = 120; // It might take a little while to propagate.
+        while (retries > 0) {
+            try {
+                // Relies on the backdoor ingress controller installed by helm_install.sh.
+                // If this changes an alternative would be to use the fabric8 client ExecWatch/ExecListener to
+                // invoke curl from a pod.
+                final var indexURL = esIngressBase + "/_cat/indices?format=json";
+                when().get(indexURL).then()
+                        .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
+            } catch (Exception e) {
+                retries--;
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception _e) {
+                }
+            }
+            return;
+        }
     }
 
     @AfterAll
