@@ -28,6 +28,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 
 * [Prerequisites and setup](installation/PREREQUISITES.md) - everything you need to do before installing the Helm charts
 * [Installation](installation/INSTALLATION.md) - the steps to install the Helm charts
+* [Migration](installation/MIGRATION.md) - what you have to do if you're migrating an exisitng deployment to Kubernetes
 
 ## Additional content
 
