@@ -1,6 +1,6 @@
 # Migration
 
-If you already have an existing Data Center product deployment, you can migrate it to a Kubernetes cluster using the [Data Center Helm charts](../../../../). 
+If you already have an existing Data Center product deployment, you can migrate it to a Kubernetes cluster using the Data Center Helm charts. 
 
 You will need to migrate your database and your shared home, then all you need to do is to follow the [Installation guide](INSTALLATION.md), using your migrated resources instead of provisioning new ones.
 
