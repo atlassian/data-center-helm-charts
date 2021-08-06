@@ -12,7 +12,8 @@ Helpful links:
 
 * [Atlassian Data Center migration plan](https://confluence.atlassian.com/enterprise/atlassian-data-center-migration-plan-935363952.html){.external} - gives some guidance on overall process, organizational preparedness, estimated time frames, and app compatibility. 
 * [Atlassian Data Center migration checklist](https://confluence.atlassian.com/enterprise/atlassian-data-center-migration-checklist-935383667.html){.external} - also provides useful tests and checks to perform throughout the moving process.
-* [Migrating to another database](https://confluence.atlassian.com/doc/migrating-to-another-database-148867.html){.external} - describes how to migrate your Confluence data from your existing database to another database.
-
+* Migrating to another database - describes how to migrate your data from your existing database to another database:
+   * [Migrating Confluence to another database](https://confluence.atlassian.com/doc/migrating-to-another-database-148867.html){.external}
+   * [Migrating Jira to another database](https://confluence.atlassian.com/adminjiraserver/switching-databases-938846867.html){.external} 
 
 > For better performance consider co-locating your migrated database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you need high availability.
