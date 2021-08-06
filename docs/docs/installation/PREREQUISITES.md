@@ -50,6 +50,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 * Must be reachable from the product deployed within your Kubernetes cluster. 
 * The database service may be deployed within the same Kubernetes cluster as the Data Center product or elsewhere.
 * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information go to the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
+> For better performance consider co-locating your database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.
 
 ### Configure a shared-home volume
 
