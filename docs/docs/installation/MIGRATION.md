@@ -16,4 +16,4 @@ Helpful links:
    * [Migrating Confluence to another database](https://confluence.atlassian.com/doc/migrating-to-another-database-148867.html){.external}
    * [Migrating Jira to another database](https://confluence.atlassian.com/adminjiraserver/switching-databases-938846867.html){.external} 
 
-> For better performance consider co-locating your migrated database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you need high availability.
+> For better performance consider co-locating your migrated database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.
