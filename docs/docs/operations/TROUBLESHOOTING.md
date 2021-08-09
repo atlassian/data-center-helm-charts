@@ -52,7 +52,7 @@ You can read the output and make sure it doesn't contain an error or an exceptio
 
 ### Get application pod details
 
-For more details follow the [Kubernetes official guide](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/).
+For more details follow the [official guide for debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/).
 
 Get the list of pods and their states:
 
@@ -68,3 +68,15 @@ kubectl describe POD_NAME -n NAMESPACE
 
 ### Get storage details
 
+Each application pod needs to have successfully mounted local and shared home. You can find out the details for the persistent volume claims with this command: 
+
+???+ info "Prerequisities"
+      The example needs to have [`jq`](https://stedolan.github.io/jq/) tool installed.
+
+```shell
+kubectl get pods --all-namespaces -o=json | jq -c \
+'.items[] | {name: .metadata.name, namespace: .metadata.namespace, claimName:.spec.volumes[] | select( has ("persistentVolumeClaim") ).persistentVolumeClaim.claimName }'
+```
+Find all the application pods in the output and verify they have the correct claims (shared + local home).
+
+For more details follow the [documentation for persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
