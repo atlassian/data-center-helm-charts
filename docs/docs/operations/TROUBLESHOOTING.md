@@ -1,4 +1,4 @@
-# Troubleshooting and investigation tips
+# Troubleshooting
 
 This guide contains general tips on how to investigate application deployment that doesn't work correctly.
 
@@ -65,3 +65,6 @@ Get details about a specific pod:
 ```shell
 kubectl describe POD_NAME -n NAMESPACE
 ```
+
+### Get storage details
+
