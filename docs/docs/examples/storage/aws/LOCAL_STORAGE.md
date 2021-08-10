@@ -2,16 +2,21 @@
 This file provides examples on how a Kubernetes cluster and helm deployment can be configured to utilize AWS EBS backed volumes.
 
 ## Dynamic provisioning
-Due to the ephemeral nature of Kubernetes pods we advise dynamic provisioning be used for creating and consuming EBS volume(s)
+Due to the ephemeral nature of Kubernetes pods we advise dynamic provisioning be used for creating and consuming EBS volume(s).
 
 ### Prerequisites
-1. [EBS](https://github.com/kubernetes-sigs/aws-ebs-csi-driver){.external} CSI driver is [installed](https://www.eksworkshop.com/beginner/170_statefulset/ebs_csi_driver/) within the k8s cluster. Ensure that `enableVolumeScheduling=true` is set when installing, see [here](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/tree/master/examples/kubernetes/dynamic-provisioning){.external} for additional details.
-
-You can confirm that the EBS CSI driver has been installed by running
+1. Ensure the [EBS](https://github.com/kubernetes-sigs/aws-ebs-csi-driver){.external} CSI driver is installed within the k8s cluster, you can confirm this by running:  
 
 ```shell
 kubectl get csidriver
 ```
+the output of the above command should include the named driver `ebs.csi.aws.com` for example:
+```shell
+NAME              ATTACHREQUIRED   PODINFOONMOUNT   MODES        AGE
+ebs.csi.aws.com   true             false            Persistent   5d1h
+```
+If not present the EBS driver can be installed using the following instructions [here](https://www.eksworkshop.com/beginner/170_statefulset/ebs_csi_driver/){.external}.
+
 
 ### Provisioning
 
@@ -46,6 +51,5 @@ volumes:
 # Resources
 Some useful resources on provisioning local storage with the AWS CSI Driver
 
-- https://github.com/kubernetes-sigs/aws-ebs-csi-driver
-- https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
-- https://aws.amazon.com/blogs/containers/introducing-efs-csi-dynamic-provisioning/
+- [EBS CSI driver - GitHub Repo](https://github.com/kubernetes-sigs/aws-ebs-csi-driver)
+- [Official Amazon EBS CSI driver documentation](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
