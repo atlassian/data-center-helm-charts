@@ -112,7 +112,7 @@ index a39d4ae..8e148f3 100644
 
 
 * Version 0.9.0 
-* Merge branch 'master' into DCKUBE-317-additional-libraries-for-synchron 
+* Merge branch 'main' into DCKUBE-317-additional-libraries-for-synchron 
 * DCKUBE-317: Fix new line remover 
 * initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140) 
 * DCKUBE-317: Fix comment for Synchrony additional library 
@@ -120,11 +120,11 @@ index a39d4ae..8e148f3 100644
 * DCKUBE-292: fix the problem with empty ingress URL in Confluence 
 * DCKUBE-317: Added additional libraries for synchrony 
 * Update values.yaml (#139) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * README update for 0.8.0 
 * Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Add Ingress path to Confluence setup ingress and add tests (#136) 
 * Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134) 
@@ -135,7 +135,7 @@ index a39d4ae..8e148f3 100644
 * Revert "DCKUBE-205: define the ingress template as a library" 
 * Revert "DCKUBE-205: use diffent ingress name for setup ingress" 
 * Revert "DCKUBE-205: fix a typo for ingress definitions" 
-* Merge branch 'master' into issue-712/DCKUBE-205-make-possible-to-run-k8s-tests-in-local-cluster 
+* Merge branch 'main' into issue-712/DCKUBE-205-make-possible-to-run-k8s-tests-in-local-cluster 
 * Add Crowd as a tested product (#128) 
 * DCKUBE-205: address review comments 
 * DCKUBE-205: fix a typo for ingress definitions 
@@ -378,7 +378,7 @@ index da3a956..a39d4ae 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Merge branch 'master' into issue-712/DCKUBE-205-make-possible-to-run-k8s-tests-in-local-cluster 
+* Merge branch 'main' into issue-712/DCKUBE-205-make-possible-to-run-k8s-tests-in-local-cluster 
 
 ### Default value changes
 
@@ -485,7 +485,7 @@ index 0ae8cf2..08095d6 100644
 * Update application versions (#116) 
 * DCKUBE-103: add a system to enable collab editing by default 
 * indenting jira's additionalFiles volume mounts and adding to confluence 
-* Merge branch 'master' into issue-712/DCKUBE-205-make-possible-to-run-k8s-tests-in-local-cluster 
+* Merge branch 'main' into issue-712/DCKUBE-205-make-possible-to-run-k8s-tests-in-local-cluster 
 * DCKUBE-205: use separate ingress for setup 
 * Update documentation for 0.6.0 release 
 * DCKUBE-205: increase the default Nginx timeout 
@@ -496,9 +496,9 @@ index 0ae8cf2..08095d6 100644
 * DCKUBE-231: Max body size should be configurable 
 * DCKUBE-90: Additional details relating to the Ingress controller 
 * Introducing an easier way to mount secrets and configmaps (#102) 
-* Merge branch 'master' into dckube-131-nfs-fixer-removal 
+* Merge branch 'main' into dckube-131-nfs-fixer-removal 
 * DCKUBE-131: fix for initContainer being synthesized twice 
-* Merge branch 'master' into dckube-131-nfs-fixer-removal 
+* Merge branch 'main' into dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Updates to template formatting and readme wording 
 * Merge pull request #98 from atlassian-labs/dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Alter NFS permissions via init container 
@@ -510,11 +510,11 @@ index 0ae8cf2..08095d6 100644
 * DCNG-976 replace Confluence chart fluentd log file tail input, with HTTP events posted direct from Confluence 
 * Merge pull request #59 from atlassian-labs/minor-cleanup-and-Azure-related-fixes 
 * DCNG-976 remove duplicate additionalContainers from confluence chart 
-* Merge remote-tracking branch 'origin/master' into DCNG-976-efk 
+* Merge remote-tracking branch 'origin/main' into DCNG-976-efk 
 * Fix gid value 
-* Merge remote-tracking branch 'origin/master' into DCNG-976-efk 
+* Merge remote-tracking branch 'origin/main' into DCNG-976-efk 
 * OpenShift support (#56) 
-* Merge remote-tracking branch 'origin/master' into DCNG-976-efk 
+* Merge remote-tracking branch 'origin/main' into DCNG-976-efk 
 * DCNG-977 enable access logs in Confluence by default, for consistency with Jira+BB 
 * DCNG-977 document use of double-mounted local-home volume 
 * DCNG-783 minor cleanup and Azure related fixes 
@@ -548,7 +548,7 @@ index 0ae8cf2..08095d6 100644
 * DCNG-898 add a series of unit tests for the serviceAccount and image config rendering 
 * DCNG-899 Added service account to db-connectivity-test 
 * DCNG-897 Use "before-hook-creation,hook-succeeded" deletion policy 
-* Merge remote-tracking branch 'origin/master' into DCNG-897 
+* Merge remote-tracking branch 'origin/main' into DCNG-897 
 * DCNG-897 Add hook-delete-policy to chart tests and nfs-fixer job 
 * DCNG-894 Add a ServiceAccount, ClusterRole and ClusterRoleBinding to the Confluence chart 
 * DCNG-880 Added support for custom builds in kubeVersion 

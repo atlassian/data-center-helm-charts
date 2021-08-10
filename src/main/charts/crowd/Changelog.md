@@ -86,11 +86,11 @@ change.
 
 * Version 0.9.0 
 * initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * README update for 0.8.0 
 * Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134) 
 * DCKUBE-267: Wording updates 
@@ -109,7 +109,7 @@ index a48f866..ce5a29d 100644
    resources:
      jvm:
 +      # -- JVM memory arguments below are based on the defaults defined for the Crowd docker container, see:
-+      # https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/
++      # https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/main/
 +      #
        # -- The maximum amount of heap memory that will be used by the Crowd JVM
 -      maxHeap: "1g"

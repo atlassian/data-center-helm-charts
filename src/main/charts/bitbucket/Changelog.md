@@ -112,15 +112,15 @@ index d3342d2..786d343 100644
 * Version 0.9.0 
 * initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140) 
 * Update values.yaml (#139) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * README update for 0.8.0 
 * Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
+* Merge branch 'main' into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Wording updates 
 * DCKUBE-267: Initial commit 
 * DCKUBE-51 Application upgrade (#122) 
@@ -365,9 +365,9 @@ index bb7a568..d3342d2 100644
 * DCKUBE-231: Max body size should be configurable 
 * DCKUBE-90: Additional details relating to the Ingress controller 
 * Introducing an easier way to mount secrets and configmaps (#102) 
-* Merge branch 'master' into dckube-131-nfs-fixer-removal 
+* Merge branch 'main' into dckube-131-nfs-fixer-removal 
 * DCKUBE-131: fix for initContainer being synthesized twice 
-* Merge branch 'master' into dckube-131-nfs-fixer-removal 
+* Merge branch 'main' into dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Updates to template formatting and readme wording 
 * Merge pull request #98 from atlassian-labs/dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Alter NFS permissions via init container 
@@ -385,7 +385,7 @@ index bb7a568..d3342d2 100644
 * Add optional TLS to ingress spec 
 * DCNG-892 simplify config of https/http 
 * DCNG-892 update docs 
-* Merge remote-tracking branch 'origin/master' into DCNG-892 
+* Merge remote-tracking branch 'origin/main' into DCNG-892 
 * DCNG-892 Configure the created ingress as nginx by default 
 * DCNG-892 Move ingress value structure up to top level 
 * DCNG-906 Set ELASTICSEARCH_ENABLED=false if ES base URL is defined 
@@ -409,7 +409,7 @@ index bb7a568..d3342d2 100644
 * DCNG-898 add a series of unit tests for the serviceAccount and image config rendering 
 * DCNG-899 Added service account to db-connectivity-test 
 * DCNG-897 Use "before-hook-creation,hook-succeeded" deletion policy 
-* Merge remote-tracking branch 'origin/master' into DCNG-897 
+* Merge remote-tracking branch 'origin/main' into DCNG-897 
 * DCNG-894 Add a ServiceAccount, ClusterRole and ClusterRoleBinding to the Bitbucket chart 
 * DCNG-897 Add hook-delete-policy to chart tests and nfs-fixer job 
 * DCNG-880 Added support for custom builds in kubeVersion 

@@ -6,7 +6,7 @@ name: Maven unit tests
 on:
   push:
     branches:
-      - master
+      - main
       - /.*-stable/
   pull_request:
     branches:
