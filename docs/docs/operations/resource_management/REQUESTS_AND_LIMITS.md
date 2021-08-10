@@ -6,10 +6,10 @@ The default resource requests that are used for each product are defined below. 
 
 | Product  | CPU   |  Memory |
 |----------|:-----:|------:|
-| [Jira](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/main/#markdown-header-memory-heap-size){.external}                        | `2`   | `2G`  |
-| [Confluence](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/main/#markdown-header-memory-heap-size){.external}     | `2`   | `2G`  |
-| [Bitbucket](https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/main/){.external}                                        | `2`   | `2G`  |
-| [Crowd](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/main/){.external}                                                       | `2`   | `1G`  |
+| [Jira](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/#markdown-header-memory-heap-size){.external}                        | `2`   | `2G`  |
+| [Confluence](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/master/#markdown-header-memory-heap-size){.external}     | `2`   | `2G`  |
+| [Bitbucket](https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/){.external}                                        | `2`   | `2G`  |
+| [Crowd](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/){.external}                                                       | `2`   | `1G`  |
 
 ### Memory request sizing
 Request sizing must allow for the size of the product `JVM`. That means the `maximum heap size`, `minumum heap size` and the `reserved code cache size` (if applicable) plus other JVM overheads, must be considered when defining the request `memory` size. As a rule of thumb the formula below can be used to deduce the appropriate request memory size.
