@@ -10,10 +10,15 @@ An example detailing how an existing EFS filesystem can be created and consumed 
 
 Additional details on static EFS provisioning can be found [here](https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/examples/kubernetes/static_provisioning){.external}
 
-Confirm that the EFS CSI driver has been installed by running
+You can confirm that the EFS CSI driver has been installed by running:
 
 ```shell
 kubectl get csidriver
+```
+the output of the above command should include the named driver `efs.csi.aws.com` for example:
+```shell
+NAME              ATTACHREQUIRED   PODINFOONMOUNT   MODES        AGE
+efs.csi.aws.com   false            false            Persistent   5d3h
 ```
 
 ### Provisioning
