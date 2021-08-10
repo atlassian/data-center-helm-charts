@@ -5,7 +5,7 @@ This file provides examples on how a Kubernetes cluster and helm deployment can 
 Due to the ephemeral nature of Kubernetes pods we advise dynamic provisioning be used for creating and consuming EBS volume(s).
 
 ### Prerequisites
-1. Ensure the [EBS](https://github.com/kubernetes-sigs/aws-ebs-csi-driver){.external} CSI driver is installed within the k8s cluster, you can confirm this by running:  
+Ensure the [EBS](https://github.com/kubernetes-sigs/aws-ebs-csi-driver){.external} CSI driver is installed within the k8s cluster, you can confirm this by running:  
 
 ```shell
 kubectl get csidriver
