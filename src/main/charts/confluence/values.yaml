@@ -493,7 +493,7 @@ confluence:
   
     # JVM Memory / Heap Size definitions. Thes values below are based on the 
     # defaults defined for the Confluence docker container.
-    # https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/main/#markdown-header-memory-heap-size
+    # https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/master/#markdown-header-memory-heap-size
     #
     jvm:
     

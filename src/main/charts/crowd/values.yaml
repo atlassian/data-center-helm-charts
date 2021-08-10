@@ -210,7 +210,7 @@ crowd:
 
     # JVM Memory / Heap Size definitions. These values below are based on the
     # defaults defined for the Crowd docker container.
-    # https://bitbucket.org/atlassian-docker/docker-atlassian-crowd-server/src/main/#markdown-header-memory-heap-size
+    # https://bitbucket.org/atlassian-docker/docker-atlassian-crowd-server/src/master/#markdown-header-memory-heap-size
     #
     jvm:
 
