@@ -14,7 +14,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
 stabilized.
 
-Also, we **don’t officially support** the functionality described in the [examples](docs/examples) or the documented [platforms](docs/PLATFORMS.md). You should use them for reference only. 
+Also, we **don’t officially support** the functionality described in the [examples](https://atlassian-labs.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian-labs.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
 
 ## Documentation
 
