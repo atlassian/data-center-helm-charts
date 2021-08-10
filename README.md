@@ -9,16 +9,20 @@ This project contains [Helm charts](https://helm.sh/) for installing Atlassian's
 
 Use the charts to install and operate Data Center products within a Kubernetes cluster of your choice. It can be a managed environment, such as [Amazon EKS](https://aws.amazon.com/eks/), [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/), [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine), or a custom on-premise system.
 
+## Get started
+
+**Get started right now using our [documentation](https://atlassian-labs.github.io/data-center-helm-charts/)!**
+
+We provide extensive documentation to support our Helm charts. This includes prerequisites, set up, installation, examples, and more.
+
+
 ## Support disclaimer
 
-These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
+These Helm charts are in **beta phase and unsupported**, with the goal of introducing official support once they have been
 stabilized.
 
 Also, we **don’t officially support** the functionality described in the [examples](https://atlassian-labs.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian-labs.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
 
-## Documentation
-
-We provide [extensive documentation](https://atlassian-labs.github.io/data-center-helm-charts/) to support our Helm charts. This includes prerequisites, set up, installation, examples, and more.
 
 ## Feedback
 
