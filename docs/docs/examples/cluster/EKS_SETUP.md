@@ -28,7 +28,7 @@ managedNodeGroups:
 
     1. [Geographical region](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/){.external} - where will the cluster reside.
     2. [EC2 instance type](https://aws.amazon.com/ec2/instance-types/){.external} - the instance type to be used for the nodes that make up the cluster.
-    3. Number of nodes - guidance on the resource dimensions that should be used for these nodes can be found in [Requests and limits](../../operations/resource_management/REQUESTS_AND_LIMITS.md).
+    3. Number of nodes - guidance on the resource dimensions that should be used for these nodes can be found in [Requests and limits](../../userguide/resource_management/REQUESTS_AND_LIMITS.md).
 
 Adding the config above to a file named `config.yaml` provision the cluster: 
 
@@ -37,4 +37,4 @@ eksctl create cluster -f config.yaml
 ```
 
 ---
-Having established a cluster, continue with provisioning the [prerequisite infrastructure](../../installation/PREREQUISITES.md).
+Having established a cluster, continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).

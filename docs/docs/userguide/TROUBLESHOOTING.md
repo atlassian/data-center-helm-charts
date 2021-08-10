@@ -5,7 +5,7 @@ This guide contains general tips on how to investigate application deployment th
 ## General tips
 
 First, it is important to gather the information that will help you better understand where to focus your investigation efforts.
-The next section assumes you've followed the [installation](../installation/INSTALLATION.md) and [configuration](../installation/CONFIGURATION.md) guides, and you can't access the installed product service. 
+The next section assumes you've followed the [installation](../userguide/INSTALLATION.md) and [configuration](../userguide/CONFIGURATION.md) guides, and you can't access the installed product service. 
 
 For installation troubleshooting, you will need to access the Kubernetes cluster and have enough permissions to follow the commands below.
 

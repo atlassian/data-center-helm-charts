@@ -22,4 +22,4 @@ For details on creating the database user and database itself follow the appropr
     [Create database for Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
  
 
-> Once you create a database continue with provisioning the [prerequisite infrastructure](../../installation/PREREQUISITES.md).
+> Once you create a database continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).

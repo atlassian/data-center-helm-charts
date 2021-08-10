@@ -1,0 +1,6 @@
+collapse_single_pages: false
+nav:
+    - STORAGE.md
+    - AWS: aws
+    - NFS: nfs
+    - ...

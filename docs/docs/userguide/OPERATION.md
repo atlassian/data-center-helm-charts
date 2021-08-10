@@ -1,5 +1,5 @@
 # Operation
-Once you have [installed your product](../installation/INSTALLATION.md), use this document if you want to scale your product, update your product, or see what examples we have.
+Once you have [installed your product](../userguide/INSTALLATION.md), use this document if you want to scale your product, update your product, or see what examples we have.
 
 ## Managing resources
 
@@ -33,11 +33,11 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
 ### Rolling upgrade
 
 === "Jira"
-       To learn about rolling upgrade in Jira see [Jira rolling upgrade](product_upgrades/JIRA_UPGRADE.md)
+       To learn about rolling upgrade in Jira see [Jira rolling upgrade](product_upgrades/JIRA_UPGRADE.md).
 === "Confluence"
-       To learn about rolling upgrade in Confluence see [Confluence rolling upgrade](product_upgrades/CONFLUENCE_UPGRADE.md)
+       To learn about rolling upgrade in Confluence see [Confluence rolling upgrade](product_upgrades/CONFLUENCE_UPGRADE.md).
 === "Bitbucket"
-       To learn about rolling upgrade in Bitbucket see [Bitbucket rolling upgrade](product_upgrades/BITBUCKET_UPGRADE.md)
+       To learn about rolling upgrade in Bitbucket see [Bitbucket rolling upgrade](product_upgrades/BITBUCKET_UPGRADE.md).
 
 ## Examples
 ### Logging

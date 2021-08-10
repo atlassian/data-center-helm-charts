@@ -8,12 +8,11 @@ You will need to migrate your database and your shared home, then all you need t
 * Migrating your shared home - Application nodes should have access to a shared directory in the same path. Examples of what the shared file system stores include plugins, shared caches, repositories, attachments, and avatars. Configure your shared home by updating the `sharedHome` stanza in the `values.yaml` file as explained in the [Configure persistent storage step in the installation guide](INSTALLATION.md#5-configure-persistent-storage).
 
 Helpful links:
-[Helm charts](https://helm.sh/){.external}
 
 * [Atlassian Data Center migration plan](https://confluence.atlassian.com/enterprise/atlassian-data-center-migration-plan-935363952.html){.external} - gives some guidance on overall process, organizational preparedness, estimated time frames, and app compatibility. 
 * [Atlassian Data Center migration checklist](https://confluence.atlassian.com/enterprise/atlassian-data-center-migration-checklist-935383667.html){.external} - also provides useful tests and checks to perform throughout the moving process.
 * Migrating to another database - describes how to migrate your data from your existing database to another database:
-   * [Migrating Confluence to another database](https://confluence.atlassian.com/doc/migrating-to-another-database-148867.html){.external}
-   * [Migrating Jira to another database](https://confluence.atlassian.com/adminjiraserver/switching-databases-938846867.html){.external} 
+    * [Migrating Confluence to another database](https://confluence.atlassian.com/doc/migrating-to-another-database-148867.html){.external}
+    * [Migrating Jira to another database](https://confluence.atlassian.com/adminjiraserver/switching-databases-938846867.html){.external} 
 
 > For better performance consider co-locating your migrated database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.

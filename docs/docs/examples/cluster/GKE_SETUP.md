@@ -7,4 +7,4 @@ We recommend installing and configuring [Google Cloud SDK](https://cloud.google.
 ## Manual creation
 Follow the [How-to guides](https://cloud.google.com/kubernetes-engine/docs/how-to#creating-clusters){.external} for details on creating an GKE cluster. 
 
-> Having established a cluster continue with provisioning the [prerequisite infrastructure](../../installation/PREREQUISITES.md).
+> Having established a cluster continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).

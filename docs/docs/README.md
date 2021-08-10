@@ -26,17 +26,17 @@ The diagram below provides a high level overview of what a typical deployment mi
 
 ## Installing the Helm charts
 
-* [Prerequisites and setup](installation/PREREQUISITES.md) - everything you need to do before installing the Helm charts
-* [Installation](installation/INSTALLATION.md) - the steps to install the Helm charts
-* [Migration](installation/MIGRATION.md) - what you have to do if you're migrating an exisitng deployment to Kubernetes
+* [Prerequisites and setup](userguide/PREREQUISITES.md) - everything you need to do before installing the Helm charts
+* [Installation](userguide/INSTALLATION.md) - the steps to install the Helm charts
+* [Migration](userguide/MIGRATION.md) - what you have to do if you're migrating an exisitng deployment to Kubernetes
 
 ## Additional content
 
-* [Operation](operations/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
-* [Configuration](installation/CONFIGURATION.md) - a deep dive into the configuration parameters
+* [Operation](userguide/OPERATION.md) - how to upgrade applications, scale your cluster, and update resources
+* [Configuration](userguide/CONFIGURATION.md) - a deep dive into the configuration parameters
 * [Platforms support](platforms/PLATFORMS.md) - how to allow support for different platforms
 * [Examples](examples/EXAMPLES.md) - various configuration examples
-* [Troubleshooting](operations/TROUBLESHOOTING.md) - how to debug issues with installation
+* [Troubleshooting](userguide/TROUBLESHOOTING.md) - how to debug issues with installation
 
 ## Feedback
 
