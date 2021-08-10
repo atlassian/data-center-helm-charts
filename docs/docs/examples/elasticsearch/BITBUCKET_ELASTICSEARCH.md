@@ -5,11 +5,15 @@ While Bitbucket has its own internal Elasticsearch instance, we highly recommend
 ### Installing Elasticsearch into your Kubernetes cluster
 Choose a version of Elasticsearch that is supported by the [version of Bitbucket you are installing](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-additional-toolsAdditionaltools){.external}. For Bitbucket 7.14 the latest supported Elasticsearch version is 7.9.3, so we will target that.
 
-There are official [Helm charts for Elasticsearch 7.9.3](https://artifacthub.io/packages/helm/elastic/elasticsearch/7.9.3){.external}. Following the documentation there add the Elasticsearch Helm charts repository, then install it:
+There are official [Helm charts for Elasticsearch 7.9.3](https://artifacthub.io/packages/helm/elastic/elasticsearch/7.9.3){.external}. Following the documentation there add the Elasticsearch Helm charts repository:
 
-`helm repo add elastic https://helm.elastic.co`
-
-`helm install elasticsearch --version 7.9.3 elastic/elasticsearch`
+```bash
+helm repo add elastic https://helm.elastic.co
+```
+then install it:
+```bash
+helm install elasticsearch --version 7.9.3 elastic/elasticsearch
+```
 
 ### Configuring your Bitbucket deployment
 
