@@ -7,4 +7,4 @@ We recommend installing and configuring the [Azure Cloud Shell](https://docs.mic
 ## Manual creation
 Follow the [Azure Kubernetes Service Quickstart](https://docs.microsoft.com/en-au/azure/aks/kubernetes-walkthrough){.external} for details on creating an AKS cluster.
 
-> Having established a cluster continue with provisioning the [prerequisite infrastructure](../../installation/PREREQUISITES.md).
+> Having established a cluster continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).

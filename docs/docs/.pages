@@ -1,6 +1,5 @@
 nav:
-    - Introduction: README.md
-    - Installation: installation
-    - Operations: operations
+    - Home: README.md
+    - User guide: userguide
     - Examples: examples
     - Platforms: platforms

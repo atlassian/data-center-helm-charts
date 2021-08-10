@@ -302,7 +302,7 @@ to request 2x the value of the max heap for the JVM.
 This requirement to configure both the container memory and JVM heap will
 hopefully be removed.
 
-You can read more about [resource scaling](../operations/resource_management/RESOURCE_SCALING.md#vertical-scaling-adding-resources) and [resource requests and limits](../operations/resource_management/REQUESTS_AND_LIMITS.md).
+You can read more about [resource scaling](../userguide/resource_management/RESOURCE_SCALING.md#vertical-scaling-adding-resources) and [resource requests and limits](../userguide/resource_management/REQUESTS_AND_LIMITS.md).
 
 
 ## Additional containers

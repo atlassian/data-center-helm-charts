@@ -1,4 +1,4 @@
-# Implementation of an NFS Server for Bitbucket
+# Implementation of an NFS server for Bitbucket
 
 !!!warning Dislaimer
 

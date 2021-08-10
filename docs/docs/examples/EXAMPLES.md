@@ -1,4 +1,4 @@
-# Examples 
+# Available examples 
 
 !!!warning "Support disclaimer"
     Use the examples we provide as reference only, we don’t offer official support for them. 
