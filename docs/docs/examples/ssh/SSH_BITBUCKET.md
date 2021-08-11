@@ -18,7 +18,7 @@ Create a new `ConfigMap`:
 kubectl create configmap tcp-services
 ```
 
-In our example we deployed Bitbucket under the name `bitbucket` in the namespace `ssh-test`, update the `ConfigMap` `tcp-services` accordingly:
+In our example we deployed Bitbucket using the Helm release name `bitbucket` in the namespace `ssh-test`, update the `ConfigMap` `tcp-services` accordingly:
 
 ```yaml
 apiVersion: v1
