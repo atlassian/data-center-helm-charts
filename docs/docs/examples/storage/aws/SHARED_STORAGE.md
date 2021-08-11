@@ -5,7 +5,7 @@ This file provides examples on how a Kubernetes cluster and helm deployment can 
 An example detailing how an existing EFS filesystem can be created and consumed using static provisioning.
 
 ## Prerequisites
-1. [EFS](https://github.com/kubernetes-sigs/aws-efs-csi-driver){.external} CSI driver is [installed](https://www.eksworkshop.com/beginner/190_efs/efs-csi-driver/){.external} within the k8s cluster.
+1. [EFS](https://github.com/kubernetes-sigs/aws-efs-csi-driver){.external} CSI driver is [installed](https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html#efs-create-iam-resources){.external} within the k8s cluster.
 2. A physical EFS filesystem has been [provisioned](https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html#efs-create-filesystem){.external}
 
 Additional details on static EFS provisioning can be found [here](https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/examples/kubernetes/static_provisioning){.external}
