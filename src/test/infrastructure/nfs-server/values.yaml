@@ -56,7 +56,8 @@ service:
 persistence:
   annotations: {}
   size: 5Gi
-  storageClassName: "gp2"
+  # Use the default storage class name
+  storageClassName:
 
 resources:
   # limits:
