@@ -10,7 +10,7 @@
 * Add Service annotations (#209)
 * DCKUBE-453: Add support for providing a custom fluentd start command (#218)
 * DCKUBE-435: Renamed the 'master' branch to 'main' and set it as default (#232)
-* Update eks cluster yaml (#227)
+* Update EKS cluster yaml example (#227)
 * Improve [documentation](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
