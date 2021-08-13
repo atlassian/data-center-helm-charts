@@ -7,10 +7,11 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
+
+* DCKUBE-435: Renamed the 'master' branch to 'main' (#232)
 * DCKUBE-453: Add support for providing a custom fluentd start command (#218)
 * DCKUBE-534: Make some deployment params configurable (#226)
-* DCKUBE-534: Update Bitbucket version to 7.15.1-jdk11 (#226)
-* DCKUBE-435: Renamed the 'master' branch to 'main' (#232)
+* DCKUBE-596: Update Bitbucket version to 7.15.1-jdk11 (#238)
 * Update EKS cluster yaml example (#227)
 * Improve [documentation](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
 
