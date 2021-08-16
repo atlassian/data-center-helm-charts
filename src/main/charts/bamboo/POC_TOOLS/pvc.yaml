@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-home-volume
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeMode: Filesystem
+  volumeName: shared-home-volume
+  resources:
+    requests:
+      storage: 10Gi
