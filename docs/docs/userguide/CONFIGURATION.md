@@ -143,16 +143,30 @@ on the JDBC driver being used, but some examples are:
 
 | Vendor        | JDBC driver class                               | Example JDBC URL                                        |   
 |---            |---                                              |---                                                      |
-| Postgres      | `org.postgresql.Driver`                         | `jdbc:postgresql://<dbhost>:5432/<dbname>`              |   
+| PostgreSQL    | `org.postgresql.Driver`                         | `jdbc:postgresql://<dbhost>:5432/<dbname>`              |   
 | MySQL         | `com.mysql.jdbc.Driver`                         | `jdbc:mysql://<dbhost>/<dbname>`                        |   
 | SQL Server    | `com.microsoft.sqlserver.jdbc.SQLServerDriver`  | `jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>`  |   
 | Oracle        | `oracle.jdbc.OracleDriver`                      | `jdbc:oracle:thin:@<dbhost>:1521:<SID>`                 |
 
-> **NOTE:** With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
->  * [Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html){.external}
->  * [Confluence](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup){.external}
->  * [Bitbucket](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html){.external}
->  * [Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
+!!!info "Database creation"
+
+    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below: 
+   
+    === "Jira"
+
+        [Connect Jira to an external database](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html){.external}
+
+    === "Confluence"
+    
+        [Connect Confluence to an external database](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup){.external}
+    
+    === "Bitbucket"
+    
+        [Connect Bitbucket to an external database](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html){.external}
+
+    === "Crowd"
+
+        [Connect Crowd to an external database](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
 
 ### `database.driver`
 
@@ -163,9 +177,9 @@ correspond to the JDBC URL used; see the table above for example driver classes.
 Note that the products only ship with certain JDBC drivers installed, depending
 on the license conditions of those drivers.
 
-In order to use JDBC drivers that are not shipped with the product (e.g. MySQL 
-and Oracle), you need to follow the steps to introduce additional libraries into the
-installation (see below).
+!!!warning "Non-bundled DB drivers"
+    MySQL and Oracle database drivers are not shipped with the products due to licensing restrictions.
+    You will need to provide [`additionalLibraries` configuration](#additional-libraries-plugins).
 
 ### `database.type`
 
@@ -174,12 +188,12 @@ database engine to be used. The acceptable values for this include:
 
 | Vendor | Jira | Confluence  |   
 |---|---|---|
-| Postgres | `postgres72` | `postgresql` |   
+| PostgreSQL | `postgres72` | `postgresql` |   
 | MySQL | `mysql57` / `mysql8` | `mysql` |   
 | SQL Server | `mssql` | `mssql` |   
 | Oracle | `oracle10g` | `oracle` |   
 
-### Database credentials
+### `database.credentials`
 
 All products can have their database connectivity and credentials specified either
 interactively during first-time setup, or automatically by specifying certain configuration
@@ -189,7 +203,7 @@ Depending on the product, the `database.type`, `database.url` and `database.driv
 can be provided. In addition, the database username and password can be provided via a Kubernetes secret,
 with the secret name specified with the `database.credentials.secretName` chart value. 
 When all the required information is provided in this way, the database connectivity configuration screen
-will be bypassed during product setup. 
+will be bypassed during product setup.
 
 ## Namespace
 
