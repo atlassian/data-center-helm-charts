@@ -40,7 +40,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 
 ## Feedback
 
-If you find any issue, [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
+If you find any issue, [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
   
 
 ## Contributions
