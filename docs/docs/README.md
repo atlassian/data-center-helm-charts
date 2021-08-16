@@ -36,11 +36,11 @@ The diagram below provides a high level overview of what a typical deployment mi
 * [Configuration](userguide/CONFIGURATION.md) - a deep dive into the configuration parameters
 * [Platforms support](platforms/PLATFORMS.md) - how to allow support for different platforms
 * [Examples](examples/EXAMPLES.md) - various configuration examples
-* [Troubleshooting](userguide/TROUBLESHOOTING.md) - how to debug issues with installation
+* [Troubleshooting](troubleshooting/TROUBLESHOOTING.md) - how to debug issues with installation
 
 ## Feedback
 
-If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
+If you find any issue, [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
   
 
 ## Contributions
