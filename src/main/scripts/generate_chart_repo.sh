@@ -7,8 +7,10 @@ set -x
 CHARTS_SRC_DIR="src/main/charts"
 
 # The directory that will contain the generated chart repo files
-# "docs" is the hard-coded directory used by GitHub-Pages (yeah, I know)
-PUBLISH_DIR="docs"
+# docs/docs repository is transformed with MKDocs and served with Github Pages.
+# When the index.yaml is located there, it will be accessible on the GH pages URL:
+# https://atlassian-labs.github.io/data-center-helm-charts/
+PUBLISH_DIR="docs/docs"
 
 PACKAGE_DIR="target/helm"
 
