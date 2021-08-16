@@ -2,8 +2,8 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 0.14.0
-appVersion: 7.12.3-jdk11
+version: 0.15.0
+appVersion: 7.12.4-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -19,8 +19,35 @@ sources:
 deprecated: false
 annotations:
   artifacthub.io/changes: |
-    - kind: changed
-      description: Update Confluence version to 7.12.3-jdk11
+    - kind: added
+      description: Add Service annotations
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/209
+    - kind: added
+      description: Add support for providing a custom fluentd start command
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/218
+    - kind: changed
+      description: Renamed the 'master' branch to 'main'
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/232
+    - kind: changed
+      description: Update eks cluster yaml
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/227
+    - kind: changed
+      description: Improve documentation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/206
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/222
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/223
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/228
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/229
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/231
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/233
+        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/235
