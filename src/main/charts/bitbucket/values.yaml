@@ -313,7 +313,7 @@ volumes:
       # can write to it. This is a workaround for a K8s bug affecting NFS volumes: 
       # https://github.com/kubernetes/examples/issues/260
       #
-      enabled: false
+      enabled: true
       
       # -- The path in the K8s initContainer where the shared-home volume will be mounted
       #
