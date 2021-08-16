@@ -193,7 +193,7 @@ database engine to be used. The acceptable values for this include:
 | SQL Server | `mssql` | `mssql` |   
 | Oracle | `oracle10g` | `oracle` |   
 
-### Database credentials
+### `database.credentials`
 
 All products can have their database connectivity and credentials specified either
 interactively during first-time setup, or automatically by specifying certain configuration
@@ -203,7 +203,7 @@ Depending on the product, the `database.type`, `database.url` and `database.driv
 can be provided. In addition, the database username and password can be provided via a Kubernetes secret,
 with the secret name specified with the `database.credentials.secretName` chart value. 
 When all the required information is provided in this way, the database connectivity configuration screen
-will be bypassed during product setup. 
+will be bypassed during product setup.
 
 ## Namespace
 
