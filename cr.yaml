@@ -1,2 +1,2 @@
-pages-branch: main
-index-path: docs/index.yaml
+pages-branch: gh-pages
+index-path: docs/docs/index.yaml
