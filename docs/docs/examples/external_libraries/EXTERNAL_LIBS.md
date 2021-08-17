@@ -82,14 +82,14 @@ This approach is very similar to the [Shared home volume](#shared-home-volume) a
 
     Because many of the steps for this approach are similar to the steps used for [Shared home volume](#shared-home-volume) only those that differ will be discussed.
 
-### Create new volume
+### 1. Create new volume
 Using the same approach taken for provisioning the [shared-home volume](../storage/aws/SHARED_STORAGE.md), create a new `EFS` with a corresponding `PV` and `PVC`.
 
 !!!warning "ReadOnlyMany"
 
     Ensure that the PV and PVC are setup with `ReadOnlyMany` access
 
-### Update `values.yaml`
+### 2. Update `values.yaml`
 Assuming that the `PVC` representing the `EFS` is called `third-party-libraries`, update the `values.yaml` so that the `PVC` is added as an `additional` mount:
 ```yaml
 volumes:

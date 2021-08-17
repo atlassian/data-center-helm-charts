@@ -269,9 +269,15 @@ This will mount the `lib1.jar` and `lib2.jar` from the `mylibs` sub-directory fr
 into the appropriate place in the container.
 
 Similarly, you can use `additionalBundledPlugins` to load product plugins into the
-container. Note: Plugins installed via this method will appear as system plugins
-rather than user plugins. An alternative to this method is to install the
-plugins via "Manage Apps" in the product system administration UI.
+container. 
+
+!!!info "System plugin"
+
+    Plugins installed via this method will appear as system plugins
+    rather than user plugins. An alternative to this method is to install the
+    plugins via "Manage Apps" in the product system administration UI.
+
+For more details on the above, and how 3rd party libraries can be supplied to a Pod see the example [External libraries and plugins](../examples/external_libraries/EXTERNAL_LIBS.md)
 
 ## Request body size
 By default the maximum allowed size for the request body is set to 250MB. If the size in a request exceeds the maximum 
