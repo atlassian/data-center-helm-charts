@@ -1,0 +1,17 @@
+name: Documentation - Build
+on:
+  pull_request:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install mkdocs requirements
+        run: pip install -r requirements.txt
+        working-directory: docs
+      - name: Publish documentation to gp-pages branch
+        run: mkdocs build
+        working-directory: docs
