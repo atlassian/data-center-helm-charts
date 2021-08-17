@@ -125,7 +125,7 @@ spec:
         {{- end }}
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        {{- if .Values.persistence.storageClassName }}
+        {{- if not (kindIs "invalid" .Values.persistence.storageClassName) }}
         storageClassName: {{ .Values.persistence.storageClassName | quote }}
         {{- end }}
         resources:

@@ -56,9 +56,10 @@ service:
 persistence:
   annotations: {}
   size: 5Gi
-  # If specified, this Storage Class will be used to provision the NFS PVC.
-  # If left as an empty sting, the default Storage Class will be used.
-  storageClassName: ""
+  # If the string is set to nonempty value, this will specify the storage class to be used.
+  # If left empty, the default Storage Class will be utilised.
+  # Alternatively, can be set to the empty string, to indicate that no Storage Class should be used here.
+  storageClassName:
 
 resources:
   # limits:
