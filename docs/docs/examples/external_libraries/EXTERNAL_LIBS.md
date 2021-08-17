@@ -5,12 +5,12 @@ being installed.
 An example of when this may be needed are for those products that do not ship with the appropriate `MySQL` and `Oracle` 
 `JDBC` drivers.
 
-There are 2 strategies for doing this, you can either use the required [shared home volume](#shared-home-volume) or create
-a [custom volume](#custom-volume) specifically for this purpose. Each approach will be discussed below.
+There are 2 strategies for doing this, you can either use the required prerequisite [shared home volume](../../userguide/PREREQUISITES.md#configure-a-shared-home-volume) or create
+a custom volume specifically for this purpose. Each approach will be discussed below.
 
 !!!info "Approach"
 
-    Which aproach is used is totally up to you. For convenience you may want to just use `shared-home`, or if you'd like to 
+    Which approach is used is totally up to you. For convenience you may want to just use [shared-home](../../userguide/PREREQUISITES.md#configure-a-shared-home-volume), or if you'd like to 
     keep things clean you may decide to mount these 3rd party libraries in a volume of their own. This approach would be 
     particularly usefull when these libraries need to be shared with other Pod's in your cluster.
 
@@ -47,7 +47,7 @@ Initialise the Pod in the same namespace in which the `shared-home` PVC was crea
 ```bash
 kubectl apply -f shared-home-browser.yaml
 ```
-Once running execute the following command, it will create the sub-sir `libraries` under `/shared-home`
+Once running execute the following command, it will create the sub-sir, `libraries`, under `/shared-home`
 ```bash
 kubectl exec -it shared-home-browser -- bash -c "mkdir -p /shared-home/libraries"
 ```
