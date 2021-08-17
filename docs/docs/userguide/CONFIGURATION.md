@@ -19,7 +19,7 @@ Some key considerations to note when configuring the controller are:
     * The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
 
 ![ingress-architecture](../assets/images/ingress.png "Request routing via Ingress")
-
+    
 !!!note "Traffic flow (diagram)"
     0. Inbound client request
     1. DNS routes request to appropriate LB
