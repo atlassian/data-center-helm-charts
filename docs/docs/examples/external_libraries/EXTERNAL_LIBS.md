@@ -72,7 +72,7 @@ With this config these files (`my_library.jar`) will be injected into the contai
 This approach is very similar to the [Shared home volume](#shared-home-volume) approach, only a custom volume is created and used as opposed `shared-home`. 
 
 1. Create a new volume for storing 3rd party libraries
-2. Create sub-dir in `shared-home` volume
+2. Create sub-dir for `custom-volume`
 3. Copy libraries to sub-dir
 4. Update `additionalLibraries` stanza in `values.yaml`
 5. Update `additionalVolumeMounts` stanza in `values.yaml`
