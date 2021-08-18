@@ -29,6 +29,6 @@ $ kubectl describe pods
 $ kubectl describe sts
 $ kubectl describe pv
 $ kubectl describe pvc
-$kubectl logs <pod name>
+$kubectl logs [relevant pod name]
 
 **Additional Context**
