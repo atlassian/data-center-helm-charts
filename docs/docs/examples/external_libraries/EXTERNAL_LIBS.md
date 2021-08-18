@@ -111,6 +111,3 @@ additionalLibraries:
     subDirectory: database_drivers
     fileName: my_library.jar
 ```
-`
-
-
