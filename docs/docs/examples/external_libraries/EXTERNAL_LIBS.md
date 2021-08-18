@@ -12,7 +12,7 @@ a custom volume specifically for this purpose. Each approach will be discussed b
 
     Which approach is used is totally up to you. For convenience you may want to just use [shared-home](../../userguide/PREREQUISITES.md#configure-a-shared-home-volume), or if you'd like to 
     keep things clean you may decide to mount these 3rd party libraries in a volume of their own. This approach would be 
-    particularly usefull when these libraries need to be shared with other Pod's in your cluster.
+    particularly useful when these libraries need to be shared with other Pod's in your cluster.
 
 ## Shared home volume
 This approach comprises of 3 high-level tasks:

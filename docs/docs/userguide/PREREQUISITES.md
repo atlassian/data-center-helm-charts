@@ -65,5 +65,5 @@ The following CLI tools are required
 ### Configure local-home volume
 * As with the [shared-home](#configure-a-shared-home-volume) each pod requires its own volume for `local-home`. This is needed by each product for defining operational data. 
 * If not defined, an [emptyDir{}](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
-* Whilst an `emptyDir` may be acceptable for evaluation purposes its recommended that each Pod is allocated its own volume
+* Whilst an `emptyDir` may be acceptable for evaluation purposes it is recommended that each Pod is allocated it's own volume
 * A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each Pod. An example of this strategy can be found [here](../examples/storage/aws/LOCAL_STORAGE.md)
