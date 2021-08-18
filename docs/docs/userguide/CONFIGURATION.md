@@ -19,7 +19,7 @@ Some key considerations to note when configuring the controller are:
     * The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
 
 ![ingress-architecture](../assets/images/ingress.png "Request routing via Ingress")
-
+    
 !!!note "Traffic flow (diagram)"
     0. Inbound client request
     1. DNS routes request to appropriate LB
@@ -107,7 +107,7 @@ using `PersistentVolumes` is the strongly recommended approach.
 
 ## Additional volumes
 
-In additional to the `local-home` and `shared-home` volumes that are always
+In addition to the `local-home` and `shared-home` volumes that are always
 attached to the product pods, you can attach your own volumes for your own
 purposes, and mount them into the product container.  Use the `additional`
 (under `volumes`) and `additionalVolumeMounts` values to both attach the volumes
@@ -234,19 +234,25 @@ AWS EFS, Azure Files)
 
 The products' Docker images contain the default set of bundled libraries and plugins. 
 Additional libraries and plugins can be mounted into the product containers during
-the Helm install. This can be useful for bundling extra JDBC drivers, for example,
-or additional bundled plugins that you need for your installation.
+the Helm install. One such use case for this is mounting `JDBC` drivers that are not 
+shipped with the products' by default.
 
-In order for this to work, the additional JAR files need to be available as part
-of a Kubernetes volume. Options here include putting them into the shared-home volume 
-that you already need to have as part of the installation. Alternatively, you can 
-create a new PV for them, as long as it has `ReadOnlyMany` capability. You
-could even store the files as a `ConfigMap` that gets mounted as a volume, but
+To make use of this mechanism, the additional files need to be available as part
+of a Kubernetes volume. Options here include putting them into the `shared-home` volume 
+that's [required as part of the prerequisites](PREREQUISITES.md#configure-a-shared-home-volume). Alternatively, you can 
+create a custom volume `PV` for them, as long as it has `ReadOnlyMany` capability. 
+
+!!!info "Custom volumes for loading libraries"
+
+    If you're not using the `shared-home` volume, then you can declare your own custom 
+    volume, by following the [Additional volumes](#additional-volumes) section above. 
+
+You could even store the files as a `ConfigMap` that gets mounted as a volume, but
 you're likely to run into file size limitations there.
 
 Assuming that the existing `shared-home` volume is used for this, then the only 
-configuration required is to specify the `additionalLibraries` and/or 
-`additionalBundledPlugins` structures in your `values.yaml` file, e.g.
+configuration required is to specify the `additionalLibraries` in your `values.yaml` 
+file, e.g.
 
 ```yaml
 jira:
@@ -259,17 +265,19 @@ jira:
       fileName: lib2.jar
 ```    
 
-This will mount the `lib1.jar` and `lib2.jar` in the appropriate place in
-the container.
+This will mount the `lib1.jar` and `lib2.jar` from the `mylibs` sub-directory from `shared-home` 
+into the appropriate place in the container.
 
-Similarly, use `additionalBundledPlugins` to load product plugins into the
-container. Note: Plugins installed via this method will appear as system plugins
-rather than user plugins. An alternative to this method is to install the
-plugins via "Manage Apps" in the product system administration UI.
+Similarly, you can use `additionalBundledPlugins` to load product plugins into the
+container. 
 
-If you're not using the `shared-home` volume, then you can declare your own custom 
-volume in the "Additional Volumes" section below, then declare the libraries as above
-(but with your custom volume name).
+!!!info "System plugin"
+
+    Plugins installed via this method will appear as system plugins
+    rather than user plugins. An alternative to this method is to install the
+    plugins via "Manage Apps" in the product system administration UI.
+
+For more details on the above, and how 3rd party libraries can be supplied to a Pod see the example [External libraries and plugins](../examples/external_libraries/EXTERNAL_LIBS.md)
 
 ## Request body size
 By default the maximum allowed size for the request body is set to 250MB. If the size in a request exceeds the maximum 

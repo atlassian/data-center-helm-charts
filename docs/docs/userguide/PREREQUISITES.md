@@ -3,19 +3,20 @@
 
 In order to deploy Atlassian’s Data Center products, the following is required:
 
-1. An understanding of Kubernetes and Helm concepts
-2. A Kubernetes cluster, running Kubernetes v1.19 or later
-3. `kubectl` v1.19 or later, must be compatible with your cluster
-4. `helm` v3.3 or later
+1. An understanding of [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/){.external} and [Helm](https://helm.sh/){.external} concepts
+2. A Kubernetes cluster, running Kubernetes `v1.19` or later
+3. `kubectl` `v1.19` or later, must be compatible with your cluster
+4. `helm` `v3.3` or later
 
 ## Environment setup 
 
 Before installing the Data Center Helm charts you need to set up your environment:
 
-### Install tools 
+### Tooling 
+The following CLI tools are required
 
-1. [Install Helm](https://helm.sh/docs/intro/install/){.external}
-2. [Install kubectl](https://kubernetes.io/docs/tasks/tools/){.external}
+* [Helm](https://helm.sh/docs/intro/install/){.external}
+* [kubectl](https://kubernetes.io/docs/tasks/tools/){.external}
 
 ### Create and connect to the Kubernetes cluster
 
@@ -46,19 +47,23 @@ Before installing the Data Center Helm charts you need to set up your environmen
 === "Crowd"
       [Supported databases](https://confluence.atlassian.com/crowd/supported-platforms-191851.html#SupportedPlatforms-Databases){.external}
 
-
 * Must be reachable from the product deployed within your Kubernetes cluster. 
 * The database service may be deployed within the same Kubernetes cluster as the Data Center product or elsewhere.
 * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information go to the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
-> For better performance consider co-locating your database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.
+
+!!!info "Reducing Pod to DB latency" 
+
+      For better performance consider co-locating your database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.
 
 ### Configure a shared-home volume
-
-* See examples of [creating shared storage](../examples/storage/STORAGE.md).
 * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
-
-* The `shared-home` volume must be correctly configured as a read-write shared filesystem (e.g. NFS, AWS EFS, Azure Files)
-
-* The recommended setup is to use Kubernetes PersistentVolumes and PersistentVolumeClaims. The `local-home` volume requires a PersistentVolume with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a PersistentVolume with `ReadWriteMany (RWX)` capability. Typically, this will be a NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). 
-
+* Some cloud based options for a shared filesystem include [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}. You can also stand up your own NFS
+* The logical representation of the chosen storage type within Kubernetes can be defined as `PersistentVolumes` with an associated `PersistentVolumeClaims` in a `ReadWriteMany (RWX)` access mode.
 * For more information about volumes go to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes). 
+* See examples of [creating shared storage](../examples/storage/STORAGE.md).
+
+### Configure local-home volume
+* As with the [shared-home](#configure-a-shared-home-volume) each pod requires its own volume for `local-home`. This is needed by each product for defining operational data. 
+* If not defined, an [emptyDir{}](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
+* Whilst an `emptyDir` may be acceptable for evaluation purposes it is recommended that each Pod is allocated it's own volume
+* A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each Pod. An example of this strategy can be found [here](../examples/storage/aws/LOCAL_STORAGE.md)

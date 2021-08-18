@@ -146,12 +146,13 @@ helm install <release-name> \
              --values values.yaml
 ```
 
-* `<release-name>` is the name of your deployment and is up to you, or you can use `--generate-name`.
-* `<product>` can be jira, confluence, bitbucket or crowd.
-* `<namespace>` is optional. You can use namespaces to organize clusters into virtual sub-clusters.
-* `<chart-version>` is optional, and can be omitted if you just want to use the latest version of the chart.
-* `values.yaml` is optional and contains your site-specific configuration information. If omitted, the chart config default will be used.
-* Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may be waiting for several minutes if anything is mis-configured.
+!!!note "Values & flags"
+    * `<release-name>` the name of your deployment. You can also use `--generate-name`.
+    * `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket` or `crowd`.
+    * `<namespace>` optional flag for categorizing installed resources.
+    * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
+    * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
+    * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
 
 ## 8. Test your deployed product 
 
@@ -168,11 +169,8 @@ helm test <release-name> --logs --namespace <namespace>
 
 Using the service URL provided by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 
-# Uninstall  
-
+# Uninstall
+The deployment and all of its associated resources can be un-installed with the following command:
 ```shell
 helm uninstall <release-name> atlassian-data-center/<product>
 ```
-
-* `<release-name>` is the name you chose for your deployment
-* `<product>` can be jira, confluence, bitbucket, or crowd
