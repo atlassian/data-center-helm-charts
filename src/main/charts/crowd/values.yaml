@@ -27,10 +27,10 @@
 #
 replicaCount: 1
 
-# -- The termination grace period for pods during shutdown. This
-# should be set the Crowd internal grace period, plus a small buffer
-# to allow the JVM to fully terminate.
-terminationGracePeriodSeconds: 35
+# -- The termination grace period for pods during shutdown. At a minium this
+# should be set the Crowd internal grace period, plus a small buffer to allow
+# the JVM to fully terminate.
+terminationGracePeriodSeconds: 30
 
 # -- Image configuration
 #
