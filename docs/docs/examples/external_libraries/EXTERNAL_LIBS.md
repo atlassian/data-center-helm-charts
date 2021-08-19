@@ -127,7 +127,6 @@ nfsPermissionFixer:
     if [[ ! -f /shared-home/drivers/mysql-driver.jar ]]; then
       mkdir -p /shared-home/drivers
       apk add dpkg
-      rm -rf /shared-home/drivers/mysql-driver.jar
       wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java_8.0.26-1debian10_all.deb
       dpkg-deb -R mysql-connector-java_8.0.26-1debian10_all.deb /tmp/
       cp /tmp/usr/share/java/mysql-connector-java-8.0.26.jar  /shared-home/drivers/mysql-driver.jar
