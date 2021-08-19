@@ -36,5 +36,5 @@ Contributions are welcome. [Find out how to contribute](CONTRIBUTING.md).
 
 ## License
 
-Copyright (c) [2021] Atlassian and others.
+Copyright (c) [2020] to [2021] Atlassian and others.
 Apache 2.0 licensed, see [license file](LICENSE).
