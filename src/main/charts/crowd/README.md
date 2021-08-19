@@ -4,9 +4,9 @@
 
 A chart for installing Crowd Data Center on Kubernetes
 
-For installation please follow [the documentation in the repository](https://atlassian-labs.github.io/data-center-helm-charts/).
+For installation please follow [the documentation](https://atlassian-labs.github.io/data-center-helm-charts/).
 
-**Homepage:** <https://www.atlassian.com/software/crowd>
+**Homepage:** <https://atlassian-labs.github.io/data-center-helm-charts/>
 
 ## Source Code
 

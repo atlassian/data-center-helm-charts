@@ -11,7 +11,7 @@ keywords:
   - Crowd Data Center
   - Crowd DC
   - Atlassian
-home: https://www.atlassian.com/software/crowd
+home: https://atlassian-labs.github.io/data-center-helm-charts/
 icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
