@@ -27,11 +27,6 @@
 #
 replicaCount: 1
 
-# -- The termination grace period for pods during shutdown. This
-# should be set to the Confluence internal grace period (default 20
-# seconds), plus a small buffer to allow the JVM to fully terminate.
-terminationGracePeriodSeconds: 25
-
 # Image configuration
 #
 image:
@@ -535,9 +530,12 @@ confluence:
       #    memory: "2G"
 
   shutdown:
-    terminationGracePeriodSeconds: 20
+    # -- The termination grace period for pods during shutdown. This
+    # should be set to the Confluence internal grace period (default 20
+    # seconds), plus a small buffer to allow the JVM to fully terminate.
+    terminationGracePeriodSeconds: 25
 
-    # By default, tomcat will be stopped by a shutdown script from the Confluence distribution.
+    # By default, Tomcat will be stopped by a shutdown script from the Confluence distribution.
     # If any other shutdown behaviour is needed, it can be achieved by overriding this value.
     command:
 
@@ -685,7 +683,10 @@ synchrony:
         memory: "2.5G"
 
   shutdown:
-    terminationGracePeriodSeconds: 20
+    # -- The termination grace period for pods during shutdown. This
+    # should be set to the Synchrony internal grace period (default 20
+    # seconds), plus a small buffer to allow the JVM to fully terminate.
+    terminationGracePeriodSeconds: 25
         
   # -- The base URL of the Synchrony service. This will be the URL that users' browsers will 
   # be given to communicate with Synchrony, as well as the URL that the Confluence service 
