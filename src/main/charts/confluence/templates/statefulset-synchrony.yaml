@@ -21,7 +21,7 @@ spec:
         {{- include "synchrony.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 1
+      terminationGracePeriodSeconds: 20
       hostAliases:
         {{- with .Values.additionalHosts }}
         {{- toYaml . | nindent 8 }}

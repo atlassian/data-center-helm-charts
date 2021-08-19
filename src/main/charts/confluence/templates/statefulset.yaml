@@ -20,7 +20,7 @@ spec:
         {{- include "confluence.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 1
+      terminationGracePeriodSeconds: 20
       {{ if .Values.confluence.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
@@ -126,6 +126,13 @@ spec:
                   key: reserved_code_cache
                   name: {{ include "confluence.fullname" . }}-jvm-config
             {{- include "confluence.additionalEnvironmentVariables" . | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - "echo $(pgrep -f org.apache.catalina.startup.Bootstrap | head -n 1) > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh"
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "confluence.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
