@@ -28,7 +28,7 @@
 replicaCount: 1
 
 # -- The termination grace period for pods during shutdown. This
-# should be set the Confluence internal grace period (default 20
+# should be set to the Confluence internal grace period (default 20
 # seconds), plus a small buffer to allow the JVM to fully terminate.
 terminationGracePeriodSeconds: 25
 
