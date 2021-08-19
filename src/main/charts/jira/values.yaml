@@ -28,6 +28,11 @@
 #
 replicaCount: 1
 
+# -- The termination grace period for pods during shutdown. This
+# should be set the Jira internal grace period, plus a small buffer
+# to allow the JVM to fully terminate.
+terminationGracePeriodSeconds: 35
+
 # Image configuration 
 #
 image:
