@@ -11,7 +11,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
 ## Get started
 
-**Get started right now using our [documentation](https://atlassian-labs.github.io/data-center-helm-charts/)!**
+**Get started right now using our [documentation](https://atlassian-labs.github.io/data-center-helm-charts/).**
 
 We provide extensive documentation to support our Helm charts. This includes prerequisites, set up, installation, examples, and more.
 
@@ -26,7 +26,7 @@ Also, we **don’t officially support** the functionality described in the [exam
 
 ## Feedback
 
-If you find any issue, please [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new). If you have general feedback or question regarding the charts, please use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
+If you find any issue, [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
   
 
 ## Contributions
