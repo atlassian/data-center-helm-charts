@@ -1,4 +1,4 @@
-# Troubleshooting
+# Troubleshooting tips
 
 This guide contains general tips on how to investigate application deployment that doesn't work correctly.
 
