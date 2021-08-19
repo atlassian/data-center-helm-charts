@@ -20,7 +20,7 @@ spec:
         {{- include "crowd.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 1
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{ if .Values.crowd.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
