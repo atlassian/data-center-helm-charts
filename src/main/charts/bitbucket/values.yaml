@@ -204,7 +204,7 @@ volumes:
     # -- Static provisioning of local-home using K8s PVs and PVCs
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for 
-    # pods is not recommended. Dymamic provisioning described above is the prescribed 
+    # pods is not recommended. Dynamic provisioning described above is the prescribed
     # approach.
     #
     # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define 
@@ -238,7 +238,7 @@ volumes:
       #
       create: false
       
-      # -- Addtional options used when mounting the NFS volume
+      # -- Additional options used when mounting the NFS volume
       # 
       mountOptions: []
       
@@ -246,7 +246,7 @@ volumes:
       #
       nfs:
       
-        # -- The address of the NFS server. It needs to be resolveable by the kubelet, 
+        # -- The address of the NFS server. It needs to be resolvable by the kubelet,
         # so consider using an IP address.
         #
         server: ""
@@ -334,7 +334,7 @@ volumes:
 
 # Ingress configuration 
 #
-# To make the Atlassian product available from outside of the K8s cluster an Ingress 
+# To make the Atlassian product available from outside the K8s cluster an Ingress
 # Controller should be pre-provisioned. With this in place the configuration below 
 # can be used to configure an appropriate Ingress Resource. 
 # https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#ingress
@@ -386,7 +386,7 @@ ingress:
   
   # -- The name of the K8s Secret that contains the TLS private key and corresponding 
   # certificate. When utilised, TLS termination occurs at the ingress point where 
-  # traffic to the Service and it's Pods is in plaintext. 
+  # traffic to the Service, and it's Pods is in plaintext.
   #
   # Usage is optional and depends on your use case. The Ingress Controller itself 
   # can also be configured with a TLS secret for all Ingress Resources.
@@ -464,7 +464,7 @@ bitbucket:
     #
     ssh: 7999
     
-    # -- The port on which the Hazlecast listens for client traffic
+    # -- The port on which the Hazelcast listens for client traffic
     #
     hazelcast: 5701
 
@@ -521,7 +521,7 @@ bitbucket:
     #
     enabled: false
 
-  # Elasiticsearch config
+  # Elasticsearch config
   # 
   elasticSearch:
   
@@ -530,7 +530,7 @@ bitbucket:
     #
     baseUrl:
     
-    # Elasticsearch connection details
+    # Elasticsearch's connection details
     #
     credentials:
     
@@ -542,11 +542,11 @@ bitbucket:
       #
       secretName:
       
-      # -- The key in the the Kubernetes Secret that contains the Elasticsearch username.
+      # -- The key in the Kubernetes Secret that contains the Elasticsearch username.
       #
       usernameSecreyKey: username
       
-      # -- The key in the the Kubernetes Secret that contains the Elasticsearch password.
+      # -- The key in the Kubernetes Secret that contains the Elasticsearch password.
       #
       passwordSecretKey: password
 
@@ -662,7 +662,7 @@ fluentd:
   command:
   
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) 
-  # should be used for Fluentd. If enabled this config must supplied via the 
+  # should be used for Fluentd. If enabled this config must be supplied via the
   # 'fluentdCustomConfig' property below.
   #
   customConfigFile: false
@@ -720,7 +720,7 @@ tolerations: []
 #   key: <key>
 
 # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
-# Due to the performance requirements it is highly recommended to run all Bitbucket pods
+# Due to the performance requirements it is highly recommended running all Bitbucket pods
 # in the same availability zone as your dedicated NFS server. To achieve this, you
 # can define `affinity` and `podAffinity` rules that will place all pods into the same zone,
 # and therefore minimise the real distance between the application pods and the shared storage.

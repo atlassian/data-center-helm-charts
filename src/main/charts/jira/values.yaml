@@ -277,7 +277,7 @@ volumes:
   
 # Ingress configuration 
 #
-# To make the Atlassian product available from outside of the K8s cluster an Ingress 
+# To make the Atlassian product available from outside the K8s cluster an Ingress
 # Controller should be pre-provisioned. With this in place the configuration below 
 # can be used to configure an appropriate Ingress Resource. 
 # https://atlassian-labs.github.io/data-center-helm-charts/installation/CONFIGURATION/#ingress
@@ -329,7 +329,7 @@ ingress:
   
   # -- The name of the K8s Secret that contains the TLS private key and corresponding 
   # certificate. When utilised, TLS termination occurs at the ingress point where 
-  # traffic to the Service and it's Pods is in plaintext. 
+  # traffic to the Service, and it's Pods is in plaintext.
   #
   # Usage is optional and depends on your use case. The Ingress Controller itself 
   # can also be configured with a TLS secret for all Ingress Resources.
@@ -385,7 +385,7 @@ jira:
     #
     http: 8080
     
-    # -- Ehache port
+    # -- Ehcache port
     #
     ehcache: 40001
     
@@ -456,7 +456,7 @@ jira:
   #
   resources:
   
-    # JVM Memory / Heap Size definitions. Thes values below are based on the 
+    # JVM Memory / Heap Size definitions. The values below are based on the
     # defaults defined for the Jira docker container.
     # https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/#markdown-header-memory-heap-size
     #
@@ -568,7 +568,7 @@ fluentd:
   command:
   
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) 
-  # should be used for Fluentd. If enabled this config must supplied via the 
+  # should be used for Fluentd. If enabled this config must be supplied via the
   # 'fluentdCustomConfig' property below.
   #
   customConfigFile: false

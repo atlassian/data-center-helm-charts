@@ -56,7 +56,10 @@ service:
 persistence:
   annotations: {}
   size: 5Gi
-  storageClassName: "gp2"
+  # If set to non-empty string value, this will specify the storage class to be used.
+  # If left without value, the default Storage Class will be utilised.
+  # Alternatively, can be set to the empty string "", to indicate that no Storage Class should be used here.
+  storageClassName:
 
 resources:
   # limits:

@@ -20,7 +20,7 @@ Each approach will be discussed below.
     particularly useful when these libraries need to be shared with other Pod's in your cluster.
 
 ## Shared home volume
-This approach comprises of 3 high-level tasks:
+This approach consists of 3 high-level tasks:
 
 1. Create sub-dir in `shared-home` volume
 2. Copy libraries to sub-dir
@@ -119,7 +119,7 @@ additionalLibraries:
 
 ## Custom command
 This example is based on the GitHub issue discussed [here](https://github.com/atlassian-labs/data-center-helm-charts/issues/239). The `nfsPermissionFixer` in the `values.yaml` is used for appropriately setting the permissions on the `shared-home` volume. The command it uses for this is already defined by default, however
-it can also be supplied with a custom `command` for adding 3rd party libraries to `shared-home`. The example below, comes courtesy of the conversation had here, shows how this approach can be used for adding the `JDBC` `MySQL` driver:
+it can also be supplied with a custom `command` for adding 3rd party libraries to `shared-home`. The example below shows how this approach can be used for adding the `JDBC` `MySQL` driver:
 
 ```yaml linenums="1"
 nfsPermissionFixer:
