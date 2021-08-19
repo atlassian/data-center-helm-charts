@@ -88,7 +88,7 @@ spec:
         app.kubernetes.io/instance: unittest-bitbucket
     spec:
       serviceAccountName: unittest-bitbucket
-      terminationGracePeriodSeconds: 1
+      terminationGracePeriodSeconds: 35
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260

@@ -35,6 +35,11 @@
 #
 replicaCount: 1
 
+# -- The termination grace period for pods during shutdown. This
+# should be set to the Bitbucket internal grace period (default 30
+# seconds), plus a small buffer to allow the JVM to fully terminate.
+terminationGracePeriodSeconds: 35
+
 # -- Image configuration 
 #
 image:
