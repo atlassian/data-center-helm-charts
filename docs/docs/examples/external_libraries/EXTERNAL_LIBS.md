@@ -5,8 +5,13 @@ being installed.
 An example of when this may be needed are for those products that do not ship with the appropriate `MySQL` and `Oracle` 
 `JDBC` drivers.
 
-There are 2 strategies for doing this, you can either use the required prerequisite [shared home volume](../../userguide/PREREQUISITES.md#configure-a-shared-home-volume) or create
-a custom volume specifically for this purpose. Each approach will be discussed below.
+There are 3 strategies for doing this, you can either:
+
+*  [use the required prerequisite shared home volume](#shared-home-volume) 
+*  [create a custom volume specifically for this purpose](#custom-volume) 
+*  [provide a custom command for the `nfsPermissionFixer`](#custom-command)
+
+Each approach will be discussed below.
 
 !!!info "Approach"
 
@@ -15,7 +20,7 @@ a custom volume specifically for this purpose. Each approach will be discussed b
     particularly useful when these libraries need to be shared with other Pod's in your cluster.
 
 ## Shared home volume
-This approach comprises of 3 high-level tasks:
+This approach consists of 3 high-level tasks:
 
 1. Create sub-dir in `shared-home` volume
 2. Copy libraries to sub-dir
@@ -110,4 +115,36 @@ additionalLibraries:
   - volumeName: third-party-libraries
     subDirectory: database_drivers
     fileName: my_library.jar
+```
+
+## Custom command
+This example is based on the GitHub issue discussed [here](https://github.com/atlassian-labs/data-center-helm-charts/issues/239). The `nfsPermissionFixer` in the `values.yaml` is used for appropriately setting the permissions on the `shared-home` volume. The command it uses for this is already defined by default, however
+it can also be supplied with a custom `command` for adding 3rd party libraries to `shared-home`. The example below shows how this approach can be used for adding the `JDBC` `MySQL` driver:
+
+```yaml linenums="1"
+nfsPermissionFixer:
+  command: |
+    if [[ ! -f /shared-home/drivers/mysql-driver.jar ]]; then
+      mkdir -p /shared-home/drivers
+      apk add dpkg
+      wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java_8.0.26-1debian10_all.deb
+      dpkg-deb -R mysql-connector-java_8.0.26-1debian10_all.deb /tmp/
+      cp /tmp/usr/share/java/mysql-connector-java-8.0.26.jar  /shared-home/drivers/mysql-driver.jar
+    fi
+    chgrp 2003 /shared-home; chmod g+w /shared-home
+```
+!!!warning "shared-home permissions"
+
+    If taking this approach ensure the last thing your custom command does is apply the relevant permissions to the `shared-home` mount, see line `12` in `yaml` 
+    snippet above. 
+
+    Each product chart has a `sharedHome.permissionFix.command` helper for doing this. look at Jira's helper [sharedHome.permissionFix.command](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L102) 
+    for more details on how these permissions are applied by default.
+
+Remember to also update the `additionalLibraries` stanza accordingly:
+```yaml
+additionalLibraries: 
+  - volumeName: shared-home
+    subDirectory: drivers
+    fileName: mysql-driver.jar
 ```
