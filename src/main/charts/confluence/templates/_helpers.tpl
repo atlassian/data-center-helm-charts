@@ -184,9 +184,7 @@ The command that will be run to properly shutdown Confluence tomcat
 {{- define "confluence.shutdown.command" -}}
 {{- if .Values.confluence.shutdown.command }}
 {{ .Values.confluence.shutdown.command }}
-{{- else }}
-echo $(pgrep -f org.apache.catalina.startup.Bootstrap | sort | head -n 1) > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh
-{{- end }}
+{{- else }}echo $(pgrep -f org.apache.catalina.startup.Bootstrap | sort | head -n 1) > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh{{- end }}
 {{- end }}
 
 {{/*
