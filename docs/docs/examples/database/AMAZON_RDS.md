@@ -7,10 +7,16 @@ This example provides instructions for creating an Amazon [RDS DB instance](http
 ## Database creation
 There are two steps for creating the database:
 
+1. [Initialize database server](#1-initialize-database-server)
+2. [Initialize database & user](#2-create-database--user)
+
 ### 1. Initialize database server
 For details on standing up an RDS DB server follow the guide: [Creating an Amazon RDS DB instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateDBInstance.html){.external}. 
-### 2. Create database
-For details on creating the database user and database itself follow the appropriate guide below:
+### 2. Initialize database & user
+!!!danger "Don't forget to create the database and user!"
+
+    This is a required step. See details below on how this can be done.
+For details on creating the logical database and database user follow the appropriate guide below:
 
 === "Jira"
     [Create database for Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html){.external}
