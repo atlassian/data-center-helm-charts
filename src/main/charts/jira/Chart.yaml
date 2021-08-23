@@ -12,7 +12,7 @@ keywords:
   - Jira Data Center
   - Jira DC
   - Atlassian
-home: https://www.atlassian.com/software/jira
+home: https://atlassian-labs.github.io/data-center-helm-charts/
 icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
