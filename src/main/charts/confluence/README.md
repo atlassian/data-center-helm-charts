@@ -74,7 +74,7 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen  |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"atlassian/confluence-server"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
+| image.repository | string | `"atlassian/confluence"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |
