@@ -401,7 +401,7 @@ confluence:
   # -- Boolean to define whether to set home directory permissions on startup 
   # of Confluence container. Set to 'false' to disable this behaviour. 
   #
-  setPermissions: false
+  setPermissions: true
   
   # Port definitions
   #
