@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static test.jackson.JsonNodeAssert.assertThat;
 
 /**
- * Tests the various permutations of the "<product>.license" value structure in the Helm charts
+ * Tests the various permutations of the "<product>.contextPath" value structure in the Helm charts
  */
 class ContextPathTest {
     private Helm helm;
