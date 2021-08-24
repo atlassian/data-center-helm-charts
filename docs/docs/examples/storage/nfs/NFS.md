@@ -1,63 +1,59 @@
-# Implementation of an NFS server for Bitbucket
+# NFS server for Bitbucket
+!!!danger "Disclaimer"
 
-!!!warning Dislaimer
-
-    **This functionality is not officially supported.**
+    **This functionality is not officially supported. It should not be used for production deployments!**
     
-    The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These examples should not be used in production. 
-    
-    Before you proceed we highly recommend that you understand your specific deployment needs and tailor your solution to them.
+    The included NFS example is provided as is and should be used as reference a only. Before you proceed we highly recommend that you understand your specific deployment needs and tailor your solution to them.
 
-# Components
+## Bitbucket Data Center and NFS
 
-For a full production deployment you will need to create some common components. These components are then passed as values 
-to the Helm chart when you install your product. The components are:
-
-* Shared storage
-* Database
-* Elasticsearch
-
-## Shared storage
-
-### Cloud-managed shared storage 
-
-#### Dedicated NFS server - Bitbucket Data Center requirement
-
-Bitbucket Data Center uses a shared network file system (NFS) to store its repositories in a common 
-location that is accessible to multiple Bitbucket nodes. Due to the high requirements on performance for IO 
-operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. Based on this, 
+Bitbucket Data Center uses shared home to store its repositories in a common location that is accessible to multiple Bitbucket nodes. 
+Due to the high requirements on performance for IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. Based on this, 
 we don't recommend that you use 
-[cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms).
-
-You might choose to use an NFS server for other Data Center products, but they don't have the same performance 
-characteristics. It might be better to go for the resilience of a managed service over a self-managed 
-server for other products.
+[cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) such as AWS EFS.
  
-#### Requirements
+## NFS provisioning
+The NFS server can be provisioned manually or by using the supplied Helm chart. Details for both approaches can be found below.
 
-Prior to installing the Helm chart, you need to provision a suitable NFS shared storage solution. The exact details 
-of this resource will be highly site-specific, but the example below can be used as a guide.
-
-For more information on setting up Bitbucket Data Center's shared file server, see 
-[Step 2. Provision your shared file system](https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs){.external}. 
+### Manual
+For information on setting up Bitbucket Data Center's shared file server, see [Provision your shared file system](https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs){.external}. 
 This section contains the requirements and recommendations for setting up NFS for Bitbucket Data Center.
 
-You need to set your NFS server's size according to your instance needs. See the capacity recommendations](https://confluence.atlassian.com/bitbucketserver/recommendations-for-running-bitbucket-in-aws-776640282.html).
+!!!tip "NFS Server sizing"
 
-#### Example
+    Ensure the NFS server's size is appropriate for the needs of the Bitbucket instance. See [capacity recommendations](https://confluence.atlassian.com/bitbucketserver/recommendations-for-running-bitbucket-in-aws-776640282.html){.external} for details.
 
-We've provided a template as a **reference** on how an NFS server could be stood-up to work in conjunction 
-with a Bitbucket deployment: [`nfs-server-example`](nfs-server-example).
+### Helm
+The supplied Helm chart should be used as a **reference** only. Details on usage and installation can be found [here](helm-chart/NFS_HELM_CHART.md).
 
-Provision the NFS by using the following command:
-```shell
-helm install nfs-server-example nfs-server-example
+## Update `values.yaml`
+Regardless of the approach used for installing the NFS the `values.yaml` needs to be updated as follows.
+```yaml
+update details here...
 ```
+!!!tip "Pod affinity"
 
-:warning: Please note that the NFS server created with this template is not production ready and should not be 
-used for anything other than testing deployment.
-
-
-#### Pod affinity
-
-We **highly recommend** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. Use the suitable affinity definition in the `affinity: {}` definition in the `values.yaml` file.
+    It is  **highly recommend** keep the NFS server and Bitbucket nodes in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour.
+    
+    ```yaml
+    # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
+    # Due to the performance requirements it is highly recommended running all Bitbucket pods
+    # in the same availability zone as your dedicated NFS server. To achieve this, you
+    # can define `affinity` and `podAffinity` rules that will place all pods into the same zone,
+    # and therefore minimise the physical distance between the application pods and the shared storage.
+    # More specific documentation can be found in the official Affinity and Anti-affinity documentation:
+    # https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+    #
+    # This is an example on how to ensure the pods are in the same zone as NFS server that is labeled with `role=nfs-server`:
+    #
+    #   podAffinity:
+    #    requiredDuringSchedulingIgnoredDuringExecution:
+    #      - labelSelector:
+    #          matchExpressions:
+    #            - key: role
+    #              operator: In
+    #              values:
+    #                - nfs-server # needs to be the same value as NFS server deployment
+    #        topologyKey: topology.kubernetes.io/zone
+    affinity: {}
+    ```
