@@ -50,6 +50,7 @@ Kubernetes: `>=1.19.x-0`
 | crowd.securityContext.gid | string | `"2004"` | The GID used by the Crowd docker image |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen |
 | crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd |
+| crowd.setPermissions | bool | `true` | Boolean to define whether to set home directory permissions on startup of Crowd container. Set to 'false' to disable this behaviour. |
 | crowd.umask | string | `"0022"` | The umask used by the Crowd process when it creates new files. The default is 0022. This gives the new files:  - read/write permissions for the Crowd user  - read permissions for everyone else. |
 | fluentd.customConfigFile | bool | `false` | Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) should be used for Fluentd. If enabled this config must supplied via the 'fluentdCustomConfig' property below. |
 | fluentd.elasticsearch.enabled | bool | `true` | Set to 'true' if Fluentd should send all log events to an Elasticsearch service. |
