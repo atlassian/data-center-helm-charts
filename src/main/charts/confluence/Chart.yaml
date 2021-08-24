@@ -3,7 +3,7 @@ name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
 version: 0.15.0
-appVersion: 7.12.4-jdk11
+appVersion: 7.13.0-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -11,7 +11,7 @@ keywords:
   - Confluence Data Center
   - Confluence DC
   - Atlassian
-home: https://www.atlassian.com/software/confluence
+home: https://atlassian-labs.github.io/data-center-helm-charts/
 icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/confluence.svg
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts

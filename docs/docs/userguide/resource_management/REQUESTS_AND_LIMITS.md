@@ -2,7 +2,10 @@
 To ensure that Kubernetes appropriately schedules resources, the respective product `values.yaml` is configured with default `cpu` and `memory` [resource request values](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/){.external} .
 
 ## Resource requests
-The default resource requests that are used for each product are defined below. Take note that these values are geared toward small data sets. For larger enterprise deployments refer to the data center infrastructure recommendations [here](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html){.external} . Using the [formula](#memory-request-sizing) below, the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
+The default resource requests that are used for each product are defined below. 
+>Note: these values are geared towards small data sets. For larger enterprise deployments refer to the [Data Center infrastructure recommendations](https://confluence.atlassian.com/enterprise/data-center-infrastructure-recommendations-972333478.html){.external}.
+
+Using the [formula](#memory-request-sizing) below, the `memory` specific values are derived from the default `JVM` requirements defined for each product's Docker container.
 
 | Product  | CPU   |  Memory |
 |----------|:-----:|------:|
@@ -18,7 +21,7 @@ Request sizing must allow for the size of the product `JVM`. That means the `max
 ```
 
 ## Resource limits
-Environmental and hardware constraints are different for each deployment, therefore the product `values.yaml` do not provide a resource [`limit`](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container){.external}  definition. Resource usage limits can be defined by updating the commented out `resources.container.limits` stanza within the appropriate product `values.yaml`, for example:
+Environmental and hardware constraints are different for each deployment, therefore the product's `values.yaml` does not provide a resource [`limit`](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container){.external} definition. Resource usage limits can be defined by updating the commented out the `resources.container.limits` stanza within the appropriate `values.yaml`. For example:
 
 ```yaml
 container:

@@ -47,7 +47,7 @@ image:
   # -- The Confluence Docker image to use
   # https://hub.docker.com/r/atlassian/bitbucket-server
   #
-  repository: atlassian/bitbucket-server
+  repository: atlassian/bitbucket
   
   # -- Image pull policy
   #

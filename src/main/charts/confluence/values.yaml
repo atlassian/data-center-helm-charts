@@ -34,7 +34,7 @@ image:
   # -- The Confluence Docker image to use
   # https://hub.docker.com/r/atlassian/confluence-server
   #
-  repository: atlassian/confluence-server
+  repository: atlassian/confluence
   
   # -- Image pull policy
   #
