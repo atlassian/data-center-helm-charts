@@ -14,7 +14,7 @@ To see the custom values you used for this release:
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
 {{ if .Values.ingress.create -}}
-{{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ include "confluence.ingressPath" }}
+{{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ include "confluence.ingressPath" . }}
 {{- else }}
 Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- if contains "NodePort" .Values.confluence.service.type }}
