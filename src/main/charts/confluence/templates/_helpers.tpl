@@ -168,6 +168,17 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Create default value for ingress path
+*/}}
+{{- define "confluence.ingressPath" -}}
+{{- if .Values.ingress.path -}}
+{{- .Values.ingress.path -}}
+{{- else -}}
+{{ default ( "/" ) .Values.confluence.service.contextPath -}}
+{{- end }}
+{{- end }}
+
+{{/*
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
 {{- define "sharedHome.permissionFix.command" -}}
