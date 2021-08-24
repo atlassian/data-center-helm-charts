@@ -184,7 +184,7 @@ The command that will be run to properly shutdown Confluence tomcat
 {{- define "confluence.shutdown.command" -}}
 {{- if .Values.confluence.shutdown.command }}
 {{ .Values.confluence.shutdown.command }}
-{{- else }}export CONNIE_PID="$(pgrep -f org.apache.catalina.startup.Bootstrap | sort | head -n 1)"; echo $CONNIE_PID > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh; tail --pid=$CONNIE_PID -f /dev/null{{- end }}
+{{- else }}export CONNIE_PID=$(pgrep -f org.apache.catalina.startup.Bootstrap | sort | head -n 1); echo $CONNIE_PID > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh; tail --pid=$CONNIE_PID -f /dev/null{{- end }}
 {{- end }}
 
 {{/*
