@@ -17,7 +17,6 @@ For details on standing up an RDS DB server follow the guide: [Creating an Amazo
 
     This is a required step. For details on creating the application database and database user follow the appropriate guide below:
 
-
 === "Jira"
     [Create database for Jira](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html){.external}
 === "Confluence"
