@@ -136,7 +136,7 @@ spec:
       hostAliases:
       containers:
         - name: synchrony
-          image: "atlassian/confluence-server:7.13.0-jdk11"
+          image: "atlassian/confluence:7.13.0-jdk11"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -218,7 +218,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: confluence
-          image: "atlassian/confluence-server:7.13.0-jdk11"
+          image: "atlassian/confluence:7.13.0-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

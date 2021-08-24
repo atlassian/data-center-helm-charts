@@ -73,9 +73,9 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to Fluentd container (e.g. more log sources) |
 | fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
-| image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket-server","tag":""}` | Image configuration  |
+| image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket","tag":""}` | Image configuration  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"atlassian/bitbucket-server"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server |
+| image.repository | string | `"atlassian/bitbucket"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |
