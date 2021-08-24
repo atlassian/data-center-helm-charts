@@ -373,6 +373,11 @@ jira:
     #
     gid: "2001"
 
+  # -- Boolean to define whether to set home directory permissions on startup
+  # of Jira container. Set to 'false' to disable this behaviour.
+  #
+  setPermissions: true
+
   # Port definitions
   #
   ports:
