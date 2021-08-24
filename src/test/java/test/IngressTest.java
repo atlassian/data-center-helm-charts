@@ -210,4 +210,56 @@ class IngressTest {
         }
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_contextPath(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "confluence.service.contextPath", "/confluence-tmp"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertNotEquals(0, ingresses.size());
+
+        for (KubeResource ingress : ingresses) {
+            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                    .hasTextContaining("/confluence-tmp");
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "confluence.service.contextPath", "/context",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertNotEquals(0, ingresses.size());
+
+        for (KubeResource ingress : ingresses) {
+            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                    .hasTextContaining("/ingress");
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertNotEquals(0, ingresses.size());
+
+        for (KubeResource ingress : ingresses) {
+            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                    .hasTextContaining("/");
+        }
+    }
+
+
 }
