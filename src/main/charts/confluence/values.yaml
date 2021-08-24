@@ -407,10 +407,10 @@ confluence:
   #
   umask: "0022"
   
-  # -- Boolean to define whether to set home directory permissions on startup 
+  # -- Boolean to define whether to set local home directory permissions on startup
   # of Confluence container. Set to 'false' to disable this behaviour. 
   #
-  setPermissions: false
+  setPermissions: true
   
   # Port definitions
   #

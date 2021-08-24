@@ -50,6 +50,7 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s Service will listen |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket |
+| bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour. |
 | bitbucket.sshService | object | `{"annotations":{},"enabled":false,"port":22,"type":"LoadBalancer"}` | Enable or disable an additional service for exposing SSH for external access. Disable when the SSH service is exposed through the ingress controller, or  enable if the ingress controller does not support TCP. |
 | bitbucket.sshService.annotations | object | `{}` | Annotations for the SSH service. Useful if a load balancer controller  needs extra annotations. |
 | bitbucket.sshService.enabled | bool | `false` | Set to 'true' if an additional SSH Service should be created  |

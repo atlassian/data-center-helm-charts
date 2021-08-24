@@ -256,7 +256,7 @@ spec:
             - name: UMASK
               value: "0022"
             - name: SET_PERMISSIONS
-              value: "false"
+              value: "true"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
