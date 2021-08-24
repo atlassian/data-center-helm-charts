@@ -101,6 +101,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: SET_PERMISSIONS
+              value: "true"
             - name: JIRA_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

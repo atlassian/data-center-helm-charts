@@ -142,6 +142,8 @@ spec:
               value: "https"
             - name: SERVER_SECURE
               value: "true"
+            - name: SET_PERMISSIONS
+              value: "true"
             - name: BITBUCKET_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_MINIMUM_MEMORY
