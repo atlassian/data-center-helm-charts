@@ -218,11 +218,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: confluence
-<<<<<<< HEAD
-          image: "atlassian/confluence-server:7.13.0-jdk11"
-=======
-          image: "atlassian/confluence:7.12.4-jdk11"
->>>>>>> cc91f92 (Update tests with correct image names.)
+          image: "atlassian/confluence:7.13.0-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
