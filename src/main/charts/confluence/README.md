@@ -82,6 +82,7 @@ Kubernetes: `>=1.19.x-0`
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |
 | ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on  this hostname will be routed by the Ingress Resource to the appropriate backend  Service. |
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS  (HTTPS) enforced. |
+| ingress.ingressNginxClassName | string | `"nginx"` | The class name used by the 'ingress-nginx' controller if it's being used.  |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'  controller.  https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to  the K8s ingress-nginx controller. Set to 'false' if a different controller is  to be used, in which case the appropriate annotations for that controller must  be specified below under 'ingress.annotations'. |
 | ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/confluence'. Based on a  'ingress.host' value of 'company.k8s.com' this would result in a URL of  'company.k8s.com/confluence' |

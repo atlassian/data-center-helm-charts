@@ -318,6 +318,9 @@ ingress:
   #
   nginx: true
   
+  # -- The class name used by the 'ingress-nginx' controller if it's being used. 
+  ingressNginxClassName: nginx
+
   # -- The max body size to allow. Requests exceeding this size will result
   # in an HTTP 413 error being returned to the client.
   #
