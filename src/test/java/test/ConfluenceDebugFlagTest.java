@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import test.helm.Helm;
 import test.model.Kind;
+import test.model.KubeResource;
+import test.model.KubeResources;
 import test.model.Product;
 
 import java.util.Map;
@@ -24,9 +26,7 @@ class ConfluenceDebugFlagTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(Product.confluence, Map.of(
                 "confluence.jvmDebug.enabled", "false"));
 
-        final var configMap = resources.getAll(Kind.ConfigMap)
-                .find(map -> map.getName().endsWith("jvm-config"))
-                .getOrElseThrow(() -> new AssertionError("More than one config map with jvm parameters have been found"));
+        final KubeResource configMap = findJvmArgumentsConfigMap(resources);
 
         assertThat(configMap.getNode("data", "additional_jvm_args"))
                 .hasTextNotContaining("\n");
@@ -42,10 +42,7 @@ class ConfluenceDebugFlagTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(Product.confluence, Map.of(
                 "confluence.jvmDebug.enabled", "true"));
 
-        final var configMap = resources.getAll(Kind.ConfigMap)
-                .find(map -> map.getName().endsWith("jvm-config"))
-                .getOrElseThrow(() -> new AssertionError("More than one config map with jvm parameters have been found"));
-
+        final KubeResource configMap = findJvmArgumentsConfigMap(resources);
 
         assertThat(configMap.getNode("data", "additional_jvm_args"))
                 .hasTextNotContaining("\n");
@@ -56,5 +53,11 @@ class ConfluenceDebugFlagTest {
 
         assertThat(configMap.getNode("data", "additional_jvm_args"))
                 .hasSeparatedTextContaining("-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005");
+    }
+
+    private KubeResource findJvmArgumentsConfigMap(KubeResources resources) {
+        return resources.getAll(Kind.ConfigMap)
+                .find(map -> map.getName().endsWith("jvm-config"))
+                .getOrElseThrow(() -> new AssertionError("More than one config map with jvm parameters have been found"));
     }
 }
