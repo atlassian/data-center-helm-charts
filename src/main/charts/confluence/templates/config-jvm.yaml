@@ -11,7 +11,7 @@ data:
     {{ include "confluence.sysprop.enable.synchrony.by.default" . }}
     {{ include "confluence.sysprop.clusterNodeName" . }}
     {{ include "confluence.sysprop.fluentdAppender" . }}
-    {{- include "confluence.sysprop.debug" . -}}
+    {{ include "confluence.sysprop.debug" . -}}
     {{- range .Values.confluence.additionalJvmArgs }}
     {{ . }}
     {{- end }}
