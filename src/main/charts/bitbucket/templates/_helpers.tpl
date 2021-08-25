@@ -230,16 +230,13 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volumes.sharedHome" -}}
-- name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
+- name: shared-home
   persistentVolumeClaim:
     claimName: {{ include "bitbucket.fullname" . }}-shared-home
-{{ else }}
-{{ if .Values.volumes.sharedHome.customVolume }}
+{{ else if .Values.volumes.sharedHome.customVolume }}
+- name: shared-home
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
-{{ else }}
-  emptyDir: {}
-{{- end }}
 {{- end }}
 {{- end }}
 
@@ -326,13 +323,33 @@ volumeClaimTemplates:
   value: "true"
 - name: HAZELCAST_PORT
   value: {{ .Values.bitbucket.ports.hazelcast | quote }}
+{{- include "bitbucket.hazelcastGroupEnvVars" . }}
 {{ end }}
 {{ end }}
 
+{{- define "bitbucket.hazelcastGroupSecretName" -}}
+{{- .Values.bitbucket.clustering.group.secretName | default (printf "%s-clustering" (include "bitbucket.fullname" .)) -}}
+{{- end }}
+
+{{- define "bitbucket.hazelcastGroupEnvVars" }}
+- name: HAZELCAST_GROUP_NAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "bitbucket.hazelcastGroupSecretName" . | quote }}
+      key: {{ .Values.bitbucket.clustering.group.nameSecretKey | quote }}
+- name: HAZELCAST_GROUP_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "bitbucket.hazelcastGroupSecretName" . | quote }}
+      key: {{ .Values.bitbucket.clustering.group.passwordSecretKey | quote }}
+{{- end }}
+
 {{- define "bitbucket.elasticSearchEnvVars" -}}
-{{ with .Values.bitbucket.elasticSearch.baseUrl }}
+{{- if or .Values.bitbucket.elasticSearch.baseUrl .Values.bitbucket.clustering.enabled }}
 - name: ELASTICSEARCH_ENABLED
   value: "false"
+{{- end }}
+{{ with .Values.bitbucket.elasticSearch.baseUrl }}
 - name: PLUGIN_SEARCH_ELASTICSEARCH_BASEURL
   value: {{ . | quote }}
 {{ end }}

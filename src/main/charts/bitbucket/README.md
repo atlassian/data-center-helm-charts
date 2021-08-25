@@ -31,13 +31,19 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.additionalJvmArgs[0] | string | `"-XX:ActiveProcessorCount=2"` | The value defined for ActiveProcessorCount should correspond to that provided  for 'container.requests.cpu'. https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE |
 | bitbucket.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the  Bitbucket container. Each item in the list should specify the name of the volume  that contains the library, as well as the name of the library file within that  volume's root directory. Optionally, a subDirectory field can be included to  specify which directory in the volume contains the library file. |
 | bitbucket.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bitbucket container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
+| bitbucket.applicationMode | string | `"default"` | Application Mode This can be either 'default' or 'mirror' |
 | bitbucket.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
+| bitbucket.clustering.group.nameSecretKey | string | `"name"` | The key in the Kubernetes Secret that contains the Hazelcast group name. |
+| bitbucket.clustering.group.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Hazelcast group password. |
+| bitbucket.clustering.group.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Hazelcast group credentials. Example of creating a credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=name=<name> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets If no secret is specified, a random group name and password will be generated. |
+| bitbucket.displayName | string | `nil` | Set the display name of the Bitbucket instance. |
 | bitbucket.elasticSearch.baseUrl | string | `nil` | The base URL of the external Elasticsearch instance to be used. If this is defined, then Bitbucket will disable its internal Elasticsearch instance. |
 | bitbucket.elasticSearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Elasticsearch password. |
 | bitbucket.elasticSearch.credentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Elasticsearch credentials. Example of creating a credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
-| bitbucket.elasticSearch.credentials.usernameSecreyKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username. |
+| bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username. |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then  the license will be automatically populated during Bitbucket setup. Otherwise, it will  need to be provided via the browser after initial startup. An Example of creating  a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license>  https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
+| bitbucket.mirror.upstreamUrl | string | `nil` | Specifies the URL of the upstream Bitbucket server for this mirror. |
 | bitbucket.ports.hazelcast | int | `5701` | The port on which the Hazelcast listens for client traffic |
 | bitbucket.ports.http | int | `7990` | The port on which the Bitbucket container listens for HTTP traffic |
 | bitbucket.ports.ssh | int | `7999` | The port on which the Bitbucket container listens for SSH traffic |
@@ -54,6 +60,7 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.sshService | object | `{"annotations":{},"enabled":false,"port":22,"type":"LoadBalancer"}` | Enable or disable an additional service for exposing SSH for external access. Disable when the SSH service is exposed through the ingress controller, or  enable if the ingress controller does not support TCP. |
 | bitbucket.sshService.annotations | object | `{}` | Annotations for the SSH service. Useful if a load balancer controller  needs extra annotations. |
 | bitbucket.sshService.enabled | bool | `false` | Set to 'true' if an additional SSH Service should be created  |
+| bitbucket.sshService.host | string | `nil` | The hostname of the SSH service. If set, it'll be used to configure the SSH base URL for the application. |
 | bitbucket.sshService.port | int | `22` | Port to expose the SSH service on. |
 | bitbucket.sshService.type | string | `"LoadBalancer"` | SSH Service type |
 | bitbucket.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret that contains the sysadmin display name |
@@ -113,6 +120,7 @@ Kubernetes: `>=1.19.x-0`
 | volumes.sharedHome.persistentVolume.mountOptions | list | `[]` | Additional options to be used when mounting the NFS volume  |
 | volumes.sharedHome.persistentVolume.nfs.path | string | `""` | Specifies NFS directory share. This will be mounted into the Pod(s) using the 'volumes.sharedHome.mountPath' |
 | volumes.sharedHome.persistentVolume.nfs.server | string | `""` | The address of the NFS server. It needs to be resolvable by the kubelet, so consider using an IP address. |
+| volumes.sharedHome.persistentVolumeClaim.accessMode | string | `"ReadWriteMany"` | Specifies the access mode of the volume to claim |
 | volumes.sharedHome.persistentVolumeClaim.create | bool | `false` | If 'true', then a 'PersistentVolumeClaim' will be created for the 'PersistentVolume' |
 | volumes.sharedHome.persistentVolumeClaim.resources | object | `{"requests":{"storage":"1Gi"}}` | Specifies the standard K8s resource requests and/or limits for the shared-home  |
 | volumes.sharedHome.persistentVolumeClaim.storageClassName | string | `nil` | Specify the name of the 'StorageClass' that should be used If set to non-empty string value, this will specify the storage class to be used. If left without value, the default Storage Class will be utilised. Alternatively,  can be set to the empty string "", to indicate that no Storage Class should be used here. |
