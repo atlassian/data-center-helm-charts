@@ -17,28 +17,9 @@ The NFS server can be provisioned manually or by using the supplied Helm chart. 
 
 !!!tip "Pod affinity"
 
-    It is  **highly recommend** keep the NFS server and Bitbucket nodes in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour.
+    It is  **highly recommend** keep the NFS server and Bitbucket nodes in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour i.e.
     
     ```yaml
-    # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
-    # Due to the performance requirements it is highly recommended running all Bitbucket pods
-    # in the same availability zone as your dedicated NFS server. To achieve this, you
-    # can define `affinity` and `podAffinity` rules that will place all pods into the same zone,
-    # and therefore minimise the physical distance between the application pods and the shared storage.
-    # More specific documentation can be found in the official Affinity and Anti-affinity documentation:
-    # https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
-    #
-    # This is an example on how to ensure the pods are in the same zone as NFS server that is labeled with `role=nfs-server`:
-    #
-    #   podAffinity:
-    #    requiredDuringSchedulingIgnoredDuringExecution:
-    #      - labelSelector:
-    #          matchExpressions:
-    #            - key: role
-    #              operator: In
-    #              values:
-    #                - nfs-server # needs to be the same value as NFS server deployment
-    #        topologyKey: topology.kubernetes.io/zone
     affinity: {}
     ```
 
@@ -60,7 +41,7 @@ Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/e
 ```shell
 helm install nfs-server nfs-server-example --namespace nfs
 ```
-This will create an K8s service, its IP address will be used for configuring the `values.yaml`. The IP corresponds to the `CLUSTER-IP` returned when running:
+Get the IP address of the NFS service (`CLUSTER-IP`) by running the following command
 ```shell
 kubectl get service --namespace nfs
 ```
@@ -74,17 +55,18 @@ helm uninstall nfs-server --namespace nfs
 ```
 
 ## Update `values.yaml`
-Regardless of the approach used for installing the NFS the `values.yaml` needs to be updated as follows.
+Using the NFS IP and directory share, (see above) update the `values.yaml` appropriately. The approach below shows how a `persistentVolume` and corresponding `peristentVolumeClaim` can be dynamically created for the NFS at install:
 ```yaml
-sharedHome:
-  persistentVolume:
-    create: true
-    nfs:
-      server: "10.100.197.23" # IP address of the NFS server 
-      path: "/srv/nfs" # Directory share of NFS
-  persistentVolumeClaim:
-    create: true
-    storageClassName: ""
+volumes:
+  sharedHome:
+    persistentVolume:
+      create: true
+      nfs:
+        server: "10.100.197.23" # IP address of the NFS server 
+        path: "/srv/nfs" # Directory share of NFS
+    persistentVolumeClaim:
+      create: true
+      storageClassName: ""
 ```
 You can of course manually provision your own `persistentVolume` and corresponding claim (as opposed to the dynamic approach described above) for the NFS server. In this case update the `values.yaml` to make use of them via the `customVolume` stanza:
 ```yaml
