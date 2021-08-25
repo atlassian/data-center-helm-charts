@@ -41,13 +41,6 @@ Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/e
 ```shell
 helm install nfs-server nfs-server-example --namespace nfs
 ```
-Get the IP address of the NFS service (`CLUSTER-IP`) by running the following command
-```shell
-kubectl get service --namespace nfs
-```
-!!!info "NFS directory share"
-
-    The NFS Helm chart creates and exposes the directory share `/srv/nfs`. This will be required when configuring `values.yaml` 
 
 #### Uninstall
 ```shell
@@ -55,7 +48,14 @@ helm uninstall nfs-server --namespace nfs
 ```
 
 ## Update `values.yaml`
-Using the NFS IP and directory share, (see above) update the `values.yaml` appropriately. The approach below shows how a `persistentVolume` and corresponding `peristentVolumeClaim` can be dynamically created for the NFS at install:
+Get the IP address of the NFS service (`CLUSTER-IP`) by running the following command
+```shell
+kubectl get service --namespace nfs | awk '{print $3}'
+```
+!!!info "NFS directory share"
+
+    The NFS Helm chart creates and exposes the directory share `/srv/nfs`. This will be required when configuring `values.yaml` 
+The approach below shows how a `persistentVolume` and corresponding `peristentVolumeClaim` can be dynamically created for the provisioned NFS. Using the NFS IP and directory share, (see above) update the `values.yaml` appropriately:
 ```yaml
 volumes:
   sharedHome:
@@ -73,5 +73,5 @@ You can of course manually provision your own `persistentVolume` and correspondi
 sharedHome:
   customVolume: 
     persistentVolumeClaim:
-      claimName: "nfs-server-claim"
+      claimName: "custom-nfs-server-claim"
 ```
