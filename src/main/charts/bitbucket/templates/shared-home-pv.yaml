@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "bitbucket.fullname" . }}-shared-home-pv
+  name: {{ include "bitbucket.volume.sharedHome.name" . }}
   labels:
   {{- include "bitbucket.labels" . | nindent 4 }}
 spec:

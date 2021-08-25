@@ -482,7 +482,7 @@ volumes:
   #
   sharedHome:
 
-    # Dynamic provisioning of local-home using the K8s Storage Classes
+    # Dynamic provisioning of shared-home using the K8s Storage Classe
     #
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
     #

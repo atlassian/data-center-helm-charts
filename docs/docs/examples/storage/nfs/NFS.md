@@ -24,7 +24,20 @@ This section contains the requirements and recommendations for setting up NFS fo
     Ensure the NFS server's size is appropriate for the needs of the Bitbucket instance. See [capacity recommendations](https://confluence.atlassian.com/bitbucketserver/recommendations-for-running-bitbucket-in-aws-776640282.html){.external} for details.
 
 ### Helm
-The supplied Helm chart should be used as a **reference** only. Details on usage and installation can be found [here](helm-chart/NFS_HELM_CHART.md).
+!!!danger "Disclaimer"
+
+    **This Helm chart is not officially supported! It should not be used for production deployments!**
+
+#### Installation
+Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
+```shell
+helm install nfs-server nfs-server-example
+```
+
+#### Uninstall
+```shell
+helm uninstall nfs-server
+```
 
 ## Update `values.yaml`
 Regardless of the approach used for installing the NFS the `values.yaml` needs to be updated as follows.
