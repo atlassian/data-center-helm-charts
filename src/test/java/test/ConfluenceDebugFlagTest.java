@@ -3,14 +3,11 @@ package test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Kind;
 import test.model.Product;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import static test.jackson.JsonNodeAssert.assertThat;
 
