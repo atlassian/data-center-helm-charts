@@ -1,5 +1,6 @@
 package test;
 
+import io.restassured.internal.common.assertion.Assertion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
@@ -222,8 +223,8 @@ class IngressTest {
         Assertions.assertNotEquals(0, ingresses.size());
 
         for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                    .hasTextContaining("/confluence-tmp");
+            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
+            Assertions.assertEquals(path.replace("/setup", "") , "/confluence-tmp");
         }
     }
 
@@ -240,8 +241,25 @@ class IngressTest {
         Assertions.assertNotEquals(0, ingresses.size());
 
         for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                    .hasTextContaining("/ingress");
+            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
+            Assertions.assertEquals(path.replace("/setup", "") , "/ingress");
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_no_context_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertNotEquals(0, ingresses.size());
+
+        for (KubeResource ingress : ingresses) {
+            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
+            Assertions.assertEquals(path.replace("/setup", "") , "/ingress");
         }
     }
 
@@ -256,8 +274,8 @@ class IngressTest {
         Assertions.assertNotEquals(0, ingresses.size());
 
         for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                    .hasTextContaining("/");
+            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
+            Assertions.assertEquals(path.replace("setup", "") , "/");
         }
     }
 
