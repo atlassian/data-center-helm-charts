@@ -112,6 +112,8 @@ spec:
             - name: SERVER_SECURE
               value: "true"
             {{ end }}
+            - name: SET_PERMISSIONS
+              value: {{ .Values.bitbucket.setPermissions | quote }}
             - name: BITBUCKET_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             {{ with .Values.bitbucket.license.secretName }}

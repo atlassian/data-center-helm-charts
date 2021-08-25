@@ -73,6 +73,8 @@ spec:
                   name: {{ . }}
                   key: {{ $.Values.jira.license.secretKey }}
             {{ end }}
+            - name: SET_PERMISSIONS
+              value: {{ .Values.jira.setPermissions | quote }}
             - name: JIRA_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS

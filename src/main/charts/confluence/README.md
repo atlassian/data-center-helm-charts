@@ -32,7 +32,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.accessLog.mountPath | string | `"/opt/atlassian/confluence/logs"` | The path within the Confluence container where the local-home volume should be  mounted in order to capture access logs. |
 | confluence.additionalBundledPlugins | list | `[]` | Specifies a list of additional Confluence plugins that should be added to the  Confluence container. Note plugins installed via this method will appear as  bundled plugins rather than user plugins. An alternative to this method  is to install the plugins via "Manage Apps" in the product system  administration UI. These should be specified in the same manner as the  'additionalLibraries' property. |
 | confluence.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Confluence  container. See https://hub.docker.com/r/atlassian/confluence-server for  supported variables. |
-| confluence.additionalJvmArgs | list | `["-XX:ActiveProcessorCount=2"]` | Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g.  system properties. |
+| confluence.additionalJvmArgs | list | `["-XX:ActiveProcessorCount=2"]` | Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g. system properties. |
 | confluence.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the  Confluence container. Each item in the list should specify the name of the volume  that contains the library, as well as the name of the library file within that  volume's root directory. Optionally, a subDirectory field can be included to  specify which directory in the volume contains the library file. |
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | confluence.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
@@ -56,7 +56,9 @@ Kubernetes: `>=1.19.x-0`
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen |
 | confluence.service.type | string | `"ClusterIP"` | The type of K8s service to use for Confluence |
-| confluence.setPermissions | bool | `false` | Boolean to define whether to set home directory permissions on startup  of Confluence container. Set to 'false' to disable this behaviour.  |
+| confluence.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Confluence container. Set to 'false' to disable this behaviour.  |
+| confluence.shutdown.command | string | `nil` |  |
+| confluence.shutdown.terminationGracePeriodSeconds | int | `25` | The termination grace period for pods during shutdown. This should be set to the Confluence internal grace period (default 20 seconds), plus a small buffer to allow the JVM to fully terminate. |
 | confluence.umask | string | `"0022"` | The umask used by the Confluence process when it creates new files. The default is 0022. This gives the new files:  - read/write permissions for the Confluence user  - read permissions for everyone else. |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password |
 | database.credentials.secretName | string | `nil` | The name of the K8s Secret that contains the database login credentials. If the secret is specified, then the credentials will be automatically utilised on  Confluence startup. If the secret is not provided, then the credentials will need to be  provided via the browser during manual configuration post deployment.   Example of creating a database credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
@@ -74,7 +76,7 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen  |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"atlassian/confluence-server"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
+| image.repository | string | `"atlassian/confluence"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |
@@ -109,7 +111,7 @@ Kubernetes: `>=1.19.x-0`
 | synchrony.resources.jvm.stackSize | string | `"2048k"` | The memory allocated for the Synchrony stack |
 | synchrony.service.port | int | `80` | The port on which the Synchrony K8s Service will listen |
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony |
-| terminationGracePeriodSeconds | int | `25` | The termination grace period for pods during shutdown. This should be set to the Confluence internal grace period (default 20 seconds), plus a small buffer to allow the JVM to fully terminate. |
+| synchrony.shutdown.terminationGracePeriodSeconds | int | `25` | The termination grace period for pods during shutdown. This should be set to the Synchrony internal grace period (default 20 seconds), plus a small buffer to allow the JVM to fully terminate. |
 | tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Confluence pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Confluence pods. Note that this will not create any corresponding volume mounts; those needs to be defined in confluence.additionalVolumeMounts |
 | volumes.localHome.customVolume | object | `{}` | Static provisioning of local-home using K8s PVs and PVCs NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for  pods is not recommended. Dynamic provisioning described above is the prescribed approach. When 'persistentVolumeClaim.create' is 'false', then this value can be used to define  a standard K8s volume that will be used for the local-home volume(s). If not defined,  then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify  the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static |

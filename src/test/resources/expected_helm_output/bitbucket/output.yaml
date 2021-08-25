@@ -105,7 +105,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2003 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket-server:7.15.1-jdk11"
+          image: "atlassian/bitbucket:7.15.1-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -141,6 +141,8 @@ spec:
             - name: SERVER_SCHEME
               value: "https"
             - name: SERVER_SECURE
+              value: "true"
+            - name: SET_PERMISSIONS
               value: "true"
             - name: BITBUCKET_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"

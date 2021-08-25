@@ -87,7 +87,7 @@ spec:
             - name: UMASK
               value: {{ .Values.crowd.umask | quote }}
             - name: SET_PERMISSIONS
-              value: "false"
+              value: {{ .Values.crowd.setPermissions | quote }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_MINIMUM_MEMORY

@@ -50,6 +50,7 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s Service will listen |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket |
+| bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour. |
 | bitbucket.sshService | object | `{"annotations":{},"enabled":false,"port":22,"type":"LoadBalancer"}` | Enable or disable an additional service for exposing SSH for external access. Disable when the SSH service is exposed through the ingress controller, or  enable if the ingress controller does not support TCP. |
 | bitbucket.sshService.annotations | object | `{}` | Annotations for the SSH service. Useful if a load balancer controller  needs extra annotations. |
 | bitbucket.sshService.enabled | bool | `false` | Set to 'true' if an additional SSH Service should be created  |
@@ -73,9 +74,9 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.extraVolumes | list | `[]` | Specify custom volumes to be added to Fluentd container (e.g. more log sources) |
 | fluentd.fluentdCustomConfig | object | `{}` | Custom fluent.conf file |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
-| image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket-server","tag":""}` | Image configuration  |
+| image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket","tag":""}` | Image configuration  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"atlassian/bitbucket-server"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server |
+| image.repository | string | `"atlassian/bitbucket"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |

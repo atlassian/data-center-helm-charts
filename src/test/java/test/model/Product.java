@@ -17,7 +17,7 @@ public enum Product {
     confluence {
         @Override
         public String getDockerImageName() {
-            return "atlassian/confluence-server";
+            return "atlassian/confluence";
         }
 
         @Override
@@ -39,7 +39,7 @@ public enum Product {
     bitbucket {
         @Override
         public String getDockerImageName() {
-            return "atlassian/bitbucket-server";
+            return "atlassian/bitbucket";
         }
 
         @Override

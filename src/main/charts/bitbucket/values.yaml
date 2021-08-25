@@ -47,7 +47,7 @@ image:
   # -- The Confluence Docker image to use
   # https://hub.docker.com/r/atlassian/bitbucket-server
   #
-  repository: atlassian/bitbucket-server
+  repository: atlassian/bitbucket
   
   # -- Image pull policy
   #
@@ -456,7 +456,12 @@ bitbucket:
     # -- The GID used by the Bitbucket docker image
     #
     gid: "2003"
-    
+
+  # -- Boolean to define whether to set local home directory permissions on startup
+  # of Bitbucket container. Set to 'false' to disable this behaviour.
+  #
+  setPermissions: true
+
   # Port definitions
   #  
   ports:
