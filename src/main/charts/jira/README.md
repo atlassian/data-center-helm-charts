@@ -80,6 +80,7 @@ Kubernetes: `>=1.19.x-0`
 | jira.service.contextPath | string | `nil` | The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | jira.service.port | int | `80` | The port on which the Jira K8s Service will listen |
 | jira.service.type | string | `"ClusterIP"` | The type of K8s service to use for Jira |
+| jira.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Jira container. Set to 'false' to disable this behaviour. |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Jira pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Jira pods |
 | replicaCount | int | `1` | The initial number of Jira pods that should be started at deployment time.  Note that Jira requires manual configuration via the browser post deployment  after the first pod is deployed. This configuration must be completed before  scaling up additional pods. As such this value should always be kept as 1,  but can be altered once manual configuration is complete. |

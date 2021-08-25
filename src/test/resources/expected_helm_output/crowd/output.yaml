@@ -138,7 +138,7 @@ spec:
             - name: UMASK
               value: "0022"
             - name: SET_PERMISSIONS
-              value: "false"
+              value: "true"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/crowd/shared"
             - name: JVM_MINIMUM_MEMORY
