@@ -29,14 +29,14 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: "{{ include "confluence.ingressPath" . }}/setup"
+          - path: {{ trimSuffix "/" (include "confluence.ingressPath" .) }}/setup
             pathType: Prefix
             backend:
               service:
                 name: {{ include "confluence.fullname" . }}
                 port:
                   number: {{ $.Values.confluence.service.port }}
-          - path: "{{ include "confluence.ingressPath" . }}/bootstrap"
+          - path: {{ trimSuffix "/" (include "confluence.ingressPath" .) }}/bootstrap
             pathType: Prefix
             backend:
               service:
