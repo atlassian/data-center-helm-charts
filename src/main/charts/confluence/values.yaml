@@ -333,11 +333,10 @@ ingress:
   # Service.
   #
   host:
-  
-  # -- The base path for the Ingress Resource. For example '/confluence'. Based on a 
-  # 'ingress.host' value of 'company.k8s.com' this would result in a URL of 
-  # 'company.k8s.com/confluence'
-  #
+
+  # -- The base path for the Ingress Resource. For example '/confluence'. Based on a
+  # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
+  # 'company.k8s.com/confluence'. Default value is 'confluence.service.contextpath'
   path:
   
   # -- The custom annotations that should be applied to the Ingress Resource 
