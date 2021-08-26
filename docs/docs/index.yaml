@@ -7,41 +7,41 @@ entries:
           description: Add support for providing a custom fluentd start command
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/218
+            url: https://github.com/atlassian/data-center-helm-charts/pull/218
         - kind: changed
           description: Make some deployment params configurable
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/226
+            url: https://github.com/atlassian/data-center-helm-charts/pull/226
         - kind: changed
           description: Renamed the 'master' branch to 'main'
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/232
+            url: https://github.com/atlassian/data-center-helm-charts/pull/232
         - kind: changed
           description: Update eks cluster yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/227
+            url: https://github.com/atlassian/data-center-helm-charts/pull/227
         - kind: changed
           description: Improve documentation
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/206
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/222
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/223
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/228
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/229
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/231
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/233
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/235
+            url: https://github.com/atlassian/data-center-helm-charts/pull/206
+            url: https://github.com/atlassian/data-center-helm-charts/pull/222
+            url: https://github.com/atlassian/data-center-helm-charts/pull/223
+            url: https://github.com/atlassian/data-center-helm-charts/pull/228
+            url: https://github.com/atlassian/data-center-helm-charts/pull/229
+            url: https://github.com/atlassian/data-center-helm-charts/pull/231
+            url: https://github.com/atlassian/data-center-helm-charts/pull/233
+            url: https://github.com/atlassian/data-center-helm-charts/pull/235
     apiVersion: v2
     appVersion: 7.15.1-jdk11
     created: "2021-08-17T01:45:26.5328453Z"
     description: A chart for installing Bitbucket Data Center on Kubernetes
     digest: 953f36be69e7b720f56659d430f84abd3afdf6ef4e4dd4bf98e3da50b42006af
     home: https://www.atlassian.com/software/bitbucket
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bitbucket.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
     keywords:
     - Bitbucket
     - Bitbucket Server
@@ -51,11 +51,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.15.0/bitbucket-0.15.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.15.0/bitbucket-0.15.0.tgz
     version: 0.15.0
   - annotations:
       artifacthub.io/changes: |-
@@ -63,14 +63,14 @@ entries:
           description: Update Bitbucket version to 7.14.1-jdk11
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
+            url: https://github.com/atlassian/data-center-helm-charts/pull/212
     apiVersion: v2
     appVersion: 7.14.1-jdk11
     created: "2021-07-23T07:52:09.7960143Z"
     description: A chart for installing Bitbucket Data Center on Kubernetes
     digest: c5eedd6c405ed7231cfa9ad5fc0ad5da8adf9c5f5322ba98c40d2cd5b5e40a52
     home: https://www.atlassian.com/software/bitbucket
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bitbucket.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
     keywords:
     - Bitbucket
     - Bitbucket Server
@@ -80,11 +80,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.14.0/bitbucket-0.14.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.14.0/bitbucket-0.14.0.tgz
     version: 0.14.0
   - annotations:
       artifacthub.io/changes: |-
@@ -92,19 +92,19 @@ entries:
           description: Bitbucket NFS server chart
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/205
+            url: https://github.com/atlassian/data-center-helm-charts/pull/205
         - kind: changed
           description: Volume docs updates
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+            url: https://github.com/atlassian/data-center-helm-charts/pull/188
     apiVersion: v2
     appVersion: 7.12.1-jdk11
     created: "2021-07-22T05:12:22.088028881Z"
     description: A chart for installing Bitbucket Data Center on Kubernetes
     digest: 3f7d33567342c9aa704ce536769254db61aa01411e2b7832464b1a05ce66c06d
     home: https://www.atlassian.com/software/bitbucket
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bitbucket.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
     keywords:
     - Bitbucket
     - Bitbucket Server
@@ -114,11 +114,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.13.0/bitbucket-0.13.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.13.0/bitbucket-0.13.0.tgz
     version: 0.13.0
   - annotations:
       artifacthub.io/changes: |-
@@ -126,24 +126,24 @@ entries:
           description: Defining the following values in the helpers template for each chart, to allow template overrides
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/173
+            url: https://github.com/atlassian/data-center-helm-charts/pull/173
         - kind: fixed
           description: Wording improvement for warning in NOTES when PV is not used
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/199
+            url: https://github.com/atlassian/data-center-helm-charts/pull/199
         - kind: fixed
           description: Improve readability of values.yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/182
+            url: https://github.com/atlassian/data-center-helm-charts/pull/182
     apiVersion: v2
     appVersion: 7.12.1-jdk11
     created: "2021-07-06T17:30:00.088909+10:00"
     description: A chart for installing Bitbucket Data Center on Kubernetes
     digest: cac6244cc0173294cdd06e98abe49c1cea005abd4a62112b0e628729457d6daf
     home: https://www.atlassian.com/software/bitbucket
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bitbucket.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
     keywords:
     - Bitbucket
     - Bitbucket Server
@@ -153,11 +153,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.12.0/bitbucket-0.12.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.12.0/bitbucket-0.12.0.tgz
     version: 0.12.0
   - annotations:
       artifacthub.io/changes: |-
@@ -175,7 +175,7 @@ entries:
     description: A chart for installing Bitbucket Data Center on Kubernetes
     digest: 24bfb99a7a8d0f72279f2814c8d239c6955f1ec5464de5c70762034ca09ce715
     home: https://www.atlassian.com/software/bitbucket
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bitbucket.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
     keywords:
     - Bitbucket
     - Bitbucket Server
@@ -185,11 +185,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.11.0/bitbucket-0.11.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.11.0/bitbucket-0.11.0.tgz
     version: 0.11.0
   - apiVersion: v2
     appVersion: 7.12.1-jdk11
@@ -207,11 +207,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.10.0/bitbucket-0.10.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.10.0/bitbucket-0.10.0.tgz
     version: 0.10.0
   - apiVersion: v2
     appVersion: 7.12.1-jdk11
@@ -229,11 +229,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.9.0/bitbucket-0.9.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.9.0/bitbucket-0.9.0.tgz
     version: 0.9.0
   - apiVersion: v2
     appVersion: 7.12.1-jdk11
@@ -251,11 +251,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.8.0/bitbucket-0.8.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.8.0/bitbucket-0.8.0.tgz
     version: 0.8.0
   - apiVersion: v2
     appVersion: 7.12.1-jdk11
@@ -272,18 +272,18 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.7.0/bitbucket-0.7.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.7.0/bitbucket-0.7.0.tgz
     version: 0.7.0
   - apiVersion: v2
     appVersion: 7.7.0-jdk11
     created: "2021-05-04T05:38:38.36913736Z"
     description: A chart for installing Bitbucket DC on Kubernetes
     digest: d9114ac387352d7cdc59ba27c753d0aa503cab7116cf63dbf8257c3744063341
-    home: https://github.com/atlassian-labs/data-center-helm-charts
+    home: https://github.com/atlassian/data-center-helm-charts
     keywords:
     - Bitbucket
     - Bitbucket Server
@@ -292,10 +292,10 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: bitbucket
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/bitbucket-0.6.0/bitbucket-0.6.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.6.0/bitbucket-0.6.0.tgz
     version: 0.6.0
   confluence:
   - annotations:
@@ -304,41 +304,41 @@ entries:
           description: Add Service annotations
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/209
+            url: https://github.com/atlassian/data-center-helm-charts/pull/209
         - kind: added
           description: Add support for providing a custom fluentd start command
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/218
+            url: https://github.com/atlassian/data-center-helm-charts/pull/218
         - kind: changed
           description: Renamed the 'master' branch to 'main'
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/232
+            url: https://github.com/atlassian/data-center-helm-charts/pull/232
         - kind: changed
           description: Update eks cluster yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/227
+            url: https://github.com/atlassian/data-center-helm-charts/pull/227
         - kind: changed
           description: Improve documentation
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/206
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/222
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/223
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/228
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/229
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/231
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/233
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/235
+            url: https://github.com/atlassian/data-center-helm-charts/pull/206
+            url: https://github.com/atlassian/data-center-helm-charts/pull/222
+            url: https://github.com/atlassian/data-center-helm-charts/pull/223
+            url: https://github.com/atlassian/data-center-helm-charts/pull/228
+            url: https://github.com/atlassian/data-center-helm-charts/pull/229
+            url: https://github.com/atlassian/data-center-helm-charts/pull/231
+            url: https://github.com/atlassian/data-center-helm-charts/pull/233
+            url: https://github.com/atlassian/data-center-helm-charts/pull/235
     apiVersion: v2
     appVersion: 7.12.4-jdk11
     created: "2021-08-17T01:45:26.8245293Z"
     description: A chart for installing Confluence Data Center on Kubernetes
     digest: 4d39db613d72a73f0e3458dca56af0f48e47f97f5e43b2124125a243698e78d6
     home: https://www.atlassian.com/software/confluence
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/confluence.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
     keywords:
     - Confluence
     - Confluence Server
@@ -348,11 +348,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.15.0/confluence-0.15.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.15.0/confluence-0.15.0.tgz
     version: 0.15.0
   - annotations:
       artifacthub.io/changes: |-
@@ -360,14 +360,14 @@ entries:
           description: Update Confluence version to 7.12.3-jdk11
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
+            url: https://github.com/atlassian/data-center-helm-charts/pull/212
     apiVersion: v2
     appVersion: 7.12.3-jdk11
     created: "2021-07-23T07:52:10.198515Z"
     description: A chart for installing Confluence Data Center on Kubernetes
     digest: 5d9c06d7b67b395c441f44c2eacf142de015a721483d1cc4cb26f7d947dedfcb
     home: https://www.atlassian.com/software/confluence
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/confluence.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
     keywords:
     - Confluence
     - Confluence Server
@@ -377,11 +377,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.14.0/confluence-0.14.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.14.0/confluence-0.14.0.tgz
     version: 0.14.0
   - annotations:
       artifacthub.io/changes: |-
@@ -389,19 +389,19 @@ entries:
           description: Fix Synchrony resource requests and limits
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/210
+            url: https://github.com/atlassian/data-center-helm-charts/pull/210
         - kind: changed
           description: Volume docs updates
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+            url: https://github.com/atlassian/data-center-helm-charts/pull/188
     apiVersion: v2
     appVersion: 7.12.2-jdk11
     created: "2021-07-22T05:12:22.394261132Z"
     description: A chart for installing Confluence Data Center on Kubernetes
     digest: 6e702d600d5318ad72020bdd27916bcf79d965b3023dbaa0a87b47287e60cc07
     home: https://www.atlassian.com/software/confluence
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/confluence.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
     keywords:
     - Confluence
     - Confluence Server
@@ -411,11 +411,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.13.0/confluence-0.13.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.13.0/confluence-0.13.0.tgz
     version: 0.13.0
   - annotations:
       artifacthub.io/changes: |-
@@ -423,29 +423,29 @@ entries:
           description: Increase the timeout for /bootstrap endpoints in the same way as for /setup to avoid the ingress timeout
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/194
+            url: https://github.com/atlassian/data-center-helm-charts/pull/194
         - kind: added
           description: Defining the following values in the helpers template for each chart, to allow template overrides
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/173
+            url: https://github.com/atlassian/data-center-helm-charts/pull/173
         - kind: fixed
           description: Wording improvement for warning in NOTES when PV is not used
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/199
+            url: https://github.com/atlassian/data-center-helm-charts/pull/199
         - kind: fixed
           description: Improve readability of values.yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/182
+            url: https://github.com/atlassian/data-center-helm-charts/pull/182
     apiVersion: v2
     appVersion: 7.12.2-jdk11
     created: "2021-07-06T17:30:00.379367+10:00"
     description: A chart for installing Confluence Data Center on Kubernetes
     digest: 359c28ac77166c8d82c4ae83f4123f88ec44c5aee62355d797fd4e82c774ccf0
     home: https://www.atlassian.com/software/confluence
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/confluence.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
     keywords:
     - Confluence
     - Confluence Server
@@ -455,11 +455,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.12.0/confluence-0.12.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.12.0/confluence-0.12.0.tgz
     version: 0.12.0
   - annotations:
       artifacthub.io/changes: |
@@ -481,7 +481,7 @@ entries:
     description: A chart for installing Confluence Data Center on Kubernetes
     digest: 83eb5c6b8693852aa394831f3ac9efe05395bd67a511c9a326b8b888a74ab03c
     home: https://www.atlassian.com/software/confluence
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/confluence.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
     keywords:
     - Confluence
     - Confluence Server
@@ -491,11 +491,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.11.0/confluence-0.11.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.11.0/confluence-0.11.0.tgz
     version: 0.11.0
   - apiVersion: v2
     appVersion: 7.12.0-jdk11
@@ -513,11 +513,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.10.0/confluence-0.10.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.10.0/confluence-0.10.0.tgz
     version: 0.10.0
   - apiVersion: v2
     appVersion: 7.12.0-jdk11
@@ -535,11 +535,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.9.0/confluence-0.9.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.9.0/confluence-0.9.0.tgz
     version: 0.9.0
   - apiVersion: v2
     appVersion: 7.12.0-jdk11
@@ -557,11 +557,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.8.0/confluence-0.8.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.8.0/confluence-0.8.0.tgz
     version: 0.8.0
   - apiVersion: v2
     appVersion: 7.12.0-jdk11
@@ -578,18 +578,18 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.7.0/confluence-0.7.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.7.0/confluence-0.7.0.tgz
     version: 0.7.0
   - apiVersion: v2
     appVersion: 7.9.0-jdk11
     created: "2021-05-04T05:38:38.662020393Z"
     description: A chart for installing Confluence DC on Kubernetes
     digest: 2506b7f29b9dda9a5c9f42911a9e3e655fac19d9dc9d0f2db4f083a7e3e30a96
-    home: https://github.com/atlassian-labs/data-center-helm-charts
+    home: https://github.com/atlassian/data-center-helm-charts
     keywords:
     - Confluence
     - Confluence Server
@@ -598,10 +598,10 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: confluence
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/confluence-0.6.0/confluence-0.6.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.6.0/confluence-0.6.0.tgz
     version: 0.6.0
   crowd:
   - annotations:
@@ -610,41 +610,41 @@ entries:
           description: Add Service annotations
           links:
           - name: Github PR
-            url: added://github.com/atlassian-labs/data-center-helm-charts/pull/209
+            url: added://github.com/atlassian/data-center-helm-charts/pull/209
         - kind: changed
           description: Add support for providing a custom fluentd start command
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/218
+            url: https://github.com/atlassian/data-center-helm-charts/pull/218
         - kind: changed
           description: Renamed the 'master' branch to 'main'
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/232
+            url: https://github.com/atlassian/data-center-helm-charts/pull/232
         - kind: changed
           description: Update eks cluster yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/227
+            url: https://github.com/atlassian/data-center-helm-charts/pull/227
         - kind: changed
           description: Improve documentation
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/206
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/222
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/223
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/228
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/229
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/231
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/233
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/235
+            url: https://github.com/atlassian/data-center-helm-charts/pull/206
+            url: https://github.com/atlassian/data-center-helm-charts/pull/222
+            url: https://github.com/atlassian/data-center-helm-charts/pull/223
+            url: https://github.com/atlassian/data-center-helm-charts/pull/228
+            url: https://github.com/atlassian/data-center-helm-charts/pull/229
+            url: https://github.com/atlassian/data-center-helm-charts/pull/231
+            url: https://github.com/atlassian/data-center-helm-charts/pull/233
+            url: https://github.com/atlassian/data-center-helm-charts/pull/235
     apiVersion: v2
     appVersion: 4.3.5-jdk11
     created: "2021-08-17T01:45:27.1119147Z"
     description: A chart for installing Crowd Data Center on Kubernetes
     digest: 48850b89000d2dea3fd18afc8bc12e134a5324761c8d477ae988541e10bb80f3
     home: https://www.atlassian.com/software/crowd
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
     keywords:
     - Crowd
     - Crowd Server
@@ -654,11 +654,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.15.0/crowd-0.15.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.15.0/crowd-0.15.0.tgz
     version: 0.15.0
   - annotations:
       artifacthub.io/changes: |-
@@ -666,14 +666,14 @@ entries:
           description: Update Crowd version to 4.3.5-jdk11
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
+            url: https://github.com/atlassian/data-center-helm-charts/pull/212
     apiVersion: v2
     appVersion: 4.3.5-jdk11
     created: "2021-07-23T07:52:10.5184012Z"
     description: A chart for installing Crowd Data Center on Kubernetes
     digest: c45a3ae7b723a64eaa8de2208c64020ab5af5bd98bcb32773e5664b72c7173d9
     home: https://www.atlassian.com/software/crowd
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
     keywords:
     - Crowd
     - Crowd Server
@@ -683,11 +683,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.14.0/crowd-0.14.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.14.0/crowd-0.14.0.tgz
     version: 0.14.0
   - annotations:
       artifacthub.io/changes: |-
@@ -695,14 +695,14 @@ entries:
           description: Volume docs updates
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+            url: https://github.com/atlassian/data-center-helm-charts/pull/188
     apiVersion: v2
     appVersion: 4.3.0-jdk11
     created: "2021-07-22T05:12:22.710663321Z"
     description: A chart for installing Crowd Data Center on Kubernetes
     digest: 6df192393167448789d9a8a358e15a8a191cc72c0afc23c71ffeb6c2d2a8b145
     home: https://www.atlassian.com/software/crowd
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
     keywords:
     - Crowd
     - Crowd Server
@@ -712,11 +712,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.13.0/crowd-0.13.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.13.0/crowd-0.13.0.tgz
     version: 0.13.0
   - annotations:
       artifacthub.io/changes: |-
@@ -732,7 +732,7 @@ entries:
     description: A chart for installing Crowd Data Center on Kubernetes
     digest: 611034f331d673cb15ac902a41dc1e18bfabfcb0812ff38c26305761e8b3f738
     home: https://www.atlassian.com/software/crowd
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
     keywords:
     - Crowd
     - Crowd Server
@@ -742,11 +742,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.12.0/crowd-0.12.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.12.0/crowd-0.12.0.tgz
     version: 0.12.0
   - annotations:
       artifacthub.io/changes: |-
@@ -762,7 +762,7 @@ entries:
     description: A chart for installing Crowd Data Center on Kubernetes
     digest: 390ae7408acdbe7c08f96965131c7b7a13eee6ba0e925a296d55673548f5ddae
     home: https://www.atlassian.com/software/crowd
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/crowd.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
     keywords:
     - Crowd
     - Crowd Server
@@ -772,11 +772,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.11.0/crowd-0.11.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.11.0/crowd-0.11.0.tgz
     version: 0.11.0
   - apiVersion: v2
     appVersion: 4.3.0-jdk11
@@ -794,11 +794,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.10.0/crowd-0.10.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.10.0/crowd-0.10.0.tgz
     version: 0.10.0
   - apiVersion: v2
     appVersion: 4.3.0-jdk11
@@ -816,11 +816,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.9.0/crowd-0.9.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.9.0/crowd-0.9.0.tgz
     version: 0.9.0
   - apiVersion: v2
     appVersion: 4.3.0-jdk11
@@ -838,11 +838,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.8.0/crowd-0.8.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.8.0/crowd-0.8.0.tgz
     version: 0.8.0
   - apiVersion: v2
     appVersion: 4.3.0-jdk11
@@ -860,11 +860,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: crowd
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
   - annotations:
@@ -873,34 +873,34 @@ entries:
           description: Add Service annotations
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/209
+            url: https://github.com/atlassian/data-center-helm-charts/pull/209
         - kind: added
           description: Add support for providing a custom fluentd start command
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/218
+            url: https://github.com/atlassian/data-center-helm-charts/pull/218
         - kind: changed
           description: Renamed the 'master' branch to 'main'
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/232
+            url: https://github.com/atlassian/data-center-helm-charts/pull/232
         - kind: changed
           description: Update eks cluster yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/227
+            url: https://github.com/atlassian/data-center-helm-charts/pull/227
         - kind: changed
           description: Improve documentation
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/206
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/222
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/223
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/228
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/229
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/231
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/233
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/235
+            url: https://github.com/atlassian/data-center-helm-charts/pull/206
+            url: https://github.com/atlassian/data-center-helm-charts/pull/222
+            url: https://github.com/atlassian/data-center-helm-charts/pull/223
+            url: https://github.com/atlassian/data-center-helm-charts/pull/228
+            url: https://github.com/atlassian/data-center-helm-charts/pull/229
+            url: https://github.com/atlassian/data-center-helm-charts/pull/231
+            url: https://github.com/atlassian/data-center-helm-charts/pull/233
+            url: https://github.com/atlassian/data-center-helm-charts/pull/235
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 8.13.9-jdk11
@@ -908,7 +908,7 @@ entries:
     description: A chart for installing Jira Data Center on Kubernetes
     digest: 3b091b281252f481e78e8507bdba80653fdc86b13b69bf96f260cdf8722afb20
     home: https://www.atlassian.com/software/jira
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
     keywords:
     - Jira
     - Jira Software
@@ -919,11 +919,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.15.0/jira-0.15.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.15.0/jira-0.15.0.tgz
     version: 0.15.0
   - annotations:
       artifacthub.io/changes: |-
@@ -931,7 +931,7 @@ entries:
           description: Update Jira version to 8.13.9-jdk11
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/212
+            url: https://github.com/atlassian/data-center-helm-charts/pull/212
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 8.13.9-jdk11
@@ -939,7 +939,7 @@ entries:
     description: A chart for installing Jira Data Center on Kubernetes
     digest: ec41bb5f63bed4fe079aedc1f6841cb703e49b1a9cc5749657d4480e2fdff3b6
     home: https://www.atlassian.com/software/jira
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
     keywords:
     - Jira
     - Jira Software
@@ -950,11 +950,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.14.0/jira-0.14.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.14.0/jira-0.14.0.tgz
     version: 0.14.0
   - annotations:
       artifacthub.io/changes: |-
@@ -962,19 +962,19 @@ entries:
           description: Added Jira Proxy information to helm chart
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/202
+            url: https://github.com/atlassian/data-center-helm-charts/pull/202
         - kind: changed
           description: Volume docs updates
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/188
+            url: https://github.com/atlassian/data-center-helm-charts/pull/188
     apiVersion: v2
     appVersion: 8.13.7-jdk11
     created: "2021-07-22T05:12:23.021563331Z"
     description: A chart for installing Jira Data Center on Kubernetes
     digest: a6b789356265c20d421a9f152fedd9fcfda8f3bbe705e18b1c897b20b8cb62fc
     home: https://www.atlassian.com/software/jira
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
     keywords:
     - Jira
     - Jira Software
@@ -985,11 +985,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.13.0/jira-0.13.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.13.0/jira-0.13.0.tgz
     version: 0.13.0
   - annotations:
       artifacthub.io/changes: |-
@@ -997,24 +997,24 @@ entries:
           description: Defining the following values in the helpers template for each chart, to allow template overrides
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/173
+            url: https://github.com/atlassian/data-center-helm-charts/pull/173
         - kind: fixed
           description: Wording improvement for warning in NOTES when PV is not used
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/199
+            url: https://github.com/atlassian/data-center-helm-charts/pull/199
         - kind: fixed
           description: Improve readability of values.yaml
           links:
           - name: Github PR
-            url: https://github.com/atlassian-labs/data-center-helm-charts/pull/182
+            url: https://github.com/atlassian/data-center-helm-charts/pull/182
     apiVersion: v2
     appVersion: 8.13.7-jdk11
     created: "2021-07-06T17:30:01.365393+10:00"
     description: A chart for installing Jira Data Center on Kubernetes
     digest: 60f310620bd60470efce682f9a0ffbb097c7712beba6f100903e5d25fc280b23
     home: https://www.atlassian.com/software/jira
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
     keywords:
     - Jira
     - Jira Software
@@ -1025,11 +1025,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.12.0/jira-0.12.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.12.0/jira-0.12.0.tgz
     version: 0.12.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1047,7 +1047,7 @@ entries:
     description: A chart for installing Jira Data Center on Kubernetes
     digest: 815fb2bbe65418e510cde0a44bbdc3ccfde2599e80f189a96b6e99b6005099c9
     home: https://www.atlassian.com/software/jira
-    icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
     keywords:
     - Jira
     - Jira Software
@@ -1058,11 +1058,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.11.0/jira-0.11.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.11.0/jira-0.11.0.tgz
     version: 0.11.0
   - apiVersion: v2
     appVersion: 8.13.6-jdk11
@@ -1081,11 +1081,11 @@ entries:
     kubeVersion: '>=1.19.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.10.0/jira-0.10.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.10.0/jira-0.10.0.tgz
     version: 0.10.0
   - apiVersion: v2
     appVersion: 8.13.6-jdk11
@@ -1104,11 +1104,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.9.0/jira-0.9.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.9.0/jira-0.9.0.tgz
     version: 0.9.0
   - apiVersion: v2
     appVersion: 8.13.6-jdk11
@@ -1127,11 +1127,11 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.8.0/jira-0.8.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.8.0/jira-0.8.0.tgz
     version: 0.8.0
   - apiVersion: v2
     appVersion: 8.13.6-jdk11
@@ -1149,18 +1149,18 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.7.0/jira-0.7.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.7.0/jira-0.7.0.tgz
     version: 0.7.0
   - apiVersion: v2
     appVersion: 8.13.0-jdk11
     created: "2021-05-04T05:38:38.946732021Z"
     description: A chart for installing Jira DC on Kubernetes
     digest: 166acb16811b4d81e17eff604b3f0be639ea8dc66d4a0ebe311f7676fba7fde0
-    home: https://github.com/atlassian-labs/data-center-helm-charts
+    home: https://github.com/atlassian/data-center-helm-charts
     keywords:
     - Jira
     - Jira Software
@@ -1170,9 +1170,9 @@ entries:
     kubeVersion: '>=1.17.x-0'
     name: jira
     sources:
-    - https://github.com/atlassian-labs/data-center-helm-charts
+    - https://github.com/atlassian/data-center-helm-charts
     type: application
     urls:
-    - https://github.com/atlassian-labs/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
 generated: "2021-08-17T01:45:27.4104412Z"

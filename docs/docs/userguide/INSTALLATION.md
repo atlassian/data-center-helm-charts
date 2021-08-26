@@ -8,7 +8,7 @@ Add the Helm chart repository to your local Helm installation:
 
 ```shell
 helm repo add atlassian-data-center \
- https://atlassian-labs.github.io/data-center-helm-charts
+ https://atlassian.github.io/data-center-helm-charts
 ```
 
 Update the repo:

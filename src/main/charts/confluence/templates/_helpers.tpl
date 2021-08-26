@@ -150,9 +150,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "confluence.sysprop.debug" -}}
-{{- if .Values.confluence.jvmDebug.enabled -}}
--Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
-{{- end }}
+{{- if .Values.confluence.jvmDebug.enabled }} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 {{ end -}}
 {{- end }}
 
 {{- define "confluence.sysprop.enable.synchrony.by.default" -}}
