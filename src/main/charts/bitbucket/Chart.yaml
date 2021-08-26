@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 0.15.0
+version: 1.0.0
 appVersion: 7.15.1-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -20,34 +20,35 @@ deprecated: false
 annotations:
   artifacthub.io/changes: |
     - kind: added
-      description: Add support for providing a custom fluentd start command
+      description: Enable NFS permission fixer by default
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/218
+        url: https://github.com/atlassian/data-center-helm-charts/pull/241
     - kind: changed
-      description: Make some deployment params configurable
+      description: Provide value for set permissions
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/226
+        url: https://github.com/atlassian/data-center-helm-charts/pull/261
+    - kind: added
+      description: Configurable grace periods
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/249
     - kind: changed
-      description: Renamed the 'master' branch to 'main'
+      description: Update the Bitbucket image name, as the '-server' suffix is now deprecated
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/232
-    - kind: changed
-      description: Update eks cluster yaml
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/227
+        url: https://github.com/atlassian/data-center-helm-charts/pull/259
     - kind: changed
       description: Improve documentation
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/206
-        url: https://github.com/atlassian/data-center-helm-charts/pull/222
-        url: https://github.com/atlassian/data-center-helm-charts/pull/223
-        url: https://github.com/atlassian/data-center-helm-charts/pull/228
-        url: https://github.com/atlassian/data-center-helm-charts/pull/229
-        url: https://github.com/atlassian/data-center-helm-charts/pull/231
-        url: https://github.com/atlassian/data-center-helm-charts/pull/233
-        url: https://github.com/atlassian/data-center-helm-charts/pull/235
+        url: https://github.com/atlassian/data-center-helm-charts/pull/236
+        url: https://github.com/atlassian/data-center-helm-charts/pull/243
+        url: https://github.com/atlassian/data-center-helm-charts/pull/245
+        url: https://github.com/atlassian/data-center-helm-charts/pull/252
+        url: https://github.com/atlassian/data-center-helm-charts/pull/253
+        url: https://github.com/atlassian/data-center-helm-charts/pull/256
+        url: https://github.com/atlassian/data-center-helm-charts/pull/258
+        url: https://github.com/atlassian/data-center-helm-charts/pull/260
+        url: https://github.com/atlassian/data-center-helm-charts/pull/268

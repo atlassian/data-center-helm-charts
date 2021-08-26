@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.0.0
+![AppVersion: 7.12.4-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.12.4-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* DCKUBE-598: Enable NFS permission fixer by default (#241)
+* Dckube 581: Provide value for set permissions (#261)
+* DCKUBE-613: Configurable grace periods (#249)
+* DCKUBE-614: Upgrade Confluence to 7.13.0 LTS version (#257)
+* DCKUBE-612: Proper shutdown for Confluence (#250)
+* Update the Confluence image name, as the '-server' suffix is deprecated (#259)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md)  (#236, #243, #245, #252, #253, #256, #258, #260, 268)
+
+
 ## 0.15.0
 ![AppVersion: 7.12.4-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.12.4-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
