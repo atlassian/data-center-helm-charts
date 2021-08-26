@@ -17,7 +17,7 @@ The NFS server can be provisioned manually or by using the supplied Helm chart. 
 
 !!!tip "Pod affinity"
 
-    It is  **highly recommend** keep the NFS server and Bitbucket nodes in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour i.e.
+    To reduce the IO latency between the NFS server and Bitbucket Pod(s) it is  highly recommend to keep them in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour i.e.
     
     ```yaml
     affinity: {}
