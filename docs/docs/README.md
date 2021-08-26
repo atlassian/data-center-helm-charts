@@ -38,6 +38,15 @@ The diagram below provides a high level overview of what a typical deployment mi
 * [Examples](examples/EXAMPLES.md) - various configuration examples
 * [Troubleshooting](troubleshooting/TROUBLESHOOTING.md) - how to debug issues with installation
 
+## Product versions
+The minimum versions that we support for each product are:
+=== "Jira Data Center"
+      8.19
+=== "Confluence Data Center"
+      7.13
+=== "Bitbucket Data Center"
+      7.11
+
 ## Feedback
 
 If you find any issues, [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
