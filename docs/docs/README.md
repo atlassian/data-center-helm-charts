@@ -41,7 +41,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 ## Product versions
 The minimum versions that we support for each product are:
 === "Jira Data Center"
-      8.13
+      8.19
 === "Confluence Data Center"
       7.13
 === "Bitbucket Data Center"
