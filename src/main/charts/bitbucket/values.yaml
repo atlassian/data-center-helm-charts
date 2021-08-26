@@ -227,10 +227,10 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/bitbucket"
 
-  # An NFS volume for 'shared-home' is required by Bitbucket to effectively operate in multi-node 
+  # A NFS volume for 'shared-home' is required by Bitbucket to effectively operate in multi-node 
   # environment.
   #
-  # details on how an NFS should be stood up for Bitbucket can be found here:
+  # Details on how an NFS should be stood up for Bitbucket can be found here:
   # https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
   # 
   # Additional information on utilizing an NFS with the Helm charts can be found here:
