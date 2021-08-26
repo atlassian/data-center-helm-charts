@@ -12,7 +12,9 @@ import test.model.Kind;
 import test.model.KubeResource;
 import test.model.Product;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 import static test.jackson.JsonNodeAssert.assertThat;
@@ -233,10 +235,11 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-            Assertions.assertTrue(path.equals("/confluence-tmp") || path.equals("/confluence-tmp/setup"));
-        }
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/confluence-tmp", "/confluence-tmp/setup");
+
     }
 
     @ParameterizedTest
@@ -251,10 +254,10 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-            Assertions.assertTrue(path.equals("/ingress") || path.equals("/ingress/setup"));
-        }
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/ingress", "/ingress/setup");
     }
 
     @ParameterizedTest
@@ -268,10 +271,10 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-            Assertions.assertTrue(path.equals("/ingress") || path.equals("/ingress/setup"));
-        }
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/ingress", "/ingress/setup");
     }
 
     @ParameterizedTest
@@ -284,10 +287,10 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            String path = ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-            Assertions.assertTrue(path.equals("/") || path.equals("/setup"));
-        }
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/", "/setup");
     }
 
 
