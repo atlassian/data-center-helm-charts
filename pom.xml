@@ -7,9 +7,9 @@
     <version>0.1.0-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:git@github.com:atlassian-labs/data-center-helm-charts.git</connection>
-        <developerConnection>scm:git:git@github.com:atlassian-labs/data-center-helm-charts.git</developerConnection>
-        <url>scm:git:git@github.com:atlassian-labs/data-center-helm-charts.git</url>
+        <connection>scm:git:git@github.com:atlassian/data-center-helm-charts.git</connection>
+        <developerConnection>scm:git:git@github.com:atlassian/data-center-helm-charts.git</developerConnection>
+        <url>scm:git:git@github.com:atlassian/data-center-helm-charts.git</url>
     </scm>
 
     <dependencies>

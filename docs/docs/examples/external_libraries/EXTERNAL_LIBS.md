@@ -71,7 +71,7 @@ additionalLibraries:
     subDirectory: libraries
     fileName: my_library.jar
 ```
-With this config these files (`my_library.jar`) will be injected into the container directory `<product-installation-directory>/lib`. For more info on how these files are injected into the appropriate product container location, see Jira's helper [jira.additionalLibraries](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L180).  
+With this config these files (`my_library.jar`) will be injected into the container directory `<product-installation-directory>/lib`. For more info on how these files are injected into the appropriate product container location, see Jira's helper [jira.additionalLibraries](https://github.com/atlassian/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L180).  
 
 ## Custom volume
 This approach is very similar to the [Shared home volume](#shared-home-volume) approach, only a custom volume is created and used as opposed `shared-home`. 
@@ -118,7 +118,7 @@ additionalLibraries:
 ```
 
 ## Custom command
-This example is based on the GitHub issue discussed [here](https://github.com/atlassian-labs/data-center-helm-charts/issues/239). The `nfsPermissionFixer` in the `values.yaml` is used for appropriately setting the permissions on the `shared-home` volume. The command it uses for this is already defined by default, however
+This example is based on the GitHub issue discussed [here](https://github.com/atlassian/data-center-helm-charts/issues/239). The `nfsPermissionFixer` in the `values.yaml` is used for appropriately setting the permissions on the `shared-home` volume. The command it uses for this is already defined by default, however
 it can also be supplied with a custom `command` for adding 3rd party libraries to `shared-home`. The example below shows how this approach can be used for adding the `JDBC` `MySQL` driver:
 
 ```yaml linenums="1"
@@ -138,7 +138,7 @@ nfsPermissionFixer:
     If taking this approach ensure the last thing your custom command does is apply the relevant permissions to the `shared-home` mount, see line `12` in `yaml` 
     snippet above. 
 
-    Each product chart has a `sharedHome.permissionFix.command` helper for doing this. look at Jira's helper [sharedHome.permissionFix.command](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L102) 
+    Each product chart has a `sharedHome.permissionFix.command` helper for doing this. look at Jira's helper [sharedHome.permissionFix.command](https://github.com/atlassian/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L102) 
     for more details on how these permissions are applied by default.
 
 Remember to also update the `additionalLibraries` stanza accordingly:

@@ -12,10 +12,10 @@ keywords:
   - Jira Data Center
   - Jira DC
   - Atlassian
-home: https://atlassian-labs.github.io/data-center-helm-charts/
-icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/jira-software.svg
+home: https://atlassian.github.io/data-center-helm-charts/
+icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
 sources:
-  - https://github.com/atlassian-labs/data-center-helm-charts
+  - https://github.com/atlassian/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
 deprecated: false
 annotations:
@@ -25,31 +25,31 @@ annotations:
       description: Add Service annotations
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/209
+        url: https://github.com/atlassian/data-center-helm-charts/pull/209
     - kind: added
       description: Add support for providing a custom fluentd start command
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/218
+        url: https://github.com/atlassian/data-center-helm-charts/pull/218
     - kind: changed
       description: Renamed the 'master' branch to 'main'
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/232
+        url: https://github.com/atlassian/data-center-helm-charts/pull/232
     - kind: changed
       description: Update eks cluster yaml
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/227
+        url: https://github.com/atlassian/data-center-helm-charts/pull/227
     - kind: changed
       description: Improve documentation
       links:
       - name: Github PR
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/206
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/222
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/223
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/228
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/229
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/231
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/233
-        url: https://github.com/atlassian-labs/data-center-helm-charts/pull/235
+        url: https://github.com/atlassian/data-center-helm-charts/pull/206
+        url: https://github.com/atlassian/data-center-helm-charts/pull/222
+        url: https://github.com/atlassian/data-center-helm-charts/pull/223
+        url: https://github.com/atlassian/data-center-helm-charts/pull/228
+        url: https://github.com/atlassian/data-center-helm-charts/pull/229
+        url: https://github.com/atlassian/data-center-helm-charts/pull/231
+        url: https://github.com/atlassian/data-center-helm-charts/pull/233
+        url: https://github.com/atlassian/data-center-helm-charts/pull/235

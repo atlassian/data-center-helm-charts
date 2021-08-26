@@ -10,7 +10,7 @@
 * DCKUBE-453: Add support for providing a custom fluentd start command (#218)
 * DCKUBE-596: Update Confluence version to 7.12.4-jdk11 (#238)
 * Update EKS cluster yaml example (#227)
-* Improve [documentation](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
 ## 0.14.0
@@ -134,7 +134,7 @@ index a39d4ae..8e148f3 100644
 * Update values.yaml (#139) 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
 * README update for 0.8.0 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
@@ -512,7 +512,7 @@ index 0ae8cf2..08095d6 100644
 * DCKUBE-131: fix for initContainer being synthesized twice 
 * Merge branch 'master' into dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Updates to template formatting and readme wording 
-* Merge pull request #98 from atlassian-labs/dckube-131-nfs-fixer-removal 
+* Merge pull request #98 from https://github.com/atlassian/data-center-helm-charts/dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Alter NFS permissions via init container 
 * feat(range): Fix support for multiple plugins 
 * ISSUE-85: Add context path for Confluence 
@@ -520,7 +520,7 @@ index 0ae8cf2..08095d6 100644
 * DCNG-1021 fix stray CR for Confluence 
 * DCNG-976 remove unnecessary local-home volume mount from confluence fluentd container 
 * DCNG-976 replace Confluence chart fluentd log file tail input, with HTTP events posted direct from Confluence 
-* Merge pull request #59 from atlassian-labs/minor-cleanup-and-Azure-related-fixes 
+* Merge pull request #59 from https://github.com/atlassian/data-center-helm-charts/minor-cleanup-and-Azure-related-fixes 
 * DCNG-976 remove duplicate additionalContainers from confluence chart 
 * Merge remote-tracking branch 'origin/master' into DCNG-976-efk 
 * Fix gid value 
@@ -571,10 +571,10 @@ index 0ae8cf2..08095d6 100644
 * DCNG-856 Add NOTES.txt 
 * DCNG-849 avoid incorrect rendering for empty  additionalEnvironmentVariables 
 * DCNG-849 check for the presense of additionalLabels so we don't render an empty {} 
-* Merge pull request #6 from atlassian-labs/DCNG-849 
+* Merge pull request #6 from https://github.com/atlassian/data-center-helm-charts/DCNG-849 
 * DCNG-850 add extension point for additional environment variables 
 * DCNG-848 add extension point for additional labels 
-* Merge pull request #3 from atlassian-labs/DCNG-848 
+* Merge pull request #3 from https://github.com/atlassian/data-center-helm-charts/DCNG-848 
 * DCNG-866 Replace hardcoded image pull policy with value placeholder 
 * DCNG-848 Add support for additional volumes and volume mounts 
 
