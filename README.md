@@ -3,7 +3,7 @@
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/atlassian-data-center)](https://artifacthub.io/packages/search?repo=atlassian-data-center)
 [![Atlassian license](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE) 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md) 
-[![Maven unit tests](https://github.com/atlassian-labs/data-center-helm-charts/actions/workflows/maven.yml/badge.svg)](https://github.com/atlassian-labs/data-center-helm-charts/actions/workflows/maven.yml)
+[![Maven unit tests](https://github.com/atlassian/data-center-helm-charts/actions/workflows/maven.yml/badge.svg)](https://github.com/atlassian/data-center-helm-charts/actions/workflows/maven.yml)
 
 This project contains [Helm charts](https://helm.sh/) for installing Atlassian's [Jira Data Center](https://www.atlassian.com/enterprise/data-center/jira), [Confluence Data Center](https://www.atlassian.com/enterprise/data-center/confluence), and [Bitbucket Data Center](https://www.atlassian.com/enterprise/data-center/bitbucket) on Kubernetes. 
 
@@ -11,7 +11,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
 ## Get started
 
-**Get started right now using our [documentation](https://atlassian-labs.github.io/data-center-helm-charts/).**
+**Get started right now using our [documentation](https://atlassian.github.io/data-center-helm-charts/).**
 
 We provide extensive documentation to support our Helm charts. This includes prerequisites, set up, installation, examples, and more.
 
@@ -21,12 +21,12 @@ We provide extensive documentation to support our Helm charts. This includes pre
 These Helm charts are in **beta phase and unsupported**, with the goal of introducing official support once they have been
 stabilized.
 
-Also, we **don’t officially support** the functionality described in the [examples](https://atlassian-labs.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian-labs.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
+Also, we **don’t officially support** the functionality described in the [examples](https://atlassian.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
 
 
 ## Feedback
 
-If you find any issue, [raise a ticket](https://github.com/atlassian-labs/data-center-helm-charts/issues/new). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
+If you find any issue, [raise a ticket](https://github.com/atlassian/data-center-helm-charts/issues/new). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
   
 
 ## Contributions

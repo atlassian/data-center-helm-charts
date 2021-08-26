@@ -52,4 +52,4 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 #################################################################################
 {{- end }}
 
-For further documentation, see https://atlassian-labs.github.io/data-center-helm-charts/
+For further documentation, see https://atlassian.github.io/data-center-helm-charts/

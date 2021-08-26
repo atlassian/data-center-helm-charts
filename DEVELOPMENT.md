@@ -30,4 +30,4 @@ This will create a docker image locally, process the files and start the live se
 
 ## Deployment
 
-Documentation is automatically deployed to [official documentation](https://atlassian-labs.github.io/data-center-helm-charts/) with Github Pages. Any change that is merged into the default branch will trigger Github Actions that builds the static documentation site and pushes it to `gh-pages` branch. This branch is then deployed by Github Pages.
+Documentation is automatically deployed to [official documentation](https://atlassian.github.io/data-center-helm-charts/) with Github Pages. Any change that is merged into the default branch will trigger Github Actions that builds the static documentation site and pushes it to `gh-pages` branch. This branch is then deployed by Github Pages.
