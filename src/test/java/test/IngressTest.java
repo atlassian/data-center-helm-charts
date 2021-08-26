@@ -172,8 +172,9 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(1, ingresses.size());
 
-        String path = ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-        Assertions.assertEquals(path , "/jira-tmp");
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/jira-tmp");
+
     }
 
     @ParameterizedTest
@@ -188,8 +189,8 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(1, ingresses.size());
 
-        String path = ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-        Assertions.assertEquals(path ,"/ingress");
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/ingress");
     }
 
     @ParameterizedTest
@@ -203,8 +204,8 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(1, ingresses.size());
 
-        String path = ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-        Assertions.assertEquals(path ,"/ingress");
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/ingress");
     }
 
     @ParameterizedTest
@@ -217,8 +218,8 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(1, ingresses.size());
 
-        String path = ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText();
-        Assertions.assertEquals(path ,"/");
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/");
     }
 
     @ParameterizedTest
