@@ -10,8 +10,10 @@
 * DCKUBE-613: Configurable grace periods (#249)
 * DCKUBE-614: Upgrade Confluence to 7.13.0 LTS version (#257)
 * DCKUBE-612: Proper shutdown for Confluence (#250)
+* DCKUBE-620: Set ContextPath as default for singress path (#263)
+* DCKUBE-635: Fix spacing of the jvm args for debug flag (#266)
 * Update the Confluence image name, as the '-server' suffix is deprecated (#259)
-* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md)  (#236, #243, #245, #252, #253, #256, #258, #260, 268)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md)  (#236, #243, #245, #252, #253, #256, #258, #260, 263, 268)
 
 
 ## 0.15.0

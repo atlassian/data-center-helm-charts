@@ -40,10 +40,20 @@ annotations:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/250
     - kind: changed
+      description: Set ContextPath as default for ingress path
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/263
+    - kind: changed
       description: Update the Confluence image name, as the '-server' suffix is now deprecated
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/259
+    - kind: changed
+      description: Fix spacing of the jvm args for debug flag
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/266
     - kind: changed
       description: Improve documentation
       links:
@@ -56,4 +66,6 @@ annotations:
         url: https://github.com/atlassian/data-center-helm-charts/pull/256
         url: https://github.com/atlassian/data-center-helm-charts/pull/258
         url: https://github.com/atlassian/data-center-helm-charts/pull/260
+        url: https://github.com/atlassian/data-center-helm-charts/pull/263
         url: https://github.com/atlassian/data-center-helm-charts/pull/268
+        url: https://github.com/atlassian/data-center-helm-charts/pull/270
