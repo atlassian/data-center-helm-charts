@@ -1,16 +1,13 @@
 # NFS server for Bitbucket
-!!!danger "Disclaimer"
+!!!warning "Disclaimer"
 
     **This functionality is not officially supported. It should not be used for production deployments!**
     
     The included NFS example is provided as is and should be used as reference a only. Before you proceed we highly recommend that you understand your specific deployment needs and tailor your solution to them.
 
 ## Bitbucket Data Center and NFS
-
-Bitbucket Data Center uses shared home to store its repositories in a common location that is accessible to multiple Bitbucket nodes. 
-Due to the high requirements on performance for IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. Based on this, 
-we don't recommend that you use 
-[cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) such as AWS EFS.
+Due to the high performance requirements on IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. For this reason 
+we don't recommend that you use [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) such as AWS EFS.
  
 ## NFS provisioning
 The NFS server can be provisioned manually or by using the supplied Helm chart. Details for both approaches can be found below.
@@ -18,10 +15,6 @@ The NFS server can be provisioned manually or by using the supplied Helm chart. 
 !!!tip "Pod affinity"
 
     To reduce the IO latency between the NFS server and Bitbucket Pod(s) it is  highly recommend to keep them in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour i.e.
-    
-    ```yaml
-    affinity: {}
-    ```
 
 ### Manual
 For information on setting up Bitbucket Data Center's shared file server, see [Provision your shared file system](https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs){.external}. 
@@ -32,7 +25,7 @@ This section contains the requirements and recommendations for setting up NFS fo
     Ensure the NFS server's size is appropriate for the needs of the Bitbucket instance. See [capacity recommendations](https://confluence.atlassian.com/bitbucketserver/recommendations-for-running-bitbucket-in-aws-776640282.html){.external} for details.
 
 ### Helm
-!!!danger "Disclaimer"
+!!!warning "Disclaimer"
 
     **This Helm chart is not officially supported! It should not be used for production deployments!**
 
@@ -72,9 +65,13 @@ volumes:
       create: true
       storageClassName: ""
 ```
-You can of course manually provision your own `persistentVolume` and corresponding claim (as opposed to the dynamic approach described above) for the NFS server. In this case update the `values.yaml` to make use of them via the `customVolume` stanza:
+You can of course manually provision your own `persistentVolume` and corresponding claim (as opposed to the dynamic approach described above) for the NFS server. In this case update the `values.yaml` to make use of them via the `customVolume` stanza, `sharedHome.persistentVolume.create` and `sharedHome.persistentVolumeClaim.create` should also both be set to `false`.
 ```yaml
 sharedHome:
+  persistentVolume:
+    create: false
+  persistentVolumeClaim:
+    create: false
   customVolume: 
     persistentVolumeClaim:
       claimName: "custom-nfs-server-claim"

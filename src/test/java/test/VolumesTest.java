@@ -12,9 +12,9 @@ import test.model.Product;
 import java.util.Map;
 
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
-import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 import static test.jackson.JsonNodeAssert.assertThat;
 import static test.model.Kind.PersistentVolumeClaim;
+import static test.model.Kind.PersistentVolume;
 
 /**
  * Tests the various permutations of the "persistence" value structure in the Helm charts
@@ -142,28 +142,30 @@ class VolumesTest {
     }
     
     @ParameterizedTest
-    @EnumSource(value = Product.class, mode = INCLUDE, names = "bitbucket")
+    @EnumSource(value = Product.class, names = "bitbucket")
     void bitbucketSharedHomeClaimUsesDefaultVolumeName(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.sharedHome.persistentVolume.create", "true",
                 "volumes.sharedHome.persistentVolumeClaim.create", "true"
         ));
     
-        final var kubeResource = resources.get(PersistentVolumeClaim);
-        Assertions.assertThat(kubeResource.getNode("spec").get("volumeName").asText()).isEqualTo(product.getHelmReleaseName() + "-shared-home-pv");
+        final String volumeName = product.getHelmReleaseName() + "-shared-home-pv";
+        final var pvc = resources.get(PersistentVolumeClaim);
+        final var pv = resources.get(PersistentVolume);
+        Assertions.assertThat(pv.getName()).isEqualTo(volumeName);
+        Assertions.assertThat(pvc.getNode("spec").get("volumeName").asText()).isEqualTo(volumeName);
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, mode = INCLUDE, names = "bitbucket")
+    @EnumSource(value = Product.class, names = "bitbucket")
     void bitbucketSharedHomeClaimUsesSuppliedVolumeName(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.sharedHome.persistentVolume.create", "false",
                 "volumes.sharedHome.persistentVolumeClaim.create", "true",
                 "volumes.sharedHome.persistentVolumeClaim.volumeName", "my-custom-volume"
         ));
-
-        final var kubeResource = resources.get(PersistentVolumeClaim);
-        Assertions.assertThat(kubeResource.getNode("spec").get("volumeName").asText()).isEqualTo("my-custom-volume");
+        final var pvc = resources.get(PersistentVolumeClaim);
+        Assertions.assertThat(pvc.getNode("spec").get("volumeName").asText()).isEqualTo("my-custom-volume");
     }
 
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {

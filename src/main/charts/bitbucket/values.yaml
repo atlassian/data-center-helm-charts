@@ -227,14 +227,14 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/bitbucket"
 
-  # A NFS volume for 'shared-home' is required by Bitbucket to effectively operate in multi-node 
+  # An NFS volume for 'shared-home' is required by Bitbucket to effectively operate in multi-node 
   # environment.
   #
   # Details on how an NFS should be stood up for Bitbucket can be found here:
   # https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
   # 
   # Additional information on utilizing an NFS with the Helm charts can be found here:
-  # https://atlassian-labs.github.io/data-center-helm-charts/examples/storage/nfs/NFS/
+  # https://atlassian.github.io/data-center-helm-charts/examples/storage/nfs/NFS/
   #  
   sharedHome:
 
@@ -299,7 +299,7 @@ volumes:
     # If not defined, then an 'emptyDir' volume is utilised. 
     #
     # Having manually provisioned a 'PersistentVolume' with corresponding 'PresistentVolumeClaim'
-    # specify the bound ' claim name below
+    # specify the bound claim name below
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
     # https://atlassian-labs.github.io/data-center-helm-charts/examples/storage/aws/SHARED_STORAGE/
     #
