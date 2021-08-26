@@ -15,10 +15,10 @@ Using the [formula](#memory-request-sizing) below, the `memory` specific values 
 | [Crowd](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/){.external}                                                       | `2`   | `1G`  |
 
 ### Synchrony container resources
+
 A Confluence cluster requires a Synchrony container. The default resource requests that are used for the Synchrony container are:
 * CPU: 2
 * Memory: 2.5G 
-
 
 ### Memory request sizing
 Request sizing must allow for the size of the product `JVM`. That means the `maximum heap size`, `minumum heap size` and the `reserved code cache size` (if applicable) plus other JVM overheads, must be considered when defining the request `memory` size. As a rule of thumb the formula below can be used to deduce the appropriate request memory size.
