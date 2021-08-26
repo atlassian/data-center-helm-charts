@@ -1,7 +1,5 @@
 package test;
 
-import com.fasterxml.jackson.databind.node.JsonNodeType;
-import io.restassured.internal.common.assertion.Assertion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
