@@ -1,4 +1,5 @@
 nav:
     - TROUBLESHOOTING.md
     - SUPPORT_BOUNDARIES.md
+    - LIMITATIONS.md
     - ...
