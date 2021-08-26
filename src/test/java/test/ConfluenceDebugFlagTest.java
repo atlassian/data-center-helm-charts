@@ -1,5 +1,6 @@
 package test;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -10,6 +11,7 @@ import test.model.KubeResources;
 import test.model.Product;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static test.jackson.JsonNodeAssert.assertThat;
 
@@ -56,8 +58,10 @@ class ConfluenceDebugFlagTest {
     }
 
     private KubeResource findJvmArgumentsConfigMap(KubeResources resources) {
-        return resources.getAll(Kind.ConfigMap)
+        final var jvmConfigMaps = resources.getAll(Kind.ConfigMap)
                 .find(map -> map.getName().endsWith("jvm-config"))
-                .getOrElseThrow(() -> new AssertionError("More than one config map with jvm parameters have been found"));
+                .collect(Collectors.toList());
+        Assertions.assertThat(jvmConfigMaps).hasSize(1);
+        return jvmConfigMaps.get(0);
     }
 }
