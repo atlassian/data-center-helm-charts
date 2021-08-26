@@ -51,10 +51,34 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
         return this;
     }
 
+    /**
+     * Check that the given text is contained and is positioned either at the beginning/end of the string, or surrounded by spaces
+     * <p>
+     * Examples:
+     * "A B C".hasSeparatedTextContaining("A"); // PASS
+     * "A B C".hasSeparatedTextContaining("B"); // PASS
+     * "A B C".hasSeparatedTextContaining("C"); // PASS
+     * "A  BC".hasSeparatedTextContaining("B"); // FAIL
+     */
+    public JsonNodeAssert hasSeparatedTextContaining(final String expected) {
+        hasTextContaining(expected);
+        doesNotContainRegex(".*[^\\s]" + expected + ".*");
+        doesNotContainRegex(".*" + expected + "[^\\s].*");
+        return this;
+    }
+
     public JsonNodeAssert hasTextNotContaining(final String expected) {
         assertNodeIsOfType(STRING);
         if (actual.asText().contains(expected)) {
             failWithMessage("Expected JsonNode's text to NOT contain <%s> but was <%s>", expected, actual.asText());
+        }
+        return this;
+    }
+
+    public JsonNodeAssert doesNotContainRegex(final String regex) {
+        assertNodeIsOfType(STRING);
+        if (actual.asText().matches(regex)) {
+            failWithMessage("Expected JsonNode's text to NOT contain regex <%s> but was <%s>", regex, actual.asText());
         }
         return this;
     }
