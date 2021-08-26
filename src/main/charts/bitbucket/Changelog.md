@@ -8,7 +8,7 @@
 
 
 * DCKUBE-598: Enable NFS permission fixer by default (#241)
-* Dckube 581: provide value for set permissions (#261)
+* DCKUBE-581: Provide value for set permissions (#261)
 * DCKUBE-613: Configurable grace periods (#249)
 * Update the Bitbucket image name, as the '-server' suffix is now deprecated (#259)
 * Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#236, #243, #245, #252, #253, #256, #258, #260, 268)

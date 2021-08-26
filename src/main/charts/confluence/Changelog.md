@@ -6,7 +6,7 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * DCKUBE-598: Enable NFS permission fixer by default (#241)
-* Dckube 581: Provide value for set permissions (#261)
+* DCKUBE-581: Provide value for set permissions (#261)
 * DCKUBE-613: Configurable grace periods (#249)
 * DCKUBE-614: Upgrade Confluence to 7.13.0 LTS version (#257)
 * DCKUBE-612: Proper shutdown for Confluence (#250)
