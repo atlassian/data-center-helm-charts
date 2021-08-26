@@ -10,7 +10,9 @@ import test.model.Kind;
 import test.model.KubeResource;
 import test.model.Product;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 import static test.jackson.JsonNodeAssert.assertThat;
@@ -168,12 +170,11 @@ class IngressTest {
                 "jira.service.contextPath", "/jira-tmp"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
-        Assertions.assertNotEquals(0, ingresses.size());
+        Assertions.assertEquals(1, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                    .hasTextContaining("/jira-tmp");
-        }
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/jira-tmp");
+
     }
 
     @ParameterizedTest
@@ -186,12 +187,25 @@ class IngressTest {
                 "ingress.path", "/ingress"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
-        Assertions.assertNotEquals(0, ingresses.size());
+        Assertions.assertEquals(1, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                    .hasTextContaining("/ingress");
-        }
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/ingress");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "jira")
+    void jira_ingress_path_no_context_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/ingress");
     }
 
     @ParameterizedTest
@@ -202,12 +216,80 @@ class IngressTest {
                 "ingress.host", "myhost.mydomain"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
-        Assertions.assertNotEquals(0, ingresses.size());
+        Assertions.assertEquals(1, ingresses.size());
 
-        for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                    .hasTextContaining("/");
-        }
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_contextPath(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "confluence.service.contextPath", "/confluence-tmp"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/confluence-tmp", "/confluence-tmp/setup");
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "confluence.service.contextPath", "/context",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/ingress", "/ingress/setup");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_no_context_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/ingress", "/ingress/setup");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = ingresses
+                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
+                .collect(Collectors.toList());
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/", "/setup");
+    }
+
 
 }
