@@ -37,6 +37,10 @@ This section contains the requirements and recommendations for setting up NFS fo
     **This Helm chart is not officially supported! It should not be used for production deployments!**
 
 #### Installation
+Create a namespace for the NFS
+```shell
+kubectl create namespace nfs
+```
 Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
 ```shell
 helm install nfs-server nfs-server-example --namespace nfs
