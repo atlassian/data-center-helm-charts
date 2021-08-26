@@ -1,63 +1,78 @@
-# Implementation of an NFS server for Bitbucket
+# NFS server for Bitbucket
+!!!warning "Disclaimer"
 
-!!!warning Dislaimer
-
-    **This functionality is not officially supported.**
+    **This functionality is not officially supported. It should not be used for production deployments!**
     
-    The included examples are provided as is and are to be used as guidance on how to set up a testing environment. These examples should not be used in production. 
-    
-    Before you proceed we highly recommend that you understand your specific deployment needs and tailor your solution to them.
+    The included NFS example is provided as is and should be used as reference a only. Before you proceed we highly recommend that you understand your specific deployment needs and tailor your solution to them.
 
-# Components
-
-For a full production deployment you will need to create some common components. These components are then passed as values 
-to the Helm chart when you install your product. The components are:
-
-* Shared storage
-* Database
-* Elasticsearch
-
-## Shared storage
-
-### Cloud-managed shared storage 
-
-#### Dedicated NFS server - Bitbucket Data Center requirement
-
-Bitbucket Data Center uses a shared network file system (NFS) to store its repositories in a common 
-location that is accessible to multiple Bitbucket nodes. Due to the high requirements on performance for IO 
-operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. Based on this, 
-we don't recommend that you use 
-[cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms).
-
-You might choose to use an NFS server for other Data Center products, but they don't have the same performance 
-characteristics. It might be better to go for the resilience of a managed service over a self-managed 
-server for other products.
+## Bitbucket Data Center and NFS
+Due to the high performance requirements on IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. For this reason 
+we don't recommend that you use [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) such as AWS EFS.
  
-#### Requirements
+## NFS provisioning
+The NFS server can be provisioned manually or by using the supplied Helm chart. Details for both approaches can be found below.
 
-Prior to installing the Helm chart, you need to provision a suitable NFS shared storage solution. The exact details 
-of this resource will be highly site-specific, but the example below can be used as a guide.
+!!!tip "Pod affinity"
 
-For more information on setting up Bitbucket Data Center's shared file server, see 
-[Step 2. Provision your shared file system](https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs){.external}. 
+    To reduce the IO latency between the NFS server and Bitbucket Pod(s) it is  highly recommend to keep them in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. The `affinity` stanza within `values.yaml` can be updated to take advantage of this behaviour i.e.
+
+### Manual
+For information on setting up Bitbucket Data Center's shared file server, see [Provision your shared file system](https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs){.external}. 
 This section contains the requirements and recommendations for setting up NFS for Bitbucket Data Center.
 
-You need to set your NFS server's size according to your instance needs. See the capacity recommendations](https://confluence.atlassian.com/bitbucketserver/recommendations-for-running-bitbucket-in-aws-776640282.html).
+!!!tip "NFS Server sizing"
 
-#### Example
+    Ensure the NFS server's size is appropriate for the needs of the Bitbucket instance. See [capacity recommendations](https://confluence.atlassian.com/bitbucketserver/recommendations-for-running-bitbucket-in-aws-776640282.html){.external} for details.
 
-We've provided a template as a **reference** on how an NFS server could be stood-up to work in conjunction 
-with a Bitbucket deployment: [`nfs-server-example`](nfs-server-example).
+### Helm
+!!!warning "Disclaimer"
 
-Provision the NFS by using the following command:
+    **This Helm chart is not officially supported! It should not be used for production deployments!**
+
+#### Installation
+Create a namespace for the NFS
 ```shell
-helm install nfs-server-example nfs-server-example
+kubectl create namespace nfs
+```
+Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
+```shell
+helm install nfs-server nfs-server-example --namespace nfs
 ```
 
-:warning: Please note that the NFS server created with this template is not production ready and should not be 
-used for anything other than testing deployment.
+#### Uninstall
+```shell
+helm uninstall nfs-server --namespace nfs
+```
 
+## Update `values.yaml`
+Get the IP address of the NFS service (`CLUSTER-IP`) by running the following command
+```shell
+kc get service --namespace nfs -o jsonpath='{.items[0].spec.clusterIP}'
+```
+!!!info "NFS directory share"
 
-#### Pod affinity
-
-We **highly recommend** to keep NFS server and Bitbucket nodes in close proximity. To achieve this, you can use [standard Kubernetes affinity rules](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. Use the suitable affinity definition in the `affinity: {}` definition in the `values.yaml` file.
+    The NFS Helm chart creates and exposes the directory share `/srv/nfs`. This will be required when configuring `values.yaml` 
+The approach below shows how a `persistentVolume` and corresponding `peristentVolumeClaim` can be dynamically created for the provisioned NFS. Using the NFS IP and directory share, (see above) update the `values.yaml` appropriately:
+```yaml
+volumes:
+  sharedHome:
+    persistentVolume:
+      create: true
+      nfs:
+        server: "10.100.197.23" # IP address of the NFS server 
+        path: "/srv/nfs" # Directory share of NFS
+    persistentVolumeClaim:
+      create: true
+      storageClassName: ""
+```
+You can of course manually provision your own `persistentVolume` and corresponding claim (as opposed to the dynamic approach described above) for the NFS server. In this case update the `values.yaml` to make use of them via the `customVolume` stanza, `sharedHome.persistentVolume.create` and `sharedHome.persistentVolumeClaim.create` should also both be set to `false`.
+```yaml
+sharedHome:
+  persistentVolume:
+    create: false
+  persistentVolumeClaim:
+    create: false
+  customVolume: 
+    persistentVolumeClaim:
+      claimName: "custom-nfs-server-claim"
+```

@@ -243,6 +243,10 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 {{- end }}
 
+{{- define "bitbucket.volume.sharedHome.name" -}}
+{{ include "bitbucket.fullname" . }}-shared-home-pv
+{{- end }}
+
 {{- define "bitbucket.volumeClaimTemplates" -}}
 {{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
 volumeClaimTemplates:
