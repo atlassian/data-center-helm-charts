@@ -13,7 +13,7 @@
 * DCKUBE-534: Make some deployment params configurable (#226)
 * DCKUBE-596: Update Bitbucket version to 7.15.1-jdk11 (#238)
 * Update EKS cluster yaml example (#227)
-* Improve [documentation](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
 ## 0.14.0
@@ -129,10 +129,10 @@ index d3342d2..786d343 100644
 * Update values.yaml (#139) 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
 * README update for 0.8.0 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134) 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
@@ -384,11 +384,11 @@ index bb7a568..d3342d2 100644
 * DCKUBE-131: fix for initContainer being synthesized twice 
 * Merge branch 'master' into dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Updates to template formatting and readme wording 
-* Merge pull request #98 from atlassian-labs/dckube-131-nfs-fixer-removal 
+* Merge pull request #98 from https://github.com/atlassian/data-center-helm-charts/dckube-131-nfs-fixer-removal 
 * DCKUBE-131: Alter NFS permissions via init container 
 * feat(range): Fix support for multiple plugins 
 * Update READMEs for 0.5.0 release 
-* Merge pull request #59 from atlassian-labs/minor-cleanup-and-Azure-related-fixes 
+* Merge pull request #59 from https://github.com/atlassian/data-center-helm-charts/minor-cleanup-and-Azure-related-fixes 
 * DCNG-976 add fluentd sidecar to bitbucket chart 
 * Fix gid value 
 * OpenShift support (#56) 
@@ -434,11 +434,11 @@ index bb7a568..d3342d2 100644
 * DCNG-856 Add NOTES.txt 
 * DCNG-849 avoid incorrect rendering for empty  additionalEnvironmentVariables 
 * DCNG-849 check for the presense of additionalLabels so we don't render an empty {} 
-* Merge pull request #6 from atlassian-labs/DCNG-849 
+* Merge pull request #6 from https://github.com/atlassian/data-center-helm-charts/DCNG-849 
 * DCNG-850 add extension point for additional environment variables 
 * DCNG-848 add extension point for additional labels 
-* Merge pull request #2 from atlassian-labs/DCNG-867 
-* Merge pull request #3 from atlassian-labs/DCNG-848 
+* Merge pull request #2 from https://github.com/atlassian/data-center-helm-charts/DCNG-867 
+* Merge pull request #3 from https://github.com/atlassian/data-center-helm-charts/DCNG-848 
 * DCNG-866 Replace hardcoded image pull policy with value placeholder 
 * DCNG-848 Add support for additional volumes and volume mounts 
 * DCNG-867 Document the presense of  bitbucket.additionalJvmArgs 

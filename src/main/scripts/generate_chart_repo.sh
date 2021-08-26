@@ -9,7 +9,7 @@ CHARTS_SRC_DIR="src/main/charts"
 # The directory that will contain the generated chart repo files
 # docs/docs repository is transformed with MKDocs and served with Github Pages.
 # When the index.yaml is located there, it will be accessible on the GH pages URL:
-# https://atlassian-labs.github.io/data-center-helm-charts/
+# https://atlassian.github.io/data-center-helm-charts/
 PUBLISH_DIR="docs/docs"
 
 PACKAGE_DIR="target/helm"
@@ -40,7 +40,7 @@ docker run --user "$(id -u):$(id -g)" \
   quay.io/helmpack/chart-releaser \
   upload \
   --package-path /releases \
-  --owner atlassian-labs \
+  --owner atlassian \
   --git-repo data-center-helm-charts \
   --token "$GITHUB_TOKEN"
 
@@ -56,9 +56,9 @@ docker run \
   --rm \
   quay.io/helmpack/chart-releaser \
   index \
-  --owner atlassian-labs \
+  --owner atlassian \
   --git-repo data-center-helm-charts \
-  --charts-repo https://atlassian-labs.github.io/data-center-helm-charts \
+  --charts-repo https://atlassian.github.io/data-center-helm-charts \
   --index-path /index/index.yaml \
   --package-path /packages \
   --token "$GITHUB_TOKEN"

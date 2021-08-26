@@ -11,7 +11,7 @@
 * DCKUBE-453: Add support for providing a custom fluentd start command (#218)
 * DCKUBE-435: Renamed the 'master' branch to 'main' and set it as default (#232)
 * Update EKS cluster yaml example (#227)
-* Improve [documentation](https://github.com/atlassian-labs/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
 ## 0.14.0
@@ -101,7 +101,7 @@ change.
 * initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140) 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
 * README update for 0.8.0 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:atlassian-labs/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
 * Merge branch 'master' into dckube-267-define-minimum-compute-resources 
 * DCKUBE-267: Update cpu request sizes 
