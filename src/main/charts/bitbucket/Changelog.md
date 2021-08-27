@@ -8,10 +8,10 @@
 
 
 * DCKUBE-598: Enable NFS permission fixer by default (#241)
-* DCKUBE-581: Provide value for set permissions (#261)
+* DCKUBE-581: Enable configuration for SET_PERMISSIONS docker image variable (#261)
 * DCKUBE-613: Configurable grace periods (#249)
 * Update the Bitbucket image name, as the '-server' suffix is now deprecated (#259)
-* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#236, #243, #245, #252, #253, #256, #258, #260, #268, #270, #272)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/) (#236, #243, #245, #252, #253, #256, #258, #260, #268, #270, #272)
 
 
 ## 0.15.0
@@ -27,7 +27,7 @@
 * DCKUBE-534: Make some deployment params configurable (#226)
 * DCKUBE-596: Update Bitbucket version to 7.15.1-jdk11 (#238)
 * Update EKS cluster yaml example (#227)
-* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
 ## 0.14.0

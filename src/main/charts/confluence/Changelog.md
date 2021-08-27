@@ -6,14 +6,14 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * DCKUBE-598: Enable NFS permission fixer by default (#241)
-* DCKUBE-581: Provide value for set permissions (#261)
+* DCKUBE-581: Enable configuration for SET_PERMISSIONS docker image variable (#261)
 * DCKUBE-613: Configurable grace periods (#249)
 * DCKUBE-614: Upgrade Confluence to 7.13.0 LTS version (#257)
-* DCKUBE-612: Proper shutdown for Confluence (#250)
+* DCKUBE-612: Improve Confluence shutdown procedure (#250)
 * DCKUBE-620: Set ContextPath as default for singress path (#263)
 * DCKUBE-635: Fix spacing of the jvm args for debug flag (#266)
 * Update the Confluence image name, as the '-server' suffix is deprecated (#259)
-* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md)  (#236, #243, #245, #252, #253, #256, #258, #260, #263, #268, #270, #272)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/)  (#236, #243, #245, #252, #253, #256, #258, #260, #263, #268, #270, #272)
 
 
 ## 0.15.0
@@ -26,7 +26,7 @@
 * DCKUBE-453: Add support for providing a custom fluentd start command (#218)
 * DCKUBE-596: Update Confluence version to 7.12.4-jdk11 (#238)
 * Update EKS cluster yaml example (#227)
-* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
 ## 0.14.0
