@@ -41,11 +41,11 @@ The diagram below provides a high level overview of what a typical deployment mi
 ## Product versions
 The minimum versions that we support for each product are:
 === "Jira Data Center"
-      8.19
+      [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html)
 === "Confluence Data Center"
-      7.13
+      [7.13](https://confluence.atlassian.com/jirasoftware/jira-software-7-13-x-release-notes-957981568.html)
 === "Bitbucket Data Center"
-      7.11
+      [7.11](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-11-release-notes-1044104495.html)
 
 ## Feedback
 
