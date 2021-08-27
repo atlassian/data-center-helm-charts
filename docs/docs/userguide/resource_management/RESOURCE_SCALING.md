@@ -19,7 +19,7 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
 
 !!!note "Initial cluster size"
       **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
-      For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md) page.
+      For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
 
 ### Scaling Jira safely
 At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods.
@@ -29,15 +29,15 @@ At present there are issues relating to index replication with Jira when immedia
 
 Although these issues are Jira specific, they are exasperated on account of the significalty reduced startup times for Jira when running in a Kubernetes cluster. As such they can have an impact on horizontal scaling if the approach describe below is not taken:
 
-* Using either the `declarative` or `impreative` approach scale the cluster by **1 Pod only**
-!!!warning "1 Pod as a time!"
+* Using either the `declarative` or `impreative` approach scale the cluster by **1 pod only**
+!!!warning "1 pod as a time!"
       
-      Ensure you only scale up by 1 Pod at a time!
+      Ensure you only scale up by 1 pod at a time!
   
-* Make sure that the new Pod is running and has a state of `Running` 
+* Make sure that the new pod is running and has a state of `Running` 
 * Log into the Jira instance as the `admin` user via the service URL
-* Navigating to `System` > `Troubleshooting and support tools`
-* Under the `Instance health` tab make sure that `Cluster Index Replication` has a green tick for example   
+* Navigate to `System` > `Troubleshooting and support tools`
+* Under the `Instance health` tab make sure that `Cluster Index Replication` has a green tick, for example:   
 
 ![img.png](../../assets/images/good_cluster_index_replication.png)
 
