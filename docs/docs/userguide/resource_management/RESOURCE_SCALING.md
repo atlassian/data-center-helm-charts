@@ -1,7 +1,7 @@
 # Product scaling
 For optimum performance and stability the appropriate resource `requests` and `limits` should be defined for each pod. The number of pods in the product cluster should also be carefully considered. Kubernetes provides means for horizontal and vertical scaling of the deployed pods within a cluster, these approaches are described below.
 
-## Horizontal scaling - adding Pod's
+## Horizontal scaling - adding pods
 The Helm charts provision one `StatefulSet` by default. The number of replicas within this `StatefulSet` can be altered either declaratively or imperatively. Note that the Ingress must support cookie-based session affinity in order for the products to work correctly in a multi-node configuration.
 
 
@@ -22,7 +22,7 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md) page.
 
 ### Scaling Jira safely
-At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira Pod's.
+At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods.
 
 * [Index replication service is paused indefinitely](https://jira.atlassian.com/browse/JRASERVER-72125)
 * [Automatic restore of indexes will fail ](https://jira.atlassian.com/browse/JRASERVER-62669)
@@ -41,7 +41,7 @@ Although these issues are Jira specific, they are exasperated on account of the 
 
 ![img.png](../../assets/images/good_cluster_index_replication.png)
 
-* Having confirmed the index is healthy proceed with adding additional Jira Pod's to the cluster by following the same steps as above.
+* Having confirmed the index is healthy proceed with adding additional Jira pods to the cluster by following the same steps as above.
 
 ## Vertical scaling - adding resources
 The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
