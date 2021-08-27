@@ -22,12 +22,9 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
 
 ### Scaling Jira safely
-At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods.
+At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods. See [Jira limitaions and horizontal scaling](../../troubleshooting/LIMITATIONS.md#jira-limitations-and-horizontal-scaling).
 
-* [Index replication service is paused indefinitely](https://jira.atlassian.com/browse/JRASERVER-72125)
-* [Automatic restore of indexes will fail ](https://jira.atlassian.com/browse/JRASERVER-62669)
-
-Although these issues are Jira specific, they are exasperated on account of the significalty reduced startup times for Jira when running in a Kubernetes cluster. As such they can have an impact on horizontal scaling if the approach describe below is not taken:
+To overcome these issue you need to take the following approach:
 
 * Using either the `declarative` or `impreative` approach scale the cluster by **1 pod only**
 !!!warning "1 pod as a time!"
