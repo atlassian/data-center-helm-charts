@@ -16,9 +16,11 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
     stabilized.
     
-    Also, we **don’t officially support** the functionality described in the [examples](examples/EXAMPLES.md) or the documented [platforms](platforms/PLATFORMS.md). You should use them for reference only.
+    We **don’t officially support** the functionality described in the [examples](examples/EXAMPLES.md) or the documented [platforms](platforms/PLATFORMS.md). You should use them as reference only.
     
-    Read about our [Support boundaries](troubleshooting/SUPPORT_BOUNDARIES.md) and the [Product and platform limitations](troubleshooting/LIMITATIONS.md).
+    Read more about [what we support and what we don’t](troubleshooting/SUPPORT_BOUNDARIES.md). 
+
+    Note that Jira currently has limitations with scaling. Read more about the [Product and platform limitations](troubleshooting/LIMITATIONS.md).
 
 
 ## Architecture
