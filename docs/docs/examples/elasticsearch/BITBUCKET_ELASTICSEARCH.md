@@ -18,6 +18,7 @@ helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ### Configuring your Bitbucket deployment
 
 To enable using the installed Elasticsearch service you need to configure the service URL under `bitbucket:` in the `values.yaml` file:
+(Check Kubernetes official document on how to get [DNS for Services](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}).)
 ```yaml
 bitbucket:
   elasticSearch:
