@@ -22,7 +22,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
 !!! warning "Current Jira limitations"
 
-      At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira Pod's.
+      At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira Pods.
  
       * [Index replication service is paused indefinitely](https://jira.atlassian.com/browse/JRASERVER-72125)
       * [Automatic restore of indexes will fail ](https://jira.atlassian.com/browse/JRASERVER-62669)
