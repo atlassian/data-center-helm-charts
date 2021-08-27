@@ -12,20 +12,20 @@ helm repo add elastic https://helm.elastic.co
 ```
 then install it:
 ```bash
-helm install elasticsearch --version 7.9.3 elastic/elasticsearch
+helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ```
 
 ### Configuring your Bitbucket deployment
 
-To enable using the installed Elasticsearch service you need to to configure the service URL under `bitbucket:` in the `values.yaml` file:
+To enable using the installed Elasticsearch service you need to configure the service URL under `bitbucket:` in the `values.yaml` file:
 ```yaml
 bitbucket:
   elasticSearch:
-    baseUrl: http://elasticsearch:9200
+    baseUrl: http://elasticsearch-master.<namespace>.svc.cluster.local:9200
 ```
 This will also have the effect of disabling Bitbucket’s internal Elasticsearch instance.
 
-If you have configured authentication in the deployed Elasticsearch you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
+The open source version of Elasticsearch doesn't need credentials. However, if you have Elastic Stack subscriptions, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
 ```yaml
     credentials:
       secretName: <my-elasticsearch-secret>
@@ -70,3 +70,9 @@ bitbucket:
       passwordSecretKey: password
 ```
 > Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
+
+
+
+## Test Elasticsearch connection
+To test if Elasticsearch is properly setup, go to Administration > System - Server settings. In Search section, Elasticsearch URL should be pre-populated already. Click `Test` button to see if successfully connected.
+![bitbucket-elasticsearch](../../assets/images/bitbucket-elasticsearch.png)
