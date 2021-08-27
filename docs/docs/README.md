@@ -21,19 +21,6 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     Read about our [Support boundaries](troubleshooting/SUPPORT_BOUNDARIES.md) and the [Product and platform limitations](troubleshooting/LIMITATIONS.md).
 
 
-## Jira limitations and horizontal scaling
-
-!!! warning "Current Jira limitations"
-
-      At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira Pods.
- 
-      * [Index replication service is paused indefinitely](https://jira.atlassian.com/browse/JRASERVER-72125)
-      * [Automatic restore of indexes will fail ](https://jira.atlassian.com/browse/JRASERVER-62669)
-
-      Please note that Jira is actively being worked on so that these issues are resolved in the coming releases.
-      
-      Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such they can have an impact on horizontal scaling if the [correct approach is not taken](userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
-
 ## Architecture
 
 The diagram below provides a high level overview of what a typical deployment might look like when using the Atlassian Data Center Helm charts:
