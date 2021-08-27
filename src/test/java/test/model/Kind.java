@@ -4,5 +4,5 @@ package test.model;
  * The different types of Kubernetes resource we use.
  */
 public enum Kind {
-    StatefulSet, ServiceAccount, ConfigMap, Service, Pod, Job, ClusterRole, ClusterRoleBinding, PersistentVolume, PersistentVolumeClaim, Ingress
+    StatefulSet, ServiceAccount, ConfigMap, Secret, Service, Pod, Job, ClusterRole, ClusterRoleBinding, PersistentVolume, PersistentVolumeClaim, Ingress
 }

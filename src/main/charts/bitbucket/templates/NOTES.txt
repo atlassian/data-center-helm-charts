@@ -49,7 +49,7 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- if and (not (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume)) (and .Values.bitbucket.clustering.enabled (eq .Values.bitbucket.applicationMode "default")) }}
 
 #################################################################################
-#####  WARNING: Clustering is enabled and Shared Home is not configured!!!  #####
+#####  WARNING: Clustering is enabled but Shared Home is not configured!!!  #####
 #####            Nodes will not be able to form a cluster.                  #####
 #################################################################################
 {{- end }}

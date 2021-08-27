@@ -1,16 +1,17 @@
 package test;
 
+import org.assertj.core.internal.Conditions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
-import test.model.Product;
+import test.model.*;
 
 import java.util.Map;
 
-import static test.model.Kind.ClusterRole;
-import static test.model.Kind.ClusterRoleBinding;
+import static test.jackson.JsonNodeAssert.assertThat;
+import static test.model.Kind.*;
 
 class ClusteringTest {
     private Helm helm;
@@ -29,13 +30,19 @@ class ClusteringTest {
         resources.assertContains(ClusterRole, product.getHelmReleaseName())
                 .assertContains(ClusterRoleBinding, product.getHelmReleaseName());
 
-        resources.getStatefulSet(product.getHelmReleaseName())
-                .getContainer()
-                .getEnv()
+        test.model.StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        Container container = statefulSet.getContainer();
+        Env env = container.getEnv();
+        env
                 .assertHasFieldRef("KUBERNETES_NAMESPACE", "metadata.namespace")
                 .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_NAME", product.getHelmReleaseName())
                 .assertHasValue("HAZELCAST_NETWORK_KUBERNETES", "true")
-                .assertHasValue("HAZELCAST_PORT", "5701");
+                .assertHasValue("HAZELCAST_PORT", "5701")
+                .assertHasSecretRef("HAZELCAST_GROUP_NAME",
+                        product.getHelmReleaseName() + "-clustering", "name")
+                .assertHasSecretRef("HAZELCAST_GROUP_PASSWORD",
+                        product.getHelmReleaseName() + "-clustering", "password");
+        resources.assertContains(Secret, product.getHelmReleaseName() + "-clustering");
     }
 
     @ParameterizedTest

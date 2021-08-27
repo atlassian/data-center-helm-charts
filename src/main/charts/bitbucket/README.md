@@ -35,8 +35,8 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | bitbucket.clustering.group.nameSecretKey | string | `"name"` | The key in the Kubernetes Secret that contains the Hazelcast group name. |
 | bitbucket.clustering.group.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Hazelcast group password. |
-| bitbucket.clustering.group.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Hazelcast group credentials. Example of creating a credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=name=<name> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets If no secret is specified, a random group name and password will be generated. |
-| bitbucket.displayName | string | `nil` | Set the display name of the Bitbucket instance. |
+| bitbucket.clustering.group.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Hazelcast group credentials. Example of creating a credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=name=<name> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets If no secret is specified, a default group name will be used and a random password will be generated during installation. |
+| bitbucket.displayName | string | `nil` | Set the display name of the Bitbucket instance. Note that this value is only used during installation and changing the value during an upgrade has no effect. |
 | bitbucket.elasticSearch.baseUrl | string | `nil` | The base URL of the external Elasticsearch instance to be used. If this is defined, then Bitbucket will disable its internal Elasticsearch instance. |
 | bitbucket.elasticSearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Elasticsearch password. |
 | bitbucket.elasticSearch.credentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Elasticsearch credentials. Example of creating a credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
@@ -57,7 +57,6 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s Service will listen |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket |
 | bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour. |
-| bitbucket.sshService | object | `{"annotations":{},"enabled":false,"port":22,"type":"LoadBalancer"}` | Enable or disable an additional service for exposing SSH for external access. Disable when the SSH service is exposed through the ingress controller, or  enable if the ingress controller does not support TCP. |
 | bitbucket.sshService.annotations | object | `{}` | Annotations for the SSH service. Useful if a load balancer controller  needs extra annotations. |
 | bitbucket.sshService.enabled | bool | `false` | Set to 'true' if an additional SSH Service should be created  |
 | bitbucket.sshService.host | string | `nil` | The hostname of the SSH service. If set, it'll be used to configure the SSH base URL for the application. |

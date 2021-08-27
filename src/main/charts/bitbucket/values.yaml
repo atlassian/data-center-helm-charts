@@ -446,6 +446,7 @@ bitbucket:
     port: 22
 
     # -- The hostname of the SSH service. If set, it'll be used to configure the SSH base URL for the application.
+    #
     host:
     
     # -- SSH Service type
@@ -536,7 +537,9 @@ bitbucket:
     #
     emailAddressSecretKey: emailAddress
 
-  # -- Set the display name of the Bitbucket instance.
+  # -- Set the display name of the Bitbucket instance. Note that this value is only used during installation and
+  # changing the value during an upgrade has no effect.
+  #
   displayName:
 
   # Data Center clustering
@@ -548,6 +551,9 @@ bitbucket:
     #
     enabled: false
 
+    # Hazelcast group configuration secrets. If left unchanged, a default group name and a random password will be
+    # generated on installation.
+    #
     group:
       # -- The name of the Kubernetes Secret that contains the Hazelcast group credentials.
       # Example of creating a credentials K8s secret below:
@@ -555,13 +561,15 @@ bitbucket:
       # --from-literal=password=<password>'
       # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
       #
-      # If no secret is specified, a random group name and password will be generated.
+      # If no secret is specified, a default group name will be used and a random password will be generated during
+      # installation.
       #
       secretName:
 
       # -- The key in the Kubernetes Secret that contains the Hazelcast group name.
       #
       nameSecretKey: name
+
       # -- The key in the Kubernetes Secret that contains the Hazelcast group password.
       #
       passwordSecretKey: password
@@ -645,6 +653,7 @@ bitbucket:
   # Mirror Configuration
   #
   mirror:
+
     # -- Specifies the URL of the upstream Bitbucket server for this mirror.
     #
     upstreamUrl:
