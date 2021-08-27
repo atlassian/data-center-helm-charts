@@ -2,6 +2,11 @@
 
 This page describes what is within our scope of support for Kubernetes deployments, and what isn't. 
 
+> Read our [troubleshooting tips](TROUBLESHOOTING.md).
+
+> Read about the [product and platform limitations](LIMITATIONS.md).
+
+
 ## Supported components
 ### Helm charts
 
@@ -31,7 +36,6 @@ There is a large number of combinations and potential setup scenarios and we can
 See examples of [creating shared storage](../examples/storage/STORAGE.md). For more information about volumes go to the [Volumes section of the configuration guide](../userguide/CONFIGURATION.md#volumes). 
 
 
-
 ### Networking
 You're required to configure the network access to the cluster. In Kubernetes, this usually means providing an ingress controller. See an example of [provisioning an NGINX Ingress controller](../examples/ingress/CONTROLLERS.md). 
 
@@ -43,12 +47,3 @@ You also need to make sure that your instance is accessible to the users (DNS, f
 The database is provided as a connection string with the option to provide credentials and a driver. The database needs to be configured following product-specific requirements as per usual and needs to be accessible from Kubernetes.
 
 See an example of [provisioning databases on cloud-based providers](../examples/database/CLOUD_PROVIDERS.md).
-
-## Unsupported configurations
-These configurations are explicitly not supported and the Helm charts don’t work without modifications in these environments:
-
-* [Istio infrastructure](https://istio.io/latest/docs/ops/deployment/architecture/){.external}
-    * Due to several reasons, Istio is imposing networking rules on every workload in the Kubernetes cluster that doesn’t work with our deployments.
-    * The current recommendation is to create an exemption for our workloads if Istio is enabled in the cluster by default.
-* Air-tight network (no outgoing requests)
-    * Some of our components are installed from publicly available repositories. When they can't reach the internet, they won’t work.

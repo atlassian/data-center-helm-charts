@@ -29,7 +29,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: {{ .Values.ingress.path }}
+          - path: {{ include "confluence.ingressPath" . }}
             pathType: Prefix
             backend:
               service:
@@ -37,7 +37,7 @@ spec:
                 port:
                   number: {{ $.Values.confluence.service.port }}
           {{ if .Values.synchrony.enabled }}
-          - path: "{{ trimSuffix "/" .Values.ingress.path }}/synchrony"
+          - path: {{ trimSuffix "/" (include "confluence.ingressPath" .) }}/synchrony"
             pathType: Prefix
             backend:
               service:

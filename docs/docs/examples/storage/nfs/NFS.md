@@ -47,7 +47,7 @@ helm uninstall nfs-server --namespace nfs
 ## Update `values.yaml`
 Get the IP address of the NFS service (`CLUSTER-IP`) by running the following command
 ```shell
-kc get service --namespace nfs -o jsonpath='{.items[0].spec.clusterIP}'
+kubectl get service --namespace nfs -o jsonpath='{.items[0].spec.clusterIP}'
 ```
 !!!info "NFS directory share"
 
