@@ -2,9 +2,21 @@
 
 ## Product limitations
 We haven't changed our Data Center applications' architecture to support Kubernetes. So, as is with all our Data Center products, the following limitiations still exist:
+
 * We don't support horizontal or vertical autoscaling in our products. Read about [Product scaling](../userguide/resource_management/RESOURCE_SCALING.md).
 * More pods doesn’t mean that the application will be more performant.
 * We still have session affinity, so you will need to have a network setup that supports that. 
+
+## Jira limitations and horizontal scaling
+
+At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods.
+
+* [Index replication service is paused indefinitely](https://jira.atlassian.com/browse/JRASERVER-72125){.external}
+* [Automatic restore of indexes will fail ](https://jira.atlassian.com/browse/JRASERVER-62669){.external}
+
+Please note that Jira is actively being worked on so that these issues are resolved in the coming releases.
+      
+Although these issues are Jira specific, they are exasperated on account of the significalty reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../userguide/resource_management/RESOURCE_SCALING.md/#scaling-jira-safely).
 
 ## Platform limitations
 These configurations are explicitly not supported and the Helm charts don’t work without modifications in these environments:
