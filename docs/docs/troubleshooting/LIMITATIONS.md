@@ -7,7 +7,7 @@ We haven't changed our Data Center applications' architecture to support Kuberne
 * More pods doesn’t mean that the application will be more performant.
 * We still have session affinity, so you will need to have a network setup that supports that. 
 
-## Jira limitations and horizontal scaling
+## Jira and horizontal scaling
 
 At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods.
 
