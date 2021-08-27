@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.16.0
+
+![AppVersion: 4.3.5-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=4.3.5-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* DCKUBE-598: Enable NFS permission fixer by default (#241)
+* DCKUBE-581: Enable configuration for SET_PERMISSIONS docker image variable (#261)
+* DCKUBE-613: Configurable grace periods (#249)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/) (#236, #243, #245, #252, #253, #256, #258, #260, #268, #270, #272)
+
 
 ## 0.15.0
 
@@ -11,7 +22,7 @@
 * DCKUBE-453: Add support for providing a custom fluentd start command (#218)
 * DCKUBE-435: Renamed the 'master' branch to 'main' and set it as default (#232)
 * Update EKS cluster yaml example (#227)
-* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/blob/main/docs/docs/README.md) (#206, #222, #223, #228, #229, #231, #233, #235)
+* Improve [documentation](https://github.com/atlassian/data-center-helm-charts/) (#206, #222, #223, #228, #229, #231, #233, #235)
 
 
 ## 0.14.0
