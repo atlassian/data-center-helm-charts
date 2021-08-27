@@ -17,6 +17,9 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     stabilized.
     
     Also, we **don’t officially support** the functionality described in the [examples](examples/EXAMPLES.md) or the documented [platforms](platforms/PLATFORMS.md). You should use them for reference only.
+    
+    Read about our [Support boundaries](troubleshooting/SUPPORT_BOUNDARIES.md) and the [Product and platform limitations](troubleshooting/LIMITATIONS.md).
+
 
 ## Jira limitations and horizontal scaling
 
@@ -29,7 +32,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
       Please note that Jira is actively being worked on so that these issues are resolved in the coming releases.
       
-      Although these issues are Jira specific, they are exasperated on account of the significalty reduced startup times for Jira when running in a Kubernetes cluster. As such they can have an impact on horizontal scaling if the [correct approach is not taken](userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
+      Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such they can have an impact on horizontal scaling if the [correct approach is not taken](userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
 
 ## Architecture
 
@@ -50,6 +53,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 * [Platforms support](platforms/PLATFORMS.md) - how to allow support for different platforms
 * [Examples](examples/EXAMPLES.md) - various configuration examples
 * [Troubleshooting](troubleshooting/TROUBLESHOOTING.md) - how to debug issues with installation
+
 
 ## Product versions
 The minimum versions that we support for each product are:
