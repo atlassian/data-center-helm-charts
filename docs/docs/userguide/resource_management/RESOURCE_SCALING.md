@@ -22,7 +22,7 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
 
 ### Scaling Jira safely
-At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods. See [Jira and horizontal scaling](../../troubleshooting/LIMITATIONS.md#jira-limitations-and-horizontal-scaling).
+At present there are issues relating to index replication with Jira when immediately scaling up by more than 1 pod at a time. See [Jira and horizontal scaling](../../troubleshooting/LIMITATIONS.md#jira-limitations-and-horizontal-scaling).
 
 To overcome these issue you need to take the following approach:
 

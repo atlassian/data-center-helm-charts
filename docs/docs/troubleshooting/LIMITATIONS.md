@@ -8,8 +8,7 @@ We haven't changed our Data Center applications' architecture to support Kuberne
 * We still have session affinity, so you will need to have a network setup that supports that. 
 
 ## Jira and horizontal scaling
-
-At present there are issues relating to index replication with Jira when immediately scaling up from `1` to `>=3` Jira pods.
+At present there are issues relating to index replication with Jira when immediately scaling up by more than 1 pod at a time.
 
 * [Index replication service is paused indefinitely](https://jira.atlassian.com/browse/JRASERVER-72125){.external}
 * [Automatic restore of indexes will fail ](https://jira.atlassian.com/browse/JRASERVER-62669){.external}
