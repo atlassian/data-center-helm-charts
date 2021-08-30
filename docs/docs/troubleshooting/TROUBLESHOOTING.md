@@ -9,10 +9,11 @@ The next section assumes you've followed the [installation](../userguide/INSTALL
 
 For installation troubleshooting, you will need to access the Kubernetes cluster and have enough permissions to follow the commands below.
 
-We highly recommend that you read through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/). 
-For great starting tips read the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/).
+We highly recommend that you read through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/){.external}. 
+For great starting tips read the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/){.external}.
 
->Note: some commands include `RELEASE_NAME` and `NAMESPACE`. Replace them with the Helm release name and namespace specified when running `helm install`.
+!!!note "Value placeholders"
+    Some commands include `<release_name>` and `<namespace>`. Replace them with the Helm release name and namespace specified when running `helm install`.
 
 ## My service is not accessible
 
@@ -26,7 +27,7 @@ If you have waited long enough (more than 10 minutes), and the service is still 
 1. Run `helm list --all-namespaces` to get the list of all installed chart releases.
     * You should be able to see your installation in the list
     * The status for the release should be `deployed`
-2. Run `helm test RELEASE_NAME -n NAMESPACE`
+2. Run `helm test <release_name> -n <namespace>`
     * This should return application tests in `succeeded` phase
     * In case there are any test failures you will need to further investigate the particular domain
    
@@ -38,7 +39,7 @@ To verify the DNS record from your machine, run a basic `dig` test:
 dig SERVICE_DOMAIN_NAME
 ```
 
-Or use a [web version of the tool](https://toolbox.googleapps.com/apps/dig/).
+Or use a [web version of the tool](https://toolbox.googleapps.com/apps/dig/){.external}.
 
 ### Investigate application logs
 
@@ -52,18 +53,18 @@ You can read the output and make sure it doesn't contain an error or an exceptio
 
 ### Get application pod details
 
-For more details follow the [official guide for debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/).
+For more details follow the [official guide for debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/){.external}.
 
 Get the list of pods and their states:
 
 ```shell
-kubectl get RELEASE_NAME -n NAMESPACE -o wide
+kubectl get <release_name> -n <namespace> -o wide
 ```
 
 Get details about a specific pod:
 
 ```shell
-kubectl describe POD_NAME -n NAMESPACE
+kubectl describe POD_NAME -n <namespace>
 ```
 
 ### Get storage details
@@ -71,7 +72,7 @@ kubectl describe POD_NAME -n NAMESPACE
 Each application pod needs to have successfully mounted local and shared home. You can find out the details for the persistent volume claims with this command: 
 
 ???+ info "Prerequisities"
-      The example needs to have [`jq`](https://stedolan.github.io/jq/) tool installed.
+      The example needs to have [`jq`](https://stedolan.github.io/jq/){.external} tool installed.
 
 ```shell
 kubectl get pods --all-namespaces -o=json | jq -c \
@@ -79,4 +80,4 @@ kubectl get pods --all-namespaces -o=json | jq -c \
 ```
 Find all the application pods in the output and verify they have the correct claims (shared + local home).
 
-For more details follow the [documentation for persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
+For more details follow the [documentation for persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external}.

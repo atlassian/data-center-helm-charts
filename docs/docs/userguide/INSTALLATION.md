@@ -11,7 +11,7 @@ helm repo add atlassian-data-center \
  https://atlassian.github.io/data-center-helm-charts
 ```
 
-Update the repo:
+Update the repository:
 
 ```shell
 helm repo update
@@ -28,7 +28,8 @@ helm show values atlassian-data-center/<product> > values.yaml
 ## 3. Configure database
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
 
-> By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
+!!!tip "Automated setup steps"
+    By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
 
 !!!info "Migration"
     If you are migrating an existing Data Center product to Kubernetes, use the values of your product's database. See [Migration guide](MIGRATION.md).
@@ -52,9 +53,10 @@ database:
     passwordSecretKey: password
 ```
 
-> For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
+!!!info "Database connectivity"
+    For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
 
-> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
+    Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
     
 ## 4. Configure Ingress
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external} provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
@@ -72,9 +74,10 @@ ingress:
   tlsSecretName: <tls_certificate_name>
 ```
 
-> For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#ingress). 
+!!!info "Ingress configuration"
+    For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#ingress). 
 
-> See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
+    See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 
@@ -100,10 +103,10 @@ volumes:
       create: true
       storageClassName: <storage-class-name>
 ```
-
-> For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
+!!!info "Volume configuration"
+    For more details, refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
     
-!!!info "Bitbucket shared storage"
+!!!tip "Bitbucket shared storage"
     Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
     
 ## 6. Configure license and sysadmin credentials for Bitbucket
@@ -163,7 +166,7 @@ helm test <release-name> --logs --namespace <namespace>
 ```
 
 * This will run some basic smoke tests against the deployed release.
-* If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
+* If any of these tests fail, it is likely that the deployment was not successful. Check the status of the deployed resources for any obvious errors that may have caused the failure.
 
 ## 9. Complete product setup 
 

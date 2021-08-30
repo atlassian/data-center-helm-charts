@@ -34,7 +34,7 @@ Create a namespace for the NFS
 ```shell
 kubectl create namespace nfs
 ```
-Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
+Clone this repository and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
 ```shell
 helm install nfs-server nfs-server-example --namespace nfs
 ```
