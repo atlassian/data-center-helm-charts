@@ -51,7 +51,7 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 ######            Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
-{{ if and ( .Values.synchrony.enabled ( not ( or .Values.volumes.synchronyHome.persistentVolumeClaim.create .Values.volumes.synchronyHome.customVolume ))) }}
+{{ if ( and .Values.synchrony.enabled ( not ( or .Values.volumes.synchronyHome.persistentVolumeClaim.create .Values.volumes.synchronyHome.customVolume ))) }}
 #################################################################################
 ######      WARNING: Persistent volume is not used for Synchrony Home!!!    #####
 ######            Data will be lost when the pod is terminated.             #####
