@@ -14,7 +14,7 @@ These instructions are composed of 3 high-level parts:
 ## Controller installation and configuration
 We recommend installing the controller using its official [Helm Charts](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx){.external}. You can also use the instructions below.
 
-### 1. Add controller repo
+### 1. Add controller repository
 Add the `ingress-nginx` Helm repository:
 ```shell
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -64,12 +64,12 @@ Take note of the `LoadBalancer` and using it as a value update the DNS record so
 Kubernetes certificate management is handled using [cert-manager](https://cert-manager.io/){.external}.
 
 ### 1. Install cert-manager
-Add the cert-manager repo
+Add the cert-manager repository
 ```shell
 helm repo add jetstack https://charts.jetstack.io
 ```
 
-Update repos
+Update repositories
 ```shell
 helm repo update
 ```

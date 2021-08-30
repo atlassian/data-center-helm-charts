@@ -10,7 +10,8 @@ Depending on the need of your deployment, SSH access can be provided through two
 ## NGINX Ingress controller config for SSH connections
 We can follow the official documentation for the NGINX Ingress controller for this: [Exposing TCP and UDP services - NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/){.external}.
 
->**NOTE:** These instructions should be performed in the same namespace in which the Ingress controller resides.
+!!!info "Namespace co-location"
+    These instructions should be performed in the same namespace in which the Ingress controller resides.
 
 ### 1. Create ConfigMap
 Create a new `ConfigMap`:
