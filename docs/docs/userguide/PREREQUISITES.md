@@ -15,7 +15,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 2. :material-directions-fork: [Provision an Ingress Controller](#provision-an-ingress-controller)
 3. :material-database: [Provision a database](#provision-a-database)
 4. :material-folder-network: [Configure a shared-home volume](#configure-a-shared-home-volume)
-5. :material-folder-home: [Configure local-home volume](#configure-local-home-volume)
+5. :material-folder-home: [Configure a local-home volume](#configure-local-home-volume)
 
 ---
 
@@ -55,9 +55,9 @@ Before installing the Data Center Helm charts you need to set up your environmen
 * The database service may be deployed within the same Kubernetes cluster as the Data Center product or elsewhere.
 * The products need to be provided with the information they need to connect to the database service. Configuration for each product is mostly the same, with some small differences. For more information go to the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
 
-!!!info "Reducing Pod to DB latency" 
+!!!info "Reducing pod to database latency" 
 
-      For better performance consider co-locating your database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.
+      For better performance consider co-locating your database in the Availability Zone (AZ) as your product nodes. Database-heavy operations, such as full re-index, become significantly faster when the database is collocated with the Data Center node in the same AZ. However we don't recommend this if you're running critical workloads.
 
 !!!example ""
       See an example of [provisioning databases on cloud-based providers](../examples/database/CLOUD_PROVIDERS.md).
@@ -67,16 +67,16 @@ Before installing the Data Center Helm charts you need to set up your environmen
 * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
 * Some cloud based options for a shared filesystem include [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}. You can also stand up your own NFS
 * The logical representation of the chosen storage type within Kubernetes can be defined as `PersistentVolumes` with an associated `PersistentVolumeClaims` in a `ReadWriteMany (RWX)` access mode.
-* For more information about volumes go to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes). 
+* For more information about volumes see the [Volumes section of the configuration guide](CONFIGURATION.md#volumes). 
 
 !!!example ""
       See examples of [creating shared storage](../examples/storage/STORAGE.md).
 
 ### :material-folder-home: Configure local-home volume
-* As with the [shared-home](#configure-a-shared-home-volume) each pod requires its own volume for `local-home`. This is needed by each product for defining operational data. 
+* As with the [shared-home](#configure-a-shared-home-volume), each pod requires its own volume for `local-home`. Each product needs this for defining operational data. 
 * If not defined, an [emptyDir{}](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
-* Whilst an `emptyDir` may be acceptable for evaluation purposes it is recommended that each Pod is allocated it's own volume
-* A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each Pod.
+* Although an `emptyDir` may be acceptable for evaluation purposes, we recommend that each pod is allocated its own volume.
+* A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each pod.
 
 !!!example ""
-      An example of this strategy can be found [here](../examples/storage/aws/LOCAL_STORAGE.md).
+      An example of this strategy can be found [the local storage example](../examples/storage/aws/LOCAL_STORAGE.md).
