@@ -35,84 +35,23 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 3. DNS setup
-Manually provision a new DNS record via your cloud provider or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md){.external}. Alternatively the instructions below show how this can be performed using [AWS Route53](https://aws.amazon.com/route53/){.external}
+Manually provision a new DNS record via your cloud provider, [for instance AWS and Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html), or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}. There are also instructions [here](DNS.md) on how this can 
+done.
 
-!!!tip "DNS record creation using Route53"
+Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 2. above](#2-install-controller). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
+```shell
+kubectl get service -n ingress | grep ingress-nginx
+```
+the output of this command should look something like...
+```shell
+ingress-nginx-controller             LoadBalancer   10.100.22.16    b834z142d8118406795a34df35e10b17-38927090.eu-west-1.elb.amazonaws.com   80:32615/TCP,443:31787/TCP   76m
+ingress-nginx-controller-admission   ClusterIP      10.100.5.36     <none>                                                                  443/TCP                      76m
+```
+Take note of the `LoadBalancer` and using it as a value update the DNS record so that traffic is routed to it.
 
-    The approach below shows how a DNS record can be created using AWS Route53 and the [AWS CLI for record sets](https://aws.amazon.com/premiumsupport/knowledge-center/alias-resource-record-set-route53-cli/){.external}
+!!!info "Time to provision"
 
-First, identify the name of the auto provisioned [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer/){.external} that was created above for [Step 2. Install controller](#2-install-controller):
-```shell
-kubectl get service -n ingress | grep ingress-nginx | awk '{print $4}' | head -1
-```
-the output of this command should be the name of the load balancer, take note of the name i.e.
-```shell
-b834z142d8118406795a34df35e10b17-38927090.eu-west-1.elb.amazonaws.com
-```
-Next, using the first part of the load balancer name, get the `HostedZoneId` for the load balancer
-```shell
-aws elb describe-load-balancers --load-balancer-name b834z142d8118406795a34df35e10b17 --region <aws_region> | jq '.LoadBalancerDescriptions[] | .CanonicalHostedZoneNameID'
-```
-With the `HostedZoneId` and the **full** name of the load balancer create the `JSON` "change batch" file below:
-
-```yaml
-{
-  "Comment": "An alias resource record for Jira in K8s",
-  "Changes": [
-    {
-      "Action": "CREATE",
-      "ResourceRecordSet": {
-        "Name": <DNS record name>,
-        "Type": "A",
-        "AliasTarget": {
-          "HostedZoneId": <Load balancer hosted zone ID>,
-          "DNSName": <Load balancer name>,
-          "EvaluateTargetHealth": true
-        }
-      }
-    }
-  ]
-}
-```
-  
-!!!tip "DNS record name"
-
-    If for example, the DNS record name were set to `product.k8s.hoolicorp.com` then the host, `hoolicorp.com`, would be the pre-registerd [AWS Route53 hosted zone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-concepts.html#route-53-concepts-hosted-zone){.external}.
-
-Next get the zone ID for the hosted zone:
-```shell
-aws route53 list-hosted-zones-by-name | jq '.HostedZones[] | select(.Name == "hoolicorp.com.") | .Id'
-```
-Finally, using the hosted zone ID and the `JSON` change batch file created above, initialize the record:
-```shell
-aws route53 change-resource-record-sets --hosted-zone-id <hosted zone ID> --change-batch file://change-batch.json
-```
-This will return a response similar to the one below:
-```json
-{
-    "ChangeInfo": {
-        "Id": "/change/C03268442VMV922ROD1M4",
-        "Status": "PENDING",
-        "SubmittedAt": "2021-08-30T01:42:23.478Z",
-        "Comment": "An alias resource record for Jira in K8s"
-    }
-}
-```
-You can get the current status of the record's initialization:
-```shell
-aws route53  get-change --id /change/C03268442VMV922ROD1M4
-```
-Once the `Status` has transitioned to `INSYNC` the record is ready for use...
-```json
-{
-    "ChangeInfo": {
-        "Id": "/change/C03268442VMV922ROD1M4",
-        "Status": "INSYNC",
-        "SubmittedAt": "2021-08-30T01:42:23.478Z",
-        "Comment": "Creating Alias resource record sets in Route 53"
-    }
-}
-```
+    **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
 ## Certificate manager installation and configuration
 K8s certificate management is handled using [cert-manager](https://cert-manager.io/){.external}.
