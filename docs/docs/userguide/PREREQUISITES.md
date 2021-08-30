@@ -57,7 +57,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 !!!info "Reducing pod to database latency" 
 
-      For better performance consider co-locating your database in the Availability Zone (AZ) as your product nodes. Database-heavy operations, such as full re-index, become significantly faster when the database is collocated with the Data Center node in the same AZ. However we don't recommend this if you're running critical workloads.
+      For better performance consider co-locating your database in the same Availability Zone (AZ) as your product nodes. Database-heavy operations, such as full re-index, become significantly faster when the database is collocated with the Data Center node in the same AZ. However we don't recommend this if you're running critical workloads.
 
 !!!example ""
       See an example of [provisioning databases on cloud-based providers](../examples/database/CLOUD_PROVIDERS.md).
