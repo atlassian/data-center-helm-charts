@@ -517,9 +517,9 @@ confluence:
     container: 
     
       requests:
-        # -- Initial CPU request by Confluence pod
-        #
-        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        # -- Initial CPU request by Confluence pod.
+        # If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        cpu: "2"
         
         # -- Initial Memory request by Confluence pod
         #
@@ -680,6 +680,12 @@ synchrony:
         # -- Initial Memory request Synchrony pod
         #
         memory: "2.5G"
+
+  # --  Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g.
+  # system properties.
+  #
+  additionalJvmArgs: {}
+    #- -Dsynchrony.example.system.property=46
 
   shutdown:
     # -- The termination grace period for pods during shutdown. This

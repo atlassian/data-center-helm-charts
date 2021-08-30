@@ -45,7 +45,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Confluence container readiness probe  before the pod fails readiness checks. |
 | confluence.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Confluence container readiness probe,  after which the probe will start running. |
 | confluence.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Confluence container readiness probe will run |
-| confluence.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Confluence pod |
+| confluence.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Confluence pod. If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below |
 | confluence.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Confluence pod |
 | confluence.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Confluence JVM |
 | confluence.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Confluence JVM |
@@ -96,6 +96,7 @@ Kubernetes: `>=1.19.x-0`
 | serviceAccount.create | bool | `true` | Set to 'true' if a ServiceAccount should be created, or 'false' if it  already exists. |
 | serviceAccount.imagePullSecrets | list | `[]` | For Docker images hosted in private registries, define the list of image pull  secrets that should be utilized by the created ServiceAccount https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to be used by the pods. If not specified, but  the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name  will be auto-generated, otherwise the 'default' ServiceAccount will be used. https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server |
+| synchrony.additionalJvmArgs | object | `{}` | Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g. system properties. |
 | synchrony.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the  Synchrony container. Each item in the list should specify the name of the volume  that contains the library, as well as the name of the library file within that  volume's root directory. Optionally, a subDirectory field can be included to  specify which directory in the volume contains the library file. |
 | synchrony.enabled | bool | `false` | Set to 'true' if Synchrony (i.e. collaborative editing) should be enabled. This will result in a separate StatefulSet and Service to be created for Synchrony. If disabled, then collaborative editing will be disabled in Confluence. |
 | synchrony.ingressUrl | string | `nil` | The base URL of the Synchrony service. This will be the URL that users' browsers will  be given to communicate with Synchrony, as well as the URL that the Confluence service  will use to communicate directly with Synchrony, so the URL must be resolvable both from inside and outside the Kubernetes cluster. |
