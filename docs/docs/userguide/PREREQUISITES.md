@@ -12,10 +12,10 @@ In order to deploy Atlassian’s Data Center products, the following is required
 Before installing the Data Center Helm charts you need to set up your environment:
 
 1. :material-kubernetes: [Create and connect to the Kubernetes cluster](#create-and-connect-to-the-kubernetes-cluster)
-1. :fontawesome-solid-network-wired: [Provision an Ingress Controller](#provision-an-ingress-controller)
-1. :material-database: [Provision a database](#provision-a-database)
-1. :material-folder-network: [Configure a shared-home volume](#configure-a-shared-home-volume)
-1. :material-folder-home: [Configure local-home volume](#configure-local-home-volume)
+2. :material-directions-fork: [Provision an Ingress Controller](#provision-an-ingress-controller)
+3. :material-database: [Provision a database](#provision-a-database)
+4. :material-folder-network: [Configure a shared-home volume](#configure-a-shared-home-volume)
+5. :material-folder-home: [Configure local-home volume](#configure-local-home-volume)
 
 ---
 
@@ -27,7 +27,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 !!!example ""
       See examples of [provisioning Kubernetes clusters on cloud-based providers](../examples/cluster/CLOUD_PROVIDERS.md).
 
-### :fontawesome-solid-network-wired: Provision an Ingress Controller
+### :material-directions-fork: Provision an Ingress Controller
 
 * This step is necessary in order to make your Atlassian product available from outside of the Kubernetes cluster after deployment. 
 * The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme){.external}, [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme){.external} and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme){.external}. There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external}.
