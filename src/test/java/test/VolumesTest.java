@@ -88,7 +88,8 @@ class VolumesTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.persistentVolumeClaim.create", "true",
                 "volumes.localHome.persistentVolumeClaim.storageClassName", "foo",
-                "volumes.localHome.persistentVolumeClaim.resources.requests.storage", "2Gi"));
+                "volumes.localHome.persistentVolumeClaim.resources.requests.storage", "2Gi",
+                "volumes.localHome.mountPath", "/foo/bar"));
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
@@ -98,6 +99,9 @@ class VolumesTest {
                 .hasTextEqualTo("foo");
         assertThat(localHomeVolumeClaimTemplate.path("spec").path("resources").path("requests").path("storage"))
                 .hasTextEqualTo("2Gi");
+        final var mount = statefulSet.getContainer().getVolumeMount("local-home");
+        assertThat(mount.get("name")).hasTextEqualTo("local-home");
+        assertThat(mount.get("mountPath")).hasTextEqualTo("/foo/bar");
     }
 
     @ParameterizedTest
