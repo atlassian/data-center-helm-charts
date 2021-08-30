@@ -104,7 +104,7 @@ volumes:
       storageClassName: <storage-class-name>
 ```
 !!!info "Volume configuration"
-    For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
+    For more details, refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
     
 !!!tip "Bitbucket shared storage"
     Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
@@ -166,7 +166,7 @@ helm test <release-name> --logs --namespace <namespace>
 ```
 
 * This will run some basic smoke tests against the deployed release.
-* If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
+* If any of these tests fail, it is likely that the deployment was not successful. Check the status of the deployed resources for any obvious errors that may have caused the failure.
 
 ## 9. Complete product setup 
 
