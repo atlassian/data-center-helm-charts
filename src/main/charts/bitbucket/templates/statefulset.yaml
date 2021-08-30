@@ -139,6 +139,10 @@ spec:
                   key: additional_jvm_args
                   name: {{ include "bitbucket.fullname" . }}-jvm-config
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: {{ include "bitbucket.shutdown.command" . }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "bitbucket.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
