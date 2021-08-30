@@ -32,7 +32,7 @@ Some key considerations to note when configuring the controller are:
     6. Pod handles request 
 
 !!!info "Request body size"
-    By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an 413 error will be returned to the client. If the maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
+    By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. If the maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
 
 ## :material-folder-home: Volumes
 The Data Center products make use of filesystem storage. Each DC node has its own "local-home" volume, and all nodes in the DC cluster share a single "shared-home" volume.

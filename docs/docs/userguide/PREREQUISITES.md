@@ -3,9 +3,9 @@
 
 In order to deploy Atlassian’s Data Center products, the following is required:
 
-1. An understanding of [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/){.external} and [Helm](https://helm.sh/){.external} concepts
-3. `kubectl` `v1.19` or later, must be compatible with your cluster
-4. `helm` `v3.3` or later
+1. An understanding of [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/){.external} and [Helm](https://helm.sh/){.external} concepts.
+2. [`kubectl` `v1.19` or later](https://kubernetes.io/docs/tasks/tools/), must be compatible with your cluster.
+3. [`helm` `v3.3` or later.](https://helm.sh/docs/intro/install/)
 
 ## Environment setup 
 
