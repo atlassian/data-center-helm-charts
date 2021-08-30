@@ -35,7 +35,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 3. DNS setup
-Manually provision a new DNS record via your cloud provider, [for instance AWS and Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html), or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}. There are also instructions [here](DNS.md) on how this can
+Manually provision a new DNS record via your cloud provider, [for instance AWS and Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html), or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}. There are also instructions on [how this can be done using the AWS CLI](DNS.md).
 
 Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 2. above](#2-install-controller). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
