@@ -3,7 +3,7 @@
 
 !!!warning "Using these instructions" 
 
-    These instructions are for reference purposes only, as such they should be used for development and testing purposes only! See the official instructions for [Deploying and configuring the controller](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
+    These instructions are for reference purposes, as such they should be used for development and testing purposes only! See the official instructions for [Deploying and configuring the controller](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
 
 These instructions are composed of 3 high-level parts:
 
