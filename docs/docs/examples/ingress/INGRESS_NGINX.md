@@ -1,7 +1,9 @@
 # NGINX Ingress Controller - with TLS termination
 [NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/){.external} with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/){.external} and certificates from [Let's Encrypt](https://letsencrypt.org/){.external}.
 
-> **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
+!!!warning "A note about using these instructions" 
+
+    These instructions are for reference purposes only, as such they should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
 
 These instructions are composed of 3 high-level parts:
 
@@ -143,7 +145,10 @@ kubectl get pods --namespace cert-manager
 
 ### 2. Create certificate issuer
 Using the yaml spec below create and apply the certificate `Issuer` resource
-> Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
+
+!!!warning "Namespace co-location"
+
+    Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -194,6 +199,8 @@ ingress:
     In this case the `<dns_record>` would correspond to the record name that was created in [3. DNS setup](#3-dns-setup) above
 
 ## Bitbucket SSH configuration
-> **NOTE:** Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../ssh/SSH_BITBUCKET.md) for details.
+!!!warning "Bitbucket and SSH" 
+
+    Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../ssh/SSH_BITBUCKET.md) for details.
 
 > Having created the Ingress controller continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).
