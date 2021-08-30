@@ -662,7 +662,13 @@ synchrony:
     # -- The type of K8s service to use for Synchrony
     #
     type: ClusterIP
-   
+
+
+  # -- Boolean to define whether to set synchrony home directory permissions on startup
+  # of Synchrony container. Set to 'false' to disable this behaviour.
+  #
+  setPermissions: true
+
   # Port definitions
   #  
   ports:

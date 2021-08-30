@@ -15,6 +15,7 @@ import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static test.jackson.JsonNodeAssert.assertThat;
 import static test.model.Kind.PersistentVolumeClaim;
 import static test.model.Kind.PersistentVolume;
+import static test.model.Synchrony.synchronyStatefulSetName;
 
 /**
  * Tests the various permutations of the "persistence" value structure in the Helm charts
@@ -235,7 +236,4 @@ class VolumesTest {
                 .isArrayWithChildren(expectedAccessModes);
     }
 
-    private String synchronyStatefulSetName() {
-        return Product.confluence.getHelmReleaseName() + "-synchrony";
-    }
 }

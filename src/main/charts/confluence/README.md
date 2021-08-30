@@ -112,6 +112,7 @@ Kubernetes: `>=1.19.x-0`
 | synchrony.resources.jvm.stackSize | string | `"2048k"` | The memory allocated for the Synchrony stack |
 | synchrony.service.port | int | `80` | The port on which the Synchrony K8s Service will listen |
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony |
+| synchrony.setPermissions | bool | `true` | Boolean to define whether to set synchrony home directory permissions on startup of Synchrony container. Set to 'false' to disable this behaviour. |
 | synchrony.shutdown.terminationGracePeriodSeconds | int | `25` | The termination grace period for pods during shutdown. This should be set to the Synchrony internal grace period (default 20 seconds), plus a small buffer to allow the JVM to fully terminate. |
 | tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Confluence pods |
 | volumes.additional | list | `[]` | Defines additional volumes that should be applied to all Confluence and Synchrony pods. Note that this will not create any corresponding volume mounts; those needs to be defined in confluence.additionalVolumeMounts |

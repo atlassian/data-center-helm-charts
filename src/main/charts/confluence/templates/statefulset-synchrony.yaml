@@ -55,6 +55,8 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            - name: SET_PERMISSIONS
+              value: {{ .Values.synchrony.setPermissions | quote }}
             - name: SYNCHRONY_BIND
               valueFrom:
                 fieldRef:
