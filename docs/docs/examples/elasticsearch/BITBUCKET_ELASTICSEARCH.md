@@ -15,8 +15,8 @@ then install it:
 helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ```
 > Running the above commands will install Elasticsearch with default configurations, i.e. 3 worker nodes. 
-> However, it may not always work out of the box if you failed to fulfill pre-requisites for the default installation. 
-> Some examples including:
+> However, it may not always work out of the box if failed to fulfill pre-requisites for the default installation. 
+> Some example pre-requisites include:
 > * cpu/memory requests: 1000m/2Gi
 > * pre-configured storage with at least three 30Gi volumes (one for each worker node)
 > 
