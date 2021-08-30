@@ -14,18 +14,20 @@ then install it:
 ```bash
 helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ```
-> Running the above commands will install Elasticsearch with default configurations, i.e. 3 worker nodes. 
-> However, it may not always work out of the box if failed to fulfill pre-requisites for the default installation. 
-> Some example pre-requisites include:
-> * cpu/memory requests: 1000m/2Gi
-> * pre-configured storage with at least three 30Gi volumes (one for each worker node)
-> 
-> Refer to [Elasticsearch values.yaml file](https://github.com/elastic/helm-charts/blob/7.9/elasticsearch/values.yaml){.external} for more detail.
+!!! info 
+    Running the above commands will install Elasticsearch with default configurations, i.e. 3 worker nodes. 
+    However, it may not always work out of the box if failed to fulfill pre-requisites for the default installation. 
+    Some example pre-requisites include:
+
+    * cpu/memory requests: 1000m/2Gi
+    * pre-configured storage with at least three 30Gi volumes (one for each worker node)
+    
+    Refer to [Elasticsearch values.yaml file](https://github.com/elastic/helm-charts/blob/7.9/elasticsearch/values.yaml){.external} for more detail.
 
 ### Configuring your Bitbucket deployment
 
 To enable the installed Elasticsearch service you need to configure the service URL under `bitbucket:` in the `values.yaml` file.
-Check the Kubernetes official documentation on how to get [DNS for Services](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}).
+Check the Kubernetes official documentation on how to get [DNS for Services](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}.
 ```yaml
 bitbucket:
   elasticSearch:
@@ -33,16 +35,17 @@ bitbucket:
 ```
 This will also have the effect of disabling Bitbucket’s internal Elasticsearch instance.
 
-> If you hold a basic license of Elasticsearch, authentication is not supported. However, if you have other [Elastic Stack subscriptions](https://www.elastic.co/subscriptions){.external}, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
-```yaml
-bitbucket:
-  elasticSearch:    
-    credentials:
-      secretName: <my-elasticsearch-secret>
-      usernameSecreyKey: username
-      passwordSecretKey: password
-```
-> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
+!!! info
+    If you hold a basic license of Elasticsearch, authentication is not supported. However, if you have other [Elastic Stack subscriptions](https://www.elastic.co/subscriptions){.external}, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
+    ```yaml
+    bitbucket:
+      elasticSearch:    
+         credentials:
+            secretName: <my-elasticsearch-secret>
+            usernameSecreyKey: username
+            passwordSecretKey: password
+    ```
+    Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
 
 
 ## Configuring Amazon Elasticsearch Service with Bitbucket on Kubernetes
