@@ -537,6 +537,7 @@ confluence:
     # By default, Tomcat will be stopped by a shutdown script from the Confluence distribution.
     # If any other shutdown behaviour is needed, it can be achieved by overriding this value.
     command:
+      - "/shutdown-wait.sh"
 
   # --  Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g.
   # system properties.

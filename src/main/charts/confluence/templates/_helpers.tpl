@@ -192,7 +192,7 @@ The command that will be run to properly shutdown Confluence tomcat
 */}}
 {{- define "confluence.shutdown.command" -}}
 {{- if .Values.confluence.shutdown.command }}
-{{ .Values.confluence.shutdown.command }}
+{{- .Values.confluence.shutdown.command }}
 {{- else }}["/shutdown-wait.sh"]{{- end }}
 {{- end }}
 

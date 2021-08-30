@@ -25,7 +25,7 @@ spec:
         {{- include "bitbucket.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
       {{ if .Values.bitbucket.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
@@ -142,7 +142,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{ include "bitbucket.shutdown.command" . }}
+                command: {{ include "bitbucket.shutdown.command" . | nindent 18 }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "bitbucket.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

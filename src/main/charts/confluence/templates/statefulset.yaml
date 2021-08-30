@@ -129,7 +129,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{ include "confluence.shutdown.command" . }}
+                command: {{- include "confluence.shutdown.command" . | nindent 18 }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "confluence.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

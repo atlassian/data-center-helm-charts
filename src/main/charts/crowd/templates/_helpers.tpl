@@ -126,7 +126,7 @@ The command that will be run to properly shutdown Crowd
 */}}
 {{- define "crowd.shutdown.command" -}}
 {{- if .Values.crowd.shutdown.command }}
-{{ .Values.crowd.shutdown.command }}
+{{- .Values.crowd.shutdown.command }}
 {{- else }}["/shutdown-wait.sh"]{{- end }}
 {{- end }}
 

@@ -461,6 +461,19 @@ jira:
     #
     secretKey: license-key
 
+  shutdown:
+    # -- The termination grace period for pods during shutdown. This
+    # should be set to the internal grace period, plus a small buffer
+    # to allow the JVM to fully terminate.
+    terminationGracePeriodSeconds: 30
+
+    # By default, Jira will be stopped by the script supplied by the
+    # image.  If any other shutdown behaviour is needed, it can be
+    # achieved by overriding this value. The format is a list of the
+    # command and arguments.
+    command:
+      - "/shutdown-wait.sh"
+
   # Pod resource requests 
   #
   resources:

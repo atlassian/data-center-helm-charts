@@ -35,11 +35,6 @@
 #
 replicaCount: 1
 
-# -- The termination grace period for pods during shutdown. This
-# should be set to the Bitbucket internal grace period (default 30
-# seconds), plus a small buffer to allow the JVM to fully terminate.
-terminationGracePeriodSeconds: 35
-
 # -- Image configuration 
 #
 image:
@@ -566,6 +561,17 @@ bitbucket:
       # -- The key in the Kubernetes Secret that contains the Elasticsearch password.
       #
       passwordSecretKey: password
+
+  shutdown:
+    # -- The termination grace period for pods during shutdown. This
+    # should be set to the Bitbucket internal grace period (default 30
+    # seconds), plus a small buffer to allow the JVM to fully terminate.
+    terminationGracePeriodSeconds: 35
+
+    # By default, Bitbucket will be stopped by the script supplied by the image.
+    # If any other shutdown behaviour is needed, it can be achieved by overriding this value.
+    command:
+      - "/shutdown-wait.sh"
 
   # Pod resource requests 
   #

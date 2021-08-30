@@ -128,7 +128,7 @@ The command that will be run to properly shutdown Bitbucket
 */}}
 {{- define "bitbucket.shutdown.command" -}}
 {{- if .Values.bitbucket.shutdown.command }}
-{{ .Values.bitbucket.shutdown.command }}
+{{- .Values.bitbucket.shutdown.command }}
 {{- else }}["/shutdown-wait.sh"]{{- end }}
 {{- end }}
 

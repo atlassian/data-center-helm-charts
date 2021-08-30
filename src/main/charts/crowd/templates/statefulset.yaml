@@ -20,7 +20,7 @@ spec:
         {{- include "crowd.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
       {{ if .Values.crowd.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
@@ -104,7 +104,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{ include "crowd.shutdown.command" . }}
+                command: {{ include "crowd.shutdown.command" . | nindent 18 }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "crowd.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

@@ -52,6 +52,8 @@ Kubernetes: `>=1.19.x-0`
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen |
 | crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd |
 | crowd.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Crowd container. Set to 'false' to disable this behaviour. |
+| crowd.shutdown.command[0] | string | `"/shutdown-wait.sh"` |  |
+| crowd.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | crowd.umask | string | `"0022"` | The umask used by the Crowd process when it creates new files. The default is 0022. This gives the new files:  - read/write permissions for the Crowd user  - read permissions for everyone else. |
 | fluentd.command | string | `nil` | The command used to start Fluentd. If not supplied the default command  will be used: "fluentd -c /fluentd/etc/fluent.conf -v" Note: The custom command can be free-form, however pay particular attention to the process that should ultimately be left running in the container. This process should be invoked with 'exec' so that signals are appropriately propagated to it, for instance SIGTERM. An example of how such a command may look is: "<command 1> && <command 2> && exec <primary command>" |
 | fluentd.customConfigFile | bool | `false` | Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default) should be used for Fluentd. If enabled this config must be supplied via the 'fluentdCustomConfig' property below. |

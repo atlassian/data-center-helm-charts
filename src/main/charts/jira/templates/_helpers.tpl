@@ -108,7 +108,7 @@ The command that will be run to properly shutdown Jira
 */}}
 {{- define "jira.shutdown.command" -}}
 {{- if .Values.jira.shutdown.command }}
-{{ .Values.jira.shutdown.command }}
+{{- .Values.jira.shutdown.command }}
 {{- else }}["/shutdown-wait.sh"]{{- end }}
 {{- end }}
 

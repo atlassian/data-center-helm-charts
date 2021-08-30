@@ -20,7 +20,7 @@ spec:
         {{- include "jira.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
       {{ if .Values.jira.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
@@ -132,7 +132,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{ include "jira.shutdown.command" . }}
+                command: {{- include "jira.shutdown.command" . | nindent 18 }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "jira.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
