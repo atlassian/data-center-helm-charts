@@ -14,6 +14,13 @@ then install it:
 ```bash
 helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ```
+> Running the above commands will install Elasticsearch with default configurations, i.e. 3 worker nodes. 
+> However, it may not always work out of the box if you failed to fulfill pre-requisites for the default installation. 
+> Some examples including:
+> * cpu/memory requests: 1000m/2Gi
+> * pre-configured storage with at least three 30Gi volumes (one for each worker node)
+> 
+> Refer to [Elasticsearch values.yaml file](https://github.com/elastic/helm-charts/blob/7.9/elasticsearch/values.yaml){.external} for more detail.
 
 ### Configuring your Bitbucket deployment
 
