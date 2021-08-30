@@ -1,9 +1,9 @@
 # NGINX Ingress Controller - with TLS termination
 [NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/){.external} with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/){.external} and certificates from [Let's Encrypt](https://letsencrypt.org/){.external}.
 
-!!!warning "A note about using these instructions" 
+!!!warning "Using these instructions" 
 
-    These instructions are for reference purposes only, as such they should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
+    These instructions are for reference purposes only, as such they should be used for development and testing purposes only! See the official instructions for [Deploying and configuring the controller](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
 
 These instructions are composed of 3 high-level parts:
 
@@ -35,8 +35,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 3. DNS setup
-Manually provision a new DNS record via your cloud provider, [for instance AWS and Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html), or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}. There are also instructions [here](DNS.md) on how this can 
-done.
+Manually provision a new DNS record via your cloud provider, [for instance AWS and Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html), or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}. There are also instructions [here](DNS.md) on how this can
 
 Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 2. above](#2-install-controller). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
