@@ -17,8 +17,8 @@ helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 
 ### Configuring your Bitbucket deployment
 
-To enable using the installed Elasticsearch service you need to configure the service URL under `bitbucket:` in the `values.yaml` file:
-(Check Kubernetes official document on how to get [DNS for Services](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}).)
+To enable the installed Elasticsearch service you need to configure the service URL under `bitbucket:` in the `values.yaml` file.
+Check Kubernetes official document on how to get [DNS for Services](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}).
 ```yaml
 bitbucket:
   elasticSearch:
@@ -26,8 +26,10 @@ bitbucket:
 ```
 This will also have the effect of disabling Bitbucket’s internal Elasticsearch instance.
 
-The open source version of Elasticsearch doesn't need credentials. However, if you have Elastic Stack subscriptions, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
+> If you hold a basic license of Elasticsearch, authentication is not supported. However, if you have other [Elastic Stack subscriptions](https://www.elastic.co/subscriptions){.external}, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
 ```yaml
+bitbucket:
+  elasticSearch:    
     credentials:
       secretName: <my-elasticsearch-secret>
       usernameSecreyKey: username
