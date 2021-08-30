@@ -13,7 +13,7 @@ We highly recommend that you read through the Kubernetes official documentation 
 For great starting tips read the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/){.external}.
 
 !!!note "Value placeholders"
-    Some commands include `RELEASE_NAME` and `NAMESPACE`. Replace them with the Helm release name and namespace specified when running `helm install`.
+    Some commands include `<release_name>` and `<namespace>`. Replace them with the Helm release name and namespace specified when running `helm install`.
 
 ## My service is not accessible
 
@@ -27,7 +27,7 @@ If you have waited long enough (more than 10 minutes), and the service is still 
 1. Run `helm list --all-namespaces` to get the list of all installed chart releases.
     * You should be able to see your installation in the list
     * The status for the release should be `deployed`
-2. Run `helm test RELEASE_NAME -n NAMESPACE`
+2. Run `helm test <release_name> -n <namespace>`
     * This should return application tests in `succeeded` phase
     * In case there are any test failures you will need to further investigate the particular domain
    
@@ -58,13 +58,13 @@ For more details follow the [official guide for debugging](https://kubernetes.io
 Get the list of pods and their states:
 
 ```shell
-kubectl get RELEASE_NAME -n NAMESPACE -o wide
+kubectl get <release_name> -n <namespace> -o wide
 ```
 
 Get details about a specific pod:
 
 ```shell
-kubectl describe POD_NAME -n NAMESPACE
+kubectl describe POD_NAME -n <namespace>
 ```
 
 ### Get storage details
