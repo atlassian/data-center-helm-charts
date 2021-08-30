@@ -2,9 +2,10 @@
 
 This page describes what is within our scope of support for Kubernetes deployments, and what isn't. 
 
-> Read our [troubleshooting tips](TROUBLESHOOTING.md).
+!!!note "Additional information"
+    Read our [troubleshooting tips](TROUBLESHOOTING.md).
 
-> Read about the [product and platform limitations](LIMITATIONS.md).
+    Read about the [product and platform limitations](LIMITATIONS.md).
 
 
 ## Supported components
