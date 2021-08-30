@@ -21,4 +21,4 @@ Application nodes should have access to a shared directory in the same path. Exa
     * [Migrating Jira to another database](https://confluence.atlassian.com/adminjiraserver/switching-databases-938846867.html){.external} 
 
 !!!tip "Availability Zone proximity"
-    For better performance consider co-locating your migrated database in the Availability Zone (AZ) as your product nodes. Database-heavy operations (e.g. full re-index) become significantly faster when the database is collocated with the Data Center node in the same AZ, however we don't recommend this if you're running critical workloads.
+    For better performance consider co-locating your migrated database in the same Availability Zone (AZ) as your product nodes. Database-heavy operations, such as full re-index, become significantly faster when the database is collocated with the Data Center node in the same AZ. However we don't recommend this if you're running critical workloads.
