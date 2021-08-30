@@ -130,9 +130,9 @@ class VolumesTest {
     void additionalVolumeMounts(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".additionalVolumeMounts[0].name", "my-volume-mount",
-                pname+".additionalVolumeMounts[0].mountPath", "/my-volume-path",
-                pname+".additionalVolumeMounts[0].subPath", "extra_path"
+                pname + ".additionalVolumeMounts[0].name", "my-volume-mount",
+                pname + ".additionalVolumeMounts[0].mountPath", "/my-volume-path",
+                pname + ".additionalVolumeMounts[0].subPath", "extra_path"
         ));
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
@@ -140,7 +140,7 @@ class VolumesTest {
         assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
         assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
     }
-    
+
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bitbucket")
     void bitbucketSharedHomeClaimUsesDefaultVolumeName(Product product) throws Exception {
@@ -148,7 +148,7 @@ class VolumesTest {
                 "volumes.sharedHome.persistentVolume.create", "true",
                 "volumes.sharedHome.persistentVolumeClaim.create", "true"
         ));
-    
+
         final String volumeName = product.getHelmReleaseName() + "-shared-home-pv";
         final var pvc = resources.get(PersistentVolumeClaim);
         final var pv = resources.get(PersistentVolume);
@@ -168,10 +168,74 @@ class VolumesTest {
         Assertions.assertThat(pvc.getNode("spec").get("volumeName").asText()).isEqualTo("my-custom-volume");
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchronyHome_pvc_create(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.synchronyHome.persistentVolumeClaim.create", "true"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+
+        assertThat(statefulSet.getVolumeClaimTemplates())
+                .describedAs("StatefulSet %s should have a single volumeClaimTemplate", statefulSet.getName())
+                .hasSize(1);
+
+        verifyVolumeClaimTemplate(
+                statefulSet.getVolumeClaimTemplates().head(),
+                "synchrony-home", "ReadWriteOnce");
+
+        assertThat(statefulSet.getVolume("synchrony-home"))
+                .describedAs("StatefulSet %s should not have a synchrony-home volume in the pod spec", statefulSet.getName())
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchronyHome_custom_volume(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.synchronyHome.customVolume.hostPath", "/foo/bar" // not actually a valid hostPath definition, but it works for the test
+        ));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+
+        assertThat(statefulSet.getVolume("synchrony-home"))
+                .hasValueSatisfying(synchronyHomeVolume -> assertThat(synchronyHomeVolume).isObject(Map.of("hostPath", "/foo/bar")));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchronyHome_pvc_custom(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.synchronyHome.persistentVolumeClaim.create", "true",
+                "volumes.synchronyHome.persistentVolumeClaim.storageClassName", "foo",
+                "volumes.synchronyHome.persistentVolumeClaim.resources.requests.storage", "2Gi",
+                "volumes.synchronyHome.mountPath", "/foo/bar"));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+
+        final var synchronyHomeVolumeClaimTemplate = statefulSet.getVolumeClaimTemplates().head();
+        verifyVolumeClaimTemplate(synchronyHomeVolumeClaimTemplate, "synchrony-home", "ReadWriteOnce");
+        assertThat(synchronyHomeVolumeClaimTemplate.path("spec").path("storageClassName"))
+                .hasTextEqualTo("foo");
+        assertThat(synchronyHomeVolumeClaimTemplate.path("spec").path("resources").path("requests").path("storage"))
+                .hasTextEqualTo("2Gi");
+        final var mount = statefulSet.getContainer("synchrony").getVolumeMount("synchrony-home");
+        assertThat(mount.get("name")).hasTextEqualTo("synchrony-home");
+        assertThat(mount.get("mountPath")).hasTextEqualTo("/foo/bar");
+    }
+
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
         assertThat(volumeClaimTemplate.path("metadata").path("name"))
                 .hasTextEqualTo(expectedVolumeName);
         assertThat(volumeClaimTemplate.path("spec").path("accessModes"))
                 .isArrayWithChildren(expectedAccessModes);
+    }
+
+    private String synchronyStatefulSetName() {
+        return Product.confluence.getHelmReleaseName() + "-synchrony";
     }
 }

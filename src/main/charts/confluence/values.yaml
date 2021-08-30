@@ -155,7 +155,7 @@ database:
     
 # REQUIRED - Volume configuration
 #
-# By default, the charts will configure the local-home and shared-home as ephemeral 
+# By default, the charts will configure the local-home, synchrony-home and shared-home as ephemeral
 # volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production 
 # deployments this is not ideal and so local-home and shared-home should both be configured 
 # appropriately.
@@ -286,8 +286,58 @@ volumes:
       # here.
       #
       command:
-  
-  # -- Defines additional volumes that should be applied to all Confluence pods.
+
+  # Each synchrony pod needs its own volume for 'synchrony-home'. Synchrony process will write logs to that location
+  # and any configuration files can be placed there.
+  #
+  synchronyHome:
+
+    # Dynamic provisioning of synchrony-home using the K8s Storage Classes
+    #
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
+    # https://atlassian.github.io/data-center-helm-charts/examples/storage/aws/LOCAL_STORAGE/
+    #
+    persistentVolumeClaim:
+
+      # -- If 'true', then a 'PersistentVolume' and 'PersistentVolumeClaim' will be dynamically
+      # created for each pod based on the 'StorageClassName' supplied below.
+      #
+      create: false
+
+      # -- Specify the name of the 'StorageClass' that should be used for the synchrony-home
+      # volume claim.
+      #
+      storageClassName:
+
+      # -- Specifies the standard K8s resource requests and/or limits for the synchrony-home
+      # volume claims.
+      #
+      resources:
+        requests:
+          storage: 1Gi
+
+    # -- Static provisioning of synchrony-home using K8s PVs and PVCs
+    #
+    # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for
+    # pods is not recommended. Dynamic provisioning described above is the prescribed
+    # approach.
+    #
+    # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define
+    # a standard K8s volume that will be used for the synchrony-home volume(s). If not defined,
+    # then an 'emptyDir' volume is utilised. Having provisioned a 'PersistentVolume', specify
+    # the bound 'persistentVolumeClaim.claimName' for the 'customVolume' object.
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
+    #
+    customVolume: { }
+    # persistentVolumeClaim:
+    #   claimName: "<pvc>"
+
+    # -- Specifies the path in the Synchrony container to which the synchrony-home volume will be
+    # mounted.
+    #
+    mountPath: "/var/atlassian/application-data/confluence"
+
+  # -- Defines additional volumes that should be applied to all Confluence and Synchrony pods.
   # Note that this will not create any corresponding volume mounts;
   # those needs to be defined in confluence.additionalVolumeMounts
   #
