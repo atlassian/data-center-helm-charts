@@ -101,6 +101,10 @@ spec:
                   key: max_heap
                   name: {{ include "crowd.fullname" . }}-jvm-config
             {{- include "crowd.additionalEnvironmentVariables" . | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: {{ include "crowd.shutdown.command" . }}
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "crowd.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
