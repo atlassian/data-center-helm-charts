@@ -155,6 +155,11 @@ spec:
               subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  [/shutdown-wait.sh]
       volumes:
         - name: local-home
           emptyDir: {}

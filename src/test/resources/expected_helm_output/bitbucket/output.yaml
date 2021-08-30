@@ -161,6 +161,11 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: unittest-bitbucket-jvm-config
+          lifecycle:
+            preStop:
+              exec:
+                command: 
+                  [/shutdown-wait.sh]
       volumes:
         - name: local-home
           emptyDir: {}
