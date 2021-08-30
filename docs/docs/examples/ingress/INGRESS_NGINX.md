@@ -1,7 +1,9 @@
 # NGINX Ingress Controller - with TLS termination
 [NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/){.external} with automatic TLS certificate management using [cert-manager](https://cert-manager.io/docs/){.external} and certificates from [Let's Encrypt](https://letsencrypt.org/){.external}.
 
-> **NOTE:** These instructions are for reference purposes only. They should be used for development and testing purposes only! Official instructions for deploying and configuring the controller can be found [here](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
+!!!warning "Using these instructions" 
+
+    These instructions are for reference purposes, as such they should be used for development and testing purposes only! See the official instructions for [Deploying and configuring the controller](https://kubernetes.github.io/ingress-nginx/deploy/){.external}.
 
 These instructions are composed of 3 high-level parts:
 
@@ -33,7 +35,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress
 ```
 
 ### 3. DNS setup
-Manually provision a new DNS record via your cloud provider or using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}.
+Manually provision a new DNS record via your cloud provider, [for instance AWS and Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html), or dynamically using [external-dns](https://github.com/kubernetes-sigs/external-dns){.external}. There are also instructions on [how this can be done using the AWS CLI](DNS.md).
 
 Once created, associate the DNS record with the auto provisioned Load Balancer that was created in [Step 2. above](#2-install-controller). To do this first identify the name of the auto provisioned LB, this can be done by examining the deployed ingress services i.e.
 ```shell
@@ -46,7 +48,9 @@ ingress-nginx-controller-admission   ClusterIP      10.100.5.36     <none>      
 ```
 Take note of the `LoadBalancer` and using it as a value update the DNS record so that traffic is routed to it.
 
-> **NOTE:** It can take a few minutes for the DNS to resolve these changes.
+!!!info "Time to provision"
+
+    **NOTE:** It can take a few minutes for the DNS to resolve these changes.
 
 ## Certificate manager installation and configuration
 K8s certificate management is handled using [cert-manager](https://cert-manager.io/){.external}.
@@ -79,7 +83,10 @@ kubectl get pods --namespace cert-manager
 
 ### 2. Create certificate issuer
 Using the yaml spec below create and apply the certificate `Issuer` resource
-> Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
+
+!!!warning "Namespace co-location"
+
+    Ensure that the certificate issuer is installed in the same namespace that the Atlassian product will be deployed to.
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -125,7 +132,13 @@ ingress:
   tlsSecretName: tls-certificate
 ```
 
+!!!tip "Configuring the `host` value"
+
+    In this case the `<dns_record>` would correspond to the record name that was created in [3. DNS setup](#3-dns-setup) above
+
 ## Bitbucket SSH configuration
-> **NOTE:** Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../ssh/SSH_BITBUCKET.md) for details.
+!!!warning "Bitbucket and SSH" 
+
+    Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../ssh/SSH_BITBUCKET.md) for details.
 
 > Having created the Ingress controller continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).
