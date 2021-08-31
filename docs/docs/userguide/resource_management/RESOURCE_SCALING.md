@@ -29,7 +29,7 @@ At present there are issues relating to index replication with Jira when immedia
       Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the index. This is more reliable than copying the index from individual pods. If you migrated `shared-home` from an existing instance, snapshots should be available. If not, follow the steps below to generate the index before scaling Jira:
       
       1. Log into the Jira instance as the `admin` user
-      1. Go to `Admin` -> `System` -> `Advanced` -> `Indexing`
+      1. Go to `Settings` -> `System` -> `Indexing`
       1. There should be no errors on this page i.e.
       ![good-index](../../assets/images/good-index.png)
       1.  If there are errors (as seen below) perform a `Full re-index` before proceeding
@@ -51,7 +51,7 @@ Having followed the steps above, and ensured a healthy index is available, using
 
       1. Make sure that the new pod has a state of `Running` 
       1. Log into the Jira instance as the `admin` user via the service URL
-      1. Go to `Admin` -> `System` -> `Advanced` -> `Indexing`
+      1. Go to `Settings` -> `System` -> `Indexing`
       1. Confirm that there are no index related errors i.e.   
       ![good-index](../../assets/images/good-index.png)
       1. Having confirmed the index is healthy proceed with adding additional Jira pods to the cluster by following the same steps as above.
