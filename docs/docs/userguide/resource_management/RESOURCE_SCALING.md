@@ -37,7 +37,7 @@ At present there are issues relating to index replication with Jira when immedia
       1. Once the `Full re-index` is complete, scroll down to `Index Recovery` settings visible on the same page
       ![index-recovery-settings](../../assets/images/index-recovery-settings.png)
       1. Take note of the current settings
-      1. Temporarly change these values, as depicted in the screen shot below. The cron expression will create an index snapshot every minute
+      1. Temporarly change these values (`Edit Settings`), as depicted in the screen shot below. The cron expression will create an index snapshot every minute
       ![edit-index-recovery-settings](../../assets/images/edit-index-recovery-settings.png)
       1. Wait for the snapshot to be created, by checking for an archive in `<shared-home>/export/indexsnapshots`
       1. Once the snapshot is available revert the settings made in step 7. Consider keeping the index recovery feature enabled
@@ -47,7 +47,7 @@ Having followed the steps above, and ensured a healthy index is available, using
       
       Ensure you only scale up by 1 pod at a time!
 
-!!!info ""
+!!!info "Scaling by 1 pod at a time"
 
       1. Make sure that the new pod has a state of `Running` 
       1. Log into the Jira instance as the `admin` user via the service URL
