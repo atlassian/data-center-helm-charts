@@ -111,7 +111,7 @@ volumes:
     
 ## 6. Configure clustering
 
-By default, the Helm charts are will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
+By default, the Helm charts will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
 
 ```yaml
   clustering:
