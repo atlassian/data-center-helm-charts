@@ -15,19 +15,19 @@ then install it:
 helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ```
 !!! info "Pre-requisites of Elasticsearch Helm chart"
-    Running the above commands will install Elasticsearch with default configurations, i.e. 3 worker nodes. 
+    Running the above commands will install Elasticsearch with default configuration, i.e. 3 worker nodes. 
     However, it may not always work out of the box if failed to fulfill pre-requisites for the default installation. 
     Some example pre-requisites include:
 
-    * cpu/memory requests: 1000m/2Gi
+    * CPU/memory requests: 1000m/2Gi
     * pre-configured storage with at least three 30Gi volumes (one for each worker node)
     
-    Refer to [Elasticsearch values.yaml file](https://github.com/elastic/helm-charts/blob/7.9/elasticsearch/values.yaml){.external} for more detail.
+    Refer to [Elasticsearch values.yaml file](https://github.com/elastic/helm-charts/blob/7.9/elasticsearch/values.yaml){.external} for more details.
 
 ### Configuring your Bitbucket deployment
 
-To enable the installed Elasticsearch service you need to configure the service URL under `bitbucket:` in the `values.yaml` file.
-Check the Kubernetes official documentation on how to get [DNS for Services](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}.
+To enable the installed Elasticsearch service you need to configure the service URL under `bitbucket:` stanza in the `values.yaml` file.
+Check the Kubernetes official documentation on how to get [DNS record for a service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}.
 ```yaml
 bitbucket:
   elasticSearch:
@@ -84,5 +84,5 @@ bitbucket:
 > Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
 
 ## Testing your Elasticsearch connection
-To test if Elasticsearch is properly set up, go to **Administration > System - Server settings**. The Elasticsearch URL should be pre-populated already in the search section. Click the **Test** button to see if it connected successfully.
+To test if Elasticsearch is properly set up, go to **Administration > System - Server settings**. The Elasticsearch URL should be pre-populated already in the search section. Click the **Test** button to see if it connects successfully.
 ![bitbucket-elasticsearch](../../assets/images/bitbucket-elasticsearch.png)
