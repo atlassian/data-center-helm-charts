@@ -40,7 +40,7 @@ At present there are issues relating to index replication with Jira when immedia
       1. Temporarly change these values (`Edit Settings`), as depicted in the screen shot below. The cron expression will create an index snapshot every minute
       ![edit-index-recovery-settings](../../assets/images/edit-index-recovery-settings.png)
       1. Wait for the snapshot to be created, by checking for an archive in `<shared-home>/export/indexsnapshots`
-      1. Once the snapshot is available revert the settings made in step 7. Consider keeping the index recovery feature enabled
+      1. Once the snapshot is available revert the settings noted in step 6. Consider keeping the index recovery feature enabled
 
 Having followed the steps above, and ensured a healthy index is available, using either the `declarative` or `impreative` approach scale the cluster by **1 pod only**
 !!!warning "1 pod as a time!"
