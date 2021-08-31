@@ -35,8 +35,8 @@ bitbucket:
 ```
 This will also have the effect of disabling Bitbucket’s internal Elasticsearch instance.
 
-!!! info "Elasticsearch credentials"
-    If you hold a basic license of Elasticsearch, authentication is not supported. However, if you have other [Elastic Stack subscriptions](https://www.elastic.co/subscriptions){.external}, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
+!!! info "Elasticsearch security"
+    If you have Elasticsearch cluster with [security enabled](https://github.com/elastic/helm-charts/tree/master/elasticsearch#how-to-deploy-clusters-with-security-authentication-and-tls-enabled){.external}, i.e. having credential details stored in a Kubernetes secret and passed into `extraEnvs` as this [example](https://github.com/elastic/helm-charts/blob/master/elasticsearch/examples/security/values.yaml#L23){.external} does, you can then use the same secret and configure that in the bitbucket `values.yaml` file:       
     ```yaml
     bitbucket:
       elasticSearch:    
