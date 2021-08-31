@@ -43,7 +43,7 @@ At present there are issues relating to index replication with Jira when immedia
       1. Once the snapshot is available revert the settings noted in step 6. Consider keeping the index recovery feature enabled
 
 Having followed the steps above, and ensured a healthy index is available, using either the `declarative` or `impreative` approach scale the cluster by **1 pod only**
-!!!warning "1 pod as a time!"
+!!!warning "1 pod at a time!"
       
       Ensure you only scale up by 1 pod at a time!
 
