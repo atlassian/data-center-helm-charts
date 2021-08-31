@@ -19,8 +19,8 @@ helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
     However, it may not always work out of the box if failed to fulfill pre-requisites for the default installation. 
     Some example pre-requisites include:
 
-    * CPU/memory requests: 1000m/2Gi
-    * pre-configured storage with at least three 30Gi volumes (one for each worker node)
+    * CPU/memory requests: 1000m/2Gi (for each worker node)
+    * pre-configured storage volumes (30Gi for each worker node)
     
     Refer to [Elasticsearch values.yaml file](https://github.com/elastic/helm-charts/blob/7.9/elasticsearch/values.yaml){.external} for more details.
 
