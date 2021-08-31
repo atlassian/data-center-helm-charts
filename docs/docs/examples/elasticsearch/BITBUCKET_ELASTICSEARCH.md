@@ -14,7 +14,7 @@ then install it:
 ```bash
 helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
 ```
-!!! info 
+!!! info "Pre-requisites of Elasticsearch Helm chart"
     Running the above commands will install Elasticsearch with default configurations, i.e. 3 worker nodes. 
     However, it may not always work out of the box if failed to fulfill pre-requisites for the default installation. 
     Some example pre-requisites include:
@@ -35,7 +35,7 @@ bitbucket:
 ```
 This will also have the effect of disabling Bitbucket’s internal Elasticsearch instance.
 
-!!! info
+!!! info "Elasticsearch credentials"
     If you hold a basic license of Elasticsearch, authentication is not supported. However, if you have other [Elastic Stack subscriptions](https://www.elastic.co/subscriptions){.external}, you will also need to provide the details in a Kubernetes secret and configure that in the `values.yaml` file:
     ```yaml
     bitbucket:
