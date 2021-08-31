@@ -109,19 +109,22 @@ volumes:
 !!!tip "Bitbucket shared storage"
     Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
     
-## 6. Configure license and sysadmin credentials for Bitbucket
+## 6. Configure clustering
 
-Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml).
-Create a Kubernetes secret to hold the Bitbucket license:
+By default, the Helm charts are will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
 
-```shell
-kubectl create secret generic <license_secret_name> --from-literal=license-key='<bitbucket_license_key>'
+```yaml
+  clustering:
+    enabled: true
 ```
 
-Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
+  
+## 7. Configure license 
+
+You can configure the product license if you provide `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml). To do that, create a Kubernetes secret to hold the product license:
 
 ```shell
-kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
+kubectl create secret generic <license_secret_name> --from-literal=license-key='<product_license_key>'
 ```
 
 Update the `values.yaml` file with the secrets:
@@ -130,16 +133,29 @@ Update the `values.yaml` file with the secrets:
 license:
   secretName: <secret_name>
   secretKey: license-key
-...
-sysadminCredentials:
-  secretName: <sysadmin_creds_secret_name>
-  usernameSecretKey: username
-  passwordSecretKey: password
-  displayNameSecretKey: displayName
-  emailAddressSecretKey: emailAddress
 ```
+???tip "Sysadmin credentials for Bitbucket "
 
-## 7. Install your chosen product
+    Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and also provide `license` stanza from the previous step.
+
+    Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
+
+    ```shell
+    kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
+    ```
+
+    Update the `values.yaml` file with the secrets:
+
+    ```yaml
+    sysadminCredentials:
+      secretName: <sysadmin_creds_secret_name>
+      usernameSecretKey: username
+      passwordSecretKey: password
+      displayNameSecretKey: displayName
+      emailAddressSecretKey: emailAddress
+    ```
+
+## 8. Install your chosen product
 
 ```shell
 helm install <release-name> \
@@ -157,7 +173,7 @@ helm install <release-name> \
     * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
     * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
 
-## 8. Test your deployed product 
+## 9. Test your deployed product 
 
 Make sure the service pod/s are running, then test your deployed product:
 
@@ -168,7 +184,7 @@ helm test <release-name> --logs --namespace <namespace>
 * This will run some basic smoke tests against the deployed release.
 * If any of these tests fail, it is likely that the deployment was not successful. Check the status of the deployed resources for any obvious errors that may have caused the failure.
 
-## 9. Complete product setup 
+## 10. Complete product setup 
 
 Using the service URL provided by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 
