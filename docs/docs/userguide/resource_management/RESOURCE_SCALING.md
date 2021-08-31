@@ -26,7 +26,7 @@ At present there are issues relating to index replication with Jira when immedia
 
 !!!info "Before scaling your cluster the following steps should be performed"
 
-      Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the issue index. This is more reliable than copying the index from individual pods. If you migrated `shared-home` from an existing instance, snapshots should be available. If not, follow the steps below to generate the index before scaling Jira:
+      Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the index. This is more reliable than copying the index from individual pods. If you migrated `shared-home` from an existing instance, snapshots should be available. If not, follow the steps below to generate the index before scaling Jira:
       
       1. Log into the Jira instance as the `admin` user
       1. Go to `Admin` -> `System` -> `Advanced` -> `Indexing`
