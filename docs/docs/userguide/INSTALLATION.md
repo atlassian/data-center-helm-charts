@@ -121,7 +121,7 @@ By default, the Helm charts will not configure the products for Data Center clus
   
 ## 7. Configure license 
 
-You can configure the product license if you provide `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml). To do that, create a Kubernetes secret to hold the product license:
+You can configure the product license if you provide a `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml). To do that, create a Kubernetes secret to hold the product license:
 
 ```shell
 kubectl create secret generic <license_secret_name> --from-literal=license-key='<product_license_key>'
@@ -136,7 +136,7 @@ license:
 ```
 ???tip "Sysadmin credentials for Bitbucket "
 
-    Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and also provide `license` stanza from the previous step.
+    Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and also provide the `license` stanza from the previous step.
 
     Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
 
