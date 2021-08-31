@@ -81,7 +81,8 @@ bitbucket:
       usernameSecreyKey: username
       passwordSecretKey: password
 ```
-> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
+!!! info ""
+    Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
 
 ## Testing your Elasticsearch connection
 To test if Elasticsearch is properly set up, go to **Administration > System - Server settings**. The Elasticsearch URL should be pre-populated already in the search section. Click the **Test** button to see if it connects successfully.
