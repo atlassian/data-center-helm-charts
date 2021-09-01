@@ -142,7 +142,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{ include "bitbucket.shutdown.command" . | nindent 18 }}
+                command: ["sh", "-c", {{ .Values.bitbucket.shutdown.command | quote }}]
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "bitbucket.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
