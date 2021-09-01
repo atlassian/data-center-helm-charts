@@ -24,37 +24,14 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
 ### Scaling Jira safely
 At present there are issues relating to index replication with Jira when immediately scaling up by more than 1 pod at a time. See [Jira and horizontal scaling](../../troubleshooting/LIMITATIONS.md#jira-limitations-and-horizontal-scaling).
 
-!!!info "Before scaling your cluster the following steps should be performed"
+!!!info "Before scaling your cluster"
 
-      Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the index. This is more reliable than copying the index from individual pods. If you migrated `shared-home` from an existing instance, snapshots should be available. If not, follow the steps below to generate the index before scaling Jira:
-      
-      1. Log into the Jira instance as the `admin` user
-      1. Go to `Settings` -> `System` -> `Indexing`
-      1. There should be no errors on this page i.e.
-      ![good-index](../../assets/images/good-index.png)
-      1.  If there are errors (as seen below) perform a `Full re-index` before proceeding
-      ![bad-index](../../assets/images/bad-index.png)
-      1. Once the `Full re-index` is complete, scroll down to `Index Recovery` settings visible on the same page
-      ![index-recovery-settings](../../assets/images/index-recovery-settings.png)
-      1. Take note of the current settings
-      1. Temporarly change these values (`Edit Settings`), as depicted in the screen shot below. The cron expression will create an index snapshot every minute
-      ![edit-index-recovery-settings](../../assets/images/edit-index-recovery-settings.png)
-      1. Wait for the snapshot to be created, by checking for an archive in `<shared-home>/export/indexsnapshots`
-      1. Once the snapshot is available revert the settings noted in step 6. Consider keeping the index recovery feature enabled
+      Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the index. If there is no snapshot present in  `<shared-home>/export/indexsnapshots` then [configure Jira for index snapshots](JIRA_INDEX_SNAPSHOT.md)
 
-Having followed the steps above, and ensured a healthy index is available, using either the `declarative` or `impreative` approach scale the cluster by **1 pod only**
-!!!warning "1 pod as a time!"
-      
-      Ensure you only scale up by 1 pod at a time!
+Having followed the steps above, and ensured a healthy snapshot index is available, [scale the cluster as necessary](#horizontal-scaling-adding-pods). Once scaling is complete confirm that the index is still healthy [using the approach prescribed in Step 3](JIRA_INDEX_SNAPSHOT.md). If there are still indexing issues then please refer to the guides below:
 
-!!!info "Scaling by 1 pod at a time"
-
-      1. Make sure that the new pod has a state of `Running` 
-      1. Log into the Jira instance as the `admin` user via the service URL
-      1. Go to `Settings` -> `System` -> `Indexing`
-      1. Confirm that there are no index related errors i.e.   
-      ![good-index](../../assets/images/good-index.png)
-      1. Having confirmed the index is healthy proceed with adding additional Jira pods to the cluster by following the same steps as above.
+* [unable to perform a background re-index error](https://confluence.atlassian.com/jirakb/how-to-fix-a-jira-application-that-is-unable-to-perform-a-background-re-index-at-this-time-error-316637947.html)
+* [Troubleshoot index problems in Jira server](https://confluence.atlassian.com/jirakb/troubleshoot-index-problems-in-jira-server-203394752.html)
 
 ## Vertical scaling - adding resources
 The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
