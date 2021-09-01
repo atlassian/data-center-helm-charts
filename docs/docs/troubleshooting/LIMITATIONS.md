@@ -15,7 +15,7 @@ At present there are issues relating to index replication with Jira when immedia
 
 !!!info "Indexing improvements" 
   
-    Please note that Jira is actively being worked to address these issues in the coming releases.
+    Please note that Jira is actively being worked on to address these issues in the coming releases.
       
 Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../../userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
 
