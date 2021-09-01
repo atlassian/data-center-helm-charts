@@ -1,6 +1,6 @@
 # Configuration 
 
-## Ingress
+## :material-directions-fork: Ingress
 In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
 
 The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller. 
@@ -10,10 +10,12 @@ Some key considerations to note when configuring the controller are:
 !!!Ingress requirements
     * At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
     * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
-       * Usage of the NGINX Ingress Controller 
-       * Ingress Controller annotations
-       * The request max body size
-       * The hostname of the ingress resource
+      
+         * Usage of the NGINX Ingress Controller 
+         * Ingress Controller annotations
+         * The request max body size
+         * The hostname of the ingress resource
+    
     * When installed, with the provided [configuration](https://kubernetes.github.io/ingress-nginx/deploy/){.external}, the NGINX Ingress Controller will provision an internet-facing (see diagram below) load balancer on your behalf. The load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt){.external} or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
     * If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers){.external} option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
     * The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
@@ -29,8 +31,10 @@ Some key considerations to note when configuring the controller are:
     5. Service forwards request to appropriate pod
     6. Pod handles request 
 
+!!!info "Request body size"
+    By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. If the maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
 
-## Volumes
+## :material-folder-home: Volumes
 The Data Center products make use of filesystem storage. Each DC node has its own "local-home" volume, and all nodes in the DC cluster share a single "shared-home" volume.
 
 By default, the Helm charts will configure all of these volumes as ephemeral "emptyDir" volumes. This makes it possible to install the charts without configuring any volume management, but comes with two big caveats:
@@ -105,7 +109,7 @@ using `PersistentVolumes` is the strongly recommended approach.
 2. We have an example detailing how an existing EFS filesystem can be created and consumed using static provisioning: [Shared storage - utilizing AWS EFS-backed filesystem](../examples/storage/aws/SHARED_STORAGE.md).
 3. You can also refer to an example on how a Kubernetes cluster and helm deployment can be configured to utilize AWS EBS backed volumes: [Local storage - utilizing AWS EBS-backed volumes](../examples/storage/aws/LOCAL_STORAGE.md).
 
-## Additional volumes
+### Additional volumes
 
 In addition to the `local-home` and `shared-home` volumes that are always
 attached to the product pods, you can attach your own volumes for your own
@@ -131,7 +135,7 @@ volumes:
          claimName: my-volume-claim
 ```
 
-## Database connectivity
+## :material-database: Database connectivity
 
 The products need to be supplied with the information they need to connect to the 
 database service. Configuration for each product is mostly the same, with some small differences.
@@ -150,7 +154,7 @@ on the JDBC driver being used, but some examples are:
 
 !!!info "Database creation"
 
-    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below: 
+    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
    
     === "Jira"
 
@@ -205,32 +209,34 @@ with the secret name specified with the `database.credentials.secretName` chart 
 When all the required information is provided in this way, the database connectivity configuration screen
 will be bypassed during product setup.
 
-## Namespace
+## :fontawesome-solid-user-tag: Namespace
 
 The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
 If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
-## Clustering
+## :fontawesome-solid-network-wired: Clustering
 By default, the Helm charts are will not configure the products for Data Center clustering. 
 
 In order to enable clustering, the appropriate chart value must be set to `true`.
 
-=== "Jira"
+!!!note ""
 
-    `jira.clustering.enabled`
+    === "Jira"
 
-=== "Confluence"
+        `jira.clustering.enabled`
 
-    `confluence.clustering.enabled`
+    === "Confluence"
 
-=== "Bitbucket"
+        `confluence.clustering.enabled`
 
-    `bitbucket.clustering.enabled`
+    === "Bitbucket"
+
+        `bitbucket.clustering.enabled`
 
 In addition, the `shared-home` volume must be correctly configured as a read-write shared filesystem (e.g. NFS,
 AWS EFS, Azure Files)
 
-## Additional libraries & plugins
+## :material-book-cog: Additional libraries & plugins
 
 The products' Docker images contain the default set of bundled libraries and plugins. 
 Additional libraries and plugins can be mounted into the product containers during
@@ -279,12 +285,7 @@ container.
 
 For more details on the above, and how 3rd party libraries can be supplied to a Pod see the example [External libraries and plugins](../examples/external_libraries/EXTERNAL_LIBS.md)
 
-## Request body size
-By default the maximum allowed size for the request body is set to 250MB. If the size in a request exceeds the maximum 
-size of the client request body, an 413 error will be returned to the client. If the maximum request body can be 
-configured by changing the value of `maxBodySize` in 'values.yaml'.
-
-## Resources
+## :octicons-cpu-16: CPU and memory requests
 
 The Helm charts allow you to specify container-level CPU and memory resources,
 using standard Kubernetes `limit` and `request` structures, e.g.
@@ -327,7 +328,7 @@ hopefully be removed.
 You can read more about [resource scaling](../userguide/resource_management/RESOURCE_SCALING.md#vertical-scaling-adding-resources) and [resource requests and limits](../userguide/resource_management/REQUESTS_AND_LIMITS.md).
 
 
-## Additional containers
+## :octicons-container-16: Additional containers
 
 The Helm charts allow you to add your own `container` and `initContainer` 
 entries to the product pods.  Use the values `additionalContainers` and
@@ -336,8 +337,8 @@ entries to the product pods.  Use the values `additionalContainers` and
 One use-case for an additional container would be to attach a sidecar container 
 to the product pods.
 
-## Additional labels, toleration's, node selectors, affinity
+## :material-checkbox-multiple-marked-outline: Additional options
 
-The Helm charts also allow you to specify `additionalLabls`, `tolerations`, 
-`nodeSelectors` and `affinities`. These are standard Kubernetes structures 
-that will be included in the pods. 
+The Helm charts also allow you to specify [`additionalLabels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/){.external}, [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external}, 
+[`nodeSelectors`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector){.external} and [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. These are standard Kubernetes structures 
+that will be included in the pods.

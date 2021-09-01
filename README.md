@@ -18,10 +18,7 @@ We provide extensive documentation to support our Helm charts. This includes pre
 
 ## Support disclaimer
 
-These Helm charts are in **beta phase and unsupported**, with the goal of introducing official support once they have been
-stabilized.
-
-Also, we **don’t officially support** the functionality described in the [examples](https://atlassian.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
+We **don’t officially support** the functionality described in the [examples](https://atlassian.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
 
 
 ## Feedback

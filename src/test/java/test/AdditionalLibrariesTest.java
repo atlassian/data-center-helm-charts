@@ -7,10 +7,12 @@ import org.junit.jupiter.api.TestInfo;
 import test.helm.Helm;
 import test.model.Product;
 import test.model.StatefulSet;
+import test.model.Synchrony;
 
 import java.util.Map;
 
 import static test.jackson.JsonNodeAssert.assertThat;
+import static test.model.Synchrony.synchronyStatefulSetName;
 
 public class AdditionalLibrariesTest {
     private Helm helm;
@@ -29,7 +31,7 @@ public class AdditionalLibrariesTest {
                 "synchrony.additionalLibraries[0].fileName","mysql-connector-java-8.0.25.jar"
         ));
 
-        StatefulSet statefulSet = resources.getStatefulSet("unittest-confluence-synchrony");
+        StatefulSet statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
         JsonNode volumeMount = statefulSet.getContainer("synchrony").getVolumeMount("my-custom-volume");
 
         assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-8.0.25.jar");
@@ -44,7 +46,7 @@ public class AdditionalLibrariesTest {
                 "synchrony.additionalLibraries[0].fileName","mysql-connector-java-8.0.25.jar"
         ));
 
-        StatefulSet statefulSet = resources.getStatefulSet("unittest-confluence-synchrony");
+        StatefulSet statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
         JsonNode volumeMount = statefulSet.getContainer("synchrony").getVolumeMount("my-custom-volume");
 
         assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-8.0.25.jar");

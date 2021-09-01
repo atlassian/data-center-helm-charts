@@ -37,3 +37,6 @@ See examples of local and shared storage:
 
 ## SSH
 * See an example of [SSH service in Bitbucket on Kubernetes](ssh/SSH_BITBUCKET.md)
+
+## Customization
+* See an example of [External libraries and plugins](external_libraries/EXTERNAL_LIBS.md)

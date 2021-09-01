@@ -32,6 +32,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
+            {{- include "synchrony.volumeMounts" . | nindent 12 }}
             {{- include "synchrony.additionalLibraries" . | nindent 12 }}
             - mountPath: /scripts
               name: entrypoint-script
@@ -54,6 +55,8 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            - name: SET_PERMISSIONS
+              value: {{ .Values.synchrony.setPermissions | quote }}
             - name: SYNCHRONY_BIND
               valueFrom:
                 fieldRef:
@@ -79,8 +82,9 @@ spec:
           configMap:
             name: {{ include "synchrony.fullname" . }}-entrypoint
             defaultMode: 0744
-        {{ include "confluence.volumes.sharedHome" . | nindent 8 }}
+        {{ include "synchrony.volumes" . | nindent 8 }}
         {{ with .Values.volumes.additional }}
         {{ toYaml . | nindent 8 }}
         {{ end }}
+  {{ include "synchrony.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}

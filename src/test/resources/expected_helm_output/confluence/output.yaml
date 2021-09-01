@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jvm-config
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -60,7 +60,7 @@ kind: Service
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -86,7 +86,7 @@ kind: Service
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -113,7 +113,7 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -140,6 +140,8 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
+            - name: synchrony-home
+              mountPath: "/var/atlassian/application-data/confluence"
             - mountPath: /scripts
               name: entrypoint-script
           ports:
@@ -161,6 +163,8 @@ spec:
               cpu: "2"
               memory: 2.5G
           env:
+            - name: SET_PERMISSIONS
+              value: "true"
             - name: SYNCHRONY_BIND
               valueFrom:
                 fieldRef:
@@ -172,6 +176,8 @@ spec:
           configMap:
             name: unittest-confluence-synchrony-entrypoint
             defaultMode: 0744
+        - name: synchrony-home
+          emptyDir: {}
         - name: shared-home
           emptyDir: {}
 ---
@@ -181,7 +187,7 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -282,7 +288,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["sh", "-c", "export CONNIE_PID=$(pgrep -f org.apache.catalina.startup.Bootstrap | sort | head -n 1); echo $CONNIE_PID > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh; tail --pid=$CONNIE_PID -f /dev/null"]
+                command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
         - name: local-home
           emptyDir: {}
@@ -298,7 +304,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"
@@ -329,7 +335,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-0.15.0
+    helm.sh/chart: confluence-0.16.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.13.0-jdk11"

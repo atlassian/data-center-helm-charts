@@ -16,7 +16,7 @@ metadata:
   region: ap-southeast-2
 
 managedNodeGroups:
-  - name: jira
+  - name: appNodes
     instanceType: m5.large
     desiredCapacity: 2
     ssh: # enable SSH using SSM

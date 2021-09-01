@@ -72,6 +72,23 @@ class SynchronyTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_additionalJvmArgs(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalJvmArgs[0]", "-Dfoo=1",
+                "synchrony.additionalJvmArgs[1]", "-Dbar=2"
+        ));
+
+        final var entrypoint = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-synchrony-entrypoint")
+                .getNode("data", "start-synchrony.sh");
+
+        assertThat(entrypoint)
+                .hasSeparatedTextContaining("-Dfoo=1")
+                .hasSeparatedTextContaining("-Dbar=2");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
     void synchrony_resources(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true",

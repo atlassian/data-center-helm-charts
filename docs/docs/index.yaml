@@ -2,6 +2,66 @@ apiVersion: v1
 entries:
   bitbucket:
   - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: Enable NFS permission fixer by default
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/241
+        - kind: changed
+          description: Enable configuration for SET_PERMISSIONS docker image variable
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/261
+        - kind: added
+          description: Configurable grace periods
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/249
+        - kind: changed
+          description: Update the Bitbucket image name, as the '-server' suffix is now deprecated
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/259
+        - kind: changed
+          description: Improve documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/236
+            url: https://github.com/atlassian/data-center-helm-charts/pull/243
+            url: https://github.com/atlassian/data-center-helm-charts/pull/245
+            url: https://github.com/atlassian/data-center-helm-charts/pull/252
+            url: https://github.com/atlassian/data-center-helm-charts/pull/253
+            url: https://github.com/atlassian/data-center-helm-charts/pull/256
+            url: https://github.com/atlassian/data-center-helm-charts/pull/258
+            url: https://github.com/atlassian/data-center-helm-charts/pull/260
+            url: https://github.com/atlassian/data-center-helm-charts/pull/263
+            url: https://github.com/atlassian/data-center-helm-charts/pull/268
+            url: https://github.com/atlassian/data-center-helm-charts/pull/270
+            url: https://github.com/atlassian/data-center-helm-charts/pull/272
+    apiVersion: v2
+    appVersion: 7.15.1-jdk11
+    created: "2021-08-27T05:31:24.877001Z"
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 302012f67d20f9db07e72daeb0b163d415bed45f922d8b13401751541e28334f
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.16.0/bitbucket-0.16.0.tgz
+    version: 0.16.0
+  - annotations:
       artifacthub.io/changes: |
         - kind: added
           description: Add support for providing a custom fluentd start command
@@ -298,6 +358,81 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.6.0/bitbucket-0.6.0.tgz
     version: 0.6.0
   confluence:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: Enable NFS permission fixer by default
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/241
+        - kind: changed
+          description: Enable configuration for SET_PERMISSIONS docker image variable
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/261
+        - kind: added
+          description: Configurable grace periods
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/249
+        - kind: added
+          description: Improve Confluence shutdown procedure
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/250
+        - kind: changed
+          description: Set ContextPath as default for ingress path
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/263
+        - kind: changed
+          description: Update the Confluence image name, as the '-server' suffix is now deprecated
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/259
+        - kind: changed
+          description: Fix spacing of the jvm args for debug flag
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/266
+        - kind: changed
+          description: Improve documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/236
+            url: https://github.com/atlassian/data-center-helm-charts/pull/243
+            url: https://github.com/atlassian/data-center-helm-charts/pull/245
+            url: https://github.com/atlassian/data-center-helm-charts/pull/252
+            url: https://github.com/atlassian/data-center-helm-charts/pull/253
+            url: https://github.com/atlassian/data-center-helm-charts/pull/256
+            url: https://github.com/atlassian/data-center-helm-charts/pull/258
+            url: https://github.com/atlassian/data-center-helm-charts/pull/260
+            url: https://github.com/atlassian/data-center-helm-charts/pull/263
+            url: https://github.com/atlassian/data-center-helm-charts/pull/268
+            url: https://github.com/atlassian/data-center-helm-charts/pull/270
+            url: https://github.com/atlassian/data-center-helm-charts/pull/272
+    apiVersion: v2
+    appVersion: 7.13.0-jdk11
+    created: "2021-08-27T05:31:25.1938745Z"
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 79ed15e3b9273137cb2cde189b1ab20544fa3ff7295ca7c38323d346063329a4
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-0.16.0/confluence-0.16.0.tgz
+    version: 0.16.0
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
@@ -607,6 +742,61 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
+          description: Enable NFS permission fixer by default
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/241
+        - kind: changed
+          description: Enable configuration for SET_PERMISSIONS docker image variable
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/261
+        - kind: added
+          description: Configurable grace periods
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/249
+        - kind: changed
+          description: Improve documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/236
+            url: https://github.com/atlassian/data-center-helm-charts/pull/243
+            url: https://github.com/atlassian/data-center-helm-charts/pull/245
+            url: https://github.com/atlassian/data-center-helm-charts/pull/252
+            url: https://github.com/atlassian/data-center-helm-charts/pull/253
+            url: https://github.com/atlassian/data-center-helm-charts/pull/256
+            url: https://github.com/atlassian/data-center-helm-charts/pull/258
+            url: https://github.com/atlassian/data-center-helm-charts/pull/260
+            url: https://github.com/atlassian/data-center-helm-charts/pull/263
+            url: https://github.com/atlassian/data-center-helm-charts/pull/268
+            url: https://github.com/atlassian/data-center-helm-charts/pull/270
+            url: https://github.com/atlassian/data-center-helm-charts/pull/272
+    apiVersion: v2
+    appVersion: 4.3.5-jdk11
+    created: "2021-08-27T05:31:25.4859967Z"
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 8dbbf152b4eaeba82a0a2c4d200ed21ec3c191db5077786bb02c4f4cf6bc481b
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.16.0/crowd-0.16.0.tgz
+    version: 0.16.0
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
           description: Add Service annotations
           links:
           - name: Github PR
@@ -867,6 +1057,63 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: Enable NFS permission fixer by default
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/241
+        - kind: changed
+          description: Enable configuration for SET_PERMISSIONS docker image variable
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/261
+        - kind: added
+          description: Configurable grace periods
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/249
+        - kind: changed
+          description: Improve documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/236
+            url: https://github.com/atlassian/data-center-helm-charts/pull/243
+            url: https://github.com/atlassian/data-center-helm-charts/pull/245
+            url: https://github.com/atlassian/data-center-helm-charts/pull/252
+            url: https://github.com/atlassian/data-center-helm-charts/pull/253
+            url: https://github.com/atlassian/data-center-helm-charts/pull/256
+            url: https://github.com/atlassian/data-center-helm-charts/pull/258
+            url: https://github.com/atlassian/data-center-helm-charts/pull/260
+            url: https://github.com/atlassian/data-center-helm-charts/pull/263
+            url: https://github.com/atlassian/data-center-helm-charts/pull/268
+            url: https://github.com/atlassian/data-center-helm-charts/pull/270
+            url: https://github.com/atlassian/data-center-helm-charts/pull/272
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.13.9-jdk11
+    created: "2021-08-27T05:31:25.7845406Z"
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: b5fc0edfc058c34dedb7158b66e677bcf0af4fdfb31e930e0be75bd9b8294661
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.16.0/jira-0.16.0.tgz
+    version: 0.16.0
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
@@ -1175,4 +1422,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2021-08-17T01:45:27.4104412Z"
+generated: "2021-08-27T05:31:25.7847241Z"

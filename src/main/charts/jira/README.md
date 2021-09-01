@@ -1,6 +1,6 @@
 # jira
 
-![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.13.9-jdk11](https://img.shields.io/badge/AppVersion-8.13.9--jdk11-informational?style=flat-square)
+![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.13.9-jdk11](https://img.shields.io/badge/AppVersion-8.13.9--jdk11-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
@@ -81,6 +81,8 @@ Kubernetes: `>=1.19.x-0`
 | jira.service.port | int | `80` | The port on which the Jira K8s Service will listen |
 | jira.service.type | string | `"ClusterIP"` | The type of K8s service to use for Jira |
 | jira.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Jira container. Set to 'false' to disable this behaviour. |
+| jira.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |
+| jira.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Jira pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Jira pods |
 | replicaCount | int | `1` | The initial number of Jira pods that should be started at deployment time.  Note that Jira requires manual configuration via the browser post deployment  after the first pod is deployed. This configuration must be completed before  scaling up additional pods. As such this value should always be kept as 1,  but can be altered once manual configuration is complete. |

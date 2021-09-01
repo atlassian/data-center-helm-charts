@@ -13,6 +13,9 @@ data:
     java \
        -Xms{{ .Values.synchrony.resources.jvm.minHeap }} \
        -Xmx{{ .Values.synchrony.resources.jvm.maxHeap }} \
+       {{- range .Values.synchrony.additionalJvmArgs }}
+       {{ . }} \
+       {{- end }}
        -Xss{{ .Values.synchrony.resources.jvm.stackSize }} \
        -XX:ActiveProcessorCount={{ .Values.synchrony.resources.container.requests.cpu }} \
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
