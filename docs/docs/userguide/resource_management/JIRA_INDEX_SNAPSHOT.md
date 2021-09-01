@@ -1,4 +1,4 @@
-# Configure Jira for index snapshots
+# Creating an initial index snapshot in Jira
 
 These steps should be followed to enable shared index snapshots with Jira:
 
