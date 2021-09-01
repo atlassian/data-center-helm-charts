@@ -157,7 +157,7 @@ database:
 #
 # By default, the charts will configure the local-home, synchrony-home and shared-home as ephemeral
 # volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production 
-# deployments this is not ideal and so local-home, synchrony-home and shared-home should both be configured
+# deployments this is not ideal and so local-home, synchrony-home and shared-home should all be configured
 # appropriately.
 # https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#volumes-configuration
 #    
