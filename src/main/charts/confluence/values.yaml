@@ -157,7 +157,7 @@ database:
 #
 # By default, the charts will configure the local-home, synchrony-home and shared-home as ephemeral
 # volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production 
-# deployments this is not ideal and so local-home and shared-home should both be configured 
+# deployments this is not ideal and so local-home, synchrony-home and shared-home should both be configured
 # appropriately.
 # https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#volumes-configuration
 #    
@@ -186,7 +186,7 @@ volumes:
       #
       storageClassName:
       
-      # -- Specifies the standard K8s resource requests and/or limits for the local-home 
+      # -- Specifies the standard K8s resource requests for the local-home
       # volume claims.
       #
       resources:
@@ -236,7 +236,7 @@ volumes:
       #
       storageClassName:
       
-      # -- Specifies the standard K8s resource requests and/or limits for the shared-home 
+      # -- Specifies the standard K8s resource requests limits for the shared-home
       # volume claims.
       #
       resources:
@@ -309,7 +309,7 @@ volumes:
       #
       storageClassName:
 
-      # -- Specifies the standard K8s resource requests and/or limits for the synchrony-home
+      # -- Specifies the standard K8s resource requests for the synchrony-home
       # volume claims.
       #
       resources:
