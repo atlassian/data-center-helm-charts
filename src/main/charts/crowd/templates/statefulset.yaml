@@ -104,7 +104,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{ include "crowd.shutdown.command" . | nindent 18 }}
+                command: ["sh", "-c", {{ .Values.crowd.shutdown.command | quote }}]
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "crowd.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

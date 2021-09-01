@@ -122,15 +122,6 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 
 {{/*
-The command that will be run to properly shutdown Crowd
-*/}}
-{{- define "crowd.shutdown.command" -}}
-{{- if .Values.crowd.shutdown.command }}
-{{- .Values.crowd.shutdown.command }}
-{{- else }}["/shutdown-wait.sh"]{{- end }}
-{{- end }}
-
-{{/*
 The command that should be run to start the fluentd service
 */}}
 {{- define "fluentd.start.command" -}}
