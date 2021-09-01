@@ -462,6 +462,7 @@ jira:
     secretKey: license-key
 
   shutdown:
+
     # -- The termination grace period for pods during shutdown. This
     # should be set to the internal grace period, plus a small buffer
     # to allow the JVM to fully terminate.
