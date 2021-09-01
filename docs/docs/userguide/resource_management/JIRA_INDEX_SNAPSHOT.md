@@ -2,7 +2,7 @@
 
 These steps should be followed to enable shared index snapshots with Jira:
 
-1. Log into the Jira instance as the `admin` user
+1. Log into the Jira instance as the Administrator
 1. Go to `Settings` -> `System` -> `Indexing`
 1. There should be no errors on this page i.e.
 ![good-index](../../assets/images/good-index.png)
