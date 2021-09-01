@@ -287,7 +287,7 @@ volumes:
       #
       command:
 
-  # Each synchrony pod needs its own volume for 'synchrony-home'. Synchrony process will write logs to that location
+  # Each synchrony pod needs its own volume for 'synchrony-home'. The Synchrony process will write logs to that location
   # and any configuration files can be placed there.
   #
   synchronyHome:
@@ -569,6 +569,7 @@ confluence:
       requests:
         # -- Initial CPU request by Confluence pod.
         # If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        #
         cpu: "2"
         
         # -- Initial Memory request by Confluence pod
