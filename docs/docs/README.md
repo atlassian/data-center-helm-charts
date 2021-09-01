@@ -16,7 +16,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     
     Read more about [what we support and what we don’t](troubleshooting/SUPPORT_BOUNDARIES.md). 
 
-    Note that Jira currently has limitations with scaling. Read more about the [Product and platform limitations](troubleshooting/LIMITATIONS.md).
+    Note that Jira currently has [limitations with scaling](troubleshooting/LIMITATIONS.md#jira-and-horizontal-scaling). Read more about this and other [product and platform limitations](troubleshooting/LIMITATIONS.md).
 
 ## Architecture
 
