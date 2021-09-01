@@ -151,6 +151,10 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-crowd-jvm-config
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
         - name: local-home
           emptyDir: {}

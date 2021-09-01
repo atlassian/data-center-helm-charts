@@ -288,7 +288,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["sh", "-c", "export CONNIE_PID=$(pgrep -f org.apache.catalina.startup.Bootstrap | sort | head -n 1); echo $CONNIE_PID > /opt/atlassian/confluence/work/catalina.pid && /bin/su confluence -c /opt/atlassian/confluence/bin/stop-confluence.sh; tail --pid=$CONNIE_PID -f /dev/null"]
+                command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
         - name: local-home
           emptyDir: {}

@@ -580,14 +580,22 @@ confluence:
       #    memory: "2G"
 
   shutdown:
+
     # -- The termination grace period for pods during shutdown. This
     # should be set to the Confluence internal grace period (default 20
     # seconds), plus a small buffer to allow the JVM to fully terminate.
+    #
     terminationGracePeriodSeconds: 25
 
-    # By default, Tomcat will be stopped by a shutdown script from the Confluence distribution.
-    # If any other shutdown behaviour is needed, it can be achieved by overriding this value.
-    command:
+    # -- By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/),
+    # using a script supplied by the Docker image. If any other
+    # shutdown behaviour is needed it can be achieved by overriding
+    # this value. Note that the shutdown command needs to wait for the
+    # application shutdown completely before exiting; see [the default
+    # command](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/master/shutdown-wait.sh)
+    # for details.
+    #
+    command: "/shutdown-wait.sh"
 
   # --  Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g.
   # system properties.
