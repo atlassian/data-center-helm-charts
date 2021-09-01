@@ -234,6 +234,14 @@ on Tomcat's logs directory. THis ensures that Tomcat+Confluence logs get capture
 {{ end }}
 
 {{/*
+Defines the volume mounts used by the Synchrony container.
+*/}}
+{{ define "synchrony.volumeMounts" }}
+- name: synchrony-home
+  mountPath: {{ .Values.volumes.synchronyHome.mountPath | quote }}
+{{ end }}
+
+{{/*
 For each additional library declared, generate a volume mount that injects that library into the Confluence lib directory
 */}}
 {{- define "confluence.additionalLibraries" -}}
@@ -332,11 +340,32 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 {{- end }}
 
+{{- define "synchrony.volumes" -}}
+{{ if not .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
+{{ include "synchrony.volumes.synchronyHome" . }}
+{{- end }}
+{{ include "confluence.volumes.sharedHome" . }}
+{{- with .Values.volumes.additional }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
+{{- end }}
+
 {{- define "confluence.volumes.localHome" -}}
 {{- if not .Values.volumes.localHome.persistentVolumeClaim.create }}
 - name: local-home
 {{ if .Values.volumes.localHome.customVolume }}
 {{- toYaml .Values.volumes.localHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "synchrony.volumes.synchronyHome" -}}
+{{- if not .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
+- name: synchrony-home
+{{ if .Values.volumes.synchronyHome.customVolume }}
+{{- toYaml .Values.volumes.synchronyHome.customVolume | nindent 2 }}
 {{ else }}
   emptyDir: {}
 {{- end }}
@@ -368,6 +397,23 @@ volumeClaimTemplates:
     storageClassName: {{ .Values.volumes.localHome.persistentVolumeClaim.storageClassName | quote }}
     {{- end }}
     {{- with .Values.volumes.localHome.persistentVolumeClaim.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "synchrony.volumeClaimTemplates" -}}
+{{ if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
+volumeClaimTemplates:
+- metadata:
+    name: synchrony-home
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .Values.volumes.synchronyHome.persistentVolumeClaim.storageClassName }}
+    storageClassName: {{ .Values.volumes.synchronyHome.persistentVolumeClaim.storageClassName | quote }}
+    {{- end }}
+    {{- with .Values.volumes.synchronyHome.persistentVolumeClaim.resources }}
     resources:
       {{- toYaml . | nindent 6 }}
     {{- end }}

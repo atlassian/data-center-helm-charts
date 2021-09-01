@@ -140,6 +140,8 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
+            - name: synchrony-home
+              mountPath: "/var/atlassian/application-data/confluence"
             - mountPath: /scripts
               name: entrypoint-script
           ports:
@@ -161,6 +163,8 @@ spec:
               cpu: "2"
               memory: 2.5G
           env:
+            - name: SET_PERMISSIONS
+              value: "true"
             - name: SYNCHRONY_BIND
               valueFrom:
                 fieldRef:
@@ -172,6 +176,8 @@ spec:
           configMap:
             name: unittest-confluence-synchrony-entrypoint
             defaultMode: 0744
+        - name: synchrony-home
+          emptyDir: {}
         - name: shared-home
           emptyDir: {}
 ---
