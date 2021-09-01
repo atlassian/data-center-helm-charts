@@ -188,15 +188,6 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 
 {{/*
-The command that will be run to properly shutdown Confluence tomcat
-*/}}
-{{- define "confluence.shutdown.command" -}}
-{{- if .Values.confluence.shutdown.command }}
-{{- .Values.confluence.shutdown.command }}
-{{- else }}["/shutdown-wait.sh"]{{- end }}
-{{- end }}
-
-{{/*
 The command that should be run to start the fluentd service
 */}}
 {{- define "fluentd.start.command" -}}
