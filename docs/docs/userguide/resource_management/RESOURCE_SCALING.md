@@ -28,9 +28,9 @@ At present there are issues relating to index replication with Jira when immedia
 
       Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the index. If there is no snapshot present in  `<shared-home>/export/indexsnapshots` then [configure Jira for index snapshots](JIRA_INDEX_SNAPSHOT.md)
 
-Having followed the steps above, and ensured a healthy snapshot index is available, [scale the cluster as necessary](#horizontal-scaling-adding-pods). Once scaling is complete confirm that the index is still healthy [using the approach prescribed in Step 3](JIRA_INDEX_SNAPSHOT.md). If there are still indexing issues then please refer to the guides below:
+Having followed the steps above, and ensured a healthy snapshot index is available, [scale the cluster as necessary](#horizontal-scaling-adding-pods). Once scaling is complete confirm that the index is still healthy [using the approach prescribed in Step 3](JIRA_INDEX_SNAPSHOT.md). If there are still indexing issues then please refer to the guides below for details on how address them:
 
-* [unable to perform a background re-index error](https://confluence.atlassian.com/jirakb/how-to-fix-a-jira-application-that-is-unable-to-perform-a-background-re-index-at-this-time-error-316637947.html)
+* [Unable to perform a background re-index error](https://confluence.atlassian.com/jirakb/how-to-fix-a-jira-application-that-is-unable-to-perform-a-background-re-index-at-this-time-error-316637947.html)
 * [Troubleshoot index problems in Jira server](https://confluence.atlassian.com/jirakb/troubleshoot-index-problems-in-jira-server-203394752.html)
 
 ## Vertical scaling - adding resources
