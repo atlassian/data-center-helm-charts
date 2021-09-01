@@ -19,12 +19,13 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
 
 !!!note "Initial cluster size"
       **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
-      For details on modifying the `cpu` and `memory` requirements of the `StatefulSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
+      
+For details on modifying the `cpu` and `memory` requirements of the `StatefulSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
 
 ### Scaling Jira safely
 At present there are issues relating to index replication with Jira when immediately scaling up by more than 1 pod at a time. See [Jira and horizontal scaling](../../troubleshooting/LIMITATIONS.md#jira-limitations-and-horizontal-scaling).
 
-!!!info "Before scaling your cluster"
+!!!warning   "Before scaling your cluster"
 
       Make sure there's at least one snapshot file in `<shared-home>/export/indexsnapshots`. New pods will attempt to use these files to replicate the index. If there is no snapshot present in  `<shared-home>/export/indexsnapshots` then [create initial index snapshot].(JIRA_INDEX_SNAPSHOT.md)
 

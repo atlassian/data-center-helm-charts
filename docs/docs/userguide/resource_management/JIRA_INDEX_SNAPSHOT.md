@@ -14,6 +14,7 @@ These steps should be followed to enable shared index snapshots with Jira:
 1. Temporarily change these values (`Edit Settings`), as depicted in the screenshot below. The cron expression will create an index snapshot every minute
 ![edit-index-recovery-settings](../../assets/images/edit-index-recovery-settings.png)
 1. Wait for the snapshot to be created, by checking for an archive in `<shared-home>/export/indexsnapshots`
-1. When the snapshot is available, revert the settings noted in `step 6` above
-1. Consider keeping the `Enable index recovery` setting `ON`
+1. When the snapshot is available, revert the settings noted in `step 6`, or back to the defaults:
+![default-index-recovery-settings](../../assets/images/default-index-recovery-settings.png)
+1. Consider keeping the `Enable index recovery` setting so that it is set to `ON`
 1. Proceed with [scaling the cluster as necessary](RESOURCE_SCALING.md#horizontal-scaling-adding-pods)
