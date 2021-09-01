@@ -1,6 +1,6 @@
 # Configure Jira for index snapshots
 
-These steps should be followed to enable shared index snapshots with Jira   
+These steps should be followed to enable shared index snapshots with Jira:
 
 1. Log into the Jira instance as the `admin` user
 1. Go to `Settings` -> `System` -> `Indexing`
