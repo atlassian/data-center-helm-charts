@@ -218,6 +218,7 @@ crowd:
     # -- The termination grace period for pods during shutdown. This
     # should be set to the internal grace period, plus a small buffer
     # to allow the JVM to fully terminate.
+    #
     terminationGracePeriodSeconds: 30
 
     # -- By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/),
@@ -227,6 +228,7 @@ crowd:
     # application shutdown completely before exiting; see [the default
     # command](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/shutdown-wait.sh)
     # for details.
+    #
     command: "/shutdown-wait.sh"
 
   # Crowd Pod resource requests

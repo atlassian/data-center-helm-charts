@@ -567,6 +567,7 @@ bitbucket:
     # -- The termination grace period for pods during shutdown. This
     # should be set to the Bitbucket internal grace period (default 30
     # seconds), plus a small buffer to allow the JVM to fully terminate.
+    #
     terminationGracePeriodSeconds: 35
 
     # -- By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/),
@@ -576,6 +577,7 @@ bitbucket:
     # application shutdown completely before exiting; see [the default
     # command](https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/shutdown-wait.sh)
     # for details.
+    #
     command: "/shutdown-wait.sh"
 
   # Pod resource requests 
