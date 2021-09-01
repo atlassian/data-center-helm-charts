@@ -104,15 +104,6 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 
 {{/*
-The command that will be run to properly shutdown Jira
-*/}}
-{{- define "jira.shutdown.command" -}}
-{{- if .Values.jira.shutdown.command }}
-{{- .Values.jira.shutdown.command }}
-{{- else }}["/shutdown-wait.sh"]{{- end }}
-{{- end }}
-
-{{/*
 The command that should be run to start the fluentd service
 */}}
 {{- define "fluentd.start.command" -}}

@@ -158,8 +158,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command:
-                  [/shutdown-wait.sh]
+                command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
         - name: local-home
           emptyDir: {}

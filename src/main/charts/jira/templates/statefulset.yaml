@@ -132,7 +132,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: {{- include "jira.shutdown.command" . | nindent 18 }}
+                command: ["sh", "-c", {{ .Values.jira.shutdown.command | quote }}]
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "jira.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
