@@ -23,7 +23,7 @@ We **don’t officially support** the functionality described in the [examples](
 
 ## Feedback
 
-If you find any issue, [raise a ticket](https://github.com/atlassian/data-center-helm-charts/issues/new). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
+If you find any issue, [raise a ticket](https://support.atlassian.com/contact/). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
   
 
 ## Contributions
