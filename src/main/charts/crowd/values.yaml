@@ -3,12 +3,10 @@
 # HEADS UP! 
 #
 # Data loss will occur if sections declared as 'REQUIRED' are not configured appropriately!
-# These sections are:
-# - database
+# For Crowd, the required section is:
 # - volumes
 #
 # Additional details on pre-provisioning these required resources can be found here:
-# https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#provision-a-database
 # https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#configure-a-shared-home-volume
 # https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#configure-local-home-volume
 #
@@ -311,7 +309,7 @@ crowd:
 # To make the Atlassian product available from outside the K8s cluster an Ingress
 # Controller should be pre-provisioned. With this in place the configuration below
 # can be used to configure an appropriate Ingress Resource.
-# https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#ingress
+# https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#ingress
 #
 ingress:
 
@@ -451,7 +449,7 @@ fluentd:
 # volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production
 # deployments this is not ideal and so local-home and shared-home should both be configured
 # appropriately.
-# https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#volumes-configuration
+# https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#volumes
 #
 volumes:
   localHome:

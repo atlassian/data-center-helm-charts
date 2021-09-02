@@ -114,7 +114,7 @@ serviceAccount:
 #
 # Bitbucket requires a backend database. The configuration below can be used to define the 
 # database to use and its connection details.
-# https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#database-connectivity
+# https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#database-connectivity
 #
 database:
 
@@ -124,7 +124,7 @@ database:
    # - 'jdbc:mysql://<dbhost>/<dbname>'
    # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
    # - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
-  # https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#databaseurl
+  # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databaseurl
   #
   url:
   
@@ -135,7 +135,7 @@ database:
    # - 'com.mysql.jdbc.Driver'
    # - 'oracle.jdbc.OracleDriver'
    # - 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
-  #https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#databasedriver
+  # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasedriver:
   #
   driver:
   
@@ -169,7 +169,7 @@ database:
 # volumes i.e. 'emptyDir: {}'. This is fine for evaluation purposes but for production 
 # deployments this is not ideal and so local-home and shared-home should both be configured 
 # appropriately.
-# https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#volumes-configuration
+# https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#volumes
 #
 volumes:
 
@@ -346,7 +346,7 @@ volumes:
 # To make the Atlassian product available from outside the K8s cluster an Ingress
 # Controller should be pre-provisioned. With this in place the configuration below 
 # can be used to configure an appropriate Ingress Resource. 
-# https://atlassian.github.io/data-center-helm-charts/installation/CONFIGURATION/#ingress
+# https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#ingress
 #
 ingress:
 
@@ -500,7 +500,7 @@ bitbucket:
     secretKey: license-key
 
   # Bitbucket system administrator credential config 
-  # https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#6-configure-license-and-sysadmin-credentials-for-bitbucket
+  # https://atlassian.github.io/data-center-helm-charts/userguide/INSTALLATION/?h=sysad#7-configure-license
   #
   sysadminCredentials:
   
