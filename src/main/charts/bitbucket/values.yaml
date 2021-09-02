@@ -26,6 +26,7 @@
 # - volumes
 # - bitbucket.license
 # - bitbucket.sysadminCredentials
+# - bitbucket.elasticSearch
 #
 ##
 
