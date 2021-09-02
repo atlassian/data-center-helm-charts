@@ -1,6 +1,6 @@
 # External libraries and plugins
 
-!!!warning "`.jar` files only!"
+!!!warning "`.jar` files only"
 
     Whether loading external libraries, drivers or plugins, the approaches outlined here can only be used with `.jar` files. Plugin `obr` files can be extracted (unzipped) to access the associated `.jar`
 
