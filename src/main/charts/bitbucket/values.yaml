@@ -8,14 +8,15 @@
 # - volumes
 #
 # Additional details on pre-provisioning these required resources can be found here:
-# https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#3-configure-database
-# https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#5-configure-persistent-storage
+# https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#provision-a-database
+# https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#configure-a-shared-home-volume
+# https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#configure-local-home-volume
 #
-# To manage external access to the Bitbucket instance, an ingress resource can also be configured 
+# To manage external access to the Bitbucket instance, an ingress resource can also be configured
 # under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
 #
 # Additional details on pre-provisioning an ingress controller can be found here:
-# https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#4-configure-ingress
+# https://atlassian.github.io/data-center-helm-charts/userguide/PREREQUISITES/#provision-an-ingress-controller
 #
 # Unlike the other products, Bitbucket has the added advantage that it can be fully 
 # configured at deployment. For a fully configured Bitbucket instance that does not
