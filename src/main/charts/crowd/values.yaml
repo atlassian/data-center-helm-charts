@@ -1,6 +1,6 @@
 ## Atlassian Crowd Data Center Helm values
-# 
-# HEADS UP! 
+#
+# HEADS UP!
 #
 # Data loss will occur if sections declared as 'REQUIRED' are not configured appropriately!
 # These sections are:
@@ -11,18 +11,18 @@
 # https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#3-configure-database
 # https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#5-configure-persistent-storage
 #
-# To manage external access to the Crowd instance, an ingress resource can also be configured 
-# under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present. 
+# To manage external access to the Crowd instance, an ingress resource can also be configured
+# under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present.
 #
 # Additional details on pre-provisioning an ingress controller can be found here:
 # https://atlassian.github.io/data-center-helm-charts/installation/INSTALLATION/#4-configure-ingress
 #
 ##
 
-# -- The initial number of Crowd pods that should be started at deployment time. 
-# Note that Crowd requires manual configuration via the browser post deployment 
-# after the first pod is deployed. This configuration must be completed before 
-# scaling up additional pods. As such this value should always be kept as 1, 
+# -- The initial number of Crowd pods that should be started at deployment time.
+# Note that Crowd requires manual configuration via the browser post deployment
+# after the first pod is deployed. This configuration must be completed before
+# scaling up additional pods. As such this value should always be kept as 1,
 # but can be altered once manual configuration is complete.
 #
 replicaCount: 1
@@ -269,7 +269,7 @@ crowd:
         #    cpu: "2"
         #    memory: "1G"
 
-  # --  Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g.
+  # -- Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g.
   # system properties.
   #
   additionalJvmArgs:
@@ -280,10 +280,10 @@ crowd:
     #
     - -XX:ActiveProcessorCount=2
 
-  # -- Specifies a list of additional Java libraries that should be added to the 
-  # Crowd container. Each item in the list should specify the name of the volume 
-  # that contains the library, as well as the name of the library file within that 
-  # volume's root directory. Optionally, a subDirectory field can be included to 
+  # -- Specifies a list of additional Java libraries that should be added to the
+  # Crowd container. Each item in the list should specify the name of the volume
+  # that contains the library, as well as the name of the library file within that
+  # volume's root directory. Optionally, a subDirectory field can be included to
   # specify which directory in the volume contains the library file. Additional details:
   # https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/
   #
@@ -292,17 +292,17 @@ crowd:
 #      subDirectory:
 #      fileName:
 
-  # -- Specifies a list of additional Crowd plugins that should be added to the 
-  # Crowd container. Note plugins installed via this method will appear as 
-  # bundled plugins rather than user plugins. These should be specified in the same 
+  # -- Specifies a list of additional Crowd plugins that should be added to the
+  # Crowd container. Note plugins installed via this method will appear as
+  # bundled plugins rather than user plugins. These should be specified in the same
   # manner as the 'additionalLibraries' property. Additional details:
-  # https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ 
+  # https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/
   #
-  # NOTE: only .jar files can be loaded using this approach. OBR's can be extracted 
+  # NOTE: only .jar files can be loaded using this approach. OBR's can be extracted
   # (unzipped) to access the associated .jar
   #
-  # An alternative to this method is to install the plugins via "Manage Apps" in the 
-  # product system  administration UI.
+  # An alternative to this method is to install the plugins via "Manage Apps" in the
+  # product system administration UI.
   #
   additionalBundledPlugins: []
 #    - volumeName:
@@ -396,7 +396,7 @@ fluentd:
   #
   imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
 
-  # -- The command used to start Fluentd. If not supplied the default command 
+  # -- The command used to start Fluentd. If not supplied the default command
   # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
   #
   # Note: The custom command can be free-form, however pay particular attention to
@@ -428,7 +428,7 @@ fluentd:
   #   </source>
 
   # -- The port on which the Fluentd sidecar will listen
-  # 
+  #
   httpPort: 9880
 
   # Elasticsearch config based on your ELK stack
