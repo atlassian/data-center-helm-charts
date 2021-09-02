@@ -634,7 +634,8 @@ bitbucket:
   # Bitbucket container. Each item in the list should specify the name of the volume 
   # that contains the library, as well as the name of the library file within that 
   # volume's root directory. Optionally, a subDirectory field can be included to 
-  # specify which directory in the volume contains the library file.
+  # specify which directory in the volume contains the library file. Additional details:
+  # https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/
   #
   additionalLibraries: []
   #  - volumeName:
@@ -643,10 +644,15 @@ bitbucket:
 
   # -- Specifies a list of additional Bitbucket plugins that should be added to the 
   # Bitbucket container. Note plugins installed via this method will appear as 
-  # bundled plugins rather than user plugins. An alternative to this method 
-  # is to install the plugins via "Manage Apps" in the product system 
-  # administration UI. These should be specified in the same manner as the 
-  # 'additionalLibraries' property.
+  # bundled plugins rather than user plugins. These should be specified in the same 
+  # manner as the 'additionalLibraries' property. Additional details:
+  # https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ 
+  #
+  # NOTE: only .jar files can be loaded using this approach. OBR's can be extracted 
+  # (unzipped) to access the associated .jar
+  #
+  # An alternative to this method is to install the plugins via "Manage Apps" in the 
+  # product system  administration UI.
   #
   additionalBundledPlugins: []
   #  - volumeName:
