@@ -10,9 +10,9 @@ assignees: ''
 ### NOTE:
 Please report only Helm Chart issues here. To report a product specific bug use [Atlassian Support Page](https://jira.atlassian.com/secure/Dashboard.jspa)
 
-### Report the bug:
+### Report the issue:
 
-**Describe the bug**
+**Describe the issue**
 
 
 **Existing Behaviour**
