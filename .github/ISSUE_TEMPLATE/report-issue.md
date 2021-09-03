@@ -1,6 +1,6 @@
 ---
 name: Report Helm Chart Issue
-about: Report Helm Chart issues and help us improve
+about: Report Helm chart issues and help us improve
 title: "[ISSUE]"
 labels: bug
 assignees: ''
@@ -8,28 +8,28 @@ assignees: ''
 ---
 
 ### NOTE:
-Please report only Helm Chart issues here. To report a product specific bug use [Atlassian Support Page](https://jira.atlassian.com/secure/Dashboard.jspa)
+Please report only Helm chart issues here. To report a product-specific bug use the [Atlassian Support Page](https://jira.atlassian.com/secure/Dashboard.jspa)
 
 ### Report the issue:
 
 **Describe the issue**
 
 
-**Existing Behaviour**
+**Existing behaviour**
 
 
-**Steps to Reproduce**
+**Steps to reproduce**
 1. 
 2. 
 3. 
 
-**Expected Behaviour**
+**Expected behaviour**
 
 
 **Screenshots (if applicable)**
 
-**More Input (optional):**
-please run the following relevant commands and report the output.
+**More input (optional):**
+Please run the following relevant commands and report the output:
 ```
 $ kubectl get pods
 $ kubectl describe pods
@@ -39,4 +39,4 @@ $ kubectl describe pvc
 $ kubectl logs [relevant pod name]
 ```
 
-**Additional Context**
+**Additional context**
