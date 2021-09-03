@@ -29,7 +29,7 @@ Please report only helm chart issues here. To report a product specific bug use 
 **Screenshots (if applicable)**
 
 **More Input (optional):**
-please run of the following relevant commands and report the output.
+please run the following relevant commands and report the output.
 ```
 $ kubectl get pods
 $ kubectl describe pods
