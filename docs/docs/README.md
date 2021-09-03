@@ -49,7 +49,7 @@ The minimum versions that we support for each product are:
 
 ## Feedback
 
-If you find any issues, [raise a ticket](https://github.com/atlassian/data-center-helm-charts/issues/new){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
+If you find any issues, [raise a ticket](https://support.atlassian.com/contact/){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
   
 
 ## Contributions

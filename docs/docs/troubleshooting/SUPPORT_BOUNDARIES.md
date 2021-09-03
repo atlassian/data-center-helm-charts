@@ -17,7 +17,7 @@ You are responsible for creating the components that are required by the product
 
 If you have followed our documentation on how to configure the Helm charts, and you're using correctly created components, we will provide support if you encounter an error in installation. 
 
-If you find any issues, [raise a ticket](https://github.com/atlassian/data-center-helm-charts/issues/new){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
+If you find any issues, [raise a ticket with our support team](https://support.atlassian.com/contact/){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
 
 ## Unsupported components
 There is a set of required components that you can create in multiple ways. You are responsible for creating them correctly so you can use them in the Helm charts. 
