@@ -1,34 +1,42 @@
 ---
-name: Report Issue
-about: Report an issue to help us improve
+name: Report Helm Chart Issue
+about: Report Helm chart issues and help us improve
 title: "[ISSUE]"
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
+### NOTE:
+Please report only Helm chart issues here. To report a product-specific bug use the [Atlassian Support Page](https://jira.atlassian.com/secure/Dashboard.jspa)
+
+### Report the issue:
+
+**Describe the issue**
 
 
-**Existing Behaviour**
+**Existing behaviour**
 
 
-**Steps to Reproduce**
-1.
-2.
-3.
+**Steps to reproduce**
+1. 
+2. 
+3. 
 
-**Expected Behaviour**
+**Expected behaviour**
 
 
 **Screenshots (if applicable)**
 
-**More Input(please run and report the output of the relevant commands):**
+**More input (if applicable)**
+Please run the following relevant commands and report the output:
+```
 $ kubectl get pods
 $ kubectl describe pods
 $ kubectl describe sts
 $ kubectl describe pv
 $ kubectl describe pvc
-$kubectl logs [relevant pod name]
+$ kubectl logs [relevant pod name]
+```
 
-**Additional Context**
+**Additional context**
