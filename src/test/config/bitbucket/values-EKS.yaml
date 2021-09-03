@@ -5,6 +5,14 @@ serviceAccount:
 
 ingress:
   create: true
+  nginx: false
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/certificate-arn: ${eks.ingress.certificate}
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /status
   host: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
 
 bitbucket:
@@ -12,7 +20,9 @@ bitbucket:
     enabled: true
     annotations:
       external-dns.alpha.kubernetes.io/hostname: ${helm.release.prefix}-bitbucket-ssh.${eks.ingress.domain}
-      service.beta.kubernetes.io/aws-load-balancer-internal: '${eks.ssh.internal}'
+      service.beta.kubernetes.io/aws-load-balancer-type: external
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+      service.beta.kubernetes.io/aws-load-balancer-scheme: ${eks.ssh.loadbalancer.scheme}
   additionalEnvironmentVariables:
     - name: PLUGIN_SSH_BASEURL
       value: ssh://${helm.release.prefix}-bitbucket-ssh.${eks.ingress.domain}/

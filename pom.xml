@@ -118,7 +118,10 @@
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
 <!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
-        <eks.ssh.internal>true</eks.ssh.internal>
+        <!-- ARN of an ACM issued certificate for the above domain -->
+        <eks.ingress.certificate/>
+        <!-- Can be either 'internal' or 'internet-facing' -->
+        <eks.ssh.loadbalancer.scheme>internal</eks.ssh.loadbalancer.scheme>
         <custom.ingress.uri />
 
         <shared.pvc.name>atlassian-dc-shared-home-pvc</shared.pvc.name>
