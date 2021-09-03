@@ -1,6 +1,6 @@
 ---
-name: Report A Helm Chart Issue
-about: Report helm chart issues to help us improve
+name: Report Helm Chart Issue
+about: Report Helm Chart issues and help us improve
 title: "[ISSUE]"
 labels: bug
 assignees: ''
@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ### NOTE:
-Please report only helm chart issues here. To report a product specific bug use [Attlassian Support Page](https://jira.atlassian.com/secure/Dashboard.jspa)
+Please report only Helm Chart issues here. To report a product specific bug use [Atlassian Support Page](https://jira.atlassian.com/secure/Dashboard.jspa)
 
 ### Report the bug:
 
