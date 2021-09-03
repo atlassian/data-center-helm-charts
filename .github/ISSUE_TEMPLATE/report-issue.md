@@ -28,7 +28,7 @@ Please report only Helm chart issues here. To report a product-specific bug use 
 
 **Screenshots (if applicable)**
 
-**More input (optional):**
+**More input (optional)**
 Please run the following relevant commands and report the output:
 ```
 $ kubectl get pods
