@@ -39,7 +39,7 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
 === "Bitbucket"
        To learn about rolling upgrade in Bitbucket see [Bitbucket rolling upgrade](product_upgrades/BITBUCKET_UPGRADE.md).
 
-## Examples
+### DYLAN ???? WHY ARE THESE EXAMPLES LISTED HERE? THEY SEEM A BIT OUT OF PLACE PARTICULARLY THE STORAGE >>> ## Examples
 ### Logging
 #### How to deploy an EFK stack to Kubernetes
 There are different methods to deploy an EFK stack. We provide two deployment methods, the first is deploying EFK locally on Kubernetes, and the second is using managed Elasticsearch outside the Kubernetes cluster. Please refer to [Logging in Kubernetes](../examples/logging/efk/EFK.md).
@@ -51,5 +51,8 @@ Bitbucket Data Center (Bitbucket DC) uses a shared network file system (NFS) to 
 Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but we provide an example implementation of [NFS Server for Bitbucket](../examples/storage/nfs/NFS.md), which can be used as a guide.
 
 #### Examples of provisioning storage with the AWS CSI Driver
- * [Local storage - utilizing AWS EBS-backed volumes](../examples/storage/aws/LOCAL_STORAGE.md)
- * [Shared storage - utilizing AWS EFS-backed filesystem](../examples/storage/aws/SHARED_STORAGE.md)
+
+=== "Local home"
+    * [Local storage - utilizing AWS EBS-backed volumes](../examples/storage/aws/LOCAL_STORAGE.md)
+=== "Shared home"
+    * [Shared storage - utilizing AWS EFS-backed filesystem](../examples/storage/aws/SHARED_STORAGE.md)

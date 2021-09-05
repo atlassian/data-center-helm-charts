@@ -37,4 +37,6 @@ eksctl create cluster -f config.yaml
 ```
 
 ---
-Having established a cluster, continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).
+!!!tip "Next step - Ingress controller"
+    
+    Having established a cluster, continue with provisioning the next piece of prerequisite infrastructure, the [Ingress controller](../../userguide/PREREQUISITES.md#provision-an-ingress-controller).

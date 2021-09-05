@@ -54,3 +54,9 @@ Some useful resources on provisioning local storage with the AWS CSI Driver
 
 - [EBS CSI driver - GitHub Repo](https://github.com/kubernetes-sigs/aws-ebs-csi-driver)
 - [Official Amazon EBS CSI driver documentation](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
+---
+
+!!!tip "Product installation" 
+
+    Creating the local home volume is the final step in provisioning the [required infrastructure](../../../userguide/PREREQUISITES.md). You can now move onto the next step, [Installation](../../../userguide/INSTALLATION.md).
+

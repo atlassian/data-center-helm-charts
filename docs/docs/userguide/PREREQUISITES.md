@@ -74,7 +74,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 ### :material-folder-home: Configure local-home volume
 * As with the [shared-home](#configure-a-shared-home-volume), each pod requires its own volume for `local-home`. Each product needs this for defining operational data. 
-* If not defined, an [emptyDir{}](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
+* If not defined, an [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
 * Although an `emptyDir` may be acceptable for evaluation purposes, we recommend that each pod is allocated its own volume.
 * A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each pod.
 

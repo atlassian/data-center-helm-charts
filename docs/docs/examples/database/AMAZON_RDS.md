@@ -26,5 +26,7 @@ For details on standing up an RDS DB server follow the guide: [Creating an Amazo
 === "Crowd"
     [Create database for Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
  
-
-> Once you create a database continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).
+---
+!!!tip "Next step - Shared storage"
+    
+    Having created the database continue with provisioning the next piece of prerequisite infrastructure, [shared storage](../../userguide/PREREQUISITES.md#configure-a-shared-home-volume).

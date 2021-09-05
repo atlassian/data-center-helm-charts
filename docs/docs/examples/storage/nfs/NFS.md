@@ -76,3 +76,7 @@ sharedHome:
     persistentVolumeClaim:
       claimName: "custom-nfs-server-claim"
 ```
+---
+!!!tip "Next step - Local storage"
+
+    Having created the shared home NFS continue with provisioning the next piece of prerequisite infrastructure, [local storage](../../../userguide/PREREQUISITES.md#configure-local-home-volume).
