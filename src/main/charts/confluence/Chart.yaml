@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Fix synchrony ingress path
+      description: Fix Synchrony ingress path
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/281
