@@ -1,4 +1,5 @@
 # Change Log
+This is the first officially supported version of the helm chart.
 
 ## 1.0.0
 ![AppVersion: 7.13.0-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.13.0-jdk11&color=success&logo=)

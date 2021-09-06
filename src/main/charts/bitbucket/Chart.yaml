@@ -25,11 +25,6 @@ annotations:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/282
     - kind: changed
-      description: Use the AWS LB Controller with ALB/NLBs instead of nginx for testing
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/294
-    - kind: changed
       description: Improve documentation
       links:
       - name: Github PR
