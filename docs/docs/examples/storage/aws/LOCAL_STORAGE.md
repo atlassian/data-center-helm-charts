@@ -15,7 +15,7 @@ the output of the above command should include the named driver `ebs.csi.aws.com
 NAME              ATTACHREQUIRED   PODINFOONMOUNT   MODES        AGE
 ebs.csi.aws.com   true             false            Persistent   5d1h
 ```
-If not present the EBS driver can be installed using the following instructions [here](https://www.eksworkshop.com/beginner/170_statefulset/ebs_csi_driver/){.external}.
+If not present the EBS driver can be installed using the following instructions [here](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html){.external}.
 
 
 ### Provisioning
