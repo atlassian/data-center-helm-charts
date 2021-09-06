@@ -29,9 +29,8 @@ See examples of provisioning Kubernetes clusters on cloud-based providers:
 
     * See an example of [standing up an NFS server for Bitbucket](storage/nfs/NFS.md)
 
-=== "Elasticsearch"
-
-    * See an example of [standing up an Elasticsearch instance for Bitbucket](elasticsearch/BITBUCKET_ELASTICSEARCH.md)
+## :material-file-search-outline: Elasticsearch
+* See an example of [standing up an Elasticsearch instance for Bitbucket](elasticsearch/BITBUCKET_ELASTICSEARCH.md)
 
 ## :material-file-document-edit: Logging
 * See an example of [how to deploy an EFK stack to Kubernetes](logging/efk/EFK.md)

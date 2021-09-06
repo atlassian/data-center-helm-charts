@@ -7,4 +7,7 @@ We recommend installing and configuring the [Azure Cloud Shell](https://docs.mic
 ## Manual creation
 Follow the [Azure Kubernetes Service Quickstart](https://docs.microsoft.com/en-au/azure/aks/kubernetes-walkthrough){.external} for details on creating an AKS cluster.
 
-> Having established a cluster continue with provisioning the [prerequisite infrastructure](../../userguide/PREREQUISITES.md).
+---
+!!!tip "Next step - Ingress controller"
+
+    Having established a cluster, continue with provisioning the next piece of prerequisite infrastructure, the [Ingress controller](../../userguide/PREREQUISITES.md#provision-an-ingress-controller).
