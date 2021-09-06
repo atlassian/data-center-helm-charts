@@ -84,7 +84,7 @@ For each `PersistentVolumeClaim` created by the chart, a suitable `PersistentVol
 to installation. These can be provisioned either statically or dynamically, using an 
 auto-provisioner.
 
-### DYLAN ???? >>> An alternative to `PersistentVolumeClaims` is to use inline volume definitions,
+An alternative to `PersistentVolumeClaims` is to use inline volume definitions,
 either for `local-home` or `shared-home` (or both), for example:
 
 ```yaml
@@ -341,10 +341,15 @@ You can read more about [resource scaling](../userguide/resource_management/RESO
 
 ## :octicons-container-16: Additional containers
 
-    The Helm charts allow you to add your own `container` and [initContainer](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/){.external} entries to the product pods. Use the `additionalContainers` and `additionalInitContainers` stanzas within the `values.yaml` for this. One use-case for an additional container would be to attach a sidecar container to the product pods.
+The Helm charts allow you to add your own `container` and [initContainer](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/){.external} entries to the product pods. Use the `additionalContainers` and `additionalInitContainers` stanzas within the `values.yaml` for this. One use-case for an additional container would be to attach a sidecar container to the product pods.
 
 ## :material-checkbox-multiple-marked-outline: Additional options
 
-The Helm charts also allow you to specify [`additionalLabels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/){.external}, [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external}, 
-[`nodeSelectors`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector){.external} and [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. These are standard Kubernetes structures 
-that will be included in the pods.
+The Helm charts also allow you to specify: 
+
+* [`additionalLabels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/){.external}
+* [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external}, 
+* [`nodeSelectors`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector){.external}  
+* [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. 
+  
+These are standard Kubernetes structures that will be included in the pods.
