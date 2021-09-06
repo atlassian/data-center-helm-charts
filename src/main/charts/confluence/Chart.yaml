@@ -25,7 +25,7 @@ annotations:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/281
     - kind: changed
-      description: Improve graceful shotdown
+      description: Improve graceful shutdown
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/282
