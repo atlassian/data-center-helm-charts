@@ -11,11 +11,11 @@ In order to deploy Atlassian’s Data Center products, the following is required
 
 Before installing the Data Center Helm charts you need to set up your environment:
 
-1. :material-kubernetes: [Create and connect to the Kubernetes cluster](#create-and-connect-to-the-kubernetes-cluster)
-2. :material-directions-fork: [Provision an Ingress Controller](#provision-an-ingress-controller)
-3. :material-database: [Provision a database](#provision-a-database)
-4. :material-folder-network: [Configure a shared-home volume](#configure-a-shared-home-volume)
-5. :material-folder-home: [Configure a local-home volume](#configure-local-home-volume)
+1. [Create and connect to the Kubernetes cluster](#create-and-connect-to-the-kubernetes-cluster)
+2. [Provision an Ingress Controller](#provision-an-ingress-controller)
+3. [Provision a database](#provision-a-database)
+4. [Configure a shared-home volume](#configure-a-shared-home-volume)
+5. [Configure a local-home volume](#configure-local-home-volume)
 
 ---
 
