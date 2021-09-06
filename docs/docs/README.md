@@ -22,7 +22,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
 The diagram below provides a high level overview of what a typical deployment might look like when using the Atlassian Data Center Helm charts:
 
-![architecture](assets/images/k8s-overview.png "Request routing via Ingress")
+![architecture](assets/images/KubernetesOverview.png "Request routing via Ingress")
 
 ## Installing the Helm charts
 
