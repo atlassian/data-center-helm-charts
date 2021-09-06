@@ -17,6 +17,9 @@ Before installing the Data Center Helm charts you need to set up your environmen
 4. :material-folder-network: [Configure a shared-home volume](#configure-a-shared-home-volume)
 5. :material-folder-home: [Configure a local-home volume](#configure-local-home-volume)
 
+!!!info "Elasticsearch for Bitbucket"
+    While Bitbucket has its own internal Elasticsearch instance, we highly recommend you use an external Elasticsearch installation. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md).
+    
 ---
 
 ### :material-kubernetes: Create and connect to the Kubernetes cluster
