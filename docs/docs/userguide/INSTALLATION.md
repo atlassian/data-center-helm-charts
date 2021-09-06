@@ -174,7 +174,11 @@ helm install <release-name> \
     * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
     
 !!!info "Elasticsearch for Bitbucket"
-    While Bitbucket has its own internal Elasticsearch instance, we highly recommend you use an external Elasticsearch installation. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md).    
+    We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md).    
+    
+    
+     you ever want to run more than one node, you need to have a separate elasticsearch cluster if you want code search.
+    
 
 ## 9. Test your deployed product 
 
