@@ -98,7 +98,7 @@ When a node inside an EKS cluster needs to call an AWS API, it needs to provide 
 Your first step is to configure IAM roles for Service Accounts (IRSA) for `fluentbit`, to make sure you have an OIDC identity provider to use IAM roles for the service account in the cluster:
 
 ```shell
-$ eksctl utils associate-iam-oidc-provider \
+eksctl utils associate-iam-oidc-provider \
      --cluster dcd-ap-southeast-2 \
      --approve 
 ```
@@ -112,9 +112,10 @@ Then create an IAM policy to limit the permissions to connect to the Elasticsear
 * ACCOUNT_ID : AWS Account ID
 * AWS_REGION : AWS region code
 
+Now create the file `fluent-bit-policy.json` to define the policy itself:
+
 ```shell
-$ mkdir ~/environment/logging
-$ cat <<EoF > ~/environment/logging/fluent-bit-policy.json
+cat <<EoF > ~/environment/logging/fluent-bit-policy.json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -128,13 +129,14 @@ $ cat <<EoF > ~/environment/logging/fluent-bit-policy.json
     ]
 }
 EoF
-
-$ aws iam create-policy  \
+```
+Next initialize the policy:
+```shell
+aws iam create-policy  \
      --policy-name fluent-bit-policy \
      --policy-document file://~/environment/logging/fluent-bit-policy.json
 ```
-Next, create an IAM role for the service account:
-
+Create an IAM role for the service account:
 ```shell
 eksctl create iamserviceaccount \
      --name fluent-bit \
@@ -144,10 +146,12 @@ eksctl create iamserviceaccount \
      --approve \
      --override-existing-serviceaccounts
 ```
-
-To confirm that the service account with an Amazon Resource Name (ARN) of the IAM role is annotated:
+Confirm that the service account with an Amazon Resource Name (ARN) of the IAM role is annotated:
 ```shell
-$ kubectl describe serviceaccount fluent-bit
+kubectl describe serviceaccount fluent-bit
+```
+Look for output similar to:
+```yaml
 Name: fluent-bit
 Namespace:  dcd
 Labels: <none>
@@ -157,10 +161,14 @@ Mountable secrets:  fluent-bit-token-pgpss
 Tokens:  fluent-bit-token-pgpss
 Events:  <none>
 ```
+Now define the Elasticsearch domain
 
-*Provision an Elasticsearch cluster:* Provision a public Elasticsearch cluster with Fine-Grained Access Control enabled and a built-in user database:
+!!!info ""
+
+    This configuration will provision a public Elasticsearch cluster with Fine-Grained Access Control enabled and a built-in user database:
+
 ```shell
-$ cat <<EOF> ~/environment/logging/elasticsearch_domain.json
+cat <<EOF> ~/environment/logging/elasticsearch_domain.json
 {
     "DomainName": ${ES_DOMAIN_NAME},
     "ElasticsearchVersion": ${ES_VERSION},
@@ -201,27 +209,38 @@ $ cat <<EOF> ~/environment/logging/elasticsearch_domain.json
     }
 }
 EOF
+```
+Initialize the Elasticsearch domain using the `elasticsearch_domain.json`
 
-$ aws es create-elasticsearch-domain \
-   --cli-input-json   file://~/environment/logging/es_domain.json
+```shell
+aws es create-elasticsearch-domain \
+   --cli-input-json   file://~/environment/logging/elasticsearch_domain.json
 ```
 
-It takes a while for Elasticsearch clusters to change to an active state. Check the AWS Console to see the status of the cluster, and continue to the next step when the cluster is ready.
+!!!info ""
+    
+    It takes a while for Elasticsearch clusters to change to an active state. Check the AWS Console to see the status of the cluster, and continue to the next step when the cluster is ready.
 
-*Configure Elasticsearch access:* At this point you need to map roles to users in order to set fine-grained access control, because without this mapping all the requests to the cluster will result in permission errors. You should add the `fluentbit` ARN as a backend role to the `all-access` role, which uses the Elasticsearch APIs. To find the `fluentbit` ARN run the following command and export the value of `ARN Role` into the `FLUENTBIT_ROLE` environment variable:
+At this point you need to map roles to users in order to set fine-grained access control, because without this mapping all the requests to the cluster will result in permission errors. You should add the `fluentbit` ARN as a backend role to the `all-access` role, which uses the Elasticsearch APIs. To find the `fluentbit` ARN run the following command and export the value of `ARN Role` into the `FLUENTBIT_ROLE` environment variable:
 ```shell
-$ eksctl get iamserviceaccount --cluster dcd-ap-southeast-2
-[ℹ] eksctl version 0.37.0
-[ℹ] using region ap-southeast-2
+eksctl get iamserviceaccount --cluster dcd-ap-southeast-2
+```
+The output of this command should look similar to this:
+```shell
 NAMESPACE    NAME                ROLE ARN
 kube-system cluster-autoscaler   arn:aws:iam::887464544476:role/eksctl-dcd-ap-southeast-2-addon-iamserviceac-Role1-1RSRFV0BQVE3E
-
-$ export FLUENTBIT_ROLE=arn:aws:iam::887464544476:role/eksctl-dcd-ap-southeast-2-addon-iamserviceac-Role1-1RSRFV0BQVE3E
+```
+Take note of the `ROLE ARN` and export it as the environment variable `FLUENTBIT_ROLE`
+```shell
+export FLUENTBIT_ROLE=arn:aws:iam::887464544476:role/eksctl-dcd-ap-southeast-2-addon-iamserviceac-Role1-1RSRFV0BQVE3E
 ```
 Retrieve the Elasticsearch endpoint and update the internal database:
 ```shell
-$ export ES_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name ngh-search-domain --output text --query "DomainStatus.Endpoint")
-$ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
+export ES_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name ngh-search-domain --output text --query "DomainStatus.Endpoint")
+```
+
+```shell
+curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
    -X PATCH \
    https://${ES_ENDPOINT}/_opendistro/_security/api/rolesmapping/all_access?pretty \
    -H 'Content-Type: application/json' \
@@ -235,11 +254,11 @@ $ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
 ```
 Finally, it is time to deploy `fluentbit` DaemonSet:
 ```shell
-$ kubectl apply -f src/main/logging/fluentbit.yaml
+kubectl apply -f src/main/logging/fluentbit.yaml
 ```
 After a few minutes all pods should be up and in running status. This is the end of the, you can open Kibana to visualise the logs. The endpoint for Kibana can be found in the Elasticsearch output tab in the AWS console, or you can run the following command:
 ```shell
-$ echo "Kibana URL: https://${ES_ENDPOINT}/_plugin/kibana/" 
+echo "Kibana URL: https://${ES_ENDPOINT}/_plugin/kibana/" 
 Kibana URL: https://search-domain-uehlb3kxledxykchwexee.ap-southeast-2.es.amazonaws.com/_plugin/kibana/
 ```
 
