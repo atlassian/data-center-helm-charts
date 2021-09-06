@@ -92,7 +92,7 @@ kubectl port-forward deployment/kibana-kibana 5601
 
 ## Managed EFK stack
 
-In this solution [Elasticsearch is deployed as a managed AWS service](https://aws.amazon.com/elasticsearch-service/){.external} and lives outside of the Kubernetes cluster. This approach uses [fluentBit](https://fluentbit.io/){.external} instead of `Fluentd` for log processing.
+In this solution [Elasticsearch is deployed as a managed AWS service](https://aws.amazon.com/elasticsearch-service/){.external} and lives outside of the Kubernetes cluster. This approach uses [Fluentbit](https://fluentbit.io/){.external} instead of `Fluentd` for log processing.
 
 ???+ info "Fluentbit"
 
