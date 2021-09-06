@@ -5,7 +5,7 @@
 
 ## EFK stack
 
-A common Kubernetes logging pattern is the combination of ***Elasticsearch***, ***Fluentd***, and ***Kibana***, known as *EFK Stack*. 
+A common Kubernetes logging pattern is the combination of `Elasticsearch`, `Fluentd`, and `Kibana`, known as *EFK Stack*. 
 
 [Fluentd](https://www.fluentd.org/){.external} is an open-source and multi-platform log processor that collects data/logs from different sources, aggregates, and forwards them to multiple destinations. It is fully compatible with Docker and Kubernetes environments. 
 
@@ -48,9 +48,9 @@ $ curl localhost:9200
 }
 ```
 
-### 2. Enable fluentd
+### 2. Enable Fluentd
 
-Now enable `fluentd` and set the `hostname` for Elasticsearch in `values.yaml` as follows:
+Now enable `Fluentd` and set the `hostname` for Elasticsearch in `values.yaml` as follows:
 
 ```yaml
 fluentd:
@@ -86,16 +86,16 @@ kubectl port-forward deployment/kibana-kibana 5601
 
 ## Managed EFK stack
 
-In this solution [Elasticsearch is deployed as a managed AWS service](https://aws.amazon.com/elasticsearch-service/){.external} and lives outside of the Kubernetes cluster. This approach uses [fluentBit](https://fluentbit.io/){.external} instead of `fluentd` for log processing.
+In this solution [Elasticsearch is deployed as a managed AWS service](https://aws.amazon.com/elasticsearch-service/){.external} and lives outside of the Kubernetes cluster. This approach uses [fluentBit](https://fluentbit.io/){.external} instead of `Fluentd` for log processing.
 
-???+ info "fluentbit"
+???+ info "Fluentbit"
 
-    `fluentbit` is used to collect and aggregate log data inside the EKS cluster. It then sends this to an AWS Elasticsearch instance outside of the cluster.
+    `Fluentbit` is used to collect and aggregate log data inside the EKS cluster. It then sends this to an AWS Elasticsearch instance outside of the cluster.
 
 
-When a node inside an EKS cluster needs to call an AWS API, it needs to provide extended permissions. Amazon provides an image of `fluentbit` that supports AWS service accounts,and using this you no longer need to follow the traditional way. All you need is to have an IAM role for the AWS service account on an EKS cluster. Using this service account, an AWS permission can be provided to the containers in any pod that use that service account. The result is that the pods on that node can call AWS APIs.
+When a node inside an EKS cluster needs to call an AWS API, it needs to provide extended permissions. Amazon provides an image of `Fluentbit` that supports AWS service accounts,and using this you no longer need to follow the traditional way. All you need is to have an IAM role for the AWS service account on an EKS cluster. Using this service account, an AWS permission can be provided to the containers in any pod that use that service account. The result is that the pods on that node can call AWS APIs.
 
-Your first step is to configure IAM roles for Service Accounts (IRSA) for `fluentbit`, to make sure you have an OIDC identity provider to use IAM roles for the service account in the cluster:
+Your first step is to configure IAM roles for Service Accounts (IRSA) for `Fluentbit`, to make sure you have an OIDC identity provider to use IAM roles for the service account in the cluster:
 
 ```shell
 eksctl utils associate-iam-oidc-provider \
@@ -221,7 +221,7 @@ aws es create-elasticsearch-domain \
     
     It takes a while for Elasticsearch clusters to change to an active state. Check the AWS Console to see the status of the cluster, and continue to the next step when the cluster is ready.
 
-At this point you need to map roles to users in order to set fine-grained access control, because without this mapping all the requests to the cluster will result in permission errors. You should add the `fluentbit` ARN as a backend role to the `all-access` role, which uses the Elasticsearch APIs. To find the `fluentbit` ARN run the following command and export the value of `ARN Role` into the `FLUENTBIT_ROLE` environment variable:
+At this point you need to map roles to users in order to set fine-grained access control, because without this mapping all the requests to the cluster will result in permission errors. You should add the `Fluentbit` ARN as a backend role to the `all-access` role, which uses the Elasticsearch APIs. To find the `fluentbit` ARN run the following command and export the value of `ARN Role` into the `FLUENTBIT_ROLE` environment variable:
 ```shell
 eksctl get iamserviceaccount --cluster dcd-ap-southeast-2
 ```
@@ -252,11 +252,11 @@ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
 ]
 '
 ```
-Finally, it is time to deploy `fluentbit` DaemonSet:
+Finally, it is time to deploy the `Fluentbit` DaemonSet:
 ```shell
 kubectl apply -f src/main/logging/fluentbit.yaml
 ```
-After a few minutes all pods should be up and in running status. This is the end of the, you can open Kibana to visualise the logs. The endpoint for Kibana can be found in the Elasticsearch output tab in the AWS console, or you can run the following command:
+After a few minutes all pods should be up and in running status. you can open Kibana to visualise the logs. The endpoint for Kibana can be found in the Elasticsearch output tab in the AWS console, or you can run the following command:
 ```shell
 echo "Kibana URL: https://${ES_ENDPOINT}/_plugin/kibana/" 
 Kibana URL: https://search-domain-uehlb3kxledxykchwexee.ap-southeast-2.es.amazonaws.com/_plugin/kibana/
