@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 0.16.0
+version: 1.0.0
 appVersion: 8.19.0-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -21,34 +21,29 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-    - kind: added
-      description: Enable NFS permission fixer by default
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/241
     - kind: changed
-      description: Enable configuration for SET_PERMISSIONS docker image variable
+      description: Improve graceful shotdown
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/261
-    - kind: added
-      description: Configurable grace periods
+        url: https://github.com/atlassian/data-center-helm-charts/pull/282
+    - kind: changed
+      description: Update Jira to 8.19.0
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/249
+        url: https://github.com/atlassian/data-center-helm-charts/pull/286
     - kind: changed
       description: Improve documentation
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/236
-        url: https://github.com/atlassian/data-center-helm-charts/pull/243
-        url: https://github.com/atlassian/data-center-helm-charts/pull/245
-        url: https://github.com/atlassian/data-center-helm-charts/pull/252
-        url: https://github.com/atlassian/data-center-helm-charts/pull/253
-        url: https://github.com/atlassian/data-center-helm-charts/pull/256
-        url: https://github.com/atlassian/data-center-helm-charts/pull/258
-        url: https://github.com/atlassian/data-center-helm-charts/pull/260
-        url: https://github.com/atlassian/data-center-helm-charts/pull/263
-        url: https://github.com/atlassian/data-center-helm-charts/pull/268
-        url: https://github.com/atlassian/data-center-helm-charts/pull/270
-        url: https://github.com/atlassian/data-center-helm-charts/pull/272
+        url: https://github.com/atlassian/data-center-helm-charts/pull/275
+        url: https://github.com/atlassian/data-center-helm-charts/pull/276
+        url: https://github.com/atlassian/data-center-helm-charts/pull/277
+        url: https://github.com/atlassian/data-center-helm-charts/pull/279
+        url: https://github.com/atlassian/data-center-helm-charts/pull/280
+        url: https://github.com/atlassian/data-center-helm-charts/pull/284
+        url: https://github.com/atlassian/data-center-helm-charts/pull/285
+        url: https://github.com/atlassian/data-center-helm-charts/pull/289
+        url: https://github.com/atlassian/data-center-helm-charts/pull/290
+        url: https://github.com/atlassian/data-center-helm-charts/pull/291
+        url: https://github.com/atlassian/data-center-helm-charts/pull/293
+        url: https://github.com/atlassian/data-center-helm-charts/pull/295
