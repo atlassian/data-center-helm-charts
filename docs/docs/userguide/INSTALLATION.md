@@ -172,6 +172,9 @@ helm install <release-name> \
     * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
     * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
     * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
+    
+!!!info "Elasticsearch for Bitbucket"
+    While Bitbucket has its own internal Elasticsearch instance, we highly recommend you use an external Elasticsearch installation. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md).    
 
 ## 9. Test your deployed product 
 
