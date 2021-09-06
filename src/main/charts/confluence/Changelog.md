@@ -5,7 +5,7 @@
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
-* DCKUBE-670: Fix synchrony ingress path (#281)
+* DCKUBE-670: Fix Synchrony ingress path (#281)
 * DCKUBE-621: Improve graceful shutdown (#282)
 * DCKUBE-654: Make synchrony configurable (#283)
 * Improved [documentation](https://github.com/atlassian/data-center-helm-charts/) (#275, #276, #277, #279, #280, #284, #285, #289, #290, #291, #293. #295)
