@@ -310,7 +310,7 @@ jira:
 
 !!!tip ""
 
-    By default, the Helm Charts have no container-level resource limits or requests are set.
+    By default, the Helm Charts have no container-level resource limits, however there are default requests that are set.
 
 Specifying these values is fine for CPU limits/requests, but for memory 
 resources it is also necessary to configure the JVM's memory limits. 

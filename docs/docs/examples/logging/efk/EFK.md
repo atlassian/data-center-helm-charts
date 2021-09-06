@@ -25,7 +25,13 @@ Follow these steps to install Elasticsearch
 
 ### 1. Install Elasticsearch
 
-Install Elasticsearch using the instructions [documented here](../../elasticsearch/BITBUCKET_ELASTICSEARCH.md). Once installed make sure Elasticsearch cluster is working as expected:
+Install Elasticsearch using the instructions [documented here](../../elasticsearch/BITBUCKET_ELASTICSEARCH.md). Once installed make sure Elasticsearch cluster is working as expected by first port forwarding the service
+
+```shell
+kubectl port-forward svc/elasticsearch-master 9200
+```
+
+you can then `curl` the endpoint for the current state
 
 ```shell
 $ curl localhost:9200
@@ -58,7 +64,7 @@ fluentd:
    elasticsearch:
      hostname: elasticsearch-master
 ```
-Fluentd tries to parse and send the data to Elasticsearch, but since it's not installed yet the data is lost. At this point you have logged data in the installed Elasticsearch, and you should install Kibana to complete the EFK stack deployment:
+Fluentd tries to parse and send the data to Elasticsearch, but since it's not installed the data is lost. At this point you have logged data in the installed Elasticsearch, and you should install Kibana to complete the EFK stack deployment:
 
 ### 3. Install Kibana
 
@@ -99,18 +105,20 @@ Your first step is to configure IAM roles for Service Accounts (IRSA) for `Fluen
 
 ```shell
 eksctl utils associate-iam-oidc-provider \
-     --cluster dcd-ap-southeast-2 \
+     --cluster <cluster_name> \
      --approve 
 ```
 Then create an IAM policy to limit the permissions to connect to the Elasticsearch cluster. Before this, you need to set the following environment variables: 
 
-* KUBE_NAMESPACE : The namespace for kubernetes cluster
-* ES_DOMAIN_NAME : Elasticsearch domain name
-* ES_VERSION : Elasticsearch version 
-* ES_USER : Elasticsearch username
-* ES_PASSWORD : Elasticsearch password (eg. `export ES_PASSWORD="$(openssl rand -base64 8)_Ek1$"`)
-* ACCOUNT_ID : AWS Account ID
-* AWS_REGION : AWS region code
+| Environment variable  | Value                                                                              |                                                                       
+|-----------------------|------------------------------------------------------------------------------------|
+| KUBE_NAMESPACE        | The namespace for kubernetes cluster                                               |
+| ES_DOMAIN_NAME        | Elasticsearch domain name                                                          |        
+| ES_VERSION            | Elasticsearch version                                                              |
+| ES_USER               | Elasticsearch username                                                             | 
+| ES_PASSWORD           | Elasticsearch password (eg. `export ES_PASSWORD="$(openssl rand -base64 8)_Ek1$"`) |
+| ACCOUNT_ID            | AWS Account ID                                                                     |
+| AWS_REGION            | AWS region code                                                                    |
 
 Now create the file `fluent-bit-policy.json` to define the policy itself:
 
@@ -153,9 +161,9 @@ kubectl describe serviceaccount fluent-bit
 Look for output similar to:
 ```yaml
 Name: fluent-bit
-Namespace:  dcd
+Namespace:  elastic
 Labels: <none>
-Annotations: eks.amazonaws.com/role-arn: arn:aws:iam::887464544476:role/eksctl-dcd-ap-southeast-2-addon-iamserviceac-Role1-9B18FAAFE02F6
+Annotations: eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/eksctl-your-cluster-name-addon-iamserviceac-Role1-0A0A0A0A0A0A0
 Image pull secrets: <none>
 Mountable secrets:  fluent-bit-token-pgpss
 Tokens:  fluent-bit-token-pgpss
@@ -254,7 +262,7 @@ curl -sS -u "${ES_DOMAIN_USER}:${ES_DOMAIN_PASSWORD}" \
 ```
 Finally, it is time to deploy the `Fluentbit` DaemonSet:
 ```shell
-kubectl apply -f src/main/logging/fluentbit.yaml
+kubectl apply -f docs/docs/examples/logging/efk/managed_es/fluentbit.yaml
 ```
 After a few minutes all pods should be up and in running status. you can open Kibana to visualise the logs. The endpoint for Kibana can be found in the Elasticsearch output tab in the AWS console, or you can run the following command:
 ```shell
