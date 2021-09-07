@@ -1,0 +1,39 @@
+name: Feature request
+description: Do you have an idea or suggestion for Helm charts improvement?
+title: "[Suggestion] - "
+labels: [suggestion, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💡 Feature requests only 💡
+        
+        Thanks for taking the time to suggest a new feature! If you are experiencing issues in Helm chart installation, please read [Supported Boundaries document](https://atlassian.github.io/data-center-helm-charts/troubleshooting/SUPPORT_BOUNDARIES/) and contact [Atlassian Support directly](https://support.atlassian.com/contact/).
+  - type: textarea
+    id: suggestion-description
+    attributes:
+      label: Suggestion
+      description: Describe your idea in detail, including the use case when it will be useful
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Product
+      description: You can select multiple products
+      options:
+        - Jira
+        - Confluence
+        - Bitbucket
+        - Other
+      multiple: true
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/atlassian/data-center-helm-charts/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
