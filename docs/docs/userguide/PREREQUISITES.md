@@ -11,11 +11,11 @@ In order to deploy Atlassian’s Data Center products, the following is required
 
 Before installing the Data Center Helm charts you need to set up your environment:
 
-1. :material-kubernetes: [Create and connect to the Kubernetes cluster](#create-and-connect-to-the-kubernetes-cluster)
-2. :material-directions-fork: [Provision an Ingress Controller](#provision-an-ingress-controller)
-3. :material-database: [Provision a database](#provision-a-database)
-4. :material-folder-network: [Configure a shared-home volume](#configure-a-shared-home-volume)
-5. :material-folder-home: [Configure a local-home volume](#configure-local-home-volume)
+1. [Create and connect to the Kubernetes cluster](#create-and-connect-to-the-kubernetes-cluster)
+2. [Provision an Ingress Controller](#provision-an-ingress-controller)
+3. [Provision a database](#provision-a-database)
+4. [Configure a shared-home volume](#configure-a-shared-home-volume)
+5. [Configure a local-home volume](#configure-local-home-volume)
 
 !!!info "Elasticsearch for Bitbucket"
     We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md). 
@@ -77,7 +77,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 ### :material-folder-home: Configure local-home volume
 * As with the [shared-home](#configure-a-shared-home-volume), each pod requires its own volume for `local-home`. Each product needs this for defining operational data. 
-* If not defined, an [emptyDir{}](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
+* If not defined, an [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised. 
 * Although an `emptyDir` may be acceptable for evaluation purposes, we recommend that each pod is allocated its own volume.
 * A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each pod.
 

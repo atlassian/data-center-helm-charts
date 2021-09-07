@@ -1,6 +1,6 @@
 # Troubleshooting tips
 
-This guide contains general tips on how to investigate application deployment that doesn't work correctly.
+This guide contains general tips on how to investigate an application deployment that doesn't work correctly.
 
 ## General tips
 
@@ -9,10 +9,9 @@ The next section assumes you've followed the [installation](../userguide/INSTALL
 
 For installation troubleshooting, you will need to access the Kubernetes cluster and have enough permissions to follow the commands below.
 
-We highly recommend that you read through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/){.external}. 
-For great starting tips read the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/){.external}.
+We highly recommend that you read through the Kubernetes official documentation describing [monitoring, logging and debugging](https://kubernetes.io/docs/tasks/debug-application-cluster/){.external}. Additionally, for great starting tips read the [Application Introspection and Debugging section](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/){.external}.
 
-!!!note "Value placeholders"
+???+ info "Value placeholders"
     Some commands include `<release_name>` and `<namespace>`. Replace them with the Helm release name and namespace specified when running `helm install`.
 
 ## My service is not accessible
@@ -78,6 +77,4 @@ Each application pod needs to have successfully mounted local and shared home. Y
 kubectl get pods --all-namespaces -o=json | jq -c \
 '.items[] | {name: .metadata.name, namespace: .metadata.namespace, claimName:.spec.volumes[] | select( has ("persistentVolumeClaim") ).persistentVolumeClaim.claimName }'
 ```
-Find all the application pods in the output and verify they have the correct claims (shared + local home).
-
-For more details follow the [documentation for persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external}.
+Find all the application pods in the output and verify they have the correct claims (shared home and local home). For more details follow the [documentation for persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external}.
