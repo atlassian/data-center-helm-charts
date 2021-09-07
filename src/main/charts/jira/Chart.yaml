@@ -22,7 +22,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
     - kind: changed
-      description: Improve the graceful shutdown
+      description: Improvements to graceful shutdown
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/282
