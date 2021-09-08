@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ⚠️ Support boundaries ⚠️
+    url: https://atlassian.github.io/data-center-helm-charts/troubleshooting/SUPPORT_BOUNDARIES/
+    about: Please read the scope of support before raising an issue
+  - name: Helm installation issues
+    url: https://support.atlassian.com/contact/
+    about: Contact Atlassian Support with issues relating to Helm installation

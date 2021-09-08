@@ -90,3 +90,8 @@ Some useful resources on provisioning shared storage with the AWS CSI Driver:
 
 - [Amazon EFS CSI driver]( https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html){.external}
 - [Introducing Amazon EFS CSI dynamic provisioning](https://aws.amazon.com/blogs/containers/introducing-efs-csi-dynamic-provisioning/){.external}
+
+---
+!!!tip "Next step - Local storage"
+
+    Having created the shared home volume continue with provisioning the next piece of prerequisite infrastructure, [local storage](../../../userguide/PREREQUISITES.md#configure-local-home-volume).

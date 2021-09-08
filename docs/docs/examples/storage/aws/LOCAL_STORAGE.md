@@ -15,7 +15,7 @@ the output of the above command should include the named driver `ebs.csi.aws.com
 NAME              ATTACHREQUIRED   PODINFOONMOUNT   MODES        AGE
 ebs.csi.aws.com   true             false            Persistent   5d1h
 ```
-If not present the EBS driver can be installed using the following instructions [here](https://www.eksworkshop.com/beginner/170_statefulset/ebs_csi_driver/){.external}.
+If not present the EBS driver can be installed using the following instructions [here](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html){.external}.
 
 
 ### Provisioning
@@ -54,3 +54,9 @@ Some useful resources on provisioning local storage with the AWS CSI Driver
 
 - [EBS CSI driver - GitHub Repo](https://github.com/kubernetes-sigs/aws-ebs-csi-driver)
 - [Official Amazon EBS CSI driver documentation](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
+---
+
+!!!tip "Product installation" 
+
+    Creating the local home volume is the final step in provisioning the [required infrastructure](../../../userguide/PREREQUISITES.md). You can now move onto the next step, [Installation](../../../userguide/INSTALLATION.md).
+
