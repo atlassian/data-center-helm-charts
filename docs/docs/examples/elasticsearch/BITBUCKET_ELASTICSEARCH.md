@@ -12,7 +12,7 @@ helm repo add elastic https://helm.elastic.co
 ```
 then install it:
 ```bash
-helm install elasticsearch --set image.tag="7.9.3" elastic/elasticsearch
+helm install elasticsearch --set imageTag="7.9.3" elastic/elasticsearch
 ```
 !!! info "Prerequisites of Elasticsearch Helm chart"
     Running the above commands will install Elasticsearch with the default configuration, which is 3 worker nodes. 
