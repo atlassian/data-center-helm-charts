@@ -503,7 +503,7 @@ confluence:
     # -- The number of consecutive failures of the Confluence container readiness probe
     # before the pod fails readiness checks.
     #
-    failureThreshold: 30
+    failureThreshold: 6
 
   # Confluence log configuration
   #
@@ -714,7 +714,7 @@ synchrony:
     # -- The number of consecutive failures of the Synchrony container readiness probe
     # before the pod fails readiness checks.
     #
-    failureThreshold: 30
+    failureThreshold: 10
   
   # Synchrony Pod resource requests
   #
