@@ -157,7 +157,7 @@ spec:
               path: /heartbeat
             initialDelaySeconds: 5
             periodSeconds: 1
-            failureThreshold: 30
+            failureThreshold: 10
           resources:
             requests:
               cpu: "2"
@@ -239,7 +239,7 @@ spec:
               path: /status
             initialDelaySeconds: 10
             periodSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 6
           resources:
             requests:
               cpu: "2"
