@@ -43,6 +43,18 @@ spec:
       terminationGracePeriodSeconds: 10
       securityContext:
         fsGroup: 1000
+      initContainers:
+        - name: copy-bamboo-capabilities
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: /home/bamboo/bamboo-agent-home/bin
+              name: bamboo-agent-local-home-bin
+            - mountPath: /bamboo-capabilities
+              name: capabilities
+          command: [ 'sh', '-c', 'cp /bamboo-capabilities/bamboo-capabilities.properties /home/bamboo/bamboo-agent-home/bin' ]
       containers:
         - name: bamboo-agent
           image: atlassian/bamboo-agent-base
@@ -62,5 +74,15 @@ spec:
         - name: bamboo-agent-local-home-bin
           persistentVolumeClaim:
             claimName: "bamboo-agent-local-home-bin"
-
-    
+        - name: capabilities
+          configMap:
+            name: capabilities
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: capabilities
+data:
+  bamboo-capabilities.properties: |
+    "system.jdk.JDK 1.8" /opt/java/openjdk/bin/java
+    "system.git.executable" /usr/bin/git
