@@ -166,7 +166,7 @@ volumes:
       # -- Specify the name of the 'StorageClass' that should be used for the local-home 
       # volume claim.
       #
-      storageClassName: "local-home"
+      storageClassName: "bamboo-local-home"
       
       # -- Specifies the standard K8s resource requests and/or limits for the local-home 
       # volume claims.
@@ -447,7 +447,7 @@ bamboo:
     
     # -- The key in the K8s Secret that contains the Bamboo license key
     #
-    secretKey: license-key
+    secretKey:
 
   # Pod resource requests 
   #

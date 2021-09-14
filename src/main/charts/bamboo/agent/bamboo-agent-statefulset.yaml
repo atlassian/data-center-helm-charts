@@ -1,0 +1,78 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bamboo-agent
+  labels:
+    app: bamboo-agent
+spec:
+  ports:
+    - port: 80
+      name: web
+  clusterIP: None
+  selector:
+    app: bamboo-agent
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bamboo-agent
+spec:
+  selector:
+    matchLabels:
+      app: bamboo-agent # has to match .spec.template.metadata.labels
+  serviceName: bamboo-agent
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bamboo-agent # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: bamboo-agent
+#          command: ["/bin/sleep", "1000d"]
+          image: atlassian/bamboo-agent-base
+          args: [ "https://bamboo-k8s.deplops.com" ]
+          env:
+            - name: VM_OPTS
+              value: "-Dwrapper.java.initmemory=512 -Dwrapper.java.maxmemory=2048"
+          volumeMounts:
+            - mountPath: /home/bamboo/bamboo-agent-home
+              name: bamboo-agent-local-home
+            - mountPath: /home/bamboo/bamboo-agent-home/bin
+              name: bamboo-agent-local-home-bin
+#      volumes:
+#        - name: capabilities
+#          configMap:
+#            name: capabilities
+  volumeClaimTemplates:
+    - metadata:
+        name: bamboo-agent-local-home
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "bamboo-local-home"
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: bamboo-agent-local-home-bin
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "bamboo-local-home"
+        resources:
+          requests:
+            storage: 1Gi
+
+
+#---
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: capabilities
+#data:
+#  bamboo-capabilities.properties: |
+#    "system.jdk.JDK 1.8" /opt/java/openjdk/bin/java
+    
