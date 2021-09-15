@@ -358,7 +358,7 @@ volumeClaimTemplates:
   valueFrom:
     secretKeyRef:
       name: {{ .Values.bitbucket.elasticSearch.credentials.secretName | quote }}
-      key: {{ .Values.bitbucket.elasticSearch.credentials.usernameSecreyKey | quote }}
+      key: {{ .Values.bitbucket.elasticSearch.credentials.usernameSecretKey | quote }}
 - name: PLUGIN_SEARCH_ELASTICSEARCH_PASSWORD
   valueFrom:
     secretKeyRef:

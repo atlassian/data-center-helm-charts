@@ -7,7 +7,7 @@ metadata:
   {{- include "bitbucket.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - {{ .Values.volumes.sharedHome.accessMode }}
+    - {{ .Values.volumes.sharedHome.persistentVolumeClaim.accessMode }}
   {{- if not (kindIs "invalid" .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName) }}
   storageClassName: {{ .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName | quote }}
   {{- end }}
