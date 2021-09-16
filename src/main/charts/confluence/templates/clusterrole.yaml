@@ -4,7 +4,7 @@ kind: ClusterRole
 metadata:
   name: {{ template "confluence.clusterRoleName" . }}
   labels:
-  {{- include "confluence.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
 rules:
   - apiGroups:
       - ""

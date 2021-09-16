@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "crowd.fullname" . }}-fluentd-config
+  name: {{ include "common.names.fullname" . }}-fluentd-config
   labels:
-  {{- include "crowd.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
   fluent.conf: |
     <source>

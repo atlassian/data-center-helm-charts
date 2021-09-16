@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "bitbucket.fullname" . }}-shared-home
+  name: {{ include "common.names.fullname" . }}-shared-home
   labels:
-  {{- include "bitbucket.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.volumes.sharedHome.persistentVolumeClaim.accessMode }}
