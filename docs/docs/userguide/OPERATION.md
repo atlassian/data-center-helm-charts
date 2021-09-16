@@ -30,14 +30,11 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
     type: OnDelete
 ```  
 
-### Rolling upgrade
+### Upgrade
 
-=== "Jira"
-       To learn about rolling upgrade in Jira see [Jira rolling upgrade](product_upgrades/JIRA_UPGRADE.md).
-=== "Confluence"
-       To learn about rolling upgrade in Confluence see [Confluence rolling upgrade](product_upgrades/CONFLUENCE_UPGRADE.md).
-=== "Bitbucket"
-       To learn about rolling upgrade in Bitbucket see [Bitbucket rolling upgrade](product_upgrades/BITBUCKET_UPGRADE.md).
+To learn about upgrade the Helm chart see [Helm chart upgrade](upgrades/HELM_CHART_UPGRADE.md).  
+To learn about upgrade the products without upgrading the Helm chart see [Products upgrade](upgrades/PRODUCTS_UPGRADE.md).
+
 
 ## Examples
 ### Logging
