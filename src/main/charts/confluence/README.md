@@ -89,6 +89,7 @@ Kubernetes: `>=1.19.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Confluence pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Confluence pods |
 | replicaCount | int | `1` | The initial number of Confluence pods that should be started at deployment time. Note that Confluence requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete. |
+| schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Confluence pods |
 | serviceAccount.clusterRole.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |
 | serviceAccount.clusterRole.name | string | `nil` | The name of the ClusterRole to be used. If not specified, but the "serviceAccount.clusterRole.create" flag is set to 'true', then the ClusterRole name will be auto-generated. |
 | serviceAccount.clusterRoleBinding.create | bool | `true` | Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it already exists. |
