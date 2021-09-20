@@ -1,5 +1,6 @@
 package test;
 
+import io.vavr.collection.Traversable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
@@ -226,6 +227,7 @@ class IngressTest {
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_contextPath(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain",
                 "confluence.service.contextPath", "/confluence-tmp"));
@@ -233,35 +235,79 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        final List<String> ingressPaths = ingresses
-                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
-                .collect(Collectors.toList());
-        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/confluence-tmp", "/confluence-tmp/setup");
+        final List<String> ingressPaths = extractAllPaths(ingresses);
 
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/confluence-tmp",
+                "/confluence-tmp/synchrony",
+                "/confluence-tmp/setup",
+                "/confluence-tmp/bootstrap");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_contextPath_synchronyDisabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "false",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "confluence.service.contextPath", "/confluence-tmp"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/confluence-tmp",
+                "/confluence-tmp/setup",
+                "/confluence-tmp/bootstrap");
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_value(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain",
                 "confluence.service.contextPath", "/context",
                 "ingress.path", "/ingress"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
-        Assertions.assertEquals(2, ingresses.size());
+        final List<String> ingressPaths = extractAllPaths(ingresses);
 
-        final List<String> ingressPaths = ingresses
-                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
-                .collect(Collectors.toList());
-        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/ingress", "/ingress/setup");
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/ingress",
+                "/ingress/synchrony",
+                "/ingress/setup",
+                "/ingress/bootstrap");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_value_synchronyDisabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "false",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "confluence.service.contextPath", "/context",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/ingress",
+                "/ingress/setup",
+                "/ingress/bootstrap");
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_no_context_value(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain",
                 "ingress.path", "/ingress"));
@@ -269,27 +315,79 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        final List<String> ingressPaths = ingresses
-                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
-                .collect(Collectors.toList());
-        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/ingress", "/ingress/setup");
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/ingress",
+                "/ingress/synchrony",
+                "/ingress/setup",
+                "/ingress/bootstrap");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_no_context_value_synchronyDisabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "false",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/ingress",
+                "/ingress/setup",
+                "/ingress/bootstrap");
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_default(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(2, ingresses.size());
 
-        final List<String> ingressPaths = ingresses
-                .map(ingress -> ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path").asText())
-                .collect(Collectors.toList());
-        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder("/", "/setup");
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/",
+                "/synchrony",
+                "/setup",
+                "/bootstrap");
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_ingress_path_default_synchronyDisabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "false",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
 
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(2, ingresses.size());
+
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/",
+                "/setup",
+                "/bootstrap");
+    }
+
+    private List<String> extractAllPaths(Traversable<KubeResource> ingresses) {
+        return ingresses
+                .flatMap(ingress -> ingress.getNode("spec", "rules"))
+                .flatMap(rule -> rule.path("http").path("paths"))
+                .map(path -> path.path("path").asText())
+                .collect(Collectors.toList());
+    }
 }

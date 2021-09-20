@@ -11,7 +11,7 @@ helm repo add atlassian-data-center \
  https://atlassian.github.io/data-center-helm-charts
 ```
 
-Update the repo:
+Update the repository:
 
 ```shell
 helm repo update
@@ -28,7 +28,8 @@ helm show values atlassian-data-center/<product> > values.yaml
 ## 3. Configure database
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
 
-> By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
+!!!tip "Automated setup steps"
+    By providing all the required database values, you will bypass the database connectivity configuration during the product setup.
 
 !!!info "Migration"
     If you are migrating an existing Data Center product to Kubernetes, use the values of your product's database. See [Migration guide](MIGRATION.md).
@@ -52,9 +53,10 @@ database:
     passwordSecretKey: password
 ```
 
-> For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
+!!!info "Database connectivity"
+    For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
 
-> Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
+    Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
     
 ## 4. Configure Ingress
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external} provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
@@ -72,9 +74,10 @@ ingress:
   tlsSecretName: <tls_certificate_name>
 ```
 
-> For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#ingress). 
+!!!info "Ingress configuration"
+    For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#ingress). 
 
-> See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
+    See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
     
 ## 5. Configure persistent storage
 
@@ -100,25 +103,28 @@ volumes:
       create: true
       storageClassName: <storage-class-name>
 ```
-
-> For more details, please refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
+!!!info "Volume configuration"
+    For more details, refer to the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
     
-!!!info "Bitbucket shared storage"
+!!!tip "Bitbucket shared storage"
     Bitbucket needs a dedicated NFS server providing persistence for a shared home. Prior to installing the Helm chart, a suitable NFS shared storage solution must be provisioned. The exact details of this resource will be highly site-specific, but you can use this example as a guide: [Implementation of an NFS Server for Bitbucket](../examples/storage/nfs/NFS.md).
     
-## 6. Configure license and sysadmin credentials for Bitbucket
+## 6. Configure clustering
 
-Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml).
-Create a Kubernetes secret to hold the Bitbucket license:
+By default, the Helm charts will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
 
-```shell
-kubectl create secret generic <license_secret_name> --from-literal=license-key='<bitbucket_license_key>'
+```yaml
+  clustering:
+    enabled: true
 ```
 
-Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
+  
+## 7. Configure license 
+
+You can configure the product license if you provide a `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml). To do that, create a Kubernetes secret to hold the product license:
 
 ```shell
-kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
+kubectl create secret generic <license_secret_name> --from-literal=license-key='<product_license_key>'
 ```
 
 Update the `values.yaml` file with the secrets:
@@ -127,16 +133,29 @@ Update the `values.yaml` file with the secrets:
 license:
   secretName: <secret_name>
   secretKey: license-key
-...
-sysadminCredentials:
-  secretName: <sysadmin_creds_secret_name>
-  usernameSecretKey: username
-  passwordSecretKey: password
-  displayNameSecretKey: displayName
-  emailAddressSecretKey: emailAddress
 ```
+???tip "Sysadmin credentials for Bitbucket "
 
-## 7. Install your chosen product
+    Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and also provide the `license` stanza from the previous step.
+
+    Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
+
+    ```shell
+    kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'
+    ```
+
+    Update the `values.yaml` file with the secrets:
+
+    ```yaml
+    sysadminCredentials:
+      secretName: <sysadmin_creds_secret_name>
+      usernameSecretKey: username
+      passwordSecretKey: password
+      displayNameSecretKey: displayName
+      emailAddressSecretKey: emailAddress
+    ```
+
+## 8. Install your chosen product
 
 ```shell
 helm install <release-name> \
@@ -153,8 +172,12 @@ helm install <release-name> \
     * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
     * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
     * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
+    
+!!!info "Elasticsearch for Bitbucket"
+    We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md).    
+        
 
-## 8. Test your deployed product 
+## 9. Test your deployed product 
 
 Make sure the service pod/s are running, then test your deployed product:
 
@@ -163,9 +186,9 @@ helm test <release-name> --logs --namespace <namespace>
 ```
 
 * This will run some basic smoke tests against the deployed release.
-* If any of these tests fail, it is likely that the deployment was not successful. Please check the status of the deployed resources for any obvious errors that may have caused the failure.
+* If any of these tests fail, it is likely that the deployment was not successful. Check the status of the deployed resources for any obvious errors that may have caused the failure.
 
-## 9. Complete product setup 
+## 10. Complete product setup 
 
 Using the service URL provided by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 

@@ -12,17 +12,17 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 ## Support disclaimer
 
 !!! warning
-
-    These Helm charts are in **Beta phase and unsupported**, with the goal of introducing official support once they have been
-    stabilized.
+    We **don’t officially support** the functionality described in the [examples](examples/EXAMPLES.md) or the documented [platforms](platforms/PLATFORMS.md). You should use them for reference only.
     
-    Also, we **don’t officially support** the functionality described in the [examples](examples/EXAMPLES.md) or the documented [platforms](platforms/PLATFORMS.md). You should use them for reference only. 
+    Read more about [what we support and what we don’t](troubleshooting/SUPPORT_BOUNDARIES.md). 
+
+    Note that Jira currently has [limitations with scaling](troubleshooting/LIMITATIONS.md#jira-and-horizontal-scaling). Read more about this and other [product and platform limitations](troubleshooting/LIMITATIONS.md).
 
 ## Architecture
 
 The diagram below provides a high level overview of what a typical deployment might look like when using the Atlassian Data Center Helm charts:
 
-![architecture](assets/images/k8s-overview.png "Request routing via Ingress")
+![architecture](assets/images/KubernetesOverview.png "Request routing via Ingress")
 
 ## Installing the Helm charts
 
@@ -38,18 +38,18 @@ The diagram below provides a high level overview of what a typical deployment mi
 * [Examples](examples/EXAMPLES.md) - various configuration examples
 * [Troubleshooting](troubleshooting/TROUBLESHOOTING.md) - how to debug issues with installation
 
+
 ## Product versions
 The minimum versions that we support for each product are:
-=== "Jira Data Center"
-      8.19
-=== "Confluence Data Center"
-      7.13
-=== "Bitbucket Data Center"
-      7.11
+
+| Jira DC                                                                                                 | Confluence DC                                                                              | Bitbucket DC                                                                                                                |
+|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html) | [7.13](https://confluence.atlassian.com/doc/confluence-7-13-release-notes-1044114085.html)  | [7.11](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-11-release-notes-1044104495.html) |
+      
 
 ## Feedback
 
-If you find any issues, [raise a ticket](https://github.com/atlassian/data-center-helm-charts/issues/new){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
+If you find any issues, [raise a ticket](https://support.atlassian.com/contact/){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
   
 
 ## Contributions

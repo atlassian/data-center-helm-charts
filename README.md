@@ -18,15 +18,12 @@ We provide extensive documentation to support our Helm charts. This includes pre
 
 ## Support disclaimer
 
-These Helm charts are in **beta phase and unsupported**, with the goal of introducing official support once they have been
-stabilized.
-
-Also, we **don’t officially support** the functionality described in the [examples](https://atlassian.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
+We **don’t officially support** the functionality described in the [examples](https://atlassian.github.io/data-center-helm-charts/examples/EXAMPLES/) or the documented [platforms](https://atlassian.github.io/data-center-helm-charts/platforms/PLATFORMS/). You should use them for reference only. 
 
 
 ## Feedback
 
-If you find any issue, [raise a ticket](https://github.com/atlassian/data-center-helm-charts/issues/new). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
+If you find any issue, [raise a ticket](https://support.atlassian.com/contact/). If you have general feedback or question regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes).
   
 
 ## Contributions

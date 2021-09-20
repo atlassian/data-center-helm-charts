@@ -34,7 +34,7 @@ Create a namespace for the NFS
 ```shell
 kubectl create namespace nfs
 ```
-Clone this repo and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
+Clone this repository and from the sub-directory, `data-center-helm-charts/docs/docs/examples/storage/nfs`, run the following command:
 ```shell
 helm install nfs-server nfs-server-example --namespace nfs
 ```
@@ -76,3 +76,7 @@ sharedHome:
     persistentVolumeClaim:
       claimName: "custom-nfs-server-claim"
 ```
+---
+!!!tip "Next step - Local storage"
+
+    Having created the shared home NFS continue with provisioning the next piece of prerequisite infrastructure, [local storage](../../../userguide/PREREQUISITES.md#configure-local-home-volume).

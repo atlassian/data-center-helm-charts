@@ -51,5 +51,11 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 ######            Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
+{{ if ( and .Values.synchrony.enabled ( not ( or .Values.volumes.synchronyHome.persistentVolumeClaim.create .Values.volumes.synchronyHome.customVolume ))) }}
+#################################################################################
+######      WARNING: Persistent volume is not used for Synchrony Home!!!    #####
+######         Synchrony logs will be lost when the pod is terminated.      #####
+#################################################################################
+{{- end }}
 
 For further documentation, see https://atlassian.github.io/data-center-helm-charts/

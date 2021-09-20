@@ -1,5 +1,18 @@
 # Change Log
 
+
+## 1.0.0
+This is the first officially supported version of the Helm chart.
+
+![AppVersion: 8.13.9-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.13.9-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* DCKUBE-621: Improvements to graceful shutdown (#282)
+* DCKUBE-626: Update Jira to 8.19.0 (#286)
+* Improved [documentation](https://github.com/atlassian/data-center-helm-charts/) (#275, #276, #277, #279, #280, #284, #285, #289, #290, #291, #293. #295)
+
+
 ## 0.16.0
 
 ![AppVersion: 8.13.9-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.13.9-jdk11&color=success&logo=)

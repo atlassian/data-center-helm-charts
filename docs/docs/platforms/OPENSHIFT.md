@@ -2,11 +2,11 @@
 
 The Helm charts are vendor agnostic and create objects from standard APIs that [OpenShift](https://www.openshift.com/){.external} fully supports.
 
-However, by default OpenShift will not allow running containers as users specified in the image Dockerfiles
-or **securityContext.fsGroup** in a statefulset/deployment spec. There are a couple of ways to fix it.
+However, by default OpenShift will not allow running containers as users specified in the image `Dockerfiles`
+or `securityContext.fsGroup` in a statefulset/deployment spec. There are a couple of ways to fix this.
 
-## Attach anyuid policies
-If possible, attach anyuid policy to 2 serviceAccounts. Here's an example for a Bitbucket installation.
+## Attach `anyuid` policies
+If possible, attach `anyuid` policy to 2 serviceAccounts. Here's an example for a Bitbucket installation.
 Please, note that the service account names vary depending on the Data Center product:
 
 === "For Bitbucket pods"
@@ -21,7 +21,7 @@ Please, note that the service account names vary depending on the Data Center pr
     oc adm policy add-scc-to-user anyuid -z default -n git
     ```
 
-Typically, *volumes.sharedHome.persistentVolumeClaim.nfsPermissionFixer* needs to be set to true to make volume writable.
+Typically, the `volumes.sharedHome.persistentVolumeClaim.nfsPermissionFixer` needs to be set to `true` to make volume writable.
 It depends on the storage backend though.
 
 ## Set no security context

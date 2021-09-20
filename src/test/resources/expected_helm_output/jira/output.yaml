@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-0.16.0
+    helm.sh/chart: jira-1.0.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.9-jdk11"
+    app.kubernetes.io/version: "8.19.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-0.16.0
+    helm.sh/chart: jira-1.0.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.9-jdk11"
+    app.kubernetes.io/version: "8.19.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -36,10 +36,10 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-0.16.0
+    helm.sh/chart: jira-1.0.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.9-jdk11"
+    app.kubernetes.io/version: "8.19.0-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -59,10 +59,10 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-0.16.0
+    helm.sh/chart: jira-1.0.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.9-jdk11"
+    app.kubernetes.io/version: "8.19.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -95,7 +95,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: jira
-          image: "atlassian/jira-software:8.13.9-jdk11"
+          image: "atlassian/jira-software:8.19.0-jdk11"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -155,6 +155,10 @@ spec:
               subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
         - name: local-home
           emptyDir: {}
@@ -170,10 +174,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-0.16.0
+    helm.sh/chart: jira-1.0.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.9-jdk11"
+    app.kubernetes.io/version: "8.19.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -202,10 +206,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-0.16.0
+    helm.sh/chart: jira-1.0.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.13.9-jdk11"
+    app.kubernetes.io/version: "8.19.0-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

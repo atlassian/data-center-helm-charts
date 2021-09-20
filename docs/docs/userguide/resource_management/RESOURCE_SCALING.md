@@ -18,8 +18,21 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       ```
 
 !!!note "Initial cluster size"
-    **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
-For details on modifying the `cpu` and `memory` requirements of the `StatfuleSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md) page.
+      **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
+      
+For details on modifying the `cpu` and `memory` requirements of the `StatefulSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
+
+### Scaling Jira safely
+At present there are issues relating to index replication with Jira when immediately scaling up by more than 1 pod at a time. See [Jira and horizontal scaling](../../troubleshooting/LIMITATIONS.md#jira-limitations-and-horizontal-scaling).
+
+!!!warning "Before scaling your cluster"
+
+      Make sure there's at least one snapshot file in the `<shared-home>/export/indexsnapshots` directory. New pods will attempt to use the files in this directory to replicate the index. If there is no snapshot present in  `<shared-home>/export/indexsnapshots` then [create an initial index snapshot](JIRA_INDEX_SNAPSHOT.md)
+
+Having followed the steps above, and ensured a healthy snapshot index is available, [scale the cluster as necessary](#horizontal-scaling-adding-pods). Once scaling is complete confirm that the index is still healthy [using the approach prescribed in Step 3](JIRA_INDEX_SNAPSHOT.md). If there are still indexing issues then please refer to the guides below for details on how address them:
+
+* [Unable to perform a background re-index error](https://confluence.atlassian.com/jirakb/how-to-fix-a-jira-application-that-is-unable-to-perform-a-background-re-index-at-this-time-error-316637947.html)
+* [Troubleshoot index problems in Jira server](https://confluence.atlassian.com/jirakb/troubleshoot-index-problems-in-jira-server-203394752.html)
 
 ## Vertical scaling - adding resources
 The resource `requests` and `limits` for a `StatefulSet` can be defined before product deployment or for deployments that are already running within the Kubernetes cluster. Take note that vertical scaling will result in the pod being re-created with the updated values.
@@ -50,4 +63,13 @@ For existing deployments the `requests` and `limits` values can be dynamically u
       ```
 
 === "Imperatively"
-      Using `kubectl edit` on the appropriate `StatefulSet` the respective `cpu` and `memory` values can be modified. Saving the changes will then result in the existing product pod(s) being re-provisioned with the updated values.
+      Using `kubectl edit` on the appropriate `StatefulSet` the respective `cpu` and `memory` values can be modified i.e.
+
+      ```yaml
+      resources:
+        requests:
+          cpu: "2"
+          memory: 2G
+      ```
+
+      Saving the changes will then result in the existing product pod(s) being re-provisioned with the updated values.

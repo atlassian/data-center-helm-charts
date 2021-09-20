@@ -1,6 +1,6 @@
 # Configuration 
 
-## Ingress
+## :material-directions-fork: Ingress
 In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
 
 The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller. 
@@ -10,10 +10,12 @@ Some key considerations to note when configuring the controller are:
 !!!Ingress requirements
     * At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
     * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
-       * Usage of the NGINX Ingress Controller 
-       * Ingress Controller annotations
-       * The request max body size
-       * The hostname of the ingress resource
+      
+         * Usage of the NGINX Ingress Controller 
+         * Ingress Controller annotations
+         * The request max body size
+         * The hostname of the ingress resource
+    
     * When installed, with the provided [configuration](https://kubernetes.github.io/ingress-nginx/deploy/){.external}, the NGINX Ingress Controller will provision an internet-facing (see diagram below) load balancer on your behalf. The load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt){.external} or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
     * If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers){.external} option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
     * The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
@@ -29,19 +31,22 @@ Some key considerations to note when configuring the controller are:
     5. Service forwards request to appropriate pod
     6. Pod handles request 
 
+!!!info "Request body size"
+    By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. The maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
 
-## Volumes
-The Data Center products make use of filesystem storage. Each DC node has its own "local-home" volume, and all nodes in the DC cluster share a single "shared-home" volume.
+## :material-folder-home: Volumes
+The Data Center products make use of filesystem storage. Each DC node has its own `local-home` volume, and all nodes in the DC cluster share a single `shared-home` volume.
 
-By default, the Helm charts will configure all of these volumes as ephemeral "emptyDir" volumes. This makes it possible to install the charts without configuring any volume management, but comes with two big caveats:
+By default, the Helm charts will configure all of these volumes as ephemeral [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} volumes. This makes it possible to install the charts without configuring any volume management, but comes with two big caveats:
 
-Any data stored in the local-home or shared-home will be lost every time a pod starts. Whilst the data that is stored in local-home can generally be regenerated (e.g. from the database), this can be very a very expensive process that sometimes required manual intervention.
+1. Any data stored in the `local-home` or `shared-home` will be lost every time a pod starts. 
+1. Whilst the data that is stored in `local-home` can generally be regenerated (e.g. from the database), this can be a very expensive process that sometimes requires manual intervention.
 
-The shared-home volume will not actually be shared between multiple nodes in the DC cluster. Whilst this may not immediately prevent scaling the DC cluster up to multiple nodes, certain critical functionality of the products relies on the shared filesystem working as expected.
+For these reasons, the default volume configuration of the Helm charts is suitable only for running a single DC pod for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-pod DC clusters to operate correctly.
 
-For these reasons, the default volume configuration of the Helm charts is suitable only for running a single DC node for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-node DC clusters to operate correctly.
+While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external} and `PersistentVolumeClaims`. 
 
-While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes `PersistentVolumes` and `PersistentVolumeClaims`. The `local-home` volume requires a `PersistentVolume` with `ReadWriteOnce (RWO)` capability, and `shared-home` requires a `PersistentVolume` with `ReadWriteMany (RWX)` capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own RWX volumes (e.g. AzureFile, ElasticFileStore). While this entails a higher upfront setup effort, it gives the best flexibility.
+The `local-home` volume requires a `PersistentVolume` with [ReadWriteOnce (RWO)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability, and `shared-home` requires a `PersistentVolume` with [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own `RWX` volumes (e.g. [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}). While this entails a higher upfront setup effort, it gives the best flexibility.
 
 ### Volumes configuration
 By default, the charts will configure the `local-home` and `shared-home` values as follows:
@@ -54,7 +59,7 @@ volumes:
     emptyDir: {}
 ```
 
-As explained above, this default configuration is suitable only for testing purposes. Proper volume management needs to be configured.
+As explained above, this default configuration is suitable only for evaluation or testing purposes. Proper volume management needs to be configured.
 
 In order to enable the persistence of data stored in these volumes, it is necessary
 to replace these volumes with something else.
@@ -105,7 +110,7 @@ using `PersistentVolumes` is the strongly recommended approach.
 2. We have an example detailing how an existing EFS filesystem can be created and consumed using static provisioning: [Shared storage - utilizing AWS EFS-backed filesystem](../examples/storage/aws/SHARED_STORAGE.md).
 3. You can also refer to an example on how a Kubernetes cluster and helm deployment can be configured to utilize AWS EBS backed volumes: [Local storage - utilizing AWS EBS-backed volumes](../examples/storage/aws/LOCAL_STORAGE.md).
 
-## Additional volumes
+### Additional volumes
 
 In addition to the `local-home` and `shared-home` volumes that are always
 attached to the product pods, you can attach your own volumes for your own
@@ -131,7 +136,7 @@ volumes:
          claimName: my-volume-claim
 ```
 
-## Database connectivity
+## :material-database: Database connectivity
 
 The products need to be supplied with the information they need to connect to the 
 database service. Configuration for each product is mostly the same, with some small differences.
@@ -150,7 +155,7 @@ on the JDBC driver being used, but some examples are:
 
 !!!info "Database creation"
 
-    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below: 
+    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
    
     === "Jira"
 
@@ -200,37 +205,48 @@ interactively during first-time setup, or automatically by specifying certain co
 via Kubernetes.
 
 Depending on the product, the `database.type`, `database.url` and `database.driver` chart values
-can be provided. In addition, the database username and password can be provided via a Kubernetes secret,
+can be provided. In addition, the database username and password can be provided via a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external},
 with the secret name specified with the `database.credentials.secretName` chart value. 
 When all the required information is provided in this way, the database connectivity configuration screen
 will be bypassed during product setup.
 
-## Namespace
+## :fontawesome-solid-user-tag: Namespace
 
-The Helm charts are not opinionated as to whether they have a Kubernetes namespace to themselves. 
+The Helm charts are not opinionated whether they have a [Kubernetes namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/){.external} to themselves. 
 If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
-## Clustering
-By default, the Helm charts are will not configure the products for Data Center clustering. 
+## :fontawesome-solid-network-wired: Clustering
+By default, the Helm charts will not configure the products for Data Center clustering. In order to enable clustering, the `enabled` property for clustering must be set to `true`.
 
-In order to enable clustering, the appropriate chart value must be set to `true`.
+!!!note ""
 
-=== "Jira"
+    === "Jira"
 
-    `jira.clustering.enabled`
+        ```yaml
+        jira:
+          clustering:
+            enabled: true
+        ```
 
-=== "Confluence"
+    === "Confluence"
 
-    `confluence.clustering.enabled`
+        ```yaml
+        confluence:
+          clustering:
+            enabled: true
+        ```
 
-=== "Bitbucket"
+    === "Bitbucket"
 
-    `bitbucket.clustering.enabled`
+        ```yaml
+        bitbucket:
+          clustering:
+            enabled: true
+        ```
 
-In addition, the `shared-home` volume must be correctly configured as a read-write shared filesystem (e.g. NFS,
-AWS EFS, Azure Files)
+In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
 
-## Additional libraries & plugins
+## :material-book-cog: Additional libraries & plugins
 
 The products' Docker images contain the default set of bundled libraries and plugins. 
 Additional libraries and plugins can be mounted into the product containers during
@@ -240,7 +256,7 @@ shipped with the products' by default.
 To make use of this mechanism, the additional files need to be available as part
 of a Kubernetes volume. Options here include putting them into the `shared-home` volume 
 that's [required as part of the prerequisites](PREREQUISITES.md#configure-a-shared-home-volume). Alternatively, you can 
-create a custom volume `PV` for them, as long as it has `ReadOnlyMany` capability. 
+create a custom `PersistenVolume` for them, as long as it has `ReadOnlyMany` capability. 
 
 !!!info "Custom volumes for loading libraries"
 
@@ -279,15 +295,9 @@ container.
 
 For more details on the above, and how 3rd party libraries can be supplied to a Pod see the example [External libraries and plugins](../examples/external_libraries/EXTERNAL_LIBS.md)
 
-## Request body size
-By default the maximum allowed size for the request body is set to 250MB. If the size in a request exceeds the maximum 
-size of the client request body, an 413 error will be returned to the client. If the maximum request body can be 
-configured by changing the value of `maxBodySize` in 'values.yaml'.
+## :octicons-cpu-16: CPU and memory requests
 
-## Resources
-
-The Helm charts allow you to specify container-level CPU and memory resources,
-using standard Kubernetes `limit` and `request` structures, e.g.
+The Helm charts allow you to specify container-level CPU and memory [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits){.external} e.g.
 
 ```yaml
 jira:
@@ -298,7 +308,9 @@ jira:
         memory: "8G"
 ``` 
 
-By default, no container-level resource limits or requests are set.
+!!!tip ""
+
+    By default, the Helm Charts have no container-level resource limits, however there are default requests that are set.
 
 Specifying these values is fine for CPU limits/requests, but for memory 
 resources it is also necessary to configure the JVM's memory limits. 
@@ -327,17 +339,17 @@ hopefully be removed.
 You can read more about [resource scaling](../userguide/resource_management/RESOURCE_SCALING.md#vertical-scaling-adding-resources) and [resource requests and limits](../userguide/resource_management/REQUESTS_AND_LIMITS.md).
 
 
-## Additional containers
+## :octicons-container-16: Additional containers
 
-The Helm charts allow you to add your own `container` and `initContainer` 
-entries to the product pods.  Use the values `additionalContainers` and
-`additionalInitContainers` for this.
+The Helm charts allow you to add your own `container` and [initContainer](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/){.external} entries to the product pods. Use the `additionalContainers` and `additionalInitContainers` stanzas within the `values.yaml` for this. One use-case for an additional container would be to attach a sidecar container to the product pods.
 
-One use-case for an additional container would be to attach a sidecar container 
-to the product pods.
+## :material-checkbox-multiple-marked-outline: Additional options
 
-## Additional labels, toleration's, node selectors, affinity
+The Helm charts also allow you to specify: 
 
-The Helm charts also allow you to specify `additionalLabls`, `tolerations`, 
-`nodeSelectors` and `affinities`. These are standard Kubernetes structures 
-that will be included in the pods. 
+* [`additionalLabels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/){.external}
+* [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external}, 
+* [`nodeSelectors`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector){.external}  
+* [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. 
+  
+These are standard Kubernetes structures that will be included in the pods.

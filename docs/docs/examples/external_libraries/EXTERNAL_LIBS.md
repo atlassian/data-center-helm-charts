@@ -1,4 +1,9 @@
 # External libraries and plugins
+
+!!!warning "`.jar` files only"
+
+    Whether loading external libraries, drivers or plugins, the approaches outlined here can only be used with `.jar` files. Plugin `obr` files can be extracted (unzipped) to access the included `.jar`
+
 In some situations, you may want to load 3rd party plugins, drivers or libraries so that they are available to the product 
 being installed.
 
@@ -135,7 +140,7 @@ nfsPermissionFixer:
 ```
 !!!warning "shared-home permissions"
 
-    If taking this approach ensure the last thing your custom command does is apply the relevant permissions to the `shared-home` mount, see line `12` in `yaml` 
+    If taking this approach ensure the last thing your custom command does is apply the relevant permissions to the `shared-home` mount, see line `10` in `yaml` 
     snippet above. 
 
     Each product chart has a `sharedHome.permissionFix.command` helper for doing this. look at Jira's helper [sharedHome.permissionFix.command](https://github.com/atlassian/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L102) 
