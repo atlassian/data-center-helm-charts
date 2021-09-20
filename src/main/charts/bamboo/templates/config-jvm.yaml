@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "bamboo.fullname" . }}-jvm-config
+  labels:
+    {{- include "bamboo.labels" . | nindent 4 }}
+data:
+  additional_jvm_args: >-
+    {{ include "bamboo.sysprop.fluentdAppender" . }}
+    {{- range .Values.bamboo.additionalJvmArgs }}
+    {{ . }}
+    {{- end }}
+  max_heap: {{ .Values.bamboo.resources.jvm.maxHeap }}
+  min_heap: {{ .Values.bamboo.resources.jvm.minHeap }}
+  reserved_code_cache: {{ .Values.bamboo.resources.jvm.reservedCodeCache }}
