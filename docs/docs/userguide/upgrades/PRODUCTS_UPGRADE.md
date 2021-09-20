@@ -17,9 +17,12 @@ Go to Atlassian Docker Hub page of relevant product to pick a tag that matches y
 In the example you're running Jira using the `8.13.0-jdk11` tag, and you'll be upgrading to `8.13.1-jdk11` - our *target*.
     
 ## 2. Define the upgrade strategy
-There are two strategies to upgrade the application, _normal upgrade_ and _rolling upgrade_. You can upgrade 
-the product using rolling upgrade to avoid any interrupt in service during the upgrade process only if the 
-target version is zero downtime compatible. 
+There are two strategies to upgrade the application:
+
+* _Normal upgrade_: The service will interrupt during the upgrade.
+* _Rolling upgrade_: Upgrade will proceed with zero downtime.
+ 
+You can use rolling upgrade only if the target version is zero downtime compatible. 
 
 !!! important "Can you use rolling upgrade option?"
     To confirm if you can run rolling upgrade option, check your current and target product versions in the relevant link:  
@@ -75,7 +78,7 @@ target version is zero downtime compatible.
 === "Rolling upgrade"
     ### Rolling (zero downtime) upgrade
     
-    !!! note "Select the product tab to upgrade"
+    !!! info "Select the product tab to upgrade"
         Upgrading the product with zero downtime is bit different for each product. Please select the product and follow 
         the steps to complete the rolling upgrade.  
         
