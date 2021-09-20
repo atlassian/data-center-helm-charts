@@ -87,7 +87,7 @@ to avoid mixed version during the upgrade. In this option the product will have 
 will apply when the target product version is zero downtime compatible. If you are not sure about this please 
 see the links above. 
 * **No product upgrade**: Upgrade the Helm chart with no change in product version. This method is recommending for 
-the case the target Helm chart has the same product version as current Helm chart or for any reason you don't want to 
+the case that the target product version is the same as current product version or for any reason you don't want to 
 change the product version but still you like to upgrade the helm chart. 
  
  
