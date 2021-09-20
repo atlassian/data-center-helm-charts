@@ -32,8 +32,8 @@ In this strategy users select the pod to upgrade by deleting it, and Kubernetes 
 
 ### Upgrade
 
-To learn about upgrade the Helm chart see [Helm chart upgrade](upgrades/HELM_CHART_UPGRADE.md).  
-To learn about upgrade the products without upgrading the Helm chart see [Products upgrade](upgrades/PRODUCTS_UPGRADE.md).
+To learn about upgrading the Helm charts see [Helm chart upgrade](upgrades/HELM_CHART_UPGRADE.md).  
+To learn about upgrading the products without upgrading the Helm charts see [Products upgrade](upgrades/PRODUCTS_UPGRADE.md).
 
 
 ## Examples
