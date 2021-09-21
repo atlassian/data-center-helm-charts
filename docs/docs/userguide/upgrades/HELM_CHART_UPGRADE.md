@@ -106,7 +106,7 @@ will only apply when the target product version is zero-downtime compatible. If 
     * the target product version is not zero downtime-compatible
     * for any other reason you would prefer to avoid running the cluster in mix mode
     
-    !!!warning "Upgradin g the Helm chart might change the product version" 
+    !!!warning "Upgrading the Helm chart might change the product version" 
         If you want to upgrade the Helm chart to a newer version but don't want to change 
         the product version then follow the _Upgrade with no change in product version_ tab.
     
