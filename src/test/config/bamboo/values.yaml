@@ -1,0 +1,11 @@
+# This file contains overrides for the Bamboo Helm chart's values.yaml file
+
+bamboo:
+  clustering:
+    enabled: ${clustering.enabled}
+database:
+  type: postgres72
+  url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql:5432/bamboo
+  driver: org.postgresql.Driver
+  credentials:
+    secretName: bamboo-database-credentials
