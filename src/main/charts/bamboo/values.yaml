@@ -80,12 +80,10 @@ database:
   # -- The database type that should be used. If not specified, then it will need to be 
   # provided via the browser during manual configuration post deployment. Valid values 
   # include:
-   # - 'postgres72'
-   # - 'mysql57'
-   # - 'mysql8'
-   # - 'oracle10g'
+   # - 'postgresql'
+   # - 'mysql'
+   # - 'oracle12c'
    # - 'mssql'
-   # - 'postgresaurora96'
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasetype
   #
   type: 
@@ -364,7 +362,7 @@ bamboo:
     annotations: {}
     
   # Enable or disable security context in StatefulSet template spec. Enabled 
-  # by default with UID 1000. Disable when deploying to OpenShift, unless anyuid 
+  # by default with UID 2005. Disable when deploying to OpenShift, unless anyuid 
   # policy is attached to a service account.
   #
   securityContext:
@@ -375,7 +373,7 @@ bamboo:
     
     # -- The GID used by the Bamboo docker image
     #
-    gid: "1000"
+    gid: "2005"
 
   # Port definitions
   #

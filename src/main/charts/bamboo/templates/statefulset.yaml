@@ -67,6 +67,7 @@ spec:
             {{- include "bamboo.databaseEnvVars" . | nindent 12 }}
             {{- include "bamboo.clusteringEnvVars" . | nindent 12 }}
             {{ with .Values.bamboo.license.secretName }}
+            # TODO: Bamboo does not currently support this. Keeping for now as support may come later.
             - name: BAMBOO_SETUP_LICENSE
               valueFrom:
                 secretKeyRef:

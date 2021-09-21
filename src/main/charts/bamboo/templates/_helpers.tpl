@@ -263,10 +263,6 @@ volumeClaimTemplates:
 - name: ATL_DB_TYPE
   value: {{ . | quote }}
 {{ end }}
-{{ with .Values.database.driver }}
-- name: ATL_DB_DRIVER
-  value: {{ . | quote }}
-{{ end }}
 {{ with .Values.database.url }}
 - name: ATL_JDBC_URL
   value: {{ . | quote }}
@@ -277,6 +273,7 @@ volumeClaimTemplates:
     secretKeyRef:
       name: {{ . }}
       key: {{ $.Values.database.credentials.usernameSecretKey }}
+{{/* TODO: The password cannot be pre-filled. See https://bitbucket.org/dchevell/docker-atlassian-bamboo/src/master/. Keeping for now as this may come later*/}}
 - name: ATL_JDBC_PASSWORD
   valueFrom:
     secretKeyRef:
