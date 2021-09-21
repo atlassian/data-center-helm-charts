@@ -241,7 +241,7 @@ volumes:
     # -- Specifies the path in the Bamboo container to which the shared-home volume will be 
     # mounted.
     #
-    mountPath: "/var/atlassian/application-data/bamboo/shared"
+    mountPath: "/var/atlassian/application-data/shared-home"
     
     # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the 
     # Bamboo container.
