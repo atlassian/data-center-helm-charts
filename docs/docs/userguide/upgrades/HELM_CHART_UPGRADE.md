@@ -1,39 +1,42 @@
 # Helm chart upgrade
 Each Helm chart has a default product version that might change in next Helm chart 
-version. Therefore, be aware upgrading the Helm chart might lead in upgrading the product as well. 
-This depends on the current and target Helm chart versions. 
+version. So be aware that if you upgrade the Helm chart, it might lead to upgrading the product as well. This depends on the current and target Helm chart versions. 
 
 !!!important "Do you want to upgrade the product to a new version?" 
-     If you want to upgrade the product version without upgrading Helm chart then 
-     follow the [Product upgrades](PRODUCTS_UPGRADE.md). 
+     If you want to upgrade the product version without upgrading the Helm chart then 
+     refer to [Product upgrades](PRODUCTS_UPGRADE.md). 
 
-Before upgrading the Helm chart, first consider the versions of the current Helm chart and running product 
-on your Kubernetes cluster, also the target versions of the Helm chart and product you want to upgrade. 
-It is important you know if target product version is zero downtime compatible (if is subject to change). 
+Before upgrading the Helm chart, first consider: 
+* the version of the current Helm chart
+* the version of the product running on your Kubernetes cluster
+* the target version of the Helm chart you want to upgrade to
+* the target version of the product you want to upgrade to
+
+You need to know if the target product version is zero-downtime compatible (if it is subject to change). 
 Based on this information you may need to choose a different upgrade method.
 
 !!!info "Upgrade product strategies"
     There are two options for upgrade:
     
-    * _Normal upgrade_: The service will interrupt during the upgrade.
-    * _Rolling upgrade_: Upgrade will proceed with zero downtime.
+    * _Normal upgrade_: The service will have interruptions during the upgrade.
+    * _Rolling upgrade_: The upgrade will proceed with zero downtime.
  
 
 ## 1. Find the current version of the installed Helm chart
-To find the current version of Helm chart and product version run the following command:
+To find the current version of Helm chart and the product version run the following command:
 
  ```shell 
  helm list --namespace <namespace> 
  ```
 
-You can see the current Helm chart tag version in `CHART` and the current product tag version in `APP VERSION` 
-columns for each release name. 
+You can see the current Helm chart tag version in the `CHART` column, and the current product tag version in the `APP VERSION` 
+column for each release name. 
 
 
 ## 2. Define the target Helm chart version
-!!! hint "Do you have the Atlassian Helm chart repository in your local Helm installation?"
-    Make sure you have Atlassian Helm chart repository in your local Helm repositories. 
-    You need to add the Atlassian Helm chart repository to your local Helm installation if they are missing:
+!!! hint "Do you have the Atlassian Helm chart repository locally?"
+    Make sure you have the Atlassian Helm chart repository in your local Helm repositories. Run the following command to add them:
+    
     ```shell
     helm repo add atlassian-data-center \
          https://atlassian.github.io/data-center-helm-charts
@@ -46,9 +49,9 @@ helm repo update
 ```
 
 !!! warning "Target Helm chart version"
-    The target Helm chart version must be higher than current Helm chart version.
+    The target Helm chart version must be higher than the current Helm chart version.
     
-You can see all available Helm chart versions of the specific product by running this command:
+To see all available Helm chart versions of the specific product run this command:
 
 ```shell 
 helm search repo atlassian-data-center/<product> --versions
@@ -56,45 +59,42 @@ helm search repo atlassian-data-center/<product> --versions
 
     
  Select the target Helm chart version. You can find the default application version (target product version tag) 
- in `APP VERSION` column. 
+ in the `APP VERSION` column. 
   
  
 ## 3. Define the upgrade method
 
-Considering the current and target product versions there are different scenarios: 
+Considering the current and target **product** versions there are different scenarios: 
 
-1. The versions are different, and the target product version is not zero downtime compatible  
-2. The versions are different, but the target product version is zero downtime compatible  
-3. The versions are the same 
+1. The versions are different, and the target product version is not zero-downtime compatible.  
+2. The versions are different, and the target product version is zero-downtime compatible.  
+3. The versions are the same.
 
  
-!!!important "See the following links to find out if two versions of product are zero downtime compatible"
+!!!important "See the following links to find out if two versions of a product are zero-downtime compatible"
 
      Jira: [Upgrading Jira with zero downtime](https://confluence.atlassian.com/adminjiraserver/upgrading-jira-data-center-with-zero-downtime-938846953.html){.external}   
      Confluence: [Upgrading Confluence with zero downtime](https://confluence.atlassian.com/doc/upgrade-confluence-without-downtime-1027127923.html){.external}  
      Bitbucket: [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
 
-!!! note "All supported jira versions are zero downtime compatible"
-     The minimum supported version of Jira DC in Data Center Helm Charts is `8.19`. 
-     Considering any jira version later than 8.x is zero downtime compatible, all supported Jira DC are zero downtime
+!!! note "All supported Jira versions are zero-downtime compatible"
+     The minimum supported version of Jira Data Center in the Data Center Helm Charts is `8.19`. 
+     Considering any Jira version later than 8.x is zero-downtime compatible, all supported Jira Data Center versions are zero-downtime
      compatible. 
 
-Based on the scenario follow one of these options in next step:
+Based on the scenario follow one of these options in the next step:
 
-* **Normal upgrade**: Upgrade Helm chart when the target product version is not zero downtime compatible, or you want 
+* **Normal upgrade**: Upgrade Helm chart when the target product version is not zero-downtime compatible, or you want 
 to avoid mixed version during the upgrade. In this option the product will have a downtime during the upgrade process. 
-* **Rolling upgrade**: Upgrade Helm chart when the target product version is zero downtime compatible. This option only 
-will apply when the target product version is zero downtime compatible. If you are not sure about this please 
-see the links above. 
-* **No product upgrade**: Upgrade the Helm chart with no change in product version. This method is recommending for 
-the case that the target product version is the same as current product version or for any reason you don't want to 
-change the product version but still you like to upgrade the helm chart. 
+* **Rolling upgrade**: Upgrade Helm chart when the target product version is zero-downtime compatible. This option 
+will only apply when the target product version is zero-downtime compatible. If you are not sure about this see the links above. 
+* **No product upgrade**: Upgrade the Helm chart with no change in product version. We recommend this method when the target product version is the same as the current product version, or for any other reason you may not want to change the product version but still upgrade the helm chart. 
  
  
 ## 4. Upgrade the Helm chart
  
 !!! hint "Tip: Monitor the pods during the upgrade process"
-     You can monitor the pod activities during the upgrade by running the following command in separated terminal: 
+     You can monitor the pod activities during the upgrade by running the following command in a separate terminal: 
      ```shell 
      kubectl get pods --namespace <namespace> --watch
      ```
@@ -103,22 +103,22 @@ change the product version but still you like to upgrade the helm chart.
     ### Helm chart upgrade with downtime
      
     You need to use this method to upgrade the Helm chart if:
-    * The target product version is not zero downtime compatible
-    * For any reason you prefer to avoid running the cluster in mix mode
+    * the target product version is not zero downtime-compatible
+    * for any other reason you would prefer to avoid running the cluster in mix mode
     
-    !!!warning "Upgrade the Helm chart might change the product version" 
-        If you want to upgrade the Helm chart to newer version but do not want to change 
-        the product version then please follow the _Upgrade with no change in product version_ tab.
+    !!!warning "Upgradin g the Helm chart might change the product version" 
+        If you want to upgrade the Helm chart to a newer version but don't want to change 
+        the product version then follow the _Upgrade with no change in product version_ tab.
     
     The strategy for upgrading the product with downtime is to scale down the cluster to zero nodes and then 
-    start the nodes with new product versions. Finally scale the cluster up to the original number of nodes. 
-    Here are the step by step instructions for upgrade process:
+    start the nodes with new product versions. And finally scale the cluster up to the original number of nodes. 
+    Here are step-by-step instructions for the upgrade process:
     
-    1. Find out the number of nodes in the cluster  
+    1. Find out the number of nodes in the cluster.
         ```shell
         kubectl describe sts <release-name> --namespace <namespace> | grep 'Replicas'
         ```
-    2. Upgrade the Helm chart  
+    2. Upgrade the Helm chart.  
         Replace the product name in the following command:
         ```shell
         helm upgrade <release-name> atlassian-data-center/<product> \
@@ -131,7 +131,7 @@ change the product version but still you like to upgrade the helm chart.
         The cluster will scale down to zero nodes. Then one pod with the target product version will be recreated 
         and join the cluster. 
     
-    3. Scale up the cluster  
+    3. Scale up the cluster.
         After you confirm the new pod is in `Running` status then scale up the cluster to the same number 
         of nodes as before the upgrade: 
         ```shell
@@ -149,31 +149,31 @@ change the product version but still you like to upgrade the helm chart.
  
      
     !!!warning "Upgrade the Helm chart might change the product version" 
-        If you want to upgrade the Helm chart to newer version but do not want to change 
-        the product version then please follow the _Upgrade with no change in product version_ tab.
+        If you want to upgrade the Helm chart to newer version but don't want to change 
+        the product version then follow the _Upgrade with no change in product version_ tab.
         
-    !!! warning "Rolling upgrade is not possible if the cluster has only one node!"
-         If you have just one node in the cluster then you cannot take advantage of the zero downtime approach. You may 
-         scale up the cluster to at least two nodes before upgrade or there will be a downtime during the upgrade. 
+    !!! warning "Rolling upgrade is not possible if the cluster has only one node"
+         If you have just one node in the cluster then you can't take advantage of the zero-downtime approach. You may 
+         scale up the cluster to at least two nodes before upgrading or there will be a downtime during the upgrade. 
               
     In order to upgrade the Helm chart when the target product version is different from the current product version, 
-    you can use upgrade with zero downtime to avoid any service interrupt during the upgrade.
-    To use this option the target version should be zero downtime compatible. 
+    you can use upgrade with zero downtime to avoid any service interruption during the upgrade.
+    To use this option the target version must be zero-downtime compatible. 
     
-    !!!important "Make sure the product target version is zero downtime compatible" 
-         To ensure you will have a smooth upgrade please make sure the product target version is zero downtime 
-         compatible. If you still are not sure about this back to step 3. 
+    !!!important "Make sure the product target version is zero downtime-compatible" 
+         To ensure you will have a smooth upgrade make sure the product target version is zero-downtime 
+         compatible. If you still aren't sure about this go back to step 3. 
 
     
-    Here are the step by step instructions of the upgrade process. These steps may vary for each product:
+    Here are the step-by-step instructions of the upgrade process. These steps may vary for each product:
      
 
     === "Jira"
-        1. Put Jira into upgrade mode 
+        1. Put Jira into upgrade mode. 
             Go to **Administration > Applications > Jira upgrades** and click **Put Jira into upgrade mode**. 
             ![upgrade-mode](../../assets/images/jira-upgrade-1.png)
         
-        2. Run the upgrade using the Helm 
+        2. Run the upgrade using Helm. 
         
             ```shell
             helm upgrade <release-name> atlassian-data-center/jira \
@@ -183,23 +183,23 @@ change the product version but still you like to upgrade the helm chart.
              --namespace <namespace>
             ```
         
-        4. Wait for the upgrade to finish 
-            The pods will be re-created with the updated version, one at a time.
+        4. Wait for the upgrade to finish. 
+            The pods will be recreated with the updated version, one at a time.
             
             ![upgrade-mode](../../assets/images/jira-upgrade-2.png)
         
-        3. Finalize the upgrade 
-            After all pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
+        3. Finalize the upgrade.
+            After all the pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
             
             ![upgrade-mode](../../assets/images/jira-upgrade-3.png)
              
     === "Confluence"
-         1. Put Confluence into upgrade mode 
+         1. Put Confluence into upgrade mode. 
              From the admin page click on *Rolling Upgrade* and set the Confluence in Upgrade mode:
              
              ![upgrade-mode](../../assets/images/confluence-upgrade-1.png)
          
-         2. Run the upgrade using the Helm 
+         2. Run the upgrade using Helm. 
              ```shell
              helm upgrade <release-name> atlassian-data-center/confluence \
                  --version <target-helm-chart-version>> \
@@ -207,25 +207,25 @@ change the product version but still you like to upgrade the helm chart.
                  --wait \
                  --namespace <namespace>
              ```
-             Wait until all pods are re-created and back to `Running` status 
+             Wait until all pods are recreated and are back to `Running` status. 
          
-         4. Wait for the upgrade to finish 
-             The pods will be re-created with the updated version, one at a time.
+         4. Wait for the upgrade to finish. 
+             The pods will be recreated with the updated version, one at a time.
              
              ![upgrade-mode](../../assets/images/confluence-upgrade-2.png)
          
-         3. Finalize the upgrade 
-             After all pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
+         3. Finalize the upgrade. 
+             After all the pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
              
              ![upgrade-mode](../../assets/images/confluence-upgrade-3.png)
     
     === "Bitbucket"
-        1. Put Bitbucket into upgrade mode 
-            From the admin page click on *Rolling Upgrade* and set the Confluence in Upgrade mode:
+        1. Put Bitbucket into upgrade mode. 
+            From the admin page click on *Rolling Upgrade* and set the Bitbucket in Upgrade mode:
             
             ![upgrade-mode](../../assets/images/bitbucket-upgrade-1.png)
             
-        2. Run the upgrade using the Helm 
+        2. Run the upgrade using Helm. 
         
             ```shell
             helm upgrade <release-name> atlassian-data-center/bitbucket \
@@ -234,15 +234,15 @@ change the product version but still you like to upgrade the helm chart.
              --wait \
              --namespace <namespace>
             ```
-            Wait until all pods are re-created and back to `Running` status 
+            Wait until all pods are recreated and are back to `Running` status. 
         
-        3. Wait for the upgrade to finish 
-            The pods will be re-created with the updated version, one at a time.
+        3. Wait for the upgrade to finish. 
+            The pods will be recreated with the updated version, one at a time.
             
             ![upgrade-mode](../../assets/images/bitbucket-upgrade-2.png)
             
-        4. Finalize the upgrade 
-            After all pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
+        4. Finalize the upgrade. 
+            After all the pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
             
             ![upgrade-mode](../../assets/images/bitbucket-upgrade-3.png)
 
@@ -250,8 +250,8 @@ change the product version but still you like to upgrade the helm chart.
 === "Upgrade with no change in the product version"
     ###Helm chart upgrade with no change in product version  
     
-    If your target Helm chart has a different product version in comparison with the current product version and you 
-    still want to keep the current product version unchanged, you should use the following command to upgrade Helm chart:
+    If your target Helm chart has a different product version in comparison with the current product version, and you 
+    still want to keep the current product version unchanged, you should use the following command to upgrade the Helm chart:
     
     ```shell 
     helm upgrade <release-name> atlassian-data-center/<product> \
@@ -263,7 +263,7 @@ change the product version but still you like to upgrade the helm chart.
     ``` 
         
     However, when the product versions of target and current Helm charts are the same,
-    then you can run the following command to upgrade the Helm chart olny:
+    then you can run the following command to upgrade the Helm chart only:
     
     ```shell 
     helm upgrade <release-name> atlassian-data-center/<product> \
