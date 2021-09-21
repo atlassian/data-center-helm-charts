@@ -1,85 +1,85 @@
-{{ if .Values.agent.enabled }}
-apiVersion: apps/v1
-kind: StatefulSet
+{{/*{{ if .Values.agent.enabled }}*/}}
+{{/*apiVersion: apps/v1*/}}
+{{/*kind: StatefulSet*/}}
 
 
 
 
-metadata:
-  name: {{ include "agent.fullname" . }}
-  labels:
-    {{- include "agent.labels" . | nindent 4 }}
-spec:
-  replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "agent.fullname" . }}
-  selector:
-    matchLabels:
-      {{- include "agent.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      labels:
-        {{- include "agent.selectorLabels" . | nindent 8 }}
-    spec:
-      serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 1
-      containers:
-        - name: bamboo-agent
-          image: {{ include "confluence.image" . | quote }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          volumeMounts:
-            {{- include "synchrony.additionalLibraries" . | nindent 12 }}
-            - mountPath: /scripts
-              name: entrypoint-script
-          ports:
-            - name: http
-              containerPort: {{ .Values.synchrony.ports.http }}
-              protocol: TCP
-            - name: hazelcast
-              containerPort: {{ .Values.synchrony.ports.hazelcast }}
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              port: {{ .Values.synchrony.ports.http }}
-              path: /heartbeat
-            initialDelaySeconds: {{ .Values.synchrony.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}
-          {{- with .Values.synchrony.resources.container }}
-          resources:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          env:
-            - name: SYNCHRONY_BIND
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-            - name: SYNCHRONY_SERVICE_URL
-              value: {{ .Values.synchrony.ingressUrl | quote }}
-            {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
-            {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      volumes:
-        - name: entrypoint-script
-          configMap:
-            name: {{ include "agent.fullname" . }}-entrypoint
-            defaultMode: 0744
-        {{ include "bamboo.volumes.sharedHome" . | nindent 8 }}
-        {{ with .Values.volumes.additional }}
-        {{ toYaml . | nindent 8 }}
-        {{ end }}
-{{ end }}
+{{/*metadata:*/}}
+{{/*  name: {{ include "agent.fullname" . }}*/}}
+{{/*  labels:*/}}
+{{/*    {{- include "agent.labels" . | nindent 4 }}*/}}
+{{/*spec:*/}}
+{{/*  replicas: {{ .Values.replicaCount }}*/}}
+{{/*  serviceName: {{ include "agent.fullname" . }}*/}}
+{{/*  selector:*/}}
+{{/*    matchLabels:*/}}
+{{/*      {{- include "agent.selectorLabels" . | nindent 6 }}*/}}
+{{/*  template:*/}}
+{{/*    metadata:*/}}
+{{/*      {{- with .Values.podAnnotations }}*/}}
+{{/*      annotations:*/}}
+{{/*        {{- toYaml . | nindent 8 }}*/}}
+{{/*      {{- end }}*/}}
+{{/*      labels:*/}}
+{{/*        {{- include "agent.selectorLabels" . | nindent 8 }}*/}}
+{{/*    spec:*/}}
+{{/*      serviceAccountName: {{ include "bamboo.serviceAccountName" . }}*/}}
+{{/*      terminationGracePeriodSeconds: 1*/}}
+{{/*      containers:*/}}
+{{/*        - name: bamboo-agent*/}}
+{{/*          image: {{ include "confluence.image" . | quote }}*/}}
+{{/*          imagePullPolicy: {{ .Values.image.pullPolicy }}*/}}
+{{/*          volumeMounts:*/}}
+{{/*            {{- include "synchrony.additionalLibraries" . | nindent 12 }}*/}}
+{{/*            - mountPath: /scripts*/}}
+{{/*              name: entrypoint-script*/}}
+{{/*          ports:*/}}
+{{/*            - name: http*/}}
+{{/*              containerPort: {{ .Values.synchrony.ports.http }}*/}}
+{{/*              protocol: TCP*/}}
+{{/*            - name: hazelcast*/}}
+{{/*              containerPort: {{ .Values.synchrony.ports.hazelcast }}*/}}
+{{/*              protocol: TCP*/}}
+{{/*          readinessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              port: {{ .Values.synchrony.ports.http }}*/}}
+{{/*              path: /heartbeat*/}}
+{{/*            initialDelaySeconds: {{ .Values.synchrony.readinessProbe.initialDelaySeconds }}*/}}
+{{/*            periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}*/}}
+{{/*            failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}*/}}
+{{/*          {{- with .Values.synchrony.resources.container }}*/}}
+{{/*          resources:*/}}
+{{/*          {{- toYaml . | nindent 12 }}*/}}
+{{/*          {{- end }}*/}}
+{{/*          env:*/}}
+{{/*            - name: SYNCHRONY_BIND*/}}
+{{/*              valueFrom:*/}}
+{{/*                fieldRef:*/}}
+{{/*                  fieldPath: status.podIP*/}}
+{{/*            - name: SYNCHRONY_SERVICE_URL*/}}
+{{/*              value: {{ .Values.synchrony.ingressUrl | quote }}*/}}
+{{/*            {{- include "synchrony.databaseEnvVars" . | nindent 12 }}*/}}
+{{/*            {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}*/}}
+{{/*      {{- with .Values.nodeSelector }}*/}}
+{{/*      nodeSelector:*/}}
+{{/*      {{- toYaml . | nindent 8 }}*/}}
+{{/*      {{- end }}*/}}
+{{/*      {{- with .Values.affinity }}*/}}
+{{/*      affinity:*/}}
+{{/*      {{- toYaml . | nindent 8 }}*/}}
+{{/*      {{- end }}*/}}
+{{/*      {{- with .Values.tolerations }}*/}}
+{{/*      tolerations:*/}}
+{{/*      {{- toYaml . | nindent 8 }}*/}}
+{{/*      {{- end }}*/}}
+{{/*      volumes:*/}}
+{{/*        - name: entrypoint-script*/}}
+{{/*          configMap:*/}}
+{{/*            name: {{ include "agent.fullname" . }}-entrypoint*/}}
+{{/*            defaultMode: 0744*/}}
+{{/*        {{ include "bamboo.volumes.sharedHome" . | nindent 8 }}*/}}
+{{/*        {{ with .Values.volumes.additional }}*/}}
+{{/*        {{ toYaml . | nindent 8 }}*/}}
+{{/*        {{ end }}*/}}
+{{/*{{ end }}*/}}

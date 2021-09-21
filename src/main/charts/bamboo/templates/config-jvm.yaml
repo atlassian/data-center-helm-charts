@@ -12,4 +12,3 @@ data:
     {{- end }}
   max_heap: {{ .Values.bamboo.resources.jvm.maxHeap }}
   min_heap: {{ .Values.bamboo.resources.jvm.minHeap }}
-  reserved_code_cache: {{ .Values.bamboo.resources.jvm.reservedCodeCache }}

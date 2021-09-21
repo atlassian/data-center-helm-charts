@@ -89,12 +89,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "bamboo.fullname" . }}-jvm-config
-            - name: JVM_RESERVED_CODE_CACHE_SIZE
-              valueFrom:
-                configMapKeyRef:
-                  key: reserved_code_cache
-                  name: {{ include "bamboo.fullname" . }}-jvm-config
+                  name: {{ include "bamboo.fullname" . }}-jvm-config            
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http
@@ -102,14 +97,19 @@ spec:
               protocol: TCP
             - name: jms
               containerPort: {{ .Values.bamboo.ports.jms }} 
-              protocol: TCP       
-{{/*          readinessProbe:*/}} # Need to re-think this the readiness probe prevents the secnd pod from being fully registered becuse of the bamboo lock
-{{/*            httpGet:*/}}
-{{/*              port: {{ .Values.bamboo.ports.http }}*/}}
-{{/*              path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status*/}}
-{{/*            initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}*/}}
-{{/*            periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}*/}}
-{{/*            failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}*/}}
+              protocol: TCP
+          # TODO: Need to re-think the readiness probe if we decide for first release that running more than 1 server is 
+          # acceptable with the current bamboo architecture.
+          #  
+          # When a second bamboo server (passive) is added to the cluster, the readiness probe fails. This is because 
+          # the active pod never fully comes up on account of the cluster lock being held by the active node.
+          readinessProbe:  
+            httpGet:
+              port: {{ .Values.bamboo.ports.http }}
+              path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status
+            initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
           {{- with .Values.bamboo.resources.container }}
           resources:
             {{- toYaml . | nindent 12 }}
