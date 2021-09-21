@@ -98,17 +98,6 @@ database:
   #
   url:
    
-  # -- The Java class name of the JDBC driver to be used. If not specified, then it will 
-  # need to be provided via the browser during manual configuration post deployment.
-  # Valid drivers are:
-   # - 'org.postgresql.Driver'
-   # - 'com.mysql.jdbc.Driver'
-   # - 'oracle.jdbc.OracleDriver'
-   # - 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
-  # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasedriver:
-  #
-  driver:
-   
   # JDBC connection credentials
   # 
   credentials:
