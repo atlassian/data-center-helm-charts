@@ -2,6 +2,8 @@
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
 
+> 🚧 THIS CHART IS CURRENTLY UNDER ACTIVE DEVELOPMENT!!! 🚧
+
 A chart for installing Bamboo Data Center on Kubernetes
 
 For installation please follow [the documentation](https://atlassian.github.io/data-center-helm-charts/).
