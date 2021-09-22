@@ -1,45 +1,44 @@
 ---
-# Source: jira/templates/serviceaccount.yaml
+# Source: bamboo/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: unittest-jira
+  name: unittest-bamboo
   labels:
-    helm.sh/chart: jira-1.0.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.19.0-jdk11"
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
     app.kubernetes.io/managed-by: Helm
 ---
-# Source: jira/templates/config-jvm.yaml
+# Source: bamboo/templates/config-jvm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: unittest-jira-jvm-config
+  name: unittest-bamboo-jvm-config
   labels:
-    helm.sh/chart: jira-1.0.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.19.0-jdk11"
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
-  max_heap: 768m
-  min_heap: 384m
-  reserved_code_cache: 512m
+  max_heap: 1024m
+  min_heap: 512m
 ---
-# Source: jira/templates/service.yaml
+# Source: bamboo/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: unittest-jira
+  name: unittest-bamboo
   labels:
-    helm.sh/chart: jira-1.0.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.19.0-jdk11"
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -50,39 +49,39 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
 ---
-# Source: jira/templates/statefulset.yaml
+# Source: bamboo/templates/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: unittest-jira
+  name: unittest-bamboo
   labels:
-    helm.sh/chart: jira-1.0.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.19.0-jdk11"
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
-  serviceName: unittest-jira
+  serviceName: unittest-bamboo
   selector:
     matchLabels:
-      app.kubernetes.io/name: jira
-      app.kubernetes.io/instance: unittest-jira
+      app.kubernetes.io/name: bamboo
+      app.kubernetes.io/instance: unittest-bamboo
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: jira
-        app.kubernetes.io/instance: unittest-jira
+        app.kubernetes.io/name: bamboo
+        app.kubernetes.io/instance: unittest-bamboo
     spec:
-      serviceAccountName: unittest-jira
+      serviceAccountName: unittest-bamboo
       terminationGracePeriodSeconds: 30
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container.
         # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: 2001
+        fsGroup: 2005
       initContainers:
         - name: nfs-permission-fixer
           image: alpine
@@ -92,10 +91,10 @@ spec:
           volumeMounts:
             - name: shared-home
               mountPath: "/shared-home"
-          command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
+          command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
       containers:
-        - name: jira
-          image: "atlassian/jira-software:8.19.0-jdk11"
+        - name: bamboo
+          image: "dchevell/bamboo:8.0.0-rc4-jdk8"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -104,42 +103,34 @@ spec:
               value: "true"
             - name: SET_PERMISSIONS
               value: "true"
-            - name: JIRA_SHARED_HOME
+            - name: BAMBOO_SHARED_HOME
               value: "/var/atlassian/application-data/shared-home"
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: unittest-jira-jvm-config
+                  name: unittest-bamboo-jvm-config
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: unittest-jira-jvm-config
+                  name: unittest-bamboo-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: unittest-jira-jvm-config
-            - name: JVM_RESERVED_CODE_CACHE_SIZE
-              valueFrom:
-                configMapKeyRef:
-                  key: reserved_code_cache
-                  name: unittest-jira-jvm-config
+                  name: unittest-bamboo-jvm-config
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 8085
               protocol: TCP
-            - name: ehcache
-              containerPort: 40001 
-              protocol: TCP 
-            - name: ehcacheobject
-              containerPort: 40011
+            - name: jms
+              containerPort: 54663
               protocol: TCP
           readinessProbe:
             httpGet:
-              port: 8080
-              path: /status
+              port: 8085
+              path: /rest/api/latest/status
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
@@ -149,9 +140,9 @@ spec:
               memory: 2G
           volumeMounts:
             - name: local-home
-              mountPath: "/var/atlassian/application-data/jira"
+              mountPath: "/var/atlassian/application-data/bamboo"
             - name: local-home
-              mountPath: "/opt/atlassian/jira/logs"
+              mountPath: "/opt/atlassian/bamboo/logs"
               subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
@@ -165,19 +156,19 @@ spec:
         - name: shared-home
           emptyDir: {}
 ---
-# Source: jira/templates/tests/test-application-status.yaml
+# Source: bamboo/templates/tests/test-application-status.yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "unittest-jira-application-status-test"
+  name: "unittest-bamboo-application-status-test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.0.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.19.0-jdk11"
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -186,7 +177,7 @@ spec:
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL
-          value: "http://unittest-jira:80/status"
+          value: "http://unittest-bamboo:80/rest/api/latest/status"
       command:
         - /bin/sh
         - -ec
@@ -197,19 +188,19 @@ spec:
           echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
   restartPolicy: Never
 ---
-# Source: jira/templates/tests/test-shared-home-permissions.yaml
+# Source: bamboo/templates/tests/test-shared-home-permissions.yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "unittest-jira-shared-home-permissions-test"
+  name: "unittest-bamboo-shared-home-permissions-test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.0.0
-    app.kubernetes.io/name: jira
-    app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.19.0-jdk11"
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -218,8 +209,8 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
-        runAsUser: 2001
-        runAsGroup: 2001
+        runAsUser: 2005
+        runAsGroup: 2005
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home

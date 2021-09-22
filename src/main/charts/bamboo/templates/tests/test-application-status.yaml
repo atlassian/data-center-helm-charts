@@ -17,7 +17,7 @@ spec:
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL
-          value: "http://{{ include "bamboo.fullname" . }}:{{ .Values.bamboo.service.port }}/status"
+          value: "http://{{ include "bamboo.fullname" . }}:{{ .Values.bamboo.service.port }}/rest/api/latest/status"
       command:
         - /bin/sh
         - -ec

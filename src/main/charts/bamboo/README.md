@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0](https://img.shields.io/badge/AppVersion-8.0-informational?style=flat-square)
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.0-rc4-jdk8](https://img.shields.io/badge/AppVersion-8.0.0--rc4--jdk8-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -52,6 +52,9 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |
 | bamboo.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bamboo |
+| bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour. |
+| bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) #TODO: This needs to be updated when Steve's changes are done for details. |
+| bamboo.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password |
 | database.credentials.secretName | string | `nil` | The name of the K8s Secret that contains the database login credentials. If the secret is specified, then the credentials will be automatically utilised on  Bamboo startup. If the secret is not provided, then the credentials will need to be  provided via the browser during manual configuration post deployment.   Example of creating a database credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | database.credentials.usernameSecretKey | string | `"username"` | The key ('username') in the Secret used to store the database login username |
@@ -68,7 +71,7 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"atlassian/bamboo-server"` | The Bamboo Docker image to use https://hub.docker.com/r/atlassian/bamboo-server |
+| image.repository | string | `"dchevell/bamboo"` | The Bamboo Docker image to use https://hub.docker.com/r/atlassian/bamboo-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |

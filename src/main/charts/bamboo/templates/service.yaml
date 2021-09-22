@@ -15,9 +15,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.bamboo.ports.jms }}
-      targetPort: jms
-      protocol: TCP
-      name: jms
   selector:
   {{- include "bamboo.selectorLabels" . | nindent 4 }}

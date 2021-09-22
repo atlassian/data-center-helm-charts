@@ -20,7 +20,7 @@ spec:
         {{- include "bamboo.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 1
+      terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
       {{ if .Values.bamboo.securityContext.enabled }}
       securityContext:
         # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container.
@@ -65,15 +65,18 @@ spec:
               value: {{ include "bamboo.ingressPort" . | quote }}
             {{ end }}
             {{- include "bamboo.databaseEnvVars" . | nindent 12 }}
+            {{/* TODO: This probably isnt needed with the current active-passive Bamboo architecture "clustering" does not work as we know it i.e. active-active*/}}
             {{- include "bamboo.clusteringEnvVars" . | nindent 12 }}
             {{ with .Values.bamboo.license.secretName }}
-            # TODO: Bamboo does not currently support this. Keeping for now as support may come later.
+            {{/* TODO: Bamboo does not currently support this. Keeping for now as support may come later.*/}}
             - name: BAMBOO_SETUP_LICENSE
               valueFrom:
                 secretKeyRef:
                   name: {{ . }}
                   key: {{ $.Values.bamboo.license.secretKey }}
             {{ end }}
+            - name: SET_PERMISSIONS
+              value: {{ .Values.bamboo.setPermissions | quote }}
             - name: BAMBOO_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
@@ -97,14 +100,14 @@ spec:
               containerPort: {{ .Values.bamboo.ports.http }}
               protocol: TCP
             - name: jms
-              containerPort: {{ .Values.bamboo.ports.jms }} 
+              containerPort: {{ .Values.bamboo.ports.jms }}
               protocol: TCP
-          # TODO: Need to re-think the readiness probe if we decide for first release that running more than 1 server is 
-          # acceptable with the current bamboo architecture.
-          #  
-          # When a second bamboo server (passive) is added to the cluster, the readiness probe fails. This is because 
-          # the active pod never fully comes up on account of the cluster lock being held by the active node.
-          readinessProbe:  
+{{/*          TODO: Need to re-think the readiness probe if we decide for first release that running more than 1 server is */}}
+{{/*          acceptable with the current bamboo architecture.*/}}
+{{/*           */}}
+{{/*          When a second bamboo server (passive) is added to the cluster, the readiness probe fails. This is because */}}
+{{/*          the active pod never fully comes up on account of the cluster lock being held by the active node.*/}}
+          readinessProbe:
             httpGet:
               port: {{ .Values.bamboo.ports.http }}
               path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status
@@ -125,6 +128,10 @@ spec:
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
             {{ end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", {{ .Values.bamboo.shutdown.command | quote }}]
         {{- include "fluentd.container" . | nindent 8 }}
         {{- include "bamboo.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

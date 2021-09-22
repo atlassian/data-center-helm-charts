@@ -282,6 +282,7 @@ volumeClaimTemplates:
 {{ end }}
 {{ end }}
 
+{{/* TODO: This probably isnt needed with the current active-passive Bamboo architecture "clustering" does not work as we know it i.e. active-active*/}}
 {{- define "bamboo.clusteringEnvVars" -}}
 {{ if .Values.bamboo.clustering.enabled }}
 - name: CLUSTERED
