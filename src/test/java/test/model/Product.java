@@ -49,14 +49,10 @@ public enum Product {
     },
     bamboo {
         @Override
-        public String getDockerImageName() {
-            return "dchevell/bamboo";
-        }
+        public String getDockerImageName() { return "dchevell/bamboo"; }
 
         @Override
-        public String getContainerGid() {
-            return "2005";
-        }
+        public String getContainerGid() { return "2005"; }
     };
 
     public abstract String getDockerImageName();
