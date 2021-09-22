@@ -59,9 +59,10 @@ helm search repo atlassian-data-center/<product> --versions
 
     
  Select the target Helm chart version. You can find the default application version (target product version tag) 
- in the `APP VERSION` column. 
+ in the `APP VERSION` column.
   
- !!!error "Upgrading the Helm chart to a MAJOR version is not backward compatible."
+  
+!!!error "Upgrading the Helm chart to a MAJOR version is not backward compatible."
      The Helm chart is [semantically versioned](https://semver.org/){.external}. You need to take some extra
      steps if you are upgrading the Helm chart to a MAJOR version. Before you proceed, learn about the steps for your 
      target version in the [upgrading section](../../README.md#upgrading). 
