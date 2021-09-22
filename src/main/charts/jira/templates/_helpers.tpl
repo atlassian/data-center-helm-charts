@@ -297,6 +297,10 @@ volumeClaimTemplates:
   valueFrom:
     fieldRef:
       fieldPath: status.podIP
+- name: EHCACHE_LISTENER_PORT
+  value: {{ .Values.jira.ports.ehcache | quote }}
+- name: EHCACHE_OBJECT_PORT
+  value: {{ .Values.jira.ports.ehcacheobject | quote }}
 {{ end }}
 {{ end }}
 
