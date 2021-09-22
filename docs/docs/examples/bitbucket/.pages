@@ -1,0 +1,5 @@
+nav:
+    - Elasticsearch : BITBUCKET_ELASTICSEARCH.md
+    - Smart Mirrors : BITBUCKET_MIRRORS.md
+    - SSH : BITBUCKET_SSH.md
+    - ...
