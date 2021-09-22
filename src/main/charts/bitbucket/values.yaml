@@ -445,20 +445,27 @@ bitbucket:
     # needs extra annotations.
     #
     annotations: {}
-    
-  # Enable or disable security context in StatefulSet template spec.
-  # Enabled by default with UID 2003. Disable when deploying to OpenShift,
-  # unless anyuid policy is attached to service account.
+
+  # Standard K8s field that holds pod-level security attributes and common container settings.
   #
   securityContext:
-    
-    # -- Set to 'true' to enable the security context
-    #
-    enabled: true
-    
+
     # -- The GID used by the Bitbucket docker image
     #
-    gid: "2003"
+    fsGroup: 2003
+
+#    # -- Set to 'true' to enable the security context (Deprecated)
+#    #
+#    enabled: true
+#
+#    # -- The GID used by the Bitbucket docker image (Deprecated)
+#    #
+#    gid: "2003"
+
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  #
+  containerSecurityContext: {}
 
   # -- Boolean to define whether to set local home directory permissions on startup
   # of Bitbucket container. Set to 'false' to disable this behaviour.
