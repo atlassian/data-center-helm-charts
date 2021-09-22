@@ -61,7 +61,11 @@ helm search repo atlassian-data-center/<product> --versions
  Select the target Helm chart version. You can find the default application version (target product version tag) 
  in the `APP VERSION` column. 
   
- 
+ !!!error "Upgrading the Helm chart to a MAJOR version is not backward compatible."
+     The Helm chart is [semantically versioned](https://semver.org/){.external}. You need to take some extra
+     steps if you are upgrading the Helm chart to a MAJOR version. Before you proceed, learn about the steps for your 
+     target version in the [upgrading section](../../README.md#upgrading). 
+     
 ## 3. Define the upgrade method
 
 Considering the current and target **product** versions there are different scenarios: 
@@ -69,7 +73,6 @@ Considering the current and target **product** versions there are different scen
 1. The versions are different, and the target product version is not zero-downtime compatible.  
 2. The versions are different, and the target product version is zero-downtime compatible.  
 3. The versions are the same.
-
  
 !!!important "See the following links to find out if two versions of a product are zero-downtime compatible"
 
@@ -78,9 +81,9 @@ Considering the current and target **product** versions there are different scen
      Bitbucket: [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
 
 !!! note "All supported Jira versions are zero-downtime compatible"
-     The minimum supported version of Jira Data Center in the Data Center Helm Charts is `8.19`. 
-     Considering any Jira version later than 8.x is zero-downtime compatible, all supported Jira Data Center versions are zero-downtime
-     compatible. 
+     The minimum supported version of Jira in the Data Center Helm Charts is `8.19`. 
+     Considering any Jira version later than 8.x is zero-downtime compatible, all supported Jira Data Center versions 
+     are zero-downtime compatible. 
 
 Based on the scenario follow one of these options in the next step:
 
