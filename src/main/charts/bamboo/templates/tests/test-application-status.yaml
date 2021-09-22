@@ -25,5 +25,5 @@ spec:
           apk add -q jq curl
           STATUS=$(curl -s "$STATUS_URL")
           echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
-          echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+          echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
   restartPolicy: Never

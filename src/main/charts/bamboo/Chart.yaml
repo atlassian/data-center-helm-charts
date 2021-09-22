@@ -3,7 +3,7 @@ name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
 version: 0.0.1 # TODO: THIS NEEDS TO BE CONFIRMED 
-appVersion: 8.0.0-rc4-jdk8  # TODO: THIS NEEDS TO BE CONFIRMED 
+appVersion: 8.0.1-jdk11  # TODO: THIS NEEDS TO BE CONFIRMED 
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bamboo

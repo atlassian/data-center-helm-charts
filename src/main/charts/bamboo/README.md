@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.0-rc4-jdk8](https://img.shields.io/badge/AppVersion-8.0.0--rc4--jdk8-informational?style=flat-square)
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -71,7 +71,7 @@ Kubernetes: `>=1.19.x-0`
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen |
 | fluentd.imageName | string | `"fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"dchevell/bamboo"` | The Bamboo Docker image to use https://hub.docker.com/r/atlassian/bamboo-server |
+| image.repository | string | `"atlssmith/bamboo"` | The Bamboo Docker image to use https://hub.docker.com/r/atlassian/bamboo-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource  when NOT using the K8s ingress-nginx controller. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |

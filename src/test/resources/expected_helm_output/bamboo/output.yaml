@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
+    app.kubernetes.io/version: "8.0.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
+    app.kubernetes.io/version: "8.0.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -38,7 +38,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
+    app.kubernetes.io/version: "8.0.1-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -61,7 +61,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
+    app.kubernetes.io/version: "8.0.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -94,7 +94,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bamboo
-          image: "dchevell/bamboo:8.0.0-rc4-jdk8"
+          image: "atlssmith/bamboo:8.0.1-jdk11"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -168,7 +168,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
+    app.kubernetes.io/version: "8.0.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -185,7 +185,7 @@ spec:
           apk add -q jq curl
           STATUS=$(curl -s "$STATUS_URL")
           echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
-          echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+          echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
   restartPolicy: Never
 ---
 # Source: bamboo/templates/tests/test-shared-home-permissions.yaml
@@ -200,7 +200,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.0-rc4-jdk8"
+    app.kubernetes.io/version: "8.0.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

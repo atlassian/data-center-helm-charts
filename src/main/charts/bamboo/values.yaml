@@ -35,7 +35,7 @@ image:
   # -- The Bamboo Docker image to use
   # https://hub.docker.com/r/atlassian/bamboo-server
   #
-  repository: dchevell/bamboo # TODO: This needs to be updated when docker porting work is complete
+  repository: atlssmith/bamboo # TODO: This needs to be updated when docker porting work is complete
   
   # -- Image pull policy
   #

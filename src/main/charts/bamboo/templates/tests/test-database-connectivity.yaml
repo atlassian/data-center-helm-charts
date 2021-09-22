@@ -39,13 +39,9 @@ spec:
         - -ec
         - |
           cat <<EOF | jshell - > output.txt
-          var jdbcDriver = System.getenv("JDBC_DRIVER");
           var jdbcUrl = System.getenv("JDBC_URL");
           var jdbcUsername = System.getenv("JDBC_USER");
           var jdbcPassword = System.getenv("JDBC_PASSWORD");
-
-          System.out.println("Loading driver " + jdbcDriver);
-          Class.forName(jdbcDriver);
 
           System.out.println("Establishing connection to " + jdbcUrl);
           try (var c = java.sql.DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword)) {
