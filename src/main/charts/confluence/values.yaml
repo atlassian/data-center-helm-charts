@@ -449,7 +449,7 @@ confluence:
 
   # -- Standard K8s field that holds security configurations that will be applied to a container.
   #
-  containerSecurityContext: { }
+  containerSecurityContext: {}
 
   # -- The umask used by the Confluence process when it creates new files.
   # The default is 0022. This gives the new files:

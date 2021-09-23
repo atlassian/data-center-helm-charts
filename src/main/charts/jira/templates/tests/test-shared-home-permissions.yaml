@@ -17,8 +17,8 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
-        runAsUser: {{ .Values.jira.securityContext.gid }}
-        runAsGroup: {{ .Values.jira.securityContext.gid }}
+        runAsUser: {{ .Values.jira.securityContext.fsGroup }}
+        runAsGroup: {{ .Values.jira.securityContext.fsGroup }}
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home
