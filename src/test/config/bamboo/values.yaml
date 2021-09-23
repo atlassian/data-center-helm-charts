@@ -3,9 +3,10 @@
 bamboo:
   clustering:
     enabled: ${clustering.enabled}
+  additionalJvmArgs:
+    - -XX:ActiveProcessorCount=2
 database:
-  type: postgres72
+  type: postgresql
   url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql:5432/bamboo
-  driver: org.postgresql.Driver
   credentials:
     secretName: bamboo-database-credentials
