@@ -647,7 +647,8 @@ tolerations: []
 affinity: {}
 #  name: <value>
 
-# -- Standard K8s schedulerName that will be applied to all Bamboo pods. Additional details:
+# -- Standard K8s schedulerName that will be applied to all Bamboo pods.
+# Check Kubernetes documentation on how to configure multiple schedulers:
 # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
 #
 schedulerName:
