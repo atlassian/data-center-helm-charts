@@ -146,6 +146,9 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName  | quote }}
+      {{- end }}
       volumes:
         {{- range $i, $n := .Values.additionalFiles }}
         - name: {{ .name }}-{{$i}}

@@ -2,8 +2,6 @@
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
 
-> 🚧 THIS CHART IS CURRENTLY UNDER ACTIVE DEVELOPMENT!!! 🚧
-
 A chart for installing Bamboo Data Center on Kubernetes
 
 For installation please follow [the documentation](https://atlassian.github.io/data-center-helm-charts/).
@@ -86,6 +84,7 @@ Kubernetes: `>=1.19.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo pods |
 | replicaCount | int | `1` | The initial number of Bamboo pods that should be started at deployment time.  Note that Bamboo requires manual configuration via the browser post deployment  after the first pod is deployed. This configuration must be completed before  scaling up additional pods. As such this value should always be kept as 1,  but can be altered once manual configuration is complete. |
+| schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo pods. Additional details: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
 | serviceAccount.create | bool | `true` | Set to 'true' if a ServiceAccount should be created, or 'false' if it  already exists. |
 | serviceAccount.imagePullSecrets | list | `[]` | For Docker images hosted in private registries, define the list of image pull  secrets that should be utilized by the created ServiceAccount https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to be used by the pods. If not specified, but  the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name  will be auto-generated, otherwise the 'default' ServiceAccount will be used. https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server |
