@@ -122,19 +122,25 @@ crowd:
     #
     annotations: {}
 
-  # Enable or disable security context in StatefulSet template spec. Enabled
-  # by default with UID 2002. Disable when deploying to OpenShift, unless anyuid
-  # policy is attached to a service account.
+  # Standard K8s field that holds pod-level security attributes and common container settings.
   #
   securityContext:
 
-    # -- Set to 'true' to enable the security context
-    #
-    enabled: true
-
     # -- The GID used by the Crowd docker image
     #
-    gid: "2004"
+    fsGroup: 2004
+
+#    # -- Set to 'true' to enable the security context (Deprecated)
+#    #
+#    enabled: true
+#
+#    # -- The GID used by the Crowd docker image (Deprecated)
+#    #
+#    gid: "2004"
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  #
+  containerSecurityContext: {}
 
   # -- The umask used by the Crowd process when it creates new files.
   # The default is 0022. This gives the new files:

@@ -37,6 +37,7 @@ Kubernetes: `>=1.19.x-0`
 | crowd.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Crowd container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | crowd.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | crowd.clustering.usePodNameAsClusterNodeName | bool | `true` | Set to 'true' if the K8s pod name should be used as the end-user-visible name of the Data Center cluster node. |
+| crowd.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. |
 | crowd.ports.hazelcast | int | `5701` | The port on which the Crowd container listens for Hazelcast traffic |
 | crowd.ports.http | int | `8095` | The port on which the Crowd container listens for HTTP traffic |
 | crowd.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks. |
@@ -46,8 +47,7 @@ Kubernetes: `>=1.19.x-0`
 | crowd.resources.container.requests.memory | string | `"1G"` | Initial Memory request by Crowd pod |
 | crowd.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Crowd JVM |
 | crowd.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Crowd JVM |
-| crowd.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
-| crowd.securityContext.gid | string | `"2004"` | The GID used by the Crowd docker image |
+| crowd.securityContext.fsGroup | int | `2004` | The GID used by the Crowd docker image |
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen |
 | crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd |
