@@ -46,6 +46,13 @@ public enum Product {
         public String getContainerGid() {
             return "2003";
         }
+    },
+    bamboo {
+        @Override
+        public String getDockerImageName() { return "atlssmith/bamboo"; }
+
+        @Override
+        public String getContainerGid() { return "2005"; }
     };
 
     public abstract String getDockerImageName();
