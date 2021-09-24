@@ -4,6 +4,6 @@ nav:
     - CONFIGURATION.md
     - MIGRATION.md
     - OPERATION.md
-    - product_upgrades
+    - upgrades
     - resource_management
     - ...
