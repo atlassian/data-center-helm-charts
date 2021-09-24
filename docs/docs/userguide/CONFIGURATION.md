@@ -155,7 +155,7 @@ on the JDBC driver being used, but some examples are:
 
 !!!info "Database creation"
 
-    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
+    The Atlassian product doesn't automatically create the database,`<dbname>`, in the `JDBC URL`, so you need to manually create a user and database for the used database instance. Details on how to create product-specific databases can be found below:
    
     === "Jira"
 
