@@ -7,6 +7,7 @@ version. So be aware that if you upgrade the Helm chart, it might lead to upgrad
      refer to [Product upgrades](PRODUCTS_UPGRADE.md). 
 
 Before upgrading the Helm chart, first consider: 
+
 * the version of the current Helm chart
 * the version of the product running on your Kubernetes cluster
 * the target version of the Helm chart you want to upgrade to
