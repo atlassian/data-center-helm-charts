@@ -1,4 +1,4 @@
-# This file contains overrides for the Jira Helm chart's values.yaml file
+# This file contains overrides for the Bamboo Helm chart's values.yaml file
 
 # The created service account needs to have the credentials to pull from the Atlassian docker registry
 serviceAccount:
