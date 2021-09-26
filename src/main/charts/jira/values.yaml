@@ -28,10 +28,6 @@
 #
 replicaCount: 1
 
-# -- The termination grace period for pods during shutdown. 30s is the
-# -- Kubernetes default, but can be overridden here.
-terminationGracePeriodSeconds: 30
-
 # Image configuration
 #
 image:
