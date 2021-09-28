@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bamboo-agent-local-home
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: bamboo-local-home
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bamboo-agent
+  labels:
+    app: bamboo-agent
+spec:
+  selector:
+    matchLabels:
+      app: bamboo-agent
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bamboo-agent
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 2005
+      containers:
+        - name: bamboo-agent
+          image: atlssmith/bamboo-agent-base
+          env:
+            - name: SECURITY_TOKEN
+              value: "49387ba37d9dcbaca542f21934a0a4e0f28c0350"
+              # For BAMBOO_SERVER value we use the K8s DNS of the Bamboo server DNS
+            - name: BAMBOO_SERVER
+              value: "http://bamboo.bamboo.svc.cluster.local"
+            - name: WRAPPER_JAVA_INITMEMORY
+              value: "512"
+            - name: WRAPPER_JAVA_MAXMEMORY
+              value: "2048"
+          volumeMounts:
+            - mountPath: /home/bamboo/bamboo-agent-home
+              name: bamboo-agent-local-home
+      volumes:
+        - name: bamboo-agent-local-home
+          persistentVolumeClaim:
+            claimName: "bamboo-agent-local-home"

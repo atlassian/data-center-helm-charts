@@ -1,0 +1,133 @@
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: bamboo-agent-claim
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  storageClassName: bamboo-local-home
+#  resources:
+#    requests:
+#      storage: 1Gi
+#
+#---
+#
+#apiVersion: v1
+#kind: Pod
+#metadata:
+#  name: bamboo-agent
+#spec:
+#  securityContext:
+#    fsGroup: 1000
+#  containers:
+#    - image: atlassian/bamboo-agent-base
+#      name:  bamboo-agent
+#      args: ["https://bamboo-k8s.deplops.com"]
+#      env:
+#        - name: VM_OPTS
+#          value: "-Dwrapper.java.initmemory=512 -Dwrapper.java.maxmemory=2048"
+#      volumeMounts:
+#        - mountPath: /home/bamboo/bamboo-agent-home/bin
+#          name: bamboo-agent-home
+#  volumes:
+#    - name: bamboo-agent-home
+#      persistentVolumeClaim:
+#        claimName: bamboo-agent-claim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bamboo-agent-local-home
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: bamboo-local-home
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bamboo-agent-local-home-bin
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: bamboo-local-home
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bamboo-agent
+  labels:
+    app: bamboo-agent
+spec:
+  securityContext:
+    fsGroup: 2005
+  initContainers:
+    - name: copy-bamboo-capabilities
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        runAsUser: 0
+      volumeMounts:
+        - mountPath: /home/bamboo/bamboo-agent-home/bin
+          name: bamboo-agent-local-home-bin
+        - mountPath: /bamboo-capabilities
+          name: capabilities
+      command: [ 'sh', '-c', 'cp /bamboo-capabilities/bamboo-capabilities.properties /home/bamboo/bamboo-agent-home/bin' ]
+  containers:
+    - name: bamboo-agent
+      image: atlssmith/bamboo-agent-base
+      env:
+        - name: SECURITY_TOKEN
+          value: "d9b374b0d84e15a14a250e62838c289e1078fba0"
+        - name: BAMBOO_SERVER
+          value: "https://bamboo-k8s.deplops.com"
+        - name: WRAPPER_JAVA_INITMEMORY
+          value: "512"
+        - name: WRAPPER_JAVA_MAXMEMORY
+          value: "2048"
+      volumeMounts:
+        - mountPath: /home/bamboo/bamboo-agent-home
+          name: bamboo-agent-local-home
+        - mountPath: /home/bamboo/bamboo-agent-home/bin
+          name: bamboo-agent-local-home-bin
+  volumes:
+    - name: bamboo-agent-local-home
+      persistentVolumeClaim:
+        claimName: "bamboo-agent-local-home"
+    - name: bamboo-agent-local-home-bin
+      persistentVolumeClaim:
+        claimName: "bamboo-agent-local-home-bin"
+    - name: capabilities
+      configMap:
+        name: capabilities
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: capabilities
+data:
+  bamboo-capabilities.properties: |
+    "system.jdk.JDK 1.8" /opt/java/openjdk/bin/java
+    "system.git.executable" /usr/bin/git
