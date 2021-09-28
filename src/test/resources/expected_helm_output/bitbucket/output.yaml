@@ -83,6 +83,8 @@ spec:
       app.kubernetes.io/instance: unittest-bitbucket
   template:
     metadata:
+      annotations:
+        checksum/config-jvm: 27a0817aa16495c57f4e89f436e270cc76aa2204678f535320edc43a89dcee6a
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket

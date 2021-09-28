@@ -78,6 +78,8 @@ spec:
       app.kubernetes.io/instance: unittest-crowd
   template:
     metadata:
+      annotations:
+        checksum/config-jvm: dcbdc720c66e6833dc7e20b51809c2569f792a9c45592a8faee3c0a799ec0cf5
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
