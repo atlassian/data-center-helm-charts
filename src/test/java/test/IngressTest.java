@@ -163,6 +163,23 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bitbucket")
+    void bitbucket_ingress_path_contextPath(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/bitbucket"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/bitbucket");
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("SERVER_CONTEXT_PATH", "/bitbucket");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "jira")
     void jira_ingress_path_contextPath(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(

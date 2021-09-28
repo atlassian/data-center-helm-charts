@@ -378,7 +378,8 @@ ingress:
   
   # -- The base path for the Ingress Resource. For example '/bitbucket'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
-  # 'company.k8s.com/bitbucket'
+  # 'company.k8s.com/bitbucket'. This value is also used for Bitbucket
+  # context path.
   #
   path: "/"
   
@@ -418,7 +419,7 @@ bitbucket:
     # -- The type of K8s service to use for Bitbucket
     #
     type: ClusterIP
-    
+
     # -- Additional annotations to apply to the Service
     #
     annotations: {}
