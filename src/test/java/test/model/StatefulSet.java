@@ -32,6 +32,10 @@ public final class StatefulSet extends KubeResource {
         return getNode("spec", "template", "spec");
     }
 
+    public JsonNode getPodMetadata() {
+        return getNode("spec", "template", "metadata");
+    }
+
     public Seq<JsonNode> getVolumeClaimTemplates() {
         return Array.ofAll(getSpec().path("volumeClaimTemplates"));
     }
