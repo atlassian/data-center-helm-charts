@@ -49,6 +49,21 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource
+    void ingress_create_with_custom_class_name(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.className", "my-custom-nginx"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+
+        for (KubeResource ingress : ingresses) {
+            assertThat(ingress.getMetadata().path("annotations"))
+                    .isObject(Map.of("kubernetes.io/ingress.class", "my-custom-nginx"));
+        }
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void ingress_create_tls (Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -222,7 +237,7 @@ class IngressTest {
         assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
                 .hasTextEqualTo("/");
     }
-    
+
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bamboo")
     void bamboo_ingress_host_port(Product product) throws Exception {
@@ -318,7 +333,7 @@ class IngressTest {
         assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
                 .hasTextEqualTo("/");
     }
-    
+
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_contextPath(Product product) throws Exception {
