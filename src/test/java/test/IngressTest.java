@@ -223,8 +223,6 @@ class IngressTest {
                 .hasTextEqualTo("/");
     }
     
-    
-
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bamboo")
     void bamboo_ingress_host_port(Product product) throws Exception {
@@ -321,12 +319,6 @@ class IngressTest {
                 .hasTextEqualTo("/");
     }
     
-    
-    
-    
-    
-    
-
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_contextPath(Product product) throws Exception {

@@ -6,7 +6,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
 /**
- * A specialisation of {@link KubeResource} which adds convenience methods for making StatefulSets easier to handle.
+ * A specialisation of {@link KubeResource} which adds convenience methods for making Deployments easier to handle.
  */
 public final class Deployment extends KubeResource {
     Deployment(JsonNode node) {
