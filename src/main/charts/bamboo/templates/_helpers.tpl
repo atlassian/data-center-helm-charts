@@ -9,25 +9,6 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
-Bamboo agent VM args 
-*/}}
-{{- define "agent.VmEnvVars" -}}
-{{- if and .Values.agent.resources.jvm.maxHeap .Values.agent.resources.jvm.minHeap -}}
-{{- printf "-Dwrapper.java.initmemory=%s -Dwrapper.java.maxmemory=%s" .Values.agent.resources.jvm.maxHeap .Values.agent.resources.jvm.minHeap }}
-{{- else }}
-{{- print "-Dwrapper.java.initmemory=512 -Dwrapper.java.maxmemory=2048" }}
-{{- end }}
-{{- end }}
-
-{{/*
-The name the synchrony app within the chart.
-TODO: This will break if the confluence.name exceeds 63 characters, need to find a more rebust way to do this
-*/}}
-{{- define "agent.name" -}}
-{{ include "bamboo.name" . }}-agent
-{{- end }}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -50,14 +31,6 @@ Create chart name and version as used by the chart label.
 */}}
 {{- define "bamboo.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-The full-qualfied name of the synchrony app within the chart.
-TODO: This will break if the confluence.fullname exceeds 63 characters, need to find a more rebust way to do this
-*/}}
-{{- define "agent.fullname" -}}
-{{ include "bamboo.fullname" . }}-agent
 {{- end }}
 
 {{/*
@@ -131,29 +104,6 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- end }}
 
 {{/*
-These labels will be applied to all Synchrony resources in the chart
-*/}}
-{{- define "agent.labels" -}}
-helm.sh/chart: {{ include "bamboo.chart" . }}
-{{ include "agent.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ with .Values.additionalLabels }}
-{{- toYaml . }}
-{{- end }}
-{{- end }}
-
-{{/*
-Selector labels for finding Synchrony resources
-*/}}
-{{- define "agent.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "agent.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
 The command that should be run to start the fluentd service
 */}}
 {{- define "fluentd.start.command" -}}
@@ -169,14 +119,6 @@ The command that should be run to start the fluentd service
 {{ .Values.image.registry}}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
 {{- else -}}
 {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
-{{- end }}
-{{- end }}
-
-{{- define "agent.image" -}}
-{{- if .Values.image.registry -}}
-{{ .Values.image.registry}}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
-{{- else -}}
-{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag | default "latest" }}
 {{- end }}
 {{- end }}
 
@@ -256,21 +198,6 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- range .Values.bamboo.additionalBundledPlugins }}
 - name: {{ .volumeName }}
   mountPath: "/opt/atlassian/bamboo/atlassian-bamboo/WEB-INF/atlassian-bundled-plugins/{{ .fileName }}"
-  {{- if .subDirectory }}
-  subPath: {{ printf "%s/%s" .subDirectory .fileName | quote }}
-  {{- else }}
-  subPath: {{ .fileName | quote }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-For each additional agent library declared, generate a volume mount that injects that library into the Confluence lib directory
-*/}}
-{{- define "agent.additionalLibraries" -}}
-{{- range .Values.agent.additionalLibraries }}
-- name: {{ .volumeName }}
-  mountPath: "/opt/atlassian/confluence/confluence/WEB-INF/lib/{{ .fileName }}"
   {{- if .subDirectory }}
   subPath: {{ printf "%s/%s" .subDirectory .fileName | quote }}
   {{- else }}

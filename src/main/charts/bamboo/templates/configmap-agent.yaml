@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: agent-capabilities
-data:
-  bamboo-capabilities.properties: |
-    "system.jdk.JDK 1.8" /opt/java/openjdk/bin/java
-    "system.git.executable" /usr/bin/git
