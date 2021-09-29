@@ -29,13 +29,25 @@ class BambooAgentTest {
     void baseUrlSet(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".additionalEnvironmentVariables[0].name", "MY_ENV_VAR",
-                pname+".additionalEnvironmentVariables[0].value", "env-value"
+                pname+".server", "bamboo.bamboo.svc.cluster.local"
         ));
 
         final var deployment = resources.getDeployment(product.getHelmReleaseName());
         final var env = deployment.getContainer().getEnv();
-        env.assertHasValue("MY_ENV_VAR", "env-value");
+        env.assertHasValue("BAMBOO_SERVER", "http://bamboo.bamboo.svc.cluster.local");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "agent")
+    void securityTokenSet(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname+".securityToken", "49387ba37d9dcbaca542f21934a0a4e0f28c0350"
+        ));
+
+        final var deployment = resources.getDeployment(product.getHelmReleaseName());
+        final var env = deployment.getContainer().getEnv();
+        env.assertHasValue("SECURITY_TOKEN", "49387ba37d9dcbaca542f21934a0a4e0f28c0350");
     }
 
     @ParameterizedTest
