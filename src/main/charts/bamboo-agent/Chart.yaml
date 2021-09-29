@@ -1,13 +1,13 @@
 apiVersion: v2
-name: bamboo
-description: A chart for installing Bamboo Data Center on Kubernetes
+name: bamboo-agent
+description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
 version: 0.0.1 # TODO: THIS NEEDS TO BE CONFIRMED 
 appVersion: 8.0.1-jdk11  # TODO: THIS NEEDS TO BE CONFIRMED 
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bamboo
-  - Bamboo Server
+  - Bamboo Agent
   - Bamboo Data Center
   - Bamboo DC
   - Atlassian
@@ -15,7 +15,7 @@ home: https://www.atlassian.com/software/bamboo
 icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bamboo.svg
 sources:
   - https://github.com/atlassian-labs/data-center-helm-charts
-  - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+  - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
 deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"

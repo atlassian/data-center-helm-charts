@@ -12,7 +12,6 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 
 * <https://github.com/atlassian-labs/data-center-helm-charts>
 * <https://bitbucket.org/atlassian-docker/docker-bamboo-server>
-* <https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base>
 
 ## Requirements
 

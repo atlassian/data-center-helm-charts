@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bamboo.fullname" . }}
+  labels:
+  {{- include "bamboo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+  {{- include "bamboo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+    {{- include "bamboo.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
+      {{ if .Values.bamboo.securityContext.enabled }}
+      securityContext:      
+        fsGroup: {{ .Values.bamboo.securityContext.gid }}
+      {{ end }}
+      initContainers:
+        {{- include "bamboo.additionalInitContainers" . | nindent 8 }}    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "bamboo.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: SECURITY_TOKEN
+            value: {{ .Values.bamboo.securityToken }}
+          - name: BAMBOO_SERVER
+            value: {{ include "bamboo.serverBaseUrl" . }}
+          - name: WRAPPER_JAVA_INITMEMORY
+            valueFrom:
+              configMapKeyRef:
+                key: min_heap
+                name: {{ include "bamboo.fullname" . }}-jvm-config
+          - name: WRAPPER_JAVA_MAXMEMORY
+            valueFrom:
+              configMapKeyRef:
+                key: max_heap
+                name: {{ include "bamboo.fullname" . }}-jvm-config
+          {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.bamboo.ports.http }}
+              protocol: TCP          
+          {{- with .Values.bamboo.resources.container }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", {{ .Values.bamboo.shutdown.command | quote }}]
+      {{- include "bamboo.additionalContainers" . | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName  | quote }}
+      {{- end }}
