@@ -49,7 +49,7 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.agent.ports.http }}
-              protocol: TCP          
+              protocol: TCP
 {{/*              TODO: Enable readiness probe once available*/}}
 {{/*          readinessProbe:*/}}
 {{/*            httpGet:*/}}
