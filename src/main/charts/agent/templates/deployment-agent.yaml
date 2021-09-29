@@ -50,6 +50,14 @@ spec:
             - name: http
               containerPort: {{ .Values.agent.ports.http }}
               protocol: TCP          
+{{/*              TODO: Enable readiness probe once available*/}}
+{{/*          readinessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              port: {{ .Values.agent.ports.http }}*/}}
+{{/*              path: {{ .Values.agent.service.contextPath }}/rest/api/latest/status*/}}
+{{/*            initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}*/}}
+{{/*            periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}*/}}
+{{/*            failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}*/}}
           {{- with .Values.agent.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}
