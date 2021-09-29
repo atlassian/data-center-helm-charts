@@ -1,3 +1,5 @@
+{{/*TODO: Once status endpoint is available re-instate this test*/}}
+
 {{/*apiVersion: v1*/}}
 {{/*kind: Pod*/}}
 {{/*metadata:*/}}

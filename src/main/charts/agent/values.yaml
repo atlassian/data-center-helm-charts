@@ -68,7 +68,7 @@ agent:
   # Additional details here:
   # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html#Agentauthentication-SecuritytokenverificationSecuritytokenverification
   #
-  securityToken: "49387ba37d9dcbaca542f21934a0a4e0f28c0350"
+  securityToken:
     
   # The K8s DNS record for the Bamboo server service. Should be of the form, <namespace>.<service_name>.svc.cluster.local
   # for example: "bamboo.bamboo.svc.cluster.local"
@@ -77,7 +77,7 @@ agent:
   # export NAMESPACE=<namespace in which the Bamboo server resides>
   # echo "$(echo "${NAMESPACE}.")""$(kubectl exec -it bamboo-0 -- cat /etc/resolv.conf | grep search | awk '{print $2}')"
   # 
-  server: "bamboo.bamboo.svc.cluster.local"
+  server:
     
   # Enable or disable security context in StatefulSet template spec. Enabled 
   # by default with UID 2005. Disable when deploying to OpenShift, unless anyuid 

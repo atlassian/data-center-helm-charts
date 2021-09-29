@@ -36,8 +36,8 @@ Kubernetes: `>=1.19.x-0`
 | agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
 | agent.securityContext.gid | string | `"2005"` | The GID used by the Bamboo agent docker image |
-| agent.securityToken | string | `"49387ba37d9dcbaca542f21934a0a4e0f28c0350"` |  |
-| agent.server | string | `"bamboo.bamboo.svc.cluster.local"` |  |
+| agent.securityToken | string | `nil` |  |
+| agent.server | string | `nil` |  |
 | agent.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default TODO: This needs to be updated when Steve's changes are done command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |
 | agent.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
