@@ -32,7 +32,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: SECURITY_TOKEN
-              value: {{ .Values.agent.securityToken }}
+              value: {{ include "agent.securityToken" . }}
             - name: BAMBOO_SERVER
               value: {{ include "agent.serverBaseUrl" . }}
             - name: WRAPPER_JAVA_INITMEMORY

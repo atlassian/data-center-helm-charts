@@ -30,7 +30,18 @@ If release name contains chart name it will be used as a full name.
 The base url of the Bamboo DC server
 */}}
 {{- define "agent.serverBaseUrl" -}}
+{{- if .Values.agent.server }}
 {{- printf "http://%s" .Values.agent.server }}
+{{- end }}
+{{- end }}
+
+{{/*
+The secret token with which to authenticate to the Bamboo server
+*/}}
+{{- define "agent.securityToken" -}}
+{{- if .Values.agent.securityToken }}
+{{- printf .Values.agent.securityToken }}
+{{- end }}
 {{- end }}
 
 {{/*
