@@ -49,7 +49,16 @@ public enum Product {
     },
     bamboo {
         @Override
+        // TODO: this image will need to be updated once Stevs changes are in
         public String getDockerImageName() { return "atlssmith/bamboo"; }
+
+        @Override
+        public String getContainerGid() { return "2005"; }
+    },
+    agent {
+        @Override
+        // TODO: this image will need to be updated once Stevs changes are in
+        public String getDockerImageName() { return "atlssmith/bamboo-agent-base"; }
 
         @Override
         public String getContainerGid() { return "2005"; }

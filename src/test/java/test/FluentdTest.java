@@ -21,7 +21,7 @@ class FluentdTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
     void fluentd_sidecar_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "fluentd.enabled", "true",
@@ -38,7 +38,7 @@ class FluentdTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
     void fluentd_uses_default_start_command(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "fluentd.enabled", "true"
@@ -54,7 +54,7 @@ class FluentdTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
     void fluentd_uses_custom_start_command(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "fluentd.enabled", "true",

@@ -4,7 +4,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "bamboo.name" -}}
+{{- define "agent.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -13,7 +13,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "bamboo.fullname" -}}
+{{- define "agent.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -29,14 +29,14 @@ If release name contains chart name it will be used as a full name.
 {{/*
 The base url of the Bamboo DC server
 */}}
-{{- define "bamboo.serverBaseUrl" -}}
-{{- printf "http://%s" .Values.bamboo.server }}
+{{- define "agent.serverBaseUrl" -}}
+{{- printf "http://%s" .Values.agent.server }}
 {{- end }}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "bamboo.chart" -}}
+{{- define "agent.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -46,12 +46,12 @@ If the name is defined in the chart values, then use that,
 else if we're creating a new service account then use the name of the Helm release,
 else just use the "default" service account.
 */}}
-{{- define "bamboo.serviceAccountName" -}}
+{{- define "agent.serviceAccountName" -}}
 {{- if .Values.serviceAccount.name -}}
 {{- .Values.serviceAccount.name -}}
 {{- else -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "bamboo.fullname" . -}}
+{{- include "agent.fullname" . -}}
 {{- else -}}
 default
 {{- end -}}
@@ -61,9 +61,9 @@ default
 {{/*
 Common labels
 */}}
-{{- define "bamboo.labels" -}}
-helm.sh/chart: {{ include "bamboo.chart" . }}
-{{ include "bamboo.selectorLabels" . }}
+{{- define "agent.labels" -}}
+helm.sh/chart: {{ include "agent.chart" . }}
+{{ include "agent.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -76,12 +76,12 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "bamboo.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "bamboo.name" . }}
+{{- define "agent.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "agent.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "bamboo.image" -}}
+{{- define "agent.image" -}}
 {{- if .Values.image.registry -}}
 {{ .Values.image.registry}}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
 {{- else -}}
@@ -92,7 +92,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Defining additional init containers here instead of in values.yaml to allow template overrides
 */}}
-{{- define "bamboo.additionalInitContainers" -}}
+{{- define "agent.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
 {{- toYaml . }}
 {{- end }}
@@ -101,7 +101,7 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{/*
 Defining additional containers here instead of in values.yaml to allow template overrides
 */}}
-{{- define "bamboo.additionalContainers" -}}
+{{- define "agent.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
 {{- toYaml . }}
 {{- end }}
@@ -110,8 +110,8 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{/*
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
-{{- define "bamboo.additionalEnvironmentVariables" -}}
-{{- with .Values.bamboo.additionalEnvironmentVariables }}
+{{- define "agent.additionalEnvironmentVariables" -}}
+{{- with .Values.agent.additionalEnvironmentVariables }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}

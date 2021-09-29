@@ -1,6 +1,4 @@
-🚧 These charts are currently under construction! 🚧
-
-# bamboo-agent
+# agent
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
 
@@ -27,21 +25,21 @@ Kubernetes: `>=1.19.x-0`
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Bamboo agent pods |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Bamboo agent pods |
-| bamboo.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo agent container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for  supported variables. |
-| bamboo.ports.http | int | `80` | The port on which the Bamboo agent listens for HTTP traffic |
-| bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe  before the pod fails readiness checks. |
-| bamboo.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo agent container readiness probe,  after which the probe will start running. |
-| bamboo.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo agent container readiness probe will run |
-| bamboo.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bamboo agent pod |
-| bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
-| bamboo.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
-| bamboo.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
-| bamboo.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
-| bamboo.securityContext.gid | string | `"2005"` | The GID used by the Bamboo agent docker image |
-| bamboo.securityToken | string | `nil` |  |
-| bamboo.server | string | `nil` |  |
-| bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default TODO: This needs to be updated when Steve's changes are done command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |
-| bamboo.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
+| agent.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo agent container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for  supported variables. |
+| agent.ports.http | int | `80` | The port on which the Bamboo agent listens for HTTP traffic |
+| agent.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe  before the pod fails readiness checks. |
+| agent.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo agent container readiness probe,  after which the probe will start running. |
+| agent.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo agent container readiness probe will run |
+| agent.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bamboo agent pod |
+| agent.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
+| agent.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
+| agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
+| agent.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
+| agent.securityContext.gid | string | `"2005"` | The GID used by the Bamboo agent docker image |
+| agent.securityToken | string | `"49387ba37d9dcbaca542f21934a0a4e0f28c0350"` |  |
+| agent.server | string | `"bamboo.bamboo.svc.cluster.local"` |  |
+| agent.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default TODO: This needs to be updated when Steve's changes are done command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |
+| agent.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"atlssmith/bamboo-agent-base"` | The Bamboo agent Docker image to use https://hub.docker.com/r/atlassian/bamboo-agent-base TODO: This needs to be updated when docker porting work is complete |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |

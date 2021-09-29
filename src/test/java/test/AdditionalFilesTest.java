@@ -25,7 +25,7 @@ class AdditionalFilesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(Product.class)
+    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additional_files_config_map_creates_volumes(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "additionalFiles[0].name", "custom-config-test",
@@ -44,7 +44,7 @@ class AdditionalFilesTest {
 
 
     @ParameterizedTest
-    @EnumSource(Product.class)
+    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additional_files_secret_creates_new_secrets(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "additionalFiles[0].name", "custom-config-test",
@@ -62,7 +62,7 @@ class AdditionalFilesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(Product.class)
+    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additional_files_configMap_create_volume_mounts(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "additionalFiles[0].name", "custom-config-test",

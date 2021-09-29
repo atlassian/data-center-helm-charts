@@ -13,13 +13,13 @@ To see the custom values you used for this release:
 
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
   
-{{ if not .Values.bamboo.securityToken -}}
+{{ if not .Values.agent.securityToken -}}
 #################################################################################
 ######      WARNING: Security token not provided for authentication!!!      #####
 ######      Agents will not be able to authenticate with Bamboo server.     #####
 #################################################################################
 {{- end }}
-{{ if not .Values.bamboo.server -}}
+{{ if not .Values.agent.server -}}
 #################################################################################
 ######           WARNING: Bamboo Server URL not provided!!!                 #####
 ######      Agents will not be able to connect to the Bamboo server.        #####

@@ -25,7 +25,7 @@ class ContextPathTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"confluence", "jira"})
+    @EnumSource(value = Product.class, names = {"confluence", "jira", "bamboo"})
     void test_context_path(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".service.contextPath", "/" + product.name()));
@@ -36,8 +36,14 @@ class ContextPathTest {
                 .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/" + product.name());
 
 
-        assertEquals(resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
-                "/" + product.name() + "/status");
+        if(product.name().equals("bamboo")) {
+            assertEquals(resources.getStatefulSet(
+                    product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
+                    "/" + product.name() + "/rest/api/latest/status");
+        } else {
+            assertEquals(resources.getStatefulSet(
+                    product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
+                    "/" + product.name() + "/status");
+        }
     }
 }
