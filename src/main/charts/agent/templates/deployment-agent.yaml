@@ -34,7 +34,7 @@ spec:
             - name: SECURITY_TOKEN
               value: {{ include "agent.securityToken" . }}
             - name: BAMBOO_SERVER
-              value: {{ include "agent.serverBaseUrl" . }}
+              value: {{ include "agent.bambooServerServiceDns" . }}
             - name: WRAPPER_JAVA_INITMEMORY
               valueFrom:
                 configMapKeyRef:
