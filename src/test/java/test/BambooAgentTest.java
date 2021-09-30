@@ -22,11 +22,10 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void baseUrlSet(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".server", "bamboo.bamboo.svc.cluster.local"
+                "agent.server", "bamboo.bamboo.svc.cluster.local"
         ));
 
         final var deployment = resources.getDeployment(product.getHelmReleaseName());
@@ -35,11 +34,10 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void securityTokenSet(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".securityToken", "49387ba37d9dcbaca542f21934a0a4e0f28c0350"
+                "agent.securityToken", "49387ba37d9dcbaca542f21934a0a4e0f28c0350"
         ));
 
         final var deployment = resources.getDeployment(product.getHelmReleaseName());
@@ -48,12 +46,11 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void additionalEnvironmentVariables(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".additionalEnvironmentVariables[0].name", "MY_ENV_VAR",
-                pname+".additionalEnvironmentVariables[0].value", "env-value"
+                "agent.additionalEnvironmentVariables[0].name", "MY_ENV_VAR",
+                "agent.additionalEnvironmentVariables[0].value", "env-value"
         ));
 
         final var deployment = resources.getDeployment(product.getHelmReleaseName());
@@ -62,7 +59,7 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void additionalInitContainers(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "additionalInitContainers[0].name", "my_init_container",
@@ -75,7 +72,7 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void additionalContainers(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "additionalContainers[0].name", "my_container",
@@ -88,39 +85,38 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void deployment_empty_limits(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
 
         Deployment deployment = resources.getDeployment(product.getHelmReleaseName());
 
-        assertThat(deployment.getContainer(product.name()).getLimits()).isEmpty();
+        assertThat(deployment.getContainer(product.toString()).getLimits()).isEmpty();
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void deployment_resource_requests_and_limits(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".resources.container.requests.cpu", "10",
-                pname+".resources.container.requests.memory", "10GB",
-                pname+".resources.container.limits.cpu", "20",
-                pname+".resources.container.limits.memory", "20GB"
+                "agent.resources.container.requests.cpu", "10",
+                "agent.resources.container.requests.memory", "10GB",
+                "agent.resources.container.limits.cpu", "20",
+                "agent.resources.container.limits.memory", "20GB"
         ));
 
         Deployment deployment = resources.getDeployment(product.getHelmReleaseName());
 
         // verify requests
-        assertThat(deployment.getContainer(product.name()).getRequests().path("cpu")).hasValueEqualTo(10);
-        assertThat(deployment.getContainer(product.name()).getRequests().path("memory")).hasTextEqualTo("10GB");
+        assertThat(deployment.getContainer(product.toString()).getRequests().path("cpu")).hasValueEqualTo(10);
+        assertThat(deployment.getContainer(product.toString()).getRequests().path("memory")).hasTextEqualTo("10GB");
 
         // verify limits
-        assertThat(deployment.getContainer(product.name()).getLimits().path("cpu")).hasValueEqualTo(20);
-        assertThat(deployment.getContainer(product.name()).getLimits().path("memory")).hasTextEqualTo("20GB");
+        assertThat(deployment.getContainer(product.toString()).getLimits().path("cpu")).hasValueEqualTo(20);
+        assertThat(deployment.getContainer(product.toString()).getLimits().path("memory")).hasTextEqualTo("20GB");
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void custom_scheduler(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "schedulerName", "second_scheduler"));
@@ -130,7 +126,7 @@ class BambooAgentTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "agent")
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void default_scheduler(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "schedulerName", ""));

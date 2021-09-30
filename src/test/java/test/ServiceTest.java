@@ -26,7 +26,7 @@ class ServiceTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void service_port_type(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".service.port", "1234",
@@ -42,7 +42,7 @@ class ServiceTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void service_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".service.annotations.testAnnotation1", "test1",

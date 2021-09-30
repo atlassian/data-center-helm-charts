@@ -27,7 +27,7 @@ class ContainersTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalEnvironmentVariables(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -41,7 +41,7 @@ class ContainersTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalInitContainers(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -55,7 +55,7 @@ class ContainersTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalContainers(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
