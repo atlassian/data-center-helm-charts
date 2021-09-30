@@ -155,7 +155,7 @@ on the JDBC driver being used, but some examples are:
 
 !!!info "Database creation"
 
-    With regards, `<dbname>` in the `JDBC URL`, this database is not automatically created by the Atlassian product itself, as such a user and database must be manually created for the DB instance used. Details on how to create product specific DB's can be found below:
+    The Atlassian product doesn't automatically create the database,`<dbname>`, in the `JDBC URL`, so you need to manually create a user and database for the used database instance. Details on how to create product-specific databases can be found below:
    
     === "Jira"
 
@@ -172,6 +172,7 @@ on the JDBC driver being used, but some examples are:
     === "Crowd"
 
         [Connect Crowd to an external database](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
+
 
 ### `database.driver`
 
@@ -191,12 +192,12 @@ on the license conditions of those drivers.
 Jira and Confluence both require this value to be specified, this declares the
 database engine to be used. The acceptable values for this include:
 
-| Vendor | Jira | Confluence  |   
+| Vendor | Jira | Confluence  |
 |---|---|---|
-| PostgreSQL | `postgres72` | `postgresql` |   
-| MySQL | `mysql57` / `mysql8` | `mysql` |   
-| SQL Server | `mssql` | `mssql` |   
-| Oracle | `oracle10g` | `oracle` |   
+| PostgreSQL | `postgres72` | `postgresql` |
+| MySQL | `mysql57` / `mysql8` | `mysql` |
+| SQL Server | `mssql` | `mssql` |
+| Oracle | `oracle10g` | `oracle` |
 
 ### `database.credentials`
 

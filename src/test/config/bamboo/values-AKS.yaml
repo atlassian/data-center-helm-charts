@@ -1,0 +1,26 @@
+# This file contains overrides for the Bamboo Helm chart's values.yaml file
+
+# The created service account needs to have the credentials to pull from the Atlassian docker registry
+serviceAccount:
+  imagePullSecrets:
+    - name: regcred
+
+ingress:
+  create: true
+  host: ${helm.release.prefix}-bamboo.${aks.ingress.domain}
+  nginx: true
+  https: true
+  tlsSecretName: ingress-tls
+
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
+  sharedHome:
+    customVolume:
+      persistentVolumeClaim:
+        claimName: ${shared.pvc.name} # Pre-provisioned, and shared by all of our pods
+    subPath: ${helm.release.prefix}-bamboo # Since all of our pods share the same PV, we use subpath mounts to prevent interference
+
+nodeSelector:
+  node_purpose: ci

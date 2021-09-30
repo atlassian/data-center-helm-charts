@@ -784,6 +784,12 @@ tolerations: []
 #        topologyKey: topology.kubernetes.io/zone
 affinity: {}
 
+# -- Standard K8s schedulerName that will be applied to all Bitbucket pods.
+# Check Kubernetes documentation on how to configure multiple schedulers:
+# https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
+#
+schedulerName:
+
 # -- Additional container definitions that will be added to all Bitbucket pods
 #
 additionalContainers: []

@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "bamboo.fullname" . }}
+  labels:
+    {{- include "bamboo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "bamboo.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "bamboo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "bamboo.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
+      {{ if .Values.bamboo.securityContext.enabled }}
+      securityContext:
+        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container.
+        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+        fsGroup: {{ .Values.bamboo.securityContext.gid }}
+      {{ end }}
+      initContainers:
+        {{- include "bamboo.additionalInitContainers" . | nindent 8 }}
+        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+        - name: nfs-permission-fixer
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: {{ .Values.volumes.sharedHome.nfsPermissionFixer.mountPath | quote }}
+              {{- if .Values.volumes.sharedHome.subPath }}
+              subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+              {{- end }}
+          command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "bamboo.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{ if .Values.ingress.https }}
+            - name: ATL_TOMCAT_SCHEME
+              value: "https"
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            {{ end }}
+            {{ if .Values.bamboo.service.contextPath }}
+            - name: ATL_TOMCAT_CONTEXTPATH
+              value: {{ .Values.bamboo.service.contextPath | quote }}
+            {{ end }}
+            {{ if .Values.ingress.host }}
+            - name: ATL_PROXY_NAME
+              value: {{ .Values.ingress.host | quote }}
+            - name: ATL_PROXY_PORT
+              value: {{ include "bamboo.ingressPort" . | quote }}
+            {{ end }}
+            {{- include "bamboo.databaseEnvVars" . | nindent 12 }}
+            {{/* TODO: This probably isnt needed with the current active-passive Bamboo architecture "clustering" does not work as we know it i.e. active-active*/}}
+            {{- include "bamboo.clusteringEnvVars" . | nindent 12 }}
+            {{ with .Values.bamboo.license.secretName }}
+            {{/* TODO: Bamboo does not currently support this. Keeping for now as support may come later.*/}}
+            - name: BAMBOO_SETUP_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ . }}
+                  key: {{ $.Values.bamboo.license.secretKey }}
+            {{ end }}
+            - name: SET_PERMISSIONS
+              value: {{ .Values.bamboo.setPermissions | quote }}
+            - name: BAMBOO_SHARED_HOME
+              value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: {{ include "bamboo.fullname" . }}-jvm-config
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: {{ include "bamboo.fullname" . }}-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: {{ include "bamboo.fullname" . }}-jvm-config            
+            {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.bamboo.ports.http }}
+              protocol: TCP
+            - name: jms
+              containerPort: {{ .Values.bamboo.ports.jms }}
+              protocol: TCP
+{{/*          TODO: Need to re-think the readiness probe if we decide for first release that running more than 1 server is */}}
+{{/*          acceptable with the current bamboo architecture.*/}}
+{{/*           */}}
+{{/*          When a second bamboo server (passive) is added to the cluster, the readiness probe fails. This is because */}}
+{{/*          the active pod never fully comes up on account of the cluster lock being held by the active node.*/}}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.bamboo.ports.http }}
+              path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status
+            initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
+          {{- with .Values.bamboo.resources.container }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- include "bamboo.volumeMounts" . | nindent 12 }}
+            {{- include "bamboo.additionalVolumeMounts" . | nindent 12 }}
+            {{- include "bamboo.additionalLibraries" . | nindent 12 }}
+            {{- include "bamboo.additionalBundledPlugins" . | nindent 12 }}
+            {{- range $i, $n := .Values.additionalFiles }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", {{ .Values.bamboo.shutdown.command | quote }}]
+        {{- include "fluentd.container" . | nindent 8 }}
+        {{- include "bamboo.additionalContainers" . | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName  | quote }}
+      {{- end }}
+      volumes:
+        {{- range $i, $n := .Values.additionalFiles }}
+        - name: {{ .name }}-{{$i}}
+          {{ .type }}:
+            {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
+            items:
+              - key: {{ .key }}
+                path: {{ .key }}
+        {{ end }}
+        {{ include "bamboo.volumes" . | nindent 8 }}
+        {{ include "fluentd.config.volume" . | nindent 8 }}
+  {{ include "bamboo.volumeClaimTemplates" . | nindent 2 }}
