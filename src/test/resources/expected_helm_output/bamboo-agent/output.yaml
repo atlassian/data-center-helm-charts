@@ -79,7 +79,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: "2"
+              cpu: "1"
               memory: 2G
           lifecycle:
             preStop:
