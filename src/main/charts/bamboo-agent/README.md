@@ -30,7 +30,7 @@ Kubernetes: `>=1.19.x-0`
 | agent.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe  before the pod fails readiness checks. |
 | agent.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo agent container readiness probe,  after which the probe will start running. |
 | agent.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo agent container readiness probe will run |
-| agent.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bamboo agent pod |
+| agent.resources.container.requests.cpu | string | `"1"` | Initial CPU request by Bamboo agent pod |
 | agent.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
 | agent.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |

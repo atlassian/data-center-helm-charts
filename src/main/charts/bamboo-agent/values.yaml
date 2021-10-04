@@ -171,7 +171,7 @@ agent:
       
         # -- Initial CPU request by Bamboo agent pod
         #
-        cpu: "2" # If changing the cpu value update 'ActiveProcessorCount' below
+        cpu: "1" # If changing the cpu value update 'ActiveProcessorCount' below
         
         # -- Initial Memory request by Bamboo agent pod
         #
