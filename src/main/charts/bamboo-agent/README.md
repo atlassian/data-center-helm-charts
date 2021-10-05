@@ -26,6 +26,7 @@ Kubernetes: `>=1.19.x-0`
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Bamboo agent pods |
 | agent.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo agent container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for  supported variables. |
+| agent.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | agent.ports.http | int | `80` | The port on which the Bamboo agent listens for HTTP traffic |
 | agent.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe  before the pod fails readiness checks. |
 | agent.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo agent container readiness probe,  after which the probe will start running. |
@@ -34,8 +35,7 @@ Kubernetes: `>=1.19.x-0`
 | agent.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
 | agent.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
-| agent.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
-| agent.securityContext.gid | string | `"2005"` | The GID used by the Bamboo agent docker image |
+| agent.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | agent.securityToken | string | `nil` |  |
 | agent.server | string | `nil` |  |
 | agent.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default TODO: This needs to be updated when Steve's changes are done command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |

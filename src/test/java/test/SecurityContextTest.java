@@ -25,7 +25,7 @@ class SecurityContextTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_pod_security_context(Product product) throws Exception {
 
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -58,7 +58,7 @@ class SecurityContextTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_container_security_context(Product product) throws Exception {
 
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
