@@ -24,7 +24,7 @@ class SchedulerNameTest {
     }
 
     @ParameterizedTest
-    @EnumSource(Product.class)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void custom_scheduler(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "schedulerName", "second_scheduler"));
@@ -34,7 +34,7 @@ class SchedulerNameTest {
     }
 
     @ParameterizedTest
-    @EnumSource(Product.class)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void default_scheduler(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "schedulerName", ""));

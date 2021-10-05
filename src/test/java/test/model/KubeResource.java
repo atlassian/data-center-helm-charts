@@ -51,6 +51,8 @@ public class KubeResource {
                 return new StatefulSet(node);
             case Service:
                 return new Service(node);
+            case Deployment:
+                return new Deployment(node);
             default:
                 return new KubeResource(kind, node);
         }
