@@ -55,7 +55,7 @@ public enum Product {
     bamboo {
         @Override
         // TODO: this image will need to be updated once Stevs changes are in
-        public String getDockerImageName() { return "atlssmith/bamboo"; }
+        public String getDockerImageName() { return "atlassian/bamboo"; }
 
         @Override
         public String getContainerGid() { return "2005"; }
@@ -63,7 +63,7 @@ public enum Product {
     bamboo_agent {
         @Override
         // TODO: this image will need to be updated once Stevs changes are in
-        public String getDockerImageName() { return "atlssmith/bamboo-agent-base"; }
+        public String getDockerImageName() { return "atlassian/bamboo-agent-base"; }
 
         @Override
         public String getContainerGid() { return "2005"; }
