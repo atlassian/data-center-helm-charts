@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agent.fullname" . }}
+  labels:
+  {{- include "agent.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+  {{- include "agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+    {{- include "agent.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "agent.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}
+      {{ if .Values.agent.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.agent.securityContext.gid }}
+      {{ end }}
+      initContainers:
+        {{- include "agent.additionalInitContainers" . | nindent 8 }}    
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "agent.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SECURITY_TOKEN
+              value: {{ include "agent.securityToken" . }}
+            - name: BAMBOO_SERVER
+              value: {{ include "agent.bambooServerServiceDns" . }}
+            - name: WRAPPER_JAVA_INITMEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: {{ include "agent.fullname" . }}-jvm-config
+            - name: WRAPPER_JAVA_MAXMEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: {{ include "agent.fullname" . }}-jvm-config
+            {{- include "agent.additionalEnvironmentVariables" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.agent.ports.http }}
+              protocol: TCP
+{{/*              TODO: Enable readiness probe once available*/}}
+{{/*          readinessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              port: {{ .Values.agent.ports.http }}*/}}
+{{/*              path: {{ .Values.agent.service.contextPath }}/rest/api/latest/status*/}}
+{{/*            initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}*/}}
+{{/*            periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}*/}}
+{{/*            failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}*/}}
+          {{- with .Values.agent.resources.container }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", {{ .Values.agent.shutdown.command | quote }}]
+      {{- include "agent.additionalContainers" . | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName  | quote }}
+      {{- end }}

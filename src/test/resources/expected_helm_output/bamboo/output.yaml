@@ -92,7 +92,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bamboo
-          image: "atlssmith/bamboo:8.0.1-jdk11"
+          image: "atlassian/bamboo:8.0.1-jdk11"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME

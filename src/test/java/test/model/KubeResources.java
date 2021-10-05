@@ -26,6 +26,10 @@ public final class KubeResources {
         return getAll(Kind.StatefulSet, StatefulSet.class);
     }
 
+    public Traversable<Deployment> getDeployments() {
+        return getAll(Kind.Deployment, Deployment.class);
+    }
+
     public <T extends KubeResource> Traversable<T> getAll(Kind kind, Class<T> type) {
         return getAll(kind).map(type::cast);
     }
@@ -33,6 +37,11 @@ public final class KubeResources {
     public StatefulSet getStatefulSet(final String name) {
         return getStatefulSets().find(ss -> name.equals(ss.getName()))
                 .getOrElseThrow(() -> new AssertionError("No StatefulSet found with name " + name));
+    }
+
+    public Deployment getDeployment(final String name) {
+        return getDeployments().find(dep -> name.equals(dep.getName()))
+                .getOrElseThrow(() -> new AssertionError("No Deployment found with name " + name));
     }
 
     public KubeResource get(Kind kind) {

@@ -27,7 +27,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void ingress_create(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
@@ -49,7 +49,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void ingress_create_tls (Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
@@ -92,7 +92,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, mode = EXCLUDE, names = "bitbucket")
+    @EnumSource(value = Product.class, names = {"bamboo_agent", "bitbucket"}, mode = EnumSource.Mode.EXCLUDE)
     void https_disabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.https", "false"));
@@ -222,7 +222,103 @@ class IngressTest {
         assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
                 .hasTextEqualTo("/");
     }
+    
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_host_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.host", "myhost.mydomain",
+                "ingress.port", "666"));
 
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
+                .assertHasValue("ATL_PROXY_PORT", "666");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.host", "myhost.mydomain"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
+                .assertHasValue("ATL_PROXY_PORT", "443");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_port_http(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "False"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
+                .assertHasValue("ATL_PROXY_PORT", "80");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_path_contextPath(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "bamboo.service.contextPath", "/bamboo-tmp"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/bamboo-tmp");
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_path_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "bamboo.service.contextPath", "/context",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/ingress");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_path_no_context_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/ingress"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/ingress");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_ingress_path_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/");
+    }
+    
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_contextPath(Product product) throws Exception {

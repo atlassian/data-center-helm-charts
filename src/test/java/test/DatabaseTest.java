@@ -79,4 +79,24 @@ class DatabaseTest {
                 .assertHasSecretRef("ATL_JDBC_USER", "mysecret", "myusername")
                 .assertHasSecretRef("ATL_JDBC_PASSWORD", "mysecret", "mypassword");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_database(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.url", "myurl",
+                "database.type", "mytype",
+                "database.driver", "mydriver",
+                "database.credentials.secretName", "mysecret",
+                "database.credentials.usernameSecretKey", "myusername",
+                "database.credentials.passwordSecretKey", "mypassword"));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_JDBC_URL", "myurl")
+                .assertHasValue("ATL_DB_TYPE", "mytype")
+                .assertHasSecretRef("ATL_JDBC_USER", "mysecret", "myusername")
+                .assertHasSecretRef("ATL_JDBC_PASSWORD", "mysecret", "mypassword");
+    }
 }
