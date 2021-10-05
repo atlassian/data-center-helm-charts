@@ -432,22 +432,19 @@ confluence:
     annotations: {}
 
   # Standard K8s field that holds pod-level security attributes and common container settings.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
   securityContext:
 
     # -- The GID used by the Confluence docker image
-    #
+    # If not supplied, will default to 2002
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     fsGroup: 2002
 
-#    # -- Set to 'true' to enable the security context (Deprecated)
-#    #
-#    enabled: true
-#
-#    # -- The GID used by the Confluence docker image (Deprecated)
-#    #
-#    gid: "2002"
-
   # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   #
   containerSecurityContext: {}
 

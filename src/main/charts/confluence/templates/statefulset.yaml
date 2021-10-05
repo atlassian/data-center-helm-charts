@@ -21,8 +21,14 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.confluence.shutdown.terminationGracePeriodSeconds }}
+      {{- with .Values.confluence.securityContext }}
       securityContext:
-        {{ toYaml .Values.confluence.securityContext | nindent 8 }}
+        {{ toYaml . | nindent 8 }}
+        {{- $securityContext := . | default dict}}
+        {{- if not $securityContext.fsGroup }}
+        fsGroup: 2002
+        {{- end }}
+      {{- end }}
       hostAliases:
         {{- include "confluence.additionalHosts" . | nindent 8 }}
       initContainers:

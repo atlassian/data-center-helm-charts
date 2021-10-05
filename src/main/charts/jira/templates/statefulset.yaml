@@ -21,8 +21,14 @@ spec:
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
+      {{- with .Values.jira.securityContext }}
       securityContext:
-        {{ toYaml .Values.jira.securityContext | nindent 8 }}
+        {{ toYaml . | nindent 8 }}
+        {{- $securityContext := . | default dict}}
+        {{- if not $securityContext.fsGroup }}
+        fsGroup: 2001
+        {{- end }}
+      {{- end }}
       initContainers:
         {{- include "jira.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}

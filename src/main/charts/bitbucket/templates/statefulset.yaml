@@ -26,8 +26,14 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
+      {{- with .Values.bitbucket.securityContext }}
       securityContext:
-        {{ toYaml .Values.bitbucket.securityContext | nindent 8 }}
+        {{ toYaml . | nindent 8 }}
+        {{- $securityContext := . | default dict}}
+        {{- if not $securityContext.fsGroup }}
+        fsGroup: 2003
+        {{- end }}
+      {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}

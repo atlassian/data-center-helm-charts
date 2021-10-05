@@ -1,5 +1,3 @@
-🚧 These charts are currently under construction! 🚧
-
 # bamboo
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
@@ -37,6 +35,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bamboo container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | bamboo.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
+| bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | bamboo.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bamboo license key |
 | bamboo.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bamboo license key. If specified, then  the license will be automatically populated during Bamboo setup. Otherwise, it will  need to be provided via the browser after initial startup. An Example of creating  a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license>  https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic |
@@ -48,8 +47,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo pod |
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bamboo JVM |
-| bamboo.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
-| bamboo.securityContext.gid | string | `"2005"` | The GID used by the Bamboo docker image |
+| bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |

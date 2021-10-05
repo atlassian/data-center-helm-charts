@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Product;
@@ -28,10 +29,31 @@ class SecurityContextTest {
     void test_pod_security_context(Product product) throws Exception {
 
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".securityContext.fsGroup", "1000"));
+                product + ".securityContext.fsGroup", "1000",
+                product + ".securityContext.runAsGroup", "1000"));
 
         JsonNode podSpec = resources.getStatefulSet(product.getHelmReleaseName()).getPodSpec();
         assertThat(podSpec.path("securityContext").path("fsGroup")).hasValueEqualTo(1000);
+        assertThat(podSpec.path("securityContext").path("runAsGroup")).hasValueEqualTo(1000);
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "jira,2001",
+            "confluence,2002",
+            "bitbucket,2003",
+            "crowd,2004",
+            "bamboo,2005"
+    })
+    void test_pod_security_context_without_fsGroup(Product product, int fsGroup) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContext.runAsGroup", "1000"));
+
+        JsonNode podSpec = resources.getStatefulSet(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext").path("fsGroup")).hasValueEqualTo(fsGroup);
+        assertThat(podSpec.path("securityContext").path("runAsGroup")).hasValueEqualTo(1000);
 
     }
 

@@ -61,7 +61,7 @@ Kubernetes: `>=1.19.x-0`
 | jira.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Jira container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | jira.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Jira container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'. |
 | jira.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
-| jira.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. |
+| jira.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | jira.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Jira license key |
 | jira.license.secretName | string | `nil` | The name of the K8s Secret that contains the Jira license key. If specified, then the license will be automatically populated during Jira setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | jira.ports.ehcache | int | `40001` | Ehcache port |
@@ -75,7 +75,7 @@ Kubernetes: `>=1.19.x-0`
 | jira.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Jira JVM |
 | jira.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Jira JVM |
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache |
-| jira.securityContext.fsGroup | int | `2001` | The GID used by the Jira docker image |
+| jira.securityContext.fsGroup | int | `2001` | The GID used by the Jira docker image If not supplied, will default to 2001 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | jira.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | jira.service.contextPath | string | `nil` | The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically. |
 | jira.service.port | int | `80` | The port on which the Jira K8s Service will listen |

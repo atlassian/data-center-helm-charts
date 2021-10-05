@@ -37,7 +37,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'. |
 | confluence.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | confluence.clustering.usePodNameAsClusterNodeName | bool | `true` | Set to 'true' if the K8s pod name should be used as the end-user-visible name of the Data Center cluster node. |
-| confluence.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. |
+| confluence.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | confluence.jvmDebug.enabled | bool | `false` | Set to 'true' for remote debugging. Confluence JVM will be started with debugging port 5005 open. |
 | confluence.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Confluence license key |
 | confluence.license.secretName | string | `nil` | The name of the K8s Secret that contains the Confluence license key. If specified, then the license will be automatically populated during Confluence setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
@@ -51,7 +51,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Confluence JVM |
 | confluence.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Confluence JVM |
 | confluence.resources.jvm.reservedCodeCache | string | `"256m"` | The memory reserved for the Confluence JVM code cache |
-| confluence.securityContext.fsGroup | int | `2002` | The GID used by the Confluence docker image |
+| confluence.securityContext.fsGroup | int | `2002` | The GID used by the Confluence docker image If not supplied, will default to 2002 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically. |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen |

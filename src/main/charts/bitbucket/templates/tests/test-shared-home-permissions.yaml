@@ -16,9 +16,15 @@ spec:
       image: debian:stable-slim
       imagePullPolicy: IfNotPresent
       securityContext:
-        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        # We assume that the UID and GID used by the product images are the same, which in practice they are
+        {{- $securityContext := .Values.bitbucket.securityContext | default dict}}
+        {{- if $securityContext.fsGroup }}
+        runAsUser: {{ $securityContext.fsGroup }}
+        runAsGroup: {{ $securityContext.fsGroup }}
+        {{- else }}
         runAsUser: {{ .Values.bitbucket.securityContext.fsGroup }}
         runAsGroup: {{ .Values.bitbucket.securityContext.fsGroup }}
+        {{- end}}
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home

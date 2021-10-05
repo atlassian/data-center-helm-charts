@@ -215,7 +215,7 @@ spec:
       image: debian:stable-slim
       imagePullPolicy: IfNotPresent
       securityContext:
-        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        # We assume that the UID and GID used by the product images are the same, which in practice they are
         runAsUser: 2001
         runAsGroup: 2001
       volumeMounts:
