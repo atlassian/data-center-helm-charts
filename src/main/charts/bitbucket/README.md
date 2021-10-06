@@ -48,6 +48,7 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
 | bitbucket.securityContext.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
+| bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use. |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s Service will listen |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket |
 | bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour. |
@@ -86,7 +87,7 @@ Kubernetes: `>=1.19.x-0`
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced. |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'. |
-| ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket'. This value is also used for Bitbucket context path. |
+| ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextpath'. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext. Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket pods |
