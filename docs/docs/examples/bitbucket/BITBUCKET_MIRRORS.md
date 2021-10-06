@@ -17,10 +17,10 @@ You can learn more details about smart mirroring on the [official documentation 
     **The primary Bitbucket instance must have SSH enabled** - Mirrors keep their repositories synchronized with the primary instance over SSH and cannot use HTTP or HTTPS for this. See Enable SSH access to Git repositories for instructions on enabling SSH access on your primary instance.
 
 
-## Wokflow
+## Workflow
 
-1. Install the upstream as usual with a helm chart
-2. Install the mirror farm with another helm chart
+1. Install the upstream as usual with a Helm chart
+2. Install the mirror farm with another Helm chart
       1. There is a set of new properties that need to be configured to make the mirror works
 
 ## Configuration
