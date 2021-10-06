@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 import static test.jackson.JsonNodeAssert.assertThat;
 
 class IngressTest {
@@ -180,28 +179,28 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket"})
     void jira_ingress_path_contextPath(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain",
-                "jira.service.contextPath", "/jira-tmp"));
+                product + ".service.contextPath", "/my-path"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
         Assertions.assertEquals(1, ingresses.size());
 
         assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
-                .hasTextEqualTo("/jira-tmp");
+                .hasTextEqualTo("/my-path");
 
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket"})
     void jira_ingress_path_value(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain",
-                "jira.service.contextPath", "/context",
+                product + ".service.contextPath", "/context",
                 "ingress.path", "/ingress"));
 
         final var ingresses = resources.getAll(Kind.Ingress);
@@ -212,7 +211,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket"})
     void jira_ingress_path_no_context_value(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
