@@ -108,6 +108,17 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ with .Values.ingress.port }}:{{ . }}{{ end }}
 {{- end }}
 
+{{/*
+Create default value for ingress path
+*/}}
+{{- define "bitbucket.ingressPath" -}}
+{{- if .Values.ingress.path -}}
+{{- .Values.ingress.path -}}
+{{- else -}}
+{{ default ( "/" ) .Values.bitbucket.service.contextPath -}}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.ingressPort" -}}
 {{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
 {{- end }}

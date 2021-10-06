@@ -138,6 +138,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: SERVER_CONTEXT_PATH
+              value: "/"
             - name: SERVER_SCHEME
               value: "https"
             - name: SERVER_SECURE

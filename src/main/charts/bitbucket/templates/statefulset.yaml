@@ -106,6 +106,8 @@ spec:
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
             {{ end }}
+            - name: SERVER_CONTEXT_PATH
+              value: {{ include "bitbucket.ingressPath" . | quote }}
             {{ if .Values.ingress.https }}
             - name: SERVER_SCHEME
               value: "https"
