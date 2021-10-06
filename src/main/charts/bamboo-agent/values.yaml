@@ -95,14 +95,6 @@ agent:
   #
   containerSecurityContext: { }
 
-  # Port definitions
-  #
-  ports:
-  
-    # -- The port on which the Bamboo agent listens for HTTP traffic
-    #
-    http: 80
-     
   # TODO: As of yet a /status endpoint does not exist for agents. Once delivered the implementation for this
   # must be added
   # Confirm that the Bamboo agent is up and running with a ReadinessProbe
