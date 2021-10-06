@@ -288,6 +288,14 @@ ingress:
   # pre-provisioned Ingress Controller being available.
   #
   create: false
+
+  # -- The class name used by the ingress controller if it's being used.
+  #
+  # Please follow documenation of your ingress controller. If the cluster 
+  # contains multiple ingress controllers, this setting allows you to control
+  # which of them is used for Atlassian application traffic.
+  #
+  className: "nginx"
   
   # -- Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'
   # controller.

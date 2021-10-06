@@ -46,6 +46,7 @@ Kubernetes: `>=1.19.x-0`
 | image.repository | string | `"atlassian/jira-software"` | The Jira Docker image to use https://hub.docker.com/r/atlassian/jira-software |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource when NOT using the K8s ingress-nginx controller. |
+| ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used. Please follow documenation of your ingress controller. If the cluster  contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a pre-provisioned Ingress Controller being available. |
 | ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on this hostname will be routed by the Ingress Resource to the appropriate backend Service. |
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced. |
