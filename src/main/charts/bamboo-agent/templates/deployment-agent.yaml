@@ -109,8 +109,8 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
-{{- if $capabilitiesPropFile }}
       volumes:
+{{- if $capabilitiesPropFile }}
         - name: bamboo-capabilities-properties
           configMap:
             name: bamboo-capabilities-properties
