@@ -36,14 +36,15 @@ class BambooAgentTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bamboo_agent")
-    void securityTokenSet(Product product) throws Exception {
+    void bamboo_agent_security_token_secret_name(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "agent.securityToken", "49387ba37d9dcbaca542f21934a0a4e0f28c0350"
-        ));
+                "agent.securityToken.secretName", "security_token_secret",
+                "agent.securityToken.secretKey", "ad447ae88f8a6b1da6c78e1510bf44331ed1f956"));
 
-        final var deployment = resources.getDeployment(product.getHelmReleaseName());
-        final var env = deployment.getContainer().getEnv();
-        env.assertHasValue("SECURITY_TOKEN", "49387ba37d9dcbaca542f21934a0a4e0f28c0350");
+        resources.getDeployment(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasSecretRef("SECURITY_TOKEN", "security_token_secret", "ad447ae88f8a6b1da6c78e1510bf44331ed1f956");
     }
 
     @ParameterizedTest
