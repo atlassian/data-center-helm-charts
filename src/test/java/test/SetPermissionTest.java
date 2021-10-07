@@ -29,7 +29,8 @@ class SetPermissionTest {
             "confluence,true",
             "jira,false",
             "bitbucket,true",
-            "crowd,false"
+            "crowd,false",
+            "bamboo,true"
     })
     void test_set_permissions(String productName, String setPermission) throws Exception {
         final var product = Product.valueOf(productName);

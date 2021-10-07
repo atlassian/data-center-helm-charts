@@ -37,6 +37,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Confluence container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'. |
 | confluence.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | confluence.clustering.usePodNameAsClusterNodeName | bool | `true` | Set to 'true' if the K8s pod name should be used as the end-user-visible name of the Data Center cluster node. |
+| confluence.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | confluence.jvmDebug.enabled | bool | `false` | Set to 'true' for remote debugging. Confluence JVM will be started with debugging port 5005 open. |
 | confluence.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Confluence license key |
 | confluence.license.secretName | string | `nil` | The name of the K8s Secret that contains the Confluence license key. If specified, then the license will be automatically populated during Confluence setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
@@ -50,8 +51,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Confluence JVM |
 | confluence.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Confluence JVM |
 | confluence.resources.jvm.reservedCodeCache | string | `"256m"` | The memory reserved for the Confluence JVM code cache |
-| confluence.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
-| confluence.securityContext.gid | string | `"2002"` | The GID used by the Confluence docker image |
+| confluence.securityContext.fsGroup | int | `2002` | The GID used by the Confluence docker image If not supplied, will default to 2002 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically. |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen |
@@ -79,6 +79,7 @@ Kubernetes: `>=1.19.x-0`
 | image.repository | string | `"atlassian/confluence"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource when NOT using the K8s ingress-nginx controller. |
+| ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used. Please follow documenation of your ingress controller. If the cluster  contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a pre-provisioned Ingress Controller being available. |
 | ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on this hostname will be routed by the Ingress Resource to the appropriate backend Service. |
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced. |
@@ -89,6 +90,7 @@ Kubernetes: `>=1.19.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Confluence pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Confluence pods |
 | replicaCount | int | `1` | The initial number of Confluence pods that should be started at deployment time. Note that Confluence requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete. |
+| schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Confluence pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
 | serviceAccount.clusterRole.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |
 | serviceAccount.clusterRole.name | string | `nil` | The name of the ClusterRole to be used. If not specified, but the "serviceAccount.clusterRole.create" flag is set to 'true', then the ClusterRole name will be auto-generated. |
 | serviceAccount.clusterRoleBinding.create | bool | `true` | Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it already exists. |

@@ -40,4 +40,8 @@ public final class Container {
     public JsonNode getLimits() {
         return getResources().path("limits");
     }
+
+    public JsonNode getSecurityContext() {
+        return get("securityContext");
+    }
 }

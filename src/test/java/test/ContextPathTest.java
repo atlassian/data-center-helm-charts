@@ -34,10 +34,25 @@ class ContextPathTest {
                 .getContainer()
                 .getEnv()
                 .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/" + product.name());
+        
+            assertEquals(resources.getStatefulSet(
+                    product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
+                    "/" + product.name() + "/status");
+    }
+    
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo"})
+    void test_context_path_bamboo(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.contextPath", "/" + product.name()));
 
-
-        assertEquals(resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
-                "/" + product.name() + "/status");
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/" + product.name());
+        
+            assertEquals(resources.getStatefulSet(
+                    product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
+                    "/" + product.name() + "/rest/api/latest/status");
     }
 }

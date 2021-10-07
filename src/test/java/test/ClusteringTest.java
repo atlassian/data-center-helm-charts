@@ -74,6 +74,24 @@ class ClusteringTest {
                 .getEnv()
                 .assertHasValue("CLUSTERED", "true")
                 .assertHasFieldRef("JIRA_NODE_ID", "metadata.name")
-                .assertHasFieldRef("EHCACHE_LISTENER_HOSTNAME", "status.podIP");
+                .assertHasFieldRef("EHCACHE_LISTENER_HOSTNAME", "status.podIP")
+                .assertHasValue("EHCACHE_LISTENER_PORT", "40001")
+                .assertHasValue("EHCACHE_OBJECT_PORT", "40011");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "jira")
+    void jira_clustering_enabled_custom_ehcache(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".clustering.enabled", "true",
+                product + ".ports.ehcache", "12345",
+                product + ".ports.ehcacheobject", "23456"));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("CLUSTERED", "true")
+                .assertHasValue("EHCACHE_LISTENER_PORT", "12345")
+                .assertHasValue("EHCACHE_OBJECT_PORT", "23456");
     }
 }

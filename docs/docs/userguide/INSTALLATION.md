@@ -167,7 +167,7 @@ helm install <release-name> \
 
 !!!note "Values & flags"
     * `<release-name>` the name of your deployment. You can also use `--generate-name`.
-    * `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket` or `crowd`.
+    * `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket`, or `crowd`.
     * `<namespace>` optional flag for categorizing installed resources.
     * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
     * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.

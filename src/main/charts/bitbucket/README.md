@@ -36,6 +36,7 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.clustering.group.nameSecretKey | string | `"name"` | The key in the Kubernetes Secret that contains the Hazelcast group name. |
 | bitbucket.clustering.group.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Hazelcast group password. |
 | bitbucket.clustering.group.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Hazelcast group credentials. Example of creating a credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=name=<name> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets If no secret is specified, a default group name will be used and a random password will be generated during installation. |
+| bitbucket.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | bitbucket.displayName | string | `nil` | Set the display name of the Bitbucket instance. Note that this value is only used during installation and changing the value during an upgrade has no effect. |
 | bitbucket.elasticSearch.baseUrl | string | `nil` | The base URL of the external Elasticsearch instance to be used. If this is defined, then Bitbucket will disable its internal Elasticsearch instance. |
 | bitbucket.elasticSearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Elasticsearch password. |
@@ -51,9 +52,9 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bitbucket pod |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
 | bitbucket.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
-| bitbucket.securityContext.enabled | bool | `true` | Set to 'true' to enable the security context |
-| bitbucket.securityContext.gid | string | `"2003"` | The GID used by the Bitbucket docker image |
+| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image If not supplied, will default to 2003. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
+| bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use. |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s Service will listen |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket |
 | bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour. |
@@ -88,16 +89,18 @@ Kubernetes: `>=1.19.x-0`
 | image.repository | string | `"atlassian/bitbucket"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource when NOT using the K8s ingress-nginx controller. |
+| ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used. Please follow documenation of your ingress controller. If the cluster  contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a pre-provisioned Ingress Controller being available. |
 | ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on this hostname will be routed by the Ingress Resource to the appropriate backend Service. |
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced. |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'. |
-| ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket' |
+| ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextpath'. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext. Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket pods |
 | replicaCount | int | `1` | The initial number of Bitbucket pods that should be started at deployment time. Note that if Bitbucket is fully configured (see above) during initial deployment a 'replicaCount' greater than 1 can be supplied. |
+| schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bitbucket pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
 | serviceAccount.clusterRole.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |
 | serviceAccount.clusterRole.name | string | `nil` | The name of the ClusterRole to be used. If not specified, but the "serviceAccount.clusterRole.create" flag is set to 'true', then the ClusterRole name will be auto-generated. |
 | serviceAccount.clusterRoleBinding.create | bool | `true` | Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it already exists. |

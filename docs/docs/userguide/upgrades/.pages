@@ -1,0 +1,3 @@
+nav:
+    - Helm chart upgrade: HELM_CHART_UPGRADE.md
+    - Products upgrade: PRODUCTS_UPGRADE.md

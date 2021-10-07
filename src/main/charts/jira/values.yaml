@@ -28,10 +28,6 @@
 #
 replicaCount: 1
 
-# -- The termination grace period for pods during shutdown. 30s is the
-# -- Kubernetes default, but can be overridden here.
-terminationGracePeriodSeconds: 30
-
 # Image configuration
 #
 image:
@@ -292,6 +288,14 @@ ingress:
   # pre-provisioned Ingress Controller being available.
   #
   create: false
+
+  # -- The class name used by the ingress controller if it's being used.
+  #
+  # Please follow documenation of your ingress controller. If the cluster 
+  # contains multiple ingress controllers, this setting allows you to control
+  # which of them is used for Atlassian application traffic.
+  #
+  className: "nginx"
   
   # -- Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'
   # controller.
@@ -366,20 +370,24 @@ jira:
     # -- Additional annotations to apply to the Service
     #
     annotations: {}
-    
-  # Enable or disable security context in StatefulSet template spec. Enabled
-  # by default with UID 2001. Disable when deploying to OpenShift, unless anyuid
-  # policy is attached to a service account.
+
+  # Standard K8s field that holds pod-level security attributes and common container settings.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
   securityContext:
-  
-    # -- Set to 'true' to enable the security context
-    #
-    enabled: true
-    
+
     # -- The GID used by the Jira docker image
+    # If not supplied, will default to 2001
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
-    gid: "2001"
+    fsGroup: 2001
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: {}
 
   # -- Boolean to define whether to set local home directory permissions on startup
   # of Jira container. Set to 'false' to disable this behaviour.
@@ -671,6 +679,12 @@ tolerations: []
 #
 affinity: {}
 #  name: <value>
+
+# -- Standard K8s schedulerName that will be applied to all Jira pods.
+# Check Kubernetes documentation on how to configure multiple schedulers:
+# https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
+#
+schedulerName:
 
 # -- Additional container definitions that will be added to all Jira pods
 #

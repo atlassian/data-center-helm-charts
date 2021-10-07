@@ -357,6 +357,14 @@ ingress:
   # pre-provisioned Ingress Controller being available.
   #
   create: false
+
+  # -- The class name used by the ingress controller if it's being used.
+  #
+  # Please follow documenation of your ingress controller. If the cluster 
+  # contains multiple ingress controllers, this setting allows you to control
+  # which of them is used for Atlassian application traffic.
+  #
+  className: "nginx"
   
   # -- Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'
   # controller.
@@ -382,9 +390,9 @@ ingress:
   
   # -- The base path for the Ingress Resource. For example '/bitbucket'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
-  # 'company.k8s.com/bitbucket'
+  # 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextpath'.
   #
-  path: "/"
+  path:
   
   # -- The custom annotations that should be applied to the Ingress Resource
   # when NOT using the K8s ingress-nginx controller.
@@ -422,7 +430,11 @@ bitbucket:
     # -- The type of K8s service to use for Bitbucket
     #
     type: ClusterIP
-    
+
+    # -- The context path that Bitbucket will use.
+    #
+    contextPath:
+
     # -- Additional annotations to apply to the Service
     #
     annotations: {}
@@ -453,20 +465,24 @@ bitbucket:
     # needs extra annotations.
     #
     annotations: {}
-    
-  # Enable or disable security context in StatefulSet template spec.
-  # Enabled by default with UID 2003. Disable when deploying to OpenShift,
-  # unless anyuid policy is attached to service account.
+
+  # Standard K8s field that holds pod-level security attributes and common container settings.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
   securityContext:
-    
-    # -- Set to 'true' to enable the security context
-    #
-    enabled: true
-    
+
     # -- The GID used by the Bitbucket docker image
+    # If not supplied, will default to 2003.
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
-    gid: "2003"
+    fsGroup: 2003
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: {}
 
   # -- Boolean to define whether to set local home directory permissions on startup
   # of Bitbucket container. Set to 'false' to disable this behaviour.
@@ -828,6 +844,12 @@ tolerations: []
 #                - nfs-server # needs to be the same value as NFS server deployment
 #        topologyKey: topology.kubernetes.io/zone
 affinity: {}
+
+# -- Standard K8s schedulerName that will be applied to all Bitbucket pods.
+# Check Kubernetes documentation on how to configure multiple schedulers:
+# https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
+#
+schedulerName:
 
 # -- Additional container definitions that will be added to all Bitbucket pods
 #

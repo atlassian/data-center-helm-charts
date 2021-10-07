@@ -1,0 +1,227 @@
+---
+# Source: bamboo/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unittest-bamboo
+  labels:
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: bamboo/templates/config-jvm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-bamboo-jvm-config
+  labels:
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+data:
+  additional_jvm_args: >-
+    -Datlassian.logging.cloud.enabled=false
+    -XX:ActiveProcessorCount=2
+  max_heap: 1024m
+  min_heap: 512m
+---
+# Source: bamboo/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bamboo
+  labels:
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+---
+# Source: bamboo/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unittest-bamboo
+  labels:
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  serviceName: unittest-bamboo
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bamboo
+      app.kubernetes.io/instance: unittest-bamboo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bamboo
+        app.kubernetes.io/instance: unittest-bamboo
+    spec:
+      serviceAccountName: unittest-bamboo
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 2005
+      initContainers:
+        - name: nfs-permission-fixer
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
+          volumeMounts:
+            - name: shared-home
+              mountPath: "/shared-home"
+          command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
+      containers:
+        - name: bamboo
+          image: "atlassian/bamboo:8.0.1-jdk11"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ATL_TOMCAT_SCHEME
+              value: "https"
+            - name: ATL_TOMCAT_SECURE
+              value: "true"
+            - name: SET_PERMISSIONS
+              value: "true"
+            - name: BAMBOO_SHARED_HOME
+              value: "/var/atlassian/application-data/shared-home"
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: unittest-bamboo-jvm-config
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: unittest-bamboo-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: unittest-bamboo-jvm-config
+          ports:
+            - name: http
+              containerPort: 8085
+              protocol: TCP
+            - name: jms
+              containerPort: 54663
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: 8085
+              path: /rest/api/latest/status
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 30
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2G
+          volumeMounts:
+            - name: local-home
+              mountPath: "/var/atlassian/application-data/bamboo"
+            - name: local-home
+              mountPath: "/opt/atlassian/bamboo/logs"
+              subPath: "log"
+            - name: shared-home
+              mountPath: "/var/atlassian/application-data/shared-home"
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "/shutdown-wait.sh"]
+      volumes:
+        - name: local-home
+          emptyDir: {}
+        - name: shared-home
+          emptyDir: {}
+---
+# Source: bamboo/templates/tests/test-application-status.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-bamboo-application-status-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+  labels:
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: STATUS_URL
+          value: "http://unittest-bamboo:80/rest/api/latest/status"
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          apk add -q jq curl
+          STATUS=$(curl -s "$STATUS_URL")
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+          echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+  restartPolicy: Never
+---
+# Source: bamboo/templates/tests/test-shared-home-permissions.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "unittest-bamboo-shared-home-permissions-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+  labels:
+    helm.sh/chart: bamboo-0.0.1
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "8.0.1-jdk11"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  containers:
+    - name: test
+      image: debian:stable-slim
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        # We assume that the UID and GID used by the product images are the same, which in practice they are
+        runAsUser: 2005
+        runAsGroup: 2005
+      volumeMounts:
+        - name: shared-home
+          mountPath: /shared-home
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          ls -ld /shared-home
+          echo "Creating temporary file in shared home as user $(id -u):$(id -g)"
+          touch /shared-home/permissions-test
+          ls -l /shared-home/permissions-test
+          rm /shared-home/permissions-test
+  volumes:
+    - name: shared-home
+      emptyDir: {}
+  restartPolicy: Never

@@ -1,0 +1,31 @@
+# This file contains overrides for the Bamboo Helm chart's values.yaml file
+
+# Use the pre-created service account and role binding provided by KITT.
+serviceAccount:
+  name: "namespace-admin"
+  create: false
+  clusterRole:
+    create: false
+  clusterRoleBinding:
+    create: false
+
+# KITT requires these annotations on all pods
+podAnnotations:
+  "atlassian.com/business_unit": "server_engineering"
+
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
+  sharedHome:
+    customVolume:
+      persistentVolumeClaim:
+        claimName: ${shared.pvc.name} # Pre-provisioned, and shared by all of our pods
+    subPath: ${helm.release.prefix}-bamboo # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
+    nfsPermissionFixer:
+      enabled: true
+
+fluentd:
+  enabled: true
+  elasticsearch:
+    hostname: elasticsearch-master

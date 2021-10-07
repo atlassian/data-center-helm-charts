@@ -29,7 +29,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void localHome_pvc_create(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.persistentVolumeClaim.create", "true"
@@ -51,7 +51,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void sharedHome_pvc_create(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.sharedHome.persistentVolumeClaim.create", "true"
@@ -70,7 +70,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void localHome_custom_volume(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.customVolume.hostPath", "/foo/bar" // not actually a valid hostPath definition, but it works for the test
@@ -83,7 +83,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void localHome_pvc_custom(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.localHome.persistentVolumeClaim.create", "true",
@@ -105,7 +105,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void sharedHome_custom_volume(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.sharedHome.customVolume.hostPath", "/foo/bar" // not actually a valid hostPath definition, but it works for the test
@@ -118,7 +118,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalVolumeDefinition(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.additional[0].name", "my-volume",
@@ -131,7 +131,7 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalVolumeMounts(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
