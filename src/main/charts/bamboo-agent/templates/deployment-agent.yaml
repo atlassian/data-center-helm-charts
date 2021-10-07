@@ -29,12 +29,27 @@ spec:
         {{- end }}
       {{- end }}
       initContainers:
-        {{- include "agent.additionalInitContainers" . | nindent 8 }}    
+        {{- include "agent.additionalInitContainers" . | nindent 8 }}
       containers:
+{{- if .Values.dind.enabled }}
+        - name: dind
+          image: {{ .Values.dind.image }}
+          volumeMounts:
+            - name: xml-data
+              mountPath: /var/atlassian/application-data/bamboo-agent/xml-data
+            - name: tmp
+              mountPath: /var/atlassian/application-data/bamboo-agent/tmp
+          securityContext:
+            privileged: true
+{{- end }}
         - name: {{ .Chart.Name }}
           image: {{ include "agent.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+{{- if .Values.dind.enabled }}
+            - name: DOCKER_HOST
+              value: tcp://127.0.0.1:2375
+{{- end }}
             - name: SECURITY_TOKEN
               value: {{ include "agent.securityToken" . }}
             - name: BAMBOO_SERVER
@@ -90,3 +105,10 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
+{{- if .Values.dind.enabled }}
+      volumes:
+        - name: xml-data
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+{{- end }}
