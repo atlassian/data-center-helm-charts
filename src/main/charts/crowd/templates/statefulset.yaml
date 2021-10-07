@@ -21,12 +21,14 @@ spec:
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
-      {{ if .Values.crowd.securityContext.enabled }}
+      {{- with .Values.crowd.securityContext }}
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
-        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: {{ .Values.crowd.securityContext.gid }}
-      {{ end }}
+        {{ toYaml . | nindent 8 }}
+        {{- $securityContext := . | default dict}}
+        {{- if not $securityContext.fsGroup }}
+        fsGroup: 2004
+        {{- end }}
+      {{- end }}
       initContainers:
         {{- include "crowd.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
@@ -61,6 +63,10 @@ spec:
             initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
+          {{- with .Values.crowd.containerSecurityContext}}
+          securityContext:
+          {{- toYaml . | nindent 12}}
+          {{- end}}
           {{- with .Values.crowd.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}

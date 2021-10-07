@@ -97,7 +97,12 @@ The command that should be run by the nfs-fixer init container to correct the pe
 {{- if .Values.volumes.sharedHome.nfsPermissionFixer.command }}
 {{ .Values.volumes.sharedHome.nfsPermissionFixer.command }}
 {{- else }}
-{{- printf "(chgrp %s %s; chmod g+w %s)" .Values.bamboo.securityContext.gid .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
+{{- $securityContext := .Values.bamboo.securityContext | default dict}}
+{{- if $securityContext.fsGroup }}
+{{- printf "(chgrp %v %s; chmod g+w %s)" .Values.bamboo.securityContext.fsGroup .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
+{{- else }}
+{{- printf "(chgrp 2005 %s; chmod g+w %s)" .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
+{{- end }}
 {{- end }}
 {{- end }}
 

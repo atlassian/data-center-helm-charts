@@ -26,7 +26,7 @@ It depends on the storage backend though.
 
 ## Set no security context
 
-As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContext.enabled` to `false`.
+As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContext` to `{}`.
 As a result the container will start as a user with an OpenShift generated ID.
 Typically, NFS permission fixer job isn't required when no security context is set.
 

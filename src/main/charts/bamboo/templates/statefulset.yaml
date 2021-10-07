@@ -21,12 +21,14 @@ spec:
     spec:
       serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
-      {{ if .Values.bamboo.securityContext.enabled }}
+      {{- with .Values.bamboo.securityContext }}
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container.
-        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: {{ .Values.bamboo.securityContext.gid }}
-      {{ end }}
+        {{ toYaml . | nindent 8 }}
+        {{- $securityContext := . | default dict}}
+        {{- if not $securityContext.fsGroup }}
+        fsGroup: 2005
+        {{- end }}
+      {{- end }}
       initContainers:
         {{- include "bamboo.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
@@ -114,6 +116,10 @@ spec:
             initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
+          {{- with .Values.bamboo.containerSecurityContext}}
+          securityContext:
+          {{- toYaml . | nindent 12}}
+          {{- end}}
           {{- with .Values.bamboo.resources.container }}
           resources:
             {{- toYaml . | nindent 12 }}

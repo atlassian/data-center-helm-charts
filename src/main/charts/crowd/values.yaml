@@ -122,19 +122,22 @@ crowd:
     #
     annotations: {}
 
-  # Enable or disable security context in StatefulSet template spec. Enabled
-  # by default with UID 2002. Disable when deploying to OpenShift, unless anyuid
-  # policy is attached to a service account.
-  #
+  # Standard K8s field that holds pod-level security attributes and common container settings.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   securityContext:
 
-    # -- Set to 'true' to enable the security context
-    #
-    enabled: true
-
     # -- The GID used by the Crowd docker image
+    # If not supplied, will default to 2004
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
-    gid: "2004"
+    fsGroup: 2004
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: {}
 
   # -- The umask used by the Crowd process when it creates new files.
   # The default is 0022. This gives the new files:

@@ -90,9 +90,7 @@ spec:
       serviceAccountName: unittest-bitbucket
       terminationGracePeriodSeconds: 35
       securityContext:
-        # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
-        # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
-        fsGroup: 2003 # Makes sure that the shared-home volume mount is writeable by the bitbucket user's GID
+        fsGroup: 2003
       initContainers:
         - name: nfs-permission-fixer
           image: alpine
@@ -225,7 +223,7 @@ spec:
       image: debian:stable-slim
       imagePullPolicy: IfNotPresent
       securityContext:
-        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        # We assume that the UID and GID used by the product images are the same, which in practice they are
         runAsUser: 2003
         runAsGroup: 2003
       volumeMounts:

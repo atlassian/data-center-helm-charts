@@ -16,9 +16,15 @@ spec:
       image: debian:stable-slim
       imagePullPolicy: IfNotPresent
       securityContext:
-        # Slightly dodgy; we assume that the UID and GID used by the product images are the same, which in practice they are
+        # We assume that the UID and GID used by the product images are the same, which in practice they are
+        {{- $securityContext := .Values.bamboo.securityContext | default dict}}
+        {{- if $securityContext.fsGroup }}
+        runAsUser: {{ $securityContext.fsGroup }}
+        runAsGroup: {{ $securityContext.fsGroup }}
+        {{- else }}
         runAsUser: {{ .Values.bamboo.securityContext.gid }}
         runAsGroup: {{ .Values.bamboo.securityContext.gid }}
+        {{- end}}
       volumeMounts:
         - name: shared-home
           mountPath: /shared-home

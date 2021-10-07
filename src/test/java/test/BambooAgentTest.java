@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Deployment;
@@ -133,5 +134,47 @@ class BambooAgentTest {
 
         JsonNode podSpec = resources.getDeployment(product.getHelmReleaseName()).getPodSpec();
         assertThat(podSpec.path("schedulerName")).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"})
+    void test_pod_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "agent.securityContext.fsGroup", "1000",
+                "agent.securityContext.runAsGroup", "1000"));
+
+        JsonNode podSpec = resources.getDeployment(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext").path("fsGroup")).hasValueEqualTo(1000);
+        assertThat(podSpec.path("securityContext").path("runAsGroup")).hasValueEqualTo(1000);
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "bamboo_agent,2005"
+    })
+    void test_pod_security_context_without_fsGroup(Product product, int fsGroup) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "agent.securityContext.runAsGroup", "1000"));
+
+        JsonNode podSpec = resources.getDeployment(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext").path("fsGroup")).hasValueEqualTo(fsGroup);
+        assertThat(podSpec.path("securityContext").path("runAsGroup")).hasValueEqualTo(1000);
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"})
+    void test_container_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "agent.containerSecurityContext.runAsGroup", "2000"));
+
+        JsonNode containerSecurityContext = resources.getDeployment(product.getHelmReleaseName())
+                .getContainer()
+                .getSecurityContext();
+        assertThat(containerSecurityContext.path("runAsGroup")).hasValueEqualTo(2000);
     }
 }

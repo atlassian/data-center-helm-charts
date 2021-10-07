@@ -20,10 +20,14 @@ spec:
     spec:
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}
-      {{ if .Values.agent.securityContext.enabled }}
+      {{- with .Values.agent.securityContext }}
       securityContext:
-        fsGroup: {{ .Values.agent.securityContext.gid }}
-      {{ end }}
+        {{ toYaml . | nindent 8 }}
+        {{- $securityContext := . | default dict}}
+        {{- if not $securityContext.fsGroup }}
+        fsGroup: 2005
+        {{- end }}
+      {{- end }}
       initContainers:
         {{- include "agent.additionalInitContainers" . | nindent 8 }}    
       containers:
@@ -58,6 +62,10 @@ spec:
 {{/*            initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}*/}}
 {{/*            periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}*/}}
 {{/*            failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}*/}}
+          {{- with .Values.agent.containerSecurityContext}}
+          securityContext:
+          {{- toYaml . | nindent 12}}
+          {{- end}}
           {{- with .Values.agent.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}

@@ -77,20 +77,23 @@ agent:
   # echo "$(echo "${NAMESPACE}.")""$(kubectl exec -it bamboo-0 -- cat /etc/resolv.conf | grep search | awk '{print $2}')"
   # 
   server:
-    
-  # Enable or disable security context in StatefulSet template spec. Enabled 
-  # by default with UID 2005. Disable when deploying to OpenShift, unless anyuid 
-  # policy is attached to a service account.
-  #
+
+  # Standard K8s field that holds pod-level security attributes and common container settings.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   securityContext:
-  
-    # -- Set to 'true' to enable the security context
+
+    # -- The GID used by the Bamboo docker image
+    # If not supplied, will default to 2005.
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
-    enabled: true
-    
-    # -- The GID used by the Bamboo agent docker image
-    #
-    gid: "2005"
+    fsGroup: 2005
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: { }
 
   # Port definitions
   #
