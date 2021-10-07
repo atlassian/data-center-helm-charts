@@ -85,3 +85,4 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      volumes:
