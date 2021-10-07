@@ -95,18 +95,46 @@ agent:
   #
   containerSecurityContext: { }
 
-  # TODO: As of yet a /status endpoint does not exist for agents. Once delivered the implementation for this
-  # must be added
-  # Confirm that the Bamboo agent is up and running with a ReadinessProbe
-  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
+  # Confirm that the Bamboo agent is up and running with a startupProbe
+  # and readinessProbe. The startupProbe waits until the wrapper and agent
+  # are running, and the readinessProbes checks for it's continuing availability.
+  # See: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
   #
-  readinessProbe:
+  # Currently the startup and readiness probes work in the same
+  # manner, however having a separate startup probe allows us to spin
+  # fast on startup, and then scale back for ongoing availability.
+  startupProbe:
+
+    # -- Command to use to check the startup status. This is provided by the agent image.
+    #
+    command: "/probe-startup.sh"
   
-    # -- The initial delay (in seconds) for the Bamboo agent container readiness probe, 
+    # -- The initial delay (in seconds) for the Bamboo agent container startup probe,
     # after which the probe will start running.
     #
-    initialDelaySeconds: 10
+    initialDelaySeconds: 1
+
+    # -- How often (in seconds) the Bamboo agent container startup probe will run
+    #
+    periodSeconds: 1
     
+    # -- The number of consecutive failures of the Bamboo agent container startup probe
+    # before the pod fails readiness checks.
+    #
+    failureThreshold: 120
+
+  readinessProbe:
+
+    # -- Command to use to check the readiness status. This is provided by the agent image.
+    #
+    command: "/probe-readiness.sh"
+
+    # -- The initial delay (in seconds) for the Bamboo agent container
+    # readiness probe, after which the probe will start running. When
+    # used in conjunction with a startupProbe this can be short.
+    #
+    initialDelaySeconds: 1
+
     # -- How often (in seconds) the Bamboo agent container readiness probe will run
     #
     periodSeconds: 5
