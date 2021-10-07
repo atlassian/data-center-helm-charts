@@ -1,0 +1,10 @@
+{{- $capabilitiesPropFile := .Files.Glob "bamboo-capabilities.properties" }}
+{{- if $capabilitiesPropFile }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bamboo-capabilities-properties
+data:
+  bamboo-capabilities.properties: |
+{{ (.Files.Get "bamboo-capabilities.properties") | indent 4 }}
+{{- end }}

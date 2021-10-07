@@ -1,3 +1,4 @@
+{{- $capabilitiesPropFile := .Files.Glob "bamboo-capabilities.properties" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +30,20 @@ spec:
         {{- end }}
       {{- end }}
       initContainers:
-        {{- include "agent.additionalInitContainers" . | nindent 8 }}    
+        {{- include "agent.additionalInitContainers" . | nindent 8 }}
+{{- if $capabilitiesPropFile }}
+        - name: capabilities-properties
+          image: {{ include "agent.image" . | quote }}
+          command: ["/bin/bash"]
+          args: ["-c", "cp /var/atlassian/application-data/bamboo-agent/bamboo-capabilities.properties /var/atlassian/application-data/bamboo-agent/bin/bamboo-capabilities.properties"]
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: bamboo-capabilities-properties
+              mountPath: /var/atlassian/application-data/bamboo-agent/bamboo-capabilities.properties
+              subPath: bamboo-capabilities.properties
+            - name: bamboo-agent-bin
+              mountPath: /var/atlassian/application-data/bamboo-agent/bin
+{{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "agent.image" . | quote }}
@@ -74,6 +88,11 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.agent.shutdown.command | quote }}]
+{{- if $capabilitiesPropFile }}
+          volumeMounts:
+            - name: bamboo-agent-bin
+              mountPath: /var/atlassian/application-data/bamboo-agent/bin
+{{- end }}
       {{- include "agent.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -90,3 +109,11 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
+{{- if $capabilitiesPropFile }}
+      volumes:
+        - name: bamboo-capabilities-properties
+          configMap:
+            name: bamboo-capabilities-properties
+        - name: bamboo-agent-bin
+          emptyDir: {}
+{{- end }}
