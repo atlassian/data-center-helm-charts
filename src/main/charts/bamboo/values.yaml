@@ -308,7 +308,7 @@ ingress:
    
   # -- The base path for the Ingress Resource. For example '/bamboo'. Based on a 
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of 
-  # 'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextpath'
+  # 'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextPath'
   #
   path:
   
