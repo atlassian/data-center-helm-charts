@@ -188,12 +188,31 @@ agent:
   #
   additionalEnvironmentVariables: []
 
-  # -- Enabled a sidecar Docker in Docker container run in a privileged mode. Please note that running
+  # -- Enables a sidecar Docker-in-Docker container run in a privileged mode. Please note that running
   # containers in privileged mode can pose a serious security risk. Use with caution!
+  # You will have to install Docker to Bamboo agent image, e.g.:
+  # FROM atlassian/bamboo-agent-base:latest
+  # RUN curl -s https://get.docker.com/ | bash
+  #
   dind:
-    enabled: true
-    image: 20.10.9-dind
-
+    enabled: false
+    image: docker:20.10.9-dind
+    # -- dind.tlsEnabled instructs Docker deamon to start on a secure port (2376) and accepts secure connections only
+    # DOCKER_CERT_PATH is automatically mounted to bamvboo agent container in this case.
+    # If tlsEnabled is false docker daemons listens on 2375 and accepts non secure connections.
+    tlsEnabled: true
+    # -- dind container resources requests and limits
+    resources:
+      requests:
+        # -- Initial CPU request by a docker-in-docker container
+        #
+        cpu: "1"
+        # -- Initial Memory request by docker-in-docker container
+        #
+        memory: "2G"
+      #  limits:
+      #    cpu: "2"
+      #    memory: "2G"
 
 # -- Custom annotations that will be applied to all Bamboo agent pods
 #

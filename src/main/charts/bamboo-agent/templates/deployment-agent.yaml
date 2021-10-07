@@ -31,24 +31,52 @@ spec:
       initContainers:
         {{- include "agent.additionalInitContainers" . | nindent 8 }}
       containers:
-{{- if .Values.dind.enabled }}
+{{- if .Values.agent.dind.enabled }}
         - name: dind
-          image: {{ .Values.dind.image }}
+          image: {{ .Values.agent.dind.image }}
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: {{ if .Values.agent.dind.tlsEnabled }}"/certs"{{ else }}""{{ end }}
           volumeMounts:
             - name: xml-data
               mountPath: /var/atlassian/application-data/bamboo-agent/xml-data
-            - name: tmp
-              mountPath: /var/atlassian/application-data/bamboo-agent/tmp
+            - name: temp
+              mountPath: /var/atlassian/application-data/bamboo-agent/temp
+{{- if .Values.agent.dind.tlsEnabled }}
+            - name: certs
+              mountPath: /certs
+{{- end}}
+          {{- with .Values.agent.dind.resources }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           securityContext:
             privileged: true
 {{- end }}
         - name: {{ .Chart.Name }}
           image: {{ include "agent.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{- if .Values.agent.dind.enabled }}
+          volumeMounts:
+{{- if .Values.agent.dind.tlsEnabled }}
+            - name: certs
+              mountPath: /certs
+{{- end}}
+            - name: xml-data
+              mountPath: /var/atlassian/application-data/bamboo-agent/xml-data
+            - name: temp
+              mountPath: /var/atlassian/application-data/bamboo-agent/temp
+{{- end }}
           env:
-{{- if .Values.dind.enabled }}
+{{- if .Values.agent.dind.enabled }}
+{{- if .Values.agent.dind.tlsEnabled }}
+            - name: DOCKER_CERT_PATH
+              value: {{ if .Values.agent.dind.tlsEnabled }}"/certs/client"{{ else }}""{{ end }}
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+{{- end}}
             - name: DOCKER_HOST
-              value: tcp://127.0.0.1:2375
+              value: tcp://127.0.0.1:{{- if .Values.agent.dind.tlsEnabled }}2376{{- else}}2375{{- end}}
 {{- end }}
             - name: SECURITY_TOKEN
               value: {{ include "agent.securityToken" . }}
@@ -105,10 +133,14 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
-{{- if .Values.dind.enabled }}
       volumes:
+{{- if .Values.agent.dind.enabled }}
+{{- if .Values.agent.dind.tlsEnabled }}
+        - name: certs
+          emptyDir: {}
+{{- end}}
         - name: xml-data
           emptyDir: {}
-        - name: tmp
+        - name: temp
           emptyDir: {}
 {{- end }}
