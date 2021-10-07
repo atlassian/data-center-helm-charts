@@ -138,7 +138,7 @@ spec:
 {{- if .Values.agent.dind.tlsEnabled }}
         - name: certs
           emptyDir: {}
-{{- end}}
+{{- end }}
         - name: xml-data
           emptyDir: {}
         - name: temp
