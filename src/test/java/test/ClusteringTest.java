@@ -46,6 +46,32 @@ class ClusteringTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bitbucket")
+    void bitbucket_clustering_enabled_custom_group(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".clustering.enabled", "true",
+                product + ".clustering.group.secretName", "hazelcast-group-secret",
+                product + ".clustering.group.nameSecretKey", "name-key",
+                product + ".clustering.group.passwordSecretKey", "password-key"));
+
+        resources.assertContains(ClusterRole, product.getHelmReleaseName())
+                .assertContains(ClusterRoleBinding, product.getHelmReleaseName());
+
+        test.model.StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        Container container = statefulSet.getContainer();
+        Env env = container.getEnv();
+        env
+                .assertHasFieldRef("KUBERNETES_NAMESPACE", "metadata.namespace")
+                .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_NAME", product.getHelmReleaseName())
+                .assertHasValue("HAZELCAST_NETWORK_KUBERNETES", "true")
+                .assertHasValue("HAZELCAST_PORT", "5701")
+                .assertHasSecretRef("HAZELCAST_GROUP_NAME",
+                        "hazelcast-group-secret", "name-key")
+                .assertHasSecretRef("HAZELCAST_GROUP_PASSWORD",
+                        "hazelcast-group-secret", "password-key");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_clustering_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
