@@ -56,26 +56,33 @@ spec:
                   key: max_heap
                   name: {{ include "agent.fullname" . }}-jvm-config
             {{- include "agent.additionalEnvironmentVariables" . | nindent 12 }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.agent.ports.http }}
-              protocol: TCP
-{{/*              TODO: Enable readiness probe once available*/}}
-{{/*          readinessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              port: {{ .Values.agent.ports.http }}*/}}
-{{/*              path: {{ .Values.agent.service.contextPath }}/rest/api/latest/status*/}}
-{{/*            initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}*/}}
-{{/*            periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}*/}}
-{{/*            failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}*/}}
+
+          startupProbe:
+            exec:
+              command:
+                - {{ .Values.agent.startupProbe.command }}
+            initialDelaySeconds: {{ .Values.agent.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.agent.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.agent.startupProbe.failureThreshold }}
+
+          readinessProbe:
+            exec:
+              command:
+                - {{ .Values.agent.readinessProbe.command }}
+            initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
+
           {{- with .Values.agent.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}
           {{- end}}
+
           {{- with .Values.agent.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}
           {{- end }}
+
           lifecycle:
             preStop:
               exec:

@@ -73,10 +73,20 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-bamboo-agent-jvm-config
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
+          startupProbe:
+            exec:
+              command:
+                - /probe-startup.sh
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            failureThreshold: 120
+          readinessProbe:
+            exec:
+              command:
+                - /probe-readiness.sh
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            failureThreshold: 30
           resources:
             requests:
               cpu: "1"
