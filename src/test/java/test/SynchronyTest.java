@@ -108,4 +108,28 @@ class SynchronyTest {
         assertThat(synchronySts.getContainer("synchrony").getLimits().path("cpu")).hasValueEqualTo(20);
         assertThat(synchronySts.getContainer("synchrony").getLimits().path("memory")).hasTextEqualTo("20GB");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_changesAnnotationChecksum(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true"
+        ));
+
+        final var metadata = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodMetadata();
+        final var checksum = metadata.get("annotations").get("checksum/config-jvm");
+
+        assertThat(checksum).isNotNull();
+
+        final var resourcesWithChanges = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalJvmArgs[0]", "-Dfoo=1"));
+
+        final var metadataWithChanges = resourcesWithChanges.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodMetadata();
+        final var checksumWithChanges = metadataWithChanges.get("annotations").get("checksum/config-jvm");
+
+        assertThat(checksumWithChanges)
+                .isNotNull()
+                .isNotEqualTo(checksum);
+    }
 }

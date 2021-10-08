@@ -12,10 +12,14 @@ spec:
       {{- include "bamboo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
+        checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}
+        {{- if .Values.fluentd.enabled }}
+        checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "bamboo.selectorLabels" . | nindent 8 }}
     spec:

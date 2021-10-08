@@ -28,18 +28,24 @@ Kubernetes: `>=1.19.x-0`
 | agent.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo agent container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for  supported variables. |
 | agent.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | agent.ports.http | int | `80` | The port on which the Bamboo agent listens for HTTP traffic |
+| agent.readinessProbe.command | string | `"/probe-readiness.sh"` | Command to use to check the readiness status. This is provided by the agent image. |
 | agent.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe  before the pod fails readiness checks. |
-| agent.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo agent container readiness probe,  after which the probe will start running. |
+| agent.readinessProbe.initialDelaySeconds | int | `1` | The initial delay (in seconds) for the Bamboo agent container readiness probe, after which the probe will start running. When used in conjunction with a startupProbe this can be short. |
 | agent.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo agent container readiness probe will run |
 | agent.resources.container.requests.cpu | string | `"1"` | Initial CPU request by Bamboo agent pod |
 | agent.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
 | agent.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
-| agent.securityToken | string | `nil` |  |
+| agent.securityToken.secretKey | string | `"security-token"` |  |
+| agent.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token  will be automatically utilised on agent boot. An Example of creating a K8s secret for the  secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | agent.server | string | `nil` |  |
 | agent.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default TODO: This needs to be updated when Steve's changes are done command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |
 | agent.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
+| agent.startupProbe.command | string | `"/probe-startup.sh"` | Command to use to check the startup status. This is provided by the agent image. |
+| agent.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bamboo agent container startup probe before the pod fails readiness checks. |
+| agent.startupProbe.initialDelaySeconds | int | `1` | The initial delay (in seconds) for the Bamboo agent container startup probe, after which the probe will start running. |
+| agent.startupProbe.periodSeconds | int | `1` | How often (in seconds) the Bamboo agent container startup probe will run |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"atlassian/bamboo-agent-base"` | The Bamboo agent Docker image to use https://hub.docker.com/r/atlassian/bamboo-agent-base |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
