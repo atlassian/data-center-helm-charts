@@ -59,8 +59,6 @@ spec:
           image: "atlassian/bamboo-agent-base:8.0.1-jdk11"
           imagePullPolicy: IfNotPresent
           env:
-            - name: SECURITY_TOKEN
-              value: 49387ba37d9dcbaca542f21934a0a4e0f28c0350
             - name: BAMBOO_SERVER
               value: http://bamboo.bamboo.svc.cluster.local
             - name: WRAPPER_JAVA_INITMEMORY

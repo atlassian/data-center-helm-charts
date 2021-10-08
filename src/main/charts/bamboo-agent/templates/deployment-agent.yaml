@@ -35,8 +35,13 @@ spec:
           image: {{ include "agent.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{ with .Values.agent.securityToken.secretName }}
             - name: SECURITY_TOKEN
-              value: {{ include "agent.securityToken" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ . }}
+                  key: {{ $.Values.agent.securityToken.secretKey }}
+            {{ end }}            
             - name: BAMBOO_SERVER
               value: {{ include "agent.bambooServerServiceDns" . }}
             - name: WRAPPER_JAVA_INITMEMORY
