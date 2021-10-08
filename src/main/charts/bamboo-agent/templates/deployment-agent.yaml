@@ -67,10 +67,16 @@ spec:
             periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
 
+          {{- with .Values.agent.containerSecurityContext}}
+          securityContext:
+          {{- toYaml . | nindent 12}}
+          {{- end}}
+
           {{- with .Values.agent.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}
           {{- end }}
+
           lifecycle:
             preStop:
               exec:
