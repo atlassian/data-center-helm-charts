@@ -71,7 +71,7 @@ class FluentdTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void fluentd_checksum_disabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "fluentd.enabled", "false"
@@ -84,7 +84,7 @@ class FluentdTest {
     }
 
     @ParameterizedTest
-    @EnumSource
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void fluentd_changes_annotation_checksum(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "fluentd.enabled", "true"
