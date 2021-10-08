@@ -69,13 +69,9 @@ agent:
   #
   securityToken:
     
-  # The K8s DNS record for the Bamboo server service. Should be of the form, <namespace>.<service_name>.svc.cluster.local
-  # for example: "bamboo.bamboo.svc.cluster.local"
-  # 
-  # This value can be obtained by running:
-  # export NAMESPACE=<namespace in which the Bamboo server resides>
-  # echo "$(echo "${NAMESPACE}.")""$(kubectl exec -it bamboo-0 -- cat /etc/resolv.conf | grep search | awk '{print $2}')"
-  # 
+  # The K8s DNS record for the Bamboo server service. Should be of the form, <service_name>.<namespace>.svc.cluster.local
+  # for example: "bamboo-server.bamboo.svc.cluster.local"
+  #
   server:
 
   # Standard K8s field that holds pod-level security attributes and common container settings.
