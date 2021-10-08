@@ -308,7 +308,7 @@ ingress:
    
   # -- The base path for the Ingress Resource. For example '/bamboo'. Based on a 
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of 
-  # 'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextpath'
+  # 'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextPath'
   #
   path:
   
@@ -531,7 +531,7 @@ bamboo:
   #    subDirectory:
   #    fileName:
 
-  # -- Specifies a list of additional Bambop plugins that should be added to the
+  # -- Specifies a list of additional Bamboo plugins that should be added to the
   # Bamboo container. Note plugins installed via this method will appear as
   # bundled plugins rather than user plugins. These should be specified in the same
   # manner as the 'additionalLibraries' property. Additional details:
@@ -625,7 +625,7 @@ fluentd:
     
     # -- The prefix of the Elasticsearch index name that will be used
     #
-    indexNamePrefix: Bamboo
+    indexNamePrefix: bamboo
     
   # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
   #

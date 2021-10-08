@@ -69,4 +69,41 @@ class FluentdTest {
         assertThat(fluentdStartCommand)
                 .contains("gem install fluent-plugin-elasticsearch && fluentd -c /fluentd/etc/fluent.conf -v");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void fluentd_checksum_disabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "false"
+        ));
+
+        final var metadata = resources.getStatefulSet(product.getHelmReleaseName()).getPodMetadata();
+        final var checksum = metadata.get("annotations").get("checksum/config-fluentd");
+
+        assertThat(checksum).isNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void fluentd_changes_annotation_checksum(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true"
+        ));
+
+        final var metadata = resources.getStatefulSet(product.getHelmReleaseName()).getPodMetadata();
+        final var checksum = metadata.get("annotations").get("checksum/config-fluentd");
+
+        assertThat(checksum).isNotNull();
+
+        final var resourcesWithChanges = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true",
+                "fluentd.elasticsearch.hostname", "myelastic"));
+
+        final var metadataWithChanges = resourcesWithChanges.getStatefulSet(product.getHelmReleaseName()).getPodMetadata();
+        final var checksumWithChanges = metadataWithChanges.get("annotations").get("checksum/config-fluentd");
+
+        assertThat(checksumWithChanges)
+                .isNotNull()
+                .isNotEqualTo(checksum);
+    }
 }
