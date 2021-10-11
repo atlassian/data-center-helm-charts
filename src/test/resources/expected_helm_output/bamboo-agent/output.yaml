@@ -45,6 +45,8 @@ spec:
       app.kubernetes.io/instance: unittest-bamboo-agent
   template:
     metadata:
+      annotations:
+        checksum/config-jvm: 68819ed735bd264e7bfc5727130849562ffd71c7b13d56b0aa9384ccf7441912
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent
@@ -59,8 +61,6 @@ spec:
           image: "atlassian/bamboo-agent-base:8.0.1-jdk11"
           imagePullPolicy: IfNotPresent
           env:
-            - name: SECURITY_TOKEN
-              value: 49387ba37d9dcbaca542f21934a0a4e0f28c0350
             - name: BAMBOO_SERVER
               value: http://bamboo.bamboo.svc.cluster.local
             - name: WRAPPER_JAVA_INITMEMORY
@@ -73,10 +73,20 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-bamboo-agent-jvm-config
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
+          startupProbe:
+            exec:
+              command:
+                - /probe-startup.sh
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            failureThreshold: 120
+          readinessProbe:
+            exec:
+              command:
+                - /probe-readiness.sh
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            failureThreshold: 30
           resources:
             requests:
               cpu: "1"

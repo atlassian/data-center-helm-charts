@@ -5,8 +5,8 @@
 # A running and configured Bamboo server instance is a prerequisite for agent deployment!
 # Ensure that a valid security token and Bamboo server base URL have been supplied for the 
 # relevant properties below i.e:
-# - bamboo.securityToken
-# - bamboo.server
+# - agent.securityToken
+# - agent.server
 #
 # Additionally, the Bamboo server must have; "Remote agent authentication" *disabled* and  
 # "Security token verification" *enabled*. Details on these features and how to enable
@@ -68,14 +68,20 @@ agent:
   # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html#Agentauthentication-SecuritytokenverificationSecuritytokenverification
   #
   securityToken:
+
+    # -- The name of the K8s Secret that contains the security token. When specified the token 
+    # will be automatically utilised on agent boot. An Example of creating a K8s secret for the 
+    # secret below:
+    # 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>'
+    # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
+    #
+    secretName:
+      
+    secretKey: security-token
     
-  # The K8s DNS record for the Bamboo server service. Should be of the form, <namespace>.<service_name>.svc.cluster.local
-  # for example: "bamboo.bamboo.svc.cluster.local"
-  # 
-  # This value can be obtained by running:
-  # export NAMESPACE=<namespace in which the Bamboo server resides>
-  # echo "$(echo "${NAMESPACE}.")""$(kubectl exec -it bamboo-0 -- cat /etc/resolv.conf | grep search | awk '{print $2}')"
-  # 
+  # The K8s DNS record for the Bamboo server service. Should be of the form, <service_name>.<namespace>.svc.cluster.local
+  # for example: "bamboo-server.bamboo.svc.cluster.local"
+  #
   server:
 
   # Standard K8s field that holds pod-level security attributes and common container settings.
@@ -95,26 +101,46 @@ agent:
   #
   containerSecurityContext: { }
 
-  # Port definitions
+  # Confirm that the Bamboo agent is up and running with a startupProbe
+  # and readinessProbe. The startupProbe waits until the wrapper and agent
+  # are running, and the readinessProbes checks for it's continuing availability.
+  # See: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
   #
-  ports:
-  
-    # -- The port on which the Bamboo agent listens for HTTP traffic
+  # Currently the startup and readiness probes work in the same
+  # manner, however having a separate startup probe allows us to spin
+  # fast on startup, and then scale back for ongoing availability.
+  startupProbe:
+
+    # -- Command to use to check the startup status. This is provided by the agent image.
     #
-    http: 80
-     
-  # TODO: As of yet a /status endpoint does not exist for agents. Once delivered the implementation for this
-  # must be added
-  # Confirm that the Bamboo agent is up and running with a ReadinessProbe
-  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
-  #
-  readinessProbe:
+    command: "/probe-startup.sh"
   
-    # -- The initial delay (in seconds) for the Bamboo agent container readiness probe, 
+    # -- The initial delay (in seconds) for the Bamboo agent container startup probe,
     # after which the probe will start running.
     #
-    initialDelaySeconds: 10
+    initialDelaySeconds: 1
+
+    # -- How often (in seconds) the Bamboo agent container startup probe will run
+    #
+    periodSeconds: 1
     
+    # -- The number of consecutive failures of the Bamboo agent container startup probe
+    # before the pod fails readiness checks.
+    #
+    failureThreshold: 120
+
+  readinessProbe:
+
+    # -- Command to use to check the readiness status. This is provided by the agent image.
+    #
+    command: "/probe-readiness.sh"
+
+    # -- The initial delay (in seconds) for the Bamboo agent container
+    # readiness probe, after which the probe will start running. When
+    # used in conjunction with a startupProbe this can be short.
+    #
+    initialDelaySeconds: 1
+
     # -- How often (in seconds) the Bamboo agent container readiness probe will run
     #
     periodSeconds: 5
