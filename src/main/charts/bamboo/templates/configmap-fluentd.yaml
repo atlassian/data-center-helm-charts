@@ -14,10 +14,16 @@ data:
   {{ else }}
   fluent.conf: |
     <source>
-      @type http
-      port {{ .Values.fluentd.httpPort }}
-      bind 0.0.0.0
+      @type tail
+      path /application-data/logs/atlassian-bamboo.log*
+      read_from_head true
+      tag bamboo.log
+      <parse>
+        @type regexp
+        expression /^(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) (?<message>.*)$/
+      </parse>
     </source>
+
     <filter **>
       @type record_transformer
       <record>
@@ -27,10 +33,11 @@ data:
         helmrelease "#{ENV['HELM_RELEASE_NAME']}"
       </record>
     </filter>
+
     <filter **>
       @type stdout
     </filter>
-    {{ if .Values.fluentd.elasticsearch.enabled }}
+
     <match **>
       @type elasticsearch
       host {{ .Values.fluentd.elasticsearch.hostname }}
@@ -38,5 +45,4 @@ data:
       logstash_prefix {{ .Values.fluentd.elasticsearch.indexNamePrefix }}
     </match>
     {{ end }}
-  {{ end }}
 {{ end }}

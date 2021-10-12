@@ -4,6 +4,10 @@
   image: {{ .Values.fluentd.imageName }}
   command: ["sh", "-c", {{ include "fluentd.start.command" . | quote }}]
   volumeMounts:
+    - name: local-home
+      mountPath: /application-data/logs
+      subPath: logs
+      readOnly: true
     - name: fluentd-config
       mountPath: /fluentd/etc
       readOnly: true

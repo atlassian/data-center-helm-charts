@@ -24,7 +24,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
-    -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
   max_heap: 1024m
   min_heap: 512m
@@ -73,7 +72,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: f4a6c3bc211735afd83ece1085ddfcc5380688d433fe80791893130ada8be32b
+        checksum/config-jvm: 67b30d4d7922d63fe6a2e621952c992510b976473b9021608bef195038c15741
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
