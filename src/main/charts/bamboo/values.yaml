@@ -117,6 +117,10 @@ database:
     # -- The key ('username') in the Secret used to store the database login username
     #
     usernameSecretKey: username
+    
+    # -- The key ('password') in the Secret used to store the database login password
+    #
+    passwordSecretKey: password
 
 # REQUIRED - Volume configuration
 #
