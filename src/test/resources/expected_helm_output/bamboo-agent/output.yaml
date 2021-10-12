@@ -75,15 +75,13 @@ spec:
                   name: unittest-bamboo-agent-jvm-config
           startupProbe:
             exec:
-              command:
-                - /probe-startup.sh
+              command: ["sh", "-c", "/probe-startup.sh"]
             initialDelaySeconds: 1
             periodSeconds: 1
             failureThreshold: 120
           readinessProbe:
             exec:
-              command:
-                - /probe-readiness.sh
+              command: ["sh", "-c", "/probe-readiness.sh"]
             initialDelaySeconds: 1
             periodSeconds: 5
             failureThreshold: 30

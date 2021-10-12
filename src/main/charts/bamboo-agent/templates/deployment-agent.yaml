@@ -59,16 +59,14 @@ spec:
 
           startupProbe:
             exec:
-              command:
-                - {{ .Values.agent.startupProbe.command }}
+              command: ["sh", "-c", {{ .Values.agent.startupProbe.command | quote }}]
             initialDelaySeconds: {{ .Values.agent.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.agent.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.agent.startupProbe.failureThreshold }}
 
           readinessProbe:
             exec:
-              command:
-                - {{ .Values.agent.readinessProbe.command }}
+              command: ["sh", "-c", {{ .Values.agent.readinessProbe.command | quote }}]
             initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
