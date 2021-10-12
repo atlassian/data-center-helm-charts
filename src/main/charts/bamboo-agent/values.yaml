@@ -163,8 +163,7 @@ agent:
     # shutdown behaviour is needed it can be achieved by overriding
     # this value. Note that the shutdown command needs to wait for the
     # application shutdown completely before exiting; see [the default
-    # TODO: This needs to be updated when Steve's changes are done
-    # command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh)
+    # command](https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/src/master/shutdown-wait.sh)
     # for details.
     #
     command: "/shutdown-wait.sh"
