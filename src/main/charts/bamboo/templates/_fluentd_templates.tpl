@@ -3,7 +3,6 @@
 - name: fluentd
   image: {{ .Values.fluentd.imageName }}
   command: ["sh", "-c", {{ include "fluentd.start.command" . | quote }}]
-  ports:
   volumeMounts:
     - name: local-home
       mountPath: /application-data/logs
