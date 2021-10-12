@@ -296,7 +296,3 @@ volumeClaimTemplates:
       fieldPath: metadata.name
 {{ end }}
 {{ end }}
-
-{{- define "bamboo.sysprop.fluentdAppender" -}}
--Datlassian.logging.cloud.enabled={{.Values.fluentd.enabled}}
-{{- end }}

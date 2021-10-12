@@ -6,7 +6,6 @@ metadata:
     {{- include "bamboo.labels" . | nindent 4 }}
 data:
   additional_jvm_args: >-
-    {{ include "bamboo.sysprop.fluentdAppender" . }}
     {{- range .Values.bamboo.additionalJvmArgs }}
     {{ . }}
     {{- end }}

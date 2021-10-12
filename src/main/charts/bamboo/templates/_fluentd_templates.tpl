@@ -4,8 +4,6 @@
   image: {{ .Values.fluentd.imageName }}
   command: ["sh", "-c", {{ include "fluentd.start.command" . | quote }}]
   ports:
-    - containerPort: {{ .Values.fluentd.httpPort }}
-      protocol: TCP
   volumeMounts:
     - name: local-home
       mountPath: /application-data/logs
