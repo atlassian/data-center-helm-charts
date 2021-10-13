@@ -41,7 +41,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
-        {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (or .Values.volumes.sharedHome.create .Values.volumes.sharedHome.customVolume) }}
+        {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume) }}
         - name: nfs-permission-fixer
           image: alpine
           imagePullPolicy: IfNotPresent
@@ -83,7 +83,7 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
-            {{- if or .Values.volumes.sharedHome.create .Values.volumes.sharedHome.customVolume }}
+            {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
             - name: shared-home
               mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
               {{- if .Values.volumes.sharedHome.subPath }}
@@ -139,7 +139,7 @@ spec:
             {{ end }}
             - name: SET_PERMISSIONS
               value: {{ .Values.bitbucket.setPermissions | quote }}
-            {{- if or .Values.volumes.sharedHome.create .Values.volumes.sharedHome.customVolume }}
+            {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
             - name: BITBUCKET_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
             {{- end }}
