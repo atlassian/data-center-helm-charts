@@ -4,3 +4,6 @@ target
 \#*\#
 docs/site
 tmp
+.settings
+.project
+.classpath
