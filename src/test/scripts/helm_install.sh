@@ -249,20 +249,22 @@ install_product() {
 install_product_agent() {
   # Deploy any product support agent. Currently just bamboo, but this
   # is where Bitbucket GitAgents will go.
-  if [[ ! -z "$PRODUCT_AGENT_CHART" ]]; then
-
-    agentValueFiles=''
-    for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values-agent.yaml,values-${CLUSTER_TYPE}.yaml}; do
-      agentValueFiles+="--values $file "
-    done
-
-    echo "Task $((tasknum+=1)) - Installing product agent helm chart." >&2
-    helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
-         "$PRODUCT_AGENT_RELEASE_NAME" \
-         $HELM_DEBUG_OPTION \
-         ${agentValuesFiles} \
-         "$PRODUCT_AGENT_CHART" >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+  if [[ -z "$PRODUCT_AGENT_CHART" ]]; then
+      echo "No product agent defined, skipping provisioning"
+      return
   fi
+
+  agentValueFiles=''
+  for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values-agent.yaml,values-${CLUSTER_TYPE}.yaml}; do
+    agentValueFiles+="--values $file "
+  done
+
+  echo "Task $((tasknum+=1)) - Installing product agent helm chart." >&2
+  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
+       "$PRODUCT_AGENT_RELEASE_NAME" \
+       $HELM_DEBUG_OPTION \
+       ${agentValuesFiles} \
+       "$PRODUCT_AGENT_CHART" >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
 # Install the functest Helm chart
