@@ -10,9 +10,9 @@ There are official [Helm charts for Elasticsearch 7.9.3](https://artifacthub.io/
 ```bash
 helm repo add elastic https://helm.elastic.co
 ```
-then install it:
+then install it making sure to do so in the same namespace in which the DC product is installed:
 ```bash
-helm install elasticsearch --set imageTag="7.9.3" elastic/elasticsearch
+helm install elasticsearch --namespace <product_namespace> --set imageTag="7.9.3" elastic/elasticsearch
 ```
 !!! info "Prerequisites of Elasticsearch Helm chart"
     Running the above commands will install Elasticsearch with the default configuration, which is 3 worker nodes. 
