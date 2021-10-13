@@ -263,7 +263,7 @@ install_product_agent() {
   helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
        "$PRODUCT_AGENT_RELEASE_NAME" \
        $HELM_DEBUG_OPTION \
-       ${agentValuesFiles} \
+       ${agentValueFiles} \
        "$PRODUCT_AGENT_CHART" >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
