@@ -78,6 +78,10 @@ spec:
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.synchrony.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: entrypoint-script
           configMap:
