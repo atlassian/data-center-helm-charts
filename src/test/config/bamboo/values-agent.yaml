@@ -1,4 +1,4 @@
 
 
 agent:
-  server: "${helm.release.prefix}.bamboo.svc.cluster.local"
+  server: "${helm.release.prefix}-bamboo"
