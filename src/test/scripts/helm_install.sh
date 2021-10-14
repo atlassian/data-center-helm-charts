@@ -247,8 +247,8 @@ install_product() {
 }
 
 install_product_agent() {
-  # Deploy any product support agent. Currently just bamboo, but this
-  # is where Bitbucket GitAgents will go.
+  # Deploy any product support agent. Currently just Bamboo, but this
+  # is where Bitbucket GitAgents would probably go.
   if [[ -z "$PRODUCT_AGENT_CHART" || ! -e $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/values-agent.yaml ]]; then
       echo "No product agent defined, skipping provisioning"
       return
