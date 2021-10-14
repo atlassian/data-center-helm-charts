@@ -58,6 +58,42 @@ class SecurityContextTest {
     }
 
     @ParameterizedTest
+    @CsvSource({
+            "jira,2001",
+            "confluence,2002",
+            "bitbucket,2003",
+            "crowd,2004" // Bamboo didn't have 1.0.0 release that needs to be backward compatible
+    })
+    void test_pod_security_context_backward_compatible(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContext.fsGroup", "null",
+                product + ".securityContext.gid", "1000",
+                product + ".securityContext.enabled", "true"));
+
+        JsonNode podSpec = resources.getStatefulSet(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext").path("fsGroup")).hasValueEqualTo(1000);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "jira,2001",
+            "confluence,2002",
+            "bitbucket,2003",
+            "crowd,2004"
+    })
+    void test_pod_security_context_backward_compatible_disabled_context(Product product, int fsGroup) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContext.fsGroup", "null",
+                product + ".securityContext.gid", "1000",
+                product + ".securityContext.enabled", "false"));
+
+        JsonNode podSpec = resources.getStatefulSet(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext").path("fsGroup")).hasValueEqualTo(fsGroup);
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_container_security_context(Product product) throws Exception {
 

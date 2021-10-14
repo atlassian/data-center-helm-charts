@@ -180,15 +180,19 @@ Create default value for ingress path
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
 {{- define "sharedHome.permissionFix.command" -}}
-{{- if .Values.volumes.sharedHome.nfsPermissionFixer.command }}
-{{ .Values.volumes.sharedHome.nfsPermissionFixer.command }}
-{{- else }}
-{{- $securityContext := .Values.confluence.securityContext | default dict}}
-{{- if $securityContext.fsGroup }}
-{{- printf "(chgrp %v %s; chmod g+w %s)" .Values.confluence.securityContext.fsGroup .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
-{{- else }}
-{{- printf "(chgrp 2002 %s; chmod g+w %s)" .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
-{{- end }}
+{{- $securityContext := .Values.confluence.securityContext }}
+{{- with .Values.volumes.sharedHome.nfsPermissionFixer }}
+    {{- if .command }}
+        {{ .command }}
+    {{- else }}
+        {{- if and $securityContext.gid $securityContext.enabled }}
+            {{- printf "(chgrp %v %s; chmod g+w %s)" $securityContext.gid .mountPath .mountPath }}
+        {{- else if $securityContext.fsGroup }}
+            {{- printf "(chgrp %v %s; chmod g+w %s)" $securityContext.fsGroup .mountPath .mountPath }}
+        {{- else }}
+            {{- printf "(chgrp 2002 %s; chmod g+w %s)" .mountPath .mountPath }}
+        {{- end }}
+    {{- end }}
 {{- end }}
 {{- end }}
 

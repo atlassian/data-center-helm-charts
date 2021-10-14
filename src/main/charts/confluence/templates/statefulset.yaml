@@ -27,10 +27,14 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.confluence.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.confluence.securityContext }}
       securityContext:
+        {{- if and .enabled .gid }}
+        # for backward compatability with 1.0.0
+        fsGroup: {{ .gid }}
+        {{- else }}
         {{ toYaml . | nindent 8 }}
-        {{- $securityContext := . | default dict}}
-        {{- if not $securityContext.fsGroup }}
+        {{- if not .fsGroup }}
         fsGroup: 2002
+        {{- end }}
         {{- end }}
       {{- end }}
       hostAliases:
