@@ -1,4 +1,4 @@
 
 
 agent:
-  server: "${helm.release.prefix}-bamboo"
+  server: "${helm.release.prefix}-bamboo.${kubernetes.target.namespace}.svc.cluster.local"
