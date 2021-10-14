@@ -343,7 +343,40 @@ volumes:
   # those needs to be defined in confluence.additionalVolumeMounts
   #
   additional: []
-  
+
+
+  # -- Defines additional volumeClaimTemplates that should be applied to Confluence and/or Synchrony pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in confluence.additionalVolumeMounts
+  #
+  additionalVolumeClaimTemplates:
+
+    # -- Name of the additional volumeClaimTemplate
+    #
+    - name: myadditionalvolumeclaim
+
+      # -- If 'true', then a 'volumeClaimTemplates' will be dynamically
+      # created for Confluence based on the 'StorageClassName' supplied below.
+      #
+      enableInConfluence: false
+
+      # -- If 'true', then a 'volumeClaimTemplates' will be dynamically
+      # created for Confluence based on the 'StorageClassName' supplied below.
+      #
+      enableInSynchrony: false
+
+      # -- Specify the name of the 'StorageClass' that should be used for the additional
+      # volume claim template.
+      #
+      storageClassName:
+
+      # -- Specifies the standard K8s resource requests for the volumeClaimTemplates
+      # volume claims.
+      #
+      resources:
+        requests:
+          storage: 1Gi
+
 # Ingress configuration
 #
 # To make the Atlassian product available from outside the K8s cluster an Ingress

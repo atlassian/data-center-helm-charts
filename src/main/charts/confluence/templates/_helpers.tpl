@@ -404,9 +404,26 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 {{- end }}
 
+{{- define "confluence.volumeClaimTemplates.hasConfluence" -}}
+  {{- range .Values.volumes.additionalVolumeClaimTemplates }}
+    {{- if .enableInConfluence -}}
+      {{- true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "confluence.volumeClaimTemplates.hasSynchrony" -}}
+  {{- range .Values.volumes.additionalVolumeClaimTemplates }}
+    {{- if .enableInSynchrony -}}
+      {{- true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "confluence.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
+{{- if or .Values.volumes.localHome.persistentVolumeClaim.create (include "confluence.volumeClaimTemplates.hasConfluence" $) }}
 volumeClaimTemplates:
+{{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:
     name: local-home
   spec:
@@ -419,11 +436,28 @@ volumeClaimTemplates:
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
+{{- range .Values.volumes.additionalVolumeClaimTemplates }}
+{{- if .enableInConfluence }}
+- metadata:
+    name: {{ .name }}
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .storageClassName }}
+    storageClassName: {{ .storageClassName | quote }}
+    {{- end }}
+    {{- with .resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "synchrony.volumeClaimTemplates" -}}
-{{ if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
+{{- if or .Values.volumes.synchronyHome.persistentVolumeClaim.create (include "confluence.volumeClaimTemplates.hasSynchrony" $) }}
 volumeClaimTemplates:
+{{- if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
 - metadata:
     name: synchrony-home
   spec:
@@ -435,6 +469,22 @@ volumeClaimTemplates:
     resources:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+{{- end }}
+{{- range .Values.volumes.additionalVolumeClaimTemplates }}
+{{- if .enableInSynchrony }}
+- metadata:
+    name: {{ .name }}
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .storageClassName }}
+    storageClassName: {{ .storageClassName | quote }}
+    {{- end }}
+    {{- with .resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 
