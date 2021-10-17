@@ -10,7 +10,7 @@ There are official [Helm charts for Elasticsearch 7.9.3](https://artifacthub.io/
 ```bash
 helm repo add elastic https://helm.elastic.co
 ```
-then install it making sure to do so in the same namespace in which the DC product is installed:
+then install it:
 ```bash
 helm install elasticsearch --namespace <product_namespace> --set imageTag="7.9.3" elastic/elasticsearch
 ```
