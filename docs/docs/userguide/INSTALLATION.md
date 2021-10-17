@@ -113,6 +113,9 @@ volumes:
 
 By default, the Helm charts will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
 
+!!!info "Bamboo clustering 🚧 UNDER CONSTRUCTION 🚧"
+    Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#bamboo-and-clustering) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
+
 ```yaml
   clustering:
     enabled: true
@@ -164,6 +167,18 @@ helm install <release-name> \
              --version <chart-version> \
              --values values.yaml
 ```
+
+???tip "Bamboo agents 🚧 UNDER CONSTRUCTION 🚧" 
+
+    If you want to run remote agents with your Bamboo server deployment they can be provisioned using their dedicated chart: 
+
+    ```shell
+    helm install <release-name> \
+                 atlassian-data-center/bamboo-agent \
+                 --namespace <namespace> \
+                 --version <chart-version> \
+                 --values values.yaml
+    ```
 
 !!!note "Values & flags"
     * `<release-name>` the name of your deployment. You can also use `--generate-name`.

@@ -13,6 +13,8 @@ Go to the Atlassian Docker Hub page of the relevant product to pick a tag that m
     * Jira: [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software/tags){.external}
     * Confluence: [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/tags){.external}
     * Bitbucket: [atlassian/bitbucket-server](https://hub.docker.com/r/atlassian/bitbucket-server/tags){.external}
+    * Bamboo: [atlassian/bamboo](https://hub.docker.com/r/atlassian/bamboo/tags){.external}
+    * Bamboo agent: [atlassian/bamboo-agent-base](https://hub.docker.com/r/atlassian/bamboo-agent-base/tags){.external}
 
 In the example you're running Jira using the `8.13.0-jdk11` tag, and you'll be upgrading to `8.13.1-jdk11` - our *target*.
     
@@ -56,7 +58,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
      ```shell
      helm upgrade <release-name> atlassian-data-center/<product> \
          --reuse-values \
-         --replicaCount=1 \
+         --set replicaCount=1 \
          --set image.tag=<target-tag> \
          --wait \
          --namespace <namespace>
@@ -226,4 +228,10 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
         After all the pods are active with the new version, finalize the upgrade:
         
         ![upgrade-mode](../../assets/images/bitbucket-upgrade-3.png)
+
+    === "Bamboo"
+
+        ### Bamboo rolling upgrade
+        Rolling upgrades are currently not supported for Bamboo DC.
+        
         

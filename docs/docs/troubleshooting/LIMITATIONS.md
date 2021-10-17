@@ -19,6 +19,9 @@ At present there are issues relating to index replication with Jira when immedia
       
 Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../../userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
 
+## Bamboo and clustering 
+🚧 UNDER CONSTRUCTION 🚧
+
 ## Platform limitations
 These configurations are explicitly not supported and the Helm charts don’t work without modifications in these environments:
 
