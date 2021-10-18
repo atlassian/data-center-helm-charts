@@ -42,7 +42,7 @@ This will also have the effect of disabling Bitbucket’s internal Elasticsearch
       elasticSearch:    
          credentials:
             secretName: <my-elasticsearch-secret>
-            usernameSecreyKey: username
+            usernameSecretKey: username
             passwordSecretKey: password
     ```
     Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
@@ -78,7 +78,7 @@ bitbucket:
     baseUrl: <VPC Endpoint>
     credentials:
       secretName: <my-elasticsearch-secret>
-      usernameSecreyKey: username
+      usernameSecretKey: username
       passwordSecretKey: password
 ```
 !!! info ""

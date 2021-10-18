@@ -18,7 +18,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 5. [Configure a local-home volume](#configure-local-home-volume)
 
 !!!info "Elasticsearch for Bitbucket"
-    We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md). 
+    We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/bitbucket/BITBUCKET_ELASTICSEARCH.md). 
     
 ---
 

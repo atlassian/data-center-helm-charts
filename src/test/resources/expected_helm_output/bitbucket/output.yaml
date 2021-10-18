@@ -76,6 +76,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       partition: 0
+  podManagementPolicy: Parallel
   serviceName: unittest-bitbucket
   selector:
     matchLabels:
@@ -94,15 +95,6 @@ spec:
       securityContext:
         fsGroup: 2003
       initContainers:
-        - name: nfs-permission-fixer
-          image: alpine
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
-          volumeMounts:
-            - name: shared-home
-              mountPath: "/shared-home"
-          command: ["sh", "-c", "(chgrp 2003 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bitbucket
           image: "atlassian/bitbucket:7.15.1-jdk11"
@@ -127,8 +119,6 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/bitbucket"
-            - name: shared-home
-              mountPath: "/var/atlassian/application-data/shared-home"
           resources:
             requests:
               cpu: "2"
@@ -138,6 +128,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: JAVA_OPTS
+              value: "-Dcluster.node.name=$(KUBE_POD_NAME)"
             - name: SERVER_CONTEXT_PATH
               value: "/"
             - name: SERVER_SCHEME
@@ -146,8 +138,6 @@ spec:
               value: "true"
             - name: SET_PERMISSIONS
               value: "true"
-            - name: BITBUCKET_SHARED_HOME
-              value: "/var/atlassian/application-data/shared-home"
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
@@ -163,14 +153,14 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: unittest-bitbucket-jvm-config
+            - name: APPLICATION_MODE
+              value: "default"
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
         - name: local-home
-          emptyDir: {}
-        - name: shared-home
           emptyDir: {}
 ---
 # Source: bitbucket/templates/tests/test-application-status.yaml
@@ -241,6 +231,4 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
-    - name: shared-home
-      emptyDir: {}
   restartPolicy: Never
