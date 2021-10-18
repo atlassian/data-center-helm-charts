@@ -169,13 +169,13 @@ on the JDBC driver being used, but some examples are:
     
         [Connect Bitbucket to an external database](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html){.external}
 
-    === "Crowd"
-
-        [Connect Crowd to an external database](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
-
     === "Bamboo"
 
         [Connect Bamboo to an external database](https://confluence.atlassian.com/bamboo/connecting-bamboo-to-an-external-database-289276815.html){.external}
+
+    === "Crowd"
+
+        [Connect Crowd to an external database](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
 
 
 ### `database.driver`

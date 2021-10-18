@@ -19,11 +19,24 @@ At present there are issues relating to index replication with Jira when immedia
       
 Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../../userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
 
-## Bamboo and clustering 
-🚧 UNDER CONSTRUCTION 🚧
+## Bamboo limitations and clustering
+There are a number of know limitations relating to Bamboo Data Center, these are documented below.
+
+### Cluster size
+At present Bamboo Data Center utilizes an `active-passive` clustering model. Where K8s deployments are concerned this architecture is not ideal. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
+
+!!!info "Bamboo DC and `active-active`"
+    Work is currently underway to align Bamboo DC so that it too uses an `active-active` model like the other DC products.
+
+### Server and agent affinity
+The Bamboo server and bamboo agents must be deployed to the same cluster. You cannot have bamboo agents in one cluster communicating with a Bamboo server in another.
+
+### Bamboo to Cloud App Link
+When configuring application link between Bamboo and any Atlassian Cloud server product, Bamboo Base URL needs to be used even if bamboo is behind a firewall and not direct accessible from outside. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
 
 ## Platform limitations
 These configurations are explicitly not supported and the Helm charts don’t work without modifications in these environments:
+
 
 * [Istio infrastructure](https://istio.io/latest/docs/ops/deployment/architecture/){.external}
     * Due to several reasons, Istio is imposing networking rules on every workload in the Kubernetes cluster that doesn’t work with our deployments.
