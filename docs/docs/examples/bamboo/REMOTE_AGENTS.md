@@ -12,9 +12,9 @@ You can learn more details about remote agents on the [official documentation pa
 
     * The bamboo server instance must be fully configured
 
-    * The Bamboo server instance must have security token verification **enabled** 
+    * The Bamboo server instance must have `security token verification` **enabled** 
 
-    * The Bamboo server instance must have remote agent authentication must be **disabled**
+    * The Bamboo server instance must have `remote agent authentication` must be **disabled**
 
 ## Installation
 
@@ -29,7 +29,7 @@ Steps required for deploying a remote agent
 
 #### 1. Configure Bamboo server
 
-* When logged into the Bamboo server instance, and from the `Agents` settings tab, **enable** security token verification, and **disable** remote agent authentication
+* When logged into the Bamboo server instance, and from the `Agents` settings tab, **enable** `security token verification`, and **disable** `remote agent authentication`
    ![security_token_verification](../../assets/images/bamboo_agents/enable-disable.png){ width="900" }
    
 * Navigate to the remote agent's installation page by selecting the `Install remote agent` button from the `Agents` settings tab
@@ -70,7 +70,14 @@ helm install bamboo-agent atlassian-data-center/bamboo-agent -f values.yaml
 
 !!!tip "Custom agents"
 
-      For details on defining and deploying agents with custom/additional capabilities view the [agent capabilities guide](AGENT_CAPABILITIES.md)
+        By default the Bamboo agent Helm chart will deploy the [bamboo-agent-base](https://hub.docker.com/r/atlassian/bamboo-agent-base){.external} Docker image. This image provides the following capabilities out of the box:
+        
+        * JDK 11
+        * Git & Git LFS
+        * Maven 3
+        * Python 3
+
+        For details on defining and deploying agents with custom/additional capabilities view the [agent capabilities guide](AGENT_CAPABILITIES.md)
 
 ## Scaling the agent count
 
@@ -85,4 +92,4 @@ helm upgrade --set replicaCount=<desired number of agents> \
 
 ## Troubleshooting
 
-You can find the most common errors relating to agent configuration in the [official Bamboo agent documentation](https://confluence.atlassian.com/bamboo/bamboo-remote-agent-installation-guide-289276832.html).
+You can find the most common errors relating to agent configuration in the [official Bamboo agent documentation](https://confluence.atlassian.com/bamboo/bamboo-remote-agent-installation-guide-289276832.html){.external}.
