@@ -17,3 +17,8 @@ INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 TARGET_REPLICA_COUNT=1
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
 HELM_DEBUG=${helm.debug}
+
+# Agent deployment setup
+# Currently disabled, as the agent won't startup without a fully configured server.
+#PRODUCT_AGENT_CHART=src/main/charts/bamboo-agent/
+
