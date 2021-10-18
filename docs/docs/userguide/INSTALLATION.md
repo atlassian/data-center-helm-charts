@@ -113,7 +113,7 @@ volumes:
 
 By default, the Helm charts will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
 
-!!!info "Bamboo clustering 🚧 UNDER CONSTRUCTION 🚧"
+!!!info "Bamboo clustering"
     Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#bamboo-and-clustering) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
 
 ```yaml
@@ -168,7 +168,15 @@ helm install <release-name> \
              --values values.yaml
 ```
 
-???tip "Bamboo agents 🚧 UNDER CONSTRUCTION 🚧" 
+!!!note "Values & flags"
+* `<release-name>` the name of your deployment. You can also use `--generate-name`.
+* `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket`, or `crowd`.
+* `<namespace>` optional flag for categorizing installed resources.
+* `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
+* `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
+* Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
+
+???tip "Installing Bamboo agents" 
 
     If you want to run remote agents with your Bamboo server deployment they can be provisioned using their dedicated chart: 
 
@@ -179,14 +187,6 @@ helm install <release-name> \
                  --version <chart-version> \
                  --values values.yaml
     ```
-
-!!!note "Values & flags"
-    * `<release-name>` the name of your deployment. You can also use `--generate-name`.
-    * `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket`, or `crowd`.
-    * `<namespace>` optional flag for categorizing installed resources.
-    * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
-    * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
-    * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
     
 !!!info "Elasticsearch for Bitbucket"
     We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/elasticsearch/BITBUCKET_ELASTICSEARCH.md).    

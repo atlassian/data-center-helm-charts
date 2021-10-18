@@ -19,7 +19,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     **Certain product limitations listed below:**
 
     * Jira currently has [limitations with scaling](troubleshooting/LIMITATIONS.md#jira-and-horizontal-scaling).
-    * Bamboo currently has [limitations relating to clustering](troubleshooting/LIMITATIONS.md#bamboo-and-clustering) 🚧 UNDER CONSTRUCTION 🚧.  
+    * Bamboo currently has [limitations relating to clustering](troubleshooting/LIMITATIONS.md#bamboo-and-clustering).
     
     Read more about these [product and platform limitations](troubleshooting/LIMITATIONS.md).
 
@@ -47,9 +47,9 @@ The diagram below provides a high level overview of what a typical deployment mi
 ## Product versions
 The minimum versions that we support for each product are:
 
-| Jira DC                                                                                                            | Confluence DC                                                                                         | Bitbucket DC                                                                                                                           | Bamboo DC                                                                                                                  |
-|--------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------
-| [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html){.external} | [7.13](https://confluence.atlassian.com/doc/confluence-7-13-release-notes-1044114085.html){.external}  | [7.12](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-12-release-notes-1044112744.html){.external} | [8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1077903836.html){.external}🚧 UNDER CONSTRUCTION 🚧  |
+| Jira DC                                                                                                            | Confluence DC                                                                                         | Bitbucket DC                                                                                                                           | Bamboo DC                                                                                        |
+|--------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html){.external} | [7.13](https://confluence.atlassian.com/doc/confluence-7-13-release-notes-1044114085.html){.external}  | [7.12](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-12-release-notes-1044112744.html){.external} | [8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1077903836.html){.external}|
       
 
 ## Feedback

@@ -32,6 +32,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
      * Jira: [Upgrading Jira with zero downtime](https://confluence.atlassian.com/adminjiraserver/upgrading-jira-data-center-with-zero-downtime-938846953.html){.external} 
      * Confluence: [Upgrading Confluence with zero downtime](https://confluence.atlassian.com/doc/upgrade-confluence-without-downtime-1027127923.html){.external} 
      * Bitbucket: [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
+     * Bamboo: Zero downtime upgrades for Bamboo server and Bamboo agents is currently not supported.
 
 ## 3. Upgrade the product 
 === "Normal Upgrade"
@@ -231,7 +232,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
 
     === "Bamboo"
 
-        ### Bamboo rolling upgrade
-        Rolling upgrades are currently not supported for Bamboo DC.
+        !!!warning "Bamboo and zero downtime upgrades"
+            Zero downtime upgrades for Bamboo server and Bamboo agents is currently not supported.
         
         

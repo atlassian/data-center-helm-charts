@@ -78,9 +78,10 @@ Considering the current and target **product** versions there are different scen
  
 !!!important "See the following links to find out if two versions of a product are zero-downtime compatible"
 
-     Jira: [Upgrading Jira with zero downtime](https://confluence.atlassian.com/adminjiraserver/upgrading-jira-data-center-with-zero-downtime-938846953.html){.external}   
-     Confluence: [Upgrading Confluence with zero downtime](https://confluence.atlassian.com/doc/upgrade-confluence-without-downtime-1027127923.html){.external}  
-     Bitbucket: [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
+     * Jira: [Upgrading Jira with zero downtime](https://confluence.atlassian.com/adminjiraserver/upgrading-jira-data-center-with-zero-downtime-938846953.html){.external}   
+     * Confluence: [Upgrading Confluence with zero downtime](https://confluence.atlassian.com/doc/upgrade-confluence-without-downtime-1027127923.html){.external}  
+     * Bitbucket: [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
+     * Bamboo: Zero downtime upgrades for Bamboo server and Bamboo agents is currently not supported.
 
 !!! note "All supported Jira versions are zero-downtime compatible"
      The minimum supported version of Jira in the Data Center Helm Charts is `8.19`. 
@@ -108,6 +109,7 @@ will only apply when the target product version is zero-downtime compatible. If 
     ### Helm chart upgrade with downtime
      
     You need to use this method to upgrade the Helm chart if:
+
     * the target product version is not zero downtime-compatible
     * for any other reason you would prefer to avoid running the cluster in mix mode
     
@@ -250,6 +252,10 @@ will only apply when the target product version is zero-downtime compatible. If 
             After all the pods are active with the new version, click **Run upgrade tasks** to finalize the upgrade:
             
             ![upgrade-mode](../../assets/images/bitbucket-upgrade-3.png)
+
+    === "Bamboo"
+        !!!warning "Bamboo and zero downtime upgrades"
+            Zero downtime upgrades for Bamboo server and Bamboo agents is currently not supported.
 
      
 === "Upgrade with no change in the product version"
