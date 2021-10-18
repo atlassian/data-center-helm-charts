@@ -38,17 +38,19 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
     http://localhost:{{ .Values.bitbucket.ports.http }}
 {{- end }}
 {{- end }}
+{{- if not ( or .Values.volumes.localHome.persistentVolumeClaim.create .Values.volumes.localHome.customVolume ) }}
 
-{{ if not ( or .Values.volumes.localHome.persistentVolumeClaim.create .Values.volumes.localHome.customVolume ) }}
 #################################################################################
-######      WARNING: Persistent volume is not used for Local Home!!!        #####
-######            Data will be lost when the pod is terminated.             #####
+#####       WARNING: Persistent volume is not used for Local Home!!!        #####
+#####             Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
-{{ if not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume ) }}
+{{/* Mirrors don't need a shared home - only show warning if clustering is enabled and no shared home volume is created */}}
+{{- if and (not (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume)) (and .Values.bitbucket.clustering.enabled (eq .Values.bitbucket.applicationMode "default")) }}
+
 #################################################################################
-######      WARNING: Persistent volume is not used for Shared Home!!!       #####
-######            Data will be lost when the pod is terminated.             #####
+#####  WARNING: Clustering is enabled but Shared Home is not configured!!!  #####
+#####            Nodes will not be able to form a cluster.                  #####
 #################################################################################
 {{- end }}
 

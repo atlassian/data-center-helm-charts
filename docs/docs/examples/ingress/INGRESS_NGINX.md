@@ -146,7 +146,7 @@ ingress:
 ## Bitbucket SSH configuration
 
 !!!warning "Additional configuration"
-    Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../ssh/SSH_BITBUCKET.md) for details.
+    Bitbucket requires additional Ingress config to allow for `SSH` access. See [NGINX Ingress controller config for SSH connections](../bitbucket/BITBUCKET_SSH.md) for details.
 
 ---
 !!!tip "Next step - Database"

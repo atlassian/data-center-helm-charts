@@ -280,7 +280,11 @@ volumes:
       # when bringing your own 'PersistentVolume' i.e. 'persistentVolume.create' is false.
       #
       volumeName:
-     
+
+      # -- Specifies the access mode of the volume to claim
+      #
+      accessMode: ReadWriteMany
+
       # -- Specifies the standard K8s resource requests and/or limits for the shared-home
       #volume claims.
       #
@@ -448,7 +452,11 @@ bitbucket:
     # -- Port to expose the SSH service on.
     #
     port: 22
-    
+
+    # -- The hostname of the SSH service. If set, it'll be used to configure the SSH base URL for the application.
+    #
+    host:
+
     # -- SSH Service type
     #
     type: LoadBalancer
@@ -541,6 +549,11 @@ bitbucket:
     #
     emailAddressSecretKey: emailAddress
 
+  # -- Set the display name of the Bitbucket instance. Note that this value is only used during installation and
+  # changing the value during an upgrade has no effect.
+  #
+  displayName:
+
   # Data Center clustering
   #
   clustering:
@@ -549,6 +562,30 @@ bitbucket:
     # This will automatically configure cluster peer discovery between cluster nodes.
     #
     enabled: false
+
+    # Hazelcast group configuration secrets. If left unchanged, a default group name and a random password will be
+    # generated on installation.
+    #
+    group:
+      # -- The name of the Kubernetes Secret that contains the Hazelcast group credentials.
+      # Example of creating a credentials K8s secret below:
+      # 'kubectl create secret generic <secret-name> --from-literal=name=<name> \
+      # --from-literal=password=<password>'
+      # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
+      #
+      # If no secret is specified, a default group name will be used and a random password will be generated during
+      # installation.
+      #
+      secretName:
+
+      # -- The key in the Kubernetes Secret that contains the Hazelcast group name.
+      #
+      nameSecretKey: name
+
+      # -- The key in the Kubernetes Secret that contains the Hazelcast group password.
+      #
+      passwordSecretKey: password
+
 
   # Elasticsearch config
   # 
@@ -574,7 +611,7 @@ bitbucket:
       
       # -- The key in the Kubernetes Secret that contains the Elasticsearch username.
       #
-      usernameSecreyKey: username
+      usernameSecretKey: username
       
       # -- The key in the Kubernetes Secret that contains the Elasticsearch password.
       #
@@ -636,6 +673,21 @@ bitbucket:
       #  limits:
       #    cpu: "2"
       #    memory: "2G"
+
+
+  # -- Application Mode
+  #
+  # This can be either 'default' or 'mirror'
+  #
+  applicationMode: "default"
+
+  # Mirror Configuration
+  #
+  mirror:
+
+    # -- Specifies the URL of the upstream Bitbucket server for this mirror.
+    #
+    upstreamUrl:
 
   # Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.

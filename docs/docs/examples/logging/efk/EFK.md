@@ -25,7 +25,7 @@ Follow these steps to install Elasticsearch
 
 ### 1. Install Elasticsearch
 
-Install Elasticsearch using the instructions [documented here](../../elasticsearch/BITBUCKET_ELASTICSEARCH.md). Once installed make sure Elasticsearch cluster is working as expected by first port forwarding the service
+Install Elasticsearch using the instructions [documented here](../../bitbucket/BITBUCKET_ELASTICSEARCH.md). Once installed make sure Elasticsearch cluster is working as expected by first port forwarding the service
 
 ```shell
 kubectl port-forward svc/elasticsearch-master 9200

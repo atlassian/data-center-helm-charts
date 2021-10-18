@@ -1,0 +1,4 @@
+collapse_single_pages: false
+nav:
+    - REMOTE_AGENTS.md
+    - ...
