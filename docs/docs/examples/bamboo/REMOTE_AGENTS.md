@@ -14,7 +14,7 @@ You can learn more details about remote agents on the [official documentation pa
 
     * The Bamboo server instance must have `security token verification` **enabled** 
 
-    * The Bamboo server instance must have `remote agent authentication` must be **disabled**
+    * The Bamboo server instance must have `remote agent authentication` **disabled**
 
 ## Installation
 
