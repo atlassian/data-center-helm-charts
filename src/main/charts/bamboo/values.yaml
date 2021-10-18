@@ -434,23 +434,6 @@ bamboo:
     #
     enabled: false
 
-  # Bamboo licensing details
-  #
-  license:
-  
-    # -- The name of the K8s Secret that contains the Bamboo license key. If specified, then 
-    # the license will be automatically populated during Bamboo setup. Otherwise, it will 
-    # need to be provided via the browser after initial startup. An Example of creating 
-    # a K8s secret for the license below:
-    # 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> 
-    # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
-    #
-    secretName:
-    
-    # -- The key in the K8s Secret that contains the Bamboo license key
-    #
-    secretKey: license-key
-
   shutdown:
 
     # -- The termination grace period for pods during shutdown. This
@@ -464,7 +447,7 @@ bamboo:
     # shutdown behaviour is needed it can be achieved by overriding
     # this value. Note that the shutdown command needs to wait for the
     # application shutdown completely before exiting; see [the default
-    # command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) #TODO: This needs to be updated when Steve's changes are done
+    # command](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/shutdown-wait.sh) 
     # for details.
     #
     command: "/shutdown-wait.sh"

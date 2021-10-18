@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.3-jdk11](https://img.shields.io/badge/AppVersion-8.0.3--jdk11-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -35,8 +35,6 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | bamboo.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
-| bamboo.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bamboo license key |
-| bamboo.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bamboo license key. If specified, then  the license will be automatically populated during Bamboo setup. Otherwise, it will  need to be provided via the browser after initial startup. An Example of creating  a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license>  https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic |
 | bamboo.ports.jms | int | `54663` | JMS port |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe  before the pod fails readiness checks. |
@@ -52,7 +50,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |
 | bamboo.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bamboo |
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour. |
-| bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) #TODO: This needs to be updated when Steve's changes are done for details. |
+| bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/shutdown-wait.sh)  for details. |
 | bamboo.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password |
 | database.credentials.secretName | string | `nil` | The name of the K8s Secret that contains the database login credentials. If the secret is specified, then the credentials will be automatically utilised on  Bamboo startup. If the secret is not provided, then the credentials will need to be  provided via the browser during manual configuration post deployment.   Example of creating a database credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |

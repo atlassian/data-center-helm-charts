@@ -67,9 +67,10 @@ fluentd:
 Fluentd tries to parse and send the data to Elasticsearch, but since it's not installed the data is lost. At this point you have logged data in the installed Elasticsearch, and you should install Kibana to complete the EFK stack deployment:
 
 ### 3. Install Kibana
+With the same version that was used for installing [Elasticsearch](../../elasticsearch/BITBUCKET_ELASTICSEARCH.md), use the `imageTag` property to install Kibana:
 
 ```shell
-helm install kibana elastic/kibana
+helm install kibana --namespace <product_namespace> --set imageTag="7.9.3" elastic/kibana
 ```
 
 Make sure kibana is running by checking the deployment

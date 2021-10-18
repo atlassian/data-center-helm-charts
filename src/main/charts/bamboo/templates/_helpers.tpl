@@ -276,7 +276,6 @@ volumeClaimTemplates:
     secretKeyRef:
       name: {{ . }}
       key: {{ $.Values.database.credentials.usernameSecretKey }}
-{{/* TODO: The password cannot be pre-filled. See https://bitbucket.org/dchevell/docker-atlassian-bamboo/src/master/. Keeping for now as this may come later*/}}
 - name: ATL_JDBC_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -284,19 +283,3 @@ volumeClaimTemplates:
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
 {{ end }}
-
-{{/* TODO: This probably isnt needed with the current active-passive Bamboo architecture "clustering" does not work as we know it i.e. active-active*/}}
-{{- define "bamboo.clusteringEnvVars" -}}
-{{ if .Values.bamboo.clustering.enabled }}
-- name: CLUSTERED
-  value: "true"
-- name: BAMBOO_NODE_ID
-  valueFrom:
-    fieldRef:
-      fieldPath: metadata.name
-{{ end }}
-{{ end }}
-
-{{- define "bamboo.sysprop.fluentdAppender" -}}
--Datlassian.logging.cloud.enabled={{.Values.fluentd.enabled}}
-{{- end }}

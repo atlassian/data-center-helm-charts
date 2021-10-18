@@ -1,6 +1,6 @@
 # bamboo-agent
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.1-jdk11](https://img.shields.io/badge/AppVersion-8.0.1--jdk11-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.3-jdk11](https://img.shields.io/badge/AppVersion-8.0.3--jdk11-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center remote agents on Kubernetes
 
@@ -27,7 +27,6 @@ Kubernetes: `>=1.19.x-0`
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Bamboo agent pods |
 | agent.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo agent container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for  supported variables. |
 | agent.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
-| agent.ports.http | int | `80` | The port on which the Bamboo agent listens for HTTP traffic |
 | agent.readinessProbe.command | string | `"/probe-readiness.sh"` | Command to use to check the readiness status. This is provided by the agent image. |
 | agent.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe  before the pod fails readiness checks. |
 | agent.readinessProbe.initialDelaySeconds | int | `1` | The initial delay (in seconds) for the Bamboo agent container readiness probe, after which the probe will start running. When used in conjunction with a startupProbe this can be short. |
@@ -40,7 +39,7 @@ Kubernetes: `>=1.19.x-0`
 | agent.securityToken.secretKey | string | `"security-token"` |  |
 | agent.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token  will be automatically utilised on agent boot. An Example of creating a K8s secret for the  secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | agent.server | string | `nil` |  |
-| agent.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default TODO: This needs to be updated when Steve's changes are done command](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/shutdown-wait.sh) for details. |
+| agent.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/src/master/shutdown-wait.sh) for details. |
 | agent.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
 | agent.startupProbe.command | string | `"/probe-startup.sh"` | Command to use to check the startup status. This is provided by the agent image. |
 | agent.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bamboo agent container startup probe before the pod fails readiness checks. |
