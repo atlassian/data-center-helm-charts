@@ -19,7 +19,7 @@ Use the charts to install and operate Data Center products within a Kubernetes c
     **Certain product limitations listed below:**
 
     * Jira currently has [limitations with scaling](troubleshooting/LIMITATIONS.md#jira-and-horizontal-scaling).
-    * Bamboo currently has [limitations relating to clustering](troubleshooting/LIMITATIONS.md#bamboo-and-clustering).
+    * Bamboo currently has [limitations relating to clustering](troubleshooting/LIMITATIONS.md#cluster-size).
     
     Read more about these [product and platform limitations](troubleshooting/LIMITATIONS.md).
 

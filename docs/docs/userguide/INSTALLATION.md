@@ -119,7 +119,7 @@ By default, the Helm charts will not configure the products for Data Center clus
 ```
 
 !!!warning "Bamboo clustering"
-    Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#bamboo-and-clustering) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
+    Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
 
   
 ## 7. Configure license 

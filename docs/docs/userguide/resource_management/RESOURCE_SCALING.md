@@ -21,7 +21,7 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
 
 !!!warning "Bamboo cluster size"
-      **Bamboo server** currently has [limitations relating to clustering](../../troubleshooting/LIMITATIONS.md#bamboo-and-clustering), as such, unlike the other products Bamboo server can only be scaled to a maximum of `1` pod.
+      **Bamboo server** currently has [limitations relating to clustering](../../troubleshooting/LIMITATIONS.md#cluster-size), as such, unlike the other products Bamboo server can only be scaled to a maximum of `1` pod.
 
 For details on modifying the `cpu` and `memory` requirements of the `StatefulSet` see section [Vertical Scaling](#vertical-scaling-adding-resources) below. Additional details on the resource requests and limits used by the `StatfulSet` can be found in [Resource requests and limits](REQUESTS_AND_LIMITS.md).
 

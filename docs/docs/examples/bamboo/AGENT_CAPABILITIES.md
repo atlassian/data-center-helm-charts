@@ -11,7 +11,8 @@ You can learn more about remote agents capabilities on the [official documentati
 ## Custom capabilities
 
 If additional capabilities are required, the [Bamboo agent base Docker image](https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/src/master/){.external} can be extended with those capabilities. 
-After updating the Bamboo agent `values.yaml` with the appropriate image `tag` i.e.
+
+This custom image can then be deployed, by first updating the Bamboo agent `values.yaml` with the image `tag` of the custom Docker image i.e.
 
 ```yaml
 image:
@@ -20,7 +21,7 @@ image:
   tag: "agent-with-ruby-support"
 ```
 
-the custom agent can then be deployed using Helm:
+The custom agent can then be deployed via Helm:
 
 ```shell
 helm install bamboo-agent atlassian-data-center/bamboo-agent -f agent-with-ruby-support.yaml
