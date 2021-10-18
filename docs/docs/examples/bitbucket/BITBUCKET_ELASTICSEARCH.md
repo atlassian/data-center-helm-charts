@@ -12,7 +12,7 @@ helm repo add elastic https://helm.elastic.co
 ```
 then install it:
 ```bash
-helm install elasticsearch --set imageTag="7.9.3" elastic/elasticsearch
+helm install elasticsearch --namespace <product_namespace> --set imageTag="7.9.3" elastic/elasticsearch
 ```
 !!! info "Prerequisites of Elasticsearch Helm chart"
     Running the above commands will install Elasticsearch with the default configuration, which is 3 worker nodes. 
@@ -42,7 +42,7 @@ This will also have the effect of disabling Bitbucket’s internal Elasticsearch
       elasticSearch:    
          credentials:
             secretName: <my-elasticsearch-secret>
-            usernameSecreyKey: username
+            usernameSecretKey: username
             passwordSecretKey: password
     ```
     Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
@@ -78,7 +78,7 @@ bitbucket:
     baseUrl: <VPC Endpoint>
     credentials:
       secretName: <my-elasticsearch-secret>
-      usernameSecreyKey: username
+      usernameSecretKey: username
       passwordSecretKey: password
 ```
 !!! info ""

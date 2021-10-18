@@ -11,6 +11,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       partition: 0
+  podManagementPolicy: Parallel
   serviceName: {{ include "bitbucket.fullname" . }}
   selector:
     matchLabels:
@@ -44,7 +45,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
-        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+        {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume) }}
         - name: nfs-permission-fixer
           image: alpine
           imagePullPolicy: IfNotPresent
@@ -86,11 +87,13 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+            {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
             - name: shared-home
               mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
               {{- if .Values.volumes.sharedHome.subPath }}
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
+            {{- end }}
             {{- include "bitbucket.additionalVolumeMounts" . | nindent 12 }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}
             {{- include "bitbucket.additionalBundledPlugins" . | nindent 12 }}
@@ -108,6 +111,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: JAVA_OPTS
+              value: "-Dcluster.node.name=$(KUBE_POD_NAME)"
             {{- include "bitbucket.clusteringEnvVars" . | nindent 12 }}
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
             {{- include "bitbucket.sysadminEnvVars" . | nindent 12 }}
@@ -119,6 +124,14 @@ spec:
               value: {{ include "bitbucket.ingressPort" . | quote }}
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
+            {{- with .Values.bitbucket.displayName }}
+            - name: SETUP_DISPLAYNAME
+              value: {{ . | quote }}
+            {{- end }}
+            {{- if and .Values.bitbucket.sshService.enabled (not (empty .Values.bitbucket.sshService.host)) }}
+            - name: PLUGIN_SSH_BASEURL
+              value: ssh://{{ .Values.bitbucket.sshService.host }}{{ if ne (default .Values.bitbucket.sshService.port "22") "22" }}:{{ .Values.bitbucket.sshService.port }}{{ end }}/
+            {{- end }}
             {{ end }}
             - name: SERVER_CONTEXT_PATH
               value: {{ include "bitbucket.ingressPath" . | quote }}
@@ -130,8 +143,10 @@ spec:
             {{ end }}
             - name: SET_PERMISSIONS
               value: {{ .Values.bitbucket.setPermissions | quote }}
+            {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
             - name: BITBUCKET_SHARED_HOME
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            {{- end }}
             {{ with .Values.bitbucket.license.secretName }}
             - name: SETUP_LICENSE
               valueFrom:
@@ -139,6 +154,12 @@ spec:
                   name: {{ . }}
                   key: {{ $.Values.bitbucket.license.secretKey }}
             {{ end }}
+            {{- with .Values.bitbucket.mirror.upstreamUrl }}
+            - name: PLUGIN_MIRRORING_UPSTREAM_URL
+              value: {{ . | quote }}
+            - name: PLUGIN_MIRRORING_UPSTREAM_TYPE
+              value: "server"
+            {{- end }}
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
@@ -154,6 +175,8 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: {{ include "bitbucket.fullname" . }}-jvm-config
+            - name: APPLICATION_MODE
+              value: {{ .Values.bitbucket.applicationMode | default "default" | quote }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
             preStop:

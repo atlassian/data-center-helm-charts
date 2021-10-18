@@ -28,7 +28,7 @@ metadata:
   name: tcp-services
   namespace: ingress-nginx
 data:
-  7999: "ssh-test/bitbucket:ssh"
+  7999: "<bitbucket namespace>/<bitbucket helm release name>:ssh"
 ```
 
 ### 2. Update Ingress deployment

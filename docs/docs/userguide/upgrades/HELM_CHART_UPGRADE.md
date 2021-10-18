@@ -127,7 +127,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         Replace the product name in the following command:
         ```shell
         helm upgrade <release-name> atlassian-data-center/<product> \
-         --version <target-helm-chart-version>> \
+         --version <target-helm-chart-version> \
          --reuse-values \
          --replicaCount=1 \
          --wait \
@@ -182,7 +182,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         
             ```shell
             helm upgrade <release-name> atlassian-data-center/jira \
-             --version <target-helm-chart-version>> \
+             --version <target-helm-chart-version> \
              --reuse-values \
              --wait \
              --namespace <namespace>
@@ -207,7 +207,7 @@ will only apply when the target product version is zero-downtime compatible. If 
          2. Run the upgrade using Helm. 
              ```shell
              helm upgrade <release-name> atlassian-data-center/confluence \
-                 --version <target-helm-chart-version>> \
+                 --version <target-helm-chart-version> \
                  --reuse-values \
                  --wait \
                  --namespace <namespace>
@@ -234,7 +234,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         
             ```shell
             helm upgrade <release-name> atlassian-data-center/bitbucket \
-             --version <target-helm-chart-version>> \
+             --version <target-helm-chart-version> \
              --reuse-values \
              --wait \
              --namespace <namespace>
