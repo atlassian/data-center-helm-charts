@@ -237,15 +237,6 @@ install_product() {
      "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
-install_product() {
-  echo "Task $((tasknum+=1)) - Installing product helm chart." >&2
-  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
-     "$PRODUCT_RELEASE_NAME" \
-     $HELM_DEBUG_OPTION \
-     ${valueOverrides} \
-     "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
-}
-
 install_product_agent() {
   # Deploy any product support agent. Currently just Bamboo, but this
   # is where Bitbucket GitAgents would probably go.
