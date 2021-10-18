@@ -108,6 +108,7 @@ will only apply when the target product version is zero-downtime compatible. If 
     ### Helm chart upgrade with downtime
      
     You need to use this method to upgrade the Helm chart if:
+    
     * the target product version is not zero downtime-compatible
     * for any other reason you would prefer to avoid running the cluster in mix mode
     
@@ -129,7 +130,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         helm upgrade <release-name> atlassian-data-center/<product> \
          --version <target-helm-chart-version> \
          --reuse-values \
-         --replicaCount=1 \
+         --set replicaCount=1 \
          --wait \
          --namespace <namespace>
         ```
@@ -142,7 +143,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         ```shell
         helm upgrade <release-name> atlassian-data-center/confluence \
          --reuse-values \
-         --replicaCount=<n> \
+         --set replicaCount=<n> \
          --wait \
          --namespace <namespace>
         ``` 

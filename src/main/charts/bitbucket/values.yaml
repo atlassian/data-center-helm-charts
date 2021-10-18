@@ -634,6 +634,12 @@ bitbucket:
     #
     command: "/shutdown-wait.sh"
 
+  # -- Pod management strategy. Bitbucket can start and destroy multiple nodes in the
+  # same time therefore it can utilize the "Parallel" option.
+  # To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  #
+  podManagementStrategy: Parallel
+
   # Pod resource requests
   #
   resources:

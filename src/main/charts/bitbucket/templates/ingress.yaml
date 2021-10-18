@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "bitbucket.labels" . | nindent 4 }}
   annotations:
-    "kubernetes.io/ingress.class": {{ .Values.ingress.className }}
+    "kubernetes.io/ingress.class": {{ default "nginx" .Values.ingress.className }}
   {{ if .Values.ingress.nginx }}
     "nginx.ingress.kubernetes.io/affinity": "cookie"
     "nginx.ingress.kubernetes.io/affinity-mode": "persistent"

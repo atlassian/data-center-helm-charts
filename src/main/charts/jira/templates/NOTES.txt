@@ -13,7 +13,7 @@ To see the custom values you used for this release:
 
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
-{{ if .Values.ingress.create -}}
+{{- if .Values.ingress.create -}}
 {{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ include "jira.ingressPath" . }}
 {{- else }}
 Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
@@ -38,18 +38,26 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
     http://localhost:{{ .Values.jira.ports.http }}
 {{- end }}
 {{- end }}
+{{- if not ( or .Values.volumes.localHome.persistentVolumeClaim.create .Values.volumes.localHome.customVolume ) }}
 
-{{ if not ( or .Values.volumes.localHome.persistentVolumeClaim.create .Values.volumes.localHome.customVolume ) }}
 #################################################################################
 ######      WARNING: Persistent volume is not used for Local Home!!!        #####
 ######            Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
-{{ if not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume ) }}
+{{- if not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume ) }}
+
 #################################################################################
 ######      WARNING: Persistent volume is not used for Shared Home!!!       #####
 ######            Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
+{{- if ( or .Values.jira.securityContext.enabled .Values.jira.securityContext.gid ) }}
+
+#################################################################################
+######         DEPRECATION WARNING: jira.securityContext deprecation        #####
+######       Update your values to the new jira.securityContext format      #####
+#################################################################################
+{{- end}}
 
 For further documentation, see https://atlassian.github.io/data-center-helm-charts/

@@ -94,15 +94,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
 {{- define "sharedHome.permissionFix.command" -}}
-{{- if .Values.volumes.sharedHome.nfsPermissionFixer.command }}
-{{ .Values.volumes.sharedHome.nfsPermissionFixer.command }}
-{{- else }}
-{{- $securityContext := .Values.bamboo.securityContext | default dict}}
-{{- if $securityContext.fsGroup }}
-{{- printf "(chgrp %v %s; chmod g+w %s)" .Values.bamboo.securityContext.fsGroup .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
-{{- else }}
-{{- printf "(chgrp 2005 %s; chmod g+w %s)" .Values.volumes.sharedHome.nfsPermissionFixer.mountPath .Values.volumes.sharedHome.nfsPermissionFixer.mountPath }}
-{{- end }}
+{{- $securityContext := .Values.bamboo.securityContext }}
+{{- with .Values.volumes.sharedHome.nfsPermissionFixer }}
+    {{- if .command }}
+        {{ .command }}
+    {{- else }}
+        {{- $gid := default $securityContext.fsGroup 2005 }}
+        {{- printf "(chgrp %v %s; chmod g+w %s)" $gid .mountPath .mountPath }}
+    {{- end }}
 {{- end }}
 {{- end }}
 

@@ -1,4 +1,6 @@
-{{/*This describes a k8s StatefulSet for deploying Bitbucket for testing*/}}
+{{/* This describes a k8s StatefulSet for deploying Bitbucket for testing */}}
+{{/* the default can be removed in v2.0.0 */}}
+{{- $mirror := default dict .Values.bitbucket.mirror }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -11,7 +13,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       partition: 0
-  podManagementPolicy: Parallel
+  podManagementPolicy: {{ default "OrderedReady" .Values.bitbucket.podManagementStrategy }}
   serviceName: {{ include "bitbucket.fullname" . }}
   selector:
     matchLabels:
@@ -33,10 +35,14 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
+        {{/* this condition is to be removed in v2.0.0 */}}
+        {{- if and .enabled .gid }}
+        fsGroup: {{ .gid }}
+        {{- else }}
         {{ toYaml . | nindent 8 }}
-        {{- $securityContext := . | default dict}}
-        {{- if not $securityContext.fsGroup }}
+        {{- if not .fsGroup }}
         fsGroup: 2003
+        {{- end }}
         {{- end }}
       {{- end }}
       initContainers:
@@ -150,7 +156,7 @@ spec:
                   name: {{ . }}
                   key: {{ $.Values.bitbucket.license.secretKey }}
             {{ end }}
-            {{- with .Values.bitbucket.mirror.upstreamUrl }}
+            {{- with $mirror.upstreamUrl }}
             - name: PLUGIN_MIRRORING_UPSTREAM_URL
               value: {{ . | quote }}
             - name: PLUGIN_MIRRORING_UPSTREAM_TYPE

@@ -28,8 +28,7 @@ spec:
       {{- with .Values.bamboo.securityContext }}
       securityContext:
         {{ toYaml . | nindent 8 }}
-        {{- $securityContext := . | default dict}}
-        {{- if not $securityContext.fsGroup }}
+        {{- if not .fsGroup }}
         fsGroup: 2005
         {{- end }}
       {{- end }}
