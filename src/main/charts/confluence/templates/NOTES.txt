@@ -62,8 +62,8 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- if ( or .Values.confluence.securityContext.enabled .Values.confluence.securityContext.gid ) }}
 
 #################################################################################
-######      DEPRECATION WARNING: confluence.securityContext deprecation      #####
-######    Update your values to the new confluence.securityContext format    #####
+#####      DEPRECATION WARNING: confluence.securityContext deprecation      #####
+#####    Update your values to the new confluence.securityContext format    #####
 #################################################################################
 {{- end}}
 
