@@ -131,7 +131,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         helm upgrade <release-name> atlassian-data-center/<product> \
          --version <target-helm-chart-version> \
          --reuse-values \
-         --replicaCount=1 \
+         --set replicaCount=1 \
          --wait \
          --namespace <namespace>
         ```
@@ -144,7 +144,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         ```shell
         helm upgrade <release-name> atlassian-data-center/confluence \
          --reuse-values \
-         --replicaCount=<n> \
+         --set replicaCount=<n> \
          --wait \
          --namespace <namespace>
         ``` 

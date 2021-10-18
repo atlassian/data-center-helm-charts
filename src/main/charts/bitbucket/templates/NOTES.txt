@@ -46,12 +46,20 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 #################################################################################
 {{- end }}
 {{/* Mirrors don't need a shared home - only show warning if clustering is enabled and no shared home volume is created */}}
-{{- if and (not (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume)) (and .Values.bitbucket.clustering.enabled (eq .Values.bitbucket.applicationMode "default")) }}
+{{/* the default can be removed in v2.0.0 */}}
+{{- if and ( not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume)) ( and .Values.bitbucket.clustering.enabled ( eq (default "" .Values.bitbucket.applicationMode) "default")) }}
 
 #################################################################################
 #####  WARNING: Clustering is enabled but Shared Home is not configured!!!  #####
 #####            Nodes will not be able to form a cluster.                  #####
 #################################################################################
 {{- end }}
+{{- if ( or .Values.bitbucket.securityContext.enabled .Values.bitbucket.securityContext.gid ) }}
+
+#################################################################################
+######     DEPRECATION WARNING: bitbucket.securityContext deprecation       #####
+######   Update your values to the new bitbucket.securityContext format     #####
+#################################################################################
+{{- end}}
 
 For further documentation, see https://atlassian.github.io/data-center-helm-charts/

@@ -27,10 +27,14 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.crowd.securityContext }}
       securityContext:
+        {{/* this condition is to be removed in v2.0.0 */}}
+        {{- if and .enabled .gid }}
+        fsGroup: {{ .gid }}
+        {{- else }}
         {{ toYaml . | nindent 8 }}
-        {{- $securityContext := . | default dict}}
-        {{- if not $securityContext.fsGroup }}
+        {{- if not .fsGroup }}
         fsGroup: 2004
+        {{- end }}
         {{- end }}
       {{- end }}
       initContainers:

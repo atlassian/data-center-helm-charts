@@ -62,6 +62,7 @@ setup() {
   THISDIR=$(dirname "$0")
   RELEASE_PREFIX="$(echo "${RELEASE_PREFIX}" | tr '[:upper:]' '[:lower:]')"
   PRODUCT_RELEASE_NAME="$RELEASE_PREFIX-$PRODUCT_NAME"
+  PRODUCT_AGENT_RELEASE_NAME="$PRODUCT_RELEASE_NAME-agent"
   POSTGRES_RELEASE_NAME="$PRODUCT_RELEASE_NAME-pgsql"
   ELASTICSEARCH_RELEASE_NAME="$PRODUCT_RELEASE_NAME-elasticsearch"
   FUNCTEST_RELEASE_NAME="$PRODUCT_RELEASE_NAME-functest"
@@ -236,6 +237,27 @@ install_product() {
      "$HELM_PACKAGE_DIR/${PRODUCT_NAME}"-*.tgz >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
+install_product_agent() {
+  # Deploy any product support agent. Currently just Bamboo, but this
+  # is where Bitbucket GitAgents would probably go.
+  if [[ -z "$PRODUCT_AGENT_CHART" || ! -e $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/values-agent.yaml ]]; then
+      echo "No product agent defined, skipping provisioning"
+      return
+  fi
+
+  agentValueFiles=''
+  for file in $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/{values-agent.yaml,values-${CLUSTER_TYPE}.yaml}; do
+    agentValueFiles+="--values $file "
+  done
+
+  echo "Task $((tasknum+=1)) - Installing product agent helm chart." >&2
+  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
+       "$PRODUCT_AGENT_RELEASE_NAME" \
+       $HELM_DEBUG_OPTION \
+       ${agentValueFiles} \
+       "$PRODUCT_AGENT_CHART" >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+}
+
 # Install the functest Helm chart
 install_functional_tests() {
   echo "Task $((tasknum+=1)) - Installing functional tests." >&2
@@ -289,6 +311,7 @@ bootstrap_elasticsearch
 package_product_helm_chart
 package_functest_helm_chart
 install_product
+install_product_agent
 install_functional_tests
 wait_for_ingress
 run_tests

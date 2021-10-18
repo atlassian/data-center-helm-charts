@@ -73,7 +73,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
      ```shell
      helm upgrade <release-name> atlassian-data-center/confluence \
          --reuse-values \
-         --replicaCount=<n> \
+         --set replicaCount=<n> \
          --wait \
          --namespace <namespace>
      ``` 

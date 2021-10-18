@@ -27,10 +27,14 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.jira.securityContext }}
       securityContext:
+        {{/* this condition is to be removed in v2.0.0 */}}
+        {{- if and .enabled .gid }}
+        fsGroup: {{ .gid }}
+        {{- else }}
         {{ toYaml . | nindent 8 }}
-        {{- $securityContext := . | default dict}}
-        {{- if not $securityContext.fsGroup }}
+        {{- if not .fsGroup }}
         fsGroup: 2001
+        {{- end }}
         {{- end }}
       {{- end }}
       initContainers:

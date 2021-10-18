@@ -12,14 +12,15 @@ is advisable to wait for the tests to pass before continuing.
 To see the custom values you used for this release:
 
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
-  
-{{ if not .Values.agent.securityToken -}}
+{{- if not .Values.agent.securityToken -}}
+
 #################################################################################
 ######      WARNING: Security token not provided for authentication!!!      #####
 ######      Agents will not be able to authenticate with Bamboo server.     #####
 #################################################################################
 {{- end }}
-{{ if not .Values.agent.server -}}
+{{- if not .Values.agent.server -}}
+
 #################################################################################
 ######           WARNING: Bamboo Server URL not provided!!!                 #####
 ######      Agents will not be able to connect to the Bamboo server.        #####

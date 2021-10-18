@@ -47,6 +47,7 @@ getServices() {
 }
 
 getPodLogs "$PRODUCT_RELEASE_NAME"
+getPodLogs "$PRODUCT_RELEASE_NAME-agent"
 getPodLogs "$PRODUCT_RELEASE_NAME-nfs"
 getPodLogs "$PRODUCT_RELEASE_NAME-pgsql"
 
