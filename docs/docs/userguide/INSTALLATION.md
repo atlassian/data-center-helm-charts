@@ -207,6 +207,17 @@ helm test <release-name> --logs --namespace <namespace>
 
 Using the service URL provided by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
 
+## 11. Additional deployments
+
+Bitbucket mirrors and Bamboo agents can also be deployed via their dedicated charts:
+
+=== "Bitbucket mirror"
+    ### Bitbucket mirror installation
+
+=== "Bamboo agent"
+    ### Bamboo agent installation
+
+
 # Uninstall
 The deployment and all of its associated resources can be un-installed with the following command:
 ```shell
