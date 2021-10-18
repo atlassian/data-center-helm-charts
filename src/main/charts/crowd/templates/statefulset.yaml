@@ -27,8 +27,8 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.crowd.securityContext }}
       securityContext:
+        {{- /* this condition is to be removed in v2.0.0 */ }}
         {{- if and .enabled .gid }}
-        # for backward compatability with 1.0.0
         fsGroup: {{ .gid }}
         {{- else }}
         {{ toYaml . | nindent 8 }}
