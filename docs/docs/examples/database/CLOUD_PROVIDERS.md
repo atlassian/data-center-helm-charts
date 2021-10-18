@@ -16,6 +16,10 @@
           
         [Bitbucket supported databases](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-databasesDatabases){.external}
 
+    === "Bamboo"
+
+        [Supported databases](https://confluence.atlassian.com/bamboo/supported-platforms-289276764.html#Supportedplatforms-Databases){.external}
+
     === "Crowd"
           
         [Crowd supported databases](https://confluence.atlassian.com/crowd/supported-platforms-191851.html#SupportedPlatforms-Databases){.external}

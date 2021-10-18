@@ -51,6 +51,8 @@ Before installing the Data Center Helm charts you need to set up your environmen
       [Supported databases](https://confluence.atlassian.com/doc/supported-platforms-207488198.html#SupportedPlatforms-Databases){.external}
 === "Bitbucket"
       [Supported databases](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-databasesDatabases){.external}
+=== "Bamboo"
+      [Supported databases](https://confluence.atlassian.com/bamboo/supported-platforms-289276764.html#Supportedplatforms-Databases){.external}
 === "Crowd"
       [Supported databases](https://confluence.atlassian.com/crowd/supported-platforms-191851.html#SupportedPlatforms-Databases){.external}
 

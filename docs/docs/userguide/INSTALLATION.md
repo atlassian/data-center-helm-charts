@@ -113,13 +113,13 @@ volumes:
 
 By default, the Helm charts will not configure the products for Data Center clustering. You can enable clustering in the `values.yaml` file:
 
-!!!info "Bamboo clustering"
-    Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#bamboo-and-clustering) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
-
 ```yaml
   clustering:
     enabled: true
 ```
+
+!!!warning "Bamboo clustering"
+    Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#bamboo-and-clustering) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
 
   
 ## 7. Configure license 
@@ -170,23 +170,11 @@ helm install <release-name> \
 
 !!!note "Values & flags"
 * `<release-name>` the name of your deployment. You can also use `--generate-name`.
-* `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket`, or `crowd`.
+* `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket`, `bamboo` or `crowd`.
 * `<namespace>` optional flag for categorizing installed resources.
 * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
 * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
 * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
-
-???tip "Installing Bamboo agents" 
-
-    If you want to run remote agents with your Bamboo server deployment they can be provisioned using their dedicated chart: 
-
-    ```shell
-    helm install <release-name> \
-                 atlassian-data-center/bamboo-agent \
-                 --namespace <namespace> \
-                 --version <chart-version> \
-                 --values values.yaml
-    ```
     
 !!!info "Elasticsearch for Bitbucket"
     We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/bitbucket/BITBUCKET_ELASTICSEARCH.md).    
@@ -209,14 +197,15 @@ Using the service URL provided by Helm post install, open your product in a web 
 
 ## 11. Additional deployments
 
-Bitbucket mirrors and Bamboo agents can also be deployed via their dedicated charts:
-
-=== "Bitbucket mirror"
-    ### Bitbucket mirror installation
+Bamboo agents and Bitbucket mirrors can also be deployed via their dedicated charts:
 
 === "Bamboo agent"
-    ### Bamboo agent installation
+    !!!info "Bamboo agent installation"
+        [Instructions for deploying Bamboo agent's](../examples/bamboo/REMOTE_AGENTS.md)
 
+=== "Bitbucket mirror"
+    !!!info "Bitbucket mirror installation"
+        [Instructions for deploying Bitbucket mirror's](../examples/bitbucket/BITBUCKET_MIRRORS.md)
 
 # Uninstall
 The deployment and all of its associated resources can be un-installed with the following command:

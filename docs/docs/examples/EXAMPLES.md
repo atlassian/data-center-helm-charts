@@ -31,6 +31,11 @@ See examples of provisioning Kubernetes clusters on cloud-based providers:
 
     * See an example of [standing up an NFS server for Bitbucket](storage/nfs/NFS.md)
 
+## Bamboo
+
+### :material-face-agent: Remote agents
+* See an example of deploying a [remote agent for Bamboo](bamboo/REMOTE_AGENTS.md)
+
 ## Bitbucket
 
 ### :material-file-search-outline: Elasticsearch
