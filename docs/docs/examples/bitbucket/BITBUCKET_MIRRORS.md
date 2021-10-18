@@ -32,7 +32,7 @@ You can learn more details about smart mirroring on the [official documentation 
 ### Overview
 
 1. Install the **primary** as usual with Bitbucket Helm chart.
-      * You need to make sure the instance comply with all the above listed requirements.
+      * You need to make sure the instance complies with all the above listed requirements.
 2. Install the **mirror** with second Bitbucket Helm chart.
       * There is a set of properties that need to be configured to make the mirror work.
 3. Approve the **mirror** in the **primary** instance.
@@ -46,9 +46,9 @@ You can learn more details about smart mirroring on the [official documentation 
     Example is using [nginx-ingress controller](../ingress/INGRESS_NGINX.md). If you are using a different ingress controller, you will need to modify the example.
 
 1. Install the **primary** as usual with Bitbucket Helm chart.
-      * You need to make sure the instance comply with all the above listed requirements.
+      * You need to make sure the instance complies with all the above listed requirements.
       * Verify that you are able to clone from the primary via SSH protocol.
-      * Verify that primary instance is accessible over https with valid certificate.
+      * Verify that primary instance is accessible over HTTPS with a valid SSL certificate.
 2. Create a new file `values-mirror.yaml` with the following content:
 ``` yaml
 bitbucket:
@@ -87,22 +87,21 @@ volumes:
 
 These steps are described in detail in [official documentation](https://confluence.atlassian.com/bitbucketserver/set-up-and-configure-a-mirror-farm-978205589.html#Setupandconfigureamirrorfarm-4.Approvethemirrorfarmrequest).
 
-5. Visit the mirror URL (it might take couple of minutes to come up)
-6. Click on *Authorize* in the mirror UI
-    * The link will take you to the administration section of the primary instance
-    * ![mirror_setup](../../assets/images/bitbucket_mirrors/mirror_authorize.png){ width="400" }
-7. Click *Authorize* next to the mirror
+1. Visit the mirror URL (it might take a couple of minutes to come up)
+2. Click on *Go to the primary server* in the mirror UI. The link will take you to the administration section of the primary instance.<br />
+   ![mirror_setup](../../assets/images/bitbucket_mirrors/mirror_authorize.png){ width="400" }
+3. Click *Authorize* next to the mirror<br />
     ![click_authorize](../../assets/images/bitbucket_mirrors/upstream_authorize.png)
-8. Select which projects should be synchronized
+4. Select which projects should be synchronized<br />
     ![select_projects](../../assets/images/bitbucket_mirrors/select_projects_to_mirror.png)
-9.  Wait for the projects to be synchronized
+5. Wait for the projects to be synchronized<br />
     ![project_synchronized](../../assets/images/bitbucket_mirrors/mirror_synchronized.png)
-10. Verify that the synchronized projects can be cloned from the mirror
-    ![clone_from_mirror](../../assets/images/bitbucket_mirrors/clone_from_mirror.png){ width="300"}
+6. Verify that the synchronized projects can be cloned from the mirror<br />
+    ![clone_from_mirror](../../assets/images/bitbucket_mirrors/clone_from_mirror.png){ width="400"}
 
 ## Scaling the mirror farm
 
-As the mirror is deployed with all the fulfiled requirements for the Bitbucket Mirror Farm, you are able to scale the mirrors easily. To increase or decrease the size of the mirror farm:
+As the mirror is deployed with all the fulfilled requirements for the Bitbucket Mirror Farm, you are able to scale the mirrors easily. To increase or decrease the size of the mirror farm:
 
 ``` shell
 helm upgrade --set replicaCount=<desired number of mirror nodes> \
