@@ -27,7 +27,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.confluence.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.confluence.securityContext }}
       securityContext:
-        {{- /* this condition is to be removed in v2.0.0 */ }}
+        {{/* this condition will be removed in v2.0.0 */}}
         {{- if and .enabled .gid }}
         fsGroup: {{ .gid }}
         {{- else }}

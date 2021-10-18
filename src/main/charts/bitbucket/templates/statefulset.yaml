@@ -1,5 +1,5 @@
-{{- /* This describes a k8s StatefulSet for deploying Bitbucket for testing */ }}
-{{- /* the default can be removed in v2.0.0 */ }}
+{{/* This describes a k8s StatefulSet for deploying Bitbucket for testing */}}
+{{/* the default can be removed in v2.0.0 */}}
 {{- $mirror := default dict .Values.bitbucket.mirror }}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -35,7 +35,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
-        {{- /* this condition is to be removed in v2.0.0 */ }}
+        {{/* this condition is to be removed in v2.0.0 */}}
         {{- if and .enabled .gid }}
         fsGroup: {{ .gid }}
         {{- else }}

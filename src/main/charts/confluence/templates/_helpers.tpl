@@ -185,13 +185,12 @@ The command that should be run by the nfs-fixer init container to correct the pe
     {{- if .command }}
         {{ .command }}
     {{- else }}
-        {{- /* this condition is to be removed in v2.0.0 */ }}
         {{- if and $securityContext.gid $securityContext.enabled }}
             {{- printf "(chgrp %v %s; chmod g+w %s)" $securityContext.gid .mountPath .mountPath }}
         {{- else if $securityContext.fsGroup }}
-            {{- printf "(chgrp %d %s; chmod g+w %s)" $securityContext.fsGroup .mountPath .mountPath }}
+            {{- printf "(chgrp %v %s; chmod g+w %s)" $securityContext.fsGroup .mountPath .mountPath }}
         {{- else }}
-            {{- printf "(chgrp 2002 %s; chmod g+w %s)" .mountPath .mountPath }}
+            {{- printf "(chgrp 2001 %s; chmod g+w %s)" .mountPath .mountPath }}
         {{- end }}
     {{- end }}
 {{- end }}

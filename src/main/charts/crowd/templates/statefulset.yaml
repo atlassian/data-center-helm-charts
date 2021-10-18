@@ -27,7 +27,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
       {{- with .Values.crowd.securityContext }}
       securityContext:
-        {{- /* this condition is to be removed in v2.0.0 */ }}
+        {{/* this condition is to be removed in v2.0.0 */}}
         {{- if and .enabled .gid }}
         fsGroup: {{ .gid }}
         {{- else }}

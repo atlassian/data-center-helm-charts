@@ -45,8 +45,8 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 #####             Data will be lost when the pod is terminated.             #####
 #################################################################################
 {{- end }}
-{{- /* Mirrors don't need a shared home - only show warning if clustering is enabled and no shared home volume is created */ }}
-{{- /* the default can be removed in v2.0.0 */ }}
+{{/* Mirrors don't need a shared home - only show warning if clustering is enabled and no shared home volume is created */}}
+{{/* the default can be removed in v2.0.0 */}}
 {{- if and ( not ( or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume)) ( and .Values.bitbucket.clustering.enabled ( eq (default "" .Values.bitbucket.applicationMode) "default")) }}
 
 #################################################################################
