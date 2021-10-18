@@ -18,11 +18,11 @@ This custom image can then be deployed, by first updating the Bamboo agent `valu
 image:
   repository: hoolicorp/bamboo-agent-base
   pullPolicy: IfNotPresent
-  tag: "agent-with-ruby-support"
+  tag: "ruby-agent"
 ```
 
 The custom agent can then be deployed via Helm:
 
 ```shell
-helm install bamboo-agent atlassian-data-center/bamboo-agent -f agent-with-ruby-support.yaml
+helm install ruby-agent atlassian-data-center/bamboo-agent -f ruby-agent.yaml
 ```
