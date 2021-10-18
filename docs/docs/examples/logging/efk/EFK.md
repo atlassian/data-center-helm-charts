@@ -70,7 +70,7 @@ Fluentd tries to parse and send the data to Elasticsearch, but since it's not in
 With the same version that was used for installing [Elasticsearch](../../elasticsearch/BITBUCKET_ELASTICSEARCH.md), use the `imageTag` property to install Kibana:
 
 ```shell
-helm install kibana --namespace <product_namespace> --set imageTag="7.9.3" elastic/kibana
+helm install kibana --namespace <namespace> --set imageTag="7.9.3" elastic/kibana
 ```
 
 Make sure kibana is running by checking the deployment
