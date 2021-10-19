@@ -209,7 +209,7 @@ Bamboo agents and Bitbucket mirrors can also be deployed via their dedicated cha
 
 === "Bamboo agent"
     !!!info "Bamboo agent installation"
-        [Instructions for deploying Bamboo agent's](../examples/bamboo/REMOTE_AGENTS.md)
+        [Instructions for deploying Bamboo agents](../examples/bamboo/REMOTE_AGENTS.md)
 
 === "Bitbucket mirror"
     !!!info "Bitbucket mirror installation"

@@ -33,7 +33,7 @@ See examples of provisioning Kubernetes clusters on cloud-based providers:
 
 ## Bamboo
 
-### :material-face-agent: Remote agents
+### :material-lan-pending: Remote agents
 * See an example of deploying a [remote agent for Bamboo](bamboo/REMOTE_AGENTS.md)
 
 ## Bitbucket

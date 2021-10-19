@@ -9,11 +9,8 @@ You can learn more details about remote agents on the [official documentation pa
 !!!warning "Bamboo server prerequisites"
 
     * Your Bamboo server instance must be a fully licensed Bamboo Data Center instance
-
     * The bamboo server instance must be fully configured
-
-    * The Bamboo server instance must have `security token verification` **enabled** 
-
+    * The Bamboo server instance must have `security token verification` **enabled**
     * The Bamboo server instance must have `remote agent authentication` **disabled**
 
 ## Installation
