@@ -1,10 +1,10 @@
 # Limitations 
 
 ## Product limitations
-We haven't changed our Data Center applications' architecture to support Kubernetes. So, as is with all our Data Center products, the following limitiations still exist:
+We haven't changed our Data Center applications' architecture to support Kubernetes. So, as is with all our Data Center products, the following limitations still exist:
 
 * We don't support horizontal or vertical autoscaling in our products. Read about [Product scaling](../userguide/resource_management/RESOURCE_SCALING.md).
-* More pods doesn’t mean that the application will be more performant.
+* More pods doesn't mean that the application will be more performant.
 * We still have session affinity, so you will need to have a network setup that supports that. 
 
 ## Jira and horizontal scaling
@@ -20,10 +20,10 @@ At present there are issues relating to index replication with Jira when immedia
 Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../../userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
 
 ## Bamboo limitations and clustering
-There are a number of know limitations relating to Bamboo Data Center, these are documented below.
+There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
 ### Cluster size
-At present Bamboo Data Center utilizes an `active-passive` clustering model. Where K8s deployments are concerned this architecture is not ideal. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
+At present Bamboo Data Center utilizes an `active-passive` clustering model. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
 
 !!!info "Bamboo DC and `active-active`"
     Work is currently underway to align Bamboo DC so that it too uses an `active-active` model like the other DC products.
@@ -35,11 +35,11 @@ The Bamboo server and bamboo agents must be deployed to the same cluster. You ca
 When configuring application link between Bamboo and any Atlassian Cloud server product, Bamboo Base URL needs to be used even if bamboo is behind a firewall and not direct accessible from outside. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
 
 ## Platform limitations
-These configurations are explicitly not supported and the Helm charts don’t work without modifications in these environments:
+These configurations are explicitly not supported, and the Helm charts don’t work without modifications in these environments:
 
 
 * [Istio infrastructure](https://istio.io/latest/docs/ops/deployment/architecture/){.external}
-    * Due to several reasons, Istio is imposing networking rules on every workload in the Kubernetes cluster that doesn’t work with our deployments.
+    * Due to several reasons, Istio is imposing networking rules on every workload in the Kubernetes cluster that doesn't work with our deployments.
     * The current recommendation is to create an exemption for our workloads if Istio is enabled in the cluster by default.
 * Air-tight network (no outgoing requests)
     * Some of our components are installed from publicly available repositories. When they can't reach the internet, they won’t work.
