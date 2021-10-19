@@ -29,10 +29,7 @@ Although these issues are Jira specific, they are exasperated on account of the 
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
 ### Cluster size
-At present Bamboo Data Center utilizes an `active-passive` clustering model. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
-
-!!!info "Bamboo DC and `active-active`"
-    Work is currently underway to align Bamboo DC so that it too uses an `active-active` model like the other DC products.
+At present Bamboo Data Center utilizes an [active-passive clustering model](https://confluence.atlassian.com/bamboo/clustering-with-bamboo-data-center-1063170551.html){.external}. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
 
 ### Server and agent affinity
 The Bamboo server and Bamboo agents must be deployed to the same cluster. You cannot have Bamboo agents in one cluster communicating with a Bamboo server in another.
