@@ -24,9 +24,9 @@
 # Note that Bamboo requires manual configuration via the browser post deployment 
 # after the first pod is deployed. 
 #
-# At present Bamboo Data Center utilizes an active-passive clustering model. 
-# Where K8s deployments are concerned this architecture is not ideal. As such 
-# a Bamboo server cluster comprising only 1 pod is the recommended topology 
+# At present Bamboo Data Center utilizes an `active-passive` clustering model. 
+# This architecture is not ideal where K8s deployments are concerned. As such 
+# a Bamboo server cluster comprising only `1` pod is the recommended topology 
 # for now. For more detail see:
 # https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS#cluster-size
 #
