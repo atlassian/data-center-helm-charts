@@ -298,7 +298,7 @@ volumes:
     # this property can be used to define a custom volume that will be used for shared-home
     # If not defined, then an 'emptyDir' volume is utilised.
     #
-    # Having manually provisioned a 'PersistentVolume' with corresponding 'PresistentVolumeClaim'
+    # Having manually provisioned a 'PersistentVolume' with corresponding 'PersistentVolumeClaim'
     # specify the bound claim name below
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#static
     # https://atlassian.github.io/data-center-helm-charts/examples/storage/aws/SHARED_STORAGE/
@@ -360,7 +360,7 @@ ingress:
 
   # -- The class name used by the ingress controller if it's being used.
   #
-  # Please follow documenation of your ingress controller. If the cluster 
+  # Please follow documentation of your ingress controller. If the cluster
   # contains multiple ingress controllers, this setting allows you to control
   # which of them is used for Atlassian application traffic.
   #
@@ -390,7 +390,7 @@ ingress:
   
   # -- The base path for the Ingress Resource. For example '/bitbucket'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
-  # 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextpath'.
+  # 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextPath'.
   #
   path:
   
@@ -634,7 +634,7 @@ bitbucket:
     #
     command: "/shutdown-wait.sh"
 
-  # -- Pod management strategy. Bitbucket can start and destroy multiple nodes in the
+  # -- Pod management strategy. Bitbucket can start and destroy multiple nodes at the
   # same time therefore it can utilize the "Parallel" option.
   # To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   #
