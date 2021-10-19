@@ -29,10 +29,10 @@ At present Bamboo Data Center utilizes an `active-passive` clustering model. Thi
     Work is currently underway to align Bamboo DC so that it too uses an `active-active` model like the other DC products.
 
 ### Server and agent affinity
-The Bamboo server and bamboo agents must be deployed to the same cluster. You cannot have bamboo agents in one cluster communicating with a Bamboo server in another.
+The Bamboo server and Bamboo agents must be deployed to the same cluster. You cannot have Bamboo agents in one cluster communicating with a Bamboo server in another.
 
 ### Bamboo to Cloud App Link
-When configuring application link between Bamboo and any Atlassian Cloud server product, Bamboo Base URL needs to be used even if bamboo is behind a firewall and not direct accessible from outside. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
+When configuring application links between Bamboo server and any Atlassian Cloud server product, the Bamboo server base URL needs to be used. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
 
 ## Platform limitations
 These configurations are explicitly not supported, and the Helm charts don’t work without modifications in these environments:
