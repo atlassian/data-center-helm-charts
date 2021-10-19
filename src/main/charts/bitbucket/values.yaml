@@ -591,8 +591,9 @@ bitbucket:
   # 
   elasticSearch:
   
-    # -- The base URL of the external Elasticsearch instance to be used. If this is defined,
-    # then Bitbucket will disable its internal Elasticsearch instance.
+    # -- The base URL of the external Elasticsearch instance to be used, for example:
+    # http://elasticsearch-master.<namespace>.svc.cluster.local:9200
+    # If this is defined, then Bitbucket will disable its internal Elasticsearch instance.
     #
     baseUrl:
     

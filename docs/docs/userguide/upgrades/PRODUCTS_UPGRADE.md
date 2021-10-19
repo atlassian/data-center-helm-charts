@@ -13,6 +13,8 @@ Go to the Atlassian Docker Hub page of the relevant product to pick a tag that m
     * Jira: [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software/tags){.external}
     * Confluence: [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/tags){.external}
     * Bitbucket: [atlassian/bitbucket-server](https://hub.docker.com/r/atlassian/bitbucket-server/tags){.external}
+    * Bamboo: [atlassian/bamboo](https://hub.docker.com/r/atlassian/bamboo/tags){.external}
+    * Bamboo agent: [atlassian/bamboo-agent-base](https://hub.docker.com/r/atlassian/bamboo-agent-base/tags){.external}
 
 In the example you're running Jira using the `8.13.0-jdk11` tag, and you'll be upgrading to `8.13.1-jdk11` - our *target*.
     
@@ -30,6 +32,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
      * Jira: [Upgrading Jira with zero downtime](https://confluence.atlassian.com/adminjiraserver/upgrading-jira-data-center-with-zero-downtime-938846953.html){.external} 
      * Confluence: [Upgrading Confluence with zero downtime](https://confluence.atlassian.com/doc/upgrade-confluence-without-downtime-1027127923.html){.external} 
      * Bitbucket: [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
+     * Bamboo: Zero downtime upgrades for Bamboo server and Bamboo agents are currently not supported.
 
 ## 3. Upgrade the product 
 === "Normal Upgrade"
@@ -226,4 +229,10 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
         After all the pods are active with the new version, finalize the upgrade:
         
         ![upgrade-mode](../../assets/images/bitbucket-upgrade-3.png)
+
+    === "Bamboo"
+
+        !!!warning "Bamboo and zero downtime upgrades"
+            Zero downtime upgrades for Bamboo server and Bamboo agents are currently not supported.
+        
         

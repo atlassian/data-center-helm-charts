@@ -5,6 +5,7 @@ nav:
     - database
     - ingress
     - storage
+    - bamboo
     - bitbucket
     - logging
     - ...

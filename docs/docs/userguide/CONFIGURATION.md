@@ -169,6 +169,10 @@ on the JDBC driver being used, but some examples are:
     
         [Connect Bitbucket to an external database](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html){.external}
 
+    === "Bamboo"
+
+        [Connect Bamboo to an external database](https://confluence.atlassian.com/bamboo/connecting-bamboo-to-an-external-database-289276815.html){.external}
+
     === "Crowd"
 
         [Connect Crowd to an external database](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
@@ -176,7 +180,7 @@ on the JDBC driver being used, but some examples are:
 
 ### `database.driver`
 
-Jira and Bitbucket require the JDBC driver class to be specified (Confluence will 
+Jira and Bitbucket require the JDBC driver class to be specified (Confluence and Bamboo will 
 autoselect this based on the `database.type` value, see below). The JDBC driver must 
 correspond to the JDBC URL used; see the table above for example driver classes.
 
@@ -189,15 +193,15 @@ on the license conditions of those drivers.
 
 ### `database.type`
 
-Jira and Confluence both require this value to be specified, this declares the
+Jira, Confluence and Bamboo all require this value to be specified, this declares the
 database engine to be used. The acceptable values for this include:
 
-| Vendor | Jira | Confluence  |
-|---|---|---|
-| PostgreSQL | `postgres72` | `postgresql` |
-| MySQL | `mysql57` / `mysql8` | `mysql` |
-| SQL Server | `mssql` | `mssql` |
-| Oracle | `oracle10g` | `oracle` |
+| Vendor        |  Jira                 | Confluence     | Bamboo        |
+|---------------|-----------------------|---------------|---------------|
+| PostgreSQL    | `postgres72`          | `postgresql`  | `postgresql`  |
+| MySQL         | `mysql57` / `mysql8`  | `mysql`       | `mysql`       |
+| SQL Server    | `mssql`               | `mssql`       | `mssql`       |
+| Oracle        | `oracle10g`           | `oracle`      | `oracle12c`   |
 
 ### `database.credentials`
 
@@ -244,6 +248,11 @@ By default, the Helm charts will not configure the products for Data Center clus
           clustering:
             enabled: true
         ```
+
+    === "Bamboo"
+
+        Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
+        
 
 In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
 

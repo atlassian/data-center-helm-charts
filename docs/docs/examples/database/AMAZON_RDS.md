@@ -23,6 +23,8 @@ For details on standing up an RDS DB server follow the guide: [Creating an Amazo
     [Create database for Confluence](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup){.external}
 === "Bitbucket"
     [Create database for Bitbucket](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html){.external}
+=== "Bamboo"
+    [Create database for Bamboo](https://confluence.atlassian.com/bamboo/connecting-bamboo-to-an-external-database-289276815.html){.external}
 === "Crowd"
     [Create database for Crowd](https://confluence.atlassian.com/crowd/connecting-crowd-to-a-database-4030904.html){.external}
  

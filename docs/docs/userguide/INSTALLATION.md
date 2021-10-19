@@ -118,6 +118,9 @@ By default, the Helm charts will not configure the products for Data Center clus
     enabled: true
 ```
 
+!!!warning "Bamboo clustering"
+    Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
+
   
 ## 7. Configure license 
 
@@ -166,12 +169,20 @@ helm install <release-name> \
 ```
 
 !!!note "Values & flags"
-    * `<release-name>` the name of your deployment. You can also use `--generate-name`.
-    * `<product>` the product to install. Options include `jira`, `confluence`, `bitbucket`, or `crowd`.
-    * `<namespace>` optional flag for categorizing installed resources.
-    * `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
-    * `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
-    * Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
+* `<release-name>` the name of your deployment. You can also use `--generate-name`.
+* `<product>` the product to install. Options include: 
+  
+    * `jira` 
+    * `confluence`
+    * `bitbucket`
+    * `bamboo`
+    * `bamboo-agent`
+    * `crowd`
+  
+* `<namespace>` optional flag for categorizing installed resources.
+* `<chart-version>` optional flag for defining the [chart version](https://artifacthub.io/packages/search?org=atlassian&sort=relevance&page=1){.external} to be used. If omitted, the latest version of the chart will be used.
+* `values.yaml` optional flag for defining your site-specific configuration information. If omitted, the chart config default will be used.
+* Add `--wait` if you wish the installation command to block until all of the deployed Kubernetes resources are ready, but be aware that this may wait for several minutes if anything is mis-configured.
     
 !!!info "Elasticsearch for Bitbucket"
     We highly recommend you use an external Elasticsearch installation for Bitbucket. When you run more than one node you need to have a separate Elasticsearch cluster to enable code search. See [Bitbucket Elasticsearch recommendations](../examples/bitbucket/BITBUCKET_ELASTICSEARCH.md).    
@@ -191,6 +202,18 @@ helm test <release-name> --logs --namespace <namespace>
 ## 10. Complete product setup 
 
 Using the service URL provided by Helm post install, open your product in a web browser and complete the setup via the setup wizard. 
+
+## 11. Additional deployments
+
+Bamboo agents and Bitbucket mirrors can also be deployed via their dedicated charts:
+
+=== "Bamboo agent"
+    !!!info "Bamboo agent installation"
+        [Instructions for deploying Bamboo agents](../examples/bamboo/REMOTE_AGENTS.md)
+
+=== "Bitbucket mirror"
+    !!!info "Bitbucket mirror installation"
+        [Instructions for deploying Bitbucket mirror's](../examples/bitbucket/BITBUCKET_MIRRORS.md)
 
 # Uninstall
 The deployment and all of its associated resources can be un-installed with the following command:

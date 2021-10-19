@@ -12,6 +12,8 @@ Using the [formula](#memory-request-sizing) below, the `memory` specific values 
 | [Jira](https://bitbucket.org/atlassian-docker/docker-atlassian-jira/src/master/#markdown-header-memory-heap-size){.external}                        | `2`   | `2G`  |
 | [Confluence](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/master/#markdown-header-memory-heap-size){.external}     | `2`   | `2G`  |
 | [Bitbucket](https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/){.external}                                        | `2`   | `2G`  |
+| [Bamboo](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/){.external}                                                      | `2`   | `2G`  |
+| [Bamboo agent](https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/src/master/){.external}                                                      | `1`   | `2G`  |
 | [Crowd](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/){.external}                                                       | `2`   | `1G`  |
 
 ### Synchrony container resources

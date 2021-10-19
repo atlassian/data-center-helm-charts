@@ -22,9 +22,13 @@
 
 # -- The initial number of Bamboo pods that should be started at deployment time. 
 # Note that Bamboo requires manual configuration via the browser post deployment 
-# after the first pod is deployed. This configuration must be completed before 
-# scaling up additional pods. As such this value should always be kept as 1, 
-# but can be altered once manual configuration is complete.
+# after the first pod is deployed. 
+#
+# At present Bamboo Data Center utilizes an `active-passive` clustering model. 
+# This architecture is not ideal where K8s deployments are concerned. As such 
+# a Bamboo server cluster comprising only `1` pod is the recommended topology 
+# for now. For more detail see:
+# https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS#cluster-size
 #
 replicaCount: 1
 
