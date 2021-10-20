@@ -1,4 +1,12 @@
 
-
 agent:
   server: "${helm.release.prefix}-bamboo.${kubernetes.target.namespace}.svc.cluster.local"
+
+  additionalEnvironmentVariables:
+    # While the agent can contact the server, the server is not yet
+    # configured so returns junk, which causes the agent to error-out,
+    # and the wrapper to restart it. This is fine, but until we have
+    # full Bamboo auto-configuration we need to be a bit more
+    # permissive about what Kubernetes considers a valid pod state.
+    - name: "BAMBOO_AGENT_PERMISSIVE_READINESS"
+      value: "true"
