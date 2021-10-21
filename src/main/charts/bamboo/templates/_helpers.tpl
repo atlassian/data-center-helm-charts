@@ -143,7 +143,16 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
 {{- end }}
 
 {{/*
-Defining additional init containers here instead of in values.yaml to allow template overrides
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bamboo.podAnnotations" -}}
+{{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "bamboo.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
@@ -152,7 +161,7 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{- end }}
 
 {{/*
-Defining additional containers here instead of in values.yaml to allow template overrides
+Define additional containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "bamboo.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
@@ -161,7 +170,7 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
-Defining additional volume mounts here instead of in values.yaml to allow template overrides
+Define additional volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "bamboo.additionalVolumeMounts" -}}
 {{- with .Values.bamboo.additionalVolumeMounts }}
@@ -170,7 +179,7 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 {{- end }}
 
 {{/*
-Defining additional environment variables here instead of in values.yaml to allow template overrides
+Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "bamboo.additionalEnvironmentVariables" -}}
 {{- with .Values.bamboo.additionalEnvironmentVariables }}

@@ -5,9 +5,7 @@ metadata:
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-    {{- with .Values.podAnnotations }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- include "jira.podAnnotations" . | nindent 4 }}
   labels:
     {{- include "jira.labels" . | nindent 4 }}
 spec:

@@ -17,9 +17,7 @@ spec:
         {{- if .Values.fluentd.enabled }}
         checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
         {{- end }}
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "bamboo.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "bamboo.selectorLabels" . | nindent 8 }}
     spec:
