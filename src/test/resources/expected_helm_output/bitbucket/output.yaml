@@ -76,7 +76,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       partition: 0
-  podManagementPolicy: Parallel
+  podManagementPolicy: OrderedReady
   serviceName: unittest-bitbucket
   selector:
     matchLabels:
