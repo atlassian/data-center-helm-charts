@@ -2,6 +2,7 @@ package test;
 
 import io.vavr.collection.Array;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -16,6 +17,7 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class HelmOutputComparisonTest {
 
     private Helm helm;

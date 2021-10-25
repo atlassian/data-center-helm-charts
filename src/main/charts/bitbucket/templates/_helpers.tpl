@@ -250,13 +250,14 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volumes.sharedHome" -}}
-{{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
 - name: shared-home
+{{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
     claimName: {{ include "bitbucket.fullname" . }}-shared-home
 {{ else if .Values.volumes.sharedHome.customVolume }}
-- name: shared-home
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
 {{- end }}
 {{- end }}
 
