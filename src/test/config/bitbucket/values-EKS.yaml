@@ -13,6 +13,7 @@ ingress:
     alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /status
+    alb.ingress.kubernetes.io/scheme: ${eks.alb.loadbalancer.scheme}
   host: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
 
 bitbucket:
