@@ -29,12 +29,6 @@ spec:
         runAsGroup: {{ 2003 }}
         {{- end }}
         {{- end }}
-      volumeMounts:
-        - name: shared-home
-          mountPath: /shared-home
-          {{- if .Values.volumes.sharedHome.subPath }}
-          subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
-          {{- end }}
       command:
         - /bin/sh
         - -ec
@@ -44,6 +38,4 @@ spec:
           touch /shared-home/permissions-test
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
-  volumes:
-    {{ include "bitbucket.volumes.sharedHome" . | nindent 4 }}
   restartPolicy: Never
