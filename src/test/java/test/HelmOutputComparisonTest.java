@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class HelmOutputComparisonTest {
 
     private Helm helm;
