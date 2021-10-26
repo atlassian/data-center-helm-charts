@@ -134,7 +134,7 @@
             other products' values.yaml ignore this property. Other products need to perform additional setup steps on
             a single node after Helm chart installation.
         -->
-        <replica.count>1</replica.count>
+        <replica.count>2</replica.count>
         <!-- Expected number of replicas after instance has been started -->
         <target.replica.count>2</target.replica.count>
 
