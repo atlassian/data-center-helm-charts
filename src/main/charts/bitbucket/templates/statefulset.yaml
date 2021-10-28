@@ -135,6 +135,8 @@ spec:
               value: ssh://{{ .Values.bitbucket.sshService.host }}{{ if ne (default .Values.bitbucket.sshService.port "22") "22" }}:{{ .Values.bitbucket.sshService.port }}{{ end }}/
             {{- end }}
             {{ end }}
+            - name: SERVER_CONTEXT_PATH
+              value: {{ include "bitbucket.ingressPath" . | quote }}
             {{ if .Values.ingress.https }}
             - name: SERVER_SCHEME
               value: "https"

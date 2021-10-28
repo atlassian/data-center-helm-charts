@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static test.jackson.JsonNodeAssert.assertThat;
 
-@Disabled
 class IngressTest {
     private Helm helm;
 
