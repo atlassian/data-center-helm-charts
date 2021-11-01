@@ -429,15 +429,6 @@ bamboo:
     #
     localHomeSubPath: "log"
 
-  # Data Center clustering
-  #
-  clustering:
-  
-    # -- Set to 'true' if Data Center clustering should be enabled
-    # This will automatically configure cluster peer discovery between cluster nodes.
-    #
-    enabled: false
-
   shutdown:
 
     # -- The termination grace period for pods during shutdown. This
