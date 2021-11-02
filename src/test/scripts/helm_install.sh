@@ -281,12 +281,8 @@ wait_for_ingress() {
   echo "Waiting for $INGRESS_URI to be ready"
   for (( i=0; i<10; ++i ));
   do
-    echo "checking status ${i}x"
+     echo "checking status: i = ${i}"
 
-    echo "local service address: ${SVC_ADDRESS}"
-#    SVC_ADDRESS="http://$PRODUCT_RELEASE_NAME.$TARGET_NAMESPACE.svc.cluster.local/status"
-#    curl -s -o /dev/null -w %{http_code} ${SVC_ADDRESS}
-#    curl "$INGRESS_URI"
      STATUS_CODE=$(curl -s -o /dev/null -w %{http_code} "$INGRESS_URI")
      echo "Received status code $STATUS_CODE from $INGRESS_URI"
      if [ "$STATUS_CODE" -lt 400 ]; then
