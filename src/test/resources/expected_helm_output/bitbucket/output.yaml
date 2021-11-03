@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bitbucket-1.0.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bitbucket-1.0.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -37,7 +37,7 @@ metadata:
     helm.sh/chart: bitbucket-1.0.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -68,7 +68,7 @@ metadata:
     helm.sh/chart: bitbucket-1.0.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -85,7 +85,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 27a0817aa16495c57f4e89f436e270cc76aa2204678f535320edc43a89dcee6a
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -97,7 +96,7 @@ spec:
       initContainers:
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket:7.15.1-jdk11"
+          image: "atlassian/bitbucket:7.17.1-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -177,7 +176,7 @@ metadata:
     helm.sh/chart: bitbucket-1.0.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -209,7 +208,7 @@ metadata:
     helm.sh/chart: bitbucket-1.0.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

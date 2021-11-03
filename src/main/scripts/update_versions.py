@@ -10,21 +10,44 @@ suffix = "-jdk11"
 current_lts = {"bitbucket": "7.17", "jira": "8.20", "confluence": "7.13"}
 
 
-def update_chart(product, new_version):
-    chart_file = f'../charts/{product}/Chart.yaml'
-    with open(chart_file, "r") as stream:
-        content = stream.read()
-        doc = yaml.safe_load(content)
-        current_version = doc['appVersion']
-        logging.info("current version: %s", current_version)
+def update_versions(product_to_update, new_version):
+    products_to_update = [product_to_update]
+    if product == 'bamboo':
+        products_to_update.append("bamboo-agent")
 
-    new_content = content.replace(current_version, f"{new_version}{suffix}")
+    chart_files = [f'../charts/{p}/Chart.yaml' for p in products_to_update]
 
-    with open(chart_file, "w") as stream:
-        stream.write(new_content)
+    for chart_file in chart_files:
+        with open(chart_file, "r") as stream:
+            content = stream.read()
+            doc = yaml.safe_load(content)
+            current_version = doc['appVersion']
+            logging.info("Current version: %s", current_version)
+
+        new_content = content.replace(current_version, new_version)
+
+        with open(chart_file, "w") as stream:
+            stream.write(new_content)
+            logging.info("Updated product chart: %s", chart_file)
+
+    update_expected_output(products_to_update, new_version)
 
 
-def mac_versions(product_key):
+def update_expected_output(products_to_update, new_version):
+    output_files = [f'../../test/resources/expected_helm_output/{p}/output.yaml' for p in products_to_update]
+    for output_file in output_files:
+        with open(output_file, "r") as stream:
+            content = stream.read()
+
+        old_version = list(yaml.safe_load_all(content))[0]['metadata']['labels']['app.kubernetes.io/version']
+        new_content = content.replace(old_version, f"{new_version}")
+
+        with open(output_file, "w") as stream:
+            stream.write(new_content)
+        logging.info('Updated expected output file: %s', output_file)
+
+
+def product_versions_marketplace(product_key):
     mac_url = 'https://marketplace.atlassian.com'
     request_url = f'/rest/2/products/key/{product_key}/versions'
     params = {'offset': 0, 'limit': 50}
@@ -57,19 +80,18 @@ def latest_minor(version, mac_versions):
 
 logging.info("Updating product versions in helm charts")
 logging.warning("Always check the latest available LTS versions on https://confluence.atlassian.com/enterprise/long-term-support-releases-948227420.html")
-for p in products:
+for product in products:
     logging.info("-------------------------")
-    logging.info("Product: %s", p)
+    logging.info("Product: %s", product)
 
-    if p in current_lts.keys():
-        logging.info('LTS product (%s)', current_lts[p])
-        version = latest_minor(current_lts[p], mac_versions(p))
+    if product in current_lts.keys():
+        logging.info('LTS product (%s)', current_lts[product])
+        version = latest_minor(current_lts[product], product_versions_marketplace(product))
     else:
         logging.info("Non-LTS product")
-        r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{p}/versions/latest')
+        r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{product}/versions/latest')
         version = r.json()['name']
 
-    logging.info(f"version: %s, tagname: {version}{suffix}", version)
-    update_chart(p, version)
-    logging.info("updated the product chart")
-
+    new_version_tag = f"{version}{suffix}"
+    logging.info(f"Latest version: %s, tagname: {version}{suffix}", version)
+    update_versions(product, new_version_tag)

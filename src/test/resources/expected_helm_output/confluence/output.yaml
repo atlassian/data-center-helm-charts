@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -63,7 +63,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -89,7 +89,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -116,7 +116,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -128,7 +128,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 79b8d7abe642d0e8fc0114de0260168f1f8f5e0a606ef37ea49a3e642e1acbb6
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -138,7 +137,7 @@ spec:
       hostAliases:
       containers:
         - name: synchrony
-          image: "atlassian/confluence:7.13.0-jdk11"
+          image: "atlassian/confluence:7.13.2-jdk11"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -192,7 +191,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -204,7 +203,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 0f5d7044d15ce784dc016f10d4b372fc83fc1872a645ce17bd41f147d40ac0ad
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -226,7 +224,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: confluence
-          image: "atlassian/confluence:7.13.0-jdk11"
+          image: "atlassian/confluence:7.13.2-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -309,7 +307,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -340,7 +338,7 @@ metadata:
     helm.sh/chart: confluence-1.0.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.0-jdk11"
+    app.kubernetes.io/version: "7.13.2-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
