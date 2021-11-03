@@ -1,12 +1,36 @@
 # Change Log
 
+## 1.1.0 
+
+**Release date:** 2021-11-03
+
+![AppVersion: 8.20.1-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.20.1-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCKUBE-721: Update version in Chart.yaml files 
+* DCKUBE-733: Update the product versions (#345) 
+* DCD-1380: Update Jira to 8.20 LTS (#339) 
+* DCKUBE-739: Fix typos (#337) 
+* DCKUBE-739: make securityContext changes backward compatible (#332) 
+* Roll Statefulset Pods if ConfigMap changes (#315) 
+* Dckube 677 make security context more flexible (#321) 
+* DCKUBE-722: Enable configuring ingress.class name (#313) 
+* BAMBK8S-47: Bamboo agent Helm chart (#316) 
+* DCKUBE-717: Bind EHCACHE ports as environmental variables (#308) 
+* DCKUBE-719: Cleanup redundant (not-used) jira.terminationGracePeriodSeconds (#306) 
+* DCKUBE-678: Add scheduleName to StatefulSet (#301) 
+
 
 ## 1.0.0
+
 This is the first officially supported version of the Helm chart.
 
 ![AppVersion: 8.13.9-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.13.9-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
 
 * DCKUBE-621: Improvements to graceful shutdown (#282)
 * DCKUBE-626: Update Jira to 8.19.0 (#286)
