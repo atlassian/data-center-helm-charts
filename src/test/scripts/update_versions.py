@@ -3,11 +3,21 @@ import logging
 import requests
 import yaml
 
+import product_versions
+
+"""
+This script is used to update the product versions in the helm charts descriptors (Chart.yaml).
+It fetches the latest available version (LTS for products with LTS) from marketplace and updates the required
+tag in the product chart. It also updates expected output for the product.
+
+Script is currently executed manually and is in a fairly rough shape. 
+"""
+
 logging.basicConfig(level=logging.INFO, format="%(levelname).1s %(message)s")
 
 products = ["bitbucket", "jira", "bamboo", "confluence", "crowd"]
 suffix = "-jdk11"
-current_lts = {"bitbucket": "7.17", "jira": "8.20", "confluence": "7.13"}
+lts_products = ["bitbucket", "jira", "confluence"]
 
 
 def update_versions(product_to_update, new_version):
@@ -15,7 +25,7 @@ def update_versions(product_to_update, new_version):
     if product == 'bamboo':
         products_to_update.append("bamboo-agent")
 
-    chart_files = [f'../charts/{p}/Chart.yaml' for p in products_to_update]
+    chart_files = [f'../../main/charts/{p}/Chart.yaml' for p in products_to_update]
 
     for chart_file in chart_files:
         with open(chart_file, "r") as stream:
@@ -34,7 +44,7 @@ def update_versions(product_to_update, new_version):
 
 
 def update_expected_output(products_to_update, new_version):
-    output_files = [f'../../test/resources/expected_helm_output/{p}/output.yaml' for p in products_to_update]
+    output_files = [f'../resources/expected_helm_output/{p}/output.yaml' for p in products_to_update]
     for output_file in output_files:
         with open(output_file, "r") as stream:
             content = stream.read()
@@ -79,14 +89,13 @@ def latest_minor(version, mac_versions):
 
 
 logging.info("Updating product versions in helm charts")
-logging.warning("Always check the latest available LTS versions on https://confluence.atlassian.com/enterprise/long-term-support-releases-948227420.html")
 for product in products:
     logging.info("-------------------------")
     logging.info("Product: %s", product)
 
-    if product in current_lts.keys():
-        logging.info('LTS product (%s)', current_lts[product])
-        version = latest_minor(current_lts[product], product_versions_marketplace(product))
+    if product in lts_products:
+        version = product_versions.get_lts_version([product]).replace(suffix, "")
+        logging.info("Latest LTS version: %s", version)
     else:
         logging.info("Non-LTS product")
         r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{product}/versions/latest')
