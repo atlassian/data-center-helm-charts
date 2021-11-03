@@ -3,6 +3,7 @@ package test;
 import io.vavr.collection.Array;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.platform.commons.util.StringUtils;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -70,5 +72,15 @@ class HelmOutputComparisonTest {
 
     private static Path getHelmValuesFile(Product product) {
         return expectationFiles(product).resolve("values.yaml");
+    }
+
+    @ParameterizedTest
+    @EnumSource(Product.class)
+    @EnabledIfSystemProperty(named = "recordOutput", matches = "true")
+    void record_helm_template_output_matches_expectations(final Product product) throws Exception {
+        final var actualOutputFile = helm.captureHelmTemplateOutput(product, getHelmValuesFile(product));
+        stripBlankLines(actualOutputFile);
+        Path destination = Paths.get("src/test/resources/expected_helm_output/" + product + "/output.yaml");
+        Files.copy(actualOutputFile, destination, StandardCopyOption.REPLACE_EXISTING);
     }
 }

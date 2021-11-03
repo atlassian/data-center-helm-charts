@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: 4.4.0-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
