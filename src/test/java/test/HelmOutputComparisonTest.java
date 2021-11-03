@@ -34,10 +34,12 @@ class HelmOutputComparisonTest {
     void helm_template_output_matches_expectations(final Product product) throws Exception {
         final var expectedHelmOutput = getExpectedHelmTemplateOutputFile(product);
         stripBlankLines(expectedHelmOutput);
+        stripChecksumLines(expectedHelmOutput); // checksum lines are covered with JvmResourcesTest
 
         final var actualOutputFile = helm.captureHelmTemplateOutput(product, getHelmValuesFile(product));
 
         stripBlankLines(actualOutputFile);
+        stripChecksumLines(actualOutputFile);
 
         assertThat(expectedHelmOutput.toFile()).exists();
         assertThat(actualOutputFile.toFile()).exists();
@@ -48,6 +50,10 @@ class HelmOutputComparisonTest {
     private static void stripBlankLines(Path file) throws IOException {
         Files.write(file, Array.ofAll(Files.readAllLines(file))
                 .filter(StringUtils::isNotBlank));
+    }
+    private static void stripChecksumLines(Path file) throws IOException {
+        Files.write(file, Array.ofAll(Files.readAllLines(file))
+                .filter(line -> !line.contains("checksum/config-jvm")));
     }
 
     private static Path testResources() {
