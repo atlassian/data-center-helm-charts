@@ -635,11 +635,11 @@ bitbucket:
     #
     command: "/shutdown-wait.sh"
 
-  # -- Pod management strategy. Bitbucket can start and destroy multiple nodes at the
-  # same time therefore it can utilize the "Parallel" option.
+  # -- Pod management strategy. Bitbucket Data Center requires the "OrderedReady" value but for Bitbucket Mirrors you
+  # can use the "Parallel" option.
   # To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   #
-  podManagementStrategy: Parallel
+  podManagementStrategy: OrderedReady
 
   # Pod resource requests
   #

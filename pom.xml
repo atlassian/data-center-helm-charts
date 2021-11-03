@@ -119,8 +119,9 @@
 <!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
         <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
         <!-- ARN of an ACM issued certificate for the above domain -->
-        <eks.ingress.certificate/>
+        <eks.ingress.certificate>foo</eks.ingress.certificate>
         <!-- Can be either 'internal' or 'internet-facing' -->
+        <eks.alb.loadbalancer.scheme>internal</eks.alb.loadbalancer.scheme>
         <eks.ssh.loadbalancer.scheme>internal</eks.ssh.loadbalancer.scheme>
         <custom.ingress.uri />
 
