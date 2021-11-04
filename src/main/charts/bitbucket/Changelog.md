@@ -1,12 +1,37 @@
 # Change Log
 
+## 1.1.0 
+
+**Release date:** 2021-11-03
+
+![AppVersion: 7.17.1-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.17.1-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCKUBE-721: Update version in Chart.yaml files 
+* DCKUBE-733: Update the product versions (#345) 
+* DCKUBE-731: Stabilize CI (#344) 
+* DCKUBE-731: Fix shared home default (#342) 
+* BAMBK8S-117: Documentation updates for Bamboo on K8s (#336) 
+* DCKUBE-739: Fix typos (#337) 
+* DCKUBE-739: Make securityContext changes backward compatible (#332) 
+* DCKUBE-552 Mirror support. (#265) 
+* Roll Statefulset Pods if ConfigMap changes (#315) 
+* DCKUBE-677: Make security context more flexible (#321) 
+* DCKUBE-634: Bitbucket - set context path (#314) 
+* DCKUBE-722: Enable configuring ingress.class name (#313) 
+* DCKUBE-678: Add schedulerName to StatefulSet (#301) 
+
 
 ## 1.0.0
+
 This is the first officially supported version of the Helm chart.
 
 ![AppVersion: 7.15.1-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.15.1-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
 
 * DCKUBE-621: Improvements to graceful shutdown (#282)
 * Improved [documentation](https://github.com/atlassian/data-center-helm-charts/) (#275, #276, #277, #279, #280, #284, #285, #289, #290, #291, #293. #295)

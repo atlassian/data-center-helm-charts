@@ -1,12 +1,33 @@
 # Change Log
 
+## 1.1.0 
+
+**Release date:** 2021-11-03
+
+![AppVersion: 7.13.2-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.13.2-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCKUBE-721: Update version in Chart.yaml files 
+* DCKUBE-733: Update the product versions (#345) 
+* DCKUBE-739: Fix typos (#337) 
+* DCKUBE-739: Make securityContext changes backward compatible (#332) 
+* Roll Statefulset Pods if ConfigMap changes (#315) 
+* DCKUBE-677: Make security context more flexible (#321) 
+* DCKUBE-722: Enable configuring ingress.class name (#313) 
+* DCKUBE-678: Add schedulerName to StatefulSet (#301) 
+* DCKUBE-686: Decrease Confluence failover time (#299) 
+
 
 ## 1.0.0
+
 This is the first officially supported version of the Helm chart.
 
 ![AppVersion: 7.13.0-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.13.0-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
 
 * DCKUBE-670: Fix Synchrony ingress path (#281)
 * DCKUBE-621: Improvements to graceful shutdown (#282)
@@ -15,9 +36,11 @@ This is the first officially supported version of the Helm chart.
 
 
 ## 0.16.0
+
 ![AppVersion: 7.13.0-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.13.0-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
 
 * DCKUBE-598: Enable NFS permission fixer by default (#241)
 * DCKUBE-581: Enable configuration for SET_PERMISSIONS docker image variable (#261)
@@ -31,9 +54,11 @@ This is the first officially supported version of the Helm chart.
 
 
 ## 0.15.0
+
 ![AppVersion: 7.12.4-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.12.4-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
 
 * Add Service annotations (#209)
 * DCKUBE-435: Renamed the 'master' branch to 'main' and set it as default (#232)
@@ -48,7 +73,6 @@ This is the first officially supported version of the Helm chart.
 ![AppVersion: 7.12.3-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.12.3-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
-
 
 * DCKUBE-529: Update Confluence version to 7.12.3-jdk11 (#212)
 

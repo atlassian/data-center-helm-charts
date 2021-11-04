@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: 4.4.0-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -18,25 +18,30 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
 deprecated: false
 annotations:
+  artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
     - kind: added
-      description: Improvements to graceful shutdown
+      description: Add support for custom schedulerName
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/282
+        url: https://github.com/atlassian/data-center-helm-charts/pull/301
+    - kind: added
+      description: Enable configuring ingress.class name
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/313
     - kind: changed
-      description: Improve documentation
+      description: Make security context more flexible
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/275
-        url: https://github.com/atlassian/data-center-helm-charts/pull/276
-        url: https://github.com/atlassian/data-center-helm-charts/pull/277
-        url: https://github.com/atlassian/data-center-helm-charts/pull/279
-        url: https://github.com/atlassian/data-center-helm-charts/pull/280
-        url: https://github.com/atlassian/data-center-helm-charts/pull/284
-        url: https://github.com/atlassian/data-center-helm-charts/pull/285
-        url: https://github.com/atlassian/data-center-helm-charts/pull/289
-        url: https://github.com/atlassian/data-center-helm-charts/pull/290
-        url: https://github.com/atlassian/data-center-helm-charts/pull/291
-        url: https://github.com/atlassian/data-center-helm-charts/pull/293
-        url: https://github.com/atlassian/data-center-helm-charts/pull/295
+        url: https://github.com/atlassian/data-center-helm-charts/pull/321
+    - kind: added
+      description: Roll Statefulset Pods if ConfigMap changes
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/315
+    - kind: chaged
+      description: Crowd DC updated to 4.4.0 version
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/345
