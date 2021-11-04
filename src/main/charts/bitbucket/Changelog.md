@@ -15,13 +15,13 @@
 * DCKUBE-731: Fix shared home default (#342) 
 * BAMBK8S-117: Documentation updates for Bamboo on K8s (#336) 
 * DCKUBE-739: Fix typos (#337) 
-* DCKUBE-739: make securityContext changes backward compatible (#332) 
+* DCKUBE-739: Make securityContext changes backward compatible (#332) 
 * DCKUBE-552 Mirror support. (#265) 
 * Roll Statefulset Pods if ConfigMap changes (#315) 
-* Dckube 677 make security context more flexible (#321) 
+* DCKUBE-677: Make security context more flexible (#321) 
 * DCKUBE-634: Bitbucket - set context path (#314) 
 * DCKUBE-722: Enable configuring ingress.class name (#313) 
-* DCKUBE-678: Add scheduleName to StatefulSet (#301) 
+* DCKUBE-678: Add schedulerName to StatefulSet (#301) 
 
 
 ## 1.0.0

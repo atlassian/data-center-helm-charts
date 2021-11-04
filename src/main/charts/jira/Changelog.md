@@ -13,14 +13,14 @@
 * DCKUBE-733: Update the product versions (#345) 
 * DCD-1380: Update Jira to 8.20 LTS (#339) 
 * DCKUBE-739: Fix typos (#337) 
-* DCKUBE-739: make securityContext changes backward compatible (#332) 
+* DCKUBE-739: Make securityContext changes backward compatible (#332) 
 * Roll Statefulset Pods if ConfigMap changes (#315) 
-* Dckube 677 make security context more flexible (#321) 
+* DCKUBE-677: Make security context more flexible (#321) 
 * DCKUBE-722: Enable configuring ingress.class name (#313) 
 * BAMBK8S-47: Bamboo agent Helm chart (#316) 
 * DCKUBE-717: Bind EHCACHE ports as environmental variables (#308) 
 * DCKUBE-719: Cleanup redundant (not-used) jira.terminationGracePeriodSeconds (#306) 
-* DCKUBE-678: Add scheduleName to StatefulSet (#301) 
+* DCKUBE-678: Add schedulerName to StatefulSet (#301) 
 
 
 ## 1.0.0

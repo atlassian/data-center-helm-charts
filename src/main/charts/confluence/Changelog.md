@@ -12,12 +12,12 @@
 * DCKUBE-721: Update version in Chart.yaml files 
 * DCKUBE-733: Update the product versions (#345) 
 * DCKUBE-739: Fix typos (#337) 
-* DCKUBE-739: make securityContext changes backward compatible (#332) 
+* DCKUBE-739: Make securityContext changes backward compatible (#332) 
 * Roll Statefulset Pods if ConfigMap changes (#315) 
-* Dckube 677 make security context more flexible (#321) 
+* DCKUBE-677: Make security context more flexible (#321) 
 * DCKUBE-722: Enable configuring ingress.class name (#313) 
-* DCKUBE-678: Add scheduleName to StatefulSet (#301) 
-* DCKUBE-686: decrease Confluence failover time (#299) 
+* DCKUBE-678: Add schedulerName to StatefulSet (#301) 
+* DCKUBE-686: Decrease Confluence failover time (#299) 
 
 
 ## 1.0.0
