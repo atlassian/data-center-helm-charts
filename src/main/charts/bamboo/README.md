@@ -10,7 +10,7 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 
 ## Source Code
 
-* <https://github.com/atlassian-labs/data-center-helm-charts>
+* <https://github.com/atlassian/data-center-helm-charts>
 * <https://bitbucket.org/atlassian-docker/docker-bamboo-server>
 
 ## Requirements

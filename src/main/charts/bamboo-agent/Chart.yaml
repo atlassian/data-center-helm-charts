@@ -12,8 +12,8 @@ keywords:
   - Bamboo DC
   - Atlassian
 home: https://www.atlassian.com/software/bamboo
-icon: https://atlassian-labs.github.io/data-center-helm-charts/icons/bamboo.svg
+icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
 sources:
-  - https://github.com/atlassian-labs/data-center-helm-charts
+  - https://github.com/atlassian/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
 deprecated: false

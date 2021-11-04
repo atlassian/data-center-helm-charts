@@ -40,7 +40,7 @@ annotations:
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/315
-    - kind: chaged
+    - kind: changed
       description: Crowd DC updated to 4.4.0 version
       links:
       - name: Github PR
