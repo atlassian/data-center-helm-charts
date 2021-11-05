@@ -110,19 +110,18 @@
 
         <log.download.dir>${project.build.directory}/logs</log.download.dir>
 
-        <kubernetes.target.namespace>dcng</kubernetes.target.namespace>
+        <kubernetes.target.namespace>ci</kubernetes.target.namespace>
 
         <kubernetes.ingress.domain>internal.shared-dev.us-west-2.kitt-inf.net</kubernetes.ingress.domain>
         <aks.ingress.domain>aks.k8s.bbsperf.com</aks.ingress.domain>
         <gke.ingress.domain>gke.k8s.bbsperf.com</gke.ingress.domain>
         <kitt.ingress.domain>${kubernetes.ingress.domain}</kitt.ingress.domain>
-<!--        <eks.ingress.domain>eks.k8s.bbsperf.com</eks.ingress.domain>-->
-        <eks.ingress.domain>dcngkube.bbsperf.com</eks.ingress.domain>
+        <eks.ingress.domain>ci.deplops.com</eks.ingress.domain>
         <!-- ARN of an ACM issued certificate for the above domain -->
         <eks.ingress.certificate>foo</eks.ingress.certificate>
         <!-- Can be either 'internal' or 'internet-facing' -->
-        <eks.alb.loadbalancer.scheme>internal</eks.alb.loadbalancer.scheme>
-        <eks.ssh.loadbalancer.scheme>internal</eks.ssh.loadbalancer.scheme>
+        <eks.alb.loadbalancer.scheme>internet-facing</eks.alb.loadbalancer.scheme>
+        <eks.ssh.loadbalancer.scheme>internet-facing</eks.ssh.loadbalancer.scheme>
         <custom.ingress.uri />
 
         <shared.pvc.name>atlassian-dc-shared-home-pvc</shared.pvc.name>
