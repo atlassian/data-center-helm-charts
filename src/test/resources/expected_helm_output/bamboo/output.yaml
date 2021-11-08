@@ -118,6 +118,11 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-bamboo-jvm-config
+            - name: ATL_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: testSecret
+                  key: testKey
           ports:
             - name: http
               containerPort: 8085

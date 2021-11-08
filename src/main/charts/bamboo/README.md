@@ -34,6 +34,9 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bamboo container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
+| bamboo.license | object | `{"licenseKey":"license","secretName":null}` | The license to provide to the Bamboo nodes (optional). If you have an existing license it can be provided to the server up-front to skip the configuration screen on first starup. |
+| bamboo.license.licenseKey | string | `"license"` | The key ('license') in the Secret used to store the database login username |
+| bamboo.license.secretName | string | `nil` | The secret that contains the license information |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic |
 | bamboo.ports.jms | int | `54663` | JMS port |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe  before the pod fails readiness checks. |

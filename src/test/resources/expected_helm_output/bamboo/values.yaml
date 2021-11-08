@@ -3,3 +3,8 @@ volumes:
   sharedHome:
     nfsPermissionFixer:
       enabled: true
+
+bamboo:
+  license:
+    secretName: "testSecret"
+    licenseKey: "testKey"
