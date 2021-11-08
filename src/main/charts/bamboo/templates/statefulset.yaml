@@ -96,6 +96,28 @@ spec:
                   name: {{ .Values.bamboo.license.secretName }}
                   key: {{ .Values.bamboo.license.licenseKey }}
             {{ end }}
+            {{ if .Values.bamboo.adminUser.secretName }}
+            - name: ATL_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.adminUser.secretName }}
+                  key: {{ .Values.bamboo.adminUser.usernameSecretKey }}
+            - name: ATL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.adminUser.secretName }}
+                  key: {{ .Values.bamboo.adminUser.passwordSecretKey }}
+            - name: ATL_ADMIN_FULLNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.adminUser.secretName }}
+                  key: {{ .Values.bamboo.adminUser.fullnameSecretKey }}
+            - name: ATL_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.adminUser.secretName }}
+                  key: {{ .Values.bamboo.adminUser.emailSecretKey }}
+            {{ end }}
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http

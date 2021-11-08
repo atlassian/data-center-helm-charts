@@ -343,7 +343,7 @@ bamboo:
 
   # -- The license to provide to the Bamboo nodes (optional). If you
   # have an existing license it can be provided to the server up-front
-  # to skip the configuration screen on first starup.
+  # to skip the configuration screen on first run.
   #
   license:
 
@@ -351,9 +351,35 @@ bamboo:
     #
     secretName:
 
-    # -- The key ('license') in the Secret used to store the database login username
+    # -- The key ('licenseKey') in the Secret used to store the license information
     #
     licenseKey: license
+
+  # -- The admin user configuration and credentials to provide to
+  # Bamboo (optional). If provided this will skip the configuration
+  # screen on first run.
+  #
+  adminUser:
+
+    # -- The secret that contains the admin user information
+    #
+    secretName:
+
+    # -- The key in the Secret used to store the admin username
+    #
+    usernameSecretKey: username
+
+    # -- The key in the Secret used to store the admin password
+    #
+    passwordSecretKey: password
+
+    # -- The key in the Secret used to store the admin full name
+    #
+    fullnameSecretKey: fullname
+    
+    # -- The key in the Secret used to store the admin email
+    #
+    emailSecretKey: email
 
   # K8s Service configuration
   #

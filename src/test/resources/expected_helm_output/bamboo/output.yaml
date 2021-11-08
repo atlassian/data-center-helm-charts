@@ -121,8 +121,28 @@ spec:
             - name: ATL_LICENSE
               valueFrom:
                 secretKeyRef:
-                  name: testSecret
-                  key: testKey
+                  name: licenseTestSecret
+                  key: licenseTestKey
+            - name: ATL_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminTestUsernameKey
+            - name: ATL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminPasswordTestKey
+            - name: ATL_ADMIN_FULLNAME
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminFullnameTestKey
+            - name: ATL_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminEmailTestKey
           ports:
             - name: http
               containerPort: 8085

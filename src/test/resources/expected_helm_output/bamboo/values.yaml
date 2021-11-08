@@ -6,5 +6,12 @@ volumes:
 
 bamboo:
   license:
-    secretName: "testSecret"
-    licenseKey: "testKey"
+    secretName: licenseTestSecret
+    licenseKey: licenseTestKey
+
+  adminUser:
+    secretName: adminTestSecret
+    usernameSecretKey: adminTestUsernameKey
+    passwordSecretKey: adminPasswordTestKey
+    fullnameSecretKey: adminFullnameTestKey
+    emailSecretKey: adminEmailTestKey
