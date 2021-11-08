@@ -118,6 +118,8 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-bamboo-jvm-config
+            - name: ATL_CLIENT_BROKER_URL
+              value: "tcp://testBroker:1234"
             - name: ATL_LICENSE
               valueFrom:
                 secretKeyRef:

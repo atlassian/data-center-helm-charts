@@ -5,6 +5,8 @@ volumes:
       enabled: true
 
 bamboo:
+  brokerUrl: "tcp://testBroker:1234"
+
   license:
     secretName: licenseTestSecret
     licenseKey: licenseTestKey

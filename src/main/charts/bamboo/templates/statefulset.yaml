@@ -89,6 +89,10 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: {{ include "bamboo.fullname" . }}-jvm-config
+            {{ if .Values.bamboo.brokerUrl }}
+            - name: ATL_CLIENT_BROKER_URL
+              value: {{ .Values.bamboo.brokerUrl | quote }}
+            {{ end }}
             {{ if .Values.bamboo.license.secretName }}
             - name: ATL_LICENSE
               valueFrom:
