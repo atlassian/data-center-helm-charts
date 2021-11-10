@@ -354,7 +354,7 @@ bamboo:
     #
     secretName:
 
-    # -- The key ('licenseKey') in the Secret used to store the license information
+    # -- The key (default 'licenseKey') in the Secret used to store the license information
     #
     licenseKey: license
 
@@ -368,19 +368,19 @@ bamboo:
     #
     secretName:
 
-    # -- The key in the Secret used to store the admin username
+    # -- The key (default `username`) in the Secret used to store the admin username
     #
     usernameSecretKey: username
 
-    # -- The key in the Secret used to store the admin password
+    # -- The key (default `password`) in the Secret used to store the admin password
     #
     passwordSecretKey: password
 
-    # -- The key in the Secret used to store the admin full name
+    # -- The key (default `fullname`) in the Secret used to store the admin full name
     #
     fullnameSecretKey: fullname
     
-    # -- The key in the Secret used to store the admin email
+    # -- The key (default `email`) in the Secret used to store the admin email
     #
     emailSecretKey: email
 

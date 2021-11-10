@@ -34,15 +34,15 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bamboo container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | bamboo.adminUser | object | `{"emailSecretKey":"email","fullnameSecretKey":"fullname","passwordSecretKey":"password","secretName":null,"usernameSecretKey":"username"}` | The admin user configuration and credentials to provide to Bamboo (optional). If provided this will skip the configuration screen on first run. |
-| bamboo.adminUser.emailSecretKey | string | `"email"` | The key in the Secret used to store the admin email |
-| bamboo.adminUser.fullnameSecretKey | string | `"fullname"` | The key in the Secret used to store the admin full name |
-| bamboo.adminUser.passwordSecretKey | string | `"password"` | The key in the Secret used to store the admin password |
+| bamboo.adminUser.emailSecretKey | string | `"email"` | The key (default `email`) in the Secret used to store the admin email |
+| bamboo.adminUser.fullnameSecretKey | string | `"fullname"` | The key (default `fullname`) in the Secret used to store the admin full name |
+| bamboo.adminUser.passwordSecretKey | string | `"password"` | The key (default `password`) in the Secret used to store the admin password |
 | bamboo.adminUser.secretName | string | `nil` | The secret that contains the admin user information |
-| bamboo.adminUser.usernameSecretKey | string | `"username"` | The key in the Secret used to store the admin username |
+| bamboo.adminUser.usernameSecretKey | string | `"username"` | The key (default `username`) in the Secret used to store the admin username |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | bamboo.license | object | `{"licenseKey":"license","secretName":null}` | The license to provide to the Bamboo nodes (optional). If you have an existing license it can be provided to the server up-front to skip the configuration screen on first run. |
-| bamboo.license.licenseKey | string | `"license"` | The key ('licenseKey') in the Secret used to store the license information |
+| bamboo.license.licenseKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic |
 | bamboo.ports.jms | int | `54663` | JMS port |
