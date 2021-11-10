@@ -39,6 +39,9 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.adminUser.passwordSecretKey | string | `"password"` | The key (default `password`) in the Secret used to store the admin password |
 | bamboo.adminUser.secretName | string | `nil` | The secret that contains the admin user information |
 | bamboo.adminUser.usernameSecretKey | string | `"username"` | The key (default `username`) in the Secret used to store the admin username |
+| bamboo.agentKey | object | `{"keyName":"agentKey","secretName":null}` | Pre-configure the server/agent shared key. This should also be set in the `bamboo-agent` Helm chart values. |
+| bamboo.agentKey.keyName | string | `"agentKey"` | The key (default `agentKey`) in the Secret used to store the Bamboo shared key. |
+| bamboo.agentKey.secretName | string | `nil` | The secret that contains the shared key. |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | bamboo.license | object | `{"licenseKey":"license","secretName":null}` | The license to provide to the Bamboo nodes (optional). If you have an existing license it can be provided to the server up-front to skip the configuration screen on first run. |
