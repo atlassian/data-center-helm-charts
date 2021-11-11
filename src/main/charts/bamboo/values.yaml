@@ -344,17 +344,22 @@ bamboo:
   # -- Override the server/agent broker URL; this is optional.
   brokerUrl:
 
-  # -- Pre-configure the server/agent shared key. This should also
-  # be set in the `bamboo-agent` Helm chart values.
+  # The security token with which the agent will authenticate to the Bamboo server
+  # Additional details here:
+  # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html#Agentauthentication-SecuritytokenverificationSecuritytokenverification
   #
-  agentKey:
-    # -- The secret that contains the shared key.
+  securityToken:
+    # -- The name of the K8s Secret that contains the security token. When specified the token 
+    # will overrided the generated one. This secret should also be shared with the agent deployment.
+    # An Example of creating a K8s secret for the secret below:
+    # 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>'
+    # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
     secretName:
 
-    # -- The key (default `agentKey`) in the Secret used to store the Bamboo shared key.
+    # -- The key (default `secretKey`) in the Secret used to store the Bamboo shared key.
     #
-    keyName: agentKey
+    secretKey: security-token
 
   # -- The license to provide to the Bamboo nodes (optional). If you
   # have an existing license it can be provided to the server up-front

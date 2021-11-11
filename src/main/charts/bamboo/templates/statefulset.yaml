@@ -93,13 +93,12 @@ spec:
             - name: ATL_CLIENT_BROKER_URL
               value: {{ .Values.bamboo.brokerUrl | quote }}
             {{ end }}
-            {{ if .Values.bamboo.agentKey.secretName }}
-            {{/* FIXME: Subject to change once this is added to Bamboo. See BAMBK8S-127. */}}
-            - name: BAMBOO_AGENT_KEY
+            {{ if .Values.bamboo.securityToken.secretName }}
+            - name: SECURITY_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.bamboo.agentKey.secretName }}
-                  key: {{ .Values.bamboo.agentKey.keyName }}
+                  name: {{ .Values.bamboo.securityToken.secretName }}
+                  key: {{ .Values.bamboo.securityToken.secretKey }}
             {{ end }}
             {{ if .Values.bamboo.license.secretName }}
             - name: ATL_LICENSE

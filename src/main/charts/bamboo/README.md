@@ -39,9 +39,6 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.adminUser.passwordSecretKey | string | `"password"` | The key (default `password`) in the Secret used to store the admin password |
 | bamboo.adminUser.secretName | string | `nil` | The secret that contains the admin user information |
 | bamboo.adminUser.usernameSecretKey | string | `"username"` | The key (default `username`) in the Secret used to store the admin username |
-| bamboo.agentKey | object | `{"keyName":"agentKey","secretName":null}` | Pre-configure the server/agent shared key. This should also be set in the `bamboo-agent` Helm chart values. |
-| bamboo.agentKey.keyName | string | `"agentKey"` | The key (default `agentKey`) in the Secret used to store the Bamboo shared key. |
-| bamboo.agentKey.secretName | string | `nil` | The secret that contains the shared key. |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | bamboo.license | object | `{"licenseKey":"license","secretName":null}` | The license to provide to the Bamboo nodes (optional). If you have an existing license it can be provided to the server up-front to skip the configuration screen on first run. |
@@ -57,6 +54,8 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bamboo.securityToken.secretKey | string | `"security-token"` | The key (default `secretKey`) in the Secret used to store the Bamboo shared key. |
+| bamboo.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token  will overrided the generated one. This secret should also be shared with the agent deployment. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |
