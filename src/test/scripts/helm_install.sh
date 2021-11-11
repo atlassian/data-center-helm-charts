@@ -227,6 +227,30 @@ package_functest_helm_chart() {
   helm package "$FUNCTEST_CHART_PATH" --destination "$HELM_PACKAGE_DIR"
 }
 
+install_secrets() {
+    if [[ -n "${BAMBOO_LICENSE}" ]]; then
+        kubectl delete secret bamboo-license --ignore-not-found
+        kubectl create secret generic \
+                bamboo-license \
+                --from-literal=license="${BAMBOO_LICENSE}"
+    fi
+    if [[ -n "${BAMBOO_AGENT_KEY}" ]]; then
+        kubectl delete secret bamboo-agent-key --ignore-not-found
+        kubectl create secret generic \
+                bamboo-agent-key \
+                --from-literal=agentKey="${BAMBOO_AGENT_KEY}"
+    fi
+    if [[ -n "${BAMBOO_ADMIN_PASSWORD}" ]]; then
+        kubectl delete secret bamboo-admin-user --ignore-not-found
+        kubectl create secret generic \
+                bamboo-admin-user \
+                --from-literal=username=admin \
+                --from-literal=password="${BAMBOO_ADMIN_PASSWORD}" \
+                --from-literal=fullname=Admin \
+                --from-literal=email='admin@atlassian.com'
+    fi
+}
+
 # Install the product's Helm chart
 install_product() {
   echo "Task $((tasknum+=1)) - Installing product helm chart." >&2
@@ -312,6 +336,7 @@ bootstrap_database
 bootstrap_elasticsearch
 package_product_helm_chart
 package_functest_helm_chart
+install_secrets
 install_product
 install_product_agent
 install_functional_tests
