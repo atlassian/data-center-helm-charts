@@ -235,7 +235,7 @@ install_secrets() {
                 --from-literal=license="${BAMBOO_LICENSE}"
     fi
     if [[ -n "${SECURITY_TOKEN}" ]]; then
-        kubectl delete secret bamboo-agent-key --ignore-not-found
+        kubectl delete secret bamboo-security-token --ignore-not-found
         kubectl create secret generic \
                 bamboo-security-token \
                 --from-literal=security-token="${SECURITY_TOKEN}"

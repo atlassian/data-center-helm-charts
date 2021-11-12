@@ -3,8 +3,19 @@
 bamboo:
   clustering:
     enabled: ${clustering.enabled}
+
+  securityToken:
+    secretName: bamboo-security-token
+
+  license:
+    secretName: bamboo-license
+
+  adminUser:
+    secretName: bamboo-admin-user
+
   additionalJvmArgs:
     - -XX:ActiveProcessorCount=2
+
 database:
   type: postgresql
   url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql:5432/bamboo
