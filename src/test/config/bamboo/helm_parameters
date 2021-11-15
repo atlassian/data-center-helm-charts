@@ -8,6 +8,7 @@ POSTGRES_APP_VERSION=11
 LOG_DOWNLOAD_DIR=${project.build.directory}/logs
 TARGET_NAMESPACE=${kubernetes.target.namespace}
 DOCKER_IMAGE_REGISTRY=${dockerImage.registry}
+DOCKER_IMAGE_REPOSITORY=${dockerImage.repository}
 DOCKER_IMAGE_VERSION=${dockerImage.version}
 INGRESS_DOMAIN_AKS=${aks.ingress.domain}
 INGRESS_DOMAIN_EKS=${eks.ingress.domain}
