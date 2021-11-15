@@ -10,7 +10,7 @@ bamboo:
   license:
     secretName: bamboo-license
 
-  adminUser:
+  sysadminCredentials:
     secretName: bamboo-admin-user
 
   additionalJvmArgs:

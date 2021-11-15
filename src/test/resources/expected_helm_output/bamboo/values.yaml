@@ -7,17 +7,17 @@ volumes:
 bamboo:
   brokerUrl: "tcp://testBroker:1234"
 
-  agentKey:
+  securityToken:
     secretName: agentTestSecret
-    keyName: agentTestKey
+    secretKey: agentTestKey
 
   license:
     secretName: licenseTestSecret
-    licenseKey: licenseTestKey
+    secretKey: licenseTestKey
 
-  adminUser:
+  sysadminCredentials:
     secretName: adminTestSecret
     usernameSecretKey: adminTestUsernameKey
     passwordSecretKey: adminPasswordTestKey
-    fullnameSecretKey: adminFullnameTestKey
-    emailSecretKey: adminEmailTestKey
+    displayNameSecretKey: adminFullnameTestKey
+    emailAddressSecretKey: adminEmailTestKey

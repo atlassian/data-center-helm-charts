@@ -373,33 +373,33 @@ bamboo:
 
     # -- The key (default 'licenseKey') in the Secret used to store the license information
     #
-    licenseKey: license
+    secretKey: license
 
   # -- The admin user configuration and credentials to provide to
   # Bamboo (optional). If provided this will skip the configuration
   # screen on first run.
   #
-  adminUser:
+  sysadminCredentials:
 
     # -- The secret that contains the admin user information
     #
     secretName:
 
-    # -- The key (default `username`) in the Secret used to store the admin username
+    # -- The key in the Kubernetes Secret that contains the sysadmin username
     #
     usernameSecretKey: username
-
-    # -- The key (default `password`) in the Secret used to store the admin password
+    
+    # -- The key in the Kubernetes Secret that contains the sysadmin password
     #
     passwordSecretKey: password
-
-    # -- The key (default `fullname`) in the Secret used to store the admin full name
-    #
-    fullnameSecretKey: fullname
     
-    # -- The key (default `email`) in the Secret used to store the admin email
+    # -- The key in the Kubernetes Secret that contains the sysadmin display name
     #
-    emailSecretKey: email
+    displayNameSecretKey: displayName
+    
+    # -- The key in the Kubernetes Secret that contains the sysadmin email address
+    #
+    emailAddressSecretKey: emailAddress
 
   # K8s Service configuration
   #

@@ -105,29 +105,29 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.bamboo.license.secretName }}
-                  key: {{ .Values.bamboo.license.licenseKey }}
+                  key: {{ .Values.bamboo.license.secretKey }}
             {{ end }}
-            {{ if .Values.bamboo.adminUser.secretName }}
+            {{ if .Values.bamboo.sysadminCredentials.secretName }}
             - name: ATL_ADMIN_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.bamboo.adminUser.secretName }}
-                  key: {{ .Values.bamboo.adminUser.usernameSecretKey }}
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.usernameSecretKey }}
             - name: ATL_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.bamboo.adminUser.secretName }}
-                  key: {{ .Values.bamboo.adminUser.passwordSecretKey }}
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.passwordSecretKey }}
             - name: ATL_ADMIN_FULLNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.bamboo.adminUser.secretName }}
-                  key: {{ .Values.bamboo.adminUser.fullnameSecretKey }}
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.displayNameSecretKey }}
             - name: ATL_ADMIN_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.bamboo.adminUser.secretName }}
-                  key: {{ .Values.bamboo.adminUser.emailSecretKey }}
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.emailAddressSecretKey }}
             {{ end }}
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
