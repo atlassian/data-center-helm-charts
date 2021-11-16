@@ -59,6 +59,10 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
+            {{ if .Values.bamboo.baseUrl }}
+            - name: ATL_BASE_URL
+              value: {{ .Values.bamboo.baseUrl | quote }}
+            {{ end }}
             {{ if .Values.bamboo.service.contextPath }}
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.bamboo.service.contextPath | quote }}
@@ -128,6 +132,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.bamboo.sysadminCredentials.secretName }}
                   key: {{ .Values.bamboo.sysadminCredentials.emailAddressSecretKey }}
+            {{ end }}
+            {{ if .Values.bamboo.import.type }}
+            - name: ATL_IMPORT_OPTION
+              value: {{ .Values.bamboo.import.type }}
+            - name: ATL_IMPORT_PATH
+              value: {{ .Values.bamboo.import.path }}
             {{ end }}
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:

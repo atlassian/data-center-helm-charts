@@ -99,6 +99,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_BASE_URL
+              value: "https://testUrl/"
             - name: SET_PERMISSIONS
               value: "true"
             - name: BAMBOO_SHARED_HOME
@@ -150,6 +152,10 @@ spec:
                 secretKeyRef:
                   name: adminTestSecret
                   key: adminEmailTestKey
+            - name: ATL_IMPORT_OPTION
+              value: clean
+            - name: ATL_IMPORT_PATH
+              value: 
           ports:
             - name: http
               containerPort: 8085

@@ -5,6 +5,8 @@ volumes:
       enabled: true
 
 bamboo:
+  baseUrl: "https://testUrl/"
+
   brokerUrl: "tcp://testBroker:1234"
 
   securityToken:
@@ -21,3 +23,7 @@ bamboo:
     passwordSecretKey: adminPasswordTestKey
     displayNameSecretKey: adminFullnameTestKey
     emailAddressSecretKey: adminEmailTestKey
+
+  import:
+    type: "clean"
+

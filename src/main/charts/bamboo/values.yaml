@@ -341,6 +341,9 @@ ingress:
 #
 bamboo:
 
+  # -- Supply the base URL for the installation.
+  baseUrl:
+
   # -- Override the server/agent broker URL; this is optional.
   brokerUrl:
 
@@ -400,6 +403,24 @@ bamboo:
     # -- The key in the Kubernetes Secret that contains the sysadmin email address
     #
     emailAddressSecretKey: emailAddress
+
+  # -- Bamboo can optionally import an existing exported dataset on
+  # first-run. These optional values can configure the import file or
+  # skip this stage entirely.
+  #
+  import:
+
+    # -- Import type. Valid values are 'clean' (for a fresh install)
+    # or 'import', in which case you should provide the file path. The
+    # default is unset, which will then ask via the web UI.
+    #
+    type:
+
+    # -- Path to the existing export to import to the new
+    # installation. This should be accessible by the cluster node;
+    # e.g. via the shared-home or `additionalVolumeMounts` below.
+    #
+    path:
 
   # K8s Service configuration
   #

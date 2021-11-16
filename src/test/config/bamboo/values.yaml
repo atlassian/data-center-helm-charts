@@ -1,6 +1,8 @@
 # This file contains overrides for the Bamboo Helm chart's values.yaml file
 
 bamboo:
+  baseUrl: https://${helm.release.prefix}.${eks.ingress.domain}/
+
   clustering:
     enabled: ${clustering.enabled}
 
@@ -13,8 +15,15 @@ bamboo:
   sysadminCredentials:
     secretName: bamboo-admin-user
 
+  import:
+    type: "clean"
+
   additionalJvmArgs:
     - -XX:ActiveProcessorCount=2
+
+  additionalEnvironmentVariables:
+    - name: ATL_BAMBOO_SKIP_CONFIG
+      value: "true"
 
 database:
   type: postgresql
