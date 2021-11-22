@@ -352,6 +352,7 @@ bamboo:
   # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html#Agentauthentication-SecuritytokenverificationSecuritytokenverification
   #
   securityToken:
+
     # -- The name of the K8s Secret that contains the security token. When specified the token 
     # will overrided the generated one. This secret should also be shared with the agent deployment.
     # An Example of creating a K8s secret for the secret below:
