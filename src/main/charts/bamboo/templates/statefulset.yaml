@@ -104,6 +104,10 @@ spec:
                   name: {{ .Values.bamboo.securityToken.secretName }}
                   key: {{ .Values.bamboo.securityToken.secretKey }}
             {{ end }}
+            {{ if .Values.bamboo.disableAgentAuth }}
+            - name: ATL_BAMBOO_DISABLE_AGENT_AUTH
+              value: "true"
+            {{ end }}
             {{ if .Values.bamboo.license.secretName }}
             - name: ATL_LICENSE
               valueFrom:

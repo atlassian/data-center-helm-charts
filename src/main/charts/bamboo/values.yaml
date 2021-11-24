@@ -365,6 +365,11 @@ bamboo:
     #
     secretKey: security-token
 
+  # -- Whether to disable agent authentication. Default is false.
+  #
+  disableAgentAuth: false
+
+
   # -- The license to provide to the Bamboo nodes (optional). If you
   # have an existing license it can be provided to the server up-front
   # to skip the configuration screen on first run.

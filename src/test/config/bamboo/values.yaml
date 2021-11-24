@@ -9,6 +9,8 @@ bamboo:
   securityToken:
     secretName: bamboo-security-token
 
+  disableAgentAuth: true
+
   license:
     secretName: bamboo-license
 

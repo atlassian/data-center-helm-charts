@@ -36,6 +36,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.baseUrl | string | `nil` | Supply the base URL for the installation. |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
+| bamboo.disableAgentAuth | bool | `false` | Whether to disable agent authentication. Default is false. |
 | bamboo.import | object | `{"path":null,"type":null}` | Bamboo can optionally import an existing exported dataset on first-run. These optional values can configure the import file or skip this stage entirely. |
 | bamboo.import.path | string | `nil` | Path to the existing export to import to the new installation. This should be accessible by the cluster node; e.g. via the shared-home or `additionalVolumeMounts` below. |
 | bamboo.import.type | string | `nil` | Import type. Valid values are 'clean' (for a fresh install) or 'import', in which case you should provide the file path. The default is unset, which will then ask via the web UI. |
