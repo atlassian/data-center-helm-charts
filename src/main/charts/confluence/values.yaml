@@ -661,7 +661,7 @@ confluence:
   #
   additionalEnvironmentVariables: []
 
-  # -- Defines any topology spread constraints for the Confluence pod. All details:
+  # -- Defines topology spread constraints for Confluence pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
   topologySpreadConstraints: []
@@ -805,7 +805,7 @@ synchrony:
   #     subDirectory:
   #     fileName:
 
-  # -- Defines any topology spread constraints for the Synchrony pod. All details:
+  # -- Defines topology spread constraints for Synchrony pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
   topologySpreadConstraints: []

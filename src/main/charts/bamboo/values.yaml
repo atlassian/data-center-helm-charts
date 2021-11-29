@@ -538,6 +538,16 @@ bamboo:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines topology spread constraints for Bamboo pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+
 # Fluentd configuration 
 #
 # Bamboo log collection and aggregation can be enabled using Fluentd. This config

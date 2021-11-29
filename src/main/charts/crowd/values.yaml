@@ -318,6 +318,16 @@ crowd:
   # See https://hub.docker.com/r/atlassian/crowd for supported variables.
   additionalEnvironmentVariables: []
 
+  # -- Defines topology spread constraints for Crowd pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+
 # Ingress configuration
 #
 # To make the Atlassian product available from outside the K8s cluster an Ingress

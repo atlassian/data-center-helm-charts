@@ -45,6 +45,7 @@ Kubernetes: `>=1.19.x-0`
 | agent.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bamboo agent container startup probe before the pod fails readiness checks. |
 | agent.startupProbe.initialDelaySeconds | int | `1` | The initial delay (in seconds) for the Bamboo agent container startup probe, after which the probe will start running. |
 | agent.startupProbe.periodSeconds | int | `1` | How often (in seconds) the Bamboo agent container startup probe will run |
+| agent.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Bamboo agent pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"atlassian/bamboo-agent-base"` | The Bamboo agent Docker image to use https://hub.docker.com/r/atlassian/bamboo-agent-base |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |

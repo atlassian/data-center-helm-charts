@@ -212,6 +212,16 @@ agent:
   # supported variables.
   #
   additionalEnvironmentVariables: []
+
+  # -- Defines topology spread constraints for Bamboo agent pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: kubernetes.io/hostname
+    #   whenUnsatisfiable: ScheduleAnyway
+    #   labelSelector:
+    #     matchLabels:
      
   
 # -- Custom annotations that will be applied to all Bamboo agent pods
