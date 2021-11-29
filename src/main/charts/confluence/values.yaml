@@ -661,6 +661,17 @@ confluence:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines any topology spread constraints for the Confluence pod. All details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: confluence
+
   # Debugging
   #
   jvmDebug:
@@ -793,6 +804,17 @@ synchrony:
   #   - volumeName:
   #     subDirectory:
   #     fileName:
+
+  # -- Defines any topology spread constraints for the Synchrony pod. All details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: confluence-synchrony
 
 # Fluentd configuration
 #
