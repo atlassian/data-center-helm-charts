@@ -22,7 +22,7 @@ class TopologySpreadConstraintsTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void test_topology_constraint_on_pod(Product product) throws Exception {
+    void test_topology_constraint_on_pods_in_statefulset(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".topologySpreadConstraints[0].maxSkew", "1",
                 product + ".topologySpreadConstraints[0].topologyKey", "kubernetes.io/hostname",
@@ -36,5 +36,43 @@ class TopologySpreadConstraintsTest {
         assertThat(topologySpreadConstraints.get(0).get("maxSkew")).hasValueEqualTo(1);
         assertThat(topologySpreadConstraints.get(0).get("topologyKey")).hasTextEqualTo("kubernetes.io/hostname");
         assertThat(topologySpreadConstraints.get(0).get("whenUnsatisfiable")).hasTextContaining("ScheduleAnyway");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.INCLUDE)
+    void test_topology_constraints_on_pods_in_agent_deployment(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "agent.topologySpreadConstraints[0].maxSkew", "1",
+                "agent.topologySpreadConstraints[0].topologyKey", "kubernetes.io/hostname",
+                "agent.topologySpreadConstraints[0].whenUnsatisfiable", "ScheduleAnyway"));
+
+
+        JsonNode topologySpreadConstraints = resources.getDeployment(product.getHelmReleaseName())
+                .getPodSpec()
+                .get("topologySpreadConstraints");
+        assertThat(topologySpreadConstraints).isArrayWithNumberOfChildren(1);
+        assertThat(topologySpreadConstraints.get(0).get("maxSkew")).hasValueEqualTo(1);
+        assertThat(topologySpreadConstraints.get(0).get("topologyKey")).hasTextEqualTo("kubernetes.io/hostname");
+        assertThat(topologySpreadConstraints.get(0).get("whenUnsatisfiable")).hasTextContaining("ScheduleAnyway");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_default_topology_doesnt_exist_in_statefulset(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+
+        assertThat(resources.getStatefulSet(product.getHelmReleaseName())
+                .getPodSpec()
+                .get("topologySpreadConstraints")).isNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.INCLUDE)
+    void test_default_topology_doesnt_exist_in_deployment(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+
+        assertThat(resources.getDeployment(product.getHelmReleaseName())
+                .getPodSpec()
+                .get("topologySpreadConstraints")).isNull();
     }
 }
