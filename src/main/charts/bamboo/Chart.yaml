@@ -17,3 +17,7 @@ sources:
   - https://github.com/atlassian/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-bamboo-server
 deprecated: false
+dependencies:
+  - name: common
+    version: 0.1.0
+    repository: "file://../common"

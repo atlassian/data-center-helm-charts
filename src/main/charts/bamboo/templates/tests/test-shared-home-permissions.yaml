@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "bamboo.fullname" . }}-shared-home-permissions-test"
+  name: "{{ include "common.names.fullname" . }}-shared-home-permissions-test"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
@@ -9,7 +9,7 @@ metadata:
       {{- toYaml . | nindent 4 }}
     {{- end }}
   labels:
-    {{- include "bamboo.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   containers:
     - name: test

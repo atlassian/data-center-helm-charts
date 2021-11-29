@@ -27,6 +27,10 @@ jobs:
         with:
           version: v3.4.0
 
+      - name: Execute helm dependency update for bamboo chart
+        run: helm dependency update src/main/charts/bamboo
+      - name: Execute helm dependency update for bamboo-agent chart
+        run: helm dependency update src/main/charts/bamboo-agent
       - name: Execute helm dependency update for bitbucket chart
         run: helm dependency update src/main/charts/bitbucket
       - name: Execute helm dependency update for confluence chart
