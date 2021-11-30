@@ -10,6 +10,11 @@ data:
     {{- range .Values.jira.additionalJvmArgs }}
     {{ . }}
     {{- end }}
+    {{- if hasSuffix "m" .Values.jira.resources.container.requests.cpu }}
+    -XX:ActiveProcessorCount={{ div (trimSuffix "m" .Values.jira.resources.container.requests.cpu) 1000 | default 1 }}
+    {{ else }}
+    -XX:ActiveProcessorCount={{ .Values.jira.resources.container.requests.cpu }}
+    {{ end }}
   max_heap: {{ .Values.jira.resources.jvm.maxHeap }}
   min_heap: {{ .Values.jira.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.jira.resources.jvm.reservedCodeCache }}
