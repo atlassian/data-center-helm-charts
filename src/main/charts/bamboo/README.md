@@ -36,10 +36,10 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.baseUrl | string | `nil` | Supply the base URL for the installation. |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
-| bamboo.disableAgentAuth | bool | `false` | Whether to disable agent authentication. Default is false. |
-| bamboo.import | object | `{"path":null,"type":null}` | Bamboo can optionally import an existing exported dataset on first-run. These optional values can configure the import file or skip this stage entirely. |
+| bamboo.disableAgentAuth | bool | `false` | Whether to disable agent authentication. Setting this to true skips the agent approval step in the UI. For more information see: https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html The default is false. |
+| bamboo.import | object | `{"path":null,"type":"clean"}` | Bamboo can optionally import an existing exported dataset on first-run. These optional values can configure the import file or skip this stage entirely. For more details on importing and exporting see the documentation: https://confluence.atlassian.com/bamboo/exporting-data-for-backup-289277255.html https://confluence.atlassian.com/bamboo/importing-data-from-backup-289277260.html |
 | bamboo.import.path | string | `nil` | Path to the existing export to import to the new installation. This should be accessible by the cluster node; e.g. via the shared-home or `additionalVolumeMounts` below. |
-| bamboo.import.type | string | `nil` | Import type. Valid values are 'clean' (for a fresh install) or 'import', in which case you should provide the file path. The default is unset, which will then ask via the web UI. |
+| bamboo.import.type | string | `"clean"` | Import type. Valid values are `clean` (for a new install) or `import`, in which case you should provide the file path. The default is `clean`. |
 | bamboo.license | object | `{"secretKey":"license","secretName":null}` | The license to provide to the Bamboo nodes (optional). If you have an existing license it can be provided to the server up-front to skip the configuration screen on first run. |
 | bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information |
