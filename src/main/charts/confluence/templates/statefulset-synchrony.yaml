@@ -44,6 +44,7 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.synchrony.ports.hazelcast }}
               protocol: TCP
+            {{- include "synchrony.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.synchrony.ports.http }}

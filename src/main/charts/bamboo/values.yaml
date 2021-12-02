@@ -636,6 +636,13 @@ bamboo:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines any additional ports for the Bamboo container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
+
 # Fluentd configuration 
 #
 # Bamboo log collection and aggregation can be enabled using Fluentd. This config

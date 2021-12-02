@@ -64,6 +64,7 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.crowd.ports.hazelcast }}
               protocol: TCP
+            {{- include "crowd.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.crowd.ports.http }}

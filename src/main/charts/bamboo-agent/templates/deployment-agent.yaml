@@ -81,6 +81,9 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
 
+          ports:
+          {{- include "agent.additionalPorts" . | nindent 12 }}
+
           lifecycle:
             preStop:
               exec:

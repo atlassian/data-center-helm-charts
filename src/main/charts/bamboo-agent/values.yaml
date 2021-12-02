@@ -212,7 +212,13 @@ agent:
   # supported variables.
   #
   additionalEnvironmentVariables: []
-     
+
+  # -- Defines any additional ports for the Bamboo agent container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
   
 # -- Custom annotations that will be applied to all Bamboo agent pods
 #
