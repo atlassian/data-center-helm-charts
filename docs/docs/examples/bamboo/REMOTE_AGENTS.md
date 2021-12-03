@@ -39,7 +39,7 @@ First, create a secret to store a custom security token with which remote agent(
 
 !!!info "Security token format"
     
-    The security token should be set to a 40-character hexadecimal string. The following command can be used to do this:
+    The security token should be set to a 40-character hexadecimal string. The following command can be used to generate a string in this format:
     ```
     xxd -l 20 -p /dev/urandom
     ```
