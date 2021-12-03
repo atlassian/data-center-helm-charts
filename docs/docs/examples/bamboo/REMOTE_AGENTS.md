@@ -125,7 +125,7 @@ The number of active agents can be easily increased or decreased:
 helm upgrade --set replicaCount=<desired number of agents> \
              --reuse-values \
              <name of the release>
-             atlassian-data-center/bamoboo-agent
+             atlassian-data-center/bamboo-agent
 ```
 
 ## Troubleshooting
