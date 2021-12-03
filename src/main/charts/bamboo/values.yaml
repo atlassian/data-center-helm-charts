@@ -349,10 +349,10 @@ bamboo:
   #
   brokerUrl:
 
-  # The security token with which the agent will authenticate to the
-  # Bamboo server. The token should be set to a 40-character
-  # hexadecimal string. Additional details are here:
-  # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html
+  # The security token with which the agent will authenticate to the Bamboo server. 
+  # The token should be set to a 40-character hexadecimal string. There are many ways
+  # to generate a hex string like this, here is one: "xxd -l 20 -p /dev/urandom"
+  # Additional details are here: https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html
   #
   securityToken:
 
