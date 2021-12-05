@@ -17,6 +17,10 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 
 Kubernetes: `>=1.19.x-0`
 
+| Repository | Name | Version |
+|------------|------|---------|
+| file://../common | common | 0.1.0 |
+
 ## Values
 
 | Key | Type | Default | Description |

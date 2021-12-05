@@ -24,7 +24,7 @@
         fieldRef:
           fieldPath: status.podIP
     - name: HELM_RELEASE_NAME
-      value: {{ include "jira.fullname" . }}
+      value: {{ include "common.names.fullname" . }}
 {{ end }}
 {{ end }}
 

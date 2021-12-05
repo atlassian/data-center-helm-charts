@@ -29,7 +29,7 @@ else use the name of the Helm release.
 {{- if .Values.serviceAccount.clusterRole.name }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
-{{- include "bitbucket.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- end }}
 {{- end }}
 
@@ -198,7 +198,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
-    claimName: {{ include "bitbucket.fullname" . }}-shared-home
+    claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
 {{ else }}
@@ -207,7 +207,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volume.sharedHome.name" -}}
-{{ include "bitbucket.fullname" . }}-shared-home-pv
+{{ include "common.names.fullname" . }}-shared-home-pv
 {{- end }}
 
 {{- define "bitbucket.volumeClaimTemplates" -}}
@@ -284,7 +284,7 @@ volumeClaimTemplates:
     fieldRef:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-  value: {{ include "bitbucket.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 - name: HAZELCAST_NETWORK_KUBERNETES
   value: "true"
 - name: HAZELCAST_PORT
@@ -294,7 +294,7 @@ volumeClaimTemplates:
 {{ end }}
 
 {{- define "bitbucket.hazelcastGroupSecretName" -}}
-{{- .Values.bitbucket.clustering.group.secretName | default (printf "%s-clustering" (include "bitbucket.fullname" .)) -}}
+{{- .Values.bitbucket.clustering.group.secretName | default (printf "%s-clustering" (include "common.names.fullname" .)) -}}
 {{- end }}
 
 {{- define "bitbucket.hazelcastGroupEnvVars" }}
