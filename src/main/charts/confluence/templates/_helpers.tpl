@@ -404,24 +404,8 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 {{- end }}
 
-{{- define "confluence.volumeClaimTemplates.hasConfluence" -}}
-  {{- range .Values.volumes.additionalVolumeClaimTemplates }}
-    {{- if .enableInConfluence -}}
-      {{- true -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "confluence.volumeClaimTemplates.hasSynchrony" -}}
-  {{- range .Values.volumes.additionalVolumeClaimTemplates }}
-    {{- if .enableInSynchrony -}}
-      {{- true -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-
 {{- define "confluence.volumeClaimTemplates" -}}
-{{- if or .Values.volumes.localHome.persistentVolumeClaim.create (include "confluence.volumeClaimTemplates.hasConfluence" $) }}
+{{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.confluence.additionalVolumeClaimTemplates }}
 volumeClaimTemplates:
 {{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:
@@ -436,8 +420,7 @@ volumeClaimTemplates:
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
-{{- range .Values.volumes.additionalVolumeClaimTemplates }}
-{{- if .enableInConfluence }}
+{{- range .Values.confluence.additionalVolumeClaimTemplates }}
 - metadata:
     name: {{ .name }}
   spec:
@@ -452,12 +435,10 @@ volumeClaimTemplates:
 {{- end }}
 {{- end }}
 {{- end }}
-{{- end }}
 
 {{- define "synchrony.volumeClaimTemplates" -}}
-{{- if or .Values.volumes.synchronyHome.persistentVolumeClaim.create (include "confluence.volumeClaimTemplates.hasSynchrony" $) }}
+{{ if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
 volumeClaimTemplates:
-{{- if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
 - metadata:
     name: synchrony-home
   spec:
@@ -469,22 +450,6 @@ volumeClaimTemplates:
     resources:
       {{- toYaml . | nindent 6 }}
     {{- end }}
-{{- end }}
-{{- range .Values.volumes.additionalVolumeClaimTemplates }}
-{{- if .enableInSynchrony }}
-- metadata:
-    name: {{ .name }}
-  spec:
-    accessModes: [ "ReadWriteOnce" ]
-    {{- if .storageClassName }}
-    storageClassName: {{ .storageClassName | quote }}
-    {{- end }}
-    {{- with .resources }}
-    resources:
-      {{- toYaml . | nindent 6 }}
-    {{- end }}
-{{- end }}
-{{- end }}
 {{- end }}
 {{- end }}
 
