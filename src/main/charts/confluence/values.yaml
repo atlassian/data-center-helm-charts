@@ -661,6 +661,13 @@ confluence:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines any additional ports for the Confluence container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
+
   # Debugging
   #
   jvmDebug:
@@ -793,6 +800,13 @@ synchrony:
   #   - volumeName:
   #     subDirectory:
   #     fileName:
+
+  # -- Defines any additional ports for the Synchrony container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
 
 # Fluentd configuration
 #

@@ -29,6 +29,15 @@ public final class Container {
 
     }
 
+    public JsonNode getPorts() {
+        return get("ports");
+    }
+    public JsonNode getPort(String name) {
+        return Array.ofAll(getPorts())
+                .find(p -> p.path("name").asText().equals(name))
+                .getOrElseThrow(() -> new AssertionError("cannot find port: " + name));
+    }
+
     public JsonNode getResources() {
         return get("resources");
     }

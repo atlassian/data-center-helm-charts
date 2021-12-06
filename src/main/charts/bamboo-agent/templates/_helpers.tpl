@@ -117,6 +117,15 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
+Defining additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "agent.additionalPorts" -}}
+{{- with .Values.agent.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Defining additional environment variables here instead of in values.yaml to allow template overrides
 */}}
 {{- define "agent.additionalEnvironmentVariables" -}}

@@ -318,6 +318,13 @@ crowd:
   # See https://hub.docker.com/r/atlassian/crowd for supported variables.
   additionalEnvironmentVariables: []
 
+  # -- Defines any additional ports for the Crowd container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
+
 # Ingress configuration
 #
 # To make the Atlassian product available from outside the K8s cluster an Ingress
