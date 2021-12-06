@@ -92,7 +92,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "common.names.fullname" . }}-jvm-config            
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             {{ if .Values.bamboo.brokerUrl }}
             - name: ATL_CLIENT_BROKER_URL
               value: {{ .Values.bamboo.brokerUrl | quote }}
