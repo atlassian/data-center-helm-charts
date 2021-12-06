@@ -47,5 +47,5 @@ annotations:
         url: https://github.com/atlassian/data-center-helm-charts/pull/345
 dependencies:
   - name: common
-    version: 0.1.0
+    version: 1.0.0
     repository: "file://../common"
