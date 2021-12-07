@@ -58,4 +58,4 @@ annotations:
 dependencies:
   - name: common
     version: 1.0.0
-    repository: "file://../common"
+    repository: https://atlassian.github.io/data-center-helm-charts

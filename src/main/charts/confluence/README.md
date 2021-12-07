@@ -19,7 +19,7 @@ Kubernetes: `>=1.19.x-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../common | common | 1.0.0 |
+| https://atlassian.github.io/data-center-helm-charts | common | 1.0.0 |
 
 ## Values
 
