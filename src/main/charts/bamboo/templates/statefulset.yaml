@@ -151,6 +151,7 @@ spec:
             - name: jms
               containerPort: {{ .Values.bamboo.ports.jms }}
               protocol: TCP
+            {{- include "bamboo.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.bamboo.ports.http }}

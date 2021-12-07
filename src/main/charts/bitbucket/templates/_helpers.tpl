@@ -126,6 +126,15 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
+Defining additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "bitbucket.additionalPorts" -}}
+{{- with .Values.bitbucket.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "bitbucket.additionalVolumeMounts" -}}

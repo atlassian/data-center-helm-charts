@@ -42,6 +42,23 @@ class ContainersTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additionalPorts(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname+".additionalPorts[0].name", "jmx",
+                pname+".additionalPorts[0].port", "5555",
+                pname+".additionalPorts[0].protocol", "TCP"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var port = statefulSet.getContainer().getPort("jmx");
+        assertThat(port.path("name")).hasTextEqualTo("jmx");
+        assertThat(port.path("protocol")).hasTextEqualTo("TCP");
+        assertThat(port.path("port")).hasValueEqualTo(5555);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalInitContainers(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(

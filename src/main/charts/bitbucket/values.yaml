@@ -747,6 +747,13 @@ bitbucket:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines any additional ports for the Bitbucket container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
+
 # Fluentd configuration
 #
 # Bitbucket log collection and aggregation can be enabled using Flunetd. This config

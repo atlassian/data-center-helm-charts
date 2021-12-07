@@ -111,6 +111,15 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
+Defining additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "jira.additionalPorts" -}}
+{{- with .Values.jira.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalVolumeMounts" -}}

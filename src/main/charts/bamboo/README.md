@@ -36,6 +36,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo  container. See https://hub.docker.com/r/atlassian/bamboo-server for  supported variables. |
 | bamboo.additionalJvmArgs[0] | string | `"-XX:ActiveProcessorCount=2"` | The value defined for ActiveProcessorCount should correspond to that provided  for 'container.requests.cpu'. https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE |
 | bamboo.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bamboo container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
+| bamboo.additionalPorts | list | `[]` | Defines any additional ports for the Bamboo container. |
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | bamboo.baseUrl | string | `nil` | Supply the base URL for the installation. |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |

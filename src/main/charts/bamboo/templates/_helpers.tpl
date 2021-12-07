@@ -106,6 +106,15 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
+Defining additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "bamboo.additionalPorts" -}}
+{{- with .Values.bamboo.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "bamboo.additionalVolumeMounts" -}}
