@@ -38,7 +38,11 @@ The Bamboo server and Bamboo agents must be deployed to the same cluster. You ca
 When configuring application links between Bamboo server and any Atlassian Cloud server product, the Bamboo server base URL needs to be used. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
 
 ### Import and export of large datasets
-At present there is an issue with Bamboo where the `/server` and `/status` REST endpoints become un-usable when performing an [export/import of large datasets](https://jira.atlassian.com/browse/BAM-18673){.external}. If a data export/import is required this should be done [via a DB dump/restore](https://confluence.atlassian.com/bamboo/moving-your-bamboo-data-to-a-different-database-289277250.html){.external}
+At present there is an issue with Bamboo where the `/server` and `/status` REST endpoints become un-usable when performing an [export or import of large datasets](https://jira.atlassian.com/browse/BAM-18673){.external}. 
+
+!!!info "DB migration for dataset restore"
+
+    If a data export/import is required this should be done [via a DB dump/restore](https://confluence.atlassian.com/bamboo/moving-your-bamboo-data-to-a      different-database-289277250.html#MovingyourBamboodatatoadifferentdatabase-AlternativeDBmigration){.external}
 
 ## Platform limitations
 These configurations are explicitly not supported, and the Helm charts don’t work without modifications in these environments:
