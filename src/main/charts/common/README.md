@@ -4,16 +4,22 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 
 ## TL;DR
 
+### Chart.yaml
+
 ```yaml
 dependencies:
   - name: common
-    version: 0.x.x
+    version: 1.x.x # picks up any non-breaking version within 1.x.y line
     repository: https://atlassian.github.io/data-center-helm-charts
 ```
+
+### Local development
 
 ```bash
 helm dependency update
 ```
+
+### Product usage
 
 ```yaml
 apiVersion: v1

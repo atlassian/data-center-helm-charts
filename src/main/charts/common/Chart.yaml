@@ -12,6 +12,6 @@ keywords:
   - function
   - Atlassian
 home: https://atlassian.github.io/data-center-helm-charts/
-icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+icon: https://atlassian.github.io/data-center-helm-charts/icons/atlassian.svg
 sources:
   - https://github.com/atlassian/data-center-helm-charts
