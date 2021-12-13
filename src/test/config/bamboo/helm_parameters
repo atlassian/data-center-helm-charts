@@ -8,6 +8,7 @@ POSTGRES_APP_VERSION=11
 LOG_DOWNLOAD_DIR=${project.build.directory}/logs
 TARGET_NAMESPACE=${kubernetes.target.namespace}
 DOCKER_IMAGE_REGISTRY=${dockerImage.registry}
+DOCKER_IMAGE_REPOSITORY=${dockerImage.repository}
 DOCKER_IMAGE_VERSION=${dockerImage.version}
 INGRESS_DOMAIN_AKS=${aks.ingress.domain}
 INGRESS_DOMAIN_EKS=${eks.ingress.domain}
@@ -17,6 +18,13 @@ INGRESS_DOMAIN_KITT=${kitt.ingress.domain}
 TARGET_REPLICA_COUNT=1
 DB_INIT_SCRIPT_FILE=${db.init.script.file}
 HELM_DEBUG=${helm.debug}
+
+# Bamboo pre-seed values. We also require BAMBOO_ADMIN_PASSWORD and BAMBOO_LICENSE.
+
+SECURITY_TOKEN=1234567890123456789012345678901234567890
+BAMBOO_ADMIN_USERNAME=admin
+BAMBOO_ADMIN_FULLNAME=Admin
+BAMBOO_ADMIN_EMAIL=admin@atlassian.com
 
 # Agent deployment setup
 PRODUCT_AGENT_CHART=src/main/charts/bamboo-agent/

@@ -118,6 +118,7 @@ spec:
             - name: ehcacheobject
               containerPort: {{ .Values.jira.ports.ehcacheobject }}
               protocol: TCP
+            {{- include "jira.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.jira.ports.http }}

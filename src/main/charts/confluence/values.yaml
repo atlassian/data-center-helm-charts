@@ -661,6 +661,13 @@ confluence:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines any additional ports for the Confluence container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
+
   # -- Defines topology spread constraints for Confluence pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
@@ -804,6 +811,13 @@ synchrony:
   #   - volumeName:
   #     subDirectory:
   #     fileName:
+
+  # -- Defines any additional ports for the Synchrony container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
 
   # -- Defines topology spread constraints for Synchrony pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/

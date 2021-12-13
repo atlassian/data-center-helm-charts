@@ -59,6 +59,10 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
+            {{ if .Values.bamboo.baseUrl }}
+            - name: ATL_BASE_URL
+              value: {{ .Values.bamboo.baseUrl | quote }}
+            {{ end }}
             {{ if .Values.bamboo.service.contextPath }}
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.bamboo.service.contextPath | quote }}
@@ -88,7 +92,57 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "bamboo.fullname" . }}-jvm-config            
+                  name: {{ include "bamboo.fullname" . }}-jvm-config
+            {{ if .Values.bamboo.brokerUrl }}
+            - name: ATL_CLIENT_BROKER_URL
+              value: {{ .Values.bamboo.brokerUrl | quote }}
+            {{ end }}
+            {{ if .Values.bamboo.securityToken.secretName }}
+            - name: SECURITY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.securityToken.secretName }}
+                  key: {{ .Values.bamboo.securityToken.secretKey }}
+            {{ end }}
+            {{ if .Values.bamboo.disableAgentAuth }}
+            - name: ATL_BAMBOO_DISABLE_AGENT_AUTH
+              value: "true"
+            {{ end }}
+            {{ if .Values.bamboo.license.secretName }}
+            - name: ATL_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.license.secretName }}
+                  key: {{ .Values.bamboo.license.secretKey }}
+            {{ end }}
+            {{ if .Values.bamboo.sysadminCredentials.secretName }}
+            - name: ATL_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.usernameSecretKey }}
+            - name: ATL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.passwordSecretKey }}
+            - name: ATL_ADMIN_FULLNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.displayNameSecretKey }}
+            - name: ATL_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.bamboo.sysadminCredentials.secretName }}
+                  key: {{ .Values.bamboo.sysadminCredentials.emailAddressSecretKey }}
+            {{ end }}
+            {{ if .Values.bamboo.import.type }}
+            - name: ATL_IMPORT_OPTION
+              value: {{ .Values.bamboo.import.type }}
+            - name: ATL_IMPORT_PATH
+              value: {{ .Values.bamboo.import.path }}
+            {{ end }}
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http
@@ -97,6 +151,7 @@ spec:
             - name: jms
               containerPort: {{ .Values.bamboo.ports.jms }}
               protocol: TCP
+            {{- include "bamboo.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.bamboo.ports.http }}

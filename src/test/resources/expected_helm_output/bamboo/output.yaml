@@ -99,6 +99,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_BASE_URL
+              value: "https://testUrl/"
             - name: SET_PERMISSIONS
               value: "true"
             - name: BAMBOO_SHARED_HOME
@@ -118,6 +120,42 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-bamboo-jvm-config
+            - name: ATL_CLIENT_BROKER_URL
+              value: "tcp://testBroker:1234"
+            - name: SECURITY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: agentTestSecret
+                  key: agentTestKey
+            - name: ATL_LICENSE
+              valueFrom:
+                secretKeyRef:
+                  name: licenseTestSecret
+                  key: licenseTestKey
+            - name: ATL_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminTestUsernameKey
+            - name: ATL_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminPasswordTestKey
+            - name: ATL_ADMIN_FULLNAME
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminFullnameTestKey
+            - name: ATL_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: adminTestSecret
+                  key: adminEmailTestKey
+            - name: ATL_IMPORT_OPTION
+              value: clean
+            - name: ATL_IMPORT_PATH
+              value: 
           ports:
             - name: http
               containerPort: 8085

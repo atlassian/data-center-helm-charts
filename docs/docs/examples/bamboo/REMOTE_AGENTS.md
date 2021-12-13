@@ -8,23 +8,64 @@ You can learn more details about remote agents on the [official documentation pa
 
 !!!warning "Bamboo server prerequisites"
 
-    * Your Bamboo server instance must be a fully licensed Bamboo Data Center instance
-    * The bamboo server instance must be fully configured
+    * The Bamboo server instance must use a valid Bamboo Data Center instance license and be fully configured
     * The Bamboo server instance must have `security token verification` **enabled**
     * The Bamboo server instance must have `remote agent authentication` **disabled**
 
-## Installation
+## Deployment
 
 Steps required for deploying a remote agent
-
-### Overview
 
 1. Configure Bamboo server for remote agent support
 2. Deploy agent
 
-### Steps
+### 1. Configure Bamboo server
 
-#### 1. Configure Bamboo server
+There are 2 approaches for doing this:
+
+* Automatically when deploying Bamboo server
+* Manually via Bamboo server agent settings
+
+#### Automatically
+
+When initially deploying Bamboo server its `values.yaml` can be configured to:
+
+* disable `remote agent authentication`
+* define a custom `security token` 
+
+This will allow remote agents that are configured with the same security token to automatically join the cluster. 
+
+First, create a secret to store a custom security token with which remote agent(s) should authenticate to the Bamboo server. 
+
+!!!info "Security token format"
+    
+    The security token should be set to a 40-character hexadecimal string. The following command can be used to generate a string in this format:
+    ```
+    xxd -l 20 -p /dev/urandom
+    ```
+
+Add the generated string (security token) to a K8s secret
+
+   ``` shell
+   kubectl create secret generic security-token --from-literal=security-token=<security token>
+   ```
+
+Update the Bamboo `values.yaml` with this secret and disable agent authentication:
+
+```yaml
+bamboo:
+  securityToken:
+    secretName: "security-token"
+    secretKey: security-token
+  disableAgentAuth: true
+```
+
+!!!warning "Disabling remote agent authentication"
+
+    when setting the property `disableAgentAuth` to `true` this will have the effect of automatically allowing agents with the correct security token to communicate with the Bamboo server. This property is useful for testing, and when deployments requiring many agents are needed. This property can also be left in its default state of `false` in which case each agent will need to be approved manually via the `Agents` settings tab of the Bamboo server instance. Additional details on agent authentication can be found [here](https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html)  
+    
+
+#### Manually
 
 * When logged into the Bamboo server instance, and from the `Agents` settings tab, **enable** `security token verification`, and **disable** `remote agent authentication`
    ![security_token_verification](../../assets/images/bamboo_agents/enable-disable.png){ width="900" }
@@ -41,7 +82,7 @@ Steps required for deploying a remote agent
    kubectl create secret generic security-token --from-literal=security-token=<security token>
    ```
 
-#### 2. Deploy agent 
+### 2. Deploy agent 
 
 * Update the bamboo agent `values.yaml` to utilize the security token secret and point to the bamboo server instance
 
@@ -84,7 +125,7 @@ The number of active agents can be easily increased or decreased:
 helm upgrade --set replicaCount=<desired number of agents> \
              --reuse-values \
              <name of the release>
-             atlassian-data-center/bamoboo-agent
+             atlassian-data-center/bamboo-agent
 ```
 
 ## Troubleshooting

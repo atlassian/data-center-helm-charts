@@ -582,6 +582,13 @@ jira:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines any additional ports for the Jira container.
+  #
+  additionalPorts: []
+  #  - name: jmx
+  #    containerPort: 5555
+  #    protocol: TCP
+
   # -- Defines topology spread constraints for Jira pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #

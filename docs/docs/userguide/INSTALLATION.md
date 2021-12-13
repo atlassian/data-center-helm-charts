@@ -124,6 +124,9 @@ By default, the Helm charts will not configure the products for Data Center clus
   
 ## 7. Configure license 
 
+!!!info "Pre-configuring license"
+    Pre-provisioning a license in this way is only applicable to `Confluence`, `Bitbucket` and `Bamboo` deployments. For `Jira` deployments a license can be supplied via the setup wizard post deployment.
+
 You can configure the product license if you provide a `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml). To do that, create a Kubernetes secret to hold the product license:
 
 ```shell
@@ -137,11 +140,11 @@ license:
   secretName: <secret_name>
   secretKey: license-key
 ```
-???tip "Sysadmin credentials for Bitbucket "
+???tip "Sysadmin credentials for Bitbucket and Bamboo "
 
-    Bitbucket is slightly different from the other products in that it can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and also provide the `license` stanza from the previous step.
+    `Bitbucket` and `Bamboo` are slightly different from the other products in that they can be completely configured during deployment, meaning no manual setup is required. To do this, you need to update the `sysadminCredentials` and also provide the `license` stanza from the previous step.
 
-    Create a Kubernetes secret to hold the Bitbucket system administrator credentials:
+    Create a Kubernetes secret to hold the Bitbucket/Bamboo system administrator credentials:
 
     ```shell
     kubectl create secret generic <sysadmin_creds_secret_name> --from-literal=username='<sysadmin_username>' --from-literal=password='<sysadmin_password>' --from-literal=displayName='<sysadmin_display_name>' --from-literal=emailAddress='<sysadmin_email>'

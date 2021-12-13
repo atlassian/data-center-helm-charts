@@ -298,6 +298,24 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
+Defining additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalPorts" -}}
+{{- with .Values.confluence.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Defining additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "synchrony.additionalPorts" -}}
+{{- with .Values.synchrony.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Defining additional volume mounts here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}

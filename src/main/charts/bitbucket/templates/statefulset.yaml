@@ -75,6 +75,7 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.bitbucket.ports.hazelcast }}
               protocol: TCP
+            {{- include "bitbucket.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
