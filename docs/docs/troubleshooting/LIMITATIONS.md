@@ -38,11 +38,21 @@ The Bamboo server and Bamboo agents must be deployed to the same cluster. You ca
 When configuring application links between Bamboo server and any Atlassian Cloud server product, the Bamboo server base URL needs to be used. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
 
 ### Import and export of large datasets
-At present there is an issue with Bamboo where the `/server` and `/status` REST endpoints become un-usable when performing an [export or import of large datasets](https://jira.atlassian.com/browse/BAM-18673){.external}. 
+At present there is an issue with Bamboo where the `/server` and `/status` endpoints become un-usable when performing an [export or import of large datasets](https://jira.atlassian.com/browse/BAM-18673){.external}. 
 
-!!!info "DB migration for dataset restore"
+!!!info "Data migration"
 
-    If a data export/import is required this should be done [via a DB dump/restore](https://confluence.atlassian.com/bamboo/moving-your-bamboo-data-to-a      different-database-289277250.html#MovingyourBamboodatatoadifferentdatabase-AlternativeDBmigration){.external}
+    For large Bamboo instances we recommend using native database and filesystem backup tools instead of the built in backup/export functionality that Bamboo provides. See the [migration guide](../userguide/MIGRATION.md) for more details.
+
+The Bamboo Helm chart does however provide a facility that can be used to import [data exports produced through Bamboo](https://confluence.atlassian.com/bamboo/exporting-data-for-backup-289277255.html){.external} at deployment time. This can be used by configuring the Bamboo server `values.yaml` appropriately i.e. 
+
+```yaml
+import:
+  type: import
+  path: "/var/atlassian/application-data/shared-home/bamboo-export.zip"
+```
+
+Using this approach will restore the data set (shared home, local home and database) as part of the Helm install process.
 
 ## Platform limitations
 These configurations are explicitly not supported, and the Helm charts don’t work without modifications in these environments:

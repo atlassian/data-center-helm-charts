@@ -2,7 +2,7 @@
 
 If you already have an existing Data Center product deployment, you can migrate it to a Kubernetes cluster using the Data Center Helm charts. 
 
-You will need to migrate your database and your shared home, then all you need to do is to follow the [Installation guide](INSTALLATION.md), using your migrated resources instead of provisioning new ones.
+You will need to migrate your database and your shared home (including local home for Bamboo), then all you need to do is to follow the [Installation guide](INSTALLATION.md), using your migrated resources instead of provisioning new ones.
 
 ## Migrating your database
 
@@ -11,6 +11,10 @@ To migrate your database, you should point the Helm charts to the existing datab
 ## Migrating your shared home
 
 Application nodes should have access to a shared directory in the same path. Examples of what the shared file system stores include plugins, shared caches, repositories, attachments, and avatars. Configure your shared home by updating the `sharedHome` stanza in the `values.yaml` file as explained in the [Configure persistent storage step in the installation guide](INSTALLATION.md#5-configure-persistent-storage).
+
+## Migrating Bamboo server local home
+
+Bamboo DC stores pertinent config data in local home, namely `bamboo.cfg.xml`. Care should be taken to include this data when migrating Bamboo DC deployments.
 
 ## Helpful links
 
