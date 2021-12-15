@@ -33,7 +33,9 @@ Support for Bamboo on K8s is now officially provided with the release of [Bamboo
 
 !!!info "Unattended setup"
   
-    Until this issue has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED-SETUP` within the `values.yaml`. This has the added benefit of eliminating any manualy intervention (via the setup wizard) required for configuring Bamboo post deployment.
+    Until this issue has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED` within the `values.yaml`. This has the added benefit of eliminating any manual intervention (via the setup wizard) required for configuring Bamboo post deployment.
+
+    It should also be noted that the property, `bamboo.unattendedSetup` should be set to `true` (current default value) for this to work.
 
 ### Cluster size
 At present Bamboo Data Center utilizes an [active-passive clustering model](https://confluence.atlassian.com/bamboo/clustering-with-bamboo-data-center-1063170551.html){.external}. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
