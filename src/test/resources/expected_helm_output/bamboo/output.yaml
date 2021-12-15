@@ -170,7 +170,7 @@ spec:
               port: 8085
               path: /rest/api/latest/status
             initialDelaySeconds: 10
-            periodSeconds: 10
+            periodSeconds: 5
             failureThreshold: 30
           resources:
             requests:

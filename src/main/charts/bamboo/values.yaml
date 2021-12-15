@@ -522,7 +522,7 @@ bamboo:
     
     # -- How often (in seconds) the Bamboo container readiness probe will run
     #
-    periodSeconds: 10
+    periodSeconds: 5
     
     # -- The number of consecutive failures of the Bamboo container readiness probe 
     # before the pod fails readiness checks.
