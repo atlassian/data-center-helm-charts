@@ -23,6 +23,7 @@ Bamboo DC stores pertinent config data in local home, namely `bamboo.cfg.xml`. C
 * Migrating to another database - describes how to migrate your data from your existing database to another database:
     * [Migrating Confluence to another database](https://confluence.atlassian.com/doc/migrating-to-another-database-148867.html){.external}
     * [Migrating Jira to another database](https://confluence.atlassian.com/adminjiraserver/switching-databases-938846867.html){.external} 
+    * [Migrating Bamboo to another database](https://confluence.atlassian.com/bamboo/moving-your-bamboo-data-to-a-different-database-289277250.html){.external} 
 
 !!!tip "Availability Zone proximity"
     For better performance consider co-locating your migrated database in the same Availability Zone (AZ) as your product nodes. Database-heavy operations, such as full re-index, become significantly faster when the database is collocated with the Data Center node in the same AZ. However we don't recommend this if you're running critical workloads.

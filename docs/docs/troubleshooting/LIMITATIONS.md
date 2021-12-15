@@ -42,7 +42,7 @@ At present there is an issue with Bamboo where the `/server` and `/status` endpo
 
 !!!info "Data migration"
 
-    For large Bamboo instances we recommend using native database and filesystem backup tools instead of the built in backup/export functionality that Bamboo provides. See the [migration guide](../userguide/MIGRATION.md) for more details.
+    For large Bamboo instances we recommend using native database and filesystem backup tools instead of the built in [export](https://confluence.atlassian.com/bamboo/exporting-data-for-backup-289277255.html){.external} / [import](https://confluence.atlassian.com/bamboo/importing-data-from-backup-289277260.html){.external} functionality that Bamboo provides. See the [migration guide](../userguide/MIGRATION.md) for more details.
 
 The Bamboo Helm chart does however provide a facility that can be used to import [data exports produced through Bamboo](https://confluence.atlassian.com/bamboo/exporting-data-for-backup-289277255.html){.external} at deployment time. This can be used by configuring the Bamboo server `values.yaml` appropriately i.e. 
 
