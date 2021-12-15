@@ -28,6 +28,13 @@ Although these issues are Jira specific, they are exasperated on account of the 
 
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
+### Deployment
+Support for Bamboo on K8s is now officially provided with the release of [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1077903836.html){.external}. This release contains an issue where [partial unattended installations of Bamboo DC to K8s clusters do not work](https://jira.atlassian.com/browse/BAM-21542){.external}. 
+
+!!!info "Unattended setup"
+  
+    Until this issue has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED-SETUP` within the `values.yaml`. This has the added benefit of eliminating any manualy intervention (via the setup wizard) required for configuring Bamboo post deployment.
+
 ### Cluster size
 At present Bamboo Data Center utilizes an [active-passive clustering model](https://confluence.atlassian.com/bamboo/clustering-with-bamboo-data-center-1063170551.html){.external}. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
 
