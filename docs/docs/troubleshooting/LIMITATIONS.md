@@ -29,7 +29,7 @@ Although these issues are Jira specific, they are exasperated on account of the 
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
 ### Deployment
-With [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1077903836.html){.external} deployments to K8s using the Helm charts are now possible. This release does however contain an issue where [partial unattended installations of Bamboo DC to K8s clusters do not work](https://jira.atlassian.com/browse/BAM-21542){.external}. 
+With [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external} deployments to K8s using the Helm charts are now possible. This release does however contain an issue where [partial unattended installations of Bamboo DC to K8s clusters do not work](https://jira.atlassian.com/browse/BAM-21542){.external}. 
 
 !!!info "Unattended setup"
   
