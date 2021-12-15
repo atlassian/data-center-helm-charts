@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -37,7 +37,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -60,7 +60,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -92,7 +92,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bamboo
-          image: "atlassian/bamboo:8.0.4-jdk11"
+          image: "atlassian/bamboo:8.1.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -100,7 +100,7 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             - name: ATL_BASE_URL
-              value: "https://testUrl/"
+              value: "http://localhost:8085/"
             - name: SET_PERMISSIONS
               value: "true"
             - name: BAMBOO_SHARED_HOME
@@ -156,6 +156,8 @@ spec:
               value: clean
             - name: ATL_IMPORT_PATH
               value: 
+            - name: ATL_BAMBOO_ENABLE_UNATTENDED_SETUP
+              value: "true"
           ports:
             - name: http
               containerPort: 8085
@@ -168,7 +170,7 @@ spec:
               port: 8085
               path: /rest/api/latest/status
             initialDelaySeconds: 10
-            periodSeconds: 5
+            periodSeconds: 10
             failureThreshold: 30
           resources:
             requests:
@@ -204,7 +206,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -236,7 +238,7 @@ metadata:
     helm.sh/chart: bamboo-0.0.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
