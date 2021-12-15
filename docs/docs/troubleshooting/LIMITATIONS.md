@@ -29,11 +29,11 @@ Although these issues are Jira specific, they are exasperated on account of the 
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
 ### Deployment
-With [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external} deployments to K8s using the Helm charts are now possible. This release does however contain an issue where [partial unattended installations of Bamboo DC to K8s clusters do not work](https://jira.atlassian.com/browse/BAM-21542){.external}. 
+With [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external} deployments to K8s using the Helm charts are now possible. This release does however contain an issue where [partial unattended deployments to K8s do not work](https://jira.atlassian.com/browse/BAM-21542){.external}. 
 
 !!!info "Unattended setup"
   
-    Until this issue has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED` within the `values.yaml`. This has the added benefit of eliminating any manual intervention (via the setup wizard) required for configuring Bamboo post deployment.
+    Until [this issue](https://jira.atlassian.com/browse/BAM-21542){.external} has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED` within the `values.yaml`. This has the added benefit of eliminating any manual intervention (via the setup wizard) required for configuring Bamboo post deployment.
 
     It should also be noted that the property, `bamboo.unattendedSetup` should be set to `true` (current default value) for this to work.
 
