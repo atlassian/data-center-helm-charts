@@ -52,7 +52,7 @@ import:
   path: "/var/atlassian/application-data/shared-home/bamboo-export.zip"
 ```
 
-Using this approach will restore the data set (shared home, local home and database) as part of the Helm install process.
+Using this approach will restore the data set (`shared-home`, `local-home` and `database dump`) as part of the Helm install process.
 
 ## Platform limitations
 These configurations are explicitly not supported, and the Helm charts don’t work without modifications in these environments:
