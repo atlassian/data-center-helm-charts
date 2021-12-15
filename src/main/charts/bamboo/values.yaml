@@ -4,7 +4,7 @@
 #
 # Release 1.0.0 of this chart only support FULL unattended setups. 
 # 
-# All setup data (denoted with 'UNATTENDED-SETUP') required for configuring Bamboo including
+# All setup data (denoted with 'UNATTENDED') required for configuring Bamboo including
 # sections declared as 'REQUIRED' must be supplied up-front as part of this file. 
 # The property 'bamboo.unattendedSetup' is set, by default, to 'true'. 
 #
@@ -351,7 +351,7 @@ ingress:
 bamboo:
 
   # -- To skip the setup wizard post deployment set this property to 'true' and
-  # ensure values for all 'REQUIRED' and 'UNATTENDED-SETUP' stanzas 
+  # ensure values for all 'REQUIRED' and 'UNATTENDED' stanzas 
   # (see banner of this file) have been supplied.
   #
   # For release 1.0.0 this value is by default set to 'true'
@@ -389,7 +389,7 @@ bamboo:
   #
   disableAgentAuth: false
 
-  # UNATTENDED-SETUP
+  # UNATTENDED
   #
   # -- The Bamboo DC license that should be used.
   # If supplied here the license configuration will be 
@@ -405,7 +405,7 @@ bamboo:
     #
     secretKey: license
 
-  # UNATTENDED-SETUP 
+  # UNATTENDED 
   #
   # -- The admin user configuration, and credentials 
   # that Bamboo should use. If supplied here the admin 
