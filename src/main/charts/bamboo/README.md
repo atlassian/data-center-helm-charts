@@ -45,8 +45,8 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic |
 | bamboo.ports.jms | int | `54663` | JMS port |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe  before the pod fails readiness checks. |
-| bamboo.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo container readiness probe,  after which the probe will start running. |
-| bamboo.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container readiness probe will run |
+| bamboo.readinessProbe.initialDelaySeconds | int | `30` | The initial delay (in seconds) for the Bamboo container readiness probe,  after which the probe will start running. |
+| bamboo.readinessProbe.periodSeconds | int | `10` | How often (in seconds) the Bamboo container readiness probe will run |
 | bamboo.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bamboo pod |
 | bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo pod |
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM |
