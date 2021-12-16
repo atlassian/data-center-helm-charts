@@ -223,6 +223,8 @@ spec:
           apk add -q jq curl
           STATUS=$(curl -s "$STATUS_URL")
           echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+          echo "Sleeping for 1 minute to allow for bamboo unattended setup to complete namely database initialization..."
+          sleep 1m
           echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
   restartPolicy: Never
 ---
