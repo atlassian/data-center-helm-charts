@@ -33,7 +33,7 @@ With [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-
 
 !!!info "Unattended setup"
   
-    Until [this issue](https://jira.atlassian.com/browse/BAM-21542){.external} has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED` within the `values.yaml`. This has the added benefit of eliminating any manual intervention (via the setup wizard) required for configuring Bamboo post deployment.
+    Until [this issue](https://jira.atlassian.com/browse/BAM-21542){.external} has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED-SETUP` within the `values.yaml`. This has the added benefit of eliminating any manual intervention (via the setup wizard) required for configuring Bamboo post deployment.
 
     It should also be noted that the property, `bamboo.unattendedSetup` should be set to `true` (current default value) for this to work.
 
