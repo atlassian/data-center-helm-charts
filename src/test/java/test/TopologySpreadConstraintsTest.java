@@ -26,7 +26,8 @@ class TopologySpreadConstraintsTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".topologySpreadConstraints[0].maxSkew", "1",
                 product + ".topologySpreadConstraints[0].topologyKey", "kubernetes.io/hostname",
-                product + ".topologySpreadConstraints[0].whenUnsatisfiable", "ScheduleAnyway"));
+                product + ".topologySpreadConstraints[0].whenUnsatisfiable", "ScheduleAnyway",
+                product + ".topologySpreadConstraints[0].labelSelector.matchLabels.myLabel", "mySelector"));
 
 
         JsonNode topologySpreadConstraints = resources.getStatefulSet(product.getHelmReleaseName())
@@ -36,6 +37,7 @@ class TopologySpreadConstraintsTest {
         assertThat(topologySpreadConstraints.get(0).get("maxSkew")).hasValueEqualTo(1);
         assertThat(topologySpreadConstraints.get(0).get("topologyKey")).hasTextEqualTo("kubernetes.io/hostname");
         assertThat(topologySpreadConstraints.get(0).get("whenUnsatisfiable")).hasTextContaining("ScheduleAnyway");
+        assertThat(topologySpreadConstraints.get(0).get("labelSelector").get("matchLabels").get("myLabel")).hasTextContaining("mySelector");
     }
 
     @ParameterizedTest
@@ -44,7 +46,8 @@ class TopologySpreadConstraintsTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "agent.topologySpreadConstraints[0].maxSkew", "1",
                 "agent.topologySpreadConstraints[0].topologyKey", "kubernetes.io/hostname",
-                "agent.topologySpreadConstraints[0].whenUnsatisfiable", "ScheduleAnyway"));
+                "agent.topologySpreadConstraints[0].whenUnsatisfiable", "ScheduleAnyway",
+                "agent.topologySpreadConstraints[0].labelSelector.matchLabels.myLabel", "mySelector"));
 
 
         JsonNode topologySpreadConstraints = resources.getDeployment(product.getHelmReleaseName())
@@ -54,6 +57,7 @@ class TopologySpreadConstraintsTest {
         assertThat(topologySpreadConstraints.get(0).get("maxSkew")).hasValueEqualTo(1);
         assertThat(topologySpreadConstraints.get(0).get("topologyKey")).hasTextEqualTo("kubernetes.io/hostname");
         assertThat(topologySpreadConstraints.get(0).get("whenUnsatisfiable")).hasTextContaining("ScheduleAnyway");
+        assertThat(topologySpreadConstraints.get(0).get("labelSelector").path("matchLabels").path("myLabel")).hasTextContaining("mySelector");
     }
 
     @ParameterizedTest
