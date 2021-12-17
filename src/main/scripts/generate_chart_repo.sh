@@ -39,6 +39,7 @@ docker run --user "$(id -u):$(id -g)" \
   --rm \
   quay.io/helmpack/chart-releaser \
   upload \
+  --skip-existing \
   --package-path /releases \
   --owner atlassian \
   --git-repo data-center-helm-charts \
