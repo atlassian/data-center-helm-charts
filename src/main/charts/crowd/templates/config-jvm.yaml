@@ -12,5 +12,6 @@ data:
     {{- range .Values.crowd.additionalJvmArgs }}
     {{ . }}
     {{- end }}
+    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.crowd.resources.container.requests.cpu }}
   max_heap: {{ .Values.crowd.resources.jvm.maxHeap }}
   min_heap: {{ .Values.crowd.resources.jvm.minHeap }}

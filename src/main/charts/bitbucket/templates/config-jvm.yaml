@@ -9,5 +9,6 @@ data:
     {{- range .Values.bitbucket.additionalJvmArgs }}
     {{ . }}
     {{- end }}
+    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bitbucket.resources.container.requests.cpu }}
   max_heap: {{ .Values.bitbucket.resources.jvm.maxHeap }}
   min_heap: {{ .Values.bitbucket.resources.jvm.minHeap }}

@@ -9,5 +9,6 @@ data:
     {{- range .Values.bamboo.additionalJvmArgs }}
     {{ . }}
     {{- end }}
+    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bamboo.resources.container.requests.cpu }}
   max_heap: {{ .Values.bamboo.resources.jvm.maxHeap }}
   min_heap: {{ .Values.bamboo.resources.jvm.minHeap }}

@@ -1,0 +1,17 @@
+apiVersion: v2
+name: common
+description: A Library Helm Chart for grouping common logic between Atlassian charts. This chart is not deployable by itself.
+type: library
+version: 1.0.0
+# Please make sure that version and appVersion are always the same.
+appVersion: 1.0.0
+keywords:
+  - common
+  - helper
+  - template
+  - function
+  - Atlassian
+home: https://atlassian.github.io/data-center-helm-charts/
+icon: https://atlassian.github.io/data-center-helm-charts/icons/atlassian.svg
+sources:
+  - https://github.com/atlassian/data-center-helm-charts

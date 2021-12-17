@@ -1,6 +1,6 @@
 # bamboo-agent
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.4-jdk11](https://img.shields.io/badge/AppVersion-8.0.4--jdk11-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.1](https://img.shields.io/badge/AppVersion-8.1.1-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center remote agents on Kubernetes
 
@@ -50,6 +50,7 @@ Kubernetes: `>=1.19.x-0`
 | agent.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bamboo agent container startup probe before the pod fails readiness checks. |
 | agent.startupProbe.initialDelaySeconds | int | `1` | The initial delay (in seconds) for the Bamboo agent container startup probe, after which the probe will start running. |
 | agent.startupProbe.periodSeconds | int | `1` | How often (in seconds) the Bamboo agent container startup probe will run |
+| agent.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Bamboo agent pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"atlassian/bamboo-agent-base"` | The Bamboo agent Docker image to use https://hub.docker.com/r/atlassian/bamboo-agent-base |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |

@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-0.0.1
+    helm.sh/chart: bamboo-0.0.2
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-jvm-config
   labels:
-    helm.sh/chart: bamboo-0.0.1
+    helm.sh/chart: bamboo-0.0.2
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -34,10 +34,10 @@ kind: Service
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-0.0.1
+    helm.sh/chart: bamboo-0.0.2
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -57,10 +57,10 @@ kind: StatefulSet
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-0.0.1
+    helm.sh/chart: bamboo-0.0.2
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -92,7 +92,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bamboo
-          image: "atlassian/bamboo:8.0.4-jdk11"
+          image: "atlassian/bamboo:8.1.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -100,7 +100,7 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             - name: ATL_BASE_URL
-              value: "https://testUrl/"
+              value: "http://localhost:8085/"
             - name: SET_PERMISSIONS
               value: "true"
             - name: BAMBOO_SHARED_HOME
@@ -156,6 +156,8 @@ spec:
               value: clean
             - name: ATL_IMPORT_PATH
               value: 
+            - name: ATL_BAMBOO_ENABLE_UNATTENDED_SETUP
+              value: "true"
           ports:
             - name: http
               containerPort: 8085
@@ -167,8 +169,8 @@ spec:
             httpGet:
               port: 8085
               path: /rest/api/latest/status
-            initialDelaySeconds: 10
-            periodSeconds: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
             failureThreshold: 30
           resources:
             requests:
@@ -201,10 +203,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-0.0.1
+    helm.sh/chart: bamboo-0.0.2
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -216,12 +218,24 @@ spec:
           value: "http://unittest-bamboo:80/rest/api/latest/status"
       command:
         - /bin/sh
-        - -ec
+        - -c
         - |
           apk add -q jq curl
-          STATUS=$(curl -s "$STATUS_URL")
-          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
-          echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+          count=1
+          while [ $count -le 20 ]
+          do
+            STATUS=$(curl -s "$STATUS_URL")
+            RESPONSE_CODE=$(curl -s -o /dev/null -I -w "%{http_code}" "$STATUS_URL")
+            echo "Status URL is: $STATUS_URL"
+            echo "Response code for status test: $RESPONSE_CODE"
+            echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+            echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+            if [ $? == 0 ]; then
+              exit 0
+            fi
+            sleep 10
+            count=$(( $count + 1 ))
+          done
   restartPolicy: Never
 ---
 # Source: bamboo/templates/tests/test-shared-home-permissions.yaml
@@ -233,10 +247,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-0.0.1
+    helm.sh/chart: bamboo-0.0.2
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.0.4-jdk11"
+    app.kubernetes.io/version: "8.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
