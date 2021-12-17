@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo-agent
 description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
-version: 0.0.1
+version: 0.0.2
 appVersion: 8.1.1
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -17,3 +17,21 @@ sources:
   - https://github.com/atlassian/data-center-helm-charts
   - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
 deprecated: false
+annotations:
+  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/changes: |
+    - kind: added
+      description: Add topologySpreadConstraints to products
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/351
+    - kind: added
+      description: Initial agent support
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/335  
+    - kind: added
+      description: Add additionalPorts for the Bamboo Agent Deployment
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/353
