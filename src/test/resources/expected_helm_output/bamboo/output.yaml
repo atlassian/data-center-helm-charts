@@ -218,7 +218,7 @@ spec:
           value: "http://unittest-bamboo:80/rest/api/latest/status"
       command:
         - /bin/sh
-        - -ec
+        - -c
         - |
           sleep 60;
           apk add -q jq curl

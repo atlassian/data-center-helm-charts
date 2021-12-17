@@ -20,7 +20,7 @@ spec:
           value: "http://{{ include "bamboo.fullname" . }}:{{ .Values.bamboo.service.port }}/rest/api/latest/status"
       command:
         - /bin/sh
-        - -ec
+        - -c
         - |
           sleep 60;
           apk add -q jq curl
