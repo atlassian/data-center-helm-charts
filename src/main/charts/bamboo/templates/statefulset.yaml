@@ -153,12 +153,9 @@ spec:
               protocol: TCP
             {{- include "bamboo.additionalPorts" . | nindent 12 }}
           readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -ec
-                - |
-                  curl -s {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status | grep "RUNNING\|FIRST_RUN"
+            httpGet:
+              port: {{ .Values.bamboo.ports.http }}
+              path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status
             initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
