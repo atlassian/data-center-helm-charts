@@ -166,9 +166,12 @@ spec:
               containerPort: 54663
               protocol: TCP
           readinessProbe:
-            httpGet:
-              port: 8085
-              path: /rest/api/latest/status
+            exec:
+              command:
+                - /bin/sh
+                - -ec
+                - |
+                  curl -s /rest/api/latest/status | grep "RUNNING\|FIRST_RUN"
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 30
@@ -225,8 +228,8 @@ spec:
           RESPONSE_CODE=$(curl -s -o /dev/null -I -w "%{http_code}" "$STATUS_URL")
           echo "Status URL is: $STATUS_URL"
           echo "Response code for status test: $RESPONSE_CODE"
-          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"          
           echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
   restartPolicy: Never
 ---
 # Source: bamboo/templates/tests/test-shared-home-permissions.yaml

@@ -27,6 +27,6 @@ spec:
           RESPONSE_CODE=$(curl -s -o /dev/null -I -w "%{http_code}" "$STATUS_URL")
           echo "Status URL is: $STATUS_URL"
           echo "Response code for status test: $RESPONSE_CODE"
-          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"          
           echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
   restartPolicy: Never
