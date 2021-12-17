@@ -20,10 +20,22 @@ spec:
           value: "http://{{ include "bamboo.fullname" . }}:{{ .Values.bamboo.service.port }}/rest/api/latest/status"
       command:
         - /bin/sh
-        - -ec
+        - -c
         - |
           apk add -q jq curl
-          STATUS=$(curl -s "$STATUS_URL")
-          echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
-          echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+          count=1
+          while [ $count -le 20 ]
+          do
+            STATUS=$(curl -s "$STATUS_URL")
+            RESPONSE_CODE=$(curl -s -o /dev/null -I -w "%{http_code}" "$STATUS_URL")
+            echo "Status URL is: $STATUS_URL"
+            echo "Response code for status test: $RESPONSE_CODE"
+            echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
+            echo $STATUS | jq -e '.status|test("RUNNING|FIRST_RUN")'
+            if [ $? == 0 ]; then
+              exit 0
+            fi
+            sleep 10
+            count=$(( $count + 1 ))
+          done
   restartPolicy: Never

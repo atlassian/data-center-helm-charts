@@ -3,7 +3,7 @@ name: bamboo-agent
 description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
 version: 0.0.1
-appVersion: 8.0.4-jdk11
+appVersion: 8.1.1
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bamboo

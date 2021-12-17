@@ -5,6 +5,7 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
+import test.model.Kind;
 import test.model.Product;
 import test.model.StatefulSet;
 
@@ -49,6 +50,28 @@ public class RequestsTest {
         // verify limits
         assertThat(productSts.getContainer(product.name()).getLimits().path("cpu")).hasValueEqualTo(20);
         assertThat(productSts.getContainer(product.name()).getLimits().path("memory")).hasTextEqualTo("20GB");
+
+        // verify ActiveProcessorCount
+        final var additionalJvmArgs = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config")
+            .getNode("data", "additional_jvm_args");
+        assertThat(additionalJvmArgs)
+            .hasSeparatedTextContaining("-XX:ActiveProcessorCount=10");
+
+        final var resourcesMilliCpu = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+            product + ".resources.container.requests.cpu", "3100m"
+        ));
+        final var additionalJvmArgsMilliCpu = resourcesMilliCpu
+            .get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config").getNode("data", "additional_jvm_args");
+        assertThat(additionalJvmArgsMilliCpu)
+            .hasSeparatedTextContaining("-XX:ActiveProcessorCount=3");
+
+        final var resourcesBelow1000m = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+            product + ".resources.container.requests.cpu", "200m"
+        ));
+        final var additionalJvmArgsBelow1000m = resourcesBelow1000m
+            .get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config").getNode("data", "additional_jvm_args");
+        assertThat(additionalJvmArgsBelow1000m)
+            .hasSeparatedTextContaining("-XX:ActiveProcessorCount=1");
     }
 
 }
