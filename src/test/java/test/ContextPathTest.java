@@ -50,7 +50,7 @@ class ContextPathTest {
                 .getContainer()
                 .getEnv()
                 .assertHasValue("ATL_TOMCAT_CONTEXTPATH", "/" + product.name());
-        
+
             assertEquals(resources.getStatefulSet(
                     product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
                     "/" + product.name() + "/rest/api/latest/status");

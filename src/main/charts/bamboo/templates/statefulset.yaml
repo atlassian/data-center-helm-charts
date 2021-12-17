@@ -59,10 +59,8 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
-            {{ if .Values.bamboo.baseUrl }}
             - name: ATL_BASE_URL
-              value: {{ .Values.bamboo.baseUrl | quote }}
-            {{ end }}
+              value: {{ include "bamboo.baseUrl" . | quote }}
             {{ if .Values.bamboo.service.contextPath }}
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.bamboo.service.contextPath | quote }}
@@ -143,6 +141,8 @@ spec:
             - name: ATL_IMPORT_PATH
               value: {{ .Values.bamboo.import.path }}
             {{ end }}
+            - name: ATL_BAMBOO_ENABLE_UNATTENDED_SETUP
+              value: {{ .Values.bamboo.unattendedSetup | quote }}
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http
@@ -193,6 +193,10 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bamboo.topologySpreadConstraints }}
+      topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.schedulerName }}

@@ -671,7 +671,7 @@ bitbucket:
         
         # -- Initial CPU request by Bitbucket pod
         #
-        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        cpu: "2"
         
         # -- Initial Memory request by Bitbucket pod
         #
@@ -695,16 +695,10 @@ bitbucket:
     #
     upstreamUrl:
 
-  # Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
+  # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.
   #
-  additionalJvmArgs:
-  
-    # -- The value defined for ActiveProcessorCount should correspond to that provided
-    # for 'container.requests.cpu'.
-    # https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
-    #
-    - -XX:ActiveProcessorCount=2
+  additionalJvmArgs: []
   
   # -- Specifies a list of additional Java libraries that should be added to the
   # Bitbucket container. Each item in the list should specify the name of the volume
@@ -764,6 +758,16 @@ bitbucket:
   #    resources:
   #      requests:
   #        storage: 1Gi
+
+  # -- Defines topology spread constraints for Bitbucket pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
 
 # Fluentd configuration
 #

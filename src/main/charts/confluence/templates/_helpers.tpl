@@ -522,3 +522,11 @@ volumeClaimTemplates:
   value: "kubernetes"
 {{ end }}
 {{ end }}
+
+{{- define "flooredCPU" -}}
+    {{- if hasSuffix "m" (. | toString) }}
+    {{- div (trimSuffix "m" .) 1000 | default 1 }}
+    {{- else }}
+    {{- . }}
+    {{- end }}
+{{- end}}

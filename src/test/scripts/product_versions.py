@@ -7,7 +7,7 @@ known_supported_version = {
 	'jira-software': '8.13.8',
 	'confluence': '7.12.2',
 	'stash': '7.12.1',
-	'bamboo': '8.0.3'
+	'bamboo': '8.1.1' # Bamboo has not LTS versions.
 }
 
 

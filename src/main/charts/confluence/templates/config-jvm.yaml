@@ -15,6 +15,7 @@ data:
     {{- range .Values.confluence.additionalJvmArgs }}
     {{ . }}
     {{- end }}
+    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.confluence.resources.container.requests.cpu }}
   max_heap: {{ .Values.confluence.resources.jvm.maxHeap }}
   min_heap: {{ .Values.confluence.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.confluence.resources.jvm.reservedCodeCache }}

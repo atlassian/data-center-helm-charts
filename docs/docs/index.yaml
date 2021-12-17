@@ -1,6 +1,56 @@
 apiVersion: v1
 entries:
   bamboo:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: Support for unattended setups
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/359
+        - kind: added
+          description: Add topologySpreadConstraints to products
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/351
+        - kind: added
+          description: Bamboo pre-seeding configuration
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/349
+        - kind: added
+          description: Initial agent support
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/335  
+        - kind: added
+          description: Add additionalPorts for the Bamboo Agent Deployment
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/353
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.1.1
+    created: "2021-12-17T06:04:32.420213972Z"
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 3f23abb3b6e13eada2aa4da8d591e58e69eb04383c02b2c4e4bb15b8061e82f7
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-0.0.2/bamboo-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: 8.0.4-jdk11
     created: "2021-11-04T03:20:37.254730601Z"
@@ -24,6 +74,46 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-0.0.1/bamboo-0.0.1.tgz
     version: 0.0.1
   bamboo-agent:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: Add topologySpreadConstraints to products
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/351
+        - kind: added
+          description: Initial agent support
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/335  
+        - kind: added
+          description: Add additionalPorts for the Bamboo Agent Deployment
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/353
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.1.1
+    created: "2021-12-17T06:04:32.74097796Z"
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 3c2f23e8181e8c3eadf5e1806ca3afdf48d9f9551504ccd6a0c68e06ce76fd6f
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.2/bamboo-agent-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: 8.0.4-jdk11
     created: "2021-11-04T03:20:37.590091095Z"
@@ -508,6 +598,28 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-0.6.0/bitbucket-0.6.0.tgz
     version: 0.6.0
+  common:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-12-17T06:25:44.697113414Z"
+    description: A Library Helm Chart for grouping common logic between Atlassian
+      charts. This chart is not deployable by itself.
+    digest: ab3f5464697d37aa729af5c37b8ec0956f1565a1cf66a92838949e97efbfff6a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/atlassian.svg
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    - Atlassian
+    name: common
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    type: library
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/common-1.0.0/common-1.0.0.tgz
+    version: 1.0.0
   confluence:
   - annotations:
       artifacthub.io/changes: |-
@@ -1891,4 +2003,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2021-11-04T03:20:38.984875516Z"
+generated: "2021-12-17T06:25:45.679671828Z"

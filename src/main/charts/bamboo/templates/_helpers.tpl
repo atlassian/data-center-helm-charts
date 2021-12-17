@@ -32,6 +32,19 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Deduce the base URL for bamboo.
+*/}}
+{{- define "bamboo.baseUrl" -}}
+{{- if .Values.ingress.host -}}
+{{ ternary "https" "http" .Values.ingress.https -}}
+://
+{{- .Values.ingress.host -}}
+{{- else }}
+{{- print  "http://localhost:8085/" }}
+{{- end }}
+{{- end }}
+
+{{/*
 Create default value for ingress port
 */}}
 {{- define "bamboo.ingressPort" -}}
@@ -306,3 +319,11 @@ volumeClaimTemplates:
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
 {{ end }}
+
+{{- define "flooredCPU" -}}
+    {{- if hasSuffix "m" (. | toString) }}
+    {{- div (trimSuffix "m" .) 1000 | default 1 }}
+    {{- else }}
+    {{- . }}
+    {{- end }}
+{{- end}}

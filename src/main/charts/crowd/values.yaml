@@ -261,7 +261,7 @@ crowd:
       requests:
         # -- Initial CPU request by Crowd pod
         #
-        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
+        cpu: "2"
 
         # -- Initial Memory request by Crowd pod
         #
@@ -273,13 +273,7 @@ crowd:
   # -- Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g.
   # system properties.
   #
-  additionalJvmArgs:
-
-    # The value defined for ActiveProcessorCount should correspond to that provided
-    # for 'container.requests.cpu'.
-    # https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
-    #
-    - -XX:ActiveProcessorCount=2
+  additionalJvmArgs: []
 
   # -- Specifies a list of additional Java libraries that should be added to the
   # Crowd container. Each item in the list should specify the name of the volume
@@ -335,6 +329,16 @@ crowd:
   #    resources:
   #      requests:
   #        storage: 1Gi
+
+  # -- Defines topology spread constraints for Crowd pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
 
 # Ingress configuration
 #
