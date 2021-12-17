@@ -362,14 +362,14 @@ bamboo:
   #
   brokerUrl:
 
-  # The security token with which the agent will authenticate to the Bamboo server. 
+  # The security token with which the agent will authenticate to the Bamboo server.
   # The token should be set to a 40-character hexadecimal string. There are many ways
   # to generate a hex string like this, here is one: "xxd -l 20 -p /dev/urandom"
   # Additional details are here: https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html
   #
   securityToken:
 
-    # -- The name of the K8s Secret that contains the security token. When specified the token 
+    # -- The name of the K8s Secret that contains the security token. When specified the token
     # will overrided the generated one. This secret should also be shared with the agent deployment.
     # An Example of creating a K8s secret for the secret below:
     # 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>'
@@ -420,15 +420,15 @@ bamboo:
     # -- The key in the Kubernetes Secret that contains the sysadmin username
     #
     usernameSecretKey: username
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin password
     #
     passwordSecretKey: password
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin display name
     #
     displayNameSecretKey: displayName
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin email address
     #
     emailAddressSecretKey: emailAddress
@@ -653,7 +653,17 @@ bamboo:
   #    containerPort: 5555
   #    protocol: TCP
 
-# Fluentd configuration 
+  # -- Defines topology spread constraints for Bamboo pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+
+# Fluentd configuration
 #
 # Bamboo log collection and aggregation can be enabled using Fluentd. This config
 # assumes an existing ELK stack has been stood up and is available.

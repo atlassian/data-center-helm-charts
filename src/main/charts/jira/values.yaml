@@ -583,6 +583,16 @@ jira:
   #    containerPort: 5555
   #    protocol: TCP
 
+  # -- Defines topology spread constraints for Jira pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+
 # Fluentd configuration
 #
 # Jira log collection and aggregation can be enabled using Fluentd. This config

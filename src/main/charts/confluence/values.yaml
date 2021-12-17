@@ -661,6 +661,17 @@ confluence:
   #    containerPort: 5555
   #    protocol: TCP
 
+  # -- Defines topology spread constraints for Confluence pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: confluence
+
   # Debugging
   #
   jvmDebug:
@@ -800,6 +811,17 @@ synchrony:
   #  - name: jmx
   #    containerPort: 5555
   #    protocol: TCP
+
+  # -- Defines topology spread constraints for Synchrony pods. See details:
+  # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  #
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: confluence-synchrony
 
 # Fluentd configuration
 #
