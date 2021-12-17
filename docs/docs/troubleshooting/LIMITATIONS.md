@@ -28,8 +28,21 @@ Although these issues are Jira specific, they are exasperated on account of the 
 
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
+### Deployment
+With [Bamboo DC 8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external} deployments to K8s using the Helm charts are now possible. This release does however contain an issue where [partial unattended deployments to K8s do not work](https://jira.atlassian.com/browse/BAM-21542){.external}. 
+
+!!!info "Unattended setup"
+  
+    Until [this issue](https://jira.atlassian.com/browse/BAM-21542){.external} has been resolved, the recommended approach for deploying Bamboo server is using an `unattended` approach. That is, providing values to all those properties labeled as `REQUIRED` and `UNATTENDED-SETUP` within the `values.yaml`. This has the added benefit of eliminating any manual intervention (via the setup wizard) required for configuring Bamboo post deployment.
+
+    It should also be noted that the property, `bamboo.unattendedSetup` should be set to `true` (current default value) for this to work.
+
 ### Cluster size
-At present Bamboo Data Center utilizes an [active-passive clustering model](https://confluence.atlassian.com/bamboo/clustering-with-bamboo-data-center-1063170551.html){.external}. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now.
+At present Bamboo Data Center utilizes an [active-passive clustering model](https://confluence.atlassian.com/bamboo/clustering-with-bamboo-data-center-1063170551.html){.external}. This architecture is not ideal where K8s deployments are concerned.
+
+!!!warning "1 pod clusters only" 
+  
+    At present, Bamboo server cluster sizes comprising only `1` pod is the only supported topology for now.
 
 ### Server and agent affinity
 The Bamboo server and Bamboo agents must be deployed to the same cluster. You cannot have Bamboo agents in one cluster communicating with a Bamboo server in another.

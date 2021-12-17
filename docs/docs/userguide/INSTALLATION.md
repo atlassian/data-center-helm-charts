@@ -25,6 +25,10 @@ Obtain the default product `values.yaml` file from the chart:
 helm show values atlassian-data-center/<product> > values.yaml
 ```
 
+!!!warning "Bamboo deployments"
+
+    If deploying Bamboo, be sure to read about the current limitations relating to [Bamboo deployments and values.yaml](../../troubleshooting/LIMITATIONS/#deployment)
+
 ## 3. Configure database
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
 
