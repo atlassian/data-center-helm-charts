@@ -2,6 +2,14 @@
 # 
 # HEADS UP! 
 #
+# Release 1.0.0 of this chart only support FULL unattended setups. 
+# 
+# All setup data (denoted with 'UNATTENDED-SETUP') required for configuring Bamboo including
+# sections declared as 'REQUIRED' must be supplied up-front as part of this file. 
+# The property 'bamboo.unattendedSetup' is set, by default, to 'true'. 
+#
+# As a result, post helm install of this chart, there is no manual setup required for Bamboo.
+#
 # Data loss will occur if sections declared as 'REQUIRED' are not configured appropriately!
 # These sections are:
 # - database
@@ -322,7 +330,8 @@ ingress:
   annotations: {}
   
   # -- Set to 'true' if browser communication with the application should be TLS 
-  # (HTTPS) enforced.
+  # (HTTPS) enforced. If not using an ingress and you want to reach the service 
+  # on localhost using port-forwarding then this value should be set to 'false'
   #
   https: true
   
@@ -341,9 +350,13 @@ ingress:
 #
 bamboo:
 
-  # -- Supply the base URL for the installation.
+  # -- To skip the setup wizard post deployment set this property to 'true' and
+  # ensure values for all 'REQUIRED' and 'UNATTENDED-SETUP' stanzas 
+  # (see banner of this file) have been supplied.
   #
-  baseUrl:
+  # For release 1.0.0 this value is by default set to 'true' and should not be changed.
+  #
+  unattendedSetup: true
 
   # -- Override the server/agent broker URL; this is optional.
   #
@@ -376,24 +389,27 @@ bamboo:
   #
   disableAgentAuth: false
 
-
-  # -- The license to provide to the Bamboo nodes (optional). If you
-  # have an existing license it can be provided to the server up-front
-  # to skip the configuration screen on first run.
+  # UNATTENDED-SETUP
+  #
+  # -- The Bamboo DC license that should be used.
+  # If supplied here the license configuration will be 
+  # skipped in the setup wizard.
   #
   license:
 
     # -- The secret that contains the license information
     #
-    secretName:
+    secretName: 
 
     # -- The key (default 'licenseKey') in the Secret used to store the license information
     #
     secretKey: license
 
-  # -- The admin user configuration and credentials to provide to
-  # Bamboo (optional). If provided this will skip the configuration
-  # screen on first run.
+  # UNATTENDED-SETUP 
+  #
+  # -- The admin user configuration, and credentials 
+  # that Bamboo should use. If supplied here the admin 
+  # configuration will be skipped in the setup wizard.
   #
   sysadminCredentials:
 
@@ -502,11 +518,11 @@ bamboo:
     # -- The initial delay (in seconds) for the Bamboo container readiness probe, 
     # after which the probe will start running.
     #
-    initialDelaySeconds: 10
+    initialDelaySeconds: 30
     
     # -- How often (in seconds) the Bamboo container readiness probe will run
     #
-    periodSeconds: 5
+    periodSeconds: 10
     
     # -- The number of consecutive failures of the Bamboo container readiness probe 
     # before the pod fails readiness checks.
