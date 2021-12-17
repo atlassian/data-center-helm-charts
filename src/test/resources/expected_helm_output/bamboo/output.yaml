@@ -220,6 +220,7 @@ spec:
         - /bin/sh
         - -ec
         - |
+          sleep 60;
           apk add -q jq curl
           count=1
           while [ $count -le 20 ]
