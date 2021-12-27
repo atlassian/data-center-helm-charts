@@ -10,6 +10,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.crowd.service.type }}
+  {{- if and (eq .Values.crowd.service.type "LoadBalancer") (not (empty .Values.crowd.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.crowd.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.crowd.service.port }}
       targetPort: http

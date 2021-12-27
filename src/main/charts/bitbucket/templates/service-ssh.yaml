@@ -12,6 +12,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.bitbucket.sshService.type }}
+  {{- if and (eq .Values.bitbucket.sshService.type "LoadBalancer") (not (empty .Values.bitbucket.sshService.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.bitbucket.sshService.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.bitbucket.sshService.port }}
       targetPort: ssh

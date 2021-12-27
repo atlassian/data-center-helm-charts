@@ -7,6 +7,9 @@ metadata:
     {{- include "synchrony.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.synchrony.service.type }}
+  {{- if and (eq .Values.synchrony.service.type "LoadBalancer") (not (empty .Values.synchrony.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.synchrony.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.synchrony.service.port }}
       targetPort: http

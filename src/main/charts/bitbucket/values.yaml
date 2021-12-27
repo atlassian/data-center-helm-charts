@@ -431,6 +431,10 @@ bitbucket:
     #
     type: ClusterIP
 
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- The context path that Bitbucket will use.
     #
     contextPath:
@@ -460,7 +464,11 @@ bitbucket:
     # -- SSH Service type
     #
     type: LoadBalancer
-    
+
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- Annotations for the SSH service. Useful if a load balancer controller
     # needs extra annotations.
     #
