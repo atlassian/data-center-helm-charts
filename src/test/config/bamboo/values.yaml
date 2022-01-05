@@ -2,18 +2,18 @@
 
 bamboo:
 
-  unattendedSetup: true
+  unattendedSetup: false
 
   securityToken:
     secretName: bamboo-security-token
 
   disableAgentAuth: true
 
-  license:
-    secretName: bamboo-license
+#  license:
+#    secretName: bamboo-license
 
-  sysadminCredentials:
-    secretName: bamboo-admin-user
+#  sysadminCredentials:
+#    secretName: bamboo-admin-user
 
   import:
     type: "clean"
