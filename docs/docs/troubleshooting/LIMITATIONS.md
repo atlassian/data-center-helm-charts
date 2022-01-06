@@ -20,12 +20,6 @@ At present there are issues relating to index replication with Jira when immedia
 Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../../userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
 
 ## Bamboo
-
-!!!warning "Under active development"
-    
-    Bamboo is currently under active development and should not be used for production based deployments.
-
-
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
 
 ### Deployment
