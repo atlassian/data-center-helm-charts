@@ -15,7 +15,8 @@ spec:
         checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}        
         {{- include "agent.podAnnotations" . | nindent 8 }}
       labels:
-    {{- include "agent.selectorLabels" . | nindent 8 }}
+        {{- include "agent.selectorLabels" . | nindent 8 }}
+        {{- include "agent.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}

@@ -20,6 +20,7 @@ spec:
         {{- include "bamboo.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "bamboo.selectorLabels" . | nindent 8 }}
+        {{- include "bamboo.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}

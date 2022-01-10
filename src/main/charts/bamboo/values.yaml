@@ -748,6 +748,11 @@ fluentd:
 podAnnotations: {}
 #  name: <value>
 
+# -- Custom labels that will be applied to all Bamboo pods
+#
+podLabels: {}
+#  name: <value>
+
 # -- Standard K8s node-selectors that will be applied to all Bamboo pods
 #
 nodeSelector: {}

@@ -20,6 +20,7 @@ spec:
         {{- include "confluence.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "confluence.selectorLabels" . | nindent 8 }}
+        {{- include "confluence.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.confluence.shutdown.terminationGracePeriodSeconds }}

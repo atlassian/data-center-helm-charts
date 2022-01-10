@@ -28,6 +28,7 @@ spec:
         {{- include "bitbucket.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "bitbucket.selectorLabels" . | nindent 8 }}
+        {{- include "bitbucket.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}

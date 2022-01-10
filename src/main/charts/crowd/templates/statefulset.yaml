@@ -20,6 +20,7 @@ spec:
         {{- include "crowd.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "crowd.selectorLabels" . | nindent 8 }}
+        {{- include "crowd.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}

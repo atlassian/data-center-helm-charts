@@ -20,6 +20,7 @@ spec:
         {{- include "jira.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "jira.selectorLabels" . | nindent 8 }}
+        {{- include "jira.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
