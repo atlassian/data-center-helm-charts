@@ -3,7 +3,3 @@ volumes:
   sharedHome:
     nfsPermissionFixer:
       enabled: true
-
-serviceAccount:
-  annotations:
-    myAnnnotation: myValue
