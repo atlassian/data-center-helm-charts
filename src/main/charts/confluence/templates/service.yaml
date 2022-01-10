@@ -10,6 +10,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.confluence.service.type }}
+  {{- if and (eq .Values.confluence.service.type "LoadBalancer") (not (empty .Values.confluence.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.confluence.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.confluence.service.port }}
       targetPort: http

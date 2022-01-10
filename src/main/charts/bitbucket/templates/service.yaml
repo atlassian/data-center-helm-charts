@@ -11,6 +11,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.bitbucket.service.type }}
+  {{- if and (eq .Values.bitbucket.service.type "LoadBalancer") (not (empty .Values.bitbucket.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.bitbucket.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.bitbucket.service.port }}
       targetPort: http

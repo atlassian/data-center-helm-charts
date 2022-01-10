@@ -466,7 +466,11 @@ bamboo:
     # -- The type of K8s service to use for Bamboo
     #
     type: ClusterIP
-    
+
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH 
     # will be set automatically.
     #

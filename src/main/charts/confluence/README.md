@@ -55,6 +55,7 @@ Kubernetes: `>=1.19.x-0`
 | confluence.securityContext.fsGroup | int | `2002` | The GID used by the Confluence docker image If not supplied, will default to 2002 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically. |
+| confluence.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen |
 | confluence.service.type | string | `"ClusterIP"` | The type of K8s service to use for Confluence |
 | confluence.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Confluence container. Set to 'false' to disable this behaviour. |
@@ -115,6 +116,7 @@ Kubernetes: `>=1.19.x-0`
 | synchrony.resources.jvm.maxHeap | string | `"2g"` | The minimum amount of heap memory that will be used by the Synchrony JVM |
 | synchrony.resources.jvm.minHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Synchrony JVM |
 | synchrony.resources.jvm.stackSize | string | `"2048k"` | The memory allocated for the Synchrony stack |
+| synchrony.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | synchrony.service.port | int | `80` | The port on which the Synchrony K8s Service will listen |
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony |
 | synchrony.setPermissions | bool | `true` | Boolean to define whether to set synchrony home directory permissions on startup of Synchrony container. Set to 'false' to disable this behaviour. |

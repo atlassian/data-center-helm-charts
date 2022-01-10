@@ -10,6 +10,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.bamboo.service.type }}
+  {{- if and (eq .Values.bamboo.service.type "LoadBalancer") (not (empty .Values.bamboo.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.bamboo.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.bamboo.service.port }}
       targetPort: http
