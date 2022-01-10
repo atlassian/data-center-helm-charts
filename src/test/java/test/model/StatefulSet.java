@@ -57,4 +57,8 @@ public final class StatefulSet extends KubeResource {
         return Array.ofAll(getInitContainers())
                 .find(volume -> volume.path("name").asText().equals(name));
     }
+
+    public JsonNode getLabels() {
+        return getPodMetadata().path("labels");
+    }
 }
