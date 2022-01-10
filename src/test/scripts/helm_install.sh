@@ -168,6 +168,7 @@ package_product_helm_chart() {
 
   [ "$PERSISTENT_VOLUMES" = true ] && valueOverrides+="--set persistence.enabled=true "
   [ "$DOCKER_IMAGE_REGISTRY" ] && valueOverrides+="--set image.registry=$DOCKER_IMAGE_REGISTRY "
+  [ "$DOCKER_IMAGE_REPOSITORY" ] && valueOverrides+="--set image.repository=$DOCKER_IMAGE_REPOSITORY "
   # Assign DOCKER_LTS_VERSION env variable to image.tag if defined. This value will be overriden by
   # dockerImage.version ($DOCKER_IMAGE_VERSION) if defined.
   dockerVersion=''
@@ -281,6 +282,8 @@ wait_for_ingress() {
   echo "Waiting for $INGRESS_URI to be ready"
   for (( i=0; i<10; ++i ));
   do
+     echo "checking ingress status: i = ${i}"
+
      STATUS_CODE=$(curl -s -o /dev/null -w %{http_code} "$INGRESS_URI")
      echo "Received status code $STATUS_CODE from $INGRESS_URI"
      if [ "$STATUS_CODE" -lt 400 ]; then

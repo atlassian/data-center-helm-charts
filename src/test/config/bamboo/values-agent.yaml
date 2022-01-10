@@ -1,4 +1,16 @@
 
-
 agent:
   server: "${helm.release.prefix}-bamboo.${kubernetes.target.namespace}.svc.cluster.local"
+
+  securityToken:
+    secretName: bamboo-security-token
+
+  additionalEnvironmentVariables:
+    # While the agent can contact the server, the server is not yet
+    # configured so the handshake cannot complete and the agent
+    # quits. The wrapper will then restart the agent. This is all
+    # expected behaviour, but until we have full Bamboo
+    # auto-configuration we need to be a bit more permissive about
+    # what Kubernetes considers a valid pod state.
+    - name: "BAMBOO_AGENT_PERMISSIVE_READINESS"
+      value: "true"

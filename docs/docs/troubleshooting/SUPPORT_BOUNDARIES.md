@@ -61,3 +61,12 @@ Through the `values.yaml` the database is provided as a connection string with t
 !!!example ""
 
     See an example of [provisioning databases on cloud-based providers](../examples/database/CLOUD_PROVIDERS.md).
+
+## Bamboo - custom remote agents
+If creating and using custom remote docker agents, you're required to ensure that they are configured, built and working as expected. 
+
+!!!example ""
+
+    See an example of [customizing a remote agent with bespoke capabilities](../examples/bamboo/AGENT_CAPABILITIES.md).
+
+

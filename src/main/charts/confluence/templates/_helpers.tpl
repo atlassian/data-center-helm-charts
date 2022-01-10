@@ -307,6 +307,24 @@ Define additional containers here to allow template overrides when used as a sub
 {{- end }}
 
 {{/*
+Define additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "confluence.additionalPorts" -}}
+{{- with .Values.confluence.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "synchrony.additionalPorts" -}}
+{{- with .Values.synchrony.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Define additional volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}
@@ -498,3 +516,11 @@ volumeClaimTemplates:
   value: "kubernetes"
 {{ end }}
 {{ end }}
+
+{{- define "flooredCPU" -}}
+    {{- if hasSuffix "m" (. | toString) }}
+    {{- div (trimSuffix "m" .) 1000 | default 1 }}
+    {{- else }}
+    {{- . }}
+    {{- end }}
+{{- end}}

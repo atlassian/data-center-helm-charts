@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.3-jdk11](https://img.shields.io/badge/AppVersion-8.0.3--jdk11-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.1](https://img.shields.io/badge/AppVersion-8.1.1-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -10,7 +10,7 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 
 ## Source Code
 
-* <https://github.com/atlassian-labs/data-center-helm-charts>
+* <https://github.com/atlassian/data-center-helm-charts>
 * <https://bitbucket.org/atlassian-docker/docker-bamboo-server>
 
 ## Requirements
@@ -30,21 +30,30 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.accessLog.mountPath | string | `"/opt/atlassian/bamboo/logs"` | The path within the Bamboo container where the local-home volume should be  mounted in order to capture access logs. |
 | bamboo.additionalBundledPlugins | list | `[]` | Specifies a list of additional Bamboo plugins that should be added to the Bamboo container. Note plugins installed via this method will appear as bundled plugins rather than user plugins. These should be specified in the same manner as the 'additionalLibraries' property. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ NOTE: only .jar files can be loaded using this approach. OBR's can be extracted (unzipped) to access the associated .jar An alternative to this method is to install the plugins via "Manage Apps" in the product system administration UI. |
 | bamboo.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo  container. See https://hub.docker.com/r/atlassian/bamboo-server for  supported variables. |
-| bamboo.additionalJvmArgs[0] | string | `"-XX:ActiveProcessorCount=2"` | The value defined for ActiveProcessorCount should correspond to that provided  for 'container.requests.cpu'. https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE |
+| bamboo.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Bamboo JVM, e.g.  system properties. |
 | bamboo.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bamboo container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
+| bamboo.additionalPorts | list | `[]` | Defines any additional ports for the Bamboo container. |
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
-| bamboo.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
+| bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
+| bamboo.disableAgentAuth | bool | `false` | Whether to disable agent authentication. Setting this to true skips the agent approval step in the UI. For more information see: https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html The default is false. |
+| bamboo.import | object | `{"path":null,"type":"clean"}` | Bamboo can optionally import an existing exported dataset on first-run. These optional values can configure the import file or skip this stage entirely. For more details on importing and exporting see the documentation: https://confluence.atlassian.com/bamboo/exporting-data-for-backup-289277255.html https://confluence.atlassian.com/bamboo/importing-data-from-backup-289277260.html |
+| bamboo.import.path | string | `nil` | Path to the existing export to import to the new installation. This should be accessible by the cluster node; e.g. via the shared-home or `additionalVolumeMounts` below. |
+| bamboo.import.type | string | `"clean"` | Import type. Valid values are `clean` (for a new install) or `import`, in which case you should provide the file path. The default is `clean`. |
+| bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information |
+| bamboo.license.secretName | string | `nil` | The secret that contains the license information |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic |
 | bamboo.ports.jms | int | `54663` | JMS port |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe  before the pod fails readiness checks. |
-| bamboo.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bamboo container readiness probe,  after which the probe will start running. |
-| bamboo.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container readiness probe will run |
+| bamboo.readinessProbe.initialDelaySeconds | int | `30` | The initial delay (in seconds) for the Bamboo container readiness probe,  after which the probe will start running. |
+| bamboo.readinessProbe.periodSeconds | int | `10` | How often (in seconds) the Bamboo container readiness probe will run |
 | bamboo.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bamboo pod |
 | bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo pod |
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bamboo.securityToken.secretKey | string | `"security-token"` | The key (default `secretKey`) in the Secret used to store the Bamboo shared key. |
+| bamboo.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token will overrided the generated one. This secret should also be shared with the agent deployment. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |
@@ -52,6 +61,13 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour. |
 | bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/shutdown-wait.sh)  for details. |
 | bamboo.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate. |
+| bamboo.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret that contains the sysadmin display name |
+| bamboo.sysadminCredentials.emailAddressSecretKey | string | `"emailAddress"` | The key in the Kubernetes Secret that contains the sysadmin email address |
+| bamboo.sysadminCredentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the sysadmin password |
+| bamboo.sysadminCredentials.secretName | string | `nil` | The secret that contains the admin user information |
+| bamboo.sysadminCredentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the sysadmin username |
+| bamboo.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Bamboo pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |
+| bamboo.unattendedSetup | bool | `true` | To skip the setup wizard post deployment set this property to 'true' and ensure values for all 'REQUIRED' and 'UNATTENDED-SETUP' stanzas  (see banner of this file) have been supplied. For release 1.0.0 this value is by default set to 'true' and should not be changed. |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password |
 | database.credentials.secretName | string | `nil` | The name of the K8s Secret that contains the database login credentials. If the secret is specified, then the credentials will be automatically utilised on  Bamboo startup. If the secret is not provided, then the credentials will need to be  provided via the browser during manual configuration post deployment.   Example of creating a database credentials K8s secret below: 'kubectl create secret generic <secret-name> --from-literal=username=<username> \ --from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | database.credentials.usernameSecretKey | string | `"username"` | The key ('username') in the Secret used to store the database login username |
@@ -74,7 +90,7 @@ Kubernetes: `>=1.19.x-0`
 | ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used. Please follow documenation of your ingress controller. If the cluster  contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic. |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a  pre-provisioned Ingress Controller being available.  |
 | ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on  this hostname will be routed by the Ingress Resource to the appropriate backend  Service. |
-| ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS  (HTTPS) enforced. |
+| ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS  (HTTPS) enforced. If not using an ingress and you want to reach the service  on localhost using port-forwarding then this value should be set to 'false' |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'  controller.  https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to  the K8s ingress-nginx controller. Set to 'false' if a different controller is  to be used, in which case the appropriate annotations for that controller must  be specified below under 'ingress.annotations'. |
 | ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bamboo'. Based on a  'ingress.host' value of 'company.k8s.com' this would result in a URL of  'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextPath' |

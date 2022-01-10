@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-1.0.0
+    helm.sh/chart: bitbucket-1.1.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-jvm-config
   labels:
-    helm.sh/chart: bitbucket-1.0.0
+    helm.sh/chart: bitbucket-1.1.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -34,10 +34,10 @@ kind: Service
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-1.0.0
+    helm.sh/chart: bitbucket-1.1.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -65,10 +65,10 @@ kind: StatefulSet
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-1.0.0
+    helm.sh/chart: bitbucket-1.1.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -76,7 +76,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       partition: 0
-  podManagementPolicy: Parallel
+  podManagementPolicy: OrderedReady
   serviceName: unittest-bitbucket
   selector:
     matchLabels:
@@ -85,7 +85,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 27a0817aa16495c57f4e89f436e270cc76aa2204678f535320edc43a89dcee6a
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -97,7 +96,7 @@ spec:
       initContainers:
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket:7.15.1-jdk11"
+          image: "atlassian/bitbucket:7.17.1-jdk11"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -162,6 +161,8 @@ spec:
       volumes:
         - name: local-home
           emptyDir: {}
+        - name: shared-home
+          emptyDir: {}
 ---
 # Source: bitbucket/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -172,10 +173,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bitbucket-1.0.0
+    helm.sh/chart: bitbucket-1.1.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -204,10 +205,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bitbucket-1.0.0
+    helm.sh/chart: bitbucket-1.1.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.15.1-jdk11"
+    app.kubernetes.io/version: "7.17.1-jdk11"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -231,4 +232,6 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
+    - name: shared-home
+      emptyDir: {}
   restartPolicy: Never

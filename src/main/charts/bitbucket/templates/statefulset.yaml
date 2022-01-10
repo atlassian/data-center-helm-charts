@@ -73,6 +73,7 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.bitbucket.ports.hazelcast }}
               protocol: TCP
+            {{- include "bitbucket.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
@@ -194,6 +195,10 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.topologySpreadConstraints }}
+      topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.schedulerName }}

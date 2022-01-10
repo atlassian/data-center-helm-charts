@@ -3,3 +3,27 @@ volumes:
   sharedHome:
     nfsPermissionFixer:
       enabled: true
+
+bamboo:
+  baseUrl: "https://testUrl/"
+
+  brokerUrl: "tcp://testBroker:1234"
+
+  securityToken:
+    secretName: agentTestSecret
+    secretKey: agentTestKey
+
+  license:
+    secretName: licenseTestSecret
+    secretKey: licenseTestKey
+
+  sysadminCredentials:
+    secretName: adminTestSecret
+    usernameSecretKey: adminTestUsernameKey
+    passwordSecretKey: adminPasswordTestKey
+    displayNameSecretKey: adminFullnameTestKey
+    emailAddressSecretKey: adminEmailTestKey
+
+  import:
+    type: "clean"
+

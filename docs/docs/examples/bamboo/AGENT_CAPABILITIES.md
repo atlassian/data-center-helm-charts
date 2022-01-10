@@ -21,7 +21,7 @@ You can learn more about remote agents capabilities on the [official documentati
 
 If additional capabilities are required, the [Bamboo agent base Docker image](https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/src/master/){.external} can be extended with those capabilities. 
 
-This custom image can then be deployed, by first updating the Bamboo agent `values.yaml` with the image `tag` of the custom Docker image i.e.
+This custom image can be used, by first updating the Bamboo agent `values.yaml` with the image `tag` of the custom Docker image i.e.
 
 ```yaml
 image:

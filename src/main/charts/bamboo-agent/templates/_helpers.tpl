@@ -126,6 +126,15 @@ Define additional containers here to allow template overrides when used as a sub
 {{- end }}
 
 {{/*
+Define additional ports here instead of in values.yaml to allow template overrides
+*/}}
+{{- define "agent.additionalPorts" -}}
+{{- with .Values.agent.additionalPorts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "agent.additionalEnvironmentVariables" -}}

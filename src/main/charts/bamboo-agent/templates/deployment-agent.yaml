@@ -79,6 +79,11 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
 
+          {{ if .Values.agent.additionalPorts }}
+          ports:
+          {{- include "agent.additionalPorts" . | nindent 12 }}
+          {{- end }}
+
           lifecycle:
             preStop:
               exec:
@@ -94,6 +99,10 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agent.topologySpreadConstraints }}
+      topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.schedulerName }}

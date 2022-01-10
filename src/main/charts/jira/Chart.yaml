@@ -2,8 +2,8 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.0.0
-appVersion: 8.20.0-jdk11
+version: 1.1.0
+appVersion: 8.20.1-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Jira
@@ -21,29 +21,38 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Improvements to graceful shutdown
+    - kind: added
+      description: Add support for custom schedulerName
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/282
-    - kind: changed
-      description: Update Jira to 8.19.0
+        url: https://github.com/atlassian/data-center-helm-charts/pull/301
+    - kind: added
+      description: Bind EHCACHE ports as environmental variables
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/286
-    - kind: changed
-      description: Improve documentation
+        url: https://github.com/atlassian/data-center-helm-charts/pull/308
+    - kind: added
+      description: Enable configuring ingress.class name
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/275
-        url: https://github.com/atlassian/data-center-helm-charts/pull/276
-        url: https://github.com/atlassian/data-center-helm-charts/pull/277
-        url: https://github.com/atlassian/data-center-helm-charts/pull/279
-        url: https://github.com/atlassian/data-center-helm-charts/pull/280
-        url: https://github.com/atlassian/data-center-helm-charts/pull/284
-        url: https://github.com/atlassian/data-center-helm-charts/pull/285
-        url: https://github.com/atlassian/data-center-helm-charts/pull/289
-        url: https://github.com/atlassian/data-center-helm-charts/pull/290
-        url: https://github.com/atlassian/data-center-helm-charts/pull/291
-        url: https://github.com/atlassian/data-center-helm-charts/pull/293
-        url: https://github.com/atlassian/data-center-helm-charts/pull/295
+        url: https://github.com/atlassian/data-center-helm-charts/pull/313
+    - kind: removed
+      description: Cleanup redundant (not-used) jira.terminationGracePeriodSeconds
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/306
+    - kind: changed
+      description: Make security context more flexible
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/321
+    - kind: added
+      description: Roll Statefulset Pods if ConfigMap changes
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/315
+    - kind: changed
+      description: Jira DC updated to 8.20.1 version (LTS)
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/345

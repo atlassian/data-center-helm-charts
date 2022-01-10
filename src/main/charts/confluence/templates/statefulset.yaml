@@ -64,6 +64,7 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.confluence.ports.hazelcast }}
               protocol: TCP
+            {{- include "confluence.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.confluence.ports.http }}
@@ -154,6 +155,10 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.confluence.topologySpreadConstraints }}
+      topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.schedulerName }}

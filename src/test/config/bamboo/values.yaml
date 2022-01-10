@@ -1,10 +1,30 @@
 # This file contains overrides for the Bamboo Helm chart's values.yaml file
 
 bamboo:
-  clustering:
-    enabled: ${clustering.enabled}
+
+  unattendedSetup: true
+
+  securityToken:
+    secretName: bamboo-security-token
+
+  disableAgentAuth: true
+
+  license:
+    secretName: bamboo-license
+
+  sysadminCredentials:
+    secretName: bamboo-admin-user
+
+  import:
+    type: "clean"
+
   additionalJvmArgs:
     - -XX:ActiveProcessorCount=2
+
+  additionalEnvironmentVariables:
+    - name: ATL_BAMBOO_SKIP_CONFIG
+      value: "true"
+
 database:
   type: postgresql
   url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql:5432/bamboo
