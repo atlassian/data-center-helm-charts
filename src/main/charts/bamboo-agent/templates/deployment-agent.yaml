@@ -13,9 +13,7 @@ spec:
     metadata:
       annotations:
         checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}        
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "agent.podAnnotations" . | nindent 8 }}
       labels:
     {{- include "agent.selectorLabels" . | nindent 8 }}
     spec:

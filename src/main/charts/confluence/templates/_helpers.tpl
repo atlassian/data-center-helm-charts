@@ -272,7 +272,16 @@ For each additional Synchrony library declared, generate a volume mount that inj
 {{- end }}
 
 {{/*
-Defining additional init containers here instead of in values.yaml to allow template overrides
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "confluence.podAnnotations" -}}
+{{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
@@ -281,7 +290,7 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{- end }}
 
 {{/*
-Defining additional hosts here instead of in values.yaml to allow template overrides
+Define additional hosts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalHosts" -}}
 {{- range .Values.additionalHosts }}
@@ -289,7 +298,7 @@ Defining additional hosts here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional containers here instead of in values.yaml to allow template overrides
+Define additional containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
@@ -298,7 +307,7 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalPorts" -}}
 {{- with .Values.confluence.additionalPorts }}
@@ -307,7 +316,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "synchrony.additionalPorts" -}}
 {{- with .Values.synchrony.additionalPorts }}
@@ -316,7 +325,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional volume mounts here instead of in values.yaml to allow template overrides
+Define additional volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}
 {{- with .Values.confluence.additionalVolumeMounts }}
@@ -325,7 +334,7 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 {{- end }}
 
 {{/*
-Defining additional environment variables here instead of in values.yaml to allow template overrides
+Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalEnvironmentVariables" -}}
 {{- with .Values.confluence.additionalEnvironmentVariables }}
