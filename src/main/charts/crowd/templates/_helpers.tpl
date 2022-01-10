@@ -98,6 +98,15 @@ app.kubernetes.io/name: {{ include "crowd.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "crowd.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "crowd.sysprop.hazelcastListenPort" -}}
 -Dcrowd.cluster.hazelcast.listenPort={{ .Values.crowd.ports.hazelcast }}
 {{- end }}

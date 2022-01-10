@@ -22,9 +22,7 @@ spec:
         {{- end }}
       labels:
         {{- include "crowd.selectorLabels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "crowd.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}

@@ -101,6 +101,15 @@ app.kubernetes.io/name: {{ include "bitbucket.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "bitbucket.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.baseUrl" -}}
 {{ ternary "https" "http" .Values.ingress.https -}}
 ://

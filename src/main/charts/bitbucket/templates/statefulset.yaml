@@ -30,9 +30,7 @@ spec:
         {{- end }}
       labels:
         {{- include "bitbucket.selectorLabels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "bitbucket.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}

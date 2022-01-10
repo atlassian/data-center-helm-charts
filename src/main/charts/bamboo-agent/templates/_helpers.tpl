@@ -90,6 +90,15 @@ app.kubernetes.io/name: {{ include "agent.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "agent.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "agent.image" -}}
 {{- if .Values.image.registry -}}
 {{ .Values.image.registry}}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
