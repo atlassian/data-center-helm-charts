@@ -21,7 +21,7 @@ class PodAnnotationsTest {
     
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void service_annotations(Product product) throws Exception {
+    void pod_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "podAnnotations.podAnnotation1", "podOfHumpbacks",
                 "podAnnotations.podAnnotation2", "podOfOrcas"
@@ -29,6 +29,22 @@ class PodAnnotationsTest {
         
         final var annotations = resources.getStatefulSet(product.getHelmReleaseName()).getPodMetadata().get("annotations");
         
+        assertThat(annotations).isObject(Map.of(
+                "podAnnotation1", "podOfHumpbacks",
+                "podAnnotation2", "podOfOrcas"
+        ));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo_agent")
+    void bamboo_agent_pod_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "podAnnotations.podAnnotation1", "podOfHumpbacks",
+                "podAnnotations.podAnnotation2", "podOfOrcas"
+        ));
+
+        final var annotations = resources.getDeployment(product.getHelmReleaseName()).getPodMetadata().get("annotations");
+
         assertThat(annotations).isObject(Map.of(
                 "podAnnotation1", "podOfHumpbacks",
                 "podAnnotation2", "podOfOrcas"
