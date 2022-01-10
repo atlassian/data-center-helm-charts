@@ -30,7 +30,7 @@ class PodAnnotationsTest {
         final var annotations = resources.getStatefulSet(product.getHelmReleaseName()).getPodMetadata().get("annotations");
         
         assertThat(annotations).isObject(Map.of(
-                "podAnnotation1", "podOfHumBacks",
+                "podAnnotation1", "podOfHumpbacks",
                 "podAnnotation2", "podOfOrcas"
         ));
     }
