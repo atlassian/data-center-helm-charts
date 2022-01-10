@@ -70,9 +70,13 @@ serviceAccount:
   imagePullSecrets: []
   # - name: secretName
 
-    # Define permissions
-    # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
-    #
+  # -- Annotations to add to the ServiceAccount (if created)
+  #
+  annotations: {}
+
+  # Define permissions
+  # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+  #
   clusterRole:
 
     # -- Set to 'true' if a ClusterRole should be created, or 'false' if it

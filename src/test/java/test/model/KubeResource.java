@@ -32,6 +32,10 @@ public class KubeResource {
         return getMetadata().required("name").asText();
     }
 
+    public JsonNode getAnnotations() {
+        return getMetadata().required("annotations");
+    }
+
     public JsonNode getNode(String... paths) {
         return get(node, Array.of(paths));
     }

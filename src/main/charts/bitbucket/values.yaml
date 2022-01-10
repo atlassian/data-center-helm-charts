@@ -77,7 +77,8 @@ serviceAccount:
   imagePullSecrets: []
   # - name: secretName
 
-  #Annotations to add to the ServiceAccount if create is true
+  # -- Annotations to add to the ServiceAccount (if created)
+  #
   annotations: {}
   
   # Define permissions
