@@ -108,7 +108,16 @@ The command that should be run to start the fluentd service
 {{- end }}
 
 {{/*
-Defining additional init containers here instead of in values.yaml to allow template overrides
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bitbucket.podAnnotations" -}}
+{{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
@@ -117,7 +126,7 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{- end }}
 
 {{/*
-Defining additional containers here instead of in values.yaml to allow template overrides
+Define additional containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
@@ -126,7 +135,7 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "bitbucket.additionalPorts" -}}
 {{- with .Values.bitbucket.additionalPorts }}
@@ -135,7 +144,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional volume mounts here instead of in values.yaml to allow template overrides
+Define additional volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.additionalVolumeMounts" -}}
 {{- with .Values.bitbucket.additionalVolumeMounts }}
@@ -144,7 +153,7 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 {{- end }}
 
 {{/*
-Defining additional environment variables here instead of in values.yaml to allow template overrides
+Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.additionalEnvironmentVariables" -}}
 {{- with .Values.bitbucket.additionalEnvironmentVariables }}

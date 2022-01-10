@@ -60,6 +60,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token will overrided the generated one. This secret should also be shared with the agent deployment. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
+| bamboo.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |
 | bamboo.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bamboo |
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour. |

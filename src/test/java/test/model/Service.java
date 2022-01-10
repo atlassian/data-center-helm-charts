@@ -21,4 +21,8 @@ public class Service extends KubeResource {
     public Option<JsonNode> getPort(String name) {
         return getPorts().find(portNode -> name.equals(portNode.path("name").asText()));
     }
+
+    public JsonNode getLoadBalancerIP() {
+        return getSpec().path("loadBalancerIP");
+    }
 }

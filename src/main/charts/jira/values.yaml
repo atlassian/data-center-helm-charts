@@ -361,7 +361,11 @@ jira:
     # -- The type of K8s service to use for Jira
     #
     type: ClusterIP
-    
+
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH
     # will be set automatically.
     #

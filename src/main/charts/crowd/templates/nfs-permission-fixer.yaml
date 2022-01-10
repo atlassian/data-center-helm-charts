@@ -12,9 +12,9 @@ spec:
   template:
     metadata:
       name: {{ include "common.names.fullname" . }}-nfs-fixer
-      {{- with .Values.podAnnotations }}
+      {{- if (include "crowd.podAnnotations" .) }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        {{- include "crowd.podAnnotations" . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "common.labels.commonLabels" . | nindent 8 }}

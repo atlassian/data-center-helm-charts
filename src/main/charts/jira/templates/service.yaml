@@ -10,6 +10,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.jira.service.type }}
+  {{- if and (eq .Values.jira.service.type "LoadBalancer") (not (empty .Values.jira.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.jira.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.jira.service.port }}
       targetPort: http

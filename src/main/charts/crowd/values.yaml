@@ -118,6 +118,10 @@ crowd:
     #
     type: ClusterIP
 
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- Additional annotations to apply to the Service
     #
     annotations: {}

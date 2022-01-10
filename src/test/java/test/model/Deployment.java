@@ -28,6 +28,10 @@ public final class Deployment extends KubeResource {
                         new AssertionError("No container found with name " + name));
     }
 
+    public JsonNode getPodMetadata() {
+        return getNode("spec", "template", "metadata");
+    }
+
     public JsonNode getPodSpec() {
         return getNode("spec", "template", "spec");
     }
