@@ -23,7 +23,7 @@ class PodAnnotationsTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void service_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "podAnnotations.podAnnotation1", "podOfHumBacks",
+                "podAnnotations.podAnnotation1", "podOfHumpbacks",
                 "podAnnotations.podAnnotation2", "podOfOrcas"
         ));
         
