@@ -756,6 +756,17 @@ bitbucket:
   #    containerPort: 5555
   #    protocol: TCP
 
+  # -- Defines additional volumeClaimTemplates that should be applied to the Bitbucket pod.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in bitbucket.additionalVolumeMounts
+  #
+  additionalVolumeClaimTemplates: []
+  #  - name: myadditionalvolumeclaim
+  #    storageClassName:
+  #    resources:
+  #      requests:
+  #        storage: 1Gi
+
   # -- Defines topology spread constraints for Bitbucket pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
