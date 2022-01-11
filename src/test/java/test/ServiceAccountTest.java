@@ -44,6 +44,15 @@ class ServiceAccountTest {
 
     @ParameterizedTest
     @EnumSource(Product.class)
+    void serviceAccount_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "serviceAccount.annotations.myAnnotation", "myValue"));
+
+        assertThat(resources.get(ServiceAccount).getAnnotations()).isObject(Map.of("myAnnotation", "myValue"));
+    }
+
+    @ParameterizedTest
+    @EnumSource(Product.class)
     void serviceAccount_create_disabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "serviceAccount.create", "false"));

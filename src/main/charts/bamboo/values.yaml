@@ -81,6 +81,10 @@ serviceAccount:
   imagePullSecrets: []
   # - name: secretName
 
+  # -- Annotations to add to the ServiceAccount (if created)
+  #
+  annotations: {}
+
 # REQUIRED - Database configuration
 #
 # Bamboo requires a backend database. The configuration below can be used to define the 

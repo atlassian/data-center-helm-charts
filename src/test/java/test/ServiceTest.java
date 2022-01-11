@@ -52,7 +52,7 @@ class ServiceTest {
 
         final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
 
-        assertThat(service.getMetadata().path("annotations")).isObject(Map.of(
+        assertThat(service.getAnnotations()).isObject(Map.of(
                 "testAnnotation1", "test1",
                 "testAnnotation1.property", "test1.1",
                 "testAnnotation2", "test2"

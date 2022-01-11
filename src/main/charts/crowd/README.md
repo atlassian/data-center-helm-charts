@@ -87,6 +87,7 @@ Kubernetes: `>=1.19.x-0`
 | podLabels | object | `{}` | Custom labels that will be applied to all Crowd pods |
 | replicaCount | int | `1` | The initial number of Crowd pods that should be started at deployment time. Note that Crowd requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete. |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Crowd pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
+| serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created) |
 | serviceAccount.clusterRole.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |
 | serviceAccount.clusterRole.name | string | `nil` | The name of the ClusterRole to be used. If not specified, but the "serviceAccount.clusterRole.create" flag is set to 'true', then the ClusterRole name will be auto-generated. |
 | serviceAccount.clusterRoleBinding.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |

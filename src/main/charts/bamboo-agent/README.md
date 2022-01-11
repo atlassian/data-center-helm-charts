@@ -55,6 +55,7 @@ Kubernetes: `>=1.19.x-0`
 | podLabels | object | `{}` | Custom labels that will be applied to all Bamboo agent pods |
 | replicaCount | int | `1` | The initial number of Bamboo agent pods that should be started at deployment time.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo agent pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
+| serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created) |
 | serviceAccount.create | bool | `true` | Set to 'true' if a ServiceAccount should be created, or 'false' if it  already exists. |
 | serviceAccount.imagePullSecrets | list | `[]` | For Docker images hosted in private registries, define the list of image pull  secrets that should be utilized by the created ServiceAccount https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to be used by the pods. If not specified, but  the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name  will be auto-generated, otherwise the 'default' ServiceAccount will be used. https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server |
