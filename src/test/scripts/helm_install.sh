@@ -163,6 +163,11 @@ bootstrap_elasticsearch() {
 download_dependencies() {
   echo "Task $((tasknum+=1)) - Downloading dependencies for the helm chart ${CHART_SRC_PATH}." >&2
   helm dependency update "${CHART_SRC_PATH}"
+
+  if [[ -n "$PRODUCT_AGENT_CHART" && -e $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/values-agent.yaml ]]; then
+    echo "Installing dependencies for agent chart"
+    helm dependency update "${PRODUCT_AGENT_CHART}"
+  fi
 }
 
 # Package the product's Helm chart
