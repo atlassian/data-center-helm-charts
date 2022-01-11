@@ -6,7 +6,6 @@ metadata:
   labels:
     {{- include "jira.labels" . | nindent 4 }}
   annotations:
-    "kubernetes.io/ingress.class": {{ default "nginx" .Values.ingress.className }}
     {{ if .Values.ingress.nginx }}
     "nginx.ingress.kubernetes.io/affinity": "cookie"
     "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
@@ -19,6 +18,7 @@ metadata:
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  ingressClassName: {{ default "nginx" .Values.ingress.className }}
 {{ if and (.Values.ingress.tlsSecretName) (.Values.ingress.host) }}
   tls:
     - hosts:
