@@ -43,6 +43,15 @@ else use the name of the ClusterRole.
 {{- end }}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "crowd.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "crowd.sysprop.hazelcastListenPort" -}}
 -Dcrowd.cluster.hazelcast.listenPort={{ .Values.crowd.ports.hazelcast }}
 {{- end }}

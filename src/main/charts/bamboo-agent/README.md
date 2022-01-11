@@ -1,6 +1,6 @@
 # bamboo-agent
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.1](https://img.shields.io/badge/AppVersion-8.1.1-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.1](https://img.shields.io/badge/AppVersion-8.1.1-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center remote agents on Kubernetes
 
@@ -56,6 +56,7 @@ Kubernetes: `>=1.19.x-0`
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo agent pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo agent pods |
+| podLabels | object | `{}` | Custom labels that will be applied to all Bamboo agent pods |
 | replicaCount | int | `1` | The initial number of Bamboo agent pods that should be started at deployment time.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo agent pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
 | serviceAccount.create | bool | `true` | Set to 'true' if a ServiceAccount should be created, or 'false' if it  already exists. |

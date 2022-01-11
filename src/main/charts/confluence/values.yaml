@@ -911,6 +911,11 @@ fluentd:
 podAnnotations: {}
 #  name: <value>
 
+# -- Custom labels that will be applied to all Confluence pods
+#
+podLabels: {}
+#  name: <value>
+
 # -- Standard K8s node-selectors that will be applied to all Confluence pods
 #
 nodeSelector: {}

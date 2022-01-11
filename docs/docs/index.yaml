@@ -4,30 +4,60 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
-          description: Support for unattended setups
+          description: Support for defining podLabels
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/359
+            url: https://github.com/atlassian/data-center-helm-charts/pull/366
         - kind: added
-          description: Add topologySpreadConstraints to products
+          description: Support for defining loadBalancerIP
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/351
+            url: https://github.com/atlassian/data-center-helm-charts/pull/365
         - kind: added
-          description: Bamboo pre-seeding configuration
+          description: Support for defining podAnnotations
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/349
+            url: https://github.com/atlassian/data-center-helm-charts/pull/341
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.1.1
+    created: "2022-01-10T23:28:15.0273826Z"
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 49c0057d7718adb2a6161c8ca8e82e7cf0b6d6d8b375f3ff36c924b601922458
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.0.0/bamboo-1.0.0.tgz
+    version: 1.0.0
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: added
-          description: Initial agent support
+          description: Support for defining podLabels
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/335  
+            url: https://github.com/atlassian/data-center-helm-charts/pull/366
         - kind: added
-          description: Add additionalPorts for the Bamboo Agent Deployment
+          description: Support for defining loadBalancerIP
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/353
+            url: https://github.com/atlassian/data-center-helm-charts/pull/365
+        - kind: added
+          description: Support for defining podAnnotations
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/341
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 8.1.1
@@ -77,20 +107,50 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
-          description: Add topologySpreadConstraints to products
+          description: Support for defining podLabels
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/351
+            url: https://github.com/atlassian/data-center-helm-charts/pull/366
         - kind: added
-          description: Initial agent support
+          description: Support for defining podAnnotations
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/335  
+            url: https://github.com/atlassian/data-center-helm-charts/pull/341
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.1.1
+    created: "2022-01-10T23:28:15.4216237Z"
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: b74b0d053272196be3e09746a5586b74f3e3eee2a5bfeca2e65a8fd57d28e012
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.0.0/bamboo-agent-1.0.0.tgz
+    version: 1.0.0
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: added
-          description: Add additionalPorts for the Bamboo Agent Deployment
+          description: Support for defining podLabels
           links:
           - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/353
+            url: https://github.com/atlassian/data-center-helm-charts/pull/366        
+        - kind: added
+          description: Support for defining podAnnotations
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/341
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 8.1.1
@@ -2003,4 +2063,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2021-12-17T06:25:45.679671828Z"
+generated: "2022-01-10T23:40:17.0957817Z"

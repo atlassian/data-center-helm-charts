@@ -90,6 +90,15 @@ app.kubernetes.io/name: {{ include "synchrony.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "confluence.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "confluence.sysprop.hazelcastListenPort" -}}
 -Dconfluence.cluster.hazelcast.listenPort={{ .Values.confluence.ports.hazelcast }}
 {{- end }}

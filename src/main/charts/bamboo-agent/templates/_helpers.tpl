@@ -35,6 +35,15 @@ default
 {{- end -}}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "agent.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "agent.image" -}}
 {{- if .Values.image.registry -}}
 {{ .Values.image.registry}}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}

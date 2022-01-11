@@ -678,6 +678,11 @@ fluentd:
 podAnnotations: {}
 #  name: <value>
 
+# -- Custom labels that will be applied to all Jira pods
+#
+podLabels: {}
+#  name: <value>
+
 # -- Standard K8s node-selectors that will be applied to all Jira pods
 #
 nodeSelector: {}

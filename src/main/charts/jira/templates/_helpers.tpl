@@ -36,6 +36,15 @@ default
 {{- end }}
 
 {{/*
+Pod labels
+*/}}
+{{- define "jira.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
 {{- define "sharedHome.permissionFix.command" -}}

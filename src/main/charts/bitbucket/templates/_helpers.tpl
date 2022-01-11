@@ -46,6 +46,15 @@ else use the name of the ClusterRole.
 {{- end }}
 {{- end }}
 
+{{/*
+Pod labels
+*/}}
+{{- define "bitbucket.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.baseUrl" -}}
 {{ ternary "https" "http" .Values.ingress.https -}}
 ://
