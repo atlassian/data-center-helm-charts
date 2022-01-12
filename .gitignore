@@ -1,4 +1,6 @@
 .idea
+.vscode
+
 target
 *.iml
 \#*\#
@@ -7,3 +9,6 @@ tmp
 .settings
 .project
 .classpath
+
+# ignore installed common library chart
+src/main/charts/*/charts/*.tgz

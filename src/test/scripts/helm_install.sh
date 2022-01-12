@@ -159,6 +159,17 @@ bootstrap_elasticsearch() {
      bitnami/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
+# Download required dependencies for the product chart
+download_dependencies() {
+  echo "Task $((tasknum+=1)) - Downloading dependencies for the helm chart ${CHART_SRC_PATH}." >&2
+  helm dependency update "${CHART_SRC_PATH}"
+
+  if [[ -n "$PRODUCT_AGENT_CHART" && -e $CHART_TEST_VALUES_BASEDIR/$PRODUCT_NAME/values-agent.yaml ]]; then
+    echo "Installing dependencies for agent chart"
+    helm dependency update "${PRODUCT_AGENT_CHART}"
+  fi
+}
+
 # Package the product's Helm chart
 package_product_helm_chart() {
   echo "Task $((tasknum+=1)) - Packaging product helm chart." >&2
@@ -311,6 +322,7 @@ setup
 bootstrap_nfs
 bootstrap_database
 bootstrap_elasticsearch
+download_dependencies
 package_product_helm_chart
 package_functest_helm_chart
 install_product

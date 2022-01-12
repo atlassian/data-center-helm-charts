@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "jira.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "jira.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "jira.fullname" . }}
+  serviceName: {{ include "common.names.fullname" . }}
   selector:
     matchLabels:
-      {{- include "jira.selectorLabels" . | nindent 6 }}
+      {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -19,7 +19,7 @@ spec:
         {{- end }}
         {{- include "jira.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "jira.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.selectorLabels" . | nindent 8 }}
         {{- include "jira.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
@@ -90,22 +90,22 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_RESERVED_CODE_CACHE_SIZE
               valueFrom:
                 configMapKeyRef:
                   key: reserved_code_cache
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             {{- include "jira.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http

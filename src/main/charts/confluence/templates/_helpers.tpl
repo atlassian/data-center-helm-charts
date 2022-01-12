@@ -1,35 +1,10 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "confluence.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
 The name the synchrony app within the chart.
-TODO: This will break if the confluence.name exceeds 63 characters, need to find a more rebust way to do this
+TODO: This will break if the common.names.name exceeds 63 characters, need to find a more rebust way to do this
 */}}
 {{- define "synchrony.name" -}}
-{{ include "confluence.name" . }}-synchrony
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "confluence.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
+{{ include "common.names.name" . }}-synchrony
 {{- end }}
 
 {{/*
@@ -37,14 +12,7 @@ The full-qualfied name of the synchrony app within the chart.
 TODO: This will break if the confluence.fullname exceeds 63 characters, need to find a more rebust way to do this
 */}}
 {{- define "synchrony.fullname" -}}
-{{ include "confluence.fullname" . }}-synchrony
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "confluence.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{ include "common.names.fullname" . }}-synchrony
 {{- end }}
 
 {{/*
@@ -58,7 +26,7 @@ else just use the "default" service account.
 {{- .Values.serviceAccount.name -}}
 {{- else -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "confluence.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- else -}}
 default
 {{- end -}}
@@ -74,7 +42,7 @@ else use the name of the Helm release.
 {{- if .Values.serviceAccount.clusterRole.name }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
-{{- include "confluence.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- end }}
 {{- end }}
 
@@ -92,25 +60,10 @@ else use the name of the ClusterRole.
 {{- end }}
 
 {{/*
-These labels will be applied to all Confluence (non-Synchrony) resources in the chart
-*/}}
-{{- define "confluence.labels" -}}
-helm.sh/chart: {{ include "confluence.chart" . }}
-{{ include "confluence.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ with .Values.additionalLabels }}
-{{- toYaml . }}
-{{- end }}
-{{- end }}
-
-{{/*
 These labels will be applied to all Synchrony resources in the chart
 */}}
 {{- define "synchrony.labels" -}}
-helm.sh/chart: {{ include "confluence.chart" . }}
+helm.sh/chart: {{ include "common.names.chart" . }}
 {{ include "synchrony.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -125,7 +78,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels for finding Confluence (non-Synchrony) resources
 */}}
 {{- define "confluence.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "confluence.name" . }}
+app.kubernetes.io/name: {{ include "common.names.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -412,7 +365,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
-    claimName: {{ include "confluence.fullname" . }}-shared-home
+    claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else }}
 {{ if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
@@ -520,11 +473,11 @@ volumeClaimTemplates:
     fieldRef:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-  value: {{ include "confluence.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 - name: ATL_CLUSTER_TYPE
   value: "kubernetes"
 - name: ATL_CLUSTER_NAME
-  value: {{ include "confluence.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 {{ end }}
 {{ end }}
 

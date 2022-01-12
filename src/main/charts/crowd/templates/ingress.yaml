@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "crowd.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "crowd.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
     "kubernetes.io/ingress.class": {{ default "nginx" .Values.ingress.className }}
     {{ if .Values.ingress.nginx }}
@@ -33,7 +33,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "crowd.fullname" . }}
+                name: {{ include "common.names.fullname" . }}
                 port:
                   number: {{ $.Values.crowd.service.port }}
 {{ end }}

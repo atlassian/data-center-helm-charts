@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "bitbucket.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "bitbucket.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
     {{- with .Values.bitbucket.service.annotations }}
     {{- toYaml . | nindent 4 }}
@@ -28,4 +28,4 @@ spec:
       protocol: TCP
       name: hazelcast
   selector:
-    {{- include "bitbucket.selectorLabels" . | nindent 4 }}
+    {{- include "common.labels.selectorLabels" . | nindent 4 }}

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "bamboo.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "bamboo.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "bamboo.fullname" . }}
+  serviceName: {{ include "common.names.fullname" . }}
   selector:
     matchLabels:
-      {{- include "bamboo.selectorLabels" . | nindent 6 }}
+      {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -19,7 +19,7 @@ spec:
         {{- end }}
         {{- include "bamboo.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "bamboo.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.selectorLabels" . | nindent 8 }}
         {{- include "bamboo.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
@@ -79,17 +79,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: {{ include "bamboo.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "bamboo.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "bamboo.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             {{ if .Values.bamboo.brokerUrl }}
             - name: ATL_CLIENT_BROKER_URL
               value: {{ .Values.bamboo.brokerUrl | quote }}

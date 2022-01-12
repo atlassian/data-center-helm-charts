@@ -28,7 +28,7 @@
         fieldRef:
           fieldPath: status.podIP
     - name: HELM_RELEASE_NAME
-      value: {{ include "bamboo.fullname" . }}
+      value: {{ include "common.names.fullname" . }}
 {{ end }}
 {{ end }}
 
@@ -36,6 +36,6 @@
 {{ if .Values.fluentd.enabled }}
 - name: fluentd-config
   configMap:
-    name: {{ include "bamboo.fullname" . }}-fluentd-config
+    name: {{ include "common.names.fullname" . }}-fluentd-config
 {{ end }}
 {{ end }}

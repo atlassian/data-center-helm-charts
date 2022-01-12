@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "bamboo.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-  {{- include "bamboo.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
   {{- with .Values.bamboo.service.annotations }}
   {{- toYaml . | nindent 4 }}
@@ -19,4 +19,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-  {{- include "bamboo.selectorLabels" . | nindent 4 }}
+  {{- include "common.labels.selectorLabels" . | nindent 4 }}

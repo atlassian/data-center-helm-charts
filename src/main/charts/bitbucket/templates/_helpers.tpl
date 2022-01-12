@@ -3,38 +3,6 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "bitbucket.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "bitbucket.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "bitbucket.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
 The name of the service account to be used.
 If the name is defined in the chart values, then use that,
 else if we're creating a new service account then use the name of the Helm release,
@@ -45,7 +13,7 @@ else just use the "default" service account.
 {{- .Values.serviceAccount.name -}}
 {{- else -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "bitbucket.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- else -}}
 default
 {{- end -}}
@@ -61,7 +29,7 @@ else use the name of the Helm release.
 {{- if .Values.serviceAccount.clusterRole.name }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
-{{- include "bitbucket.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- end }}
 {{- end }}
 
@@ -76,29 +44,6 @@ else use the name of the ClusterRole.
 {{- else }}
 {{- include "bitbucket.clusterRoleName" . -}}
 {{- end }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "bitbucket.labels" -}}
-helm.sh/chart: {{ include "bitbucket.chart" . }}
-{{ include "bitbucket.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ with .Values.additionalLabels }}
-{{- toYaml . }}
-{{- end }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "bitbucket.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "bitbucket.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
@@ -280,7 +225,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
-    claimName: {{ include "bitbucket.fullname" . }}-shared-home
+    claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
 {{ else }}
@@ -289,7 +234,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volume.sharedHome.name" -}}
-{{ include "bitbucket.fullname" . }}-shared-home-pv
+{{ include "common.names.fullname" . }}-shared-home-pv
 {{- end }}
 
 {{- define "bitbucket.volumeClaimTemplates" -}}
@@ -381,7 +326,7 @@ volumeClaimTemplates:
     fieldRef:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-  value: {{ include "bitbucket.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 - name: HAZELCAST_NETWORK_KUBERNETES
   value: "true"
 - name: HAZELCAST_PORT
@@ -391,7 +336,7 @@ volumeClaimTemplates:
 {{ end }}
 
 {{- define "bitbucket.hazelcastGroupSecretName" -}}
-{{- .Values.bitbucket.clustering.group.secretName | default (printf "%s-clustering" (include "bitbucket.fullname" .)) -}}
+{{- .Values.bitbucket.clustering.group.secretName | default (printf "%s-clustering" (include "common.names.fullname" .)) -}}
 {{- end }}
 
 {{- define "bitbucket.hazelcastGroupEnvVars" }}

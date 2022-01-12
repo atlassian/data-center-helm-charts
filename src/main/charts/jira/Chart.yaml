@@ -56,3 +56,7 @@ annotations:
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/345
+dependencies:
+  - name: common
+    version: 1.0.0
+    repository: https://atlassian.github.io/data-center-helm-charts

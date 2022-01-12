@@ -4,9 +4,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "bitbucket.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "bitbucket.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
@@ -14,10 +14,10 @@ spec:
     rollingUpdate:
       partition: 0
   podManagementPolicy: {{ default "OrderedReady" .Values.bitbucket.podManagementStrategy }}
-  serviceName: {{ include "bitbucket.fullname" . }}
+  serviceName: {{ include "common.names.fullname" . }}
   selector:
     matchLabels:
-      {{- include "bitbucket.selectorLabels" . | nindent 6 }}
+      {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -27,7 +27,7 @@ spec:
         {{- end }}
         {{- include "bitbucket.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "bitbucket.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.selectorLabels" . | nindent 8 }}
         {{- include "bitbucket.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
@@ -166,17 +166,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "bitbucket.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "bitbucket.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: {{ include "bitbucket.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: APPLICATION_MODE
               value: {{ .Values.bitbucket.applicationMode | default "default" | quote }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}

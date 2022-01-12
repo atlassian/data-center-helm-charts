@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "confluence.fullname" . }}-setup
+  name: {{ include "common.names.fullname" . }}-setup
   labels:
-    {{- include "confluence.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
     "kubernetes.io/ingress.class": {{ default "nginx" .Values.ingress.className }}
     {{ if .Values.ingress.nginx }}
@@ -33,14 +33,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "confluence.fullname" . }}
+                name: {{ include "common.names.fullname" . }}
                 port:
                   number: {{ $.Values.confluence.service.port }}
           - path: {{ trimSuffix "/" (include "confluence.ingressPath" .) }}/bootstrap
             pathType: Prefix
             backend:
               service:
-                name: {{ include "confluence.fullname" . }}
+                name: {{ include "common.names.fullname" . }}
                 port:
                   number: {{ $.Values.confluence.service.port }}
 {{ end }}

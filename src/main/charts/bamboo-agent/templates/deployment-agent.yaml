@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "agent.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-  {{- include "agent.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-  {{- include "agent.selectorLabels" . | nindent 6 }}
+  {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}        
         {{- include "agent.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "agent.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.selectorLabels" . | nindent 8 }}
         {{- include "agent.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
@@ -48,12 +48,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "agent.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: WRAPPER_JAVA_MAXMEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "agent.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             {{- include "agent.additionalEnvironmentVariables" . | nindent 12 }}
 
           startupProbe:
