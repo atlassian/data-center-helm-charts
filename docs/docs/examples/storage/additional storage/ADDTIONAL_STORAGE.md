@@ -6,13 +6,11 @@ E.g. If you want to deploy Confluence on NFS, but you want to use BlockStorage (
 confluence:
   additionalVolumeClaimTemplates:
     - name: myadditionalvolumeclaim
-      storageClassName: block
+      storageClassName: gp2
       resources:
         requests:
           storage: 1Gi
   additionalVolumeMounts:
     - mountPath: /var/atlassian/application-data/confluence/index
       name: myadditionalvolumeclaim
-    clustering:
-      enabled: true
 ```
