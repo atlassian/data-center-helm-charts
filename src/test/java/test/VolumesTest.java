@@ -233,6 +233,26 @@ class VolumesTest {
         assertThat(mount.get("mountPath")).hasTextEqualTo("/foo/bar");
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additionalVolumeClaimTemplate(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname + ".additionalVolumeClaimTemplates[0].name", "my-additional-volume-claim-template",
+                pname + ".additionalVolumeClaimTemplates[0].storageClassName", "foo",
+                pname + ".additionalVolumeClaimTemplates[0].resources.requests.storage", "2Gi"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+
+        final var additionalVolumeClaimTemplate = statefulSet.getVolumeClaimTemplates().head();
+        verifyVolumeClaimTemplate(additionalVolumeClaimTemplate, "my-additional-volume-claim-template", "ReadWriteOnce");
+        assertThat(additionalVolumeClaimTemplate.path("spec").path("storageClassName"))
+                .hasTextEqualTo("foo");
+        assertThat(additionalVolumeClaimTemplate.path("spec").path("resources").path("requests").path("storage"))
+                .hasTextEqualTo("2Gi");
+    }
+
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
         assertThat(volumeClaimTemplate.path("metadata").path("name"))
                 .hasTextEqualTo(expectedVolumeName);
