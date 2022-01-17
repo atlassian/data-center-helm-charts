@@ -13,7 +13,7 @@ spec:
   {{- end }}
   {{- if .Values.volumes.sharedHome.persistentVolume.create }}
   volumeName: {{ include "bitbucket.volume.sharedHome.name" . }}
-  {{- else}}
+  {{- else if .Values.volumes.sharedHome.persistentVolumeClaim.volumeName }}
   volumeName: {{ .Values.volumes.sharedHome.persistentVolumeClaim.volumeName | quote }}
   {{- end }}
   {{- with .Values.volumes.sharedHome.persistentVolumeClaim.resources }}
