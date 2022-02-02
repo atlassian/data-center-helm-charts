@@ -38,6 +38,7 @@ jobs:
         uses: actions/checkout@v2
         with :
           repository: nghazali/data-center-terraform@latest
+          token: ${{ secrets.GH_PAT }}
           path: tf
 
       - name: Setup Go environment
