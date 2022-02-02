@@ -4,8 +4,8 @@ on:
     branches:
       - main
     paths:
-      - src/main/charts/bamboo/**
-      - src/main/charts/bamboo-agent/**
+      - 'src/main/charts/bamboo/**'
+      - 'src/main/charts/bamboo-agent/**'
   workflow_dispatch:
 
 jobs:
