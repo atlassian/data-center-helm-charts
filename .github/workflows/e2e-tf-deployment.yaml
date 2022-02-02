@@ -1,0 +1,78 @@
+name: Bamboo E2E Testing
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/main/charts/bamboo/**
+      - src/main/charts/bamboo-agent/**
+    paths-ignore: # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#example-ignoring-paths
+      - 'docs/**'
+      - '.atlassian/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: E2E Testing
+    runs-on: ubuntu-latest
+    env:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_bamboo_license: ${{ secrets.TF_VAR_LICENSE }}
+
+    steps:
+      - name: Checkout Helm charts
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.7.1
+
+      - name: Execute helm dependency update for bamboo chart
+        run: helm dependency update src/main/charts/bamboo
+      - name: Execute helm dependency update for bamboo-agent chart
+        run: helm dependency update src/main/charts/bamboo-agent
+
+      - name: Checkout Deployment Automation
+        uses: actions/checkout@v2
+        with :
+          repository: atlassian-labs/data-center-terraform
+          ref: refs/heads/release
+          path: tf
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v2.1.4
+        with:
+          go-version: 1.17
+
+      - name: Setup dependencies
+        id: setup-dependencies
+        working-directory: tf/test/
+        run: |
+          go get -v -t -d ./... && go mod tidy
+          echo ::set-output name=exit_code::$?
+
+      - name: Create test output directory
+        run: mkdir tf/test/e2etest/artifacts
+
+      - name: E2E test
+        id: e2e-test
+        working-directory: tf/test/
+        run: |
+          set -o pipefail
+          ls ..
+          ls ./e2etest
+          echo "\nbamboo_internal_use = \"$(pwd)/../..\"" >> ./e2etest/test-config.tfvars.tmpl
+          #go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
+          cat ./e2etest/test-config.tfvars.tmpl
+
+      - name: Upload test log files
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: e2e-test-artifacts
+          path: tf/test/e2etest/artifacts/
