@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: E2E Testing
+    name: Deploy Infrastructure for Bamboo DC and Run End to End Tests
     runs-on: ubuntu-latest
     env:
       AWS_DEFAULT_REGION: us-east-1
@@ -23,15 +23,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Checkout Deployment Automation
-        run: |
-          git clone https://github.com/nghazali/data-center-terraform.git tmp
-          cd tmp
-          LTS=$(curl -s GET https://api.github.com/repos/nghazali/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
-          echo "LTS version for Deployment Automation for Atlassian Data Center Products: '${LTS}'"
-          cd ..
-          git clone -b $LTS https://github.com/nghazali/data-center-terraform.git tf
           
       - name: Install Helm
         uses: azure/setup-helm@v1
@@ -42,29 +33,38 @@ jobs:
         run: helm dependency update src/main/charts/bamboo
       - name: Execute helm dependency update for bamboo-agent chart
         run: helm dependency update src/main/charts/bamboo-agent
-        
+
+
+      - name: Checkout Deployment Automation
+        run: |
+          git clone https://github.com/nghazali/data-center-terraform.git tmp
+          cd tmp
+          LTS=$(curl -s GET https://api.github.com/repos/nghazali/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
+          echo "LTS version for Deployment Automation for Atlassian Data Center Products: '${LTS}'"
+          cd ..
+          git clone -b $LTS https://github.com/nghazali/data-center-terraform.git tf
+
       - name: Setup Go environment
         uses: actions/setup-go@v2.1.4
         with:
           go-version: 1.17
 
-      - name: Setup dependencies
+      - name: Install Go dependencies
         id: setup-dependencies
         working-directory: tf/test/
         run: |
           go get -v -t -d ./... && go mod tidy
           echo ::set-output name=exit_code::$?
 
-      - name: Create test output directory
-        run: mkdir tf/test/e2etest/artifacts
-
-      - name: Deploy the infrastructure and run E2E tests
+      - name: Deploy the infrastructure, run E2E tests, and cleanup
         id: e2e-test
         working-directory: tf/test/
         run: |
           set -o pipefail
+          # Create test output directory
+          mkdir tf/test/e2etest/artifacts
           
-          # Locate the helm chart location to deploy
+          # Add Bamboo helm chart location to the config template
           echo "bamboo_internal_use = \"$(pwd)/../../src/main/charts/bamboo\"" >> ./e2etest/test-config.tfvars.tmpl
           
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
