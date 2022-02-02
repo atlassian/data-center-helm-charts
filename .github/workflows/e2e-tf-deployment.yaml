@@ -30,6 +30,7 @@ jobs:
           repository: nghazali/data-center-terraform@latest
           token: ${{ secrets.GH_PAT }}
           path: tf
+          fetch-depth: 0
           
       - name: Install Helm
         uses: azure/setup-helm@v1
