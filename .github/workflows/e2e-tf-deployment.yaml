@@ -6,9 +6,6 @@ on:
     paths:
       - src/main/charts/bamboo/**
       - src/main/charts/bamboo-agent/**
-    paths-ignore: # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#example-ignoring-paths
-      - 'docs/**'
-      - '.atlassian/**'
   workflow_dispatch:
 
 jobs:
@@ -19,7 +16,7 @@ jobs:
       AWS_DEFAULT_REGION: us-east-1
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TF_VAR_bamboo_license: ${{ secrets.TF_VAR_LICENSE }}
+      TF_VAR_bamboo_license: ${{ secrets.TF_VAR_BAMBOO_LICENSE }}
 
     steps:
       - name: Checkout Helm charts
@@ -59,16 +56,17 @@ jobs:
       - name: Create test output directory
         run: mkdir tf/test/e2etest/artifacts
 
-      - name: E2E test
+      - name: Deploy the infrastructure and run E2E tests
         id: e2e-test
         working-directory: tf/test/
         run: |
           set -o pipefail
           ls ..
           ls ./e2etest
-          echo "\nbamboo_internal_use = \"$(pwd)/../..\"" >> ./e2etest/test-config.tfvars.tmpl
+          echo "\nbamboo_internal_use = \"$(pwd)/../../src/main/charts/bamboo\"" >> ./e2etest/test-config.tfvars.tmpl
           #go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
           cat ./e2etest/test-config.tfvars.tmpl
+          aws s3 ls
 
       - name: Upload test log files
         if: always()
