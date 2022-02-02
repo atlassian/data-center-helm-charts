@@ -37,8 +37,7 @@ jobs:
       - name: Checkout Deployment Automation
         uses: actions/checkout@v2
         with :
-          repository: atlassian-labs/data-center-terraform
-          ref: refs/heads/release
+          repository: nghazali/data-center-terraform@latest
           path: tf
 
       - name: Setup Go environment
