@@ -62,12 +62,11 @@ jobs:
         working-directory: tf/test/
         run: |
           set -o pipefail
-          ls ..
+          ls ../..
           ls ./e2etest
-          echo "\nbamboo_internal_use = \"$(pwd)/../../src/main/charts/bamboo\"" >> ./e2etest/test-config.tfvars.tmpl
-          #go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
+          echo "bamboo_internal_use = \"$(pwd)/../../src/main/charts/bamboo\"" >> ./e2etest/test-config.tfvars.tmpl
+          go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
           cat ./e2etest/test-config.tfvars.tmpl
-          aws s3 ls
 
       - name: Upload test log files
         if: always()
