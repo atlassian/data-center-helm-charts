@@ -28,7 +28,8 @@ jobs:
         run: |
           git clone https://github.com/nghazali/data-center-terraform.git tmp
           cd tmp
-          LTS=$(curl -s GET https://api.github.com/repos/atlassian-labs/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
+          LTS=$(curl -s GET https://api.github.com/repos/nghazali/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
+          echo "LTS version for Deployment Automation for Atlassian Data Center Products: '${LTS}'"
           cd ..
           git clone -b $LTS https://github.com/nghazali/data-center-terraform.git tf
           
@@ -62,11 +63,12 @@ jobs:
         working-directory: tf/test/
         run: |
           set -o pipefail
-          ls ../..
-          ls ./e2etest
+          
+          # Locate the helm chart location to deploy
           echo "bamboo_internal_use = \"$(pwd)/../../src/main/charts/bamboo\"" >> ./e2etest/test-config.tfvars.tmpl
+          
+          # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
           go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
-          cat ./e2etest/test-config.tfvars.tmpl
 
       - name: Upload test log files
         if: always()
