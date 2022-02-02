@@ -30,7 +30,7 @@ jobs:
           cd tmp
           LTS=$(curl -s GET https://api.github.com/repos/atlassian-labs/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
           cd ..
-          git -b $LTS clone https://github.com/nghazali/data-center-terraform.git tf
+          git clone -b $LTS https://github.com/nghazali/data-center-terraform.git tf
           
       - name: Install Helm
         uses: azure/setup-helm@v1
