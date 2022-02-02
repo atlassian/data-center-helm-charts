@@ -60,7 +60,7 @@ jobs:
         run: |
           set -o pipefail
           # Create test output directory
-          mkdir tf/test/e2etest/artifacts
+          mkdir e2etest/artifacts
           
           # Add Bamboo helm chart location to the config template
           echo "bamboo_internal_use = \"$(pwd)/../../src/main/charts/bamboo\"" >> ./e2etest/test-config.tfvars.tmpl
