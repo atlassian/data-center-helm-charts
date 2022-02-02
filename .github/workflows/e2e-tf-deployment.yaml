@@ -24,6 +24,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout Deployment Automation
+        uses: actions/checkout@v2
+        with :
+          repository: nghazali/data-center-terraform@latest
+          token: ${{ secrets.GH_PAT }}
+          path: tf
+          
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
@@ -33,14 +40,7 @@ jobs:
         run: helm dependency update src/main/charts/bamboo
       - name: Execute helm dependency update for bamboo-agent chart
         run: helm dependency update src/main/charts/bamboo-agent
-
-      - name: Checkout Deployment Automation
-        uses: actions/checkout@v2
-        with :
-          repository: nghazali/data-center-terraform@latest
-          token: ${{ secrets.GH_PAT }}
-          path: tf
-
+        
       - name: Setup Go environment
         uses: actions/setup-go@v2.1.4
         with:
