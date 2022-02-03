@@ -40,7 +40,7 @@ jobs:
           LTS=$(git ls-remote --tags --exit-code --refs "$DEPLOYMENT_REPO" \
             | sed -E 's/^[[:xdigit:]]+[[:space:]]+refs\/tags\/(.+)/\1/g' \
             | grep '^[0-9]*.[0-9]*.[0-9]*$' | sort -V | tail -1)
-          echo "Using LTS version of Deployment Automation for Atlassian Data Center Products('${LTS}') to provision the infrastructure."
+          echo "Using LTS version('${LTS}') of Deployment Automation to provision the infrastructure for Atlassian DC Products."
           git clone -b $LTS $DEPLOYMENT_REPO tf
 
       - name: Setup test environment
