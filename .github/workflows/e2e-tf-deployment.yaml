@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Deploy Infrastructure for Atlassian DC products and Run End to End Tests
+    name: Deploy Infrastructure and Run E2E Tests
     runs-on: ubuntu-latest
     env:
       AWS_DEFAULT_REGION: us-east-1
@@ -34,7 +34,6 @@ jobs:
       - name: Execute helm dependency update for bamboo-agent chart
         run: helm dependency update src/main/charts/bamboo-agent
 
-
       - name: Checkout Deployment Automation
         run: |
           DEPLOYMENT_REPO='https://github.com/atlassian-labs/data-center-terraform.git'
@@ -44,12 +43,12 @@ jobs:
           echo "LTS version for Deployment Automation for Atlassian Data Center Products: '${LTS}'" && cd ..
           git clone -b $LTS $DEPLOYMENT_REPO tf
 
-      - name: Setup Go environment
+      - name: Setup test environment
         uses: actions/setup-go@v2.1.4
         with:
           go-version: 1.17
 
-      - name: Install Go dependencies
+      - name: Install test dependencies
         id: setup-dependencies
         working-directory: tf/test/
         run: |
