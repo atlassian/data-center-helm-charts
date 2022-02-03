@@ -37,10 +37,10 @@ jobs:
 
       - name: Checkout Deployment Automation
         run: |
-          git clone https://github.com/nghazali/data-center-terraform.git tmp && cd tmp
-          LTS=$(curl -s GET https://api.github.com/repos/nghazali/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
+          git clone https://github.com/atlassian-labs/data-center-terraform.git tmp && cd tmp
+          LTS=$(curl -s GET https://api.github.com/repos/atlassian-labs/data-center-terraform/tags | grep "name" | sed -nE 's/^.*"(.*)".*$/\1/p' | grep "^[0-9]*.[0-9]*.[0-9]*$"| sort -V | tail -1)
           echo "LTS version for Deployment Automation for Atlassian Data Center Products: '${LTS}'" && cd ..
-          git clone -b $LTS https://github.com/nghazali/data-center-terraform.git tf
+          git clone -b $LTS https://github.com/atlassian-labs/data-center-terraform.git tf
 
       - name: Setup Go environment
         uses: actions/setup-go@v2.1.4
