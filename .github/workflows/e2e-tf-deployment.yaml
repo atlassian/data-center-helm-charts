@@ -36,7 +36,7 @@ jobs:
 
       - name: Checkout Deployment Automation
         run: |
-          DEPLOYMENT_REPO='https://github.com/atlassian-lab/data-center-terraform.git'
+          DEPLOYMENT_REPO='https://github.com/nghazali/data-center-terraform.git'
           LTS=$(git ls-remote --tags --exit-code --refs "$DEPLOYMENT_REPO" \
             | sed -E 's/^[[:xdigit:]]+[[:space:]]+refs\/tags\/(.+)/\1/g' \
             | grep '^[0-9]*.[0-9]*.[0-9]*$' | sort -V | tail -1)
