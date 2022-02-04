@@ -64,7 +64,7 @@ jobs:
           mkdir e2etest/artifacts
           
           # Add root of helm chart repo to the config template
-          echo "internal_use_e2e_path = \"dirname $(dirname $(pwd))\"" >> ./e2etest/test-config.tfvars.tmpl
+          echo "local_helm_charts_path = \"dirname $(dirname $(pwd))\"" >> ./e2etest/test-config.tfvars.tmpl
           
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
           go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
