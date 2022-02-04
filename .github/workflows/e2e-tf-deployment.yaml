@@ -66,7 +66,7 @@ jobs:
           # Add root of helm chart repo to the config template
           cat << EOF >> ./e2etest/test-config.tfvars.tmpl
           # install local helm charts
-          echo "local_helm_charts_path = \"dirname $(dirname $(pwd))\""
+          echo "local_helm_charts_path = \"$(dirname $(dirname $(pwd)))\""
           EOF
           
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
