@@ -140,6 +140,11 @@ spec:
               value: "true"
             - name: ATL_PRODUCT_HOME_SHARED
               value: "/var/atlassian/application-data/crowd/shared"
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: unittest-crowd-jvm-config
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
