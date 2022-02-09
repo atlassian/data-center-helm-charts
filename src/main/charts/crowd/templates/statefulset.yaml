@@ -104,6 +104,11 @@ spec:
               value: {{ .Values.crowd.setPermissions | quote }}
             - name: ATL_PRODUCT_HOME_SHARED
               value: {{ .Values.volumes.sharedHome.mountPath | quote }}
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
