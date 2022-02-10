@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: 1.1.0
+version: 1.2.0
 appVersion: 8.1.2-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
