@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo-agent
 description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: 8.1.2-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -18,18 +18,33 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
 deprecated: false
 annotations:
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
-      description: Support for defining podLabels
+      description: Added service account annotation
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/366
+        url: https://github.com/atlassian/data-center-helm-charts/pull/363
+    - kind: changed
+      description: Updated Atlassian charts to use common definitions
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/303
+    - kind: changed
+      description: Improvements on documentation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/370
     - kind: added
-      description: Support for defining podAnnotations
+      description: Added end-to-end test for Bamboo Helm chart using Terraform
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/341
+        url: https://github.com/atlassian/data-center-helm-charts/pull/375
+    - kind: changed
+      description: Bamboo Agent DC updated to 8.1.2 version (LTS)
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/378
 dependencies:
   - name: common
     version: 1.0.0

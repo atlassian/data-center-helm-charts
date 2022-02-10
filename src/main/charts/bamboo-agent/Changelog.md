@@ -2,6 +2,22 @@
 
 ## 1.0.0
 
+**Release date:** 2022-02-10
+
+![AppVersion: 8.1.2-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.1.1-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCD-1452: Updated appVersion to the latest product LTS version. (#378)
+* Added end-to-end test for Bamboo Helm chart using Terraform (#375)
+* Improvements on documentation (#370)
+* Updated Atlassian charts to use common definitions (#303)
+* Added service account annotation (#363)
+
+
+## 1.0.0
+
 **Release date:** 2022-01-11
 
 This is the first officially supported version of the Helm chart.
