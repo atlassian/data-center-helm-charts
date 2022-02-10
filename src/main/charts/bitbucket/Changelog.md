@@ -1,5 +1,29 @@
 # Change Log
 
+## 1.2.0
+
+**Release date:** 2022-02-10
+
+![AppVersion: 7.17.5-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.17.1-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* Use volumeName only if explicitly defined (#372)
+* Fixed templating of PLUGIN_SSH_BASEURL with custom port (#371)
+* DCD-1452: Updated appVersion to the latest product LTS version. (#378)
+* Improvements on documentation (#370, #357)
+* Updated Atlassian charts to use common definitions (#303)
+* Added service account annotation (#363)
+* Added new feature additionalVolumeClaimTemplates and provided example in documentation (#334, #368)
+* Added new feature podLabels (#364)
+* Added new feature to define loadBalancerIP (#365)
+* Define podAnnotations as template to allow overrides (#341)
+* DCKUBE-738: Added topologySpreadConstraints to products (#351)
+* Set ActiveProcessorCount automatically based on Values.<product>.resources.container.requests.cpu (#352)
+* Added new feature additionalPorts (for jmx-monitoring) (#353)
+
+
 ## 1.1.0 
 
 **Release date:** 2021-11-03
