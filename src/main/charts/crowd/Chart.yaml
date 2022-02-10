@@ -18,7 +18,7 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
 deprecated: false
 annotations:
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
       description: Add new feature additionalPorts (for jmx-monitoring) 
