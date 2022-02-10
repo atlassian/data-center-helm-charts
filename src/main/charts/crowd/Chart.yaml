@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.1.0
+version: 1.2.0
 appVersion: 4.4.0-jdk11
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -21,30 +21,64 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
     - kind: added
-      description: Add support for custom schedulerName
+      description: Add new feature additionalPorts (for jmx-monitoring) 
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/301
-    - kind: added
-      description: Enable configuring ingress.class name
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/313
+        url: https://github.com/atlassian/data-center-helm-charts/pull/353
     - kind: changed
-      description: Make security context more flexible
+      description: Set ActiveProcessorCount automatically based on Values.<product>.resources.container.requests.cpu
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/321
+        url: https://github.com/atlassian/data-center-helm-charts/pull/352
     - kind: added
-      description: Roll Statefulset Pods if ConfigMap changes
+      description: Added topologySpreadConstraints to products
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/315
+        url: https://github.com/atlassian/data-center-helm-charts/pull/351
     - kind: changed
-      description: Crowd DC updated to 4.4.0 version
+      description: Define podAnnotations as template to allow overrides
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/345
+        url: https://github.com/atlassian/data-center-helm-charts/pull/341
+    - kind: added
+      description: Added new feature to define loadBalancerIP
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/365
+    - kind: added
+      description: Added new feature podLabels
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/364
+    - kind: added
+      description: Added new feature additionalVolumeClaimTemplates and provided example in documentation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/334
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/368
+    - kind: added
+      description: Added service account annotation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/363
+    - kind: changed
+      description: Updated Atlassian charts to use common definitions
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/303
+    - kind: changed
+      description: Improvements on documentation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/370
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/357
+    - kind: added
+      description: Added missing JVM_SUPPORT_RECOMMENDED_ARGS env
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/376
 dependencies:
   - name: common
     version: 1.0.0
