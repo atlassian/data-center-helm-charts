@@ -78,7 +78,7 @@ spec:
           readinessProbe:
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
-              path: "/status"
+              path: {{ .Values.bitbucket.service.contextPath }}/status
             periodSeconds: 5
             failureThreshold: 60
             initialDelaySeconds: 10
