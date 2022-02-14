@@ -55,4 +55,20 @@ class ContextPathTest {
                     product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
                     "/" + product.name() + "/rest/api/latest/status");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"})
+    void test_context_path_bitbucket(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.contextPath", "/" + product.name()));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("SERVER_CONTEXT_PATH", "/" + product.name());
+
+        assertEquals(resources.getStatefulSet(
+                        product.getHelmReleaseName()).getContainer().get("readinessProbe").get("httpGet").get("path").asText(),
+                "/" + product.name() + "/status");
+    }
 }
