@@ -12,7 +12,7 @@
 * Use volumeName only if explicitly defined (#372)
 * Fixed templating of PLUGIN_SSH_BASEURL with custom port (#371)
 * DCD-1452: Updated appVersion to the latest product LTS version. (#378)
-* Improvements on documentation (#370, #357)
+* Improvements on [documentation](https://github.com/atlassian/data-center-helm-charts/) (#370, #357)
 * Updated Atlassian charts to use common definitions (#303)
 * Added service account annotation (#363)
 * Added new feature additionalVolumeClaimTemplates and provided example in documentation (#334, #368)

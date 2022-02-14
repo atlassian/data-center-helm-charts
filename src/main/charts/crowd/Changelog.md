@@ -11,7 +11,7 @@
 
 Crowd (1.1.0 -> 1.2.0)
 * Added missing JVM_SUPPORT_RECOMMENDED_ARGS env (#376)
-* Improvements on documentation (#370, #357)
+* Improvements on [documentation](https://github.com/atlassian/data-center-helm-charts/) (#370, #357)
 * Updated Atlassian charts to use common definitions (#303)
 * Added service account annotation (#363)
 * Added new feature additionalVolumeClaimTemplates and provided example in documentation (#334, #368)

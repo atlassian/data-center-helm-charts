@@ -10,7 +10,7 @@
 
 * DCD-1452: Updated appVersion to the latest product LTS version. (#378)
 * Added end-to-end test for Bamboo Helm chart using Terraform (#375)
-* Improvements on documentation (#370)
+* Improvements on [documentation](https://github.com/atlassian/data-center-helm-charts/) (#370)
 * Updated Atlassian charts to use common definitions (#303)
 * Added service account annotation (#363)
 * Added new feature additionalVolumeClaimTemplates and provided example in documentation (#334, #368)
