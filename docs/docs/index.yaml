@@ -2,6 +2,67 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Added new feature additionalVolumeClaimTemplates and provided example in documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/334
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/368
+        - kind: added
+          description: Added service account annotation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/363
+        - kind: changed
+          description: Updated Atlassian charts to use common definitions
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/303
+        - kind: changed
+          description: Improvements on documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/370
+        - kind: added
+          description: Added end-to-end test for Bamboo Helm chart using Terraform
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/375
+        - kind: changed
+          description: Bamboo DC updated to 8.1.2 version (LTS)
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/378
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.1.2-jdk11
+    created: "2022-02-14T04:05:35.167117894Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 4e63b770794ecc52b54d74b1bfa49f33f7f596e9fb8ac35498d8c05059c57a71
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.2.0/bamboo-1.2.0.tgz
+    version: 1.2.0
+  - annotations:
       artifacthub.io/changes: |-
         - kind: added
           description: Support for defining podLabels
@@ -105,6 +166,60 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Added service account annotation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/363
+        - kind: changed
+          description: Updated Atlassian charts to use common definitions
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/303
+        - kind: changed
+          description: Improvements on documentation
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/370
+        - kind: added
+          description: Added end-to-end test for Bamboo Helm chart using Terraform
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/375
+        - kind: changed
+          description: Bamboo Agent DC updated to 8.1.2 version (LTS)
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/378
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.1.2-jdk11
+    created: "2022-02-14T04:05:35.468127149Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 3a0de03133b381e1d88da9c26250f9cfc276055e810bb6e953cabb1d50b00d89
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.2.0/bamboo-agent-1.2.0.tgz
+    version: 1.2.0
+  - annotations:
       artifacthub.io/changes: |-
         - kind: added
           description: Support for defining podLabels
@@ -140,17 +255,10 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.0.0/bamboo-agent-1.0.0.tgz
     version: 1.0.0
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: added
-          description: Support for defining podLabels
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/366        
-        - kind: added
-          description: Support for defining podAnnotations
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/341
+      artifacthub.io/changes: "- kind: added\n  description: Support for defining
+        podLabels\n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/366
+        \       \n- kind: added\n  description: Support for defining podAnnotations\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/341"
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 8.1.1
@@ -197,6 +305,64 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: "- kind: added\n  description: Add new feature additionalPorts
+        (for jmx-monitoring) \n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/353\n-
+        kind: changed\n  description: Set ActiveProcessorCount automatically based
+        on Values.<product>.resources.container.requests.cpu\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/352\n-
+        kind: added\n  description: Added topologySpreadConstraints to products\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/351\n-
+        kind: changed\n  description: Define podAnnotations as template to allow overrides\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/341\n-
+        kind: added\n  description: Added new feature to define loadBalancerIP\n  links:\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/365\n-
+        kind: added\n  description: Added new feature podLabels\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/364\n-
+        kind: added\n  description: Added new feature additionalVolumeClaimTemplates
+        and provided example in documentation\n  links:\n  - name: Github PR\n    url:
+        https://github.com/atlassian/data-center-helm-charts/pull/334\n  - name: Github
+        PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/368\n-
+        kind: added\n  description: Added service account annotation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/363\n-
+        kind: changed\n  description: Updated Atlassian charts to use common definitions\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/303\n-
+        kind: changed\n  description: Improvements on documentation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/370\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/357\n-
+        kind: changed\n  description: Bitbucket DC updated to 7.17.5 version (LTS)\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/378\n-
+        kind: fixed\n  description: Fix templating of PLUGIN_SSH_BASEURL with custom
+        port\n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/371\n-
+        kind: fixed\n  description: Use volumeName only if explicitly defined\n  links:\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/372\n"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 7.17.5-jdk11
+    created: "2022-02-14T04:05:35.796883262Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 59a108530e7b10978d9e37b596a8ec40bee145862fd8246d4ad7922693d6a596
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.2.0/bitbucket-1.2.0.tgz
+    version: 1.2.0
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
@@ -681,6 +847,60 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/common-1.0.0/common-1.0.0.tgz
     version: 1.0.0
   confluence:
+  - annotations:
+      artifacthub.io/changes: "- kind: added\n  description: Add new feature additionalPorts
+        (for jmx-monitoring) \n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/353\n-
+        kind: changed\n  description: Set ActiveProcessorCount automatically based
+        on Values.<product>.resources.container.requests.cpu\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/352\n-
+        kind: added\n  description: Added topologySpreadConstraints to products\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/351\n-
+        kind: changed\n  description: Define podAnnotations as template to allow overrides\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/341\n-
+        kind: added\n  description: Added new feature to define loadBalancerIP\n  links:\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/365\n-
+        kind: added\n  description: Added new feature podLabels\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/364\n-
+        kind: added\n  description: Added new feature additionalVolumeClaimTemplates
+        and provided example in documentation\n  links:\n  - name: Github PR\n    url:
+        https://github.com/atlassian/data-center-helm-charts/pull/334\n  - name: Github
+        PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/368\n-
+        kind: added\n  description: Added service account annotation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/363\n-
+        kind: changed\n  description: Updated Atlassian charts to use common definitions\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/303\n-
+        kind: changed\n  description: Improvements on documentation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/370\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/357\n-
+        kind: changed\n  description: Confluence DC updated to 7.13.4 version (LTS)\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/378\n"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 7.13.4-jdk11
+    created: "2022-02-14T04:05:36.423292145Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: f19015ee28c73370876f9180f5a20b73f9dfcb9ea1627cd360a30cda93d44fbb
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.2.0/confluence-1.2.0.tgz
+    version: 1.2.0
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
@@ -1173,6 +1393,60 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: "- kind: added\n  description: Add new feature additionalPorts
+        (for jmx-monitoring) \n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/353\n-
+        kind: changed\n  description: Set ActiveProcessorCount automatically based
+        on Values.<product>.resources.container.requests.cpu\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/352\n-
+        kind: added\n  description: Added topologySpreadConstraints to products\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/351\n-
+        kind: changed\n  description: Define podAnnotations as template to allow overrides\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/341\n-
+        kind: added\n  description: Added new feature to define loadBalancerIP\n  links:\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/365\n-
+        kind: added\n  description: Added new feature podLabels\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/364\n-
+        kind: added\n  description: Added new feature additionalVolumeClaimTemplates
+        and provided example in documentation\n  links:\n  - name: Github PR\n    url:
+        https://github.com/atlassian/data-center-helm-charts/pull/334\n  - name: Github
+        PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/368\n-
+        kind: added\n  description: Added service account annotation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/363\n-
+        kind: changed\n  description: Updated Atlassian charts to use common definitions\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/303\n-
+        kind: changed\n  description: Improvements on documentation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/370\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/357\n-
+        kind: added\n  description: Added missing JVM_SUPPORT_RECOMMENDED_ARGS env\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/376\n"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 4.4.0-jdk11
+    created: "2022-02-14T04:05:36.723521234Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 1e1bd649b3a267527922d8f84a5f157c079135c785db7cadd61f1dd937effef9
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.2.0/crowd-1.2.0.tgz
+    version: 1.2.0
+  - annotations:
       artifacthub.io/changes: |-
         - kind: added
           description: Add support for custom schedulerName
@@ -1585,6 +1859,61 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: "- kind: added\n  description: Add new feature additionalPorts
+        (for jmx-monitoring) \n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/353\n-
+        kind: changed\n  description: Set ActiveProcessorCount automatically based
+        on Values.<product>.resources.container.requests.cpu\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/352\n-
+        kind: added\n  description: Added topologySpreadConstraints to products\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/351\n-
+        kind: changed\n  description: Define podAnnotations as template to allow overrides\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/341\n-
+        kind: added\n  description: Added new feature to define loadBalancerIP\n  links:\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/365\n-
+        kind: added\n  description: Added new feature podLabels\n  links:\n  - name:
+        Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/364\n-
+        kind: added\n  description: Added new feature additionalVolumeClaimTemplates
+        and provided example in documentation\n  links:\n  - name: Github PR\n    url:
+        https://github.com/atlassian/data-center-helm-charts/pull/334\n  - name: Github
+        PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/368\n-
+        kind: added\n  description: Added service account annotation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/363\n-
+        kind: changed\n  description: Updated Atlassian charts to use common definitions\n
+        \ links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/303\n-
+        kind: changed\n  description: Improvements on documentation\n  links:\n  -
+        name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/370\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/357\n-
+        kind: changed\n  description: Jira DC updated to 8.20.5 version (LTS)\n  links:\n
+        \ - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/378\n"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.20.5-jdk11
+    created: "2022-02-14T04:05:37.029085067Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 66968fc1e415d4d547c92b0014fa31c7aa4a7736abcdd354c95895abd9210432
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.2.0/jira-1.2.0.tgz
+    version: 1.2.0
   - annotations:
       artifacthub.io/changes: |-
         - kind: added
@@ -2063,4 +2392,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2022-01-10T23:40:17.0957817Z"
+generated: "2022-02-14T04:05:37.029490206Z"
