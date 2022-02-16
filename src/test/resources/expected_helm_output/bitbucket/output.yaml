@@ -161,8 +161,6 @@ spec:
       volumes:
         - name: local-home
           emptyDir: {}
-        - name: shared-home
-          emptyDir: {}
 ---
 # Source: bitbucket/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -232,6 +230,4 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
-    - name: shared-home
-      emptyDir: {}
   restartPolicy: Never
