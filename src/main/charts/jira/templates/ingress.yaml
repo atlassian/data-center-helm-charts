@@ -29,7 +29,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: {{ include "jira.ingressPath" . }}
+          - path: {{ include "jira.ingress.path" . }}
             pathType: Prefix
             backend:
               service:
