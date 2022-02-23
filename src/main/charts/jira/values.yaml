@@ -385,14 +385,14 @@ jira:
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
 
-  # -- Wether to apply security context to pod.
+  # -- Whether to apply security context to pod.
   #
   securityContextEnabled: true
 
   securityContext:
 
     # -- The GID used by the Jira docker image
-    # GID will default to 2001 if not supplied and securityContextEnables is set to true.
+    # GID will default to 2001 if not supplied and securityContextEnabled is set to true.
     # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
     # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
