@@ -13,8 +13,8 @@ import java.util.Map;
 
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static test.jackson.JsonNodeAssert.assertThat;
-import static test.model.Kind.PersistentVolumeClaim;
 import static test.model.Kind.PersistentVolume;
+import static test.model.Kind.PersistentVolumeClaim;
 import static test.model.Synchrony.synchronyStatefulSetName;
 
 /**
@@ -208,6 +208,33 @@ class VolumesTest {
 
         assertThat(statefulSet.getVolume("synchrony-home"))
                 .hasValueSatisfying(synchronyHomeVolume -> assertThat(synchronyHomeVolume).isObject(Map.of("hostPath", "/foo/bar")));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_additional_volume(Product product) throws Exception {
+        String volumeName = "cache";
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.additionalSynchrony[0].name", volumeName,
+                "volumes.additionalSynchrony[0].emptyDir", "{}",
+                "synchrony.additionalVolumeMounts[0].name", "cache-mount",
+                "synchrony.additionalVolumeMounts[0].volumeName", volumeName,
+                "synchrony.additionalVolumeMounts[0].mountPath", "/path"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+
+        long additionalCacheVolumeCount = statefulSet.getVolumes()
+                .findValues("name")
+                .stream()
+                .filter(it -> it.textValue().contains(volumeName))
+                .count();
+        Assertions.assertThat(additionalCacheVolumeCount).isEqualTo(1);
+
+        assertThat(statefulSet.getContainer("synchrony").getVolumeMount("cache-mount"))
+                .isObject(
+                        Map.of("mountPath", "/path", "volumeName", volumeName));
     }
 
     @ParameterizedTest
