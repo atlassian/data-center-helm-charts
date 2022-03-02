@@ -287,10 +287,19 @@ Define additional ports here instead of in values.yaml to allow template overrid
 {{- end }}
 
 {{/*
-Define additional volume mounts here to allow template overrides when used as a sub chart
+Define additional Confluence volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}
 {{- with .Values.confluence.additionalVolumeMounts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional Synchrony volume mounts here to allow template overrides when used as a sub chart
+*/}}
+{{- define "synchrony.additionalVolumeMounts" -}}
+{{- with .Values.synchrony.additionalVolumeMounts }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}
@@ -334,7 +343,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{ include "synchrony.volumes.synchronyHome" . }}
 {{- end }}
 {{ include "confluence.volumes.sharedHome" . }}
-{{- with .Values.volumes.additional }}
+{{- with .Values.volumes.additionalSynchrony }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
 {{- end }}

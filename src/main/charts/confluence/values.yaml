@@ -342,11 +342,17 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/confluence"
 
-  # -- Defines additional volumes that should be applied to all Confluence and Synchrony pods.
+  # -- Defines additional volumes that should be applied to all Confluence pods.
   # Note that this will not create any corresponding volume mounts;
   # those needs to be defined in confluence.additionalVolumeMounts
   #
   additional: []
+
+  # -- Defines additional volumes that should be applied to all Synchrony pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in synchrony.additionalVolumeMounts
+  #
+  additionalSynchrony: []
 
 # Ingress configuration
 #
@@ -826,6 +832,12 @@ synchrony:
   #   - volumeName:
   #     subDirectory:
   #     fileName:
+
+  # -- Defines any additional volumes mounts for the Synchrony container. These
+  # can refer to existing volumes, or new volumes can be defined via
+  # 'volumes.additionalSynchrony'.
+  #
+  additionalVolumeMounts: []
 
   # -- Defines any additional ports for the Synchrony container.
   #

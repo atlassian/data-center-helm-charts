@@ -33,6 +33,7 @@ spec:
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
             {{- include "synchrony.volumeMounts" . | nindent 12 }}
+            {{- include "synchrony.additionalVolumeMounts" . | nindent 12 }}
             {{- include "synchrony.additionalLibraries" . | nindent 12 }}
             - mountPath: /scripts
               name: entrypoint-script
@@ -88,8 +89,5 @@ spec:
             name: {{ include "synchrony.fullname" . }}-entrypoint
             defaultMode: 0744
         {{ include "synchrony.volumes" . | nindent 8 }}
-        {{ with .Values.volumes.additional }}
-        {{ toYaml . | nindent 8 }}
-        {{ end }}
   {{ include "synchrony.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}
