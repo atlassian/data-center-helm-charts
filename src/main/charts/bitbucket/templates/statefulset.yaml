@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.bitbucket.securityContextEnabled }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -43,6 +44,7 @@ spec:
         fsGroup: 2003
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
