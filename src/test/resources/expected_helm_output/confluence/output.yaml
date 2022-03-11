@@ -135,6 +135,9 @@ spec:
       serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 25
       hostAliases:
+        - hostnames:
+          - test.example.com
+          ip: 192.168.1.1
       containers:
         - name: synchrony
           image: "atlassian/confluence:7.13.4-jdk11"
