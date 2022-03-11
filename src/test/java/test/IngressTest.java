@@ -351,6 +351,55 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_all_ingress_vals(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "true",
+                "ingress.path", "/bamboo"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain/bamboo");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_no_ingress_path(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "true"));
+        
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_no_ingress_host(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.https", "true"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "http://localhost:8085/");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_ingress_host_over_http(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "false",
+                "ingress.path", "/bamboo"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "http://myhost.mydomain/bamboo");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_contextPath(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(

@@ -3,13 +3,17 @@
 Deduce the base URL for bamboo.
 */}}
 {{- define "bamboo.baseUrl" -}}
-{{- if .Values.ingress.host -}}
-{{ ternary "https" "http" .Values.ingress.https -}}
-://
-{{- .Values.ingress.host -}}
-{{- else }}
-{{- print  "http://localhost:8085/" }}
-{{- end }}
+    {{- if .Values.ingress.host -}}
+        {{ ternary "https" "http" .Values.ingress.https -}}
+        ://
+        {{- if .Values.ingress.path -}}
+            {{ .Values.ingress.host}}{{.Values.ingress.path }}
+        {{- else -}}
+            {{ .Values.ingress.host}}
+        {{- end }}
+    {{- else -}}
+        {{- print  "http://localhost:8085/" }}
+    {{- end }}
 {{- end }}
 
 {{/*
