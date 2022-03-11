@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.3.0
+
+**Release date:** TBD
+
+![AppVersion: 8.1.2-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=8.1.1-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* TFKUBE-384: ATL_BASE_URL should be appropriately set when ingress.path is supplied
+
 ## 1.2.0
 
 **Release date:** 2022-02-14
