@@ -461,23 +461,6 @@ jira:
     #
     enabled: false
 
-  # Jira licensing details
-  #
-  license:
-  
-    # -- The name of the K8s Secret that contains the Jira license key. If specified, then
-    # the license will be automatically populated during Jira setup. Otherwise, it will
-    # need to be provided via the browser after initial startup. An Example of creating
-    # a K8s secret for the license below:
-    # 'kubectl create secret generic <secret-name> --from-literal=license-key=<license>
-    # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
-    #
-    secretName:
-    
-    # -- The key in the K8s Secret that contains the Jira license key
-    #
-    secretKey: license-key
-
   shutdown:
 
     # -- The termination grace period for pods during shutdown. This
