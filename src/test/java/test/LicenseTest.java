@@ -45,4 +45,17 @@ class LicenseTest {
                 .getEnv()
                 .assertHasSecretRef("SETUP_LICENSE", "license_secret", "mykey");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_license_secret_name(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "bamboo.license.secretName", "license_secret",
+                "bamboo.license.secretKey", "mykey"));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasSecretRef("ATL_LICENSE", "license_secret", "mykey");
+    }
 }
