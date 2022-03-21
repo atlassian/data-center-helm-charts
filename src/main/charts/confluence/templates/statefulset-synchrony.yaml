@@ -23,9 +23,7 @@ spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.synchrony.shutdown.terminationGracePeriodSeconds }}
       hostAliases:
-        {{- with .Values.additionalHosts }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "confluence.additionalHosts" . | nindent 8 }}
       containers:
         - name: synchrony
           image: {{ include "confluence.image" . | quote }}

@@ -215,6 +215,9 @@ spec:
       securityContext:
         fsGroup: 2002
       hostAliases:
+        - hostnames:
+          - test.example.com
+          ip: 192.168.1.1
       initContainers:
         - name: nfs-permission-fixer
           image: alpine
