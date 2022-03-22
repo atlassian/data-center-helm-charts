@@ -69,8 +69,6 @@ Kubernetes: `>=1.19.x-0`
 | jira.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Jira container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'. |
 | jira.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | jira.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
-| jira.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Jira license key |
-| jira.license.secretName | string | `nil` | The name of the K8s Secret that contains the Jira license key. If specified, then the license will be automatically populated during Jira setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | jira.ports.ehcache | int | `40001` | Ehcache port |
 | jira.ports.ehcacheobject | int | `40011` | Ehcache object port |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic |

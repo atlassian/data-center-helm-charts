@@ -1,6 +1,15 @@
 # Change Log
 
-## 1.2.0
+## 1.3.0
+
+**Release date:** TBD
+
+![AppVersion: 7.13.4-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.13.2-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCD-1471: Add support for separate Synchrony volumes (#390)
 
 **Release date:** 2022-02-14
 
