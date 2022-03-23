@@ -9,7 +9,7 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Update Bitbucket version to 7.21.0
+* Update Bitbucket version to 7.21.0 (#396)
 
 ## 1.2.0
 
