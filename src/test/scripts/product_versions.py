@@ -4,12 +4,15 @@ import json
 import re
 
 known_supported_version = {
+	'bitbucket': '7.21.0',
 	'jira-software': '8.13.8',
 	'confluence': '7.12.2',
 	'stash': '7.12.1',
 	'bamboo': '8.1.1' # Bamboo has not LTS versions.
 }
 
+# If tag suffix is desired - e.g. 7.8.0-jdk11 -> tag_suffix = "-jdk11"
+tag_suffix = "-jdk11"
 
 def get_lts_version(argv):
 	product = argv[0].lower()
@@ -47,7 +50,7 @@ def get_lts_version(argv):
 		except:
 			lts_version = known_supported_version[product]
 
-		lts_version = f"{lts_version}-jdk11"
+		lts_version = f"{lts_version}{tag_suffix}"
 	else:
 		lts_version = 'unknown'
 

@@ -16,7 +16,7 @@ Script is currently executed manually and is in a fairly rough shape.
 logging.basicConfig(level=logging.INFO, format="%(levelname).1s %(message)s")
 
 products = ["bitbucket", "jira", "bamboo", "confluence", "crowd"]
-suffix = "-jdk11"
+suffix = ""
 lts_products = ["bitbucket", "jira", "confluence"]
 
 
