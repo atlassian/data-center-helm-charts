@@ -16,7 +16,7 @@ Script is currently executed manually and is in a fairly rough shape.
 logging.basicConfig(level=logging.INFO, format="%(levelname).1s %(message)s")
 
 products = ["bitbucket", "jira", "bamboo", "confluence", "crowd"]
-suffix = ""
+tag_suffix = ""
 lts_products = ["bitbucket", "jira", "confluence"]
 
 
@@ -94,13 +94,15 @@ for product in products:
     logging.info("Product: %s", product)
 
     if product in lts_products:
-        version = product_versions.get_lts_version([product]).replace(suffix, "")
+        version = product_versions.get_lts_version([product]).replace(tag_suffix, "")
         logging.info("Latest LTS version: %s", version)
     else:
         logging.info("Non-LTS product")
         r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{product}/versions/latest')
         version = r.json()['name']
 
-    new_version_tag = f"{version}{suffix}"
-    logging.info(f"Latest version: %s, tagname: {version}{suffix}", version)
+    new_version_tag = f"{version}{tag_suffix}"
+    logging.info(f"Latest version: %s, tagname: {version}{tag_suffix}", version)
     update_versions(product, new_version_tag)
+
+logging.info(">>>> ATTENTION - Don't forget to update the product Changelogs.md - ATTENTION <<<<")

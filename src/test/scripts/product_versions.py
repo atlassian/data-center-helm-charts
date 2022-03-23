@@ -1,18 +1,19 @@
-import sys
-import urllib.request
 import json
 import re
+import sys
+import urllib.request
 
 known_supported_version = {
 	'bitbucket': '7.21.0',
 	'jira-software': '8.13.8',
 	'confluence': '7.12.2',
 	'stash': '7.12.1',
-	'bamboo': '8.1.1' # Bamboo has not LTS versions.
+	'bamboo': '8.1.1'  # Bamboo has not LTS versions.
 }
 
 # If tag suffix is desired - e.g. 7.8.0-jdk11 -> tag_suffix = "-jdk11"
-tag_suffix = "-jdk11"
+tag_suffix = ""
+
 
 def get_lts_version(argv):
 	product = argv[0].lower()
@@ -43,7 +44,7 @@ def get_lts_version(argv):
 			else:
 				lts_version = known_supported_version[product]
 
-			# Currently latest lts version of Bitbucket and Confluence don't support K8s
+			# Currently, latest lts version of Bitbucket and Confluence don't support K8s
 			# We use non-lts version of those products in the test
 			if cversion(lts_version) < cversion(known_supported_version[product]):
 				lts_version = known_supported_version[product]

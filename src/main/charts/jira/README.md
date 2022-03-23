@@ -1,6 +1,6 @@
 # jira
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.20.7-jdk11](https://img.shields.io/badge/AppVersion-8.20.7--jdk11-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.20.7](https://img.shields.io/badge/AppVersion-8.20.7-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
