@@ -5,6 +5,7 @@
 replicaCount: 1
 
 image:
+  # https://github.com/atlassian-forks/nfs-server-docker
   repository: atlassian/nfs-server-test
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
