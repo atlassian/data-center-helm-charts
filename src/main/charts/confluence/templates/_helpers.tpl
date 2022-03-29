@@ -255,7 +255,8 @@ Define additional init containers here to allow template overrides when used as 
 Define additional hosts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalHosts" -}}
-{{- range .Values.additionalHosts }}
+{{- with .Values.additionalHosts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

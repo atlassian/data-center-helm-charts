@@ -6,3 +6,8 @@ volumes:
 
 synchrony:
   enabled: true
+
+additionalHosts:
+- ip: "192.168.1.1"
+  hostnames:
+    - "test.example.com"
