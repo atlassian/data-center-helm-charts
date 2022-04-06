@@ -370,7 +370,7 @@ class IngressTest {
                 "ingress.create", "true",
                 "ingress.host", "myhost.mydomain",
                 "ingress.https", "true"));
-        
+
         resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
                 .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain");
     }
@@ -557,6 +557,19 @@ class IngressTest {
                 "/",
                 "/setup",
                 "/bootstrap");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo", "bitbucket", "confluence", "crowd", "jira"})
+    void ingress_proxy_settings(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true"));
+
+        assertThat(ingress.getMetadata().path("annotations"))
+                .isObject(Map.of(
+                        "nginx.ingress.kubernetes.io/proxy-connect-timeout", "60",
+                        "nginx.ingress.kubernetes.io/proxy-read-timeout", "60",
+                        "nginx.ingress.kubernetes.io/proxy-send-timeout", "60"));
     }
 
     private List<String> extractAllPaths(Traversable<KubeResource> ingresses) {
