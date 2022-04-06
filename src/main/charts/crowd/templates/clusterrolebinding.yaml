@@ -4,7 +4,7 @@ kind: ClusterRoleBinding
 metadata:
   name: {{ include "crowd.clusterRoleBindingName" . }}
   labels:
-  {{- include "common.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
