@@ -565,11 +565,23 @@ class IngressTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true"));
 
-        assertThat(ingress.getMetadata().path("annotations"))
-                .isObject(Map.of(
-                        "nginx.ingress.kubernetes.io/proxy-connect-timeout", "60",
-                        "nginx.ingress.kubernetes.io/proxy-read-timeout", "60",
-                        "nginx.ingress.kubernetes.io/proxy-send-timeout", "60"));
+        final var ingresses = resources.getAll(Kind.Ingress);
+
+        for (KubeResource ingress : ingresses) {
+                if ( ingress.getMetadata().path("name").asText().contains("-setup") ) {
+                    assertThat(ingress.getMetadata().path("annotations"))
+                        .isObject(Map.of(
+                            "nginx.ingress.kubernetes.io/proxy-connect-timeout", "300",
+                            "nginx.ingress.kubernetes.io/proxy-read-timeout", "300",
+                            "nginx.ingress.kubernetes.io/proxy-send-timeout", "300"));
+                } else {
+                    assertThat(ingress.getMetadata().path("annotations"))
+                        .isObject(Map.of(
+                            "nginx.ingress.kubernetes.io/proxy-connect-timeout", "60",
+                            "nginx.ingress.kubernetes.io/proxy-read-timeout", "60",
+                            "nginx.ingress.kubernetes.io/proxy-send-timeout", "60"));
+                }
+        }
     }
 
     private List<String> extractAllPaths(Traversable<KubeResource> ingresses) {

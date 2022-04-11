@@ -11,9 +11,9 @@ metadata:
     "nginx.ingress.kubernetes.io/affinity": "cookie"
     "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
     "nginx.ingress.kubernetes.io/proxy-body-size": {{ .Values.ingress.maxBodySize }}
-    "nginx.ingress.kubernetes.io/proxy-connect-timeout": {{ .Values.ingress.proxyConnectTimeout }}
-    "nginx.ingress.kubernetes.io/proxy-read-timeout": {{ .Values.ingress.proxyReadTimeout }}
-    "nginx.ingress.kubernetes.io/proxy-send-timeout": {{ .Values.ingress.proxySendTimeout }}
+    "nginx.ingress.kubernetes.io/proxy-connect-timeout": {{ .Values.ingress.proxyConnectTimeout|quote }}
+    "nginx.ingress.kubernetes.io/proxy-read-timeout": {{ .Values.ingress.proxyReadTimeout|quote }}
+    "nginx.ingress.kubernetes.io/proxy-send-timeout": {{ .Values.ingress.proxySendTimeout|quote }}
     {{- end }}
     {{- with .Values.ingress.annotations }}
   {{- toYaml . | nindent 4 }}
