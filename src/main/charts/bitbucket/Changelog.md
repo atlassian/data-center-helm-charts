@@ -8,7 +8,7 @@
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
-* Support for configuring ingress proxy settings via values.yaml
+* Support for configuring ingress proxy settings via values.yaml (#402)
 
 ## 1.3.0
 
