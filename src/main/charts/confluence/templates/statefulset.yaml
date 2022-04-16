@@ -102,6 +102,12 @@ spec:
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.confluence.service.contextPath | quote }}
             {{ end }}
+            {{ if .Values.ingress.host }}
+            - name: ATL_PROXY_NAME
+              value: {{ .Values.ingress.host | quote }}
+            - name: ATL_PROXY_PORT
+              value: {{ include "confluence.ingressPort" . | quote }}
+            {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.confluence.accessLog.enabled | quote }}
             - name: UMASK
