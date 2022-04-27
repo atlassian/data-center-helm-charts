@@ -20,6 +20,7 @@ spec:
     spec:
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.agent.securityContextEnabled }}
       {{- with .Values.agent.securityContext }}
       securityContext:
         {{ toYaml . | nindent 8 }}
@@ -27,6 +28,7 @@ spec:
         {{- if not $securityContext.fsGroup }}
         fsGroup: 2005
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "agent.additionalInitContainers" . | nindent 8 }}    

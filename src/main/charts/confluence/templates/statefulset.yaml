@@ -24,6 +24,7 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.confluence.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.confluence.securityContextEnabled }}
       {{- with .Values.confluence.securityContext }}
       securityContext:
         {{/* this condition will be removed in v2.0.0 */}}
@@ -35,6 +36,7 @@ spec:
         fsGroup: 2002
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- end }}
       hostAliases:
         {{- include "confluence.additionalHosts" . | nindent 8 }}
