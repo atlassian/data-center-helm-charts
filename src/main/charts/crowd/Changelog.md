@@ -1,5 +1,27 @@
 # Change Log
 
+## 1.4.0
+
+**Release date:** TBD
+
+![AppVersion: 7.13.5](https://img.shields.io/static/v1?label=AppVersion&message=7.13.5&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Support for configuring ingress proxy settings via values.yaml (#402)
+
+## 1.3.0
+
+**Release date:** 2022-03-23
+
+![AppVersion: 4.4.1](https://img.shields.io/static/v1?label=AppVersion&message=4.4.1&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* Update Crowd version to 4.4.1 (#396)
+
+
 ## 1.2.0
 
 **Release date:** 2022-02-14

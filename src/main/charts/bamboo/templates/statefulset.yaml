@@ -24,12 +24,14 @@ spec:
     spec:
       serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.bamboo.securityContextEnabled }}
       {{- with .Values.bamboo.securityContext }}
       securityContext:
         {{ toYaml . | nindent 8 }}
         {{- if not .fsGroup }}
         fsGroup: 2005
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "bamboo.additionalInitContainers" . | nindent 8 }}

@@ -24,6 +24,7 @@ spec:
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -35,6 +36,7 @@ spec:
         fsGroup: 2001
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "jira.additionalInitContainers" . | nindent 8 }}
@@ -75,13 +77,6 @@ spec:
             {{ end }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
-            {{ with .Values.jira.license.secretName }}
-            - name: JIRA_SETUP_LICENSE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ . }}
-                  key: {{ $.Values.jira.license.secretKey }}
-            {{ end }}
             - name: SET_PERMISSIONS
               value: {{ .Values.jira.setPermissions | quote }}
             - name: JIRA_SHARED_HOME

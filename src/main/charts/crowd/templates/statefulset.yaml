@@ -24,6 +24,7 @@ spec:
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.crowd.securityContextEnabled }}
       {{- with .Values.crowd.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -35,6 +36,7 @@ spec:
         fsGroup: 2004
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "crowd.additionalInitContainers" . | nindent 8 }}

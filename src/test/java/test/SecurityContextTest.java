@@ -39,6 +39,17 @@ class SecurityContextTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_no_pod_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContextEnabled", "false"));
+
+        JsonNode podSpec = resources.getStatefulSet(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext")).isEmpty();
+    }
+
+    @ParameterizedTest
     @CsvSource({
             "jira,2001",
             "confluence,2002",
