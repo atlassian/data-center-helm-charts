@@ -61,6 +61,9 @@ volumes:
 
 As explained above, this default configuration is suitable only for evaluation or testing purposes. Proper volume management needs to be configured.
 
+!!!info "Bitbucket default configuration exception"
+    In case of Bitbucket, `emptyDir` will not be created as a `shared-home` default volume. This is to utilise a Bitbucket's feature which allows `local-home`'s subpath (`<LOCAL_HOME_DIRECTORY>/shared`) to be `share-home` directory when `share-home` volume is not provided. Note that this is for single bitbucket node user only and using persistence volume for `local-home` is highly recommended for a production environment.
+
 In order to enable the persistence of data stored in these volumes, it is necessary
 to replace these volumes with something else.
 
