@@ -28,11 +28,17 @@ spec:
         {{- end }}
         {{- end }}
       volumeMounts:
+        {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
         - name: shared-home
           mountPath: /shared-home
           {{- if .Values.volumes.sharedHome.subPath }}
           subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
           {{- end }}
+        {{- else }}
+        - name: local-home
+          mountPath: /shared-home
+          subPath: shared
+        {{- end }}
       command:
         - /bin/sh
         - -ec
@@ -43,5 +49,9 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
+    {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
     {{ include "bitbucket.volumes.sharedHome" . | nindent 4 }}
+    {{- else }}
+    {{ include "bitbucket.volumes.localHome" . | nindent 4 }}
+    {{- end }}
   restartPolicy: Never

@@ -61,6 +61,9 @@ volumes:
 
 As explained above, this default configuration is suitable only for evaluation or testing purposes. Proper volume management needs to be configured.
 
+!!!info "Bitbucket default `shared-home` location"
+    For a single node Bitbucket deployment, if no `shared-home` volume is defined, then a subpath of `local-home` will automatically be used for this purpose, namely: `<LOCAL_HOME_DIRECTORY>/shared`. This behaviour is specific to Bitbucket itself and is not orchestrated via the Helm chart.
+
 In order to enable the persistence of data stored in these volumes, it is necessary
 to replace these volumes with something else.
 
