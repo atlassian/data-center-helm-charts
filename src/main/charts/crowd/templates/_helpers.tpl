@@ -1,5 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
+Create default value for ingress port
+*/}}
+{{- define "crowd.ingressPort" -}}
+{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- end }}
+
+{{/*
 The name of the service account to be used.
 If the name is defined in the chart values, then use that,
 else if we're creating a new service account then use the name of the Helm release,
