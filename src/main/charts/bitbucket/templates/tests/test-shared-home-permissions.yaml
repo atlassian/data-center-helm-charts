@@ -35,7 +35,7 @@ spec:
           subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
           {{- end }}
         {{- else }}
-        - name : local-home
+        - name: local-home
           mountPath: /shared-home
           subPath: shared
         {{- end }}
