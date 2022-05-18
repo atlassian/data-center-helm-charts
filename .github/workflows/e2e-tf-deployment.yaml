@@ -22,6 +22,8 @@ jobs:
       TF_VAR_bamboo_license: ${{ secrets.TF_VAR_BAMBOO_LICENSE }}
       TF_VAR_confluence_license: ${{ secrets.TF_VAR_CONFLUENCE_LICENSE }}
       TF_VAR_bitbucket_license: ${{ secrets.TF_VAR_BITBUCKET_LICENSE }}
+      TF_VAR_bamboo_admin_password: ${{ secrets.TF_VAR_BAMBOO_ADMIN_PASSWORD }}
+      TF_VAR_bitbucket_admin_password: ${{ secrets.TF_VAR_BITBUCKET_ADMIN_PASSWORD }}
 
     steps:
       - name: Checkout Helm charts
