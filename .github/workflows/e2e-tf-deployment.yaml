@@ -6,6 +6,9 @@ on:
     paths:
       - 'src/main/charts/bamboo/**'
       - 'src/main/charts/bamboo-agent/**'
+      - 'src/main/charts/bitbucket/**'
+      - 'src/main/charts/confluence/**'
+      - 'src/main/charts/jira/**'
   workflow_dispatch:
 
 jobs:
@@ -17,22 +20,34 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       TF_VAR_bamboo_license: ${{ secrets.TF_VAR_BAMBOO_LICENSE }}
+      TF_VAR_confluence_license: ${{ secrets.TF_VAR_CONFLUENCE_LICENSE }}
+      TF_VAR_bitbucket_license: ${{ secrets.TF_VAR_BITBUCKET_LICENSE }}
+      TF_VAR_bamboo_admin_password: ${{ secrets.TF_VAR_BAMBOO_ADMIN_PASSWORD }}
+      TF_VAR_bitbucket_admin_password: ${{ secrets.TF_VAR_BITBUCKET_ADMIN_PASSWORD }}
 
     steps:
       - name: Checkout Helm charts
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          
+
+      - name: Pin Kubectl version
+        uses: azure/setup-kubectl@v2.0
+        with:
+          version: 'v1.23.6'
+
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
           version: v3.7.1
 
-      - name: Execute helm dependency update for bamboo chart
-        run: helm dependency update src/main/charts/bamboo
-      - name: Execute helm dependency update for bamboo-agent chart
-        run: helm dependency update src/main/charts/bamboo-agent
+      - name: Execute helm dependency update for Helm charts
+        run: |
+          helm dependency update src/main/charts/bamboo
+          helm dependency update src/main/charts/bamboo-agent
+          helm dependency update src/main/charts/bitbucket
+          helm dependency update src/main/charts/confluence
+          helm dependency update src/main/charts/jira
 
       - name: Checkout Deployment Automation
         run: |
@@ -55,6 +70,18 @@ jobs:
           go get -v -t -d ./... && go mod tidy
           echo ::set-output name=exit_code::$?
 
+      - name: Add private SSH key for Bitbucket tests
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.BITBUCKET_E2E_TEST_PRIV_SSH_KEY }}
+          name: bitbucket-e2e # optional
+          known_hosts: dummy-entry
+          if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
+
+      - name: Add public SSH key for Bitbucket tests
+        run: |
+          echo ${{ secrets.BITBUCKET_E2E_TEST_PUB_SSH_KEY }} > /home/runner/.ssh/bitbucket-e2e.pub
+
       - name: Deploy the infrastructure, install helm charts, run E2E tests, and cleanup
         id: e2e-test
         working-directory: tf/test/
@@ -70,7 +97,7 @@ jobs:
           EOF
           
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
-          go test ./e2etest -v -timeout 60m -run Installer | tee ./e2etest/artifacts/e2etest.log
+          go test ./e2etest -v -timeout 85m -run Installer | tee ./e2etest/artifacts/e2etest.log
 
       - name: Upload test log files
         if: always()
