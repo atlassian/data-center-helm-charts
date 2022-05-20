@@ -1,0 +1,114 @@
+{{ if .Values.bitbucket.mesh.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.bitbucket.mesh.replicaCount }}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  podManagementPolicy: {{ default "OrderedReady" .Values.bitbucket.podManagementStrategy }}
+  serviceName: {{ include "common.names.fullname" . }}-mesh
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "common.names.name" . }}-mesh
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+{{/*        checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}*/}}
+        {{- if .Values.fluentd.enabled }}
+        checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
+        {{- end }}
+        {{- include "bitbucket.podAnnotations" . | nindent 8 }}
+      labels:
+        app.kubernetes.io/name: {{ include "common.names.name" . }}-mesh
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "bitbucket.podLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
+      initContainers:
+        {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
+      containers:
+        - name: bitbucket-mesh
+          image: {{ .Values.bitbucket.mesh.image }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: mesh
+              containerPort: {{ .Values.bitbucket.mesh.port }}
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.bitbucket.mesh.port }}
+            periodSeconds: 5
+            failureThreshold: 60
+            initialDelaySeconds: 10
+          {{- with .Values.bitbucket.containerSecurityContext}}
+          securityContext:
+            {{- toYaml . | nindent 12}}
+          {{- end}}
+          volumeMounts:
+            - name: mesh-home
+              mountPath: {{ .Values.bitbucket.mesh.volume.mountPath | quote }}
+          {{- with .Values.bitbucket.mesh.resources.container }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MESH_HOME
+              value: {{ .Values.bitbucket.mesh.volume.mountPath }}
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: JAVA_OPTS
+              value: "-Dcluster.node.name=$(KUBE_POD_NAME)"
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: {{ include "common.names.fullname" . }}-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: {{ include "common.names.fullname" . }}-jvm-config
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: {{ include "common.names.fullname" . }}-jvm-config
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", {{ .Values.bitbucket.shutdown.command | quote }}]
+        {{- include "fluentd.container" . | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName  | quote }}
+      {{- end }}
+      volumes:
+        {{ include "bitbucket.mesh.volume" . | nindent 8 }}
+        {{ include "fluentd.config.volume" . | nindent 8 }}
+  {{ include "bitbucket.mesh.volumeClaimTemplates" . | nindent 2 }}
+{{ end }}

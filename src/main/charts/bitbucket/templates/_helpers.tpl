@@ -233,6 +233,18 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 {{- end }}
 
+{{- define "bitbucket.mesh.volume" -}}
+- name: mesh-home
+{{- if .Values.bitbucket.mesh.volume.create }}
+  persistentVolumeClaim:
+    claimName: {{ include "common.names.fullname" . }}-mesh-home
+{{ else if .Values.bitbucket.mesh.volume.customVolume }}
+{{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{ else }}
+  emptyDir: {}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.volume.sharedHome.name" -}}
 {{ include "common.names.fullname" . }}-shared-home-pv
 {{- end }}
@@ -266,6 +278,23 @@ volumeClaimTemplates:
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.mesh.volumeClaimTemplates" -}}
+{{- if or .Values.bitbucket.mesh.volume.create }}
+volumeClaimTemplates:
+- metadata:
+    name: mesh-home
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .Values.bitbucket.mesh.volume.storageClass }}
+    storageClassName: {{ .Values.bitbucket.mesh.volume.storageClass | quote }}
+    {{- end }}
+    {{- with .Values.bitbucket.mesh.volume.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 {{- end }}
 {{- end }}
 

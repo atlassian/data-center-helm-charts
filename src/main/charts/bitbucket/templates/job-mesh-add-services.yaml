@@ -1,0 +1,49 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled -}}
+{{- range $index := until (.Values.bitbucket.mesh.replicaCount | int) }}
+{{- with $ }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-register-job-{{ $index }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-10"
+{{/*    "helm.sh/hook-delete-policy": hook-succeeded*/}}
+spec:
+  template:
+    spec:
+      containers:
+        - name: bitbucket-mesh-register-services
+          image: curlimages/curl
+          command: ["/bin/sh", "-c", "curl -XPOST -d '{\"name\":\"bitbucket-mesh-{{$index}}\",\"rpcUrl\":\"http://{{ include "common.names.fullname" . }}-mesh-{{ $index }}:{{.Values.bitbucket.mesh.port}}\"}' -H \"Content-Type: application/json\" -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD $BITBUCKET_URL/rest/api/latest/admin/git/mesh/nodes "]
+          env:
+            - name: BITBUCKET_URL
+              value: {{ include "bitbucket.baseUrl" . }}
+            {{ with .Values.bitbucket.sysadminCredentials }}
+            {{ if .secretName }}
+            - name: SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .usernameSecretKey }}
+            - name: SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .passwordSecretKey }}
+              {{ end }}
+              {{ end }}
+      restartPolicy: Never
+  backoffLimit: 4
+{{/*  ttlSecondsAfterFinished: 60*/}}
+---
+{{- end }}
+{{- end }}
+{{- end }}

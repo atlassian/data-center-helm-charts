@@ -50,6 +50,21 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username. |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
+| bitbucket.mesh.annotations | object | `{}` |  |
+| bitbucket.mesh.enabled | bool | `true` |  |
+| bitbucket.mesh.image | string | `"abrokes/bitbucket-mesh:2"` |  |
+| bitbucket.mesh.port | int | `7777` |  |
+| bitbucket.mesh.replicaCount | int | `3` |  |
+| bitbucket.mesh.resources.container.requests.cpu | string | `"2"` |  |
+| bitbucket.mesh.resources.container.requests.memory | string | `"2G"` |  |
+| bitbucket.mesh.resources.jvm.maxHeap | string | `"1g"` |  |
+| bitbucket.mesh.resources.jvm.minHeap | string | `"512m"` |  |
+| bitbucket.mesh.setByDefault | bool | `true` |  |
+| bitbucket.mesh.volume.create | bool | `true` |  |
+| bitbucket.mesh.volume.customVolume | object | `{}` |  |
+| bitbucket.mesh.volume.mountPath | string | `"/var/atlassian/application-data/mesh"` |  |
+| bitbucket.mesh.volume.resources.requests.storage | string | `"1Gi"` |  |
+| bitbucket.mesh.volume.storageClass | string | `nil` |  |
 | bitbucket.mirror.upstreamUrl | string | `nil` | Specifies the URL of the upstream Bitbucket server for this mirror. |
 | bitbucket.podManagementStrategy | string | `"OrderedReady"` | Pod management strategy. Bitbucket Data Center requires the "OrderedReady" value but for Bitbucket Mirrors you can use the "Parallel" option. To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies |
 | bitbucket.ports.hazelcast | int | `5701` | The port on which the Hazelcast listens for client traffic |
@@ -106,6 +121,9 @@ Kubernetes: `>=1.19.x-0`
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'. |
 | ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextPath'. |
+| ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds. |
+| ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed. |
+| ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext. Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket pods |

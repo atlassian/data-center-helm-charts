@@ -1,0 +1,42 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-configure-job
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+{{/*    "helm.sh/hook-delete-policy": hook-succeeded*/}}
+spec:
+  template:
+    spec:
+      containers:
+        - name: bitbucket-mesh-register-services
+          image: curlimages/curl
+          command: [ "/bin/sh", "-c", "curl -XPUT -d '{\"isRefreshing\":false,\"repositoryCreationEnabled\":{{ .Values.bitbucket.mesh.setByDefault }}' -H \"Content-Type: application/json\" -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD $BITBUCKET_URL/rest/ui/latest/admin/git/mesh/settings" ]
+          env:
+            - name: BITBUCKET_URL
+              value: {{ include "bitbucket.baseUrl" . }}
+            {{ with .Values.bitbucket.sysadminCredentials }}
+            {{ if .secretName }}
+            - name: SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .usernameSecretKey }}
+            - name: SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .passwordSecretKey }}
+              {{ end }}
+              {{ end }}
+      restartPolicy: Never
+  backoffLimit: 4
+{{/*  ttlSecondsAfterFinished: 60*/}}
+{{- end }}
