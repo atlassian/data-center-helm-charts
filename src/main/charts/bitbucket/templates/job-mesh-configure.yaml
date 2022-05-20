@@ -18,7 +18,7 @@ spec:
       containers:
         - name: bitbucket-mesh-register-services
           image: curlimages/curl
-          command: [ "/bin/sh", "-c", "curl -XPUT -d '{\"isRefreshing\":false,\"repositoryCreationEnabled\":{{ .Values.bitbucket.mesh.setByDefault }}' -H \"Content-Type: application/json\" -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD $BITBUCKET_URL/rest/ui/latest/admin/git/mesh/settings" ]
+          command: [ "/bin/sh", "-c", "curl -XPUT -d '{\"isRefreshing\":false,\"repositoryCreationEnabled\":{{ .Values.bitbucket.mesh.setByDefault }}}' -H \"Content-Type: application/json\" -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD $BITBUCKET_URL/rest/ui/latest/admin/git/mesh/settings" ]
           env:
             - name: BITBUCKET_URL
               value: {{ include "bitbucket.baseUrl" . }}
@@ -38,5 +38,4 @@ spec:
               {{ end }}
       restartPolicy: Never
   backoffLimit: 4
-{{/*  ttlSecondsAfterFinished: 60*/}}
 {{- end }}
