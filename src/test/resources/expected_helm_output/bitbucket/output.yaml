@@ -28,6 +28,72 @@ data:
   max_heap: 1g
   min_heap: 512m
 ---
+# Source: bitbucket/templates/service-mesh.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bitbucket-mesh-0
+  labels:
+    helm.sh/chart: bitbucket-1.3.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.21.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7777
+      targetPort: mesh
+      protocol: TCP
+      name: mesh
+  selector:
+    statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-0
+---
+# Source: bitbucket/templates/service-mesh.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bitbucket-mesh-1
+  labels:
+    helm.sh/chart: bitbucket-1.3.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.21.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7777
+      targetPort: mesh
+      protocol: TCP
+      name: mesh
+  selector:
+    statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-1
+---
+# Source: bitbucket/templates/service-mesh.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bitbucket-mesh-2
+  labels:
+    helm.sh/chart: bitbucket-1.3.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.21.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7777
+      targetPort: mesh
+      protocol: TCP
+      name: mesh
+  selector:
+    statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-2
+---
 # Source: bitbucket/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -58,6 +124,101 @@ spec:
   selector:
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
+---
+# Source: bitbucket/templates/statefulset-mesh.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unittest-bitbucket-mesh
+  labels:
+    helm.sh/chart: bitbucket-1.3.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.21.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  podManagementPolicy: OrderedReady
+  serviceName: unittest-bitbucket-mesh
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bitbucket-mesh
+      app.kubernetes.io/instance: unittest-bitbucket
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/name: bitbucket-mesh
+        app.kubernetes.io/instance: unittest-bitbucket
+    spec:
+      serviceAccountName: unittest-bitbucket
+      terminationGracePeriodSeconds: 35
+      initContainers:
+      containers:
+        - name: bitbucket-mesh
+          image: abrokes/bitbucket-mesh:2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mesh
+              containerPort: 7777
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 7777
+            periodSeconds: 5
+            failureThreshold: 60
+            initialDelaySeconds: 10
+          volumeMounts:
+            - name: mesh-home
+              mountPath: "/var/atlassian/application-data/mesh"
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2G
+          env:
+            - name: MESH_HOME
+              value: /var/atlassian/application-data/mesh
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: JAVA_OPTS
+              value: "-Dcluster.node.name=$(KUBE_POD_NAME)"
+            - name: JVM_MINIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: min_heap
+                  name: unittest-bitbucket-jvm-config
+            - name: JVM_MAXIMUM_MEMORY
+              valueFrom:
+                configMapKeyRef:
+                  key: max_heap
+                  name: unittest-bitbucket-jvm-config
+            - name: JVM_SUPPORT_RECOMMENDED_ARGS
+              valueFrom:
+                configMapKeyRef:
+                  key: additional_jvm_args
+                  name: unittest-bitbucket-jvm-config
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "/shutdown-wait.sh"]
+      volumes:
+        - name: mesh-home
+          persistentVolumeClaim:
+            claimName: unittest-bitbucket-mesh-home
+  volumeClaimTemplates:
+  - metadata:
+      name: mesh-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
 ---
 # Source: bitbucket/templates/statefulset.yaml
 apiVersion: apps/v1
