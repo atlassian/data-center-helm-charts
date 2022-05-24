@@ -1,6 +1,6 @@
 # bamboo-agent
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.3](https://img.shields.io/badge/AppVersion-8.1.3-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.2.3](https://img.shields.io/badge/AppVersion-8.2.3-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center remote agents on Kubernetes
 
@@ -40,7 +40,8 @@ Kubernetes: `>=1.19.x-0`
 | agent.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
 | agent.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
-| agent.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| agent.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image GID will default to 2005 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| agent.securityContextEnabled | bool | `true` |  |
 | agent.securityToken.secretKey | string | `"security-token"` |  |
 | agent.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token  will be automatically utilised on agent boot. An Example of creating a K8s secret for the  secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | agent.server | string | `nil` |  |

@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.21.0](https://img.shields.io/badge/AppVersion-7.21.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.21.1](https://img.shields.io/badge/AppVersion-7.21.1-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
@@ -59,7 +59,8 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bitbucket pod |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
 | bitbucket.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
-| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image If not supplied, will default to 2003. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image GID will default to 2003 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bitbucket.securityContextEnabled | bool | `true` |  |
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use. |
 | bitbucket.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
@@ -106,6 +107,9 @@ Kubernetes: `>=1.19.x-0`
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'. |
 | ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextPath'. |
+| ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds. |
+| ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed. |
+| ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext. Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket pods |

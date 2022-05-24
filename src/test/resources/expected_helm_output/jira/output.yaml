@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: jira-1.3.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "8.20.8"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: jira-1.3.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "8.20.8"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -39,7 +39,7 @@ metadata:
     helm.sh/chart: jira-1.3.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "8.20.8"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -62,7 +62,7 @@ metadata:
     helm.sh/chart: jira-1.3.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "8.20.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -94,7 +94,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: jira
-          image: "atlassian/jira-software:8.20.7"
+          image: "atlassian/jira-software:8.20.8"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -176,7 +176,7 @@ metadata:
     helm.sh/chart: jira-1.3.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "8.20.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -208,7 +208,7 @@ metadata:
     helm.sh/chart: jira-1.3.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "8.20.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
