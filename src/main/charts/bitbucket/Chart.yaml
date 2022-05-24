@@ -3,7 +3,7 @@ name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
 version: 1.3.0
-appVersion: 7.21.0
+appVersion: 7.21.1
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bitbucket
@@ -24,7 +24,7 @@ annotations:
       description: Update Bitbucket version to 7.21.0
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/396
+        url: https://github.com/atlassian/data-center-helm-charts/pull/412
 dependencies:
   - name: common
     version: 1.0.0

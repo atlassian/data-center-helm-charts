@@ -3,7 +3,7 @@ name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
 version: 1.3.0
-appVersion: 7.13.5
+appVersion: 7.13.6
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -26,10 +26,10 @@ annotations:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/390
     - kind: changed
-      description: Update Confluence version to 7.21.0
+      description: Update Confluence version to 7.13.6
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/396
+        url: https://github.com/atlassian/data-center-helm-charts/pull/412
 dependencies:
   - name: common
     version: 1.0.0

@@ -3,7 +3,7 @@ name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
 version: 1.3.0
-appVersion: 8.20.7
+appVersion: 8.20.8
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Jira
@@ -22,10 +22,10 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update Jira version to 8.20.7
+      description: Update Jira version to 8.20.8
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/396
+        url: https://github.com/atlassian/data-center-helm-charts/pull/412
 dependencies:
   - name: common
     version: 1.0.0
