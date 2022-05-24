@@ -24,7 +24,7 @@ annotations:
       description: Bamboo Agent updated to 8.2.3 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/396
+        url: https://github.com/atlassian/data-center-helm-charts/pull/412
 dependencies:
   - name: common
     version: 1.0.0
