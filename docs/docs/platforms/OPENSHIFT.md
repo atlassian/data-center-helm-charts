@@ -26,11 +26,28 @@ It depends on the storage backend though.
 
 ## Set no security context
 
-As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContext` to `{}`.
+As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContextEnabled` to `false`, for example, `confluence.securityContextEnabled: false`
 As a result the container will start as a user with an OpenShift generated ID.
 Typically, NFS permission fixer job isn't required when no security context is set.
+
+## Permission issues
+
+If a container start without anyuid enabled, applications can't write to `${APPLICATIOn_HOME}/logs`, `${APPLICATIOn_HOME}/work` and `${APPLICATIOn_HOME}/temp`.
+If you see in logs that the server fails to start with `permission denied` errors, you may want to declare these directories as runtime volumes. To do so, you need to declare additional volume mounts and additional volumes in values.yaml:
+
+```
+confluence:
+  additionalVolumeMounts:
+    - name: tomcat-work
+      # this example if for Confluence
+      mountPath: /opt/atlassian/confluence/work
+volumes:
+  additional:
+    - name: tomcat-work
+      emptyDir: {}
+```
 
 ## OpenShift Routes
 
 The Helm charts do not have templates for OpenShift routes that are commonly used in OpenShift instead of ingresses.
-Routes need to be manually created after the charts installation. 
+Routes need to be manually created after the charts installation.
