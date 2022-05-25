@@ -98,6 +98,12 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
+            {{ if .Values.ingress.host }}
+            - name: ATL_PROXY_NAME
+              value: {{ .Values.ingress.host | quote }}
+            - name: ATL_PROXY_PORT
+              value: {{ include "crowd.ingressPort" . | quote }}
+            {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.crowd.accessLog.enabled | quote }}
             - name: UMASK
