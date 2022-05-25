@@ -20,6 +20,21 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
+    - kind: added
+      description: Make pod securityContext optional
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/389
+    - kind: added
+      description: Support for configuring ingress proxy settings via values.yaml
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/402
+    - kind: fixed
+      description: Fixed common.label error 
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/403
     - kind: changed
       description: Update Crowd version to 5.0.0
       links:

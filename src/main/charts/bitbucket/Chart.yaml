@@ -21,6 +21,21 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
+      description: Remove emptyDir from Bitbucket shared home volume options
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/386
+    - kind: added
+      description: Make pod securityContext optional
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/389
+    - kind: added
+      description: Support for configuring ingress proxy settings via values.yaml
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/402
+    - kind: changed
       description: Update Bitbucket version to 7.21.0
       links:
       - name: Github PR

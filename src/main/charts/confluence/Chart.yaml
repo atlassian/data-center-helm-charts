@@ -21,10 +21,20 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
-      description: Add support for separate Synchrony volumes
+      description: Make pod securityContext optional
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/390
+        url: https://github.com/atlassian/data-center-helm-charts/pull/389
+    - kind: added
+      description: Support for configuring ingress proxy settings via values.yaml
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/402
+    - kind: fixed
+      description: Fixed additionalHosts
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/392
     - kind: changed
       description: Update Confluence version to 7.13.6
       links:

@@ -2,13 +2,15 @@
 
 ## 1.4.0
 
-**Release date:** TBD
+**Release date:** 2022-05-25
 
 ![AppVersion: 5.0.0](https://img.shields.io/static/v1?label=AppVersion&message=5.0.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
+* Make pod securityContext optional (#389)
 * Support for configuring ingress proxy settings via values.yaml (#402)
+* Fixed common.label error (#403)
 * Update Crowd version to 5.0.0 (#412)
 
 ## 1.3.0

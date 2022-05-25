@@ -2,12 +2,13 @@
 
 ## 1.4.0
 
-**Release date:** TBD
+**Release date:** 2022-05-25
 
 ![AppVersion: 8.2.3](https://img.shields.io/static/v1?label=AppVersion&message=8.2.3&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
+* Make pod securityContext optional (#389)
 * Update Bamboo agent version to 8.2.3 (#412)
 
 
