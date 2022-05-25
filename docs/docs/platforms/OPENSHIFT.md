@@ -39,7 +39,7 @@ If you see in logs that the server fails to start with `permission denied` error
 confluence:
   additionalVolumeMounts:
     - name: tomcat-work
-      # this example if for Confluence
+      # this example is for Confluence
       mountPath: /opt/atlassian/confluence/work
 volumes:
   additional:
