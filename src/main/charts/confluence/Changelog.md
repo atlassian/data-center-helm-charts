@@ -12,6 +12,7 @@
 * Make pod securityContext optional (#389)
 * Fixed additionalHosts (#392)
 * Support for configuring ingress proxy settings via values.yaml (#402)
+* Add ATL_PROXY_NAME and ATL_PROXY_PORT to Confluence (#407)
 * Update Confluence version to 7.13.6 (#412)
 
 

@@ -35,6 +35,11 @@ annotations:
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/403
+    - kind: added
+      description: Add ATL_PROXY_NAME and ATL_PROXY_PORT to Crowd
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/407
     - kind: changed
       description: Update Crowd version to 5.0.0
       links:

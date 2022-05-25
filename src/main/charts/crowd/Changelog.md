@@ -11,6 +11,7 @@
 * Make pod securityContext optional (#389)
 * Support for configuring ingress proxy settings via values.yaml (#402)
 * Fixed common.label error (#403)
+* Add ATL_PROXY_NAME and ATL_PROXY_PORT to Crowd (#407)
 * Update Crowd version to 5.0.0 (#412)
 
 ## 1.3.0
