@@ -24,7 +24,7 @@ Please, note that the service account names vary depending on the Data Center pr
 Typically, the `volumes.sharedHome.persistentVolumeClaim.nfsPermissionFixer` needs to be set to `true` to make volume writable.
 It depends on the storage backend though.
 
-## Set no security context
+## Disable security context
 
 As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContextEnabled` to `false`, for example, `confluence.securityContextEnabled: false`
 As a result the container will start as a user with an OpenShift generated ID.
