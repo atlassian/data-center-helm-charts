@@ -32,7 +32,7 @@ Typically, NFS permission fixer job isn't required when no security context is s
 
 ## Permission issues
 
-If a container start without anyuid enabled, applications can't write to `${APPLICATIOn_HOME}/logs`, `${APPLICATIOn_HOME}/work` and `${APPLICATIOn_HOME}/temp`.
+If a container start without anyuid enabled, applications can't write to `${APPLICATION_HOME}/logs`, `${APPLICATION_HOME}/work` and `${APPLICATION_HOME}/temp`.
 If you see in logs that the server fails to start with `permission denied` errors, you may want to declare these directories as runtime volumes. To do so, you need to declare additional volume mounts and additional volumes in values.yaml:
 
 ```
