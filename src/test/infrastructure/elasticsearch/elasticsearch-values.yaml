@@ -2,7 +2,7 @@
 
 global:
   coordinating:
-    name: coord-only
+    name: coo
 
 master:
   replicas: 1
