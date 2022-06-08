@@ -1,5 +1,9 @@
 ---
 
+global:
+  coordinating:
+    name: coord-only
+
 master:
   replicas: 1
   podAnnotations:
