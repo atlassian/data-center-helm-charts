@@ -3,7 +3,7 @@ name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
 version: 1.4.0
-appVersion: 7.13.6
+appVersion: 7.13.7
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -18,33 +18,15 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
 deprecated: false
 annotations:
-  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-    - kind: added
-      description: Make pod securityContext optional
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/389
-    - kind: added
-      description: Support for configuring ingress proxy settings via values.yaml
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/402
-    - kind: added
-      description: Add ATL_PROXY_NAME and ATL_PROXY_PORT to Confluence
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/407
-    - kind: fixed
-      description: Fixed additionalHosts
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/392
     - kind: changed
-      description: Update Confluence version to 7.13.6
+      description: Update Confluence version to 7.13.7
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/412
+        url: https://github.com/atlassian/data-center-helm-charts/pull/417
+      - name: Confluence Security Advisory 2022-06-02
+        url: https://confluence.atlassian.com/doc/confluence-security-advisory-2022-06-02-1130377146.html
 dependencies:
   - name: common
     version: 1.0.0

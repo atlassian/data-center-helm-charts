@@ -1,6 +1,17 @@
 # Change Log
 
 
+## 1.4.1
+
+**Release date:** 2022-06-08
+
+![AppVersion: 7.13.7](https://img.shields.io/static/v1?label=AppVersion&message=7.13.7&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update the default Confluence version to 7.13.7 (#417) - Mitigate [CVE-2022-26134](https://confluence.atlassian.com/doc/confluence-security-advisory-2022-06-02-1130377146.html)
+
+
 ## 1.4.0
 
 **Release date:** 2022-05-25
