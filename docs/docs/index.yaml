@@ -1088,6 +1088,42 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+          description: Update Confluence version to 7.13.7
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/417
+          - name: Confluence Security Advisory 2022-06-02
+            url: https://confluence.atlassian.com/doc/confluence-security-advisory-2022-06-02-1130377146.html
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.13.7
+    created: "2022-06-09T17:25:22.25582+10:00"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 05370dd318525fb8c8959a76a15fc7afef45800b672faae80199c32d2d50957f
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.4.1/confluence-1.4.1.tgz
+    version: 1.4.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: added
           description: Make pod securityContext optional
           links:
@@ -2265,6 +2301,41 @@ entries:
   jira:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+          description: Update Jira version to 8.20.9
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/417
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.20.9
+    created: "2022-06-09T17:25:22.88341+10:00"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 0ce2b5d83bf6f168a422a90a8046228d5a13dcb9c6a625be80fd6630bd796f83
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.4.1/jira-1.4.1.tgz
+    version: 1.4.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: added
           description: Make pod securityContext optional
           links:
@@ -2876,4 +2947,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2022-05-25T04:04:17.346181387Z"
+generated: "2022-06-09T17:25:22.883785+10:00"
