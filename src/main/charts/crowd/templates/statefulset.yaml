@@ -98,6 +98,8 @@ spec:
             - name: ATL_TOMCAT_SECURE
               value: "true"
             {{ end }}
+            - name: ATL_TOMCAT_PORT
+              value: {{ .Values.crowd.ports.http | quote }}
             {{ if .Values.ingress.host }}
             - name: ATL_PROXY_NAME
               value: {{ .Values.ingress.host | quote }}

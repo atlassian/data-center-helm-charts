@@ -132,6 +132,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_TOMCAT_PORT
+              value: "8095"
             - name: ATL_TOMCAT_ACCESS_LOG
               value: "true"
             - name: UMASK

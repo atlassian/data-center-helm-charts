@@ -69,6 +69,8 @@ spec:
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.jira.service.contextPath | quote }}
             {{ end }}
+            - name: ATL_TOMCAT_PORT
+              value: {{ .Values.jira.ports.http | quote }}
             {{ if .Values.ingress.host }}
             - name: ATL_PROXY_NAME
               value: {{ .Values.ingress.host | quote }}

@@ -101,6 +101,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_TOMCAT_PORT
+              value: "8080"
             - name: SET_PERMISSIONS
               value: "true"
             - name: JIRA_SHARED_HOME
