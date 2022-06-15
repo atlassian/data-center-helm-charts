@@ -101,6 +101,8 @@ spec:
               value: "true"
             - name: ATL_BASE_URL
               value: "http://localhost:8085/"
+            - name: ATL_TOMCAT_PORT
+              value: "8085"
             - name: SET_PERMISSIONS
               value: "true"
             - name: BAMBOO_SHARED_HOME

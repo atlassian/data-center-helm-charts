@@ -131,6 +131,8 @@ spec:
               value: "-Dcluster.node.name=$(KUBE_POD_NAME)"
             - name: SERVER_CONTEXT_PATH
               value: "/"
+            - name: SERVER_PORT
+              value: "7990"
             - name: SERVER_SCHEME
               value: "https"
             - name: SERVER_SECURE

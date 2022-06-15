@@ -53,4 +53,8 @@ public final class Container {
     public JsonNode getSecurityContext() {
         return get("securityContext");
     }
+
+    public JsonNode getReadinessProbe() {
+        return get("readinessProbe");
+    }
 }

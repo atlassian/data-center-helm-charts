@@ -139,6 +139,8 @@ spec:
             {{ end }}
             - name: SERVER_CONTEXT_PATH
               value: {{ include "bitbucket.ingressPath" . | quote }}
+            - name: SERVER_PORT
+              value: {{ .Values.bitbucket.ports.http | quote }}
             {{ if .Values.ingress.https }}
             - name: SERVER_SCHEME
               value: "https"

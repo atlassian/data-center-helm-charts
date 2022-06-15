@@ -49,6 +49,8 @@ data:
        -Xms1g \
        -Xmx2g \
        -Xss2048k \
+       -Dsynchrony.port=8091 \
+       -Dcluster.listen.port=5701 \
        -XX:ActiveProcessorCount=2 \
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
@@ -263,6 +265,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_TOMCAT_PORT
+              value: "8090"
             - name: ATL_TOMCAT_ACCESS_LOG
               value: "true"
             - name: UMASK
