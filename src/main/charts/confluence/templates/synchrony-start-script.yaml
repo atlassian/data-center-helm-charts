@@ -13,6 +13,8 @@ data:
     java \
        -Xms{{ .Values.synchrony.resources.jvm.minHeap }} \
        -Xmx{{ .Values.synchrony.resources.jvm.maxHeap }} \
+       -Dsynchrony.port={{ .Values.synchrony.ports.http }} \
+       -Dcluster.listen.port={{ .Values.synchrony.ports.hazelcast }} \
        {{- range .Values.synchrony.additionalJvmArgs }}
        {{ . }} \
        {{- end }}

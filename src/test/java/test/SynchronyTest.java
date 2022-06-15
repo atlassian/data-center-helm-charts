@@ -1,11 +1,14 @@
 package test;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Kind;
+import test.model.KubeResource;
 import test.model.Product;
 import test.model.StatefulSet;
 
@@ -131,5 +134,22 @@ class SynchronyTest {
         assertThat(checksumWithChanges)
                 .isNotNull()
                 .isNotEqualTo(checksum);
+    }
+
+    @Test
+    void synchrony_custom_ports_are_include_in_jvm_args() throws Exception {
+        Product product = Product.confluence;
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.ports.http", "1234",
+                "synchrony.ports.hazelcast", "9876"
+        ));
+
+        JsonNode startScript = resources.get(
+                Kind.ConfigMap,
+                product.getHelmReleaseName() + "-synchrony-entrypoint").getNode("data").path("start-synchrony.sh");
+
+        assertThat(startScript).hasTextContaining("-Dsynchrony.port=1234");
+        assertThat(startScript).hasTextContaining("-Dcluster.listen.port=9876");
     }
 }
