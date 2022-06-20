@@ -838,12 +838,6 @@ synchrony:
     # should be set to the Synchrony internal grace period (default 20
     # seconds), plus a small buffer to allow the JVM to fully terminate.
     terminationGracePeriodSeconds: 25
-        
-  # -- The base URL of the Synchrony service. This will be the URL that users' browsers will
-  # be given to communicate with Synchrony, as well as the URL that the Confluence service
-  # will use to communicate directly with Synchrony, so the URL must be resolvable both from
-  # inside and outside the Kubernetes cluster.
-  ingressUrl:
   
   # -- Specifies a list of additional Java libraries that should be added to the
   # Synchrony container. Each item in the list should specify the name of the volume

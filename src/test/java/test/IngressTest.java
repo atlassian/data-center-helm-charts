@@ -380,7 +380,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/confluence-tmp",
-                "/confluence-tmp/synchrony",
+                "/synchrony",
                 "/confluence-tmp/setup",
                 "/confluence-tmp/bootstrap");
     }
@@ -420,7 +420,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/ingress",
-                "/ingress/synchrony",
+                "/synchrony",
                 "/ingress/setup",
                 "/ingress/bootstrap");
     }
@@ -460,7 +460,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/ingress",
-                "/ingress/synchrony",
+                "/synchrony",
                 "/ingress/setup",
                 "/ingress/bootstrap");
     }
