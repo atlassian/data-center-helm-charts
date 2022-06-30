@@ -34,7 +34,7 @@ jobs:
       - name: Pin Kubectl version
         uses: azure/setup-kubectl@v2.0
         with:
-          version: 'v1.23.6'
+          version: 'v1.24.0'
 
       - name: Install Helm
         uses: azure/setup-helm@v1
