@@ -9,8 +9,6 @@ on:
       - 'src/main/charts/bitbucket/**'
       - 'src/main/charts/confluence/**'
       - 'src/main/charts/jira/**'
-  pull_request:
-    types: [ labeled ]
   workflow_dispatch:
 
 jobs:
@@ -51,6 +49,7 @@ jobs:
           helm dependency update src/main/charts/bitbucket
           helm dependency update src/main/charts/confluence
           helm dependency update src/main/charts/jira
+
       - name: Checkout Deployment Automation
         run: |
           DEPLOYMENT_REPO='https://github.com/atlassian-labs/data-center-terraform.git'
@@ -59,6 +58,7 @@ jobs:
             | grep '^[0-9]*.[0-9]*.[0-9]*$' | sort -V | tail -1)
           echo "Using LTS version('${LTS}') of Deployment Automation to provision the infrastructure for Atlassian DC Products."
           git clone -b $LTS $DEPLOYMENT_REPO tf
+
       - name: Setup test environment
         uses: actions/setup-go@v2.1.4
         with:
@@ -70,6 +70,7 @@ jobs:
         run: |
           go get -v -t -d ./... && go mod tidy
           echo ::set-output name=exit_code::$?
+
       - name: Add private SSH key for Bitbucket tests
         uses: shimataro/ssh-key-action@v2
         with:
@@ -81,6 +82,7 @@ jobs:
       - name: Add public SSH key for Bitbucket tests
         run: |
           echo ${{ secrets.BITBUCKET_E2E_TEST_PUB_SSH_KEY }} > /home/runner/.ssh/bitbucket-e2e.pub
+
       - name: Deploy the infrastructure, install helm charts, run E2E tests, and cleanup
         id: e2e-test
         working-directory: tf/test/
@@ -97,11 +99,10 @@ jobs:
           
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
           go test ./e2etest -v -timeout 85m -run Installer | tee ./e2etest/artifacts/e2etest.log
+
       - name: Upload test log files
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: e2e-test-artifacts
           path: tf/test/e2etest/artifacts/
-
-   
