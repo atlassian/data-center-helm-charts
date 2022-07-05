@@ -9,7 +9,7 @@ on:
       - 'src/main/charts/bitbucket/**'
       - 'src/main/charts/confluence/**'
       - 'src/main/charts/jira/**'
-  pull_request:
+  pull_request_target:
     types: [ labeled ]
   workflow_dispatch:
 
