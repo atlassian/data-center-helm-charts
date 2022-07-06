@@ -37,7 +37,7 @@ spec:
                 port:
                   number: {{ $.Values.confluence.service.port }}
           {{ if .Values.synchrony.enabled }}
-          - path: {{ trimSuffix "/" (include "confluence.ingressPath" .) }}/synchrony
+          - path: /synchrony
             pathType: Prefix
             backend:
               service:

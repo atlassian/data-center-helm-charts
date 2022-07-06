@@ -29,7 +29,9 @@ class SynchronyTest {
     void synchrony_enable(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true",
-                "synchrony.ingressUrl", "https://mysynchrony"
+                "ingress.host", "atlassian.net",
+                "ingress.path", "confluence",
+                "ingress.https", "true"
         ));
 
         resources.assertContains(Kind.StatefulSet, product.getHelmReleaseName() + "-synchrony");
@@ -39,7 +41,7 @@ class SynchronyTest {
                 .getNode("data", "additional_jvm_args");
 
         assertThat(sysProps)
-                .hasTextContaining("-Dsynchrony.service.url=https://mysynchrony/v1")
+                .hasTextContaining("-Dsynchrony.service.url=https://atlassian.net/synchrony/v1")
                 .hasTextNotContaining("synchrony.btf.disabled");
     }
 

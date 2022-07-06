@@ -25,7 +25,7 @@ metadata:
 data:
   additional_jvm_args: >-
     -Dconfluence.cluster.hazelcast.listenPort=5701
-    -Dsynchrony.service.url=/v1
+    -Dsynchrony.service.url=https:///synchrony/v1
     -Dsynchrony.by.default.enable.collab.editing.if.manually.managed=true
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
@@ -176,7 +176,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
-              value: 
+              value: "https:///synchrony"
       volumes:
         - name: entrypoint-script
           configMap:
