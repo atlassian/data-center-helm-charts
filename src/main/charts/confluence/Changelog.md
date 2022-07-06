@@ -8,9 +8,9 @@
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
-* Fix [SCALE-68](https://jira.atlassian.com/browse/SCALE-68): Use the custom ports for Confluence service
-* Fix [SCALE-69](https://jira.atlassian.com/browse/SCALE-69): Use the custom ports for Synchrony service
-
+* Fix [SCALE-68](https://jira.atlassian.com/browse/SCALE-68): Use the custom ports for Confluence service (#419)
+* Fix [SCALE-69](https://jira.atlassian.com/browse/SCALE-69): Use the custom ports for Synchrony service (#419)
+* Fix [ISSUE-225](https://github.com/atlassian/data-center-helm-charts/issues/225): Fixed Synchrony ingress path (#429)
 
 ## 1.4.1
 
