@@ -26,6 +26,11 @@ annotations:
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/419
+    - kind: changed
+      description: Jira updated to 8.20.10 version
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
 dependencies:
   - name: common
     version: 1.0.0
