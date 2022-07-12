@@ -1,6 +1,6 @@
 # Change Log
 
-## NEXT_VERSION
+## 1.5.0
 
 **Release date:** 2022-07-12
 

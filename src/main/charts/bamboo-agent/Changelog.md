@@ -9,6 +9,7 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Bamboo Agent updated to 8.2.4 (#430)
+
 ## 1.4.0
 
 **Release date:** 2022-05-25
