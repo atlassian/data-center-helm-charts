@@ -1,14 +1,15 @@
 # Change Log
 
-## NEXT_VERSION
+## 1.5.0
 
-**Release date:** RELEASE_DATE
+**Release date:** 2022-07-12
 
-![AppVersion: 8.2.3](https://img.shields.io/static/v1?label=AppVersion&message=8.2.3&color=success&logo=)
+![AppVersion: 8.2.4](https://img.shields.io/static/v1?label=AppVersion&message=8.2.4&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Fix: Use the custom ports for Bamboo service (#419)
+* Update Bamboo version to 8.2.4 (#430)
 
 ## 1.4.0
 
