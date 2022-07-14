@@ -1,16 +1,17 @@
 # Change Log
 
-## NEXT_VERSION
+## 1.5.0
 
-**Release date:** RELEASE_DATE
+**Release date:** 2022-07-14
 
-![AppVersion: 7.13.7](https://img.shields.io/static/v1?label=AppVersion&message=7.13.7&color=success&logo=)
+![AppVersion: 7.13.8](https://img.shields.io/static/v1?label=AppVersion&message=7.13.8&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Fix [SCALE-68](https://jira.atlassian.com/browse/SCALE-68): Use the custom ports for Confluence service (#419)
 * Fix [SCALE-69](https://jira.atlassian.com/browse/SCALE-69): Use the custom ports for Synchrony service (#419)
 * Fix [ISSUE-225](https://github.com/atlassian/data-center-helm-charts/issues/225): Fixed Synchrony ingress path (#429)
+* Update the default Confluence version to 7.13.8 (#430)
 
 ## 1.4.1
 
