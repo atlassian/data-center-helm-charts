@@ -4,7 +4,7 @@ kind: PersistentVolume
 metadata:
   name: {{ include "bitbucket.volume.sharedHome.name" . }}
   labels:
-  {{- include "bitbucket.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   capacity:
     storage: 1Gi

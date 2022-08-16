@@ -4,9 +4,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "bitbucket.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "bitbucket.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   updateStrategy:
@@ -14,10 +14,10 @@ spec:
     rollingUpdate:
       partition: 0
   podManagementPolicy: {{ default "OrderedReady" .Values.bitbucket.podManagementStrategy }}
-  serviceName: {{ include "bitbucket.fullname" . }}
+  serviceName: {{ include "common.names.fullname" . }}
   selector:
     matchLabels:
-      {{- include "bitbucket.selectorLabels" . | nindent 6 }}
+      {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -25,14 +25,14 @@ spec:
         {{- if .Values.fluentd.enabled }}
         checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
         {{- end }}
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "bitbucket.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "bitbucket.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.selectorLabels" . | nindent 8 }}
+        {{- include "bitbucket.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.bitbucket.securityContextEnabled }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -44,6 +44,7 @@ spec:
         fsGroup: 2003
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
@@ -79,7 +80,7 @@ spec:
           readinessProbe:
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
-              path: "/status"
+              path: {{ .Values.bitbucket.service.contextPath }}/status
             periodSeconds: 5
             failureThreshold: 60
             initialDelaySeconds: 10
@@ -133,11 +134,13 @@ spec:
             {{- end }}
             {{- if and .Values.bitbucket.sshService.enabled (not (empty .Values.bitbucket.sshService.host)) }}
             - name: PLUGIN_SSH_BASEURL
-              value: ssh://{{ .Values.bitbucket.sshService.host }}{{ if ne (default .Values.bitbucket.sshService.port "22") "22" }}:{{ .Values.bitbucket.sshService.port }}{{ end }}/
+              value: ssh://{{ .Values.bitbucket.sshService.host }}{{ if ne (int .Values.bitbucket.sshService.port) 22 }}:{{ .Values.bitbucket.sshService.port }}{{ end }}/
             {{- end }}
             {{ end }}
             - name: SERVER_CONTEXT_PATH
               value: {{ include "bitbucket.ingressPath" . | quote }}
+            - name: SERVER_PORT
+              value: {{ .Values.bitbucket.ports.http | quote }}
             {{ if .Values.ingress.https }}
             - name: SERVER_SCHEME
               value: "https"
@@ -167,17 +170,17 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "bitbucket.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "bitbucket.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: {{ include "bitbucket.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: APPLICATION_MODE
               value: {{ .Values.bitbucket.applicationMode | default "default" | quote }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}

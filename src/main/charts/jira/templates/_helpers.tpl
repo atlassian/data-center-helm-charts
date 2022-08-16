@@ -1,37 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "jira.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "jira.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "jira.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
 Create default value for ingress port
 */}}
 {{- define "jira.ingressPort" -}}
@@ -60,7 +28,7 @@ else just use the "default" service account.
 {{- .Values.serviceAccount.name -}}
 {{- else -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "jira.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- else -}}
 default
 {{- end -}}
@@ -68,26 +36,12 @@ default
 {{- end }}
 
 {{/*
-Common labels
+Pod labels
 */}}
-{{- define "jira.labels" -}}
-helm.sh/chart: {{ include "jira.chart" . }}
-{{ include "jira.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ with .Values.additionalLabels }}
+{{- define "jira.podLabels" -}}
+{{ with .Values.podLabels }}
 {{- toYaml . }}
 {{- end }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "jira.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "jira.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
@@ -148,7 +102,16 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 {{- end }}
 
 {{/*
-Defining additional init containers here instead of in values.yaml to allow template overrides
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "jira.podAnnotations" -}}
+{{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "jira.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
@@ -157,7 +120,7 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{- end }}
 
 {{/*
-Defining additional containers here instead of in values.yaml to allow template overrides
+Define additional containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "jira.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
@@ -166,7 +129,7 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "jira.additionalPorts" -}}
 {{- with .Values.jira.additionalPorts }}
@@ -175,7 +138,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional volume mounts here instead of in values.yaml to allow template overrides
+Define additional volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "jira.additionalVolumeMounts" -}}
 {{- with .Values.jira.additionalVolumeMounts }}
@@ -184,7 +147,7 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 {{- end }}
 
 {{/*
-Defining additional environment variables here instead of in values.yaml to allow template overrides
+Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "jira.additionalEnvironmentVariables" -}}
 {{- with .Values.jira.additionalEnvironmentVariables }}
@@ -247,7 +210,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
-    claimName: {{ include "jira.fullname" . }}-shared-home
+    claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else }}
 {{ if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
@@ -258,8 +221,9 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "jira.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
+{{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.jira.additionalVolumeClaimTemplates }}
 volumeClaimTemplates:
+{{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:
     name: local-home
   spec:
@@ -271,6 +235,20 @@ volumeClaimTemplates:
     resources:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+{{- end }}
+{{- range .Values.jira.additionalVolumeClaimTemplates }}
+- metadata:
+    name: {{ .name }}
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .storageClassName }}
+    storageClassName: {{ .storageClassName | quote }}
+    {{- end }}
+    {{- with .resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 

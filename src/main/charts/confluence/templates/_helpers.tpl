@@ -1,35 +1,17 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Create default value for ingress port
 */}}
-{{- define "confluence.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "confluence.ingressPort" -}}
+{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
 {{- end }}
 
 {{/*
 The name the synchrony app within the chart.
-TODO: This will break if the confluence.name exceeds 63 characters, need to find a more rebust way to do this
+TODO: This will break if the common.names.name exceeds 63 characters, need to find a more rebust way to do this
 */}}
 {{- define "synchrony.name" -}}
-{{ include "confluence.name" . }}-synchrony
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "confluence.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
+{{ include "common.names.name" . }}-synchrony
 {{- end }}
 
 {{/*
@@ -37,14 +19,7 @@ The full-qualfied name of the synchrony app within the chart.
 TODO: This will break if the confluence.fullname exceeds 63 characters, need to find a more rebust way to do this
 */}}
 {{- define "synchrony.fullname" -}}
-{{ include "confluence.fullname" . }}-synchrony
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "confluence.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{ include "common.names.fullname" . }}-synchrony
 {{- end }}
 
 {{/*
@@ -58,7 +33,7 @@ else just use the "default" service account.
 {{- .Values.serviceAccount.name -}}
 {{- else -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "confluence.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- else -}}
 default
 {{- end -}}
@@ -74,7 +49,7 @@ else use the name of the Helm release.
 {{- if .Values.serviceAccount.clusterRole.name }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
-{{- include "confluence.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- end }}
 {{- end }}
 
@@ -92,25 +67,10 @@ else use the name of the ClusterRole.
 {{- end }}
 
 {{/*
-These labels will be applied to all Confluence (non-Synchrony) resources in the chart
-*/}}
-{{- define "confluence.labels" -}}
-helm.sh/chart: {{ include "confluence.chart" . }}
-{{ include "confluence.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ with .Values.additionalLabels }}
-{{- toYaml . }}
-{{- end }}
-{{- end }}
-
-{{/*
 These labels will be applied to all Synchrony resources in the chart
 */}}
 {{- define "synchrony.labels" -}}
-helm.sh/chart: {{ include "confluence.chart" . }}
+helm.sh/chart: {{ include "common.names.chart" . }}
 {{ include "synchrony.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -125,7 +85,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels for finding Confluence (non-Synchrony) resources
 */}}
 {{- define "confluence.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "confluence.name" . }}
+app.kubernetes.io/name: {{ include "common.names.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -135,6 +95,15 @@ Selector labels for finding Synchrony resources
 {{- define "synchrony.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "synchrony.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Pod labels
+*/}}
+{{- define "confluence.podLabels" -}}
+{{ with .Values.podLabels }}
+{{- toYaml . }}
+{{- end }}
 {{- end }}
 
 {{- define "confluence.sysprop.hazelcastListenPort" -}}
@@ -159,11 +128,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
--Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
+    {{- if .Values.ingress.https -}}
+    -Dsynchrony.service.url=https://{{ .Values.ingress.host }}/synchrony/v1
+    {{- else }}
+    -Dsynchrony.service.url=http://{{ .Values.ingress.host }}/synchrony/v1
+    {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true
 {{- end -}}
-{{- end }}
+{{- end -}}
 
 {{/*
 Create default value for ingress path
@@ -272,7 +245,16 @@ For each additional Synchrony library declared, generate a volume mount that inj
 {{- end }}
 
 {{/*
-Defining additional init containers here instead of in values.yaml to allow template overrides
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "confluence.podAnnotations" -}}
+{{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
@@ -281,15 +263,16 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{- end }}
 
 {{/*
-Defining additional hosts here instead of in values.yaml to allow template overrides
+Define additional hosts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalHosts" -}}
-{{- range .Values.additionalHosts }}
+{{- with .Values.additionalHosts }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 
 {{/*
-Defining additional containers here instead of in values.yaml to allow template overrides
+Define additional containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
@@ -298,7 +281,7 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "confluence.additionalPorts" -}}
 {{- with .Values.confluence.additionalPorts }}
@@ -307,7 +290,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "synchrony.additionalPorts" -}}
 {{- with .Values.synchrony.additionalPorts }}
@@ -316,7 +299,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional volume mounts here instead of in values.yaml to allow template overrides
+Define additional Confluence volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalVolumeMounts" -}}
 {{- with .Values.confluence.additionalVolumeMounts }}
@@ -325,7 +308,16 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 {{- end }}
 
 {{/*
-Defining additional environment variables here instead of in values.yaml to allow template overrides
+Define additional Synchrony volume mounts here to allow template overrides when used as a sub chart
+*/}}
+{{- define "synchrony.additionalVolumeMounts" -}}
+{{- with .Values.synchrony.additionalVolumeMounts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalEnvironmentVariables" -}}
 {{- with .Values.confluence.additionalEnvironmentVariables }}
@@ -363,7 +355,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{ include "synchrony.volumes.synchronyHome" . }}
 {{- end }}
 {{ include "confluence.volumes.sharedHome" . }}
-{{- with .Values.volumes.additional }}
+{{- with .Values.volumes.additionalSynchrony }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
 {{- end }}
@@ -394,7 +386,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
-    claimName: {{ include "confluence.fullname" . }}-shared-home
+    claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else }}
 {{ if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
@@ -405,8 +397,9 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "confluence.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
+{{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.confluence.additionalVolumeClaimTemplates }}
 volumeClaimTemplates:
+{{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:
     name: local-home
   spec:
@@ -418,6 +411,20 @@ volumeClaimTemplates:
     resources:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+{{- end }}
+{{- range .Values.confluence.additionalVolumeClaimTemplates }}
+- metadata:
+    name: {{ .name }}
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .storageClassName }}
+    storageClassName: {{ .storageClassName | quote }}
+    {{- end }}
+    {{- with .resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 
@@ -487,11 +494,11 @@ volumeClaimTemplates:
     fieldRef:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-  value: {{ include "confluence.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 - name: ATL_CLUSTER_TYPE
   value: "kubernetes"
 - name: ATL_CLUSTER_NAME
-  value: {{ include "confluence.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 {{ end }}
 {{ end }}
 

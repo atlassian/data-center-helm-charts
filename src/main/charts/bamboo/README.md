@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.1](https://img.shields.io/badge/AppVersion-8.1.1-informational?style=flat-square)
+![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.2.3](https://img.shields.io/badge/AppVersion-8.2.3-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -16,6 +16,10 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 ## Requirements
 
 Kubernetes: `>=1.19.x-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://atlassian.github.io/data-center-helm-charts | common | 1.0.0 |
 
 ## Values
 
@@ -33,6 +37,7 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Bamboo JVM, e.g.  system properties. |
 | bamboo.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bamboo container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | bamboo.additionalPorts | list | `[]` | Defines any additional ports for the Bamboo container. |
+| bamboo.additionalVolumeClaimTemplates | list | `[]` | Defines additional volumeClaimTemplates that should be applied to the Bamboo pod. Note that this will not create any corresponding volume mounts; those needs to be defined in bamboo.additionalVolumeMounts |
 | bamboo.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bamboo container. These  can refer to existing volumes, or new volumes can be defined via  'volumes.additional'. |
 | bamboo.brokerUrl | string | `nil` | Override the server/agent broker URL; this is optional. |
 | bamboo.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
@@ -51,11 +56,13 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo pod |
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bamboo JVM |
-| bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image GID will default to 2005 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bamboo.securityContextEnabled | bool | `true` |  |
 | bamboo.securityToken.secretKey | string | `"security-token"` | The key (default `secretKey`) in the Secret used to store the Bamboo shared key. |
 | bamboo.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token will overrided the generated one. This secret should also be shared with the agent deployment. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH  will be set automatically. |
+| bamboo.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen |
 | bamboo.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bamboo |
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour. |
@@ -94,11 +101,16 @@ Kubernetes: `>=1.19.x-0`
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'  controller.  https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to  the K8s ingress-nginx controller. Set to 'false' if a different controller is  to be used, in which case the appropriate annotations for that controller must  be specified below under 'ingress.annotations'. |
 | ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bamboo'. Based on a  'ingress.host' value of 'company.k8s.com' this would result in a URL of  'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextPath' |
+| ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds. |
+| ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed. |
+| ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding  certificate. When utilised, TLS termination occurs at the ingress point where  traffic to the Service and it's Pods is in plaintext.  Usage is optional and depends on your use case. The Ingress Controller itself  can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo pods |
+| podLabels | object | `{}` | Custom labels that will be applied to all Bamboo pods |
 | replicaCount | int | `1` | The initial number of Bamboo pods that should be started at deployment time.  Note that Bamboo requires manual configuration via the browser post deployment  after the first pod is deployed.  At present Bamboo Data Center utilizes an `active-passive` clustering model.  This architecture is not ideal where K8s deployments are concerned. As such  a Bamboo server cluster comprising only `1` pod is the recommended topology  for now. For more detail see: https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS#cluster-size |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
+| serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created) |
 | serviceAccount.create | bool | `true` | Set to 'true' if a ServiceAccount should be created, or 'false' if it  already exists. |
 | serviceAccount.imagePullSecrets | list | `[]` | For Docker images hosted in private registries, define the list of image pull  secrets that should be utilized by the created ServiceAccount https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to be used by the pods. If not specified, but  the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name  will be auto-generated, otherwise the 'default' ServiceAccount will be used. https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server |

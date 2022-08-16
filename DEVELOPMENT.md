@@ -1,5 +1,13 @@
 # Development
 
+## Chart dependencies
+
+Product charts are using a common library chart (`common`). To download the dependency, you are required to run:
+
+```bash
+for d in ./src/main/charts/*/ ; do (cd $d && helm dependency update); done
+```
+
 ## Pre-commit hooks
 
 Repository contains repository hook definition to auto-generate chart documentation in case there is a change to `values.yaml` file.

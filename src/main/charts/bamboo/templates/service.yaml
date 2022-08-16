@@ -1,19 +1,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "bamboo.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-  {{- include "bamboo.labels" . | nindent 4 }}
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
   {{- with .Values.bamboo.service.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.bamboo.service.type }}
+  {{- if and (eq .Values.bamboo.service.type "LoadBalancer") (not (empty .Values.bamboo.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.bamboo.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.bamboo.service.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-  {{- include "bamboo.selectorLabels" . | nindent 4 }}
+  {{- include "common.labels.selectorLabels" . | nindent 4 }}

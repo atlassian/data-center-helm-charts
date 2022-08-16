@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.17.1-jdk11](https://img.shields.io/badge/AppVersion-7.17.1--jdk11-informational?style=flat-square)
+![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.21.1](https://img.shields.io/badge/AppVersion-7.21.1-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
@@ -17,6 +17,10 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 
 Kubernetes: `>=1.19.x-0`
 
+| Repository | Name | Version |
+|------------|------|---------|
+| https://atlassian.github.io/data-center-helm-charts | common | 1.0.0 |
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -31,6 +35,7 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties. |
 | bitbucket.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Bitbucket container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | bitbucket.additionalPorts | list | `[]` | Defines any additional ports for the Bitbucket container. |
+| bitbucket.additionalVolumeClaimTemplates | list | `[]` | Defines additional volumeClaimTemplates that should be applied to the Bitbucket pod. Note that this will not create any corresponding volume mounts; those needs to be defined in bitbucket.additionalVolumeMounts |
 | bitbucket.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Bitbucket container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'. |
 | bitbucket.applicationMode | string | `"default"` | Application Mode This can be either 'default' or 'mirror' |
 | bitbucket.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
@@ -54,18 +59,21 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bitbucket pod |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
 | bitbucket.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
-| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image If not supplied, will default to 2003. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image GID will default to 2003 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bitbucket.securityContextEnabled | bool | `true` |  |
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use. |
+| bitbucket.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s Service will listen |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket |
 | bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour. |
 | bitbucket.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/shutdown-wait.sh) for details. |
 | bitbucket.shutdown.terminationGracePeriodSeconds | int | `35` | The termination grace period for pods during shutdown. This should be set to the Bitbucket internal grace period (default 30 seconds), plus a small buffer to allow the JVM to fully terminate. |
-| bitbucket.sshService | object | `{"annotations":{},"enabled":false,"host":null,"port":22,"type":"LoadBalancer"}` | Enable or disable an additional service for exposing SSH for external access. Disable when the SSH service is exposed through the ingress controller, or enable if the ingress controller does not support TCP. |
+| bitbucket.sshService | object | `{"annotations":{},"enabled":false,"host":null,"loadBalancerIP":null,"port":22,"type":"LoadBalancer"}` | Enable or disable an additional service for exposing SSH for external access. Disable when the SSH service is exposed through the ingress controller, or enable if the ingress controller does not support TCP. |
 | bitbucket.sshService.annotations | object | `{}` | Annotations for the SSH service. Useful if a load balancer controller needs extra annotations. |
 | bitbucket.sshService.enabled | bool | `false` | Set to 'true' if an additional SSH Service should be created |
 | bitbucket.sshService.host | string | `nil` | The hostname of the SSH service. If set, it'll be used to configure the SSH base URL for the application. |
+| bitbucket.sshService.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | bitbucket.sshService.port | int | `22` | Port to expose the SSH service on. |
 | bitbucket.sshService.type | string | `"LoadBalancer"` | SSH Service type |
 | bitbucket.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret that contains the sysadmin display name |
@@ -99,11 +107,16 @@ Kubernetes: `>=1.19.x-0`
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'. |
 | ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bitbucket'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextPath'. |
+| ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds. |
+| ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed. |
+| ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext. Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket pods |
+| podLabels | object | `{}` | Custom labels that will be applied to all Bitbucket pods |
 | replicaCount | int | `1` | The initial number of Bitbucket pods that should be started at deployment time. Note that if Bitbucket is fully configured (see above) during initial deployment a 'replicaCount' greater than 1 can be supplied. |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bitbucket pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
+| serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created) |
 | serviceAccount.clusterRole.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |
 | serviceAccount.clusterRole.name | string | `nil` | The name of the ClusterRole to be used. If not specified, but the "serviceAccount.clusterRole.create" flag is set to 'true', then the ClusterRole name will be auto-generated. |
 | serviceAccount.clusterRoleBinding.create | bool | `true` | Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it already exists. |

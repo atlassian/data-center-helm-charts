@@ -6,3 +6,6 @@ contact_links:
   - name: Helm installation issues
     url: https://support.atlassian.com/contact/
     about: Contact Atlassian Support with issues relating to Helm installation
+  - name: Q & A Community forum
+    url: https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes
+    about: For anyone who’s interested in learning more about K8s, and how they can deploy their Data Center products using the Helm Charts

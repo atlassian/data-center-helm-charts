@@ -1,6 +1,6 @@
 # bamboo-agent
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.1](https://img.shields.io/badge/AppVersion-8.1.1-informational?style=flat-square)
+![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.2.3](https://img.shields.io/badge/AppVersion-8.2.3-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center remote agents on Kubernetes
 
@@ -16,6 +16,10 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 ## Requirements
 
 Kubernetes: `>=1.19.x-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://atlassian.github.io/data-center-helm-charts | common | 1.0.0 |
 
 ## Values
 
@@ -36,7 +40,8 @@ Kubernetes: `>=1.19.x-0`
 | agent.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo agent pod |
 | agent.resources.jvm.maxHeap | string | `"512m"` | The maximum amount of heap memory that will be used by the Bamboo agent JVM |
 | agent.resources.jvm.minHeap | string | `"256m"` | The minimum amount of heap memory that will be used by the Bamboo agent JVM |
-| agent.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| agent.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image GID will default to 2005 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| agent.securityContextEnabled | bool | `true` |  |
 | agent.securityToken.secretKey | string | `"security-token"` |  |
 | agent.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token  will be automatically utilised on agent boot. An Example of creating a K8s secret for the  secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | agent.server | string | `nil` |  |
@@ -52,8 +57,10 @@ Kubernetes: `>=1.19.x-0`
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo agent pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo agent pods |
+| podLabels | object | `{}` | Custom labels that will be applied to all Bamboo agent pods |
 | replicaCount | int | `1` | The initial number of Bamboo agent pods that should be started at deployment time.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo agent pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
+| serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created) |
 | serviceAccount.create | bool | `true` | Set to 'true' if a ServiceAccount should be created, or 'false' if it  already exists. |
 | serviceAccount.imagePullSecrets | list | `[]` | For Docker images hosted in private registries, define the list of image pull  secrets that should be utilized by the created ServiceAccount https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to be used by the pods. If not specified, but  the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name  will be auto-generated, otherwise the 'default' ServiceAccount will be used. https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server |

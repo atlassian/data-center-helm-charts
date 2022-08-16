@@ -15,18 +15,15 @@ spec:
     metadata:
       annotations:
         checksum/config-jvm: {{ include (print $.Template.BasePath "/synchrony-start-script.yaml") . | sha256sum }}
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "confluence.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "synchrony.selectorLabels" . | nindent 8 }}
+        {{- include "confluence.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.synchrony.shutdown.terminationGracePeriodSeconds }}
       hostAliases:
-        {{- with .Values.additionalHosts }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "confluence.additionalHosts" . | nindent 8 }}
       containers:
         - name: synchrony
           image: {{ include "confluence.image" . | quote }}
@@ -34,6 +31,7 @@ spec:
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
             {{- include "synchrony.volumeMounts" . | nindent 12 }}
+            {{- include "synchrony.additionalVolumeMounts" . | nindent 12 }}
             {{- include "synchrony.additionalLibraries" . | nindent 12 }}
             - mountPath: /scripts
               name: entrypoint-script
@@ -64,7 +62,11 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
-              value: {{ .Values.synchrony.ingressUrl | quote }}
+            {{ if .Values.ingress.https }}
+              value: "https://{{ .Values.ingress.host }}/synchrony"
+            {{ else }}
+              value: "http://{{ .Values.ingress.host }}/synchrony"
+            {{- end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -89,8 +91,5 @@ spec:
             name: {{ include "synchrony.fullname" . }}-entrypoint
             defaultMode: 0744
         {{ include "synchrony.volumes" . | nindent 8 }}
-        {{ with .Values.volumes.additional }}
-        {{ toYaml . | nindent 8 }}
-        {{ end }}
   {{ include "synchrony.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}

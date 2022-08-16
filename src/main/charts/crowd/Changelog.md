@@ -1,5 +1,65 @@
 # Change Log
 
+## 1.5.0
+
+**Release date:** 2022-07-14
+
+![AppVersion: 5.0.1](https://img.shields.io/static/v1?label=AppVersion&message=5.0.1&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix: Use the custom ports for Crowd service (#419)
+* Update Crowd version to 5.0.1 (#430)
+
+## 1.4.0
+
+**Release date:** 2022-05-25
+
+![AppVersion: 5.0.0](https://img.shields.io/static/v1?label=AppVersion&message=5.0.0&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Make pod securityContext optional (#389)
+* Support for configuring ingress proxy settings via values.yaml (#402)
+* Fixed common.label error (#403)
+* Add ATL_PROXY_NAME and ATL_PROXY_PORT to Crowd (#407)
+* Update Crowd version to 5.0.0 (#412)
+
+## 1.3.0
+
+**Release date:** 2022-03-24
+
+![AppVersion: 4.4.1](https://img.shields.io/static/v1?label=AppVersion&message=4.4.1&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* Update Crowd version to 4.4.1 (#396)
+
+
+## 1.2.0
+
+**Release date:** 2022-02-14
+
+![AppVersion: 4.4.0-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=4.4.0-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+Crowd (1.1.0 -> 1.2.0)
+* Added missing JVM_SUPPORT_RECOMMENDED_ARGS env (#376)
+* Improvements on [documentation](https://github.com/atlassian/data-center-helm-charts/) (#370, #357)
+* Updated Atlassian charts to use common definitions (#303)
+* Added service account annotation (#363)
+* Added new feature additionalVolumeClaimTemplates and provided example in documentation (#334, #368)
+* Added new feature podLabels (#364)
+* Added new feature to define loadBalancerIP (#365)
+* Define podAnnotations as template to allow overrides (#341)
+* DCKUBE-738: Added topologySpreadConstraints to products (#351)
+* Set ActiveProcessorCount automatically based on Values.<product>.resources.container.requests.cpu (#352)
+* Added new feature additionalPorts (for jmx-monitoring) (#353)
+
+
 ## 1.1.0 
 
 **Release date:** 2021-11-03

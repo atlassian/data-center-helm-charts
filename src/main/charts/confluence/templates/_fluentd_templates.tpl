@@ -27,7 +27,7 @@
         fieldRef:
           fieldPath: status.podIP
     - name: HELM_RELEASE_NAME
-      value: {{ include "confluence.fullname" . }}
+      value: {{ include "common.names.fullname" . }}
 {{ end }}
 {{ end }}
 
@@ -35,6 +35,6 @@
 {{ if .Values.fluentd.enabled }}
 - name: fluentd-config
   configMap:
-    name: {{ include "confluence.fullname" . }}-fluentd-config
+    name: {{ include "common.names.fullname" . }}-fluentd-config
 {{ end }}
 {{ end }}

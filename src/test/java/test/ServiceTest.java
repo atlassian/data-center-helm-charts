@@ -52,10 +52,25 @@ class ServiceTest {
 
         final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
 
-        assertThat(service.getMetadata().path("annotations")).isObject(Map.of(
+        assertThat(service.getAnnotations()).isObject(Map.of(
                 "testAnnotation1", "test1",
                 "testAnnotation1.property", "test1.1",
                 "testAnnotation2", "test2"
         ));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_loadbalancer_type(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.type", "LoadBalancer",
+                product + ".service.loadBalancerIP", "1.1.1.1"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getType())
+                .hasTextEqualTo("LoadBalancer");
+        assertThat(service.getLoadBalancerIP()).hasTextEqualTo("1.1.1.1");
     }
 }

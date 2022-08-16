@@ -68,6 +68,10 @@ serviceAccount:
   #
   imagePullSecrets: []
   # - name: secretName
+
+  # -- Annotations to add to the ServiceAccount (if created)
+  #
+  annotations: {}
   
    # Define permissions
    # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
@@ -338,12 +342,18 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/confluence"
 
-  # -- Defines additional volumes that should be applied to all Confluence and Synchrony pods.
+  # -- Defines additional volumes that should be applied to all Confluence pods.
   # Note that this will not create any corresponding volume mounts;
   # those needs to be defined in confluence.additionalVolumeMounts
   #
   additional: []
-  
+
+  # -- Defines additional volumes that should be applied to all Synchrony pods.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in synchrony.additionalVolumeMounts
+  #
+  additionalSynchrony: []
+
 # Ingress configuration
 #
 # To make the Atlassian product available from outside the K8s cluster an Ingress
@@ -382,6 +392,25 @@ ingress:
   #
   maxBodySize: 250m
   
+  # -- Defines a timeout for establishing a connection with a proxied server. It should
+  # be noted that this timeout cannot usually exceed 75 seconds.
+  #
+  proxyConnectTimeout: 60
+
+  # -- Defines a timeout for reading a response from the proxied server. The timeout is
+  # set only between two successive read operations, not for the transmission of the
+  # whole response. If the proxied server does not transmit anything within this time,
+  # the connection is closed.
+  #
+  proxyReadTimeout: 60
+
+  # -- Sets a timeout for transmitting a request to the proxied server. The timeout is set
+  # only between two successive write operations, not for the transmission of the whole
+  # request. If the proxied server does not receive anything within this time, the
+  # connection is closed.
+  #
+  proxySendTimeout: 60
+
   # -- The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on
   # this hostname will be routed by the Ingress Resource to the appropriate backend
   # Service.
@@ -429,7 +458,11 @@ confluence:
     # -- The type of K8s service to use for Confluence
     #
     type: ClusterIP
-    
+
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH
     # will be set automatically.
     #
@@ -443,10 +476,15 @@ confluence:
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
+
+  # -- Whether to apply security context to pod.
+  #
+  securityContextEnabled: true
+
   securityContext:
 
     # -- The GID used by the Confluence docker image
-    # If not supplied, will default to 2002
+    # GID will default to 2002 if not supplied and securityContextEnabled is set to true.
     # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
     # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     fsGroup: 2002
@@ -661,6 +699,17 @@ confluence:
   #    containerPort: 5555
   #    protocol: TCP
 
+  # -- Defines additional volumeClaimTemplates that should be applied to the Confluence pod.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in confluence.additionalVolumeMounts
+  #
+  additionalVolumeClaimTemplates: []
+  #  - name: myadditionalvolumeclaim
+  #    storageClassName:
+  #    resources:
+  #      requests:
+  #        storage: 1Gi
+
   # -- Defines topology spread constraints for Confluence pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
@@ -701,6 +750,9 @@ synchrony:
     #
     type: ClusterIP
 
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
 
   # -- Boolean to define whether to set synchrony home directory permissions on startup
   # of Synchrony container. Set to 'false' to disable this behaviour.
@@ -786,12 +838,6 @@ synchrony:
     # should be set to the Synchrony internal grace period (default 20
     # seconds), plus a small buffer to allow the JVM to fully terminate.
     terminationGracePeriodSeconds: 25
-        
-  # -- The base URL of the Synchrony service. This will be the URL that users' browsers will
-  # be given to communicate with Synchrony, as well as the URL that the Confluence service
-  # will use to communicate directly with Synchrony, so the URL must be resolvable both from
-  # inside and outside the Kubernetes cluster.
-  ingressUrl:
   
   # -- Specifies a list of additional Java libraries that should be added to the
   # Synchrony container. Each item in the list should specify the name of the volume
@@ -804,6 +850,12 @@ synchrony:
   #   - volumeName:
   #     subDirectory:
   #     fileName:
+
+  # -- Defines any additional volumes mounts for the Synchrony container. These
+  # can refer to existing volumes, or new volumes can be defined via
+  # 'volumes.additionalSynchrony'.
+  #
+  additionalVolumeMounts: []
 
   # -- Defines any additional ports for the Synchrony container.
   #
@@ -902,6 +954,11 @@ fluentd:
 # -- Custom annotations that will be applied to all Confluence pods
 #
 podAnnotations: {}
+#  name: <value>
+
+# -- Custom labels that will be applied to all Confluence pods
+#
+podLabels: {}
 #  name: <value>
 
 # -- Standard K8s node-selectors that will be applied to all Confluence pods

@@ -1,34 +1,9 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Create default value for ingress port
 */}}
-{{- define "crowd.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "crowd.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "crowd.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- define "crowd.ingressPort" -}}
+{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
 {{- end }}
 
 {{/*
@@ -42,7 +17,7 @@ else just use the "default" service account.
 {{- .Values.serviceAccount.name -}}
 {{- else -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "crowd.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- else -}}
 default
 {{- end -}}
@@ -58,7 +33,7 @@ else use the name of the Helm release.
 {{- if .Values.serviceAccount.clusterRole.name }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
-{{- include "crowd.fullname" . -}}
+{{- include "common.names.fullname" . -}}
 {{- end }}
 {{- end }}
 
@@ -76,26 +51,12 @@ else use the name of the ClusterRole.
 {{- end }}
 
 {{/*
-These labels will be applied to all Crowd resources in the chart
+Pod labels
 */}}
-{{- define "crowd.labels" -}}
-helm.sh/chart: {{ include "crowd.chart" . }}
-{{ include "crowd.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ with .Values.additionalLabels }}
+{{- define "crowd.podLabels" -}}
+{{ with .Values.podLabels }}
 {{- toYaml . }}
 {{- end }}
-{{- end }}
-
-{{/*
-Selector labels for finding Crowd resources
-*/}}
-{{- define "crowd.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "crowd.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "crowd.sysprop.hazelcastListenPort" -}}
@@ -183,7 +144,16 @@ For each additional library declared, generate a volume mount that injects that 
 {{- end }}
 
 {{/*
-Defining additional init containers here instead of in values.yaml to allow template overrides
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "crowd.podAnnotations" -}}
+{{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "crowd.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
@@ -192,7 +162,7 @@ Defining additional init containers here instead of in values.yaml to allow temp
 {{- end }}
 
 {{/*
-Defining additional containers here instead of in values.yaml to allow template overrides
+Define additional containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "crowd.additionalContainers" -}}
 {{- with .Values.additionalContainers }}
@@ -201,7 +171,7 @@ Defining additional containers here instead of in values.yaml to allow template 
 {{- end }}
 
 {{/*
-Defining additional ports here instead of in values.yaml to allow template overrides
+Define additional ports here instead of in values.yaml to allow template overrides
 */}}
 {{- define "crowd.additionalPorts" -}}
 {{- with .Values.crowd.additionalPorts }}
@@ -210,7 +180,7 @@ Defining additional ports here instead of in values.yaml to allow template overr
 {{- end }}
 
 {{/*
-Defining additional volume mounts here instead of in values.yaml to allow template overrides
+Define additional volume mounts here to allow template overrides when used as a sub chart
 */}}
 {{- define "crowd.additionalVolumeMounts" -}}
 {{- with .Values.crowd.additionalVolumeMounts }}
@@ -219,7 +189,7 @@ Defining additional volume mounts here instead of in values.yaml to allow templa
 {{- end }}
 
 {{/*
-Defining additional environment variables here instead of in values.yaml to allow template overrides
+Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
 {{- define "crowd.additionalEnvironmentVariables" -}}
 {{- with .Values.crowd.additionalEnvironmentVariables }}
@@ -267,7 +237,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
   persistentVolumeClaim:
-    claimName: {{ include "crowd.fullname" . }}-shared-home
+    claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else }}
 {{ if .Values.volumes.sharedHome.customVolume }}
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
@@ -278,8 +248,9 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "crowd.volumeClaimTemplates" -}}
-{{ if .Values.volumes.localHome.persistentVolumeClaim.create }}
+{{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.crowd.additionalVolumeClaimTemplates }}
 volumeClaimTemplates:
+{{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:
     name: local-home
   spec:
@@ -292,6 +263,20 @@ volumeClaimTemplates:
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
+{{- range .Values.crowd.additionalVolumeClaimTemplates }}
+- metadata:
+    name: {{ .name }}
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .storageClassName }}
+    storageClassName: {{ .storageClassName | quote }}
+    {{- end }}
+    {{- with .resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "crowd.clusteringEnvVars" -}}
@@ -301,11 +286,11 @@ volumeClaimTemplates:
     fieldRef:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
-  value: {{ include "crowd.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 - name: ATL_CLUSTER_TYPE
   value: "kubernetes"
 - name: ATL_CLUSTER_NAME
-  value: {{ include "crowd.fullname" . | quote }}
+  value: {{ include "common.names.fullname" . | quote }}
 {{ end }}
 {{ end }}
 

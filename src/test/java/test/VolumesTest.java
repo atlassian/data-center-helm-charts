@@ -13,8 +13,8 @@ import java.util.Map;
 
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static test.jackson.JsonNodeAssert.assertThat;
-import static test.model.Kind.PersistentVolumeClaim;
 import static test.model.Kind.PersistentVolume;
+import static test.model.Kind.PersistentVolumeClaim;
 import static test.model.Synchrony.synchronyStatefulSetName;
 
 /**
@@ -212,6 +212,33 @@ class VolumesTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_additional_volume(Product product) throws Exception {
+        String volumeName = "cache";
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.additionalSynchrony[0].name", volumeName,
+                "volumes.additionalSynchrony[0].emptyDir", "{}",
+                "synchrony.additionalVolumeMounts[0].name", "cache-mount",
+                "synchrony.additionalVolumeMounts[0].volumeName", volumeName,
+                "synchrony.additionalVolumeMounts[0].mountPath", "/path"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+
+        long additionalCacheVolumeCount = statefulSet.getVolumes()
+                .findValues("name")
+                .stream()
+                .filter(it -> it.textValue().contains(volumeName))
+                .count();
+        Assertions.assertThat(additionalCacheVolumeCount).isEqualTo(1);
+
+        assertThat(statefulSet.getContainer("synchrony").getVolumeMount("cache-mount"))
+                .isObject(
+                        Map.of("mountPath", "/path", "volumeName", volumeName));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
     void synchronyHome_pvc_custom(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true",
@@ -231,6 +258,26 @@ class VolumesTest {
         final var mount = statefulSet.getContainer("synchrony").getVolumeMount("synchrony-home");
         assertThat(mount.get("name")).hasTextEqualTo("synchrony-home");
         assertThat(mount.get("mountPath")).hasTextEqualTo("/foo/bar");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additionalVolumeClaimTemplate(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname + ".additionalVolumeClaimTemplates[0].name", "my-additional-volume-claim-template",
+                pname + ".additionalVolumeClaimTemplates[0].storageClassName", "foo",
+                pname + ".additionalVolumeClaimTemplates[0].resources.requests.storage", "2Gi"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+
+        final var additionalVolumeClaimTemplate = statefulSet.getVolumeClaimTemplates().head();
+        verifyVolumeClaimTemplate(additionalVolumeClaimTemplate, "my-additional-volume-claim-template", "ReadWriteOnce");
+        assertThat(additionalVolumeClaimTemplate.path("spec").path("storageClassName"))
+                .hasTextEqualTo("foo");
+        assertThat(additionalVolumeClaimTemplate.path("spec").path("resources").path("requests").path("storage"))
+                .hasTextEqualTo("2Gi");
     }
 
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {

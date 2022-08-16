@@ -1,6 +1,6 @@
 # crowd
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.4.0-jdk11](https://img.shields.io/badge/AppVersion-4.4.0--jdk11-informational?style=flat-square)
+![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0.0](https://img.shields.io/badge/AppVersion-5.0.0-informational?style=flat-square)
 
 A chart for installing Crowd Data Center on Kubernetes
 
@@ -16,6 +16,10 @@ For installation please follow [the documentation](https://atlassian.github.io/d
 ## Requirements
 
 Kubernetes: `>=1.19.x-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://atlassian.github.io/data-center-helm-charts | common | 1.0.0 |
 
 ## Values
 
@@ -35,6 +39,7 @@ Kubernetes: `>=1.19.x-0`
 | crowd.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g. system properties. |
 | crowd.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Crowd container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/ |
 | crowd.additionalPorts | list | `[]` | Defines any additional ports for the Crowd container. |
+| crowd.additionalVolumeClaimTemplates | list | `[]` | Defines additional volumeClaimTemplates that should be applied to the Crowd pod. Note that this will not create any corresponding volume mounts; those needs to be defined in crowd.additionalVolumeMounts |
 | crowd.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Crowd container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | crowd.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes. |
 | crowd.clustering.usePodNameAsClusterNodeName | bool | `true` | Set to 'true' if the K8s pod name should be used as the end-user-visible name of the Data Center cluster node. |
@@ -48,8 +53,10 @@ Kubernetes: `>=1.19.x-0`
 | crowd.resources.container.requests.memory | string | `"1G"` | Initial Memory request by Crowd pod |
 | crowd.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Crowd JVM |
 | crowd.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Crowd JVM |
-| crowd.securityContext.fsGroup | int | `2004` | The GID used by the Crowd docker image If not supplied, will default to 2004 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| crowd.securityContext.fsGroup | int | `2004` | The GID used by the Crowd docker image GID will default to 2004 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| crowd.securityContextEnabled | bool | `true` |  |
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service |
+| crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen |
 | crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd |
 | crowd.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Crowd container. Set to 'false' to disable this behaviour. |
@@ -79,11 +86,16 @@ Kubernetes: `>=1.19.x-0`
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client. |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/ This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'. |
 | ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/crowd'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/crowd' |
+| ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds. |
+| ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed. |
+| ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed. |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext. Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Crowd pods |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Crowd pods |
+| podLabels | object | `{}` | Custom labels that will be applied to all Crowd pods |
 | replicaCount | int | `1` | The initial number of Crowd pods that should be started at deployment time. Note that Crowd requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete. |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Crowd pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods |
+| serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created) |
 | serviceAccount.clusterRole.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |
 | serviceAccount.clusterRole.name | string | `nil` | The name of the ClusterRole to be used. If not specified, but the "serviceAccount.clusterRole.create" flag is set to 'true', then the ClusterRole name will be auto-generated. |
 | serviceAccount.clusterRoleBinding.create | bool | `true` | Set to 'true' if a ClusterRole should be created, or 'false' if it already exists. |

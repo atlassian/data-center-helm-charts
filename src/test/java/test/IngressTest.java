@@ -142,7 +142,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo", "crowd"})
     void jira_ingress_host_port(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.host", "myhost.mydomain",
@@ -154,7 +154,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo", "crowd"})
     void jira_ingress_port(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.host", "myhost.mydomain"));
@@ -165,7 +165,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo", "crowd"})
     void jira_ingress_port_http(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.host", "myhost.mydomain",
@@ -256,41 +256,6 @@ class IngressTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bamboo")
-    void bamboo_ingress_host_port(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.host", "myhost.mydomain",
-                "ingress.port", "666"));
-
-        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
-                .assertHasValue("ATL_PROXY_PORT", "666");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bamboo")
-    void bamboo_ingress_port(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.host", "myhost.mydomain"));
-
-        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
-                .assertHasValue("ATL_PROXY_PORT", "443");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bamboo")
-    void bamboo_ingress_port_http(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.host", "myhost.mydomain",
-                "ingress.https", "False"));
-
-        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
-                .assertHasValue("ATL_PROXY_PORT", "80");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bamboo")
     void bamboo_ingress_path_contextPath(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.create", "true",
@@ -351,6 +316,55 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_all_ingress_vals(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "true",
+                "ingress.path", "/bamboo"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain/bamboo");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_no_ingress_path(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "true"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_no_ingress_host(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.https", "true"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "http://localhost:8085/");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo")
+    void bamboo_atl_base_path_when_ingress_host_over_http(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.https", "false",
+                "ingress.path", "/bamboo"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
+                .assertHasValue("ATL_BASE_URL", "http://myhost.mydomain/bamboo");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_ingress_path_contextPath(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -366,7 +380,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/confluence-tmp",
-                "/confluence-tmp/synchrony",
+                "/synchrony",
                 "/confluence-tmp/setup",
                 "/confluence-tmp/bootstrap");
     }
@@ -406,7 +420,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/ingress",
-                "/ingress/synchrony",
+                "/synchrony",
                 "/ingress/setup",
                 "/ingress/bootstrap");
     }
@@ -446,7 +460,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/ingress",
-                "/ingress/synchrony",
+                "/synchrony",
                 "/ingress/setup",
                 "/ingress/bootstrap");
     }
@@ -508,6 +522,31 @@ class IngressTest {
                 "/",
                 "/setup",
                 "/bootstrap");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo", "bitbucket", "confluence", "crowd", "jira"})
+    void ingress_proxy_settings(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+
+        for (KubeResource ingress : ingresses) {
+                if ( ingress.getMetadata().path("name").asText().contains("-setup") ) {
+                    assertThat(ingress.getMetadata().path("annotations"))
+                        .isObject(Map.of(
+                            "nginx.ingress.kubernetes.io/proxy-connect-timeout", "300",
+                            "nginx.ingress.kubernetes.io/proxy-read-timeout", "300",
+                            "nginx.ingress.kubernetes.io/proxy-send-timeout", "300"));
+                } else {
+                    assertThat(ingress.getMetadata().path("annotations"))
+                        .isObject(Map.of(
+                            "nginx.ingress.kubernetes.io/proxy-connect-timeout", "60",
+                            "nginx.ingress.kubernetes.io/proxy-read-timeout", "60",
+                            "nginx.ingress.kubernetes.io/proxy-send-timeout", "60"));
+                }
+        }
     }
 
     private List<String> extractAllPaths(Traversable<KubeResource> ingresses) {

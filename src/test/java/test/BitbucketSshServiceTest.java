@@ -46,9 +46,11 @@ class BitbucketSshServiceTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "bitbucket.sshService.enabled", "true",
                 "bitbucket.sshService.port", "7999",
+                "bitbucket.sshService.host", "hostname",
                 "bitbucket.sshService.type", "ClusterIP",
                 "bitbucket.sshService.annotations.test" ,"test",
-                "bitbucket.sshService.annotations.test\\.property", "test"));
+                "bitbucket.sshService.annotations.test\\.property", "test",
+                "ingress.host", "hostname"));
 
         var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName() + "-ssh");
 
@@ -57,5 +59,8 @@ class BitbucketSshServiceTest {
         assertThat(service.getMetadata().path("annotations")).isObject(Map.of(
                 "test", "test",
                 "test.property", "test"));
+
+        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv().
+                assertHasValue("PLUGIN_SSH_BASEURL", "ssh://hostname:7999/");
     }
 }

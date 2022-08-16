@@ -68,6 +68,11 @@ serviceAccount:
   #
   imagePullSecrets: []
   # - name: secretName
+  
+  # -- Annotations to add to the ServiceAccount (if created)
+  #
+  annotations: {}
+  
 
 # REQUIRED - Database configuration
 #
@@ -313,6 +318,25 @@ ingress:
   #
   maxBodySize: 250m
   
+  # -- Defines a timeout for establishing a connection with a proxied server. It should
+  # be noted that this timeout cannot usually exceed 75 seconds.
+  #
+  proxyConnectTimeout: 60
+
+  # -- Defines a timeout for reading a response from the proxied server. The timeout is
+  # set only between two successive read operations, not for the transmission of the
+  # whole response. If the proxied server does not transmit anything within this time,
+  # the connection is closed.
+  #
+  proxyReadTimeout: 60
+
+  # -- Sets a timeout for transmitting a request to the proxied server. The timeout is set
+  # only between two successive write operations, not for the transmission of the whole
+  # request. If the proxied server does not receive anything within this time, the
+  # connection is closed.
+  #
+  proxySendTimeout: 60
+  
   # -- The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on
   # this hostname will be routed by the Ingress Resource to the appropriate backend
   # Service.
@@ -361,7 +385,11 @@ jira:
     # -- The type of K8s service to use for Jira
     #
     type: ClusterIP
-    
+
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
     # -- The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH
     # will be set automatically.
     #
@@ -375,10 +403,15 @@ jira:
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
+
+  # -- Whether to apply security context to pod.
+  #
+  securityContextEnabled: true
+
   securityContext:
 
     # -- The GID used by the Jira docker image
-    # If not supplied, will default to 2001
+    # GID will default to 2001 if not supplied and securityContextEnabled is set to true.
     # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container.
     # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
@@ -451,23 +484,6 @@ jira:
     # This will automatically configure cluster peer discovery between cluster nodes.
     #
     enabled: false
-
-  # Jira licensing details
-  #
-  license:
-  
-    # -- The name of the K8s Secret that contains the Jira license key. If specified, then
-    # the license will be automatically populated during Jira setup. Otherwise, it will
-    # need to be provided via the browser after initial startup. An Example of creating
-    # a K8s secret for the license below:
-    # 'kubectl create secret generic <secret-name> --from-literal=license-key=<license>
-    # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
-    #
-    secretName:
-    
-    # -- The key in the K8s Secret that contains the Jira license key
-    #
-    secretKey: license-key
 
   shutdown:
 
@@ -583,6 +599,17 @@ jira:
   #    containerPort: 5555
   #    protocol: TCP
 
+  # -- Defines additional volumeClaimTemplates that should be applied to the Jira pod.
+  # Note that this will not create any corresponding volume mounts;
+  # those needs to be defined in jira.additionalVolumeMounts
+  #
+  additionalVolumeClaimTemplates: []
+  #  - name: myadditionalvolumeclaim
+  #    storageClassName:
+  #    resources:
+  #      requests:
+  #        storage: 1Gi
+
   # -- Defines topology spread constraints for Jira pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
@@ -672,6 +699,11 @@ fluentd:
 # -- Custom annotations that will be applied to all Jira pods
 #
 podAnnotations: {}
+#  name: <value>
+
+# -- Custom labels that will be applied to all Jira pods
+#
+podLabels: {}
 #  name: <value>
 
 # -- Standard K8s node-selectors that will be applied to all Jira pods

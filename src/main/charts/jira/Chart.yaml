@@ -2,8 +2,8 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.1.0
-appVersion: 8.20.1-jdk11
+version: 1.5.0
+appVersion: 8.20.10
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Jira
@@ -19,40 +19,19 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
 deprecated: false
 annotations:
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
-      description: Add support for custom schedulerName
+      description: Use the custom ports for Jira service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/301
-    - kind: added
-      description: Bind EHCACHE ports as environmental variables
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/308
-    - kind: added
-      description: Enable configuring ingress.class name
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/313
-    - kind: removed
-      description: Cleanup redundant (not-used) jira.terminationGracePeriodSeconds
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/306
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Make security context more flexible
+      description: Jira updated to 8.20.10 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/321
-    - kind: added
-      description: Roll Statefulset Pods if ConfigMap changes
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/315
-    - kind: changed
-      description: Jira DC updated to 8.20.1 version (LTS)
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/345
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
+dependencies:
+  - name: common
+    version: 1.0.0
+    repository: https://atlassian.github.io/data-center-helm-charts

@@ -1,5 +1,78 @@
 # Change Log
 
+## 1.5.0
+
+**Release date:** 2022-07-14
+
+![AppVersion: 7.13.8](https://img.shields.io/static/v1?label=AppVersion&message=7.13.8&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix [SCALE-68](https://jira.atlassian.com/browse/SCALE-68): Use the custom ports for Confluence service (#419)
+* Fix [SCALE-69](https://jira.atlassian.com/browse/SCALE-69): Use the custom ports for Synchrony service (#419)
+* Fix [ISSUE-225](https://github.com/atlassian/data-center-helm-charts/issues/225): Fixed Synchrony ingress path (#429)
+* Update the default Confluence version to 7.13.8 (#430)
+
+## 1.4.1
+
+**Release date:** 2022-06-09
+
+![AppVersion: 7.13.7](https://img.shields.io/static/v1?label=AppVersion&message=7.13.7&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update the default Confluence version to 7.13.7 (#417) - Mitigate [CVE-2022-26134](https://confluence.atlassian.com/doc/confluence-security-advisory-2022-06-02-1130377146.html)
+
+
+## 1.4.0
+
+**Release date:** 2022-05-25
+
+![AppVersion: 7.13.6](https://img.shields.io/static/v1?label=AppVersion&message=7.13.6&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Make pod securityContext optional (#389)
+* Fixed additionalHosts (#392)
+* Support for configuring ingress proxy settings via values.yaml (#402)
+* Add ATL_PROXY_NAME and ATL_PROXY_PORT to Confluence (#407)
+* Update Confluence version to 7.13.6 (#412)
+
+
+## 1.3.0
+
+**Release date:** 2022-03-24
+
+![AppVersion: 7.13.5](https://img.shields.io/static/v1?label=AppVersion&message=7.13.5&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCD-1471: Add support for separate Synchrony volumes (#390)
+* Update Confluence version to 7.13.5 (#396)
+
+## 1.2.0
+
+**Release date:** 2022-02-14
+
+![AppVersion: 7.13.4-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=7.13.2-jdk11&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+
+* DCD-1452: Updated appVersion to the latest product LTS version. (#378)
+* Improvements on [documentation](https://github.com/atlassian/data-center-helm-charts/) (#370, #357)
+* Updated Atlassian charts to use common definitions (#303)
+* Added service account annotation (#363)
+* Added new feature additionalVolumeClaimTemplates and provided example in documentation (#334, #368)
+* Added new feature podLabels (#364)
+* Added new feature to define loadBalancerIP (#365)
+* Define podAnnotations as template to allow overrides (#341)
+* DCKUBE-738: Added topologySpreadConstraints to products (#351)
+* Set ActiveProcessorCount automatically based on Values.<product>.resources.container.requests.cpu (#352)
+* Added new feature additionalPorts (for jmx-monitoring) (#353)
+
+
 ## 1.1.0 
 
 **Release date:** 2021-11-03

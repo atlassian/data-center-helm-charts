@@ -3,4 +3,5 @@ nav:
     - STORAGE.md
     - AWS: aws
     - NFS: nfs
+    - Additional Storage: additional storage
     - ...

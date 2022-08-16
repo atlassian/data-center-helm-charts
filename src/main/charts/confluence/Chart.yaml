@@ -2,8 +2,8 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.1.0
-appVersion: 7.13.2-jdk11
+version: 1.5.0
+appVersion: 7.13.8
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -20,33 +20,27 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Decrease Confluence failover time
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/299
     - kind: added
-      description: Add support for custom schedulerName
+      description: Use the custom ports for Confluence service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/301
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: added
-      description: Enable configuring ingress.class name
+      description: Use the custom ports for Synchrony service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/313
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Make security context more flexible
+      description: Fixed Synchrony ingress path
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/321
-    - kind: added
-      description: Roll Statefulset Pods if ConfigMap changes
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/315
+        url: https://github.com/atlassian/data-center-helm-charts/pull/429
     - kind: changed
-      description: Confluence DC updated to 7.13.2 version (LTS)
+      description: Confluence updated to 7.13.8 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/345
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
+dependencies:
+  - name: common
+    version: 1.0.0
+    repository: https://atlassian.github.io/data-center-helm-charts

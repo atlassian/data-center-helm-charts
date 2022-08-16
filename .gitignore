@@ -1,5 +1,8 @@
 .idea
+.vscode
+
 target
+__pycache__
 *.iml
 \#*\#
 docs/site
@@ -7,3 +10,6 @@ tmp
 .settings
 .project
 .classpath
+
+# ignore installed common library chart
+src/main/charts/*/charts/*.tgz

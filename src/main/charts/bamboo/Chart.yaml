@@ -2,8 +2,8 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: 0.0.2
-appVersion: 8.1.1
+version: 1.5.0
+appVersion: 8.2.4
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bamboo
@@ -18,30 +18,19 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-bamboo-server
 deprecated: false
 annotations:
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
-      description: Support for unattended setups
+      description: Use the custom ports for Bamboo service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/359
-    - kind: added
-      description: Add topologySpreadConstraints to products
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
+    - kind: changed
+      description: Bamboo updated to 8.2.4 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/351
-    - kind: added
-      description: Bamboo pre-seeding configuration
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/349
-    - kind: added
-      description: Initial agent support
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/335  
-    - kind: added
-      description: Add additionalPorts for the Bamboo Agent Deployment
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/353
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
+dependencies:
+  - name: common
+    version: 1.0.0
+    repository: https://atlassian.github.io/data-center-helm-charts

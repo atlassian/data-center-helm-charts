@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "jira.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "jira.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  serviceName: {{ include "jira.fullname" . }}
+  serviceName: {{ include "common.names.fullname" . }}
   selector:
     matchLabels:
-      {{- include "jira.selectorLabels" . | nindent 6 }}
+      {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -17,14 +17,14 @@ spec:
         {{- if .Values.fluentd.enabled }}
         checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
         {{- end }}
-        {{- with .Values.podAnnotations }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "jira.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "jira.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.selectorLabels" . | nindent 8 }}
+        {{- include "jira.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -36,6 +36,7 @@ spec:
         fsGroup: 2001
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
         {{- include "jira.additionalInitContainers" . | nindent 8 }}
@@ -68,6 +69,8 @@ spec:
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.jira.service.contextPath | quote }}
             {{ end }}
+            - name: ATL_TOMCAT_PORT
+              value: {{ .Values.jira.ports.http | quote }}
             {{ if .Values.ingress.host }}
             - name: ATL_PROXY_NAME
               value: {{ .Values.ingress.host | quote }}
@@ -76,13 +79,6 @@ spec:
             {{ end }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
-            {{ with .Values.jira.license.secretName }}
-            - name: JIRA_SETUP_LICENSE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ . }}
-                  key: {{ $.Values.jira.license.secretKey }}
-            {{ end }}
             - name: SET_PERMISSIONS
               value: {{ .Values.jira.setPermissions | quote }}
             - name: JIRA_SHARED_HOME
@@ -91,22 +87,22 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MINIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             - name: JVM_RESERVED_CODE_CACHE_SIZE
               valueFrom:
                 configMapKeyRef:
                   key: reserved_code_cache
-                  name: {{ include "jira.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config
             {{- include "jira.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http

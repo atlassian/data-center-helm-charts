@@ -2,8 +2,8 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.1.0
-appVersion: 7.17.1-jdk11
+version: 1.5.0
+appVersion: 7.21.2
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bitbucket
@@ -18,40 +18,19 @@ sources:
   - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
 deprecated: false
 annotations:
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
-      description: Add support for custom schedulerName
+      description: Use the custom ports for Bitbucket service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/301
-    - kind: added
-      description: Enable configuring ingress.class name
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/313
-    - kind: added
-      description: Add support for context path
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/314
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Make security context more flexible
+      description: Bitbucket updated to 7.21.2 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/321
-    - kind: added
-      description: Roll Statefulset Pods if ConfigMap changes
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/315
-    - kind: added
-      description: Add support for Bitbucket Mirrors
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/265
-    - kind: changed
-      description: Bitbucket DC updated to 7.17.1 version (LTS)
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/345
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
+dependencies:
+  - name: common
+    version: 1.0.0
+    repository: https://atlassian.github.io/data-center-helm-charts

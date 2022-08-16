@@ -21,5 +21,24 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.7.1
+
+      - name: Execute helm dependency update for bamboo chart
+        run: helm dependency update src/main/charts/bamboo
+      - name: Execute helm dependency update for bamboo-agent chart
+        run: helm dependency update src/main/charts/bamboo-agent
+      - name: Execute helm dependency update for bitbucket chart
+        run: helm dependency update src/main/charts/bitbucket
+      - name: Execute helm dependency update for confluence chart
+        run: helm dependency update src/main/charts/confluence
+      - name: Execute helm dependency update for crowd chart
+        run: helm dependency update src/main/charts/crowd
+      - name: Execute helm dependency update for jira chart
+        run: helm dependency update src/main/charts/jira
+
       - name: Run tests with Maven
         run: mvn -B test

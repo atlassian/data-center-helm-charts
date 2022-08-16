@@ -1,19 +1,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "jira.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels:
-    {{- include "jira.labels" . | nindent 4 }}
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
     {{- with .Values.jira.service.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   type: {{ .Values.jira.service.type }}
+  {{- if and (eq .Values.jira.service.type "LoadBalancer") (not (empty .Values.jira.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.jira.service.loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.jira.service.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- include "jira.selectorLabels" . | nindent 4 }}
+    {{- include "common.labels.selectorLabels" . | nindent 4 }}

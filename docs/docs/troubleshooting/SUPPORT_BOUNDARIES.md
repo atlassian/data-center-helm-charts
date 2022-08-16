@@ -23,7 +23,7 @@ As described in the [Prerequisites](../userguide/PREREQUISITES.md), you are resp
 If you find any issues, [raise a ticket with our support team](https://support.atlassian.com/contact/){.external}. If you have general feedback or questions regarding the charts, use [Atlassian Community Kubernetes space](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes){.external}.
 
 ## Unsupported components
-The [Prerequisites](../userguide/PREREQUISITES.md) can be created in multiple ways. You are responsible for creating them correctly so that hey can be used successfully with the Helm charts. Additional details on these prerequisites and their requirements below: 
+The [Prerequisites](../userguide/PREREQUISITES.md) can be created in multiple ways. You are responsible for creating them correctly so that they can be used successfully with the Helm charts. Additional details on these prerequisites and their requirements below: 
 
 ### Kubernetes cluster
 You need to make sure that you have enough privileges to run the application and create all the necessary entities that the Helm charts require. There are also different Kubernetes flavours that might require specific knowledge of how to install the products in them. For example, OpenShift and Rancher have more strict rules regarding container permissions.
