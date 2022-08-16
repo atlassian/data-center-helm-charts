@@ -9,12 +9,6 @@ bamboo:
 
   disableAgentAuth: true
 
-#  license:
-#    secretName: bamboo-license
-
-#  sysadminCredentials:
-#    secretName: bamboo-admin-user
-
   import:
     type: "clean"
 
