@@ -73,7 +73,7 @@ jobs:
         id: setup-dependencies
         working-directory: tf/test/
         run: |
-          go versoin
+          go version
           go get -v -t -d ./... && go mod tidy
           echo ::set-output name=exit_code::$?
 
