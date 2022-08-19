@@ -128,10 +128,8 @@ Pod labels
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
-    {{- if .Values.ingress.https -}}
-    -Dsynchrony.service.url=https://{{ .Values.ingress.host }}/synchrony/v1
-    {{- else }}
-    -Dsynchrony.service.url=http://{{ .Values.ingress.host }}/synchrony/v1
+    {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/synchrony/v1
+    {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/synchrony/v1
     {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true
