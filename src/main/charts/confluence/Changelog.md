@@ -1,8 +1,8 @@
 # Change Log
 
-## TBD
+## 1.5.1
 
-**Release date:** 2022-07-14
+**Release date:** 2022-08-24
 
 ![AppVersion: 7.19.0](https://img.shields.io/static/v1?label=AppVersion&message=7.19.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
