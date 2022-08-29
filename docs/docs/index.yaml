@@ -1205,6 +1205,45 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+          description: Fixed Confluence when Synchrony is enabled
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/443
+        - kind: changed
+         description: Confluence updated to 7.19.0 version
+         links:
+         - name: Github PR
+           url: https://github.com/atlassian/data-center-helm-charts/pull/445
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.19.0
+    created: "2022-08-24T04:07:34.532647997Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 7a7c8e43ac4f4155780f5726711140ed3309c75b86fcf436ef9239ad26d96e9a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.5.1/confluence-1.5.1.tgz
+    version: 1.5.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: added
           description: Use the custom ports for Confluence service
           links:
@@ -3192,4 +3231,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2022-07-15T04:27:48.002387429Z"
+generated: "2022-08-24T04:07:35.117000888Z"
