@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jvm-config
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -62,10 +62,10 @@ kind: Service
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -88,10 +88,10 @@ kind: Service
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -115,10 +115,10 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -142,7 +142,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:7.13.8"
+          image: "atlassian/confluence:7.19.0"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -193,10 +193,10 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -232,7 +232,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: confluence
-          image: "atlassian/confluence:7.13.8"
+          image: "atlassian/confluence:7.19.0"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -314,10 +314,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -345,10 +345,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-1.5.0
+    helm.sh/chart: confluence-1.5.1
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.13.8"
+    app.kubernetes.io/version: "7.19.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
