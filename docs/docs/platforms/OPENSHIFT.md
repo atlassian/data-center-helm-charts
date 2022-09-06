@@ -34,7 +34,7 @@ It depends on the storage backend though.
 
 As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContextEnabled` to `false`, for example, `confluence.securityContextEnabled: false`
 As a result the container will start as a user with an OpenShift generated ID.
-You will also need to disable NFX permission fixer init container as it start as roo. Set `volumes.sharedHome.nfsPermissionFixer.enabled=false` to false.
+You will also need to disable NFS permission fixer init container as it start as root. Set `volumes.sharedHome.nfsPermissionFixer.enabled=false` to false.
 
 ## Permission issues
 
@@ -53,7 +53,7 @@ volumes:
       emptyDir: {}
 ```
 
-While it's possible to declare runtime volumes for empty directories, it is not possible for `${APPLICATION_HOME}/conf`. When starting up, Jira and Confluence generate a few configuration files which is a part of image entrypoint. Without anyuid SCC, an unprivileged user can't write to `${APPLICATION_HOME}/conf`. When starting Jira in OpenShift without anyuid SCC attached to jira service account, you will see the following log:
+While it's possible to declare runtime volumes for empty directories, it is not possible for `${APPLICATION_HOME}/conf`. When starting up, Jira and Confluence generate a few configuration files which is a part of the image entrypoint. Without anyuid SCC, an unprivileged user can't write to `${APPLICATION_HOME}/conf`. When starting Jira in OpenShift without anyuid SCC attached to jira service account, you will see the following log:
 
 ```
 INFO:root:Generating /etc/container_id from template container_id.j2
@@ -68,9 +68,9 @@ INFO:root:Running Jira with command '/opt/atlassian/jira/bin/start-jira.sh', arg
 executing as current user
 ```
 
-While this is a non fatal error and Jira is able to proceed with startup, failure to properly generate configuration files like server.xml will result in a number of error when using Jira.
+While this is a non-fatal error and Jira is able to proceed with startup, failure to properly generate configuration files like server.xml will result in a number of errors when using Jira.
 
-To mitigate the problem, either attach anyuid policy to jira (or confluence) service account **or** build your own container image if existing security practices do not allow anyuid. You need to inherit Jira (or Confluence) official image and make a few directories/files writable for users belonging to a `root` group (which users in OpenShfit containers belong to):
+To mitigate the problem, either attach anyuid policy to jira (or confluence) service account **or** build your own container image if existing security practices do not allow anyuid. You need to inherit the Jira (or Confluence) official image and make a few directories/files writable for users belonging to a `root` group (which users in OpenShfit containers belong to):
 
 ```
 FROM atlassian/jira-software:$JIRA_VERSION
