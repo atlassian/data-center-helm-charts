@@ -38,7 +38,7 @@ You will also need to disable NFS permission fixer init container as it start as
 
 ## Permission issues
 
-If a container starts without anyuid enabled, applications can't write to `${APPLICATION_HOME}/logs`, `${APPLICATION_HOME}/work` and `${APPLICATION_HOME}/temp`.
+If a container starts without `anyuid` enabled, applications can't write to `${APPLICATION_HOME}/logs`, `${APPLICATION_HOME}/work` and `${APPLICATION_HOME}/temp`.
 If you see in logs that the server fails to start with `permission denied` errors, you may want to declare these directories as runtime volumes. To do so, you need to declare additional volume mounts and additional volumes in `values.yaml`:
 
 ```
@@ -53,7 +53,7 @@ volumes:
       emptyDir: {}
 ```
 
-While it's possible to declare runtime volumes for empty directories, it is not possible for `${APPLICATION_HOME}/conf`. When starting up, Jira and Confluence generate a few configuration files which is a part of the image entrypoint. Without anyuid SCC, an unprivileged user can't write to `${APPLICATION_HOME}/conf`. When starting Jira in OpenShift without anyuid SCC attached to jira service account, you will see the following log:
+While it's possible to declare runtime volumes for empty directories, it is not possible for `${APPLICATION_HOME}/conf`. When starting up, Jira and Confluence generate a few configuration files which is a part of the image entrypoint. Without `anyuid` SCC, an unprivileged user can't write to `${APPLICATION_HOME}/conf`. When starting Jira in OpenShift without `anyuid` SCC attached to jira service account, you will see the following log:
 
 ```
 INFO:root:Generating /etc/container_id from template container_id.j2
