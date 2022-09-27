@@ -2,8 +2,8 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: 1.4.0
-appVersion: 8.2.3
+version: 1.5.0
+appVersion: 8.2.4
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bamboo
@@ -21,20 +21,15 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: added
-      description: Make pod securityContext optional
+      description: Use the custom ports for Bamboo service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/389
-    - kind: added
-      description: Support for configuring ingress proxy settings via values.yaml
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/402
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Bamboo DC updated to 8.2.3 version
+      description: Bamboo updated to 8.2.4 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/412
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
 dependencies:
   - name: common
     version: 1.0.0

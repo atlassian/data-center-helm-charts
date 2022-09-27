@@ -62,7 +62,11 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
-              value: {{ .Values.synchrony.ingressUrl | quote }}
+            {{ if .Values.ingress.https }}
+              value: "https://{{ .Values.ingress.host }}/synchrony"
+            {{ else }}
+              value: "http://{{ .Values.ingress.host }}/synchrony"
+            {{- end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
       {{- with .Values.nodeSelector }}

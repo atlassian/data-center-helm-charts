@@ -2,8 +2,8 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.4.0
-appVersion: 7.21.1
+version: 1.5.0
+appVersion: 7.21.2
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bitbucket
@@ -20,26 +20,16 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Remove emptyDir from Bitbucket shared home volume options
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/386
     - kind: added
-      description: Make pod securityContext optional
+      description: Use the custom ports for Bitbucket service
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/389
-    - kind: added
-      description: Support for configuring ingress proxy settings via values.yaml
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/402
+        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Update Bitbucket version to 7.21.0
+      description: Bitbucket updated to 7.21.2 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/412
+        url: https://github.com/atlassian/data-center-helm-charts/pull/430
 dependencies:
   - name: common
     version: 1.0.0

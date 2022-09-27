@@ -1,5 +1,7 @@
 name: Helm Charts E2E Testing
 on:
+  schedule:
+    - cron: '0 3 */2 * *' # schedule the test to run every second day at 3:00am
   push:
     branches:
       - main
@@ -9,10 +11,13 @@ on:
       - 'src/main/charts/bitbucket/**'
       - 'src/main/charts/confluence/**'
       - 'src/main/charts/jira/**'
+  pull_request_target:
+    types: [ labeled ]
   workflow_dispatch:
 
 jobs:
   test:
+    if: ${{ github.event.label.name == 'e2e' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
     name: Deploy Infrastructure and Run E2E Tests
     runs-on: ubuntu-latest
     env:
@@ -24,6 +29,7 @@ jobs:
       TF_VAR_bitbucket_license: ${{ secrets.TF_VAR_BITBUCKET_LICENSE }}
       TF_VAR_bamboo_admin_password: ${{ secrets.TF_VAR_BAMBOO_ADMIN_PASSWORD }}
       TF_VAR_bitbucket_admin_password: ${{ secrets.TF_VAR_BITBUCKET_ADMIN_PASSWORD }}
+      USE_DOMAIN: "true"
 
     steps:
       - name: Checkout Helm charts
@@ -34,7 +40,7 @@ jobs:
       - name: Pin Kubectl version
         uses: azure/setup-kubectl@v2.0
         with:
-          version: 'v1.23.6'
+          version: 'v1.24.0'
 
       - name: Install Helm
         uses: azure/setup-helm@v1
@@ -59,14 +65,15 @@ jobs:
           git clone -b $LTS $DEPLOYMENT_REPO tf
 
       - name: Setup test environment
-        uses: actions/setup-go@v2.1.4
+        uses: actions/setup-go@v3
         with:
-          go-version: 1.17
+          go-version: '1.18'
 
       - name: Install test dependencies
         id: setup-dependencies
         working-directory: tf/test/
         run: |
+          go version
           go get -v -t -d ./... && go mod tidy
           echo ::set-output name=exit_code::$?
 

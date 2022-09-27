@@ -4,6 +4,45 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: added
+          description: Use the custom ports for Bamboo service
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/419
+        - kind: changed
+          description: Bamboo updated to 8.2.4 version
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.2.4
+    created: "2022-07-15T04:27:46.229934855Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 4f9619876d955a1143b821746d6e3b9b2ed10707002933132155a967c6a92e23
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.5.0/bamboo-1.5.0.tgz
+    version: 1.5.0
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
           description: Make pod securityContext optional
           links:
           - name: Github PR
@@ -256,6 +295,45 @@ entries:
           - name: Github PR
             url: https://github.com/atlassian/data-center-helm-charts/pull/389
         - kind: changed
+          description: Bamboo Agent updated to 8.2.4 version
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.2.4
+    created: "2022-07-15T04:27:46.516199025Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 003db298d7c25cda145d8fd2fafc6c640e8f0d38c1252cb320f303f37dc9e799
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.5.0/bamboo-agent-1.5.0.tgz
+    version: 1.5.0
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Make pod securityContext optional
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/389
+        - kind: changed
           description: Bamboo Agent updated to 8.2.3 version
           links:
           - name: Github PR
@@ -461,6 +539,45 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Use the custom ports for Bitbucket service
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/419
+        - kind: changed
+          description: Bitbucket updated to 7.21.2 version
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 7.21.2
+    created: "2022-07-15T04:27:46.816206011Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 2da887323828fdc0f7cbb7aa2000f9f8c5585e17c5f9794234a7974c59782085
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.5.0/bitbucket-1.5.0.tgz
+    version: 1.5.0
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
@@ -1086,6 +1203,94 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/common-1.0.0/common-1.0.0.tgz
     version: 1.0.0
   confluence:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Fixed Confluence when Synchrony is enabled
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/443
+        - kind: changed
+         description: Confluence updated to 7.19.0 version
+         links:
+         - name: Github PR
+           url: https://github.com/atlassian/data-center-helm-charts/pull/445
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.19.0
+    created: "2022-08-24T04:07:34.532647997Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 7a7c8e43ac4f4155780f5726711140ed3309c75b86fcf436ef9239ad26d96e9a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.5.1/confluence-1.5.1.tgz
+    version: 1.5.1
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Use the custom ports for Confluence service
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/419
+        - kind: added
+          description: Use the custom ports for Synchrony service
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/419
+        - kind: changed
+          description: Fixed Synchrony ingress path
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/429
+        - kind: changed
+          description: Confluence updated to 7.13.8 version
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.13.8
+    created: "2022-07-15T04:27:47.408519545Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 1f722756e34223ec83279d7f58b5b5a4a8f5a43ed7945a79905aeb0aae33f4f0
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.5.0/confluence-1.5.0.tgz
+    version: 1.5.0
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
@@ -1761,6 +1966,45 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Use the custom ports for Crowd service
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/419
+        - kind: changed
+          description: Crowd updated to 5.0.1 version
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.0.1
+    created: "2022-07-15T04:27:47.709511395Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: f96504c983684ed49c9621ef21d7a5f0fa90992668f7e95b267f6e18a964b0ec
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.5.0/crowd-1.5.0.tgz
+    version: 1.5.0
+  - annotations:
       artifacthub.io/changes: "- kind: added\n  description: Make pod securityContext
         optional\n  links:\n  - name: Github PR\n    url: https://github.com/atlassian/data-center-helm-charts/pull/389\n-
         kind: added\n  description: Support for configuring ingress proxy settings
@@ -2299,6 +2543,46 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Use the custom ports for Jira service
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/419
+        - kind: changed
+          description: Jira updated to 8.20.10 version
+          links:
+          - name: Github PR
+            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.20.10
+    created: "2022-07-15T04:27:48.001739272Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 9a9c2992c371a70010a29b4c64f67dcb8bc22243284cb13648ab01bc79a24236
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.5.0/jira-1.5.0.tgz
+    version: 1.5.0
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
@@ -2947,4 +3231,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2022-06-09T17:25:22.883785+10:00"
+generated: "2022-08-24T04:07:35.117000888Z"

@@ -1,14 +1,15 @@
 # Change Log
 
-## NEXT_VERSION
+## 1.5.0
 
-**Release date:** RELEASE_DATE
+**Release date:** 2022-07-14
 
-![AppVersion: 8.20.9](https://img.shields.io/static/v1?label=AppVersion&message=8.20.9&color=success&logo=)
+![AppVersion: 8.20.10](https://img.shields.io/static/v1?label=AppVersion&message=8.20.10&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
-* Fix: Use the custom ports for Jira service
+* Fix: Use the custom ports for Jira service (#419)
+* Update the default Jira version to 8.20.10 (#430)
 
 ## 1.4.1
 
@@ -35,7 +36,7 @@
 
 ## 1.3.0
 
-**Release date:** 2022-03-23
+**Release date:** 2022-03-24
 
 ![AppVersion: 8.20.7](https://img.shields.io/static/v1?label=AppVersion&message=8.20.7&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
