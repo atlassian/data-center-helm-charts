@@ -25,7 +25,7 @@ annotations:
       description: Jira updated to 8.20.13 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/REPLACE_ME
+        url: https://github.com/atlassian/data-center-helm-charts/pull/453
 dependencies:
   - name: common
     version: 1.0.0
