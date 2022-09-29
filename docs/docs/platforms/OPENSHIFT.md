@@ -41,7 +41,7 @@ It depends on the storage backend though.
 
 As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContextEnabled` to `false`, for example, `confluence.securityContextEnabled: false`.
 As a result the container will start as a user with an OpenShift generated ID.
-You will also need to disable NFS permission fixer init container as it start as root. Set `volumes.sharedHome.nfsPermissionFixer.enabled` to false.
+You will also need to disable NFS permission fixer init container as it starts as root. Set `volumes.sharedHome.nfsPermissionFixer.enabled` to false.
 
 ## Permission issues
 
