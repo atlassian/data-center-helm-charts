@@ -253,6 +253,10 @@ volumeClaimTemplates:
 {{- end }}
 
 {{- define "jira.databaseEnvVars" -}}
+{{- if .Values.jira.forceConfigUpdate }}
+- name: ATL_FORCE_CFG_UPDATE
+  value: "true"
+{{- end }}
 {{ with .Values.database.type }}
 - name: ATL_DB_TYPE
   value: {{ . | quote }}

@@ -259,6 +259,33 @@ By default, the Helm charts will not configure the products for Data Center clus
 
 In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
 
+## :material-book-cog: Generating configuration files
+
+The Docker entrypoint scripts generate application configuration on
+first start; not all of these files are regenerated on subsequent
+starts. This is deliberate, to avoid race conditions or overwriting manual
+changes during restarts and upgrades. However, in deployments where
+configuration is purely specified through the environment (e.g. Kubernetes)
+this behaviour may be undesirable; this flag forces an update of all
+generated files.
+
+The affected files are:
+* Jira: `dbconfig.xml`
+* Confluence: `confluence.cfg.xml`
+* Bamboo: `bamboo.cfg.xml`
+
+To force update of the configuration files when pods restart, set `<product_name.forceConfigUpdate>` to true.
+You can do it by passing an argument to helm install/update command:
+```
+--set jira.forceConfigUpdate=true
+```
+or set it in values.yaml:
+
+```
+jira:
+  forceConfigUpdate: true
+```
+
 ## :material-book-cog: Additional libraries & plugins
 
 The products' Docker images contain the default set of bundled libraries and plugins. 

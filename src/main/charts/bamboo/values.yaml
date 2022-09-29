@@ -632,6 +632,13 @@ bamboo:
       #    cpu: "2"
       #    memory: "2G"
 
+  # -- The Docker entrypoint.py generates application configuration on
+  # first start; not all of these files are regenerated on subsequent starts.
+  # By default, bamboo.cfg.xml is generated only once. Set configOverwrite to true
+  # to change this behavior. ATL_FORCE_CFG_UPDATE=true will be added to container env.
+  #
+  forceConfigUpdate: false
+
   # -- Specifies a list of additional arguments that can be passed to the Bamboo JVM, e.g. 
   # system properties.
   #
