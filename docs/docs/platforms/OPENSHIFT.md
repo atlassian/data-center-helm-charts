@@ -77,7 +77,7 @@ executing as current user
 
 While this is a non-fatal error and Jira is able to proceed with startup, failure to properly generate configuration files like server.xml will result in a number of errors when using Jira.
 
-To mitigate the problem, either attach anyuid policy to jira (or confluence) service account **or** build your own container image if existing security practices do not allow anyuid. You need to inherit the Jira (or Confluence) official image and make a few directories/files writable for users belonging to a `root` group (which users in OpenShfit containers belong to):
+To mitigate the problem, either attach anyuid policy to Jira (or Confluence) service account **or** build your own container image if existing security practices do not allow anyuid. You need to inherit the Jira (or Confluence) official image and make a few directories/files writable for users belonging to a `root` group (which users in OpenShfit containers belong to):
 
 ```
 FROM atlassian/jira-software:$JIRA_VERSION
