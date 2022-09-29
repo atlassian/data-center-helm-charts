@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.0
+
+**Release date:** TBD
+
+![AppVersion: 7.19.2](https://img.shields.io/static/v1?label=AppVersion&message=7.19.0&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update the default Confluence version to 7.19.2 (#455)
+* 
 ## 1.5.1
 
 **Release date:** 2022-08-24
