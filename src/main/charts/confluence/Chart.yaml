@@ -3,7 +3,7 @@ name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
 version: 1.5.1
-appVersion: 7.19.0
+appVersion: 7.19.2
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Confluence
@@ -21,15 +21,10 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
      - kind: changed
-       description: Fixed Confluence when Synchrony is enabled
-       links:
-       - name: Github PR
-         url: https://github.com/atlassian/data-center-helm-charts/pull/443
-     - kind: changed
-      description: Confluence updated to 7.19.0 version
+      description: Confluence updated to 7.19.2 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/445
+        url: https://github.com/atlassian/data-center-helm-charts/pull/455
 dependencies:
   - name: common
     version: 1.0.0

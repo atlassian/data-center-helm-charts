@@ -3,7 +3,7 @@ name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
 version: 1.5.0
-appVersion: 7.21.2
+appVersion: 7.21.5
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Bitbucket
@@ -20,16 +20,11 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: added
-      description: Use the custom ports for Bitbucket service
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Bitbucket updated to 7.21.2 version
+      description: Bitbucket updated to 7.21.5 version
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/430
+        url: https://github.com/atlassian/data-center-helm-charts/pull/455
 dependencies:
   - name: common
     version: 1.0.0
