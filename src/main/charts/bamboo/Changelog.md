@@ -9,6 +9,8 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Update Bamboo version to 9.0.0 (#455)
+* Ingress is using `spec.ingressClassName` field instead of deprecated annotation
+
 
 ## 1.5.0
 

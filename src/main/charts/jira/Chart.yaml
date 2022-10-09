@@ -21,16 +21,11 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: added
-      description: Use the custom ports for Jira service
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/419
     - kind: changed
-      description: Jira updated to 8.20.10 version
+      description: Ingress is using `spec.ingressClassName` field instead of deprecated annotation
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/430
+        url: https://github.com/atlassian/data-center-helm-charts/pull/451
 dependencies:
   - name: common
     version: 1.0.0

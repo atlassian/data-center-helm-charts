@@ -9,6 +9,8 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Update Bitbucket version to 7.21.5 (#455)
+* Ingress is using `spec.ingressClassName` field instead of deprecated annotation
+
 
 ## 1.5.0
 
