@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-     - kind: changed
+    - kind: changed
       description: Confluence updated to 7.19.2 version
       links:
       - name: Github PR
