@@ -94,7 +94,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: jira
-          image: "atlassian/jira-software:8.20.10"
+          image: "atlassian/jira-software:8.20.13"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
