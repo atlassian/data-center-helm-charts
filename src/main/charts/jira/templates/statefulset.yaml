@@ -109,8 +109,8 @@ spec:
               containerPort: {{ .Values.jira.ports.http }}
               protocol: TCP
             - name: ehcache
-              containerPort: {{ .Values.jira.ports.ehcache }} 
-              protocol: TCP 
+              containerPort: {{ .Values.jira.ports.ehcache }}
+              protocol: TCP
             - name: ehcacheobject
               containerPort: {{ .Values.jira.ports.ehcacheobject }}
               protocol: TCP
