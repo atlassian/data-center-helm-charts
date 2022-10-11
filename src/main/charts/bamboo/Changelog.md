@@ -2,13 +2,15 @@
 
 ## 1.6.0
 
-**Release date:** TBD
+**Release date:** 2022-10-11
 
-![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=8.2.4&color=success&logo=)
+![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Update Bamboo version to 9.0.0 (#455)
+* Ingress Class Name is moved under spec. (#450)
+* Improved documentation (#448, #440)
 
 ## 1.5.0
 
