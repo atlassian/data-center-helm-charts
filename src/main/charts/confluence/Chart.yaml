@@ -20,22 +20,22 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-     - kind: changed
+    - kind: changed
       description: Confluence updated to 7.19.2 version
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/455
     - kind: changed
-     description: Ingress Class Name is moved under spec.
-     links:
-     - name: Github PR
-       url: https://github.com/atlassian/data-center-helm-charts/pull/450
+      description: Ingress Class Name is moved under spec.
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/450
     - kind: changed
-     description: Improved documentation
-     links:
-     - name: Github PR
-       url: https://github.com/atlassian/data-center-helm-charts/pull/448
-       url: https://github.com/atlassian/data-center-helm-charts/pull/440
+      description: Improved documentation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/448
+        url: https://github.com/atlassian/data-center-helm-charts/pull/440    
 dependencies:
   - name: common
     version: 1.0.0
