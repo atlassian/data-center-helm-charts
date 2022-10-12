@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.5.1
+version: 1.6.0
 appVersion: 8.20.13
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -22,10 +22,16 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Jira updated to 8.20.13 version
+      description: Ingress Class Name is moved under spec.
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/453
+        url: https://github.com/atlassian/data-center-helm-charts/pull/450
+    - kind: changed
+      description: Improved documentation
+      links:
+      - name: Github PR
+        url: https://github.com/atlassian/data-center-helm-charts/pull/448
+        url: https://github.com/atlassian/data-center-helm-charts/pull/440
 dependencies:
   - name: common
     version: 1.0.0
