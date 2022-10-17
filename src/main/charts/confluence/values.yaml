@@ -648,8 +648,8 @@ confluence:
 
   # -- The Docker entrypoint.py generates application configuration on
   # first start; not all of these files are regenerated on subsequent starts.
-  # By default, confluence.cfg.xml is generated only once. Set configOverwrite to true
-  # to change this behavior. ATL_FORCE_CFG_UPDATE=true will be added to container env.
+  # By default, confluence.cfg.xml is generated only once. Set `forceConfigUpdate` to true
+  # to change this behavior.
   #
   forceConfigUpdate: false
 

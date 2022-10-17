@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Tests the various permutations of the "<product>.license" value structure in the Helm charts
  */
-class ForceCfgUpdateEnvVarTest {
+class ForcedConfigUpdateTest {
     private Helm helm;
 
     @BeforeEach
@@ -22,10 +22,12 @@ class ForceCfgUpdateEnvVarTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo"})
     void jira_atl_force_config_update_true(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "jira.forceConfigUpdate", "true"));
+                "jira.forceConfigUpdate", "true",
+                "bamboo.forceConfigUpdate", "true",
+                "confluence.forceConfigUpdate", "true"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()

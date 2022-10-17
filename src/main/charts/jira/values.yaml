@@ -548,8 +548,8 @@ jira:
 
   # -- The Docker entrypoint.py generates application configuration on
   # first start; not all of these files are regenerated on subsequent starts.
-  # By default, dbconfig.xml is generated only once. Set configOverwrite to true
-  # to change this behavior. ATL_FORCE_CFG_UPDATE=true will be added to container env.
+  # By default, dbconfig.xml is generated only once. Set `forceConfigUpdate` to true
+  # to change this behavior.
   #
   forceConfigUpdate: false
   # Specifies a list of additional arguments that can be passed to the Jira JVM, e.g.
