@@ -29,6 +29,8 @@ jobs:
       TF_VAR_bitbucket_license: ${{ secrets.TF_VAR_BITBUCKET_LICENSE }}
       TF_VAR_bamboo_admin_password: ${{ secrets.TF_VAR_BAMBOO_ADMIN_PASSWORD }}
       TF_VAR_bitbucket_admin_password: ${{ secrets.TF_VAR_BITBUCKET_ADMIN_PASSWORD }}
+      TF_VAR_kinesis_log_producers_role_arns: ${{ secrets.TF_VAR_KINESIS_LOG_PRODUCERS_ROLE_ARNS }}
+      TF_VAR_osquery_fleet_enrollment_secret_name: ${{ secrets.TF_VAR_OSQUERY_FLEET_ENROLLMENT_SECRET_NAME }}
       USE_DOMAIN: "true"
 
     steps:
