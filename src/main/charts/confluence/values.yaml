@@ -646,6 +646,13 @@ confluence:
     #
     command: "/shutdown-wait.sh"
 
+  # -- The Docker entrypoint.py generates application configuration on
+  # first start; not all of these files are regenerated on subsequent starts.
+  # By default, confluence.cfg.xml is generated only once. Set `forceConfigUpdate` to true
+  # to change this behavior.
+  #
+  forceConfigUpdate: false
+
   # -- Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g.
   # system properties.
   #

@@ -1,35 +1,35 @@
-# Configuration 
+# Configuration
 
 ## :material-directions-fork: Ingress
 In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
 
-The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller. 
+The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller.
 
 Some key considerations to note when configuring the controller are:
 
 !!!Ingress requirements
     * At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
     * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
-      
-         * Usage of the NGINX Ingress Controller 
+
+         * Usage of the NGINX Ingress Controller
          * Ingress Controller annotations
          * The request max body size
          * The hostname of the ingress resource
-    
+
     * When installed, with the provided [configuration](https://kubernetes.github.io/ingress-nginx/deploy/){.external}, the NGINX Ingress Controller will provision an internet-facing (see diagram below) load balancer on your behalf. The load balancer should either support the [Proxy Protocol](https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt){.external} or allow for the forwarding of `X-Forwarded-*` headers. This ensures any backend redirects are done so over the correct protocol.
-    * If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers){.external} option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on. 
+    * If the `X-Forwarded-*` headers are being used, then enable the [use-forwarded-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers){.external} option on the controllers `ConfigMap`. This ensures that these headers are appropriately passed on.
     * The diagram below provides a high-level overview of how external requests are routed via an internet-facing load balancer to the correct service via Ingress.
 
 ![ingress-architecture](../assets/images/ingress.png "Request routing via Ingress")
-    
+
 !!!note "Traffic flow (diagram)"
     0. Inbound client request
     1. DNS routes request to appropriate LB
-    2. LB forwards request to internal Ingress 
+    2. LB forwards request to internal Ingress
     3. Ingress controller performs traffic routing lookup via Ingress object(s)
     4. Ingress forwards request to appropriate service based on Ingress object routing rule
     5. Service forwards request to appropriate pod
-    6. Pod handles request 
+    6. Pod handles request
 
 !!!info "Request body size"
     By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. The maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
@@ -39,12 +39,12 @@ The Data Center products make use of filesystem storage. Each DC node has its ow
 
 By default, the Helm charts will configure all of these volumes as ephemeral [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} volumes. This makes it possible to install the charts without configuring any volume management, but comes with two big caveats:
 
-1. Any data stored in the `local-home` or `shared-home` will be lost every time a pod starts. 
+1. Any data stored in the `local-home` or `shared-home` will be lost every time a pod starts.
 1. Whilst the data that is stored in `local-home` can generally be regenerated (e.g. from the database), this can be a very expensive process that sometimes requires manual intervention.
 
 For these reasons, the default volume configuration of the Helm charts is suitable only for running a single DC pod for evaluation purposes. Proper volume management needs to be configured in order for the data to survive restarts, and for multi-pod DC clusters to operate correctly.
 
-While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external} and `PersistentVolumeClaims`. 
+While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external} and `PersistentVolumeClaims`.
 
 The `local-home` volume requires a `PersistentVolume` with [ReadWriteOnce (RWO)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability, and `shared-home` requires a `PersistentVolume` with [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own `RWX` volumes (e.g. [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}). While this entails a higher upfront setup effort, it gives the best flexibility.
 
@@ -83,8 +83,8 @@ volumes:
 This will result in each pod in the `StatefulSet` creating a `local-home` `PersistentVolumeClaim`
 of type `ReadWriteOnce`, and a single `PersistentVolumeClaim` of type `ReadWriteMany` being created for the `shared-home`.
 
-For each `PersistentVolumeClaim` created by the chart, a suitable `PersistentVolume` needs to be made available prior 
-to installation. These can be provisioned either statically or dynamically, using an 
+For each `PersistentVolumeClaim` created by the chart, a suitable `PersistentVolume` needs to be made available prior
+to installation. These can be provisioned either statically or dynamically, using an
 auto-provisioner.
 
 An alternative to `PersistentVolumeClaims` is to use inline volume definitions,
@@ -121,7 +121,7 @@ purposes, and mount them into the product container.  Use the `additional`
 (under `volumes`) and `additionalVolumeMounts` values to both attach the volumes
 and mount them in to the product container.
 
-This might be useful if, for example, you have a custom plugin that requires its 
+This might be useful if, for example, you have a custom plugin that requires its
 own filesystem storage.
 
 Example:
@@ -141,7 +141,7 @@ volumes:
 
 ## :material-database: Database connectivity
 
-The products need to be supplied with the information they need to connect to the 
+The products need to be supplied with the information they need to connect to the
 database service. Configuration for each product is mostly the same, with some small differences.
 
 ### `database.url`
@@ -159,17 +159,17 @@ on the JDBC driver being used, but some examples are:
 !!!info "Database creation"
 
     The Atlassian product doesn't automatically create the database,`<dbname>`, in the `JDBC URL`, so you need to manually create a user and database for the used database instance. Details on how to create product-specific databases can be found below:
-   
+
     === "Jira"
 
         [Connect Jira to an external database](https://confluence.atlassian.com/adminjiraserver/connecting-jira-applications-to-a-database-938846850.html){.external}
 
     === "Confluence"
-    
+
         [Connect Confluence to an external database](https://confluence.atlassian.com/doc/database-configuration-159764.html#DatabaseConfiguration-Databasesetupsetup){.external}
-    
+
     === "Bitbucket"
-    
+
         [Connect Bitbucket to an external database](https://confluence.atlassian.com/bitbucketserver/connect-bitbucket-to-an-external-database-776640378.html){.external}
 
     === "Bamboo"
@@ -183,8 +183,8 @@ on the JDBC driver being used, but some examples are:
 
 ### `database.driver`
 
-Jira and Bitbucket require the JDBC driver class to be specified (Confluence and Bamboo will 
-autoselect this based on the `database.type` value, see below). The JDBC driver must 
+Jira and Bitbucket require the JDBC driver class to be specified (Confluence and Bamboo will
+autoselect this based on the `database.type` value, see below). The JDBC driver must
 correspond to the JDBC URL used; see the table above for example driver classes.
 
 Note that the products only ship with certain JDBC drivers installed, depending
@@ -214,13 +214,13 @@ via Kubernetes.
 
 Depending on the product, the `database.type`, `database.url` and `database.driver` chart values
 can be provided. In addition, the database username and password can be provided via a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external},
-with the secret name specified with the `database.credentials.secretName` chart value. 
+with the secret name specified with the `database.credentials.secretName` chart value.
 When all the required information is provided in this way, the database connectivity configuration screen
 will be bypassed during product setup.
 
 ## :fontawesome-solid-user-tag: Namespace
 
-The Helm charts are not opinionated whether they have a [Kubernetes namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/){.external} to themselves. 
+The Helm charts are not opinionated whether they have a [Kubernetes namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/){.external} to themselves.
 If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
 ## :fontawesome-solid-network-wired: Clustering
@@ -255,37 +255,64 @@ By default, the Helm charts will not configure the products for Data Center clus
     === "Bamboo"
 
         Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
-        
+
 
 In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
 
+## :material-book-cog: Generating configuration files
+
+The Docker entrypoint scripts generate application configuration on
+first start; not all of these files are regenerated on subsequent
+starts. This is deliberate, to avoid race conditions or overwriting manual
+changes during restarts and upgrades. However, in deployments where
+configuration is purely specified through the environment (e.g. Kubernetes)
+this behaviour may be undesirable; this flag forces an update of all
+generated files.
+
+The affected files are:
+* Jira: `dbconfig.xml`
+* Confluence: `confluence.cfg.xml`
+* Bamboo: `bamboo.cfg.xml`
+
+To force update of the configuration files when pods restart, set `<product_name.forceConfigUpdate>` to true.
+You can do it by passing an argument to helm install/update command:
+```
+--set jira.forceConfigUpdate=true
+```
+or set it in `values.yaml`:
+
+```
+jira:
+  forceConfigUpdate: true
+```
+
 ## :material-book-cog: Additional libraries & plugins
 
-The products' Docker images contain the default set of bundled libraries and plugins. 
+The products' Docker images contain the default set of bundled libraries and plugins.
 Additional libraries and plugins can be mounted into the product containers during
-the Helm install. One such use case for this is mounting `JDBC` drivers that are not 
+the Helm install. One such use case for this is mounting `JDBC` drivers that are not
 shipped with the products' by default.
 
 To make use of this mechanism, the additional files need to be available as part
-of a Kubernetes volume. Options here include putting them into the `shared-home` volume 
-that's [required as part of the prerequisites](PREREQUISITES.md#configure-a-shared-home-volume). Alternatively, you can 
-create a custom `PersistenVolume` for them, as long as it has `ReadOnlyMany` capability. 
+of a Kubernetes volume. Options here include putting them into the `shared-home` volume
+that's [required as part of the prerequisites](PREREQUISITES.md#configure-a-shared-home-volume). Alternatively, you can
+create a custom `PersistenVolume` for them, as long as it has `ReadOnlyMany` capability.
 
 !!!info "Custom volumes for loading libraries"
 
-    If you're not using the `shared-home` volume, then you can declare your own custom 
-    volume, by following the [Additional volumes](#additional-volumes) section above. 
+    If you're not using the `shared-home` volume, then you can declare your own custom
+    volume, by following the [Additional volumes](#additional-volumes) section above.
 
 You could even store the files as a `ConfigMap` that gets mounted as a volume, but
 you're likely to run into file size limitations there.
 
-Assuming that the existing `shared-home` volume is used for this, then the only 
-configuration required is to specify the `additionalLibraries` in your `values.yaml` 
+Assuming that the existing `shared-home` volume is used for this, then the only
+configuration required is to specify the `additionalLibraries` in your `values.yaml`
 file, e.g.
 
 ```yaml
 jira:
-  additionalLibraries: 
+  additionalLibraries:
     - volumeName: shared-home
       subDirectory: mylibs
       fileName: lib1.jar
@@ -294,11 +321,11 @@ jira:
       fileName: lib2.jar
 ```    
 
-This will mount the `lib1.jar` and `lib2.jar` from the `mylibs` sub-directory from `shared-home` 
+This will mount the `lib1.jar` and `lib2.jar` from the `mylibs` sub-directory from `shared-home`
 into the appropriate place in the container.
 
 Similarly, you can use `additionalBundledPlugins` to load product plugins into the
-container. 
+container.
 
 !!!info "System plugin"
 
@@ -319,17 +346,17 @@ jira:
       requests:
         cpu: "4"
         memory: "8G"
-``` 
+```
 
 !!!tip ""
 
     By default, the Helm Charts have no container-level resource limits, however there are default requests that are set.
 
-Specifying these values is fine for CPU limits/requests, but for memory 
-resources it is also necessary to configure the JVM's memory limits. 
-By default, the JVM maximum heap size is set to 1 GB, so if you increase 
+Specifying these values is fine for CPU limits/requests, but for memory
+resources it is also necessary to configure the JVM's memory limits.
+By default, the JVM maximum heap size is set to 1 GB, so if you increase
 (or decrease) the container memory resources as above, you also need to change
-the JVM's max heap size, otherwise the JVM won't take advantage of the extra 
+the JVM's max heap size, otherwise the JVM won't take advantage of the extra
 available memory (or it'll crash if there isn't enough).
 
 You specify the JVM memory limits like this:
@@ -342,7 +369,7 @@ jira:
 ```
 
 Another difficulty for specifying memory resources is that the JVM requires
-additional overheads over and above the max heap size, and the container resources 
+additional overheads over and above the max heap size, and the container resources
 need to take account of that.  A safe rule-of-thumb would be for the container
 to request 2x the value of the max heap for the JVM.
 
@@ -358,11 +385,11 @@ The Helm charts allow you to add your own `container` and [initContainer](https:
 
 ## :material-checkbox-multiple-marked-outline: Additional options
 
-The Helm charts also allow you to specify: 
+The Helm charts also allow you to specify:
 
 * [`additionalLabels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/){.external}
-* [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external}, 
+* [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external},
 * [`nodeSelectors`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector){.external}  
-* [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}. 
-  
+* [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}.
+
 These are standard Kubernetes structures that will be included in the pods.
