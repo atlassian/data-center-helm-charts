@@ -75,7 +75,7 @@ volumes:
   localHome:
     persistentVolumeClaim:
       create: true
-  shared-home:
+  sharedHome:
     persistentVolumeClaim:
       create: true
 ```
@@ -96,7 +96,7 @@ volumes:
     customVolume:
       hostPath:
         path: /path/to/my/data
-  shared-home:
+  sharedHome:
     customVolume:
       nfs:
         server: mynfsserver
@@ -128,15 +128,15 @@ Example:
 
 ```yaml
 jira:
-   additionalVolumeMounts:
-      - volumeName: my-volume
-        mountPath: /path/to/mount
+  additionalVolumeMounts:
+    - volumeName: my-volume
+      mountPath: /path/to/mount
 
 volumes:
   additional:
     - name: my-volume
       persistentVolumeClaim:
-         claimName: my-volume-claim
+        claimName: my-volume-claim
 ```
 
 ## :material-database: Database connectivity
