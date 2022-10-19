@@ -116,4 +116,31 @@ class SecurityContextTest {
                 .getSecurityContext();
         assertThat(containerSecurityContext.path("runAsGroup")).hasValueEqualTo(2000);
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void test_synchrony_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContext.fsGroup", "2000",
+                "synchrony.enabled", "true"));
+
+        JsonNode podSecurityContext = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodSpec();
+        assertThat(podSecurityContext.path("securityContext").path("fsGroup")).hasValueEqualTo(2000);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void test_synchrony_container_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".containerSecurityContext.runAsGroup", "2000",
+                "synchrony.enabled", "true"));
+
+        JsonNode containerSecurityContext = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony")
+                .getContainer()
+                .getSecurityContext();
+        assertThat(containerSecurityContext.path("runAsGroup")).hasValueEqualTo(2000);
+    }
 }
+
