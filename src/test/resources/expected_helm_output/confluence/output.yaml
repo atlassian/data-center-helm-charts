@@ -67,6 +67,7 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "7.19.2"
     app.kubernetes.io/managed-by: Helm
+  annotations:
 spec:
   type: ClusterIP
   ports:
