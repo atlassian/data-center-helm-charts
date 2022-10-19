@@ -252,6 +252,15 @@ Define pod annotations here to allow template overrides when used as a sub chart
 {{- end }}
 
 {{/*
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "synchrony.podAnnotations" -}}
+{{- with .Values.synchrony.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.additionalInitContainers" -}}

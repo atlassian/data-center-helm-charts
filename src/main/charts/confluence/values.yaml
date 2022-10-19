@@ -744,6 +744,11 @@ synchrony:
   # This will result in a separate StatefulSet and Service to be created for Synchrony.
   # If disabled, then collaborative editing will be disabled in Confluence.
   enabled: false
+
+  # -- Custom annotations that will be applied to all Synchrony pods.
+  # Default to '.Values.podAnnotations' (if defined)
+  podAnnotations: {}
+  #  name: <value>
   
   # K8s Synchrony Service configuration
   #
