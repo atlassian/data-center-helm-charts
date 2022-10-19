@@ -29,6 +29,8 @@ jobs:
       TF_VAR_bitbucket_license: ${{ secrets.TF_VAR_BITBUCKET_LICENSE }}
       TF_VAR_bamboo_admin_password: ${{ secrets.TF_VAR_BAMBOO_ADMIN_PASSWORD }}
       TF_VAR_bitbucket_admin_password: ${{ secrets.TF_VAR_BITBUCKET_ADMIN_PASSWORD }}
+      TF_VAR_kinesis_log_producers_role_arns: ${{ secrets.TF_VAR_KINESIS_LOG_PRODUCERS_ROLE_ARNS }}
+      TF_VAR_osquery_fleet_enrollment_secret_name: ${{ secrets.TF_VAR_OSQUERY_FLEET_ENROLLMENT_SECRET_NAME }}
       USE_DOMAIN: "true"
 
     steps:
@@ -69,6 +71,14 @@ jobs:
         with:
           go-version: '1.18'
 
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: |
+          python -m pip install --upgrade pip
+          pip install boto3
+
       - name: Install test dependencies
         id: setup-dependencies
         working-directory: tf/test/
@@ -96,14 +106,15 @@ jobs:
           set -o pipefail
           # Create test output directory
           mkdir e2etest/artifacts
-          
+
           # Add root of helm chart repo to the config template
           cat << EOF >> ./e2etest/test-config.tfvars.tmpl
           # install local helm charts
           local_helm_charts_path="$(dirname $(dirname $(pwd)))/src/main/charts"
           EOF
-          
+
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
+          aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" --profile default && aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" --profile default && aws configure set region "$AWS_DEFAULT_REGION" --profile default
           go test ./e2etest -v -timeout 85m -run Installer | tee ./e2etest/artifacts/e2etest.log
 
       - name: Upload test log files

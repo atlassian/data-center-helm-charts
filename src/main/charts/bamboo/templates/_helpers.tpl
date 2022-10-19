@@ -265,6 +265,10 @@ volumeClaimTemplates:
 {{- end }}
 
 {{- define "bamboo.databaseEnvVars" -}}
+{{- if .Values.bamboo.forceConfigUpdate }}
+- name: ATL_FORCE_CFG_UPDATE
+  value: "true"
+{{- end }}
 {{ with .Values.database.type }}
 - name: ATL_DB_TYPE
   value: {{ . | quote }}

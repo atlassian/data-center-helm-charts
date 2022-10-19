@@ -1,15 +1,27 @@
 # Change Log
 
-## 1.6.0
+
+## 1.7.0
 
 **Release date:** TBD
 
-![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=8.2.4&color=success&logo=)
+![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Ingress is using `spec.ingressClassName` field instead of deprecated annotation (#451)
+
+
+## 1.6.0
+
+**Release date:** 2022-10-12
+
+![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Update Bamboo version to 9.0.0 (#455)
-* Ingress is using `spec.ingressClassName` field instead of deprecated annotation
+* Improved documentation (#448, #440)
 
 
 ## 1.5.0
