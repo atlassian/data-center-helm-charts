@@ -131,7 +131,6 @@ jira:
   additionalVolumeMounts:
     - volumeName: my-volume
       mountPath: /path/to/mount
-
 volumes:
   additional:
     - name: my-volume
