@@ -21,21 +21,10 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Bamboo updated to 9.0.0 version
+      description: Ingress is using `spec.ingressClassName` field instead of deprecated annotation
       links:
       - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/455
-    - kind: changed
-      description: Ingress Class Name is moved under spec.
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/450
-    - kind: changed
-      description: Improved documentation
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/448
-        url: https://github.com/atlassian/data-center-helm-charts/pull/440
+        url: https://github.com/atlassian/data-center-helm-charts/pull/451
 dependencies:
   - name: common
     version: 1.0.0

@@ -12,6 +12,17 @@
 * Ingress Class Name is moved under spec. (#450)
 * Improved documentation (#448, #440)
 
+## 1.6.0
+
+**Release date:** TBD
+
+![AppVersion: 8.20.10](https://img.shields.io/static/v1?label=AppVersion&message=8.20.10&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Ingress is using `spec.ingressClassName` field instead of deprecated annotation
+
+
 ## 1.5.0
 
 **Release date:** 2022-07-14
@@ -22,6 +33,7 @@
 
 * Fix: Use the custom ports for Jira service (#419)
 * Update the default Jira version to 8.20.10 (#430)
+
 
 ## 1.4.1
 
@@ -45,6 +57,7 @@
 * Make pod securityContext optional (#389)
 * Support for configuring ingress proxy settings via values.yaml (#402)
 * Update Jira version to 8.20.8 (#412)
+
 
 ## 1.3.0
 

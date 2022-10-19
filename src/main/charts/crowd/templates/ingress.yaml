@@ -6,7 +6,6 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
-    "kubernetes.io/ingress.class": {{ default "nginx" .Values.ingress.className }}
     {{ if .Values.ingress.nginx }}
     "nginx.ingress.kubernetes.io/affinity": "cookie"
     "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
@@ -25,6 +24,7 @@ spec:
         - {{ .Values.ingress.host }}
       secretName: {{ .Values.ingress.tlsSecretName }}
 {{ end }}
+  ingressClassName: {{ default "nginx" .Values.ingress.className }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:
