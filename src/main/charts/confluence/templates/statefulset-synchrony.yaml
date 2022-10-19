@@ -22,8 +22,8 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.synchrony.shutdown.terminationGracePeriodSeconds }}
-      {{- if .Values.confluence.securityContextEnabled }}
-      {{- with .Values.confluence.securityContext }}
+      {{- if .Values.synchrony.securityContextEnabled }}
+      {{- with .Values.synchrony.securityContext }}
       securityContext:
         {{/* this condition will be removed in v2.0.0 */}}
         {{- if and .enabled .gid }}
@@ -64,7 +64,7 @@ spec:
             initialDelaySeconds: {{ .Values.synchrony.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}
-          {{- with .Values.confluence.containerSecurityContext}}
+          {{- with .Values.synchrony.containerSecurityContext }}
           securityContext:
           {{- toYaml . | nindent 12}}
           {{- end}}

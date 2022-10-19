@@ -761,6 +761,22 @@ synchrony:
     #
     loadBalancerIP:
 
+  securityContextEnabled: true
+
+  securityContext:
+
+    # -- The GID used by the Confluence docker image
+    # GID will default to 2002 if not supplied and securityContextEnabled is set to true.
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+    fsGroup: 2002
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: {}
+
+
   # -- Boolean to define whether to set synchrony home directory permissions on startup
   # of Synchrony container. Set to 'false' to disable this behaviour.
   #

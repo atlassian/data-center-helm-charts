@@ -122,7 +122,7 @@ class SecurityContextTest {
     void test_synchrony_security_context(Product product) throws Exception {
 
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".securityContext.fsGroup", "2000",
+                "synchrony.securityContext.fsGroup", "2000",
                 "synchrony.enabled", "true"));
 
         JsonNode podSecurityContext = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodSpec();
@@ -134,7 +134,7 @@ class SecurityContextTest {
     void test_synchrony_container_security_context(Product product) throws Exception {
 
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".containerSecurityContext.runAsGroup", "2000",
+                "synchrony.containerSecurityContext.runAsGroup", "2000",
                 "synchrony.enabled", "true"));
 
         JsonNode containerSecurityContext = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony")
