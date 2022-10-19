@@ -10,7 +10,7 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Ingress is using `spec.ingressClassName` field instead of deprecated annotation (#451)
-* Synchrony pod annotations can be redefined in `synchrony.podAnnotations` or use default confluence annotations (#464)
+* Synchrony pod and service annotations can be redefined or use default confluence annotations (#464)
 
 
 ## 1.6.0

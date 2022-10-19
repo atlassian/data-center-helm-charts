@@ -766,6 +766,10 @@ synchrony:
     #
     loadBalancerIP:
 
+    # -- Additional annotations to apply to Synchrony Service
+    #
+    annotations: {}
+
   # -- Boolean to define whether to set synchrony home directory permissions on startup
   # of Synchrony container. Set to 'false' to disable this behaviour.
   #
