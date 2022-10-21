@@ -5,10 +5,10 @@ serviceAccount:
 
 ingress:
   create: true
+  className: "alb"
   nginx: false
   annotations:
     external-dns.alpha.kubernetes.io/hostname: ${helm.release.prefix}-bitbucket.${eks.ingress.domain}
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/certificate-arn: ${eks.ingress.certificate}
     alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
     alb.ingress.kubernetes.io/target-type: ip
