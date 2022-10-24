@@ -3,7 +3,7 @@
 
 ## 1.7.0
 
-**Release date:** 2022-10-24
+**Release date:** 2022-10-25
 
 ![AppVersion: 7.19.2](https://img.shields.io/static/v1?label=AppVersion&message=7.19.2&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
@@ -12,10 +12,9 @@
 * Pin Python version to 3.9.14 (#468)
 * Update Bitbucket ingress testing values (#466)
 * Ingress Class Name is moved under spec field. (#451)
-* CLIP-1520: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml (#454)
+* Make ATL_FORCE_CFG_UPDATE configurable in values.yaml (#454)
 * Add osquery related env vars for Terraform (#462)
 * AWS cleanup and log colletion from k8s (#461)
-* Update the index for release 1.6.0
 
 ## 1.6.0
 
