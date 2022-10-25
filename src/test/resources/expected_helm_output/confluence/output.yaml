@@ -136,6 +136,8 @@ spec:
     spec:
       serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 25
+      securityContext:
+        fsGroup: 2002
       hostAliases:
         - hostnames:
           - test.example.com

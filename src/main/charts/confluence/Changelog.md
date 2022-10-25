@@ -10,7 +10,7 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Ingress is using `spec.ingressClassName` field instead of deprecated annotation (#451)
-
+* Define securityContext for Synchrony (#465)
 
 ## 1.6.0
 
