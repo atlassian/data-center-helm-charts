@@ -36,8 +36,7 @@ annotations:
         - name: Github PR
           url: https://github.com/atlassian/data-center-helm-charts/pull/451
     - kind: changed
-      description: Make ATL_FORCE_CFG_UPDATE configurable
-      in values.yaml
+      description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
       links:
         - name: Github PR
           url: https://github.com/atlassian/data-center-helm-charts/pull/454
