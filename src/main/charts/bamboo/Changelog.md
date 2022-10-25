@@ -3,14 +3,18 @@
 
 ## 1.7.0
 
-**Release date:** TBD
+**Release date:** 2022-10-25
 
 ![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
-* Ingress is using `spec.ingressClassName` field instead of deprecated annotation (#451)
-
+* Pin Python version to 3.9.14 (#468)
+* Update Bitbucket ingress testing values (#466)
+* Ingress Class Name is moved under spec field. (#451)
+* Make ATL_FORCE_CFG_UPDATE configurable in values.yaml (#454)
+* Add osquery related env vars for Terraform (#462)
+* AWS cleanup and log colletion from k8s (#461)
 
 ## 1.6.0
 
