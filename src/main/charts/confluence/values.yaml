@@ -284,7 +284,14 @@ volumes:
       # -- The path in the K8s initContainer where the shared-home volume will be mounted
       #
       mountPath: "/shared-home"
-      
+
+      # -- Image repository for the permission fixer init container. Defaults to alpine
+      #
+      imageRepo: alpine
+      # -- Image tag for the permission fixer init container. Defaults to latest
+      #
+      imageTag: latest
+
       # -- By default, the fixer will change the group ownership of the volume's root directory
       # to match the Confluence container's GID (2002), and then ensures the directory is
       # group-writeable. If this is not the desired behaviour, command used can be specified
@@ -761,6 +768,22 @@ synchrony:
     #
     loadBalancerIP:
 
+  securityContextEnabled: true
+
+  securityContext:
+
+    # -- The GID used by the Confluence docker image
+    # GID will default to 2002 if not supplied and securityContextEnabled is set to true.
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+    fsGroup: 2002
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: {}
+
+
   # -- Boolean to define whether to set synchrony home directory permissions on startup
   # of Synchrony container. Set to 'false' to disable this behaviour.
   #
@@ -894,9 +917,12 @@ fluentd:
   #
   enabled: false
   
-  # -- The Fluentd sidecar image
+  # -- The Fluentd sidecar image repository
   #
-  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  imageRepo: fluent/fluentd-kubernetes-daemonset
+  # -- The Fluentd sidecar image tag
+  #
+  imageTag: v1.11.5-debian-elasticsearch7-1.2
 
   # -- The command used to start Fluentd. If not supplied the default command
   # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
