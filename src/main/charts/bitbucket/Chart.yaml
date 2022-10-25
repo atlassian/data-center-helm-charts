@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.6.0
+version: 1.7.0
 appVersion: 7.21.5
 kubeVersion: ">=1.19.x-0"
 keywords:
@@ -21,10 +21,37 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Ingress is using `spec.ingressClassName` field instead of deprecated annotation
+      description: Pin Python version to 3.9.14
       links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/451
+        - name: Github PR
+          url: https://github.com/atlassian/data-center-helm-charts/pull/468
+    - kind: changed
+      description: Update Bitbucket ingress testing values
+      links:
+        - name: Github PR
+          url: https://github.com/atlassian/data-center-helm-charts/pull/466
+    - kind: changed
+      description: Ingress Class Name is moved under spec field.
+      links:
+        - name: Github PR
+          url: https://github.com/atlassian/data-center-helm-charts/pull/451
+    - kind: changed
+      description: Make ATL_FORCE_CFG_UPDATE configurable
+      in values.yaml
+      links:
+        - name: Github PR
+          url: https://github.com/atlassian/data-center-helm-charts/pull/454
+    - kind: changed
+      description: Add osquery related env vars for Terraform
+      links:
+        - name: Github PR
+          url: https://github.com/atlassian/data-center-helm-charts/pull/462
+    - kind: changed
+      description: AWS cleanup and log colletion from k8s
+      links:
+        - name: Github PR
+          url: https://github.com/atlassian/data-center-helm-charts/pull/461
+
 dependencies:
   - name: common
     version: 1.0.0
