@@ -11,7 +11,7 @@
 
 * Ingress is using `spec.ingressClassName` field instead of deprecated annotation (#451)
 * Synchrony pod and service annotations can be redefined or use default confluence annotations (#464)
-
+* Define securityContext for Synchrony (#465)
 
 ## 1.6.0
 

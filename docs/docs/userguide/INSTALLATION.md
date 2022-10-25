@@ -165,7 +165,44 @@ license:
       emailAddressSecretKey: emailAddress
     ```
 
-## 8. Install your chosen product
+## 8. Configure container images
+
+By default, container images are pulled from [official Atlassian DockerHub repositories](https://hub.docker.com/u/atlassian). Deployments may also use 2 other official non-Altassian images - [alpine](https://hub.docker.com/_/alpine) and [fluentd](https://hub.docker.com/r/fluent/fluentd-kubernetes-daemonset).
+
+In air-gapped environments that cannot directly access DockerHub you will need to pass custom repositories/tags to the Helm installation/upgrade command.
+
+### Product images
+
+For product images (such as Jira, Bitbucket, Confluence, Bamboo), update `values.yaml`:
+
+```
+image:
+  registry: artifactory.mycompany.com
+  repository: jira
+  tag: 7.8.20
+```
+
+### Helper containers
+
+If `volumes.sharedHome.persistentVolumeClaim.sharedHome.nfsPermissionFixer.enabled` is set to `true`, update `values.yaml`:
+
+```
+volumes:
+  sharedHome:
+    nfsPermissionFixer:
+      imageRepo: artifactory.mycompany.com/alpine
+      imageTag: latest
+```
+
+If `fluentd.enabled` is set to `true` (false by default), update `values.yaml`:
+
+```
+fluentd:
+  imageRepo: artifactory.mycompany.com/fluentd-kubernetes-daemonset
+  imageTag: v1.11.5-debian-elasticsearch7-1.2
+```
+
+## 9. Install your chosen product
 
 ```shell
 helm install <release-name> \

@@ -1,7 +1,7 @@
 {{- define "fluentd.container" -}}
 {{ if .Values.fluentd.enabled }}
 - name: fluentd
-  image: {{ .Values.fluentd.imageName }}
+  image: {{ .Values.fluentd.imageRepo }}:{{ .Values.fluentd.imageTag }}
   command: ["sh", "-c", {{ include "fluentd.start.command" . | quote }}]
   volumeMounts:
     - name: fluentd-config

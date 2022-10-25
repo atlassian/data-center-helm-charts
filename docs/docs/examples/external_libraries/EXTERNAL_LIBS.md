@@ -71,10 +71,11 @@ kubectl cp my_library.jar shared-home-browser:/shared-home/libraries
 ### 3. Update `values.yaml`
 Update the stanza, `additionalLibraries`, in `values.yaml` accordingly:
 ```yaml
-additionalLibraries:
-  - volumeName: shared-home
-    subDirectory: libraries
-    fileName: my_library.jar
+jira:
+  additionalLibraries:
+    - volumeName: shared-home
+      subDirectory: libraries
+      fileName: my_library.jar
 ```
 With this config these files (`my_library.jar`) will be injected into the container directory `<product-installation-directory>/lib`. For more info on how these files are injected into the appropriate product container location, see Jira's helper [jira.additionalLibraries](https://github.com/atlassian/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L180).  
 
