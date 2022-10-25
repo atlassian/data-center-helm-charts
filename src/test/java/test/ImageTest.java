@@ -75,4 +75,55 @@ class ImageTest {
                         .describedAs("StatefulSet %s should have the configured imagePullPolicy", statefulSet.getName())
                         .hasTextEqualTo("Always"));
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket", "confluence", "bamboo"})
+    void fluentd_custom_image_test(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true",
+                "fluentd.imageRepo", "registry.com",
+                "fluentd.imageTag", "mytag"
+        ));
+
+        final var fluentContainerImage = resources.getStatefulSet(product.getHelmReleaseName()).getContainer("fluentd").get("image");
+
+        assertThat(fluentContainerImage).hasTextEqualTo("registry.com:mytag");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket", "confluence", "bamboo"})
+    void fluentd_default_image_test(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true"
+        ));
+
+        final var fluentContainerImage = resources.getStatefulSet(product.getHelmReleaseName()).getContainer("fluentd").get("image");
+
+        assertThat(fluentContainerImage).hasTextContaining("fluent/fluentd");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket", "confluence", "bamboo"})
+    void nfs_permission_fixer_custom_image_test(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                "volumes.sharedHome.nfsPermissionFixer.imageRepo", "registry.com",
+                "volumes.sharedHome.nfsPermissionFixer.imageTag", "mytag"
+        ));
+
+        final var permissionFixerImage = resources.getStatefulSet(product.getHelmReleaseName()).getInitContainer("nfs-permission-fixer").get().path("image");
+
+        assertThat(permissionFixerImage).hasTextEqualTo("registry.com:mytag");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "bitbucket", "confluence", "bamboo"})
+    void nfs_permission_fixer_default_image_test(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+                ));
+        final var permissionFixerImage = resources.getStatefulSet(product.getHelmReleaseName()).getInitContainer("nfs-permission-fixer").get().path("image");
+
+        assertThat(permissionFixerImage).hasTextContaining("alpine");
+    }
 }
