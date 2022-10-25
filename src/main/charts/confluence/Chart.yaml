@@ -30,6 +30,7 @@ annotations:
       links:
       - name: Github PR
         url: https://github.com/atlassian/data-center-helm-charts/pull/464
+    - kind: added
       description: Security context for synchrony pod and container
       links:
       - name: Github PR
