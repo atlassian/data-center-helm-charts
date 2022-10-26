@@ -3,6 +3,37 @@ entries:
   bamboo:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Patch release to fix Artifacthub metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.0.0
+    created: "2022-10-26T04:39:57.50419584Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 8c3b83ac094fb647b24c54bef71495242591a9969a8d9d9385eedc24a9bc2599
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.7.1/bamboo-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Pin Python version to 3.9.14
           links:
@@ -19,8 +50,7 @@ entries:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/451
         - kind: changed
-          description: Make ATL_FORCE_CFG_UPDATE configurable
-          in values.yaml
+          description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
           links:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/454
@@ -394,6 +424,37 @@ entries:
   bamboo-agent:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Patch release to fix Artifacthub metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.0.0
+    created: "2022-10-26T04:39:57.797588847Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: d38ef1cfef552a2761f4a74e0a1fca6d3e8379af143518f102b2c3777869886e
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.7.1/bamboo-agent-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Pin Python version to 3.9.14
           links:
@@ -410,8 +471,7 @@ entries:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/451
         - kind: changed
-          description: Make ATL_FORCE_CFG_UPDATE configurable
-          in values.yaml
+          description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
           links:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/454
@@ -740,6 +800,37 @@ entries:
   bitbucket:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Patch release to fix Artifacthub metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 7.21.5
+    created: "2022-10-26T04:39:58.094157689Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: d26ec952897df1b37edc5f55b559bd629e11412580da5804542f03c9ac14e834
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.7.1/bitbucket-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Pin Python version to 3.9.14
           links:
@@ -756,8 +847,7 @@ entries:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/451
         - kind: changed
-          description: Make ATL_FORCE_CFG_UPDATE configurable
-          in values.yaml
+          description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
           links:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/454
@@ -1509,6 +1599,37 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Patch release to fix Artifacthub metadata
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.19.2
+    created: "2022-10-26T04:39:58.69472741Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 7958e3ac7fd83d8013cfbbcf698ea583848eeabff68fd652a809e9d9691778a0
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.7.1/confluence-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Pin Python version to 3.9.14
           links:
@@ -1525,8 +1646,7 @@ entries:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/451
         - kind: changed
-          description: CLIP-1520: Make ATL_FORCE_CFG_UPDATE configurable
-          in values.yaml
+          description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
           links:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/454
@@ -2376,6 +2496,37 @@ entries:
   crowd:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Patch release to fix Artifacthub metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.0.2
+    created: "2022-10-26T04:39:59.005382719Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 3a14a1aa5c0407a145f42ea44b249e469f381dcbe7b493fdfbb897acab5ef45e
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.7.1/crowd-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Pin Python version to 3.9.14
           links:
@@ -2392,8 +2543,7 @@ entries:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/451
         - kind: changed
-          description: Make ATL_FORCE_CFG_UPDATE configurable
-          in values.yaml
+          description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
           links:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/454
@@ -3059,6 +3209,38 @@ entries:
   jira:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Patch release to fix Artifacthub metadata
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.20.13
+    created: "2022-10-26T04:39:59.296319961Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: a2440085f1921fa87836ec66775e64fcb39bc13c4eeb3c84f0534481eb911890
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.19.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.7.1/jira-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Pin Python version to 3.9.14
           links:
@@ -3075,8 +3257,7 @@ entries:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/451
         - kind: changed
-          description: Make ATL_FORCE_CFG_UPDATE configurable
-          in values.yaml
+          description: Make ATL_FORCE_CFG_UPDATE configurable in values.yaml
           links:
             - name: Github PR
               url: https://github.com/atlassian/data-center-helm-charts/pull/454
@@ -3847,4 +4028,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2022-10-25T00:43:33.30961316Z"
+generated: "2022-10-26T04:39:59.296593039Z"
