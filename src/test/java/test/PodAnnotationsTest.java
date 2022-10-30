@@ -50,4 +50,39 @@ class PodAnnotationsTest {
                 "podAnnotation2", "podOfOrcas"
         ));
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_pod_default_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "podAnnotations.confluence", "annotation",
+                "podAnnotations.confluence1", "annotation1",
+                "synchrony.enabled", "true"
+        ));
+
+        final var annotations = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodMetadata().get("annotations");
+
+        assertThat(annotations).isObject(Map.of(
+                "confluence", "annotation",
+                "confluence1", "annotation1"
+        ));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_pod_custom_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.podAnnotations.synchrony", "annotation",
+                "synchrony.podAnnotations.synchrony1", "annotation1",
+                "synchrony.enabled", "true"
+        ));
+
+        final var annotations = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodMetadata().get("annotations");
+
+        assertThat(annotations).isObject(Map.of(
+                "synchrony", "annotation",
+                "synchrony1", "annotation1"
+
+        ));
+    }
 }

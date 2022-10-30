@@ -73,4 +73,34 @@ class ServiceTest {
                 .hasTextEqualTo("LoadBalancer");
         assertThat(service.getLoadBalancerIP()).hasTextEqualTo("1.1.1.1");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_service_default_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "confluence.service.annotations.confluence", "qwerty",
+                "synchrony.enabled", "true"
+        ));
+
+        final var annotations = resources.get(Kind.Service, Service.class, product.getHelmReleaseName() + "-synchrony").getAnnotations();
+
+        assertThat(annotations).isObject(Map.of(
+                "confluence", "qwerty"
+        ));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_service_custom_annotations(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.service.annotations.confluence", "qwerty-synchrony",
+                "synchrony.enabled", "true"
+        ));
+
+        final var annotations = resources.get(Kind.Service, Service.class, product.getHelmReleaseName() + "-synchrony").getAnnotations();
+
+        assertThat(annotations).isObject(Map.of(
+                "confluence", "qwerty-synchrony"
+        ));
+    }
 }

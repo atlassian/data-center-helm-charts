@@ -5,6 +5,17 @@ metadata:
   name: {{ include "synchrony.fullname" . }}
   labels:
     {{- include "synchrony.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.synchrony.service.annotations }}
+    {{- with .Values.synchrony.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- else }}
+    {{- with .Values.confluence.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
+
 spec:
   type: {{ .Values.synchrony.service.type }}
   {{- if and (eq .Values.synchrony.service.type "LoadBalancer") (not (empty .Values.synchrony.service.loadBalancerIP)) }}
