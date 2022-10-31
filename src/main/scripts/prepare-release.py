@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 import logging as log
 import os
 import re
+from ruamel.yaml import YAML
 from tempfile import mkstemp
 
 products = ["bamboo", "bamboo-agent", "bitbucket", "confluence", "crowd", "jira"]
@@ -22,15 +23,17 @@ def update_charts_yaml(version):
 
         proddir = f"{prodbase}/{prod}"
         chartfile = f"{proddir}/Chart.yaml"
-        (tmpfd, tmpname) = mkstemp(dir=proddir, text=True)
 
         with open(chartfile, 'r') as chart:
-            for line in chart:
-                nline = re.sub(r'^version: .+$', f"version: {version}", line)
-                os.write(tmpfd, nline.encode())
+            yaml = YAML()
+            yaml.preserve_quotes = True
+            chartyaml = yaml.load(chart)
 
-        os.close(tmpfd)
-        os.rename(tmpname, chartfile)
+        chartyaml['version'] = version
+
+        with open(chartfile, 'w') as chart:
+            yaml.dump(chartyaml, chart)
+
 
 def main():
     log.basicConfig(level=log.INFO)
