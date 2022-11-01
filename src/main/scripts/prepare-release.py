@@ -12,15 +12,6 @@ products = ["bamboo", "bamboo-agent",
 prodbase = "src/main/charts"
 
 
-def parse_args():
-    parser = ArgumentParser()
-    parser.add_argument("version", help="The version to release")
-    parser.add_argument("ghkey", help="Your Github API key")
-    args = parser.parse_args()
-
-    return args
-
-
 # TODO: As a first pass this currently only filters anything tagged
 # with 'CLIP-nnn'. However there are other options; see
 # https://hello.atlassian.net/wiki/spaces/DCD/pages/2108707663/DACI+Automating+the+Helm+release+process
@@ -42,6 +33,14 @@ def gen_changelog(repo_path):
     return list(filter(changelog_filter, changelog))
 
 
+def format_changelog(changelog):
+    # The artifacthub annotations are a single string, but formatted
+    # like YAML. Replacing the leading '*' with '-' should be
+    # sufficient.
+    c2 = map(lambda c: re.sub(r'^\* ', '- ', c), changelog)
+    return '\n'.join(c2)
+
+
 def update_charts_yaml(version, changelog):
     for prod in products:
         log.info(f"Updating {prod} to {version}")
@@ -55,10 +54,19 @@ def update_charts_yaml(version, changelog):
             chartyaml = yaml.load(chart)
 
         chartyaml['version'] = version
-        chartyaml['annotations']['artifacthub.io/changes'] = changelog
+        chartyaml['annotations']['artifacthub.io/changes'] = format_changelog(changelog)
 
         with open(chartfile, 'w') as chart:
             yaml.dump(chartyaml, chart)
+
+
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument("version", help="The version to release")
+    parser.add_argument("ghkey", help="Your Github API key")
+    args = parser.parse_args()
+
+    return args
 
 
 def main():
