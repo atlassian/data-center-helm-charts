@@ -3,6 +3,8 @@ import git
 import logging as log
 import os
 import re
+import subprocess
+import sys
 from argparse import ArgumentParser
 from ruamel.yaml import YAML
 from tempfile import mkstemp
@@ -60,6 +62,16 @@ def update_charts_yaml(version, changelog):
             yaml.dump(chartyaml, chart)
 
 
+def update_output_tests():
+    log.info("Running Maven to update the unit test output")
+
+    update_o = subprocess.run(['mvn', 'test', '-B', '-Dtest=test.HelmOutputComparisonTest#record_helm_template_output_matches_expectations', '-DrecordOutput=true'],
+                              capture_output=True)
+    if update_o.returncode != 0:
+        log.error("Failed to update the unittest comparison data: \n%s", re.sub(r'\\n', '\n', str(update_o.stdout)))
+        sys.exit(-1)
+
+
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument("version", help="The version to release")
@@ -78,6 +90,8 @@ def main():
     changelog = gen_changelog(".")
     log.info('Changelog:\n%s' % '\n'.join(changelog))
     update_charts_yaml(args.version, changelog)
+
+    update_output_tests()
 
 
 if __name__ == '__main__':
