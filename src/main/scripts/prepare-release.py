@@ -43,6 +43,16 @@ def format_changelog(changelog):
     return '\n'.join(c2)
 
 
+def update_helm_dependencies(product):
+    log.info(f"Updating Helm dependencies for {product}")
+    path = f"{prodbase}/{product}"
+
+    update_o = subprocess.run(['helm', 'dependency', 'update', path], capture_output=True)
+    if update_o.returncode != 0:
+        log.error("Failed to update Helm dependencies: \n%s", re.sub(r'\\n', '\n', str(update_o.stderr)))
+        sys.exit(-1)
+
+
 def update_charts_yaml(version, changelog):
     for prod in products:
         log.info(f"Updating {prod} to {version}")
@@ -60,6 +70,8 @@ def update_charts_yaml(version, changelog):
 
         with open(chartfile, 'w') as chart:
             yaml.dump(chartyaml, chart)
+
+        update_helm_dependencies(prod)
 
 
 def update_output_tests():
@@ -89,6 +101,7 @@ def main():
 
     changelog = gen_changelog(".")
     log.info('Changelog:\n%s' % '\n'.join(changelog))
+
     update_charts_yaml(args.version, changelog)
 
     update_output_tests()
