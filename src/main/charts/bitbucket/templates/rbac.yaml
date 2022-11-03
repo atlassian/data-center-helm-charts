@@ -1,3 +1,7 @@
+# Historically, the chart was released with ClusterRole and ClusterRoleBinding templates,
+# although, out of the box, Hazelcast Kubernetes client does not need privileges to list and get nodes
+# unless https://github.com/hazelcast/hazelcast-kubernetes#zone-aware is configured
+# To keep changes to a minimum, existing variables with `Cluster` in their names have been reused
 {{- if and (.Values.bitbucket.clustering.enabled) (or .Values.serviceAccount.clusterRole.create .Values.serviceAccount.role.create) -}}
 apiVersion: rbac.authorization.k8s.io/v1
 {{- if .Values.serviceAccount.clusterRole.create }}

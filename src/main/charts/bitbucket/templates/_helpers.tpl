@@ -21,9 +21,9 @@ default
 {{- end }}
 
 {{/*
-The name of the ClusterRole that will be created.
-If the name is defined in the chart values, then use that,
-else use the name of the Helm release.
+The name of the Role or ClusterRole that will be created.
+If .Values.serviceAccount.clusterRole.name is defined in the chart values, then use that,
+else use the name of the Helm release. Role name is always the Helm release name
 */}}
 {{- define "bitbucket.clusterRoleName" -}}
 {{- if and .Values.serviceAccount.clusterRole.name .Values.serviceAccount.clusterRole.create }}
@@ -34,9 +34,9 @@ else use the name of the Helm release.
 {{- end }}
 
 {{/*
-The name of the ClusterRoleBinding that will be created.
-If the name is defined in the chart values, then use that,
-else use the name of the ClusterRole.
+The name of the RoleBinding or ClusterRoleBinding that will be created.
+If .Values.serviceAccount.clusterRoleBinding.name is defined in the chart values, then use that,
+else use the name defined in `bitbucket.clusterRoleName`. RoleBinding name is always the Helm release name
 */}}
 {{- define "bitbucket.clusterRoleBindingName" -}}
 {{- if and .Values.serviceAccount.clusterRoleBinding.name .Values.serviceAccount.clusterRoleBinding.create }}
