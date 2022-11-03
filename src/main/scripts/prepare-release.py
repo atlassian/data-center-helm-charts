@@ -117,7 +117,6 @@ def update_output_tests():
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument("version", help="The version to release")
-    parser.add_argument("ghkey", help="Your Github API key")
     args = parser.parse_args()
 
     return args
