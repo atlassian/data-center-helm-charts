@@ -57,6 +57,7 @@ def update_changelog_file(version, changelog):
             for line in clfd:
                 if not foundfirst and re.match(r'^## [0-9]\.[0-9]\.[0-9]', line) != None:
                     # First version line, inject ours before it
+                    foundfirst = True
                     now = datetime.now()
                     os.write(tmpfd, ("## %s\n\n" % version).encode())
                     os.write(tmpfd, ("**Release date:** %s-%s-%s\n\n" % (now.year, now.month, now.day)).encode())
