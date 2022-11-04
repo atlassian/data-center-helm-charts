@@ -22,6 +22,24 @@ def changelog_filter(log_entry):
     return re.match(r'^\*\s+CLIP-[0-9]+', log_entry) != None
 
 
+def get_chart_versions():
+    versions = {}
+    for prod in products:
+        proddir = f"{prodbase}/{prod}"
+        chartfile = f"{proddir}/Chart.yaml"
+
+        with open(chartfile, 'r') as chart:
+            yaml = YAML()
+            chartyaml = yaml.load(chart)
+
+        versions[prod] = {}
+        versions[prod]['kubeVersion'] = chartyaml['kubeVersion']
+        versions[prod]['appVersion'] = chartyaml['appVersion']
+
+        log.info(f"Product {prod} versions: {versions[prod]['kubeVersion']}, {versions[prod]['appVersion']}")
+
+    return versions
+
 def gen_changelog(repo_path):
     repo = git.Repo(repo_path)
     cli = git.Git(repo_path)
@@ -44,7 +62,7 @@ def format_changelog_yaml(changelog):
     return '\n'.join(c2)
 
 
-def update_changelog_file(version, changelog):
+def update_changelog_file(version, changelog, chartversions):
     for prod in products:
         log.info(f"Updating {prod} Changelog.md to {version}")
 
@@ -58,11 +76,14 @@ def update_changelog_file(version, changelog):
                 if not foundfirst and re.match(r'^## [0-9]\.[0-9]\.[0-9]', line) != None:
                     # First version line, inject ours before it
                     foundfirst = True
+
+                    kver = chartversions[prod]['kubeVersion']
+                    appver = chartversions[prod]['appVersion']
                     now = datetime.now()
                     os.write(tmpfd, ("## %s\n\n" % version).encode())
                     os.write(tmpfd, ("**Release date:** %s-%s-%s\n\n" % (now.year, now.month, now.day)).encode())
-                    os.write(tmpfd, '![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)\n'.encode())
-                    os.write(tmpfd, '![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)\n'.encode())
+                    os.write(tmpfd, ('![AppVersion: %s](https://img.shields.io/static/v1?label=AppVersion&message=%s&color=success&logo=)\n' % (appver, appver)).encode())
+                    os.write(tmpfd, ('![Kubernetes: %s](https://img.shields.io/static/v1?label=Kubernetes&message=%s&color=informational&logo=kubernetes)\n' % (kver, kver)).encode())
                     os.write(tmpfd, '![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)\n\n'.encode())
                     for change in changelog:
                         os.write(tmpfd, ('%s\n' % change).encode())
@@ -129,10 +150,11 @@ def main():
     args = parse_args()
     log.info(f"Updating Helm charts to release {args.version}")
 
+    chartversions = get_chart_versions()
     changelog = gen_changelog(".")
     log.info('Changelog:\n%s' % '\n'.join(changelog))
 
-    update_changelog_file(args.version, changelog)
+    update_changelog_file(args.version, changelog, chartversions)
 
     update_charts_yaml(args.version, changelog)
 
