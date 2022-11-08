@@ -73,6 +73,12 @@ serviceAccount:
   #
   annotations: {}
 
+  role:
+    # -- Create a role for Hazelcast client with privileges to get and list pods and endpoints in the namespace.
+    # Set to false if you need to create a Role and RoleBinding manually
+    #
+    create: true
+
    # Define permissions
    # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
    #
@@ -81,13 +87,21 @@ serviceAccount:
     # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
     # already exists.
     #
-    create: true
+    create: false
 
     # -- The name of the ClusterRole to be used. If not specified, but
     # the "serviceAccount.clusterRole.create" flag is set to 'true',
     # then the ClusterRole name will be auto-generated.
     #
     name:
+
+  # -- Grant permissions defined in Role (list and get pods and endpoints) to a service account.
+  #
+  roleBinding:
+
+    # Set to false if you need to create a Role and RoleBinding manually
+    #
+    create: true
 
   # Grant permissions defined in ClusterRole
   # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding
@@ -97,7 +111,7 @@ serviceAccount:
     # -- Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it
     # already exists.
     #
-    create: true
+    create: false
 
     # -- The name of the ClusterRoleBinding to be created. If not specified, but
     # the "serviceAccount.clusterRoleBinding.create" flag is set to 'true',
@@ -924,12 +938,12 @@ fluentd:
 
   # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   #
-  enabled: false  
-  
+  enabled: false
+
   # -- The Fluentd sidecar image repository
   #
   imageRepo: fluent/fluentd-kubernetes-daemonset
-  
+
   # -- The Fluentd sidecar image tag
   #
   imageTag: v1.11.5-debian-elasticsearch7-1.2

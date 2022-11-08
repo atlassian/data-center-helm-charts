@@ -101,6 +101,8 @@ class ServiceAccountTest {
     void cluster_role_name(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".clustering.enabled", "true",
+                "serviceAccount.clusterRoleBinding.create", "true",
+                "serviceAccount.clusterRole.create", "true",
                 "serviceAccount.clusterRole.name", "foo"));
 
         assertThat(resources.get(ServiceAccount).getName())
@@ -117,6 +119,7 @@ class ServiceAccountTest {
     void cluster_role_create_disabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".clustering.enabled", "true",
+                "serviceAccount.clusterRoleBinding.create", "true",
                 "serviceAccount.clusterRole.create", "false"));
 
         assertThat(resources.get(ServiceAccount).getName())
@@ -135,6 +138,8 @@ class ServiceAccountTest {
     void cluster_role_binding_name(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".clustering.enabled", "true",
+                "serviceAccount.clusterRoleBinding.create", "true",
+                "serviceAccount.clusterRole.create", "true",
                 "serviceAccount.clusterRoleBinding.name", "foo"));
 
         assertThat(resources.get(ServiceAccount).getName())
