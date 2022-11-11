@@ -1,0 +1,54 @@
+name: Update LTS Tags
+
+on:
+  schedule:
+    - cron: '0 0 * * SUN' # At 00:00 on every Sunday
+
+jobs:
+  tls_check:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.14'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml requests
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Update LTS tags in Helm charts
+        run: |
+          cd src/test/scripts
+          python update_versions.py
+
+      - name: Commit changes and raise a PR
+        run: |
+          CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
+          if [ ${CHANGES} -ne 0 ]; then
+            gh pr list --state open | grep "Update appVersions for DC apps"
+            if [ $? -ne 0 ]; then
+              echo "Not raising PR because there are open PRs to upgrade versions. Merge or close them to let the workflow raise new PRs"
+            else
+              git checkout -b lts-tag-update-${GITHUB_RUN_ID}
+              git add -A
+              git commit -m "Update appVersions for DC apps"
+              git push origin lts-tag-update-${GITHUB_RUN_ID}
+              gh pr create --label "e2e" --title "Update appVersions for DC apps" --body "Update appVersions for DC apps" --base main --head lts-tag-update-${GITHUB_RUN_ID}
+            fi
+          else
+            echo "All Helm charts have the latest LTS appVersion"
+          fi
