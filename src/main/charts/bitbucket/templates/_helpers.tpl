@@ -26,7 +26,7 @@ If the name is defined in the chart values, then use that,
 else use the name of the Helm release.
 */}}
 {{- define "bitbucket.clusterRoleName" -}}
-{{- if .Values.serviceAccount.clusterRole.name }}
+{{- if and .Values.serviceAccount.clusterRole.name .Values.serviceAccount.clusterRole.create }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
 {{- include "common.names.fullname" . -}}
@@ -39,7 +39,7 @@ If the name is defined in the chart values, then use that,
 else use the name of the ClusterRole.
 */}}
 {{- define "bitbucket.clusterRoleBindingName" -}}
-{{- if .Values.serviceAccount.clusterRoleBinding.name }}
+{{- if and .Values.serviceAccount.clusterRoleBinding.name .Values.serviceAccount.clusterRoleBinding.create }}
 {{- .Values.serviceAccount.clusterRoleBinding.name }}
 {{- else }}
 {{- include "bitbucket.clusterRoleName" . -}}
