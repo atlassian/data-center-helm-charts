@@ -37,6 +37,8 @@ jobs:
 
       - name: Commit changes and raise a PR
         run: |
+          set -x
+          git status --porcelain=v1 2>/dev/null | wc -l
           CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
           if [ ${CHANGES} -ne 0 ]; then
             gh pr list --state open | grep "Update appVersions for DC apps"
