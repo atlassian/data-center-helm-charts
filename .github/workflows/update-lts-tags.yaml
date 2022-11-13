@@ -44,6 +44,7 @@ jobs:
           git status --porcelain=v1 2>/dev/null | wc -l
           CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
           if [ ${CHANGES} -ne 0 ]; then
+            echo ">>>>>>>>>>>"
             gh pr list --state open | grep "Update appVersions for DC apps"
             if [ $? -ne 0 ]; then
               echo "Not raising PR because there are open PRs to upgrade versions. Merge or close them to let the workflow raise new PRs"
