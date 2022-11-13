@@ -3,7 +3,7 @@ name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
 version: 1.7.1
-appVersion: 8.20.13
+appVersion: 8.20.14
 kubeVersion: ">=1.19.x-0"
 keywords:
   - Jira

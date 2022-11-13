@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bitbucket-1.7.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.5"
+    app.kubernetes.io/version: "7.21.6"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bitbucket-1.7.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.5"
+    app.kubernetes.io/version: "7.21.6"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -37,7 +37,7 @@ metadata:
     helm.sh/chart: bitbucket-1.7.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.5"
+    app.kubernetes.io/version: "7.21.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -68,7 +68,7 @@ metadata:
     helm.sh/chart: bitbucket-1.7.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.5"
+    app.kubernetes.io/version: "7.21.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -96,7 +96,7 @@ spec:
       initContainers:
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket:7.21.5"
+          image: "atlassian/bitbucket:7.21.6"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -176,7 +176,7 @@ metadata:
     helm.sh/chart: bitbucket-1.7.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.5"
+    app.kubernetes.io/version: "7.21.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -208,7 +208,7 @@ metadata:
     helm.sh/chart: bitbucket-1.7.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.5"
+    app.kubernetes.io/version: "7.21.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
