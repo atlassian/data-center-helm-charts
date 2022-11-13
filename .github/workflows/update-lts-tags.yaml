@@ -1,8 +1,11 @@
 name: Update LTS Tags
 
 on:
-  schedule:
-    - cron: '0 0 * * SUN' # At 00:00 on every Sunday
+  push:
+    branches:
+      - troubleshoot-lts
+  # schedule:
+  #   - cron: '0 0 * * SUN' # At 00:00 on every Sunday
 
 jobs:
   tls_check:
@@ -37,14 +40,15 @@ jobs:
 
       - name: Commit changes and raise a PR
         run: |
+          git status --porcelain=v1 2>/dev/null | wc -l
           CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
           if [ ${CHANGES} -ne 0 ]; then
-            gh pr list --state open | grep "Update appVersions for DC apps"
-            if [ $? -ne 0 ]; then
+            OPEN_PRS=$(gh pr list --state open | grep "Update appVersions for DC apps" || true)
+            if [[ ${OPEN_PRS} ]]; then
               echo "Not raising PR because there are open PRs to upgrade versions. Merge or close them to let the workflow raise new PRs"
             else
               git checkout -b lts-tag-update-${GITHUB_RUN_ID}
-              git add -A
+              git add src
               git commit -m "Update appVersions for DC apps"
               git push origin lts-tag-update-${GITHUB_RUN_ID}
               gh pr create --label "e2e" --title "Update appVersions for DC apps" --body "Update appVersions for DC apps" --base main --head lts-tag-update-${GITHUB_RUN_ID}
