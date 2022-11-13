@@ -46,7 +46,7 @@ jobs:
           if [ ${CHANGES} -ne 0 ]; then
             echo ">>>>>>>>>>>"
             gh pr list --state open
-            gh pr list --state open | grep "Update appVersions for DC apps"
+            gh pr list --state open | grep "Update appVersions for DC apps" || true
             if [ $? -ne 0 ]; then
               echo "Not raising PR because there are open PRs to upgrade versions. Merge or close them to let the workflow raise new PRs"
             else
