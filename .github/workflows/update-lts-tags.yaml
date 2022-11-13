@@ -1,8 +1,11 @@
 name: Update LTS Tags
 
 on:
-  schedule:
-    - cron: '0 0 * * SUN' # At 00:00 on every Sunday
+  push:
+    branches:
+      - troubleshoot-lts
+  # schedule:
+  #   - cron: '0 0 * * SUN' # At 00:00 on every Sunday
 
 jobs:
   tls_check:
