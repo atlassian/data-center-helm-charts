@@ -44,7 +44,7 @@ jobs:
               echo "Not raising PR because there are open PRs to upgrade versions. Merge or close them to let the workflow raise new PRs"
             else
               git checkout -b lts-tag-update-${GITHUB_RUN_ID}
-              git add src
+              git add -A
               git commit -m "Update appVersions for DC apps"
               git push origin lts-tag-update-${GITHUB_RUN_ID}
               gh pr create --label "e2e" --title "Update appVersions for DC apps" --body "Update appVersions for DC apps" --base main --head lts-tag-update-${GITHUB_RUN_ID}
