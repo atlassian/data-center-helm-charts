@@ -111,6 +111,10 @@ jobs:
           cat << EOF >> ./e2etest/test-config.tfvars.tmpl
           # install local helm charts
           local_helm_charts_path="$(dirname $(dirname $(pwd)))/src/main/charts"
+          confluence_install_local_chart = true
+          jira_install_local_chart = true
+          bitbucket_install_local_chart = true
+          bamboo_install_local_chart = true
           EOF
 
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
