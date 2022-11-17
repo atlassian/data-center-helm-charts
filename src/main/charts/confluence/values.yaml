@@ -883,7 +883,7 @@ synchrony:
   # -- Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g.
   # system properties.
   #
-  additionalJvmArgs: {}
+  additionalJvmArgs: []
     #- -Dsynchrony.example.system.property=46
 
   shutdown:
