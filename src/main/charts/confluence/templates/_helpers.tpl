@@ -477,9 +477,11 @@ volumeClaimTemplates:
       name: {{ . }}
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
-{{- if and (.Values.database.type) (contains "oracle" .Values.database.type ) }}
+{{- if .Values.database.type }}
+{{- if contains "oracle" .Values.database.type }}
 - name: ATL_DB_VALIDATIONQUERY
   value: "select 1 from dual"
+{{- end }}
 {{- end }}
 {{ end }}
 
