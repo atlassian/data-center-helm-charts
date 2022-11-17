@@ -281,6 +281,10 @@ volumeClaimTemplates:
       name: {{ . }}
       key: {{ $.Values.database.credentials.passwordSecretKey }}
 {{ end }}
+{{- if and (.Values.database.type) (contains "oracle" .Values.database.type ) }}
+- name: ATL_DB_VALIDATIONQUERY
+  value: "select 1 from dual"
+{{- end }}
 {{ end }}
 
 {{- define "jira.clusteringEnvVars" -}}

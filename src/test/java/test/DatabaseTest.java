@@ -99,4 +99,16 @@ class DatabaseTest {
                 .assertHasSecretRef("ATL_JDBC_USER", "mysecret", "myusername")
                 .assertHasSecretRef("ATL_JDBC_PASSWORD", "mysecret", "mypassword");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "confluence"})
+    void atl_db_validation_query_test(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.type", "oracle10g"));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_DB_VALIDATIONQUERY", "select 1 from dual");
+    }
 }
