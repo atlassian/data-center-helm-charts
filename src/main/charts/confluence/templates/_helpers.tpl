@@ -506,6 +506,8 @@ volumeClaimTemplates:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
   value: {{ include "common.names.fullname" . | quote }}
+- name: HAZELCAST_KUBERNETES_SERVICE_PORT
+  value: {{ .Values.confluence.ports.hazelcast | quote }}
 - name: ATL_CLUSTER_TYPE
   value: "kubernetes"
 - name: ATL_CLUSTER_NAME
@@ -521,6 +523,8 @@ volumeClaimTemplates:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
   value: {{ include "synchrony.fullname" . | quote }}
+- name: HAZELCAST_KUBERNETES_SERVICE_PORT
+  value: {{ .Values.synchrony.ports.hazelcast | quote }}
 - name: CLUSTER_JOIN_TYPE
   value: "kubernetes"
 {{ end }}
