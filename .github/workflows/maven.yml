@@ -23,9 +23,9 @@ jobs:
           java-version: 11
 
       - name: Install Helm
-        uses: azure/setup-helm@v1
+        uses: azure/setup-helm@v3
         with:
-          version: v3.7.1
+          version: v3.9.4
 
       - name: Execute helm dependency update for bamboo chart
         run: helm dependency update src/main/charts/bamboo
