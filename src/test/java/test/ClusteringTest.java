@@ -79,7 +79,10 @@ class ClusteringTest {
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_clustering_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".clustering.enabled", "true"));
+                product + ".clustering.enabled", "true",
+                product + ".ports.hazelcast", "5801",
+                "synchrony.enabled","true",
+                "synchrony.ports.hazelcast","5801"));
 
         resources.assertContains(Role, product.getHelmReleaseName())
                 .assertContains(RoleBinding, product.getHelmReleaseName());
@@ -89,8 +92,12 @@ class ClusteringTest {
                 .getEnv()
                 .assertHasFieldRef("KUBERNETES_NAMESPACE", "metadata.namespace")
                 .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_NAME", product.getHelmReleaseName())
+                .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_PORT", "5801")
                 .assertHasValue("ATL_CLUSTER_TYPE", "kubernetes")
                 .assertHasValue("ATL_CLUSTER_NAME", product.getHelmReleaseName());
+
+        resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getContainer().getEnv()
+                .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_PORT", "5801");
     }
 
     @ParameterizedTest
