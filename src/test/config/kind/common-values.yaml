@@ -1,0 +1,47 @@
+DC_APP_REPLACEME:
+  # claim little resources as there are limitations in GitHub actions
+  resources:
+    container:
+      requests:
+        cpu: 20m
+        memory: 1G
+  # we want to test scaling to 2 and making sure nodes have joined the cluster
+  clustering:
+    enabled: true
+
+  sysadminCredentials:
+    secretName: DC_APP_REPLACEME-admin
+  displayName: DC_APP_REPLACEME
+
+  license:
+    secretName: DC_APP_REPLACEME-app-license
+    secretKey: license
+
+  # this applies to Bamboo only and will be ignored in other Helm charts
+  disableAgentAuth: true
+
+database:
+  type: DB_TYPE_REPLACEME
+  url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME
+  driver: org.postgresql.Driver
+  credentials:
+    secretName: DC_APP_REPLACEME-db-creds
+
+# nfs volume provisioner and nfs server are deployed to KinD cluster
+# thus we can create PVCs and expect them to be bound to PVs that provisioner will create
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      create: true
+  sharedHome:
+    persistentVolumeClaim:
+      create: true
+      # this is the default storageclass name created when deploying the provisioner
+      storageClassName: nfs-client
+
+# KinD is deployed with custom settings, namely extraPortMappings for ports 80 and 443
+# to make sure ingress traffic is available at http://localhost
+ingress:
+  create: true
+  host: localhost
+  https: false
