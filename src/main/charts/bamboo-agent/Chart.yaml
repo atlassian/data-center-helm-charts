@@ -4,7 +4,7 @@ description: A chart for installing Bamboo Data Center remote agents on Kubernet
 type: application
 version: 1.7.1
 appVersion: 9.0.1
-kubeVersion: ">=1.19.x-0"
+kubeVersion: ">=1.21.x-0"
 keywords:
   - Bamboo
   - Bamboo Agent
