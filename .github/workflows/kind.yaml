@@ -79,9 +79,6 @@ jobs:
       - name: Get debug info
         if: always()
         run: |
-          kubectl get pods -n atlassian
-          kubectl describe pvc -n atlassian
-          kubectl describe nodes
           curl -s https://raw.githubusercontent.com/atlassian-labs/data-center-terraform/main/scripts/collect_k8s_logs.sh | bash -s -- dummy dummy logs/${{inputs.dc_app}}
 
       - name: Upload test log files

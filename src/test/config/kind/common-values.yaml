@@ -9,6 +9,7 @@ DC_APP_REPLACEME:
   clustering:
     enabled: true
 
+  # this works for Bitbucket and Bamboo only which support unattended setup
   sysadminCredentials:
     secretName: DC_APP_REPLACEME-admin
   displayName: DC_APP_REPLACEME
