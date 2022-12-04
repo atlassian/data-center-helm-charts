@@ -26,7 +26,7 @@ class ElasticSearchTest {
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasValue("ELASTICSEARCH_ENABLED", "false")
+                .assertHasValue("SEARCH_ENABLED", "false")
                 .assertHasValue("PLUGIN_SEARCH_ELASTICSEARCH_BASEURL", "https://foo/");
     }
 
