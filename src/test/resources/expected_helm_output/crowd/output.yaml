@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: crowd/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -40,7 +40,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -67,7 +67,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -179,7 +179,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -210,7 +210,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -247,7 +247,7 @@ metadata:
     helm.sh/chart: crowd-1.7.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.0.3"
+    app.kubernetes.io/version: "5.1.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": pre-install
@@ -260,7 +260,7 @@ spec:
         helm.sh/chart: crowd-1.7.1
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
-        app.kubernetes.io/version: "5.0.3"
+        app.kubernetes.io/version: "5.1.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       restartPolicy: Never
