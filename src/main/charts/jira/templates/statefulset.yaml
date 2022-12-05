@@ -24,6 +24,7 @@ spec:
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -36,11 +37,12 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+      {{- end }}
       initContainers:
         {{- include "jira.additionalInitContainers" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
-          image: alpine
+          image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
@@ -67,6 +69,8 @@ spec:
             - name: ATL_TOMCAT_CONTEXTPATH
               value: {{ .Values.jira.service.contextPath | quote }}
             {{ end }}
+            - name: ATL_TOMCAT_PORT
+              value: {{ .Values.jira.ports.http | quote }}
             {{ if .Values.ingress.host }}
             - name: ATL_PROXY_NAME
               value: {{ .Values.ingress.host | quote }}
@@ -105,8 +109,8 @@ spec:
               containerPort: {{ .Values.jira.ports.http }}
               protocol: TCP
             - name: ehcache
-              containerPort: {{ .Values.jira.ports.ehcache }} 
-              protocol: TCP 
+              containerPort: {{ .Values.jira.ports.ehcache }}
+              protocol: TCP
             - name: ehcacheobject
               containerPort: {{ .Values.jira.ports.ehcacheobject }}
               protocol: TCP

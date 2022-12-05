@@ -2,9 +2,9 @@ apiVersion: v2
 name: bamboo-agent
 description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
-version: 1.3.0
-appVersion: 8.1.3
-kubeVersion: ">=1.19.x-0"
+version: 1.7.1
+appVersion: 9.0.1
+kubeVersion: ">=1.21.x-0"
 keywords:
   - Bamboo
   - Bamboo Agent
@@ -20,11 +20,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Bamboo Agent updated to 8.1.3 version
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/396
+    - kind: fixed
+      description: Patch release to fix Artifacthub metadata
+
 dependencies:
   - name: common
     version: 1.0.0

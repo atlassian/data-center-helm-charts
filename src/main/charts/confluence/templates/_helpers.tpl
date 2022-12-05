@@ -1,5 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
+Create default value for ingress port
+*/}}
+{{- define "confluence.ingressPort" -}}
+{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- end }}
+
+{{/*
 The name the synchrony app within the chart.
 TODO: This will break if the common.names.name exceeds 63 characters, need to find a more rebust way to do this
 */}}
@@ -39,7 +46,7 @@ If the name is defined in the chart values, then use that,
 else use the name of the Helm release.
 */}}
 {{- define "confluence.clusterRoleName" -}}
-{{- if .Values.serviceAccount.clusterRole.name }}
+{{- if and .Values.serviceAccount.clusterRole.name .Values.serviceAccount.clusterRole.create }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
 {{- include "common.names.fullname" . -}}
@@ -52,7 +59,7 @@ If the name is defined in the chart values, then use that,
 else use the name of the ClusterRole.
 */}}
 {{- define "confluence.clusterRoleBindingName" -}}
-{{- if .Values.serviceAccount.clusterRoleBinding.name }}
+{{- if and .Values.serviceAccount.clusterRoleBinding.name .Values.serviceAccount.clusterRoleBinding.create }}
 {{- .Values.serviceAccount.clusterRoleBinding.name }}
 {{- else }}
 {{- include "confluence.clusterRoleName" . -}}
@@ -121,11 +128,13 @@ Pod labels
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
 {{- if .Values.synchrony.enabled -}}
--Dsynchrony.service.url={{ .Values.synchrony.ingressUrl }}/v1
+    {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/synchrony/v1
+    {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/synchrony/v1
+    {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true
 {{- end -}}
-{{- end }}
+{{- end -}}
 
 {{/*
 Create default value for ingress path
@@ -238,6 +247,15 @@ Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.podAnnotations" -}}
 {{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "synchrony.podAnnotations" -}}
+{{- with .Values.synchrony.podAnnotations }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}
@@ -435,6 +453,10 @@ volumeClaimTemplates:
 {{- end }}
 
 {{- define "confluence.databaseEnvVars" -}}
+{{- if .Values.confluence.forceConfigUpdate }}
+- name: ATL_FORCE_CFG_UPDATE
+  value: "true"
+{{- end }}
 {{ with .Values.database.type }}
 - name: ATL_DB_TYPE
   value: {{ . | quote }}
@@ -484,6 +506,8 @@ volumeClaimTemplates:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
   value: {{ include "common.names.fullname" . | quote }}
+- name: HAZELCAST_KUBERNETES_SERVICE_PORT
+  value: {{ .Values.confluence.ports.hazelcast | quote }}
 - name: ATL_CLUSTER_TYPE
   value: "kubernetes"
 - name: ATL_CLUSTER_NAME
@@ -499,6 +523,8 @@ volumeClaimTemplates:
       fieldPath: metadata.namespace
 - name: HAZELCAST_KUBERNETES_SERVICE_NAME
   value: {{ include "synchrony.fullname" . | quote }}
+- name: HAZELCAST_KUBERNETES_SERVICE_PORT
+  value: {{ .Values.synchrony.ports.hazelcast | quote }}
 - name: CLUSTER_JOIN_TYPE
   value: "kubernetes"
 {{ end }}

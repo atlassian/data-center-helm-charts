@@ -1,21 +1,97 @@
 # Change Log
 
 
-## 1.4.0
+## 1.7.1
 
-**Release date:** TBD
+**Release date:** 2022-10-26
 
-![AppVersion: 7.13.5](https://img.shields.io/static/v1?label=AppVersion&message=7.13.5&color=success&logo=)
+![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
-* DCD-1471: Add support for separate Synchrony volumes (#390)
+* Patch release to fix Artifacthub metadata
+
+## 1.7.0
+
+**Release date:** 2022-10-25
+
+![AppVersion: 7.19.2](https://img.shields.io/static/v1?label=AppVersion&message=7.19.2&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Pin Python version to 3.9.14 (#468)
+* Update Bitbucket ingress testing values (#466)
+* Ingress Class Name is moved under spec field. (#451)
+* Make ATL_FORCE_CFG_UPDATE configurable in values.yaml (#454)
+* Add osquery related env vars for Terraform (#462)
+* AWS cleanup and log colletion from k8s (#461)
+
+## 1.6.0
+
+**Release date:** 2022-10-12
+
+![AppVersion: 7.19.2](https://img.shields.io/static/v1?label=AppVersion&message=7.19.2&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update the default Confluence version to 7.19.2 (#455)
+* Improved documentation (#448, #440)
+
+
+## 1.5.1
+
+**Release date:** 2022-08-24
+
+![AppVersion: 7.19.0](https://img.shields.io/static/v1?label=AppVersion&message=7.19.0&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix [SCALE-76](https://jira.atlassian.com/browse/SCALE-76): Fixed Confluence when Synchrony is enabled (#443)
+* Update the default Confluence version to 7.19.0 (#445)
+
+
+## 1.5.0
+
+**Release date:** 2022-07-14
+
+![AppVersion: 7.13.8](https://img.shields.io/static/v1?label=AppVersion&message=7.13.8&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix [SCALE-68](https://jira.atlassian.com/browse/SCALE-68): Use the custom ports for Confluence service (#419)
+* Fix [SCALE-69](https://jira.atlassian.com/browse/SCALE-69): Use the custom ports for Synchrony service (#419)
+* Fix [ISSUE-225](https://github.com/atlassian/data-center-helm-charts/issues/225): Fixed Synchrony ingress path (#429)
+* Update the default Confluence version to 7.13.8 (#430)
+
+## 1.4.1
+
+**Release date:** 2022-06-09
+
+![AppVersion: 7.13.7](https://img.shields.io/static/v1?label=AppVersion&message=7.13.7&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update the default Confluence version to 7.13.7 (#417) - Mitigate [CVE-2022-26134](https://confluence.atlassian.com/doc/confluence-security-advisory-2022-06-02-1130377146.html)
+
+
+## 1.4.0
+
+**Release date:** 2022-05-25
+
+![AppVersion: 7.13.6](https://img.shields.io/static/v1?label=AppVersion&message=7.13.6&color=success&logo=)
+![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Make pod securityContext optional (#389)
+* Fixed additionalHosts (#392)
 * Support for configuring ingress proxy settings via values.yaml (#402)
+* Add ATL_PROXY_NAME and ATL_PROXY_PORT to Confluence (#407)
+* Update Confluence version to 7.13.6 (#412)
 
 
 ## 1.3.0
 
-**Release date:** 2022-23-03
+**Release date:** 2022-03-24
 
 ![AppVersion: 7.13.5](https://img.shields.io/static/v1?label=AppVersion&message=7.13.5&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)

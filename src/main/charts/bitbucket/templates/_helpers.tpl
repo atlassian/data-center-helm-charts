@@ -26,7 +26,7 @@ If the name is defined in the chart values, then use that,
 else use the name of the Helm release.
 */}}
 {{- define "bitbucket.clusterRoleName" -}}
-{{- if .Values.serviceAccount.clusterRole.name }}
+{{- if and .Values.serviceAccount.clusterRole.name .Values.serviceAccount.clusterRole.create }}
 {{- .Values.serviceAccount.clusterRole.name }}
 {{- else }}
 {{- include "common.names.fullname" . -}}
@@ -39,7 +39,7 @@ If the name is defined in the chart values, then use that,
 else use the name of the ClusterRole.
 */}}
 {{- define "bitbucket.clusterRoleBindingName" -}}
-{{- if .Values.serviceAccount.clusterRoleBinding.name }}
+{{- if and .Values.serviceAccount.clusterRoleBinding.name .Values.serviceAccount.clusterRoleBinding.create }}
 {{- .Values.serviceAccount.clusterRoleBinding.name }}
 {{- else }}
 {{- include "bitbucket.clusterRoleName" . -}}
@@ -222,14 +222,13 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 
 {{- define "bitbucket.volumes.sharedHome" -}}
-- name: shared-home
 {{- if .Values.volumes.sharedHome.persistentVolumeClaim.create }}
+- name: shared-home
   persistentVolumeClaim:
     claimName: {{ include "common.names.fullname" . }}-shared-home
 {{ else if .Values.volumes.sharedHome.customVolume }}
+- name: shared-home
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
-{{ else }}
-  emptyDir: {}
 {{- end }}
 {{- end }}
 
@@ -383,7 +382,7 @@ volumeClaimTemplates:
 
 {{- define "bitbucket.elasticSearchEnvVars" -}}
 {{- if or .Values.bitbucket.elasticSearch.baseUrl .Values.bitbucket.clustering.enabled }}
-- name: ELASTICSEARCH_ENABLED
+- name: SEARCH_ENABLED
   value: "false"
 {{- end }}
 {{ with .Values.bitbucket.elasticSearch.baseUrl }}

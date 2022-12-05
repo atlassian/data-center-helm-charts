@@ -15,13 +15,21 @@ spec:
     metadata:
       annotations:
         checksum/config-jvm: {{ include (print $.Template.BasePath "/synchrony-start-script.yaml") . | sha256sum }}
+        {{- if .Values.synchrony.podAnnotations }}
+        {{- include "synchrony.podAnnotations" . | nindent 8 }}
+        {{- else }}
         {{- include "confluence.podAnnotations" . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "synchrony.selectorLabels" . | nindent 8 }}
         {{- include "confluence.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.synchrony.shutdown.terminationGracePeriodSeconds }}
+      {{- with .Values.synchrony.securityContext }}
+      securityContext:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
       hostAliases:
         {{- include "confluence.additionalHosts" . | nindent 8 }}
       containers:
@@ -50,6 +58,10 @@ spec:
             initialDelaySeconds: {{ .Values.synchrony.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}
+          {{- with .Values.synchrony.containerSecurityContext }}
+          securityContext:
+          {{- toYaml . | nindent 12}}
+          {{- end}}
           {{- with .Values.synchrony.resources.container }}
           resources:
           {{- toYaml . | nindent 12 }}
@@ -62,7 +74,11 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
-              value: {{ .Values.synchrony.ingressUrl | quote }}
+            {{ if .Values.ingress.https }}
+              value: "https://{{ .Values.ingress.host }}/synchrony"
+            {{ else }}
+              value: "http://{{ .Values.ingress.host }}/synchrony"
+            {{- end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
       {{- with .Values.nodeSelector }}

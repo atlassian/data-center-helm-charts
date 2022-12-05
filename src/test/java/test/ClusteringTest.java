@@ -25,7 +25,9 @@ class ClusteringTest {
     @EnumSource(value = Product.class, names = "bitbucket")
     void bitbucket_clustering_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".clustering.enabled", "true"));
+                product + ".clustering.enabled", "true",
+                "serviceAccount.clusterRoleBinding.create", "true",
+                "serviceAccount.clusterRole.create", "true"));
 
         resources.assertContains(ClusterRole, product.getHelmReleaseName())
                 .assertContains(ClusterRoleBinding, product.getHelmReleaseName());
@@ -52,7 +54,9 @@ class ClusteringTest {
                 product + ".clustering.enabled", "true",
                 product + ".clustering.group.secretName", "hazelcast-group-secret",
                 product + ".clustering.group.nameSecretKey", "name-key",
-                product + ".clustering.group.passwordSecretKey", "password-key"));
+                product + ".clustering.group.passwordSecretKey", "password-key",
+                "serviceAccount.clusterRoleBinding.create", "true",
+                "serviceAccount.clusterRole.create", "true"));
 
         resources.assertContains(ClusterRole, product.getHelmReleaseName())
                 .assertContains(ClusterRoleBinding, product.getHelmReleaseName());
@@ -75,7 +79,34 @@ class ClusteringTest {
     @EnumSource(value = Product.class, names = "confluence")
     void confluence_clustering_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".clustering.enabled", "true"));
+                product + ".clustering.enabled", "true",
+                product + ".ports.hazelcast", "5801",
+                "synchrony.enabled","true",
+                "synchrony.ports.hazelcast","5801"));
+
+        resources.assertContains(Role, product.getHelmReleaseName())
+                .assertContains(RoleBinding, product.getHelmReleaseName());
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasFieldRef("KUBERNETES_NAMESPACE", "metadata.namespace")
+                .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_NAME", product.getHelmReleaseName())
+                .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_PORT", "5801")
+                .assertHasValue("ATL_CLUSTER_TYPE", "kubernetes")
+                .assertHasValue("ATL_CLUSTER_NAME", product.getHelmReleaseName());
+
+        resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getContainer().getEnv()
+                .assertHasValue("HAZELCAST_KUBERNETES_SERVICE_PORT", "5801");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_role_enabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".clustering.enabled", "true",
+                "serviceAccount.clusterRole.create", "true",
+                "serviceAccount.clusterRoleBinding.create", "true"));
 
         resources.assertContains(ClusterRole, product.getHelmReleaseName())
                 .assertContains(ClusterRoleBinding, product.getHelmReleaseName());

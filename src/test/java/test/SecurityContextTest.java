@@ -39,6 +39,17 @@ class SecurityContextTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_no_pod_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContextEnabled", "false"));
+
+        JsonNode podSpec = resources.getStatefulSet(product.getHelmReleaseName()).getPodSpec();
+        assertThat(podSpec.path("securityContext")).isEmpty();
+    }
+
+    @ParameterizedTest
     @CsvSource({
             "jira,2001",
             "confluence,2002",
@@ -105,4 +116,31 @@ class SecurityContextTest {
                 .getSecurityContext();
         assertThat(containerSecurityContext.path("runAsGroup")).hasValueEqualTo(2000);
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void test_synchrony_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.securityContext.fsGroup", "2000",
+                "synchrony.enabled", "true"));
+
+        JsonNode podSecurityContext = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony").getPodSpec();
+        assertThat(podSecurityContext.path("securityContext").path("fsGroup")).hasValueEqualTo(2000);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void test_synchrony_container_security_context(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.containerSecurityContext.runAsGroup", "2000",
+                "synchrony.enabled", "true"));
+
+        JsonNode containerSecurityContext = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony")
+                .getContainer()
+                .getSecurityContext();
+        assertThat(containerSecurityContext.path("runAsGroup")).hasValueEqualTo(2000);
+    }
 }
+

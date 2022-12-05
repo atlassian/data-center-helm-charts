@@ -36,11 +36,11 @@ image:
   # https://hub.docker.com/r/atlassian/confluence-server
   #
   repository: atlassian/confluence
-  
+
   # -- Image pull policy
   #
   pullPolicy: IfNotPresent
-  
+
   # -- The docker image tag to be used - defaults to the Chart appVersion
   #
   tag: ""
@@ -54,7 +54,7 @@ serviceAccount:
   # already exists.
   #
   create: true
-  
+
   # -- The name of the ServiceAccount to be used by the pods. If not specified, but
   # the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name
   # will be auto-generated, otherwise the 'default' ServiceAccount will be used.
@@ -72,33 +72,47 @@ serviceAccount:
   # -- Annotations to add to the ServiceAccount (if created)
   #
   annotations: {}
-  
+
+  role:
+    # -- Create a role for Hazelcast client with privileges to get and list pods and endpoints in the namespace.
+    # Set to false if you need to create a Role and RoleBinding manually
+    #
+    create: true
+
    # Define permissions
    # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
    #
   clusterRole:
-  
+
     # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
     # already exists.
     #
-    create: true
-    
+    create: false
+
     # -- The name of the ClusterRole to be used. If not specified, but
     # the "serviceAccount.clusterRole.create" flag is set to 'true',
     # then the ClusterRole name will be auto-generated.
     #
     name:
-    
+
+  # -- Grant permissions defined in Role (list and get pods and endpoints) to a service account.
+  #
+  roleBinding:
+
+    # Set to false if you need to create a Role and RoleBinding manually
+    #
+    create: true
+
   # Grant permissions defined in ClusterRole
   # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding
   #
   clusterRoleBinding:
-  
+
     # -- Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it
     # already exists.
     #
-    create: true
-    
+    create: false
+
     # -- The name of the ClusterRoleBinding to be created. If not specified, but
     # the "serviceAccount.clusterRoleBinding.create" flag is set to 'true',
     # then the ClusterRoleBinding name will be auto-generated.
@@ -123,7 +137,7 @@ database:
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasetype
   #
   type:
-  
+
   # -- The jdbc URL of the database. If not specified, then it will need to be provided
   # via the browser during manual configuration post deployment. Example URLs include:
    # - 'jdbc:postgresql://<dbhost>:5432/<dbname>'
@@ -133,11 +147,11 @@ database:
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databaseurl
   #
   url:
-  
+
   # JDBC connection credentials
   #
   credentials:
-  
+
     # -- The name of the K8s Secret that contains the database login credentials.
     # If the secret is specified, then the credentials will be automatically utilised on
     # Confluence startup. If the secret is not provided, then the credentials will need to be
@@ -149,15 +163,15 @@ database:
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
     secretName:
-    
+
     # -- The key ('username') in the Secret used to store the database login username
     #
     usernameSecretKey: username
-    
+
     # -- The key ('password') in the Secret used to store the database login password
     #
     passwordSecretKey: password
-    
+
 # REQUIRED - Volume configuration
 #
 # By default, the charts will configure the local-home, synchrony-home and shared-home as ephemeral
@@ -173,31 +187,31 @@ volumes:
   # https://confluence.atlassian.com/doc/confluence-home-and-other-important-directories-590259707.html
   #
   localHome:
-  
+
     # Dynamic provisioning of local-home using the K8s Storage Classes
     #
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
     # https://atlassian.github.io/data-center-helm-charts/examples/storage/aws/LOCAL_STORAGE/
     #
     persistentVolumeClaim:
-    
+
       # -- If 'true', then a 'PersistentVolume' and 'PersistentVolumeClaim' will be dynamically
       # created for each pod based on the 'StorageClassName' supplied below.
       #
       create: false
-      
+
       # -- Specify the name of the 'StorageClass' that should be used for the local-home
       # volume claim.
       #
       storageClassName:
-      
+
       # -- Specifies the standard K8s resource requests for the local-home
       # volume claims.
       #
       resources:
         requests:
           storage: 1Gi
-          
+
     # -- Static provisioning of local-home using K8s PVs and PVCs
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for
@@ -213,41 +227,41 @@ volumes:
     customVolume: {}
     # persistentVolumeClaim:
     #   claimName: "<pvc>"
-    
+
     # -- Specifies the path in the Confluence container to which the local-home volume will be
     # mounted.
     #
     mountPath: "/var/atlassian/application-data/confluence"
-    
+
   # A volume for 'shared-home' is required by Confluence to effectively operate in multi-node
   # environment
   # https://confluence.atlassian.com/doc/set-up-a-confluence-data-center-cluster-982322030.html#SetupaConfluenceDataCentercluster-Setupandconfigureyourcluster
   #
   sharedHome:
-    
+
     # Dynamic provisioning of shared-home using the K8s Storage Class
     #
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
     #
     persistentVolumeClaim:
-    
+
       # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically
       # created for shared-home based on the 'StorageClassName' supplied below.
       #
       create: false
-      
+
       # -- Specify the name of the 'StorageClass' that should be used for the 'shared-home'
       # volume claim.
       #
       storageClassName:
-      
+
       # -- Specifies the standard K8s resource requests limits for the shared-home
       # volume claims.
       #
       resources:
         requests:
           storage: 1Gi
-          
+
     # -- Static provisioning of shared-home using K8s PVs and PVCs
     #
     # When 'persistentVolumeClaim.create' is 'false', then this value can be used to define
@@ -260,31 +274,39 @@ volumes:
     customVolume: {}
     # persistentVolumeClaim:
     #   claimName: "<pvc>"
-    
+
     # -- Specifies the path in the Confluence container to which the shared-home volume will be
     # mounted.
     #
     mountPath: "/var/atlassian/application-data/shared-home"
-    
+
     # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the
     # Confluence container.
     #
     subPath:
-    
+
     # Modify permissions on shared-home
     #
     nfsPermissionFixer:
-    
+
       # -- If 'true', this will alter the shared-home volume's root directory so that Confluence
       # can write to it. This is a workaround for a K8s bug affecting NFS volumes:
       # https://github.com/kubernetes/examples/issues/260
       #
       enabled: true
-      
+
       # -- The path in the K8s initContainer where the shared-home volume will be mounted
       #
       mountPath: "/shared-home"
-      
+
+      # -- Image repository for the permission fixer init container. Defaults to alpine
+      #
+      imageRepo: alpine
+
+      # -- Image tag for the permission fixer init container. Defaults to latest
+      #
+      imageTag: latest
+
       # -- By default, the fixer will change the group ownership of the volume's root directory
       # to match the Confluence container's GID (2002), and then ensures the directory is
       # group-writeable. If this is not the desired behaviour, command used can be specified
@@ -375,7 +397,7 @@ ingress:
   # which of them is used for Atlassian application traffic.
   #
   className: "nginx"
-  
+
   # -- Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'
   # controller.
   # https://kubernetes.github.io/ingress-nginx/
@@ -386,12 +408,12 @@ ingress:
   # be specified below under 'ingress.annotations'.
   #
   nginx: true
-  
+
   # -- The max body size to allow. Requests exceeding this size will result
   # in an HTTP 413 error being returned to the client.
   #
   maxBodySize: 250m
-  
+
   # -- Defines a timeout for establishing a connection with a proxied server. It should
   # be noted that this timeout cannot usually exceed 75 seconds.
   #
@@ -421,17 +443,17 @@ ingress:
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
   # 'company.k8s.com/confluence'. Default value is 'confluence.service.contextPath'
   path:
-  
+
   # -- The custom annotations that should be applied to the Ingress Resource
   # when NOT using the K8s ingress-nginx controller.
   #
   annotations: {}
-  
+
   # -- Set to 'true' if browser communication with the application should be TLS
   # (HTTPS) enforced.
   #
   https: true
-  
+
   # -- The name of the K8s Secret that contains the TLS private key and corresponding
   # certificate. When utilised, TLS termination occurs at the ingress point where
   # traffic to the Service, and it's Pods is in plaintext.
@@ -450,11 +472,11 @@ confluence:
   # K8s Confluence Service configuration
   #
   service:
-  
+
     # -- The port on which the Confluence K8s Service will listen
     #
     port: 80
-    
+
     # -- The type of K8s service to use for Confluence
     #
     type: ClusterIP
@@ -476,10 +498,15 @@ confluence:
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
+
+  # -- Whether to apply security context to pod.
+  #
+  securityContextEnabled: true
+
   securityContext:
 
     # -- The GID used by the Confluence docker image
-    # If not supplied, will default to 2002
+    # GID will default to 2002 if not supplied and securityContextEnabled is set to true.
     # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
     # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     fsGroup: 2002
@@ -495,28 +522,28 @@ confluence:
     #  - read permissions for everyone else.
   #
   umask: "0022"
-  
+
   # -- Boolean to define whether to set local home directory permissions on startup
   # of Confluence container. Set to 'false' to disable this behaviour.
   #
   setPermissions: true
-  
+
   # Port definitions
   #
   ports:
-  
+
     # -- The port on which the Confluence container listens for HTTP traffic
     #
     http: 8090
-    
+
     # -- The port on which the Confluence container listens for Hazelcast traffic
     #
     hazelcast: 5701
-    
+
   # Confluence licensing details
   #
   license:
-    
+
     # -- The name of the K8s Secret that contains the Confluence license key. If specified, then
     # the license will be automatically populated during Confluence setup. Otherwise, it will
     # need to be provided via the browser after initial startup. An Example of creating
@@ -525,25 +552,25 @@ confluence:
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
     secretName:
-    
+
     # -- The key in the K8s Secret that contains the Confluence license key
     #
     secretKey: license-key
-    
+
   # Confirm that Confluence is up and running with a ReadinessProbe
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
   #
   readinessProbe:
-  
+
     # -- The initial delay (in seconds) for the Confluence container readiness probe,
     # after which the probe will start running.
     #
     initialDelaySeconds: 10
-    
+
     # -- How often (in seconds) the Confluence container readiness probe will run
     #
     periodSeconds: 5
-    
+
     # -- The number of consecutive failures of the Confluence container readiness probe
     # before the pod fails readiness checks.
     #
@@ -552,16 +579,16 @@ confluence:
   # Confluence log configuration
   #
   accessLog:
-  
+
     # -- Set to 'true' if access logging should be enabled.
     #
     enabled: true
-    
+
     # -- The path within the Confluence container where the local-home volume should be
     # mounted in order to capture access logs.
     #
     mountPath: "/opt/atlassian/confluence/logs"
-    
+
     # -- The subdirectory within the local-home volume where access logs should be
     # stored.
     #
@@ -570,12 +597,12 @@ confluence:
   # Data Center clustering
   #
   clustering:
-  
+
     # -- Set to 'true' if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
     #
     enabled: false
-    
+
     # -- Set to 'true' if the K8s pod name should be used as the end-user-visible
     # name of the Data Center cluster node.
     #
@@ -584,38 +611,38 @@ confluence:
   # Confluence Pod resource requests
   #
   resources:
-  
+
     # JVM Memory / Heap Size definitions. The values below are based on the
     # defaults defined for the Confluence docker container.
     # https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/src/master/#markdown-header-memory-heap-size
     #
     jvm:
-    
+
       # -- The maximum amount of heap memory that will be used by the Confluence JVM
       #
       maxHeap: "1g"
-      
+
       # -- The minimum amount of heap memory that will be used by the Confluence JVM
       #
       minHeap: "1g"
-      
+
       # -- The memory reserved for the Confluence JVM code cache
       #
       reservedCodeCache: "256m"
-      
+
     # Specifies the standard K8s resource requests and/or limits for the Confluence
     # container. It is important that if the memory resources are specified here,
     # they must allow for the size of the Confluence JVM. That means the maximum heap
     # size, the reserved code cache size, plus other JVM overheads, must be
     # accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example.
     #
-    container: 
-    
+    container:
+
       requests:
         # -- Initial CPU request by Confluence pod.
         #
         cpu: "2"
-        
+
         # -- Initial Memory request by Confluence pod
         #
         memory: "2G"
@@ -641,11 +668,18 @@ confluence:
     #
     command: "/shutdown-wait.sh"
 
+  # -- The Docker entrypoint.py generates application configuration on
+  # first start; not all of these files are regenerated on subsequent starts.
+  # By default, confluence.cfg.xml is generated only once. Set `forceConfigUpdate` to true
+  # to change this behavior.
+  #
+  forceConfigUpdate: false
+
   # -- Specifies a list of additional arguments that can be passed to the Confluence JVM, e.g.
   # system properties.
   #
   additionalJvmArgs: []
-  
+
   # -- Specifies a list of additional Java libraries that should be added to the
   # Confluence container. Each item in the list should specify the name of the volume
   # that contains the library, as well as the name of the library file within that
@@ -719,7 +753,7 @@ confluence:
   # Debugging
   #
   jvmDebug:
-  
+
     # -- Set to 'true' for remote debugging. Confluence JVM will be started with debugging
     # port 5005 open.
     enabled: false
@@ -732,15 +766,20 @@ synchrony:
   # This will result in a separate StatefulSet and Service to be created for Synchrony.
   # If disabled, then collaborative editing will be disabled in Confluence.
   enabled: false
-  
+
+  # -- Custom annotations that will be applied to all Synchrony pods.
+  # When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined)
+  podAnnotations: {}
+  #  name: <value>
+
   # K8s Synchrony Service configuration
   #
   service:
-  
+
     # -- The port on which the Synchrony K8s Service will listen
     #
     port: 80
-    
+
     # -- The type of K8s service to use for Synchrony
     #
     type: ClusterIP
@@ -748,6 +787,25 @@ synchrony:
     # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
     #
     loadBalancerIP:
+
+    # -- Annotations to apply to Synchrony Service
+    #
+    annotations: {}
+
+  securityContextEnabled: true
+
+  securityContext:
+
+    # -- The GID used by the Confluence docker image
+    # GID will default to 2002 if not supplied and securityContextEnabled is set to true.
+    # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container.
+    # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
+    fsGroup: 2002
+
+  # -- Standard K8s field that holds security configurations that will be applied to a container.
+  # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  #
+  containerSecurityContext: {}
 
   # -- Boolean to define whether to set synchrony home directory permissions on startup
   # of Synchrony container. Set to 'false' to disable this behaviour.
@@ -757,38 +815,38 @@ synchrony:
   # Port definitions
   #
   ports:
-  
+
     # -- The port on which the Synchrony container listens for HTTP traffic
     #
     http: 8091
-    
+
     # -- The port on which the Synchrony container listens for Hazelcast traffic
     #
     hazelcast: 5701
-    
+
   # Confirm that Synchrony is up and running with a ReadinessProbe
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
   #
   readinessProbe:
-  
+
     # -- The initial delay (in seconds) for the Synchrony container readiness probe,
     # after which the probe will start running.
     #
     initialDelaySeconds: 5
-    
+
     # -- How often (in seconds) the Synchrony container readiness probe will run
     #
     periodSeconds: 1
-    
+
     # -- The number of consecutive failures of the Synchrony container readiness probe
     # before the pod fails readiness checks.
     #
     failureThreshold: 10
-  
+
   # Synchrony Pod resource requests
   #
   resources:
-  
+
     # JVM Memory / Heap Size definitions. The values below are based on the
     # defaults defined for the Synchrony docker container.
     #
@@ -797,15 +855,15 @@ synchrony:
       # -- The maximum amount of heap memory that will be used by the Synchrony JVM
       #
       minHeap: "1g"
-      
+
       # -- The minimum amount of heap memory that will be used by the Synchrony JVM
       #
       maxHeap: "2g"
-      
+
       # -- The memory allocated for the Synchrony stack
       #
       stackSize: "2048k"
-      
+
     # Specifies the standard K8s resource requests and/or limits for the Synchrony
     # container. It is important that if the memory resources are specified here,
     # they must allow for the size of the Synchrony JVM. That means the maximum heap
@@ -817,7 +875,7 @@ synchrony:
         # -- Initial CPU request by Synchrony pod
         #
         cpu: "2"
-        
+
         # -- Initial Memory request Synchrony pod
         #
         memory: "2.5G"
@@ -825,7 +883,7 @@ synchrony:
   # -- Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g.
   # system properties.
   #
-  additionalJvmArgs: {}
+  additionalJvmArgs: []
     #- -Dsynchrony.example.system.property=46
 
   shutdown:
@@ -833,13 +891,7 @@ synchrony:
     # should be set to the Synchrony internal grace period (default 20
     # seconds), plus a small buffer to allow the JVM to fully terminate.
     terminationGracePeriodSeconds: 25
-        
-  # -- The base URL of the Synchrony service. This will be the URL that users' browsers will
-  # be given to communicate with Synchrony, as well as the URL that the Confluence service
-  # will use to communicate directly with Synchrony, so the URL must be resolvable both from
-  # inside and outside the Kubernetes cluster.
-  ingressUrl:
-  
+
   # -- Specifies a list of additional Java libraries that should be added to the
   # Synchrony container. Each item in the list should specify the name of the volume
   # that contains the library, as well as the name of the library file within that
@@ -887,10 +939,14 @@ fluentd:
   # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   #
   enabled: false
-  
-  # -- The Fluentd sidecar image
+
+  # -- The Fluentd sidecar image repository
   #
-  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  imageRepo: fluent/fluentd-kubernetes-daemonset
+
+  # -- The Fluentd sidecar image tag
+  #
+  imageTag: v1.11.5-debian-elasticsearch7-1.2
 
   # -- The command used to start Fluentd. If not supplied the default command
   # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
@@ -901,13 +957,13 @@ fluentd:
   # for instance SIGTERM. An example of how such a command may look is:
   # "<command 1> && <command 2> && exec <primary command>"
   command:
-  
+
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default)
   # should be used for Fluentd. If enabled this config must be supplied via the
   # 'fluentdCustomConfig' property below.
   #
   customConfigFile: false
-  
+
   # -- Custom fluent.conf file
   #
   fluentdCustomConfig: {}
@@ -926,23 +982,23 @@ fluentd:
   # -- The port on which the Fluentd sidecar will listen
   #
   httpPort: 9880
-  
+
   # Elasticsearch config based on your ELK stack
   #
   elasticsearch:
-  
+
     # -- Set to 'true' if Fluentd should send all log events to an Elasticsearch service.
     #
     enabled: true
-    
+
     # -- The hostname of the Elasticsearch service that Fluentd should send logs to.
     #
     hostname: elasticsearch
-    
+
     # -- The prefix of the Elasticsearch index name that will be used
     #
     indexNamePrefix: confluence
-    
+
   # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
   #
   extraVolumes: []
@@ -950,8 +1006,8 @@ fluentd:
   #   mountPath: /opt/atlassian/confluence/logs
   #   subPath: log
   #   readOnly: true
-  
-  
+
+
 # -- Custom annotations that will be applied to all Confluence pods
 #
 podAnnotations: {}

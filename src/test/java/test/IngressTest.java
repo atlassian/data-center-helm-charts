@@ -41,9 +41,6 @@ class IngressTest {
 
             assertThat(ingress.getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
                     .hasTextContaining("/mypath");
-
-            assertThat(ingress.getMetadata().path("annotations"))
-                    .isObject(Map.of("kubernetes.io/ingress.class", "nginx"));
         }
     }
 
@@ -57,8 +54,8 @@ class IngressTest {
         final var ingresses = resources.getAll(Kind.Ingress);
 
         for (KubeResource ingress : ingresses) {
-            assertThat(ingress.getMetadata().path("annotations"))
-                    .isObject(Map.of("kubernetes.io/ingress.class", "my-custom-nginx"));
+            assertThat(ingress.getNode("spec").path("ingressClassName"))
+                    .hasTextContaining("my-custom-nginx");
         }
     }
 
@@ -142,7 +139,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo", "crowd"})
     void jira_ingress_host_port(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.host", "myhost.mydomain",
@@ -154,7 +151,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo", "crowd"})
     void jira_ingress_port(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.host", "myhost.mydomain"));
@@ -165,7 +162,7 @@ class IngressTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "jira")
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo", "crowd"})
     void jira_ingress_port_http(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "ingress.host", "myhost.mydomain",
@@ -252,41 +249,6 @@ class IngressTest {
 
         assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
                 .hasTextEqualTo("/");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bamboo")
-    void bamboo_ingress_host_port(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.host", "myhost.mydomain",
-                "ingress.port", "666"));
-
-        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
-                .assertHasValue("ATL_PROXY_PORT", "666");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bamboo")
-    void bamboo_ingress_port(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.host", "myhost.mydomain"));
-
-        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
-                .assertHasValue("ATL_PROXY_PORT", "443");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bamboo")
-    void bamboo_ingress_port_http(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.host", "myhost.mydomain",
-                "ingress.https", "False"));
-
-        resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_PROXY_NAME", "myhost.mydomain")
-                .assertHasValue("ATL_PROXY_PORT", "80");
     }
 
     @ParameterizedTest
@@ -415,7 +377,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/confluence-tmp",
-                "/confluence-tmp/synchrony",
+                "/synchrony",
                 "/confluence-tmp/setup",
                 "/confluence-tmp/bootstrap");
     }
@@ -455,7 +417,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/ingress",
-                "/ingress/synchrony",
+                "/synchrony",
                 "/ingress/setup",
                 "/ingress/bootstrap");
     }
@@ -495,7 +457,7 @@ class IngressTest {
 
         org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
                 "/ingress",
-                "/ingress/synchrony",
+                "/synchrony",
                 "/ingress/setup",
                 "/ingress/bootstrap");
     }

@@ -18,3 +18,13 @@ Prior to accepting your contributions we ask that you please follow the appropri
 
 * [CLA for corporate contributors](https://opensource.atlassian.com/corporate)
 * [CLA for individuals](https://opensource.atlassian.com/individual)
+
+## Code Owners' Responsibilities
+
+For any pull requests, code owners should review the changes thoroughly and make sure all the requirements are met. Code owners should also run the internal Bamboo CI tests and E2E tests against the changes when are applicable.
+
+For external contributions, any Github action workflow related changes are not acceptable.
+
+### How to run E2E tests
+
+The Data Center Helm Charts uses the latest release of [Deployment Automation for Atlassian DC on K8s](https://github.com/atlassian-labs/data-center-terraform#deployment-automation-for-atlassian-dc-on-k8s) for end-to-end testing. Internal reviewers can run the tests by adding `e2e` label on a pull request (for external contributions, be mindful of the changes as it will run on internal cloud environment).

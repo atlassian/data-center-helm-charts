@@ -2,9 +2,9 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: 1.3.0
-appVersion: 8.1.3
-kubeVersion: ">=1.19.x-0"
+version: 1.7.1
+appVersion: 9.0.1
+kubeVersion: ">=1.21.x-0"
 keywords:
   - Bamboo
   - Bamboo Server
@@ -21,15 +21,8 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: fixed
-      description:  ATL_BASE_URL should be appropriately set when ingress.path is supplied
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/391
-    - kind: changed
-      description: Bamboo DC updated to 8.1.3 version
-      links:
-      - name: Github PR
-        url: https://github.com/atlassian/data-center-helm-charts/pull/396
+      description: Patch release to fix Artifacthub metadata
+
 dependencies:
   - name: common
     version: 1.0.0

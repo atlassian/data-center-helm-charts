@@ -1,6 +1,6 @@
 # crowd
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.4.1](https://img.shields.io/badge/AppVersion-4.4.1-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0.2](https://img.shields.io/badge/AppVersion-5.0.2-informational?style=flat-square)
 
 A chart for installing Crowd Data Center on Kubernetes
 
@@ -53,7 +53,8 @@ Kubernetes: `>=1.19.x-0`
 | crowd.resources.container.requests.memory | string | `"1G"` | Initial Memory request by Crowd pod |
 | crowd.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Crowd JVM |
 | crowd.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Crowd JVM |
-| crowd.securityContext.fsGroup | int | `2004` | The GID used by the Crowd docker image If not supplied, will default to 2004 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| crowd.securityContext.fsGroup | int | `2004` | The GID used by the Crowd docker image GID will default to 2004 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| crowd.securityContextEnabled | bool | `true` |  |
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen |

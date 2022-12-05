@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-1.3.0
+    helm.sh/chart: bamboo-1.7.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.1.3"
+    app.kubernetes.io/version: "9.0.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-jvm-config
   labels:
-    helm.sh/chart: bamboo-1.3.0
+    helm.sh/chart: bamboo-1.7.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.1.3"
+    app.kubernetes.io/version: "9.0.1"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -34,10 +34,10 @@ kind: Service
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-1.3.0
+    helm.sh/chart: bamboo-1.7.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.1.3"
+    app.kubernetes.io/version: "9.0.1"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -57,10 +57,10 @@ kind: StatefulSet
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-1.3.0
+    helm.sh/chart: bamboo-1.7.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.1.3"
+    app.kubernetes.io/version: "9.0.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -82,7 +82,7 @@ spec:
         fsGroup: 2005
       initContainers:
         - name: nfs-permission-fixer
-          image: alpine
+          image: alpine:latest
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
@@ -92,7 +92,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: bamboo
-          image: "atlassian/bamboo:8.1.3"
+          image: "atlassian/bamboo:9.0.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -101,6 +101,8 @@ spec:
               value: "true"
             - name: ATL_BASE_URL
               value: "http://localhost:8085/"
+            - name: ATL_TOMCAT_PORT
+              value: "8085"
             - name: SET_PERMISSIONS
               value: "true"
             - name: BAMBOO_SHARED_HOME
@@ -203,10 +205,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-1.3.0
+    helm.sh/chart: bamboo-1.7.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.1.3"
+    app.kubernetes.io/version: "9.0.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -247,10 +249,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-1.3.0
+    helm.sh/chart: bamboo-1.7.1
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "8.1.3"
+    app.kubernetes.io/version: "9.0.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

@@ -1,0 +1,57 @@
+{{- if and (.Values.bitbucket.clustering.enabled) (or .Values.serviceAccount.clusterRole.create .Values.serviceAccount.role.create) -}}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.serviceAccount.clusterRole.create }}
+kind: ClusterRole
+{{- else }}
+kind: Role
+{{- end }}
+metadata:
+{{- if .Values.serviceAccount.clusterRole.create }}
+  name: {{ template "bitbucket.clusterRoleName" . }}
+{{- else }}
+  name: {{ include "common.names.fullname" . }}
+{{- end }}
+  labels:
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+      - pods
+{{- if .Values.serviceAccount.clusterRole.create }}
+      - nodes
+{{- end }}
+    verbs:
+      - get
+      - list
+{{- end }}
+---
+{{- if and (.Values.bitbucket.clustering.enabled) (or .Values.serviceAccount.clusterRoleBinding.create .Values.serviceAccount.roleBinding.create) -}}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.serviceAccount.clusterRoleBinding.create }}
+kind: ClusterRoleBinding
+{{- else }}
+kind: RoleBinding
+{{- end }}
+metadata:
+{{- if .Values.serviceAccount.clusterRoleBinding.create }}
+  name: {{ include "bitbucket.clusterRoleBindingName" . }}
+{{- else }}
+  name: {{ include "common.names.fullname" . }}
+{{- end }}
+  labels:
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+{{- if .Values.serviceAccount.clusterRoleBinding.create }}
+  kind: ClusterRole
+{{- else }}
+  kind: Role
+{{- end }}
+  name: {{ include "bitbucket.clusterRoleName" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "bitbucket.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{ end }}

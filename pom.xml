@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-vavr</artifactId>
-            <version>0.4.0</version>
+            <version>0.4.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>4.4.0</version>
+            <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -92,13 +92,13 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <junit5.version>5.7.1</junit5.version>
-        <assertj.version>3.19.0</assertj.version>
+        <junit5.version>5.9.0</junit5.version>
+        <assertj.version>3.23.1</assertj.version>
         <vavr.version>0.10.3</vavr.version>
-        <jackson.version>2.12.1</jackson.version>
-        <kubernetes-client.version>5.0.1</kubernetes-client.version>
-        <slf4j.version>1.7.30</slf4j.version>
-        <commons-io.version>2.8.0</commons-io.version>
+        <jackson.version>2.13.3</jackson.version>
+        <kubernetes-client.version>6.0.0</kubernetes-client.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <commons-io.version>2.11.0</commons-io.version>
 
         <dockerImage.registry />
         <dockerImage.repository />

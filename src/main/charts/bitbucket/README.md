@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.21.0](https://img.shields.io/badge/AppVersion-7.21.0-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.21.5](https://img.shields.io/badge/AppVersion-7.21.5-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
@@ -74,7 +74,8 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bitbucket pod |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
 | bitbucket.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
-| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image If not supplied, will default to 2003. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bitbucket.securityContext.fsGroup | int | `2003` | The GID used by the Bitbucket docker image GID will default to 2003 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bitbucket.securityContextEnabled | bool | `true` |  |
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use. |
 | bitbucket.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |

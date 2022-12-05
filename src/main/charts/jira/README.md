@@ -1,6 +1,6 @@
 # jira
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.20.7](https://img.shields.io/badge/AppVersion-8.20.7-informational?style=flat-square)
+![Version: 1.5.1](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.20.13](https://img.shields.io/badge/AppVersion-8.20.13-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
@@ -83,7 +83,8 @@ Kubernetes: `>=1.19.x-0`
 | jira.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Jira JVM |
 | jira.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Jira JVM |
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache |
-| jira.securityContext.fsGroup | int | `2001` | The GID used by the Jira docker image If not supplied, will default to 2001 This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| jira.securityContext.fsGroup | int | `2001` | The GID used by the Jira docker image GID will default to 2001 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| jira.securityContextEnabled | bool | `true` |  |
 | jira.service.annotations | object | `{}` | Additional annotations to apply to the Service |
 | jira.service.contextPath | string | `nil` | The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically. |
 | jira.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer. |

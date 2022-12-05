@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.bitbucket.securityContextEnabled }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
         {{/* this condition is to be removed in v2.0.0 */}}
@@ -44,11 +45,12 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+      {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
         {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume) }}
         - name: nfs-permission-fixer
-          image: alpine
+          image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
@@ -137,6 +139,8 @@ spec:
             {{ end }}
             - name: SERVER_CONTEXT_PATH
               value: {{ include "bitbucket.ingressPath" . | quote }}
+            - name: SERVER_PORT
+              value: {{ .Values.bitbucket.ports.http | quote }}
             {{ if .Values.ingress.https }}
             - name: SERVER_SCHEME
               value: "https"

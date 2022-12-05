@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.3.0
+    helm.sh/chart: jira-1.7.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "9.4.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-1.3.0
+    helm.sh/chart: jira-1.7.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "9.4.0"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -36,10 +36,10 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.3.0
+    helm.sh/chart: jira-1.7.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "9.4.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -59,10 +59,10 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.3.0
+    helm.sh/chart: jira-1.7.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "9.4.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -84,7 +84,7 @@ spec:
         fsGroup: 2001
       initContainers:
         - name: nfs-permission-fixer
-          image: alpine
+          image: alpine:latest
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
@@ -94,13 +94,15 @@ spec:
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: jira
-          image: "atlassian/jira-software:8.20.7"
+          image: "atlassian/jira-software:9.4.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_TOMCAT_PORT
+              value: "8080"
             - name: SET_PERMISSIONS
               value: "true"
             - name: JIRA_SHARED_HOME
@@ -130,8 +132,8 @@ spec:
               containerPort: 8080
               protocol: TCP
             - name: ehcache
-              containerPort: 40001 
-              protocol: TCP 
+              containerPort: 40001
+              protocol: TCP
             - name: ehcacheobject
               containerPort: 40011
               protocol: TCP
@@ -173,10 +175,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.3.0
+    helm.sh/chart: jira-1.7.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "9.4.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -205,10 +207,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.3.0
+    helm.sh/chart: jira-1.7.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "8.20.7"
+    app.kubernetes.io/version: "9.4.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

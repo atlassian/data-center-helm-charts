@@ -44,11 +44,11 @@ image:
   # https://hub.docker.com/r/atlassian/bitbucket-server
   #
   repository: atlassian/bitbucket
-  
+
   # -- Image pull policy
   #
   pullPolicy: IfNotPresent
-  
+
   # -- The docker image tag to be used - defaults to the Chart appVersion
   #
   tag: ""
@@ -62,14 +62,14 @@ serviceAccount:
   # already exists.
   #
   create: true
-  
+
   # -- The name of the ServiceAccount to be used by the pods. If not specified, but
   # the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name
   # will be auto-generated, otherwise the 'default' ServiceAccount will be used.
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   #
   name:
-  
+
   # -- For Docker images hosted in private registries, define the list of image pull
   # secrets that should be utilized by the created ServiceAccount
   # https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
@@ -80,39 +80,53 @@ serviceAccount:
   # -- Annotations to add to the ServiceAccount (if created)
   #
   annotations: {}
-  
+
+  role:
+    # -- Create a role for Hazelcast client with privileges to get and list pods and endpoints in the namespace.
+    # Set to false if you need to create a Role and RoleBinding manually
+    #
+    create: true
+
   # Define permissions
   # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
   #
   clusterRole:
-  
+
     # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
     # already exists.
     #
-    create: true
-  
+    create: false
+
     # -- The name of the ClusterRole to be used. If not specified, but
     # the "serviceAccount.clusterRole.create" flag is set to 'true',
     # then the ClusterRole name will be auto-generated.
     #
     name:
-    
+
+  # -- Grant permissions defined in Role (list and get pods and endpoints) to a service account.
+  #
+  roleBinding:
+
+    # Set to false if you need to create a Role and RoleBinding manually
+    #
+    create: true
+
   # Grant permissions defined in ClusterRole
   # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding
   #
   clusterRoleBinding:
-  
+
     # -- Set to 'true' if a ClusterRoleBinding should be created, or 'false' if it
     # already exists.
     #
-    create: true
-    
+    create: false
+
     # -- The name of the ClusterRoleBinding to be created. If not specified, but
     # the "serviceAccount.clusterRoleBinding.create" flag is set to 'true',
     # then the ClusterRoleBinding name will be auto-generated.
     #
     name:
-    
+
 # REQUIRED - Database configuration
 #
 # Bitbucket requires a backend database. The configuration below can be used to define the
@@ -130,7 +144,7 @@ database:
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databaseurl
   #
   url:
-  
+
   # -- The Java class name of the JDBC driver to be used. If not specified, then it will
   # need to be provided via the browser during manual configuration post deployment.
   # Valid drivers are:
@@ -141,27 +155,27 @@ database:
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasedriver:
   #
   driver:
-  
+
   # JDBC connection credentials
-  # 
+  #
   credentials:
-  
+
     # -- The name of the K8s Secret that contains the database login credentials.
     # If the secret is specified, then the credentials will be automatically utilised on
     # Bitbucket startup. If the secret is not provided, then the credentials will need
     # to be provided via the browser during manual configuration post deployment.
-    # 
+    #
     # Example of creating a database credentials K8s secret below:
     # 'kubectl create secret generic <secret-name> --from-literal=username=<username> \
     # --from-literal=password=<password>'
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
     secretName:
-    
+
     # -- The key ('username') in the Secret used to store the database login username
     #
     usernameSecretKey: username
-    
+
     # -- The key ('password') in the Secret used to store the database login password
     #
     passwordSecretKey: password
@@ -181,31 +195,31 @@ volumes:
   # https://confluence.atlassian.com/bitbucketserver/set-the-home-directory-776640890.html
   #
   localHome:
-  
+
     # Dynamic provisioning of local-home using the K8s Storage Classes
     #
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic
     # https://atlassian.github.io/data-center-helm-charts/examples/storage/aws/LOCAL_STORAGE/
     #
     persistentVolumeClaim:
-    
+
       # -- If 'true', then a 'PersistentVolume' and 'PersistentVolumeClaim' will be dynamically
       # created for each pod based on the 'StorageClassName' supplied below.
       #
       create: false
-      
+
       # -- Specify the name of the 'StorageClass' that should be used for the local-home
       # volume claim.
       #
       storageClassName:
-      
+
       # -- Specifies the standard K8s resource requests and/or limits for the local-home
       # volume claims.
       #
       resources:
         requests:
           storage: 1Gi
-          
+
     # -- Static provisioning of local-home using K8s PVs and PVCs
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for
@@ -221,7 +235,7 @@ volumes:
     customVolume: {}
     # persistentVolumeClaim:
     #   claimName: "<pvc>"
-    
+
     # -- Specifies the path in the Bitbucket container to which the local-home volume will be
     # mounted.
     #
@@ -249,12 +263,12 @@ volumes:
       # NFS server details for which the PersistentVolume should be created.
       #
       nfs:
-      
+
         # -- The address of the NFS server. It needs to be resolvable by the kubelet,
         # so consider using an IP address.
         #
         server: ""
-        
+
         # -- Specifies NFS directory share. This will be mounted into the Pod(s) using the
         # 'volumes.sharedHome.mountPath'
         #
@@ -295,7 +309,7 @@ volumes:
       resources:
         requests:
           storage: 1Gi
-          
+
     # -- Static provisioning of shared-home using K8s PVs and PVCs
     #
     # When 'persistentVolume.create' and 'persistentVolumeClaim.create' are 'false', then
@@ -310,38 +324,45 @@ volumes:
     customVolume: {}
     # persistentVolumeClaim:
     #   claimName: "<pvc>"
-    
+
     # -- Specifies the path in the Bitbucket container to which the shared-home volume will be
     # mounted.
     #
     mountPath: "/var/atlassian/application-data/shared-home"
-    
+
     # -- Specifies the sub-directory of the shared-home volume that will be mounted in to the
     # Bitbucket container.
     #
     subPath:
-    
+
     # Modify permissions on shared-home
     #
     nfsPermissionFixer:
-    
+
       # -- If 'true', this will alter the shared-home volume's root directory so that Bitbucket
       # can write to it. This is a workaround for a K8s bug affecting NFS volumes:
       # https://github.com/kubernetes/examples/issues/260
       #
       enabled: true
-      
+
       # -- The path in the K8s initContainer where the shared-home volume will be mounted
       #
       mountPath: "/shared-home"
-      
+
+      # -- Image repository for the permission fixer init container. Defaults to alpine
+      #
+      imageRepo: alpine
+      # -- Image tag for the permission fixer init container. Defaults to latest
+      #
+      imageTag: latest
+
       # -- By default, the fixer will change the group ownership of the volume's root directory
       # to match the Bitbucket container's GID (2003), and then ensures the directory is
       # group-writeable. If this is not the desired behaviour, command used can be specified
       # here.
       #
       command:
-      
+
   # -- Defines additional volumes that should be applied to all Bitbucket pods.
   # Note that this will not create any corresponding volume mounts;
   # those need to be defined in bitbucket.additionalVolumeMounts
@@ -369,7 +390,7 @@ ingress:
   # which of them is used for Atlassian application traffic.
   #
   className: "nginx"
-  
+
   # -- Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx'
   # controller.
   # https://kubernetes.github.io/ingress-nginx/
@@ -380,12 +401,12 @@ ingress:
   # be specified below under 'ingress.annotations'.
   #
   nginx: true
-  
+
   # -- The max body size to allow. Requests exceeding this size will result
   # in an HTTP 413 error being returned to the client.
   #
   maxBodySize: 250m
-  
+
   # -- Defines a timeout for establishing a connection with a proxied server. It should
   # be noted that this timeout cannot usually exceed 75 seconds.
   #
@@ -410,23 +431,23 @@ ingress:
   # Service.
   #
   host:
-  
+
   # -- The base path for the Ingress Resource. For example '/bitbucket'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
   # 'company.k8s.com/bitbucket'. Default value is 'bitbucket.service.contextPath'.
   #
   path:
-  
+
   # -- The custom annotations that should be applied to the Ingress Resource
   # when NOT using the K8s ingress-nginx controller.
   #
   annotations: {}
-  
+
   # -- Set to 'true' if browser communication with the application should be TLS
   # (HTTPS) enforced.
   #
   https: true
-  
+
   # -- The name of the K8s Secret that contains the TLS private key and corresponding
   # certificate. When utilised, TLS termination occurs at the ingress point where
   # traffic to the Service, and it's Pods is in plaintext.
@@ -445,11 +466,11 @@ bitbucket:
   # K8s Service configuration
   #
   service:
-  
+
     # -- The port on which the Bitbucket K8s Service will listen
     #
     port: 80
-    
+
     # -- The type of K8s service to use for Bitbucket
     #
     type: ClusterIP
@@ -465,17 +486,17 @@ bitbucket:
     # -- Additional annotations to apply to the Service
     #
     annotations: {}
-    
+
   # -- Enable or disable an additional service for exposing SSH for external access.
   # Disable when the SSH service is exposed through the ingress controller, or
   # enable if the ingress controller does not support TCP.
   #
   sshService:
-  
+
     # -- Set to 'true' if an additional SSH Service should be created
     #
     enabled: false
-    
+
     # -- Port to expose the SSH service on.
     #
     port: 22
@@ -501,10 +522,15 @@ bitbucket:
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.
   #
+
+  # -- Whether to apply security context to pod.
+  #
+  securityContextEnabled: true
+
   securityContext:
 
     # -- The GID used by the Bitbucket docker image
-    # If not supplied, will default to 2003.
+    # GID will default to 2003 if not supplied and securityContextEnabled is set to true.
     # This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bitbucket container.
     # However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260
     #
@@ -523,15 +549,15 @@ bitbucket:
   # Port definitions
   #
   ports:
-  
+
     # -- The port on which the Bitbucket container listens for HTTP traffic
     #
     http: 7990
-    
+
     # -- The port on which the Bitbucket container listens for SSH traffic
     #
     ssh: 7999
-    
+
     # -- The port on which the Hazelcast listens for client traffic
     #
     hazelcast: 5701
@@ -539,7 +565,7 @@ bitbucket:
   # Bitbucket licensing details
   #
   license:
-  
+
     # -- The name of the K8s Secret that contains the Bitbucket license key. If specified, then
     # the license will be automatically populated during Bitbucket setup. Otherwise, it will
     # need to be provided via the browser after initial startup. An Example of creating
@@ -548,7 +574,7 @@ bitbucket:
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
     secretName:
-    
+
     # -- The key in the K8s Secret that contains the Bitbucket license key
     #
     secretKey: license-key
@@ -557,25 +583,25 @@ bitbucket:
   # https://atlassian.github.io/data-center-helm-charts/userguide/INSTALLATION/?h=sysad#7-configure-license
   #
   sysadminCredentials:
-  
+
     # -- The name of the Kubernetes Secret that contains the Bitbucket sysadmin credentials
     # If specified, then these will be automatically populated during Bitbucket setup.
     # Otherwise, they will need to be provided via the browser after initial startup.
     #
     secretName:
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin username
     #
     usernameSecretKey: username
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin password
     #
     passwordSecretKey: password
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin display name
     #
     displayNameSecretKey: displayName
-    
+
     # -- The key in the Kubernetes Secret that contains the sysadmin email address
     #
     emailAddressSecretKey: emailAddress
@@ -588,7 +614,7 @@ bitbucket:
   # Data Center clustering
   #
   clustering:
-  
+
     # -- Set to 'true' if Data Center clustering should be enabled
     # This will automatically configure cluster peer discovery between cluster nodes.
     #
@@ -619,19 +645,19 @@ bitbucket:
 
 
   # Elasticsearch config
-  # 
+  #
   elasticSearch:
-  
+
     # -- The base URL of the external Elasticsearch instance to be used, for example:
     # http://elasticsearch-master.<namespace>.svc.cluster.local:9200
     # If this is defined, then Bitbucket will disable its internal Elasticsearch instance.
     #
     baseUrl:
-    
+
     # Elasticsearch's connection details
     #
     credentials:
-    
+
       # -- The name of the Kubernetes Secret that contains the Elasticsearch credentials.
       # Example of creating a credentials K8s secret below:
       # 'kubectl create secret generic <secret-name> --from-literal=username=<username> \
@@ -639,11 +665,11 @@ bitbucket:
       # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
       #
       secretName:
-      
+
       # -- The key in the Kubernetes Secret that contains the Elasticsearch username.
       #
       usernameSecretKey: username
-      
+
       # -- The key in the Kubernetes Secret that contains the Elasticsearch password.
       #
       passwordSecretKey: password
@@ -675,17 +701,17 @@ bitbucket:
   # Pod resource requests
   #
   resources:
-    
+
     # JVM Memory / Heap Size definitions. These values below are based on the
     # defaults defined for the Bitbucket docker container.
     # https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/
     #
     jvm:
-    
+
       # -- The maximum amount of heap memory that will be used by the Bitbucket JVM
       # The same value will be used by the Elasticsearch JVM.
       maxHeap: "1g"
-      
+
       # -- The minimum amount of heap memory that will be used by the Bitbucket JVM
       # The same value will be used by the Elasticsearch JVM.
       minHeap: "512m"
@@ -697,13 +723,13 @@ bitbucket:
     # accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example.
     #
     container:
-    
+
       requests:
-        
+
         # -- Initial CPU request by Bitbucket pod
         #
         cpu: "2"
-        
+
         # -- Initial Memory request by Bitbucket pod
         #
         memory: "2G"
@@ -762,7 +788,7 @@ bitbucket:
   # system properties.
   #
   additionalJvmArgs: []
-  
+
   # -- Specifies a list of additional Java libraries that should be added to the
   # Bitbucket container. Each item in the list should specify the name of the volume
   # that contains the library, as well as the name of the library file within that
@@ -843,10 +869,13 @@ fluentd:
   # -- Set to 'true' if the Fluentd sidecar (DaemonSet) should be added to each pod
   #
   enabled: false
-  
-  # -- The Fluentd sidecar image
+
+  # -- The Fluentd sidecar image repository
   #
-  imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
+  imageRepo: fluent/fluentd-kubernetes-daemonset
+  # -- The Fluentd sidecar image tag
+  #
+  imageTag: v1.11.5-debian-elasticsearch7-1.2
 
   # -- The command used to start Fluentd. If not supplied the default command
   # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
@@ -857,13 +886,13 @@ fluentd:
   # for instance SIGTERM. An example of how such a command may look is:
   # "<command 1> && <command 2> && exec <primary command>"
   command:
-  
+
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default)
   # should be used for Fluentd. If enabled this config must be supplied via the
   # 'fluentdCustomConfig' property below.
   #
   customConfigFile: false
-  
+
   # -- Custom fluent.conf file
   #
   fluentdCustomConfig: {}
@@ -882,15 +911,15 @@ fluentd:
   # Elasticsearch config based on your ELK stack
   #
   elasticsearch:
-  
+
     # -- Set to 'true' if Fluentd should send all log events to an Elasticsearch service.
     #
     enabled: true
-    
+
     # -- The hostname of the Elasticsearch service that Fluentd should send logs to.
     #
     hostname: elasticsearch
-    
+
   # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
   #
   extraVolumes: []

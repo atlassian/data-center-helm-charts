@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.1.3](https://img.shields.io/badge/AppVersion-8.1.3-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.0.0](https://img.shields.io/badge/AppVersion-9.0.0-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -56,7 +56,8 @@ Kubernetes: `>=1.19.x-0`
 | bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo pod |
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM |
 | bamboo.resources.jvm.minHeap | string | `"512m"` | The minimum amount of heap memory that will be used by the Bamboo JVM |
-| bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image If not supplied, will default to 2005. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bamboo.securityContext.fsGroup | int | `2005` | The GID used by the Bamboo docker image GID will default to 2005 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Bamboo container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
+| bamboo.securityContextEnabled | bool | `true` |  |
 | bamboo.securityToken.secretKey | string | `"security-token"` | The key (default `secretKey`) in the Secret used to store the Bamboo shared key. |
 | bamboo.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token will overrided the generated one. This secret should also be shared with the agent deployment. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service |

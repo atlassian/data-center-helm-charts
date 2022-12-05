@@ -9,7 +9,11 @@ import test.model.Product;
 
 import java.util.Map;
 
-class ElasticSearchTest {
+
+/**
+ * Tests the various permutations of the "<product>.license" value structure in the Helm charts
+ */
+class ForcedConfigUpdateTest {
     private Helm helm;
 
     @BeforeEach
@@ -18,28 +22,27 @@ class ElasticSearchTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bitbucket")
-    void elastic_search_baseUrl(Product product) throws Exception {
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bamboo"})
+    void jira_atl_force_config_update_true(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".elasticSearch.baseUrl", "https://foo/"));
+                "jira.forceConfigUpdate", "true",
+                "bamboo.forceConfigUpdate", "true",
+                "confluence.forceConfigUpdate", "true"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasValue("SEARCH_ENABLED", "false")
-                .assertHasValue("PLUGIN_SEARCH_ELASTICSEARCH_BASEURL", "https://foo/");
+                .assertHasValue("ATL_FORCE_CFG_UPDATE", "true");
     }
-
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = "bitbucket")
-    void elastic_search_credentials(Product product) throws Exception {
+    @EnumSource(value = Product.class, names = "jira")
+    void jira_atl_force_config_update_false(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".elasticSearch.credentials.secretName", "mysecret"));
+                "jira.forceConfigUpdate", "false"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
                 .getEnv()
-                .assertHasSecretRef("PLUGIN_SEARCH_ELASTICSEARCH_USERNAME", "mysecret", "username")
-                .assertHasSecretRef("PLUGIN_SEARCH_ELASTICSEARCH_PASSWORD", "mysecret", "password");
+                .assertDoesNotHaveAnyOf("ATL_FORCE_CFG_UPDATE");
     }
 }
