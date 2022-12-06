@@ -756,7 +756,7 @@ bitbucket:
   mesh:
     enabled: true
     setByDefault: true # new repositories will be created on bitbucket mesh nodes
-    image: abrokes/bitbucket-mesh:2
+    image: eivantsov/bitbucket-mesh:1.4.0
     replicaCount: 3
     port: 7777
     annotations: {}

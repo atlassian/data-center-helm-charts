@@ -71,11 +71,11 @@ class BitbucketMeshTest {
         Traversable<KubeResource> all = resources.getAll(Kind.Job);
 
         KubeResource configureJob = resources.get(Kind.Job, product.getHelmReleaseName() + "-mesh-configure-job");
-        assertEquals(configureJob.getAnnotations().path("helm.sh/hook").asText(), "post-install");
+        assertEquals(configureJob.getAnnotations().path("helm.sh/hook").asText(), "post-install, post-upgrade");
         Traversable<KubeResource> registerJobs = all.filter(j -> j.getName().contains("mesh-register-job"));
         assertEquals(replicaCount, registerJobs.size());
         for (var rJob : registerJobs) {
-            assertEquals(rJob.getAnnotations().path("helm.sh/hook").asText(), "post-install");
+            assertEquals(rJob.getAnnotations().path("helm.sh/hook").asText(), "post-install, post-upgrade");
         }
     }
 }

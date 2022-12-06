@@ -1,0 +1,39 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-scripts
+  labels:
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+  register-mesh-node.sh: |
+    #!/bin/sh
+    set -e
+    {{ if and (.Values.bitbucket.service.contextPath) (ne .Values.bitbucket.service.contextPath "/") }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}{{ .Values.bitbucket.service.contextPath }}
+    {{ else }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}
+    {{ end }}
+    echo "[INFO]: Registering mesh node bitbucket-mesh-$1"
+    curl -XPOST \
+    -d "{
+    \"name\":\"bitbucket-mesh-$1\",
+    \"id\": \"$1\",
+    \"rpcUrl\":\"http://{{ include "common.names.fullname" . }}-mesh-$1:{{.Values.bitbucket.mesh.port}}\"
+    }" \
+    -H "Content-Type: application/json" \
+    -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD \
+    ${BITBUCKET_URL}/rest/api/latest/admin/git/mesh/nodes
+  configure-mesh.sh: |
+    #!/bin/sh
+    set -e
+    {{ if and (.Values.bitbucket.service.contextPath) (ne .Values.bitbucket.service.contextPath "/") }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}{{ .Values.bitbucket.service.contextPath }}
+    {{ else }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}
+    {{ end }}
+    curl -XPUT -d '{"isRefreshing":false,"repositoryCreationEnabled":{{ .Values.bitbucket.mesh.setByDefault }}}' \
+    -H "Content-Type: application/json" \
+    -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD \
+    ${BITBUCKET_URL}/rest/ui/latest/admin/git/mesh/settings
+    {{- end }}

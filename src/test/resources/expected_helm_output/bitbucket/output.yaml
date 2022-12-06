@@ -160,7 +160,7 @@ spec:
       initContainers:
       containers:
         - name: bitbucket-mesh
-          image: abrokes/bitbucket-mesh:2
+          image: eivantsov/bitbucket-mesh:1.4.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: mesh
