@@ -608,6 +608,31 @@ confluence:
     #
     usePodNameAsClusterNodeName: true
 
+  # Use AWS S3 to store attachments
+  #
+  s3AttachmentsStorage:
+    # Bucket name to store attachments. If a bucket name is defined, Confluence will automatically
+    # use AWS S3 to store attachments. Only bucket name is required, not the full arn. This can also be defined in
+    # `confluence.additionalEnvironmentVariables` as `CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_NAME`
+    # or `confluence.additionalJvmArgs` as `-Dconfluence.filestore.attachments.s3.bucket.name=<bucket-name>`
+    #
+    bucketName:
+    # AWS region where the S3 bucket is located. This can also be defined in
+    # `confluence.additionalEnvironmentVariables` as `CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_REGION`
+    # or `confluence.additionalJvmArgs` as `-Dconfluence.filestore.attachments.s3.bucket.region=<aws-region>`
+    #
+    awsRegion:
+
+    # Use EKS IRSA. See: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+    #
+    eksIrsa:
+      roleArn:
+      # Defining a full arn of AWS role to assume will automatically annotate confluence service account this role.
+      # Make sure the policy attached to the role supports the following actions: "s3:PutObject", "s3:ListBucket",
+      # "s3:GetObject", "s3:DeleteObject" on resources "arn:aws:s3:::${BUCKET_NAME}/*" and "arn:aws:s3:::${BUCKET_NAME}"
+      # Defining `roleArn` will also add "-Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
+      # system property to Confluence JVM arguments
+
   # Confluence Pod resource requests
   #
   resources:

@@ -94,6 +94,12 @@ spec:
               subPath: {{ .key }}
             {{ end }}
           env:
+            {{ if and .Values.confluence.s3AttachmentsStorage.bucketName .Values.confluence.s3AttachmentsStorage.awsRegion }}
+            - name: CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_NAME
+              value: {{ .Values.confluence.s3AttachmentsStorage.bucketName }}
+            - name: CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_REGION
+              value: {{ .Values.confluence.s3AttachmentsStorage.awsRegion }}
+            {{ end }}
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"

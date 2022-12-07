@@ -84,4 +84,19 @@ class ContainersTest {
         final var icontainer = statefulSet.getContainer("my_container");
         assertThat(icontainer.get("image")).hasTextEqualTo("my_image");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"})
+    void confluence_s3_storage_env_vars(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname+".s3AttachmentsStorage.bucketName", "my-bucket",
+                pname+".s3AttachmentsStorage.awsRegion", "my-region"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var env = statefulSet.getContainer().getEnv();
+        env.assertHasValue("CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_NAME", "my-bucket");
+        env.assertHasValue("CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_REGION", "my-region");
+    }
 }
