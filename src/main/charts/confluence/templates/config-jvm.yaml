@@ -16,6 +16,9 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.confluence.resources.container.requests.cpu }}
+    {{ if .Values.confluence.s3AttachmentsStorage.eksIrsa.roleArn }}
+    -Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    {{ end }}
   max_heap: {{ .Values.confluence.resources.jvm.maxHeap }}
   min_heap: {{ .Values.confluence.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.confluence.resources.jvm.reservedCodeCache }}
