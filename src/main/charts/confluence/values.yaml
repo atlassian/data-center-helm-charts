@@ -626,12 +626,12 @@ confluence:
     # Use EKS IRSA. See: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
     #
     eksIrsa:
-      roleArn:
       # Defining a full arn of AWS role to assume will automatically annotate confluence service account this role.
       # Make sure the policy attached to the role supports the following actions: "s3:PutObject", "s3:ListBucket",
       # "s3:GetObject", "s3:DeleteObject" on resources "arn:aws:s3:::${BUCKET_NAME}/*" and "arn:aws:s3:::${BUCKET_NAME}"
       # Defining `roleArn` will also add "-Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
       # system property to Confluence JVM arguments
+      roleArn:
 
   # Confluence Pod resource requests
   #
