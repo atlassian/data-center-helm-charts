@@ -1,11 +1,23 @@
 # Change Log
 
 
+## 1.8.0
+
+**Release date:** 2022-12-9
+
+![AppVersion: 5.1.0](https://img.shields.io/static/v1?label=AppVersion&message=5.1.0&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* CLIP-1644: Stop supporting 1.19-1.20 k8s (#486)
+* Update appVersion to 5.1.0
+* Use `ingress.https` flag to enable tls in ingress (#487)
+
 ## 1.7.1
 
 **Release date:** 2022-10-26
 
-![AppVersion: 9.0.0](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
+![AppVersion: 5.0.2](https://img.shields.io/static/v1?label=AppVersion&message=9.0.0&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
@@ -98,7 +110,7 @@ Crowd (1.1.0 -> 1.2.0)
 * Added new feature additionalPorts (for jmx-monitoring) (#353)
 
 
-## 1.1.0 
+## 1.1.0
 
 **Release date:** 2021-11-03
 
@@ -107,13 +119,13 @@ Crowd (1.1.0 -> 1.2.0)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* DCKUBE-721: Update version in Chart.yaml files 
-* DCKUBE-733: Update the product versions (#345) 
-* DCKUBE-739: Fix typos (#337) 
-* DCKUBE-739: Make securityContext changes backward compatible (#332) 
-* Roll Statefulset Pods if ConfigMap changes (#315) 
-* DCKUBE-677: Make security context more flexible (#321) 
-* DCKUBE-722: Enable configuring ingress.class name (#313) 
+* DCKUBE-721: Update version in Chart.yaml files
+* DCKUBE-733: Update the product versions (#345)
+* DCKUBE-739: Fix typos (#337)
+* DCKUBE-739: Make securityContext changes backward compatible (#332)
+* Roll Statefulset Pods if ConfigMap changes (#315)
+* DCKUBE-677: Make security context more flexible (#321)
+* DCKUBE-722: Enable configuring ingress.class name (#313)
 * DCKUBE-678: Add schedulerName to StatefulSet (#301)
 
 
@@ -175,23 +187,23 @@ This is the first officially supported version of the Helm chart.
 * DCKUBE-54: Volume docs updates (#188)
 
 
-## 0.12.0 
+## 0.12.0
 
 ![AppVersion: 4.3.0-jdk11](https://img.shields.io/static/v1?label=AppVersion&message=4.3.0-jdk11&color=success&logo=)
 ![Kubernetes: >=1.19.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.19.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* DCKUBE-437: Wording improvement for warning in NOTES when PV is not used (#199) 
-* DCKUBE-393: Improve readability of Crowd values.yaml file (#184) 
-* Defining the following values in the helpers template for each chart, to allow template overrides: (#173) 
+* DCKUBE-437: Wording improvement for warning in NOTES when PV is not used (#199)
+* DCKUBE-393: Improve readability of Crowd values.yaml file (#184)
+* Defining the following values in the helpers template for each chart, to allow template overrides: (#173)
 
 ### Default value changes
 
 There has been major improvement in the documentation for the keys in `values.yaml` file but there isn't any functional
 change.
 
-## 0.11.0 
+## 0.11.0
 
 **Release date:** 2021-06-09
 
@@ -200,10 +212,10 @@ change.
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* DCKUBE-348: Warning of absent persistent volume (#169) 
-* DCKUBE-307: Do not print logs when testing helm installation. (#168) 
-* DCKUBE-308: Print service URL after installing helm chart (#157) 
-* DCKUBE-282: Update icons to SVG (#164) 
+* DCKUBE-348: Warning of absent persistent volume (#169)
+* DCKUBE-307: Do not print logs when testing helm installation. (#168)
+* DCKUBE-308: Print service URL after installing helm chart (#157)
+* DCKUBE-282: Update icons to SVG (#164)
 
 ### Default value changes
 
@@ -211,7 +223,7 @@ change.
 # No changes in this release
 ```
 
-## 0.10.0 
+## 0.10.0
 
 **Release date:** 2021-06-01
 
@@ -220,8 +232,8 @@ change.
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Version 0.10.0 
-* DCKUBE-332: Update the minimal supported kubernetes version v1.19 (#154) 
+* Version 0.10.0
+* DCKUBE-332: Update the minimal supported kubernetes version v1.19 (#154)
 
 ### Default value changes
 
@@ -229,7 +241,7 @@ change.
 # No changes in this release
 ```
 
-## 0.9.0 
+## 0.9.0
 
 **Release date:** 2021-05-25
 
@@ -238,18 +250,18 @@ change.
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Version 0.9.0 
-* initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
-* README update for 0.8.0 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
-* DCKUBE-267: Update cpu request sizes 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
-* DCKUBE-267: Update cpu request sizes 
-* Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134) 
-* DCKUBE-267: Wording updates 
-* DCKUBE-267: Initial commit 
-* Crowd 0.7.0 README update 
+* Version 0.9.0
+* initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140)
+* Merge branch 'master' into dckube-267-define-minimum-compute-resources
+* README update for 0.8.0
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources
+* DCKUBE-267: Update cpu request sizes
+* Merge branch 'master' into dckube-267-define-minimum-compute-resources
+* DCKUBE-267: Update cpu request sizes
+* Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134)
+* DCKUBE-267: Wording updates
+* DCKUBE-267: Initial commit
+* Crowd 0.7.0 README update
 
 ### Default value changes
 
@@ -259,7 +271,7 @@ index a48f866..ce5a29d 100644
 --- a/src/main/charts/crowd/values.yaml
 +++ b/src/main/charts/crowd/values.yaml
 @@ -76,28 +76,30 @@ crowd:
- 
+
    resources:
      jvm:
 +      # -- JVM memory arguments below are based on the defaults defined for the Crowd docker container, see:
@@ -279,7 +291,7 @@ index a48f866..ce5a29d 100644
 -    # Allowing for (maxHeap+codeCache)*1.5 would be an example.
 -    container: {}
 +    # Allowing for maxHeap * 1.5 would be an example.
-+    container: 
++    container:
      #  limits:
 -    #    cpu: "4"
 -    #    memory: "2G"
@@ -291,16 +303,16 @@ index a48f866..ce5a29d 100644
 +      requests:
 +        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
 +        memory: "1G"
- 
+
    # -- Specifies a list of additional arguments that can be passed to the Crowd JVM, e.g. system properties
 -  additionalJvmArgs: []
 -#    - -Dfoo=bar
 -#    - -Dfruit=lemon
-+  additionalJvmArgs: 
++  additionalJvmArgs:
 +    # -- The value defined for ActiveProcessorCount should correspond to that provided for 'container.requests.cpu'
 +    # see: https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
 +    - -XX:ActiveProcessorCount=2
- 
+
    # -- Specifies a list of additional Java libraries that should be added to the Crowd container.
    # Each item in the list should specify the name of the volume which contain the library, as well as the name of the
 @@ -136,9 +138,11 @@ ingress:
@@ -318,7 +330,7 @@ index a48f866..ce5a29d 100644
    annotations: {}
 ```
 
-## 0.7.0 
+## 0.7.0
 
 **Release date:** 2021-05-13
 
@@ -327,7 +339,7 @@ index a48f866..ce5a29d 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Add Crowd as a tested product (#128) 
+* Add Crowd as a tested product (#128)
 
 ### Default value changes
 
@@ -335,7 +347,7 @@ index a48f866..ce5a29d 100644
 # No changes in this release
 ```
 
-## 0.1.0 
+## 0.1.0
 
 **Release date:** 2021-05-13
 
@@ -344,7 +356,7 @@ index a48f866..ce5a29d 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* initial Crowd Helm Chart based on Confluence Helm Chart (#106) 
+* initial Crowd Helm Chart based on Confluence Helm Chart (#106)
 
 ### Default value changes
 

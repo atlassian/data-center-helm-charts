@@ -1,5 +1,19 @@
 # Change Log
 
+## 1.8.0
+
+**Release date:** 2022-12-9
+
+![AppVersion: 7.21.7](https://img.shields.io/static/v1?label=AppVersion&message=7.21.7&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* CLIP-1644: Stop supporting 1.19-1.20 k8s (#486)
+* CLIP-1702: Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts (#470)
+* Update appVersion to 7.21.7
+* Use `ingress.https` flag to enable tls in ingress (#487)
+* Replace deprecated `ELASTICSEARCH_ENABLED` with `SEARCH_ENABLED` env var (#488)
+
 ## 1.7.1
 
 **Release date:** 2022-10-26
@@ -96,7 +110,7 @@
 * Added new feature additionalPorts (for jmx-monitoring) (#353)
 
 
-## 1.1.0 
+## 1.1.0
 
 **Release date:** 2021-11-03
 
@@ -105,19 +119,19 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* DCKUBE-721: Update version in Chart.yaml files 
-* DCKUBE-733: Update the product versions (#345) 
-* DCKUBE-731: Stabilize CI (#344) 
-* DCKUBE-731: Fix shared home default (#342) 
-* BAMBK8S-117: Documentation updates for Bamboo on K8s (#336) 
-* DCKUBE-739: Fix typos (#337) 
-* DCKUBE-739: Make securityContext changes backward compatible (#332) 
-* DCKUBE-552 Mirror support. (#265) 
-* Roll Statefulset Pods if ConfigMap changes (#315) 
-* DCKUBE-677: Make security context more flexible (#321) 
-* DCKUBE-634: Bitbucket - set context path (#314) 
-* DCKUBE-722: Enable configuring ingress.class name (#313) 
-* DCKUBE-678: Add schedulerName to StatefulSet (#301) 
+* DCKUBE-721: Update version in Chart.yaml files
+* DCKUBE-733: Update the product versions (#345)
+* DCKUBE-731: Stabilize CI (#344)
+* DCKUBE-731: Fix shared home default (#342)
+* BAMBK8S-117: Documentation updates for Bamboo on K8s (#336)
+* DCKUBE-739: Fix typos (#337)
+* DCKUBE-739: Make securityContext changes backward compatible (#332)
+* DCKUBE-552 Mirror support. (#265)
+* Roll Statefulset Pods if ConfigMap changes (#315)
+* DCKUBE-677: Make security context more flexible (#321)
+* DCKUBE-634: Bitbucket - set context path (#314)
+* DCKUBE-722: Enable configuring ingress.class name (#313)
+* DCKUBE-678: Add schedulerName to StatefulSet (#301)
 
 
 ## 1.0.0
@@ -191,10 +205,10 @@ This is the first officially supported version of the Helm chart.
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* DCKUBE-437: Wording improvement for warning in NOTES when PV is not used (#199) 
-* DCKUBE-410: fix additional injections (#186) 
-* DCKUBE-390: Improve readability of Jira values.yaml file (#179) 
-* DCKUBE-391: Improve readability of Bitbucket values.yaml file (#182) 
+* DCKUBE-437: Wording improvement for warning in NOTES when PV is not used (#199)
+* DCKUBE-410: fix additional injections (#186)
+* DCKUBE-390: Improve readability of Jira values.yaml file (#179)
+* DCKUBE-391: Improve readability of Bitbucket values.yaml file (#182)
 * Defining the following values in the helpers template for each chart, to allow template overrides: (#173)
 
 ### Default value changes
@@ -202,7 +216,7 @@ This is the first officially supported version of the Helm chart.
 There has been major improvement in the documentation for the keys in `values.yaml` file but there isn't any functional
 change.
 
-## 0.11.0 
+## 0.11.0
 
 **Release date:** 2021-06-09
 
@@ -211,11 +225,11 @@ change.
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* DCKUBE-348: Warning of absent persistent volume (#169) 
-* DCKUBE-307: Do not print logs when testing helm installation. (#168) 
-* DCKUBE-308: Print service URL after installing helm chart (#157) 
-* DCKUBE-282: Update icons to SVG (#164) 
-* DCKUBE-302: Add Bitbucket SSH service and custom annotations. (#152) 
+* DCKUBE-348: Warning of absent persistent volume (#169)
+* DCKUBE-307: Do not print logs when testing helm installation. (#168)
+* DCKUBE-308: Print service URL after installing helm chart (#157)
+* DCKUBE-282: Update icons to SVG (#164)
+* DCKUBE-302: Add Bitbucket SSH service and custom annotations. (#152)
 
 ### Default value changes
 
@@ -244,7 +258,7 @@ index d3342d2..786d343 100644
    securityContext:
 ```
 
-## 0.10.0 
+## 0.10.0
 
 **Release date:** 2021-06-01
 
@@ -253,8 +267,8 @@ index d3342d2..786d343 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Version 0.10.0 
-* DCKUBE-332: Update the minimal supported kubernetes version v1.19 (#154) 
+* Version 0.10.0
+* DCKUBE-332: Update the minimal supported kubernetes version v1.19 (#154)
 
 ### Default value changes
 
@@ -262,7 +276,7 @@ index d3342d2..786d343 100644
 # No changes in this release
 ```
 
-## 0.9.0 
+## 0.9.0
 
 **Release date:** 2021-05-25
 
@@ -271,22 +285,22 @@ index d3342d2..786d343 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Version 0.9.0 
-* initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140) 
-* Update values.yaml (#139) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
-* README update for 0.8.0 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
-* DCKUBE-267: Update cpu request sizes 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
-* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources 
-* DCKUBE-267: Update cpu request sizes 
-* Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134) 
-* Merge branch 'master' into dckube-267-define-minimum-compute-resources 
-* DCKUBE-267: Wording updates 
-* DCKUBE-267: Initial commit 
-* DCKUBE-51 Application upgrade (#122) 
-* Add Crowd as a tested product (#128) 
+* Version 0.9.0
+* initial commit - changed the max-body-size of request to 250MB for all products and documented in CONFIG.md (#140)
+* Update values.yaml (#139)
+* Merge branch 'master' into dckube-267-define-minimum-compute-resources
+* README update for 0.8.0
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources
+* DCKUBE-267: Update cpu request sizes
+* Merge branch 'master' into dckube-267-define-minimum-compute-resources
+* Merge branch 'dckube-267-define-minimum-compute-resources' of github.com:https://github.com/atlassian/data-center-helm-charts/data-center-helm-charts into dckube-267-define-minimum-compute-resources
+* DCKUBE-267: Update cpu request sizes
+* Added ingress.host into values.yaml with corresponding value injection in ingress.yaml for all apps. Defaults to / (#134)
+* Merge branch 'master' into dckube-267-define-minimum-compute-resources
+* DCKUBE-267: Wording updates
+* DCKUBE-267: Initial commit
+* DCKUBE-51 Application upgrade (#122)
+* Add Crowd as a tested product (#128)
 
 ### Default value changes
 
@@ -296,7 +310,7 @@ index bb7a568..d3342d2 100644
 --- a/src/main/charts/bitbucket/values.yaml
 +++ b/src/main/charts/bitbucket/values.yaml
 @@ -9,7 +9,7 @@ image:
- 
+
  serviceAccount:
    # -- Specifies the name of the ServiceAccount to be used by the pods.
 -  # If not specified, but the the "serviceAccount.create" flag is set, then the ServiceAccount name will be auto-generated,
@@ -305,7 +319,7 @@ index bb7a568..d3342d2 100644
    name:
    # -- true if a ServiceAccount should be created, or false if it already exists
 @@ -31,10 +31,10 @@ serviceAccount:
- 
+
  database:
    # -- The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database
 -  # If not specified, then it will need to be provided via browser during initial startup.
@@ -319,7 +333,7 @@ index bb7a568..d3342d2 100644
      # -- The name of the Kubernetes Secret that contains the database login credentials.
 @@ -64,25 +64,25 @@ bitbucket:
      hazelcast: 5701
- 
+
    license:
 -    # -- The name of the Kubernetes Secret which contains the Bitbucket license key.
 +    # -- The name of the Kubernetes Secret that contains the Bitbucket license key.
@@ -329,7 +343,7 @@ index bb7a568..d3342d2 100644
 -    # -- The key in the Kubernetes Secret which contains the Bitbucket license key
 +    # -- The key in the Kubernetes Secret that contains the Bitbucket license key
      secretKey: license-key
- 
+
    sysadminCredentials:
 -    # -- The name of the Kubernetes Secret which contains the Bitbucket sysadmin credentials
 +    # -- The name of the Kubernetes Secret that contains the Bitbucket sysadmin credentials
@@ -348,10 +362,10 @@ index bb7a568..d3342d2 100644
 -    # -- The key in the Kubernetes Secret which contains the sysadmin email address
 +    # -- The key in the Kubernetes Secret that contains the sysadmin email address
      emailAddressSecretKey: emailAddress
- 
+
    clustering:
 @@ -104,30 +104,34 @@ bitbucket:
- 
+
    resources:
      jvm:
 -      # -- The maximum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the ElasticSearch JVM.
@@ -364,7 +378,7 @@ index bb7a568..d3342d2 100644
 -      minHeap: "1g"
 +      # -- The minimum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the Elasticsearch JVM.
 +      minHeap: "512m"
- 
+
      # -- Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket container.
      # It is important that if the memory resources are specified here, they must allow for the size of the Bitbucket JVM.
      # That means the maximum heap size, the reserved code cache size, plus other JVM overheads, must be accommodated.
@@ -382,7 +396,7 @@ index bb7a568..d3342d2 100644
 +      requests:
 +        cpu: "2" # -- If changing the cpu value update additional JVM arg 'ActiveProcessorCount' below
 +        memory: "2G"
- 
+
    # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties
    additionalJvmArgs:
 -  #    - -Dfoo=bar
@@ -390,7 +404,7 @@ index bb7a568..d3342d2 100644
 +    # -- The value defined for ActiveProcessorCount should correspond to that provided for 'container.requests.cpu'
 +    # see: https://docs.oracle.com/en/java/javase/11/tools/java.html#GUID-3B1CE181-CD30-4178-9602-230B800D4FAE
 +    - -XX:ActiveProcessorCount=2
- 
+
    # -- Specifies a list of additional Java libraries that should be added to the Bitbucket container.
 -  # Each item in the list should specify the name of the volume which contain the library, as well as the name of the
 +  # Each item in the list should specify the name of the volume that contains the library, as well as the name of the
@@ -407,12 +421,12 @@ index bb7a568..d3342d2 100644
    host:
 +  # -- The base path for the ingress rule.
 +  path: "/"
-   # -- The custom annotations that should be applied to the Ingress 
+   # -- The custom annotations that should be applied to the Ingress
    # Resource when not using the Kubernetes ingress-nginx controller.
    annotations: {}
 @@ -176,9 +182,9 @@ ingress:
    tlsSecretName:
- 
+
  fluentd:
 -  # -- True if the fluentd sidecar should be added to each pod
 +  # -- True if the Fluentd sidecar should be added to each pod
@@ -425,7 +439,7 @@ index bb7a568..d3342d2 100644
 @@ -195,14 +201,14 @@ fluentd:
    #     tag bitbucket-access-logs
    #   </source>
- 
+
 -  # -- The name of the image containing the fluentd sidecar
 +  # -- The name of the image containing the Fluentd sidecar
    imageName: fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-elasticsearch7-1.2
@@ -471,7 +485,7 @@ index bb7a568..d3342d2 100644
 -  # those needs to be defined in bitbucket.additionalVolumeMounts
 +  # those need to be defined in bitbucket.additionalVolumeMounts
    additional: []
- 
+
  # -- Standard Kubernetes node-selectors that will be applied to all Bitbucket pods
 @@ -281,12 +287,12 @@ tolerations: []
  # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
@@ -492,7 +506,7 @@ index bb7a568..d3342d2 100644
 @@ -308,11 +314,11 @@ additionalInitContainers: []
  # -- Additional labels that should be applied to all resources
  additionalLabels: {}
- 
+
 -# -- Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into server container
 +# -- Additional existing ConfigMaps and Secrets not managed by Helm, which should be mounted into server container
  # configMap and secret are two available types (camelCase is important!)
@@ -507,7 +521,7 @@ index bb7a568..d3342d2 100644
  #    type: configMap
 ```
 
-## 0.7.0 
+## 0.7.0
 
 **Release date:** 2021-05-07
 
@@ -516,79 +530,79 @@ index bb7a568..d3342d2 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* Release 0.7.0 (#123) 
-* Update charts descriptors (#121) 
-* feat (fluentd) extra fluentd customization to (jira / confluence) helm charts (#95) 
-* Update application versions (#116) 
-* Rename Bitbucket 
-* DCKUBE-272: Expose Ehcache ports via statefulset 
-* Update documentation for 0.6.0 release 
-* DCKUBE-30: Example implementation for NFS Server (Bitbucket) 
-* DCKUBE-231: Max body size should be configurable 
-* DCKUBE-90: Additional details relating to the Ingress controller 
-* Introducing an easier way to mount secrets and configmaps (#102) 
-* Merge branch 'master' into dckube-131-nfs-fixer-removal 
-* DCKUBE-131: fix for initContainer being synthesized twice 
-* Merge branch 'master' into dckube-131-nfs-fixer-removal 
-* DCKUBE-131: Updates to template formatting and readme wording 
-* Merge pull request #98 from https://github.com/atlassian/data-center-helm-charts/dckube-131-nfs-fixer-removal 
-* DCKUBE-131: Alter NFS permissions via init container 
-* feat(range): Fix support for multiple plugins 
-* Update READMEs for 0.5.0 release 
-* Merge pull request #59 from https://github.com/atlassian/data-center-helm-charts/minor-cleanup-and-Azure-related-fixes 
-* DCNG-976 add fluentd sidecar to bitbucket chart 
-* Fix gid value 
-* OpenShift support (#56) 
-* DCNG-783 minor cleanup and Azure related fixes 
-* DCNG-926 setup NFSv3 server with lock support 
-* DCNG-945 Set up an NFS server with the Bitbucket server test 
-* DCNG-925 support for BYO NFS server 
-* default customVolume chart value to empty map , to avoid helm warning 
-* Add optional TLS to ingress spec 
-* DCNG-892 simplify config of https/http 
-* DCNG-892 update docs 
-* Merge remote-tracking branch 'origin/master' into DCNG-892 
-* DCNG-892 Configure the created ingress as nginx by default 
-* DCNG-892 Move ingress value structure up to top level 
-* DCNG-906 Set ELASTICSEARCH_ENABLED=false if ES base URL is defined 
-* DCNG-892 Add Ingress template to the Helm charts, and activate it for EKS testing 
-* DCNG-906 Add support for declaring ElasticSearch baseUrl and credentials in the bitbucket chart 
-* DCNG-927 Tweak doco for clarity 
-* DCNG-927 Allow Tomcat ingress https/secure config to be changed for Jira/Confluence, and make consistent with Bitbucket 
-* DCNG-921 add doco for enabling clustering 
-* DCNG-921 disable clustering by defaault 
-* DCNG-918 Make bitbucket sysadmin credentials secret optional 
-* DCNG-918 Make bitbucket.proxy.fqdn an optional value 
-* DCNG-913 Make bitbucket/confluence license secret optional 
-* DCNG-914 make jira/confluence DB config values fully optional 
-* DCNG-914 make bitbucket DB config values fully optional 
-* DCNG-893 move emptyDir volume defaults back into the templates 
-* DCNG-893 Make localHome/sharedHome configuration more consistent by adding an optional shared-home PVC to the chart 
-* rename localHome.persistentVolumeClaim.enabled to .create 
-* DCNG-893 update documentation 
-* DCNG-893 rework how volumes are customised in the Bitbucket chart 
-* DCNG-893 disable PVs by default on Bitbucket and Confluence 
-* DCNG-898 add a series of unit tests for the serviceAccount and image config rendering 
-* DCNG-899 Added service account to db-connectivity-test 
-* DCNG-897 Use "before-hook-creation,hook-succeeded" deletion policy 
-* Merge remote-tracking branch 'origin/master' into DCNG-897 
-* DCNG-894 Add a ServiceAccount, ClusterRole and ClusterRoleBinding to the Bitbucket chart 
-* DCNG-897 Add hook-delete-policy to chart tests and nfs-fixer job 
-* DCNG-880 Added support for custom builds in kubeVersion 
-* DCNG-853 Fixed kubeVersion 
-* DCNG-853 Updated products' charts 
-* DCNG-856 add -n to each command in NOTES.txt 
-* DCNG-856 Add NOTES.txt 
-* DCNG-849 avoid incorrect rendering for empty  additionalEnvironmentVariables 
-* DCNG-849 check for the presense of additionalLabels so we don't render an empty {} 
-* Merge pull request #6 from https://github.com/atlassian/data-center-helm-charts/DCNG-849 
-* DCNG-850 add extension point for additional environment variables 
-* DCNG-848 add extension point for additional labels 
-* Merge pull request #2 from https://github.com/atlassian/data-center-helm-charts/DCNG-867 
-* Merge pull request #3 from https://github.com/atlassian/data-center-helm-charts/DCNG-848 
-* DCNG-866 Replace hardcoded image pull policy with value placeholder 
-* DCNG-848 Add support for additional volumes and volume mounts 
-* DCNG-867 Document the presense of  bitbucket.additionalJvmArgs 
+* Release 0.7.0 (#123)
+* Update charts descriptors (#121)
+* feat (fluentd) extra fluentd customization to (jira / confluence) helm charts (#95)
+* Update application versions (#116)
+* Rename Bitbucket
+* DCKUBE-272: Expose Ehcache ports via statefulset
+* Update documentation for 0.6.0 release
+* DCKUBE-30: Example implementation for NFS Server (Bitbucket)
+* DCKUBE-231: Max body size should be configurable
+* DCKUBE-90: Additional details relating to the Ingress controller
+* Introducing an easier way to mount secrets and configmaps (#102)
+* Merge branch 'master' into dckube-131-nfs-fixer-removal
+* DCKUBE-131: fix for initContainer being synthesized twice
+* Merge branch 'master' into dckube-131-nfs-fixer-removal
+* DCKUBE-131: Updates to template formatting and readme wording
+* Merge pull request #98 from https://github.com/atlassian/data-center-helm-charts/dckube-131-nfs-fixer-removal
+* DCKUBE-131: Alter NFS permissions via init container
+* feat(range): Fix support for multiple plugins
+* Update READMEs for 0.5.0 release
+* Merge pull request #59 from https://github.com/atlassian/data-center-helm-charts/minor-cleanup-and-Azure-related-fixes
+* DCNG-976 add fluentd sidecar to bitbucket chart
+* Fix gid value
+* OpenShift support (#56)
+* DCNG-783 minor cleanup and Azure related fixes
+* DCNG-926 setup NFSv3 server with lock support
+* DCNG-945 Set up an NFS server with the Bitbucket server test
+* DCNG-925 support for BYO NFS server
+* default customVolume chart value to empty map , to avoid helm warning
+* Add optional TLS to ingress spec
+* DCNG-892 simplify config of https/http
+* DCNG-892 update docs
+* Merge remote-tracking branch 'origin/master' into DCNG-892
+* DCNG-892 Configure the created ingress as nginx by default
+* DCNG-892 Move ingress value structure up to top level
+* DCNG-906 Set ELASTICSEARCH_ENABLED=false if ES base URL is defined
+* DCNG-892 Add Ingress template to the Helm charts, and activate it for EKS testing
+* DCNG-906 Add support for declaring ElasticSearch baseUrl and credentials in the bitbucket chart
+* DCNG-927 Tweak doco for clarity
+* DCNG-927 Allow Tomcat ingress https/secure config to be changed for Jira/Confluence, and make consistent with Bitbucket
+* DCNG-921 add doco for enabling clustering
+* DCNG-921 disable clustering by defaault
+* DCNG-918 Make bitbucket sysadmin credentials secret optional
+* DCNG-918 Make bitbucket.proxy.fqdn an optional value
+* DCNG-913 Make bitbucket/confluence license secret optional
+* DCNG-914 make jira/confluence DB config values fully optional
+* DCNG-914 make bitbucket DB config values fully optional
+* DCNG-893 move emptyDir volume defaults back into the templates
+* DCNG-893 Make localHome/sharedHome configuration more consistent by adding an optional shared-home PVC to the chart
+* rename localHome.persistentVolumeClaim.enabled to .create
+* DCNG-893 update documentation
+* DCNG-893 rework how volumes are customised in the Bitbucket chart
+* DCNG-893 disable PVs by default on Bitbucket and Confluence
+* DCNG-898 add a series of unit tests for the serviceAccount and image config rendering
+* DCNG-899 Added service account to db-connectivity-test
+* DCNG-897 Use "before-hook-creation,hook-succeeded" deletion policy
+* Merge remote-tracking branch 'origin/master' into DCNG-897
+* DCNG-894 Add a ServiceAccount, ClusterRole and ClusterRoleBinding to the Bitbucket chart
+* DCNG-897 Add hook-delete-policy to chart tests and nfs-fixer job
+* DCNG-880 Added support for custom builds in kubeVersion
+* DCNG-853 Fixed kubeVersion
+* DCNG-853 Updated products' charts
+* DCNG-856 add -n to each command in NOTES.txt
+* DCNG-856 Add NOTES.txt
+* DCNG-849 avoid incorrect rendering for empty  additionalEnvironmentVariables
+* DCNG-849 check for the presense of additionalLabels so we don't render an empty {}
+* Merge pull request #6 from https://github.com/atlassian/data-center-helm-charts/DCNG-849
+* DCNG-850 add extension point for additional environment variables
+* DCNG-848 add extension point for additional labels
+* Merge pull request #2 from https://github.com/atlassian/data-center-helm-charts/DCNG-867
+* Merge pull request #3 from https://github.com/atlassian/data-center-helm-charts/DCNG-848
+* DCNG-866 Replace hardcoded image pull policy with value placeholder
+* DCNG-848 Add support for additional volumes and volume mounts
+* DCNG-867 Document the presense of  bitbucket.additionalJvmArgs
 
 ### Default value changes
 
@@ -600,7 +614,7 @@ index 1df2526..bb7a568 100644
 @@ -7,17 +7,40 @@ image:
    # -- The docker image tag to be used. Defaults to the Chart appVersion.
    tag: ""
- 
+
 -# -- Specifies which serviceAccount to use for the pods. If not specified, the kubernetes default will be used.
 -serviceAccountName:
 +serviceAccount:
@@ -624,7 +638,7 @@ index 1df2526..bb7a568 100644
 +    name:
 +    # -- true if a ClusterRoleBinding should be created, or false if it already exists
 +    create: true
- 
+
  database:
    # -- The JDBC URL of the database to be used by Bitbucket, e.g. jdbc:postgresql://host:port/database
 +  # If not specified, then it will need to be provided via browser during initial startup.
@@ -642,7 +656,7 @@ index 1df2526..bb7a568 100644
      usernameSecretKey: username
      # -- The key in the Secret used to store the database login password
 @@ -25,26 +48,34 @@ database:
- 
+
  bitbucket:
    service:
 -    # -- The port on which the Jira Kubernetes service will listen
@@ -663,7 +677,7 @@ index 1df2526..bb7a568 100644
      http: 7990
      ssh: 7999
      hazelcast: 5701
- 
+
    license:
 -    # -- The name of the Kubernetes Secret which contains the Bitbucket license key
 -    secretName: bitbucket-license
@@ -673,7 +687,7 @@ index 1df2526..bb7a568 100644
 +    secretName:
      # -- The key in the Kubernetes Secret which contains the Bitbucket license key
      secretKey: license-key
- 
+
    sysadminCredentials:
      # -- The name of the Kubernetes Secret which contains the Bitbucket sysadmin credentials
 -    secretName: bitbucket-sysadmin-credentials
@@ -686,7 +700,7 @@ index 1df2526..bb7a568 100644
 @@ -54,20 +85,28 @@ bitbucket:
      # -- The key in the Kubernetes Secret which contains the sysadmin email address
      emailAddressSecretKey: emailAddress
- 
+
 -  proxy:
 -    # -- The fully-qualified domain name of the ingress
 -    fqdn:
@@ -711,7 +725,7 @@ index 1df2526..bb7a568 100644
 +      usernameSecreyKey: username
 +      # -- The key in the the Kubernetes Secret that contains the ElasticSearch password.
 +      passwordSecretKey: password
- 
+
    resources:
      jvm:
 -      # -- The maximum amount of heap memory that will be used by the Bitbucket JVM
@@ -720,12 +734,12 @@ index 1df2526..bb7a568 100644
 -      # -- The minimum amount of heap memory that will be used by the Bitbucket JVM
 +      # -- The minimum amount of heap memory that will be used by the Bitbucket JVM. The same value will be used by the ElasticSearch JVM.
        minHeap: "1g"
- 
+
      # -- Specifies the standard Kubernetes resource requests and/or limits for the Bitbucket container.
 @@ -82,6 +121,11 @@ bitbucket:
      #    cpu: "4"
      #    memory: "2G"
- 
+
 +  # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g. system properties
 +  additionalJvmArgs:
 +  #    - -Dfoo=bar
@@ -737,7 +751,7 @@ index 1df2526..bb7a568 100644
 @@ -99,36 +143,134 @@ bitbucket:
    #    subDirectory:
    #    fileName:
- 
+
 +  # -- Defines any additional volumes mounts for the Bitbucket container.
 +  # These can refer to existing volumes, or new volumes can be defined in volumes.additional.
 +  additionalVolumeMounts: []
@@ -761,7 +775,7 @@ index 1df2526..bb7a568 100644
 +  maxBodySize: 10m
 +  # -- The fully-qualified hostname of the Ingress Resource.
 +  host:
-+  # -- The custom annotations that should be applied to the Ingress 
++  # -- The custom annotations that should be applied to the Ingress
 +  # Resource when not using the Kubernetes ingress-nginx controller.
 +  annotations: {}
 +  # -- True if the browser communicates with the application over HTTPS.
@@ -785,7 +799,7 @@ index 1df2526..bb7a568 100644
 +  #     @type multiline
 +  #     format_firstline /\d{4}-\d{1,2}-\d{1,2}/
 +  #     </parse>
-+  #     path /application-data/logs/atlassian-bitbucket-access.log* 
++  #     path /application-data/logs/atlassian-bitbucket-access.log*
 +  #     pos_file /tmp/bitbucketlog.pos
 +  #     tag bitbucket-access-logs
 +  #   </source>
@@ -807,7 +821,7 @@ index 1df2526..bb7a568 100644
  # -- Specify custom annotations to be added to all Bitbucket pods
  podAnnotations: {}
  #  "name": "value"
- 
+
  volumes:
    localHome:
 -    # -- Specifies the name of the storage class that should be used for the Bitbucket local-home volume
@@ -875,12 +889,12 @@ index 1df2526..bb7a568 100644
 +  # Note that this will not create any corresponding volume mounts;
 +  # those needs to be defined in bitbucket.additionalVolumeMounts
 +  additional: []
- 
+
  # -- Standard Kubernetes node-selectors that will be applied to all Bitbucket pods
  nodeSelector: {}
 @@ -137,6 +279,24 @@ nodeSelector: {}
  tolerations: []
- 
+
  # -- Standard Kubernetes affinities that will be applied to all Bitbucket pods
 +# Due to the performance requirements it is highly recommended to run all Bitbucket pods
 +# in the same availability zone as your dedicated NFS server. To achieve this, you
@@ -901,10 +915,10 @@ index 1df2526..bb7a568 100644
 +#                - nfs-server # needs to be the same value as NFS server deployment
 +#        topologyKey: topology.kubernetes.io/zone
  affinity: {}
- 
+
  # -- Additional container definitions that will be added to all Bitbucket pods
 @@ -144,3 +304,26 @@ additionalContainers: []
- 
+
  # -- Additional initContainer definitions that will be added to all Bitbucket pods
  additionalInitContainers: []
 +
@@ -932,7 +946,7 @@ index 1df2526..bb7a568 100644
 +
 ```
 
-## 0.1.0 
+## 0.1.0
 
 **Release date:** 2020-11-04
 
@@ -940,7 +954,7 @@ index 1df2526..bb7a568 100644
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 
-* OSR-523 Snapshot of helm charts and test code from internal repo 
+* OSR-523 Snapshot of helm charts and test code from internal repo
 
 ### Default value changes
 
