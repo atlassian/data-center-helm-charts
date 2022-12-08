@@ -2,7 +2,7 @@
 
 ## 1.8.0
 
-**Release date:** 2022-12-6
+**Release date:** 2022-12-8
 
 ![AppVersion: 9.4.0](https://img.shields.io/static/v1?label=AppVersion&message=9.4.0&color=success&logo=)
 ![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
