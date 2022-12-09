@@ -19,11 +19,15 @@ sources:
 deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
-  artifacthub.io/changes: |-
-    - Stop supporting 1.19 and 1.20 k8s
-    - Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts
-    - Update appVersion to the latest LTS
-    - Remove deprecated Elasticsearch env var
+  artifacthub.io/changes: |
+    - kind: changed
+      description: Stop supporting 1.19 and 1.20 k8s
+    - kind: changed
+      description: Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts
+    - kind: changed
+      description: Update appVersion to the latest LTS
+    - kind: changed
+      description: Remove deprecated Elasticsearch env var
 
 dependencies:
 - name: common

@@ -2,9 +2,11 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
-      artifacthub.io/changes: |-
-        - Stop supporting 1.19 and 1.20 k8s
-        - Update appVersion to the latest LTS
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Stop supporting 1.19 and 1.20 k8s
+        - kind: changed
+          description: Update appVersion to the latest LTS
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.1
@@ -454,9 +456,11 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
-      artifacthub.io/changes: |-
-        - Stop supporting 1.19 and 1.20 k8s
-        - Update appVersion to the latest LTS
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Stop supporting 1.19 and 1.20 k8s
+        - kind: changed
+          description: Update appVersion to the latest LTS
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.1
@@ -861,11 +865,15 @@ entries:
     version: 0.0.1
   bitbucket:
   - annotations:
-      artifacthub.io/changes: |-
-        - Stop supporting 1.19 and 1.20 k8s
-        - Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts
-        - Update appVersion to the latest LTS
-        - Remove deprecated Elasticsearch env var
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Stop supporting 1.19 and 1.20 k8s
+        - kind: changed
+          description: Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts
+        - kind: changed
+          description: Update appVersion to the latest LTS
+        - kind: changed
+          description: Remove deprecated Elasticsearch env var
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 7.21.7
@@ -1694,11 +1702,16 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
-        - Stop supporting 1.19 and 1.20 k8s
-        - Update appVersion to the latest LTS
-        - Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts
-        - Make synchrony pod and service annotations configurable
-        - Make Hazelcast port configurable
+        - kind: changed
+          description: Stop supporting 1.19 and 1.20 k8s
+        - kind: changed
+          description: Update appVersion to the latest LTS
+        - kind: changed
+          description: Create Role instead of ClusterRole for Hazelcast Kube client in Confluence and Bitbucket Helm charts
+        - kind: added
+          description: Make synchrony pod and service annotations configurable
+        - kind: fixed
+          description: Make Hazelcast port configurable
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 7.19.4
@@ -2624,9 +2637,11 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
-      artifacthub.io/changes: |-
-        - Stop supporting 1.19 and 1.20 k8s
-        - Update appVersion to the latest LTS
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Stop supporting 1.19 and 1.20 k8s
+        - kind: changed
+          description: Update appVersion to the latest LTS
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 5.1.0
@@ -3368,9 +3383,11 @@ entries:
     version: 0.7.0
   jira:
   - annotations:
-      artifacthub.io/changes: |-
-        - Stop supporting 1.19 and 1.20 k8s
-        - Update appVersion to the latest LTS
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Stop supporting 1.19 and 1.20 k8s
+        - kind: changed
+          description: Update appVersion to the latest LTS
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.4.0
