@@ -2,29 +2,29 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.7.1
+version: 1.8.1
 appVersion: 9.4.0
 kubeVersion: ">=1.21.x-0"
 keywords:
-  - Jira
-  - Jira Software
-  - Jira Server
-  - Jira Data Center
-  - Jira DC
-  - Atlassian
+- Jira
+- Jira Software
+- Jira Server
+- Jira Data Center
+- Jira DC
+- Atlassian
 home: https://atlassian.github.io/data-center-helm-charts/
 icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
 sources:
-  - https://github.com/atlassian/data-center-helm-charts
-  - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+- https://github.com/atlassian/data-center-helm-charts
+- https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
 deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Patch release to fix Artifacthub metadata
+    - kind: changed
+      description: Fix artifacthub annotations
 
 dependencies:
-  - name: common
-    version: 1.0.0
-    repository: https://atlassian.github.io/data-center-helm-charts
+- name: common
+  version: 1.0.0
+  repository: https://atlassian.github.io/data-center-helm-charts

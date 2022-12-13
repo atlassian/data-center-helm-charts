@@ -1,0 +1,24 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  # this is required due to weird nginx controller behavior where it needs to redirect smth to
+  # /dev/null but can't do it due to permission issues. The workaround is to mount /dev into control plane container
+  extraMounts:
+  - hostPath: /dev
+    containerPath: /dev
+  # the below config is required to properly install and use Nginx ingress
+  # and use localhost to access DC applications
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP

@@ -1,0 +1,89 @@
+name: Test DC App in a KinD Cluster
+
+on:
+  workflow_call:
+    inputs:
+      dc_app:
+        required: true
+        type: string
+    secrets:
+      BITBUCKET_LICENSE:
+        description: 'Bitbucket license'
+      CONFLUENCE_LICENSE:
+        description: 'Confluence license'
+      JIRA_LICENSE:
+        description: 'Jira license'
+      BAMBOO_LICENSE:
+        description: 'Bamboo license'
+
+jobs:
+  kind-testing:
+    runs-on: ubuntu-latest
+    env:
+      # See: https://github.com/kubernetes-sigs/kind/tags
+      KIND_VERSION: "v0.17.0"
+      # See: https://hub.docker.com/r/kindest/node/tags
+      K8S_VERSION: "v1.25.3"
+      DC_APP: ${{inputs.dc_app}}
+      LICENSE: ${{ secrets[format('{0}_LICENSE', inputs.dc_app)] }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Pin Kubectl version
+        uses: azure/setup-kubectl@v3.0
+        with:
+          version: 'v1.25.3'
+
+      - name: Pin Helm version
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.9.2
+
+      - name: Create KinD cluster
+        run: |
+          src/test/scripts/kind/create_kind.sh
+
+      - name: Install KinD tooling
+        run: |
+          src/test/scripts/kind/configure_kind.sh
+
+      - name: Deploy postgres database
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          deploy_postgres
+
+      - name: Create db, admin and license secrets
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          create_secrets
+
+      - name: Deploy ${{inputs.dc_app}}
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          deploy_app
+
+      - name: Verify ${{inputs.dc_app}} status
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_ingress
+
+      - name: Test scaling ${{inputs.dc_app}}
+        run: |
+          echo "[INFO]: Scaling ${DC_APP} to 2 replicas"
+          kubectl scale sts/${DC_APP} --replicas=2 -n atlassian
+          sleep 10
+          kubectl wait --for=condition=ready pod/${DC_APP}-1 -n atlassian --timeout=360s
+
+      - name: Get debug info
+        if: always()
+        run: |
+          curl -s https://raw.githubusercontent.com/atlassian-labs/data-center-terraform/main/scripts/collect_k8s_logs.sh | bash -s -- dummy dummy logs/${{inputs.dc_app}}
+
+      - name: Upload test log files
+        if: always()
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: kind-artifacts
+          path: logs/

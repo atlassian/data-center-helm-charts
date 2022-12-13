@@ -1,0 +1,50 @@
+# This workflow is for testing Helm charts in KinD clusters
+
+name: DC apps tests in KinD
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '**.xml'
+      - '**.yaml'
+      - '**.properties'
+      - 'LICENSE'
+      - 'Makefile'
+      - '.gitignore'
+      - '.java-version'
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+
+  jira:
+    uses: ./.github/workflows/kind.yaml
+    with:
+      dc_app: jira
+    secrets:
+      JIRA_LICENSE: "${{ secrets.JIRA_LICENSE }}"
+
+  confluence:
+    uses: ./.github/workflows/kind.yaml
+    with:
+      dc_app: confluence
+    secrets:
+      CONFLUENCE_LICENSE: "${{ secrets.TF_VAR_CONFLUENCE_LICENSE }}"
+
+  bitbucket:
+    uses: ./.github/workflows/kind.yaml
+    with:
+      dc_app: bitbucket
+    secrets:
+      BITBUCKET_LICENSE: "${{ secrets.TF_VAR_BITBUCKET_LICENSE }}"
+
+  bamboo:
+    uses: ./.github/workflows/kind.yaml
+    with:
+      dc_app: bamboo
+    secrets:
+      BAMBOO_LICENSE: "${{ secrets.TF_VAR_BAMBOO_LICENSE }}"
