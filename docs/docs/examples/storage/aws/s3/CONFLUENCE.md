@@ -35,7 +35,7 @@ additionalEnvironmentVariables:
 
 If Confluence is deployed to AWS EKS, it is strongly recommended to use [IAM roles for service accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html).
 
-Confluence service account will be automatically annotated with a role ARN if it is defined, for example:
+The Confluence service account will be automatically annotated with a role `ARN` if it is defined, for example:
 
 ```yaml
 confluence:
