@@ -55,6 +55,15 @@ Pod labels
 {{- end }}
 {{- end }}
 
+{{/*
+Mesh Pod labels
+*/}}
+{{- define "mesh.podLabels" -}}
+{{ with .Values.bitbucket.mesh.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.baseUrl" -}}
 {{ ternary "https" "http" .Values.ingress.https -}}
 ://
@@ -121,6 +130,15 @@ Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.podAnnotations" -}}
 {{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bitbucket.mesh.podAnnotations" -}}
+{{- with .Values.bitbucket.mesh.podAnnotations }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}
@@ -229,18 +247,6 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{ else if .Values.volumes.sharedHome.customVolume }}
 - name: shared-home
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
-{{- end }}
-{{- end }}
-
-{{- define "bitbucket.mesh.volume" -}}
-- name: mesh-home
-{{- if .Values.bitbucket.mesh.volume.create }}
-  persistentVolumeClaim:
-    claimName: {{ include "common.names.fullname" . }}-mesh-home
-{{ else if .Values.bitbucket.mesh.volume.customVolume }}
-{{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
-{{ else }}
-  emptyDir: {}
 {{- end }}
 {{- end }}
 

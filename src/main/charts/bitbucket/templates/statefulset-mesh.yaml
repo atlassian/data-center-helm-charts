@@ -20,15 +20,15 @@ spec:
   template:
     metadata:
       annotations:
-{{/*        checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}*/}}
+        checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm-mesh.yaml") . | sha256sum }}
         {{- if .Values.fluentd.enabled }}
         checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
         {{- end }}
-        {{- include "bitbucket.podAnnotations" . | nindent 8 }}
+        {{- include "bitbucket.mesh.podAnnotations" . | nindent 8 }}
       labels:
         app.kubernetes.io/name: {{ include "common.names.name" . }}-mesh
         app.kubernetes.io/instance: {{ .Release.Name }}
-        {{- include "bitbucket.podLabels" . | nindent 8 }}
+        {{- include "mesh.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
@@ -36,7 +36,7 @@ spec:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
       containers:
         - name: bitbucket-mesh
-          image: {{ .Values.bitbucket.mesh.image }}
+          image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: mesh
@@ -72,43 +72,42 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: {{ include "common.names.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config-mesh
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: {{ include "common.names.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config-mesh
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: {{ include "common.names.fullname" . }}-jvm-config
+                  name: {{ include "common.names.fullname" . }}-jvm-config-mesh
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.bitbucket.shutdown.command | quote }}]
         {{- include "fluentd.container" . | nindent 8 }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.bitbucket.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.bitbucket.mesh.affinity }}
       affinity:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.bitbucket.mesh.tolerations }}
       tolerations:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.bitbucket.topologySpreadConstraints }}
+      {{- with .Values.bitbucket.mesh.topologySpreadConstraints }}
       topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName  | quote }}
+      schedulerName: {{ .Values.bitbucket.mesh.schedulerName  | quote }}
       {{- end }}
       volumes:
-        {{ include "bitbucket.mesh.volume" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
   {{ include "bitbucket.mesh.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}

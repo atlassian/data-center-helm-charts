@@ -11,6 +11,23 @@ metadata:
     app.kubernetes.io/version: "7.21.7"
     app.kubernetes.io/managed-by: Helm
 ---
+# Source: bitbucket/templates/config-jvm-mesh.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-bitbucket-jvm-config-mesh
+  labels:
+    helm.sh/chart: bitbucket-1.7.1
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "7.21.7"
+    app.kubernetes.io/managed-by: Helm
+data:
+  additional_jvm_args: >-
+    -XX:ActiveProcessorCount=2
+  max_heap: 1g
+  min_heap: 512m
+---
 # Source: bitbucket/templates/config-jvm.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -176,8 +193,11 @@ spec:
             - name: mesh-home
               mountPath: "/var/atlassian/application-data/mesh"
           resources:
-            requests:
+            limits:
               cpu: "2"
+              memory: 2G
+            requests:
+              cpu: "1"
               memory: 2G
           env:
             - name: MESH_HOME
@@ -192,25 +212,22 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: min_heap
-                  name: unittest-bitbucket-jvm-config
+                  name: unittest-bitbucket-jvm-config-mesh
             - name: JVM_MAXIMUM_MEMORY
               valueFrom:
                 configMapKeyRef:
                   key: max_heap
-                  name: unittest-bitbucket-jvm-config
+                  name: unittest-bitbucket-jvm-config-mesh
             - name: JVM_SUPPORT_RECOMMENDED_ARGS
               valueFrom:
                 configMapKeyRef:
                   key: additional_jvm_args
-                  name: unittest-bitbucket-jvm-config
+                  name: unittest-bitbucket-jvm-config-mesh
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
       volumes:
-        - name: mesh-home
-          persistentVolumeClaim:
-            claimName: unittest-bitbucket-mesh-home
   volumeClaimTemplates:
   - metadata:
       name: mesh-home
