@@ -46,7 +46,7 @@ confluence:
     roleArn: arn:aws:iam::37583956:role/confluence-s3-role
 ```
 
-Below is an example policy that needs to be attached to the role:
+Below is an example policy, providing appropriate S3 access to Confluence, that needs to be attached to the role:
 
 ```json
 {
