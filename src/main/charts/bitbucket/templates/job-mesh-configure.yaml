@@ -1,0 +1,44 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-configure-job
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "-5"
+spec:
+  template:
+    spec:
+      containers:
+        - name: bitbucket-mesh-register-services
+          image: curlimages/curl
+          command: ["/scripts/configure-mesh.sh"]
+          env:
+            {{ with .Values.bitbucket.sysadminCredentials }}
+            - name: SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .usernameSecretKey }}
+            - name: SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .passwordSecretKey }}
+              {{ end }}
+          volumeMounts:
+            - name: configure-mesh
+              mountPath: /scripts
+      restartPolicy: Never
+      volumes:
+            - name: configure-mesh
+              configMap:
+                name: {{ include "common.names.fullname" . }}-mesh-scripts
+                items:
+                  - key: configure-mesh.sh
+                    path: configure-mesh.sh
+                defaultMode: 0777
+  backoffLimit: 4
+{{- end }}

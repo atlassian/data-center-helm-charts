@@ -55,6 +55,15 @@ Pod labels
 {{- end }}
 {{- end }}
 
+{{/*
+Mesh Pod labels
+*/}}
+{{- define "mesh.podLabels" -}}
+{{ with .Values.bitbucket.mesh.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.baseUrl" -}}
 {{ ternary "https" "http" .Values.ingress.https -}}
 ://
@@ -121,6 +130,15 @@ Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.podAnnotations" -}}
 {{- with .Values.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bitbucket.mesh.podAnnotations" -}}
+{{- with .Values.bitbucket.mesh.podAnnotations }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}
@@ -265,6 +283,23 @@ volumeClaimTemplates:
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.mesh.volumeClaimTemplates" -}}
+{{- if or .Values.bitbucket.mesh.volume.create }}
+volumeClaimTemplates:
+- metadata:
+    name: mesh-home
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .Values.bitbucket.mesh.volume.storageClass }}
+    storageClassName: {{ .Values.bitbucket.mesh.volume.storageClass | quote }}
+    {{- end }}
+    {{- with .Values.bitbucket.mesh.volume.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 {{- end }}
 {{- end }}
 

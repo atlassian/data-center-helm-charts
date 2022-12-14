@@ -1,0 +1,51 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled -}}
+{{- range $index := until (.Values.bitbucket.mesh.replicaCount | int) }}
+{{- with $ }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-register-job-{{ $index }}
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "-10"
+spec:
+  template:
+    spec:
+      containers:
+        - name: bitbucket-mesh-register-services
+          image: curlimages/curl
+          command: ["/scripts/register-mesh-node.sh"]
+          args: ["{{ $index }}"]
+          env:
+            {{ with .Values.bitbucket.sysadminCredentials }}
+            - name: SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .usernameSecretKey }}
+            - name: SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .passwordSecretKey }}
+              {{ end }}
+          volumeMounts:
+          - name: register-mesh-node
+            mountPath: /scripts
+      volumes:
+      - name: register-mesh-node
+        configMap:
+          name: {{ include "common.names.fullname" . }}-mesh-scripts
+          items:
+            - key: register-mesh-node.sh
+              path: register-mesh-node.sh
+          defaultMode: 0777
+      restartPolicy: Never
+  backoffLimit: 4
+{{/*  ttlSecondsAfterFinished: 60*/}}
+---
+{{- end }}
+{{- end }}
+{{- end }}

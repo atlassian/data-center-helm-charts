@@ -752,6 +752,110 @@ bitbucket:
     #
     upstreamUrl:
 
+  # Mesh configuration
+  mesh:
+    # -- Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html
+    #
+    enabled: true
+    # -- Automatically create all new repositories on Bitbucket mesh nodes
+    #
+    setByDefault: true
+    # -- The Confluence Docker image to use
+    # https://hub.docker.com/r/atlassian/bitbucket-server
+    #
+
+    image:
+      # -- The Bitbucket Mesh Docker image to use
+      # https://hub.docker.com/r/atlassian/bitbucket-mesh
+      #
+      repository: eivantsov/bitbucket-mesh
+
+      # -- Image pull policy
+      #
+      pullPolicy: IfNotPresent
+
+      # -- The docker image tag to be used - defaults to the Chart appVersion
+      #
+      tag: "1.4.0"
+
+    # -- Number of Bitbucket Mesh nodes
+    #
+    replicaCount: 3
+
+    # -- Bitbucket Mesh port
+    #
+    port: 7777
+
+    # -- Custom annotations that will be applied to all Bitbucket Mesh pods
+    #
+    podAnnotations: {}
+    #  name: <value>
+
+    # -- Custom labels that will be applied to all Bitbucket Mesh pods
+    #
+    podLabels: {}
+    #  name: <value>
+
+    # -- Bitbucket Mesh resources requests and limits
+    #
+    resources:
+      # -- Bitbucket Mesh JVM heap settings
+      #
+
+      jvm:
+        maxHeap: "1g"
+        minHeap: "512m"
+
+      # -- Bitbucket Mesh container cpu/mem requests and limits
+      #
+      container:
+        requests:
+          cpu: "1"
+          memory: "2G"
+        limits:
+          cpu: "2"
+          memory: "2G"
+
+    volume:
+      create: true
+      resources:
+        requests:
+          storage: 1Gi
+      storageClass:
+      mountPath: "/var/atlassian/application-data/mesh"
+
+    # -- Standard K8s node-selectors that will be applied to all Bitbucket Mesh pods
+    #
+    nodeSelector: {}
+    #  name: <value>
+
+    # -- Standard Kubernetes affinities that will be applied to all Bitbucket mesh pods
+    #
+    affinity: {}
+
+    # -- Standard K8s tolerations that will be applied to all Bitbucket Mesh pods
+    #
+    tolerations: {}
+    # - effect: <name>
+    #   operator: <operator>
+    #   key: <key>
+
+    # -- Defines topology spread constraints for Bitbucket Mesh pods. See details:
+    # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+    #
+    topologySpreadConstraints: {}
+    # - maxSkew: 1
+    #   topologyKey: kubernetes.io/hostname
+    #   whenUnsatisfiable: ScheduleAnyway
+    #   labelSelector:
+    #     matchLabels:
+
+    # -- Standard K8s schedulerName that will be applied to all Bitbucket pods.
+    # Check Kubernetes documentation on how to configure multiple schedulers:
+    # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
+    #
+    schedulerName:
+
   # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.
   #

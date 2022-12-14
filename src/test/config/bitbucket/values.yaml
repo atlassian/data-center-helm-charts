@@ -2,6 +2,9 @@
 
 replicaCount: ${replica.count}
 
+image:
+  tag: 8.0.0
+
 database:
   url: jdbc:postgresql://${helm.release.prefix}-bitbucket-pgsql:5432/bitbucket
   driver: org.postgresql.Driver

@@ -30,6 +30,7 @@ class ImageTest {
         ));
 
         resources.getStatefulSets()
+                .filter(s -> product.getHelmReleaseName().equals(s.getName()))
                 .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("image"))
                         .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
                         .hasTextEqualTo("%s:myversion", product.getDockerImageName()));
@@ -44,6 +45,7 @@ class ImageTest {
         ));
 
         resources.getStatefulSets()
+                .filter(s -> product.getHelmReleaseName().equals(s.getName()))
                 .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("image"))
                         .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
                         .hasTextEqualTo("myregistry.io/%s:myversion", product.getDockerImageName()));
@@ -59,6 +61,7 @@ class ImageTest {
         ));
 
         resources.getStatefulSets()
+                .filter(s -> product.getHelmReleaseName().equals(s.getName()))
                 .forEach(statefulSet -> assertThat(statefulSet.getContainer().get("image"))
                         .describedAs("StatefulSet %s should have the configured image", statefulSet.getName())
                         .hasTextEqualTo("myregistry.io/myorg/myimage:myversion"));

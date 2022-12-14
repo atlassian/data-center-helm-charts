@@ -28,6 +28,10 @@ public final class StatefulSet extends KubeResource {
                         new AssertionError("No container found with name " + name));
     }
 
+    public int getReplicas() {
+        return getSpec().get("replicas").intValue();
+    }
+
     public JsonNode getPodSpec() {
         return getNode("spec", "template", "spec");
     }

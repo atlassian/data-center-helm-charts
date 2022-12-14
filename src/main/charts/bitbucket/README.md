@@ -50,6 +50,21 @@ Kubernetes: `>=1.19.x-0`
 | bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username. |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets |
+| bitbucket.mesh.annotations | object | `{}` |  |
+| bitbucket.mesh.enabled | bool | `true` |  |
+| bitbucket.mesh.image | string | `"abrokes/bitbucket-mesh:2"` |  |
+| bitbucket.mesh.port | int | `7777` |  |
+| bitbucket.mesh.replicaCount | int | `3` |  |
+| bitbucket.mesh.resources.container.requests.cpu | string | `"2"` |  |
+| bitbucket.mesh.resources.container.requests.memory | string | `"2G"` |  |
+| bitbucket.mesh.resources.jvm.maxHeap | string | `"1g"` |  |
+| bitbucket.mesh.resources.jvm.minHeap | string | `"512m"` |  |
+| bitbucket.mesh.setByDefault | bool | `true` |  |
+| bitbucket.mesh.volume.create | bool | `true` |  |
+| bitbucket.mesh.volume.customVolume | object | `{}` |  |
+| bitbucket.mesh.volume.mountPath | string | `"/var/atlassian/application-data/mesh"` |  |
+| bitbucket.mesh.volume.resources.requests.storage | string | `"1Gi"` |  |
+| bitbucket.mesh.volume.storageClass | string | `nil` |  |
 | bitbucket.mirror.upstreamUrl | string | `nil` | Specifies the URL of the upstream Bitbucket server for this mirror. |
 | bitbucket.podManagementStrategy | string | `"OrderedReady"` | Pod management strategy. Bitbucket Data Center requires the "OrderedReady" value but for Bitbucket Mirrors you can use the "Parallel" option. To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies |
 | bitbucket.ports.hazelcast | int | `5701` | The port on which the Hazelcast listens for client traffic |
