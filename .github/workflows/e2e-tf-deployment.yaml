@@ -40,13 +40,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@master
-        with:
-          aws-region: us-east-1
-          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
-          role-session-name: DCTerraformHelmSession
-
       - name: Pin Kubectl version
         uses: azure/setup-kubectl@v2.0
         with:
@@ -107,6 +100,14 @@ jobs:
         run: |
           echo ${{ secrets.BITBUCKET_E2E_TEST_PUB_SSH_KEY }} > /home/runner/.ssh/bitbucket-e2e.pub
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          role-session-name: DCTerraformHelmSession
+          role-duration-seconds: 7200
+  
       - name: Deploy the infrastructure, install helm charts, run E2E tests, and cleanup
         id: e2e-test
         working-directory: tf/test/
