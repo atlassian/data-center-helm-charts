@@ -79,6 +79,9 @@ setup() {
 
   # Install the bitnami postgresql Helm chart
   helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
+  
+  # add elastic helm repo
+  helm repo add elastic https://helm.elastic.co --force-update
 
   mkdir -p "$LOG_DOWNLOAD_DIR"
   touch $LOG_DOWNLOAD_DIR/helm_install_log.txt
@@ -126,9 +129,9 @@ bootstrap_database() {
      --values $PSQL_CHART_VALUES \
      --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
      --set image.tag="$POSTGRES_APP_VERSION" \
-     --set postgresqlDatabase="$DB_NAME" \
-     --set postgresqlUsername="$PRODUCT_NAME" \
-     --set postgresqlPassword="$PRODUCT_NAME" \
+     --set auth.database="$DB_NAME" \
+     --set auth.username="$PRODUCT_NAME" \
+     --set auth.password="$PRODUCT_NAME" \
      --version "$POSTGRES_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
      bitnami/postgresql >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
@@ -152,11 +155,11 @@ bootstrap_elasticsearch() {
 
   helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
      "$ELASTICSEARCH_RELEASE_NAME" \
+     --set nameOverride=${PRODUCT_RELEASE_NAME}-elasticsearch \
      --values $ES_CHART_VALUES \
-     --set image.tag="$ELASTICSEARCH_APP_VERSION" \
      --version "$ELASTICSEARCH_CHART_VERSION" \
      $HELM_DEBUG_OPTION \
-     bitnami/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+     elastic/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
 }
 
 # Download required dependencies for the product chart

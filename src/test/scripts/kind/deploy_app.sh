@@ -10,7 +10,7 @@ deploy_postgres() {
        --set image.tag="11" \
        --set fullnameOverride="postgres" \
        --set persistence.enabled=false \
-       --version="10.16.2" \
+       --version="11.6.2" \
        --wait --timeout=120s \
        -n atlassian
 }
