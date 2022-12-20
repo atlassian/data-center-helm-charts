@@ -4,13 +4,12 @@ deploy_postgres() {
   echo "[INFO]: Installing Postgres Helm chart"
   helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
   helm install postgres bitnami/postgresql \
-       --set postgresqlDatabase="${DC_APP}" \
-       --set postgresqlUsername="${DC_APP}" \
-       --set postgresqlPassword="${DC_APP}pwd" \
-       --set image.tag="11" \
+       --set auth.database="${DC_APP}" \
+       --set auth.username="${DC_APP}" \
+       --set auth.password="${DC_APP}pwd" \
        --set fullnameOverride="postgres" \
        --set persistence.enabled=false \
-       --version="10.16.2" \
+       --version="11.6.2" \
        --wait --timeout=120s \
        -n atlassian
 }
