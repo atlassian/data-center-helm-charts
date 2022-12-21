@@ -53,11 +53,12 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.mesh.additionalInitContainers | object | `{}` | Additional initContainer definitions that will be added to all Bitbucket pods  |
 | bitbucket.mesh.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Bitbucket Mesh JVM, e.g. system properties.  |
 | bitbucket.mesh.affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket mesh pods  |
-| bitbucket.mesh.enabled | bool | `true` | Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html  |
-| bitbucket.mesh.image | object | `{"pullPolicy":"IfNotPresent","repository":"eivantsov/bitbucket-mesh","tag":"1.4.0"}` | The Bitbucket Mesh image to use https://hub.docker.com/r/atlassian/bitbucket-mesh  |
+| bitbucket.mesh.enabled | bool | `false` | Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html  |
+| bitbucket.mesh.image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket-mesh","tag":"1.3.0"}` | The Bitbucket Mesh image to use https://hub.docker.com/r/atlassian/bitbucket-mesh  |
 | bitbucket.mesh.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
-| bitbucket.mesh.image.repository | string | `"eivantsov/bitbucket-mesh"` | The Bitbucket Mesh image repository https://hub.docker.com/r/atlassian/bitbucket-mesh  |
-| bitbucket.mesh.image.tag | string | `"1.4.0"` | The docker image tag to be used - defaults to the Chart appVersion  |
+| bitbucket.mesh.image.repository | string | `"atlassian/bitbucket-mesh"` | The Bitbucket Mesh image repository https://hub.docker.com/r/atlassian/bitbucket-mesh  |
+| bitbucket.mesh.image.tag | string | `"1.3.0"` | The docker image tag to be used - defaults to the Chart appVersion  |
+| bitbucket.mesh.nodeAutoRegistration | bool | `false` | Experimental! Automatically register Bitbucket mesh nodes with the Bitbucket server. `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials to post-install node registration jobs that are created only for new Helm chart installations. It is recommended to manually register Mesh nodes in Butbucket UI.     |
 | bitbucket.mesh.nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podLabels | object | `{}` | Custom labels that will be applied to all Bitbucket Mesh pods  |
@@ -71,7 +72,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.mesh.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | bitbucket.mesh.service.port | int | `7777` | Bitbucket Mesh port  |
 | bitbucket.mesh.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket  |
-| bitbucket.mesh.setByDefault | bool | `true` | Automatically create all new repositories on Bitbucket mesh nodes  |
+| bitbucket.mesh.setByDefault | bool | `false` | Experimental! Automatically create all new repositories on Bitbucket mesh nodes. `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials to node post-install job. It is recommended to manually configure it in Bitbucket UI.  |
 | bitbucket.mesh.shutdown.terminationGracePeriodSeconds | int | `35` | The termination grace period for pods during shutdown. This should be set to the Bitbucket internal grace period (default 30 seconds), plus a small buffer to allow the JVM to fully terminate.  |
 | bitbucket.mesh.tolerations | object | `{}` | Standard K8s tolerations that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.topologySpreadConstraints | object | `{}` | Defines topology spread constraints for Bitbucket Mesh pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
