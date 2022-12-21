@@ -1,0 +1,45 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-scripts
+  labels:
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+  register-mesh-node.sh: |
+    #!/bin/sh
+    {{ if and (.Values.bitbucket.service.contextPath) (ne .Values.bitbucket.service.contextPath "/") }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}:{{ .Values.bitbucket.service.port }}{{ .Values.bitbucket.service.contextPath }}
+    {{ else }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}:{{ .Values.bitbucket.service.port }}
+    {{ end }}
+
+    echo "[INFO]: Registering mesh node bitbucket-mesh-$1 with ${BITBUCKET_URL}"
+    response=$(curl -s -o /tmp/response.txt -w "%{http_code}" -XPOST -d "{\"name\":\"bitbucket-mesh-$1\",\"rpcUrl\":\"http://{{ include "common.names.fullname" . }}-mesh-$1:{{.Values.bitbucket.mesh.service.port}}\"}" -H "Content-Type: application/json" -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD ${BITBUCKET_URL}/rest/api/latest/admin/git/mesh/nodes)
+    if [ ${response} == "200" ]; then
+      echo "[INFO]: Successfully registered mesh node bitbucket-mesh-$1"
+      cat /tmp/response.txt
+    else
+      echo "[ERROR]: Failed to register mesh node. Response code: ${response}"
+      cat /tmp/response.txt
+      exit 1
+    fi
+  configure-mesh.sh: |
+    #!/bin/sh
+    {{ if and (.Values.bitbucket.service.contextPath) (ne .Values.bitbucket.service.contextPath "/") }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}:{{ .Values.bitbucket.service.port }}{{ .Values.bitbucket.service.contextPath }}
+    {{ else }}
+    BITBUCKET_URL=http://{{ include "common.names.fullname" . }}:{{ .Values.bitbucket.service.port }}
+    {{ end }}
+    
+    echo "[INFO]: Making Bitbucket Mesh default for all new repositories"
+    response=$(curl -s -o /tmp/response.txt -w "%{http_code}" -XPUT -d '{"isRefreshing":false,"repositoryCreationEnabled":{{ .Values.bitbucket.mesh.setByDefault }}}' -H "Content-Type: application/json" -u $SYSADMIN_USERNAME:$SYSADMIN_PASSWORD ${BITBUCKET_URL}/rest/ui/latest/admin/git/mesh/settings)
+    if [ ${response} == "200" ]; then
+      echo "[INFO]: Successfully enabled mesh for all new repositories"
+      cat /tmp/response.txt
+    else
+      echo "[ERROR]: Rest API call failed. Response code: ${response}"
+      cat /tmp/response.txt
+      exit 1
+    fi
+{{- end }}

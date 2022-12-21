@@ -131,7 +131,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -212,7 +211,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 561385b996533511e27156614606210d24027939ce0d57d7f46378ecf23141f1
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

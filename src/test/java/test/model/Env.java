@@ -41,6 +41,19 @@ public class Env {
         return this;
     }
 
+    public Env assertHasConfigMapRef(String envName, String expectedConfigMapName, String expectedConfigMapKey) {
+        assertThat(findEnv(envName))
+                .describedAs("Expected env '%s' to have a value", envName)
+                .hasValueSatisfying(node ->
+                        assertThat(node.path("valueFrom").path("configMapKeyRef"))
+                                .describedAs("Expected env '%s' to have the expected value", envName)
+                                .isObject(Map.of(
+                                        "name", expectedConfigMapName,
+                                        "key", expectedConfigMapKey)));
+
+        return this;
+    }
+
     public Env assertHasFieldRef(String envName, String expectedFieldPath) {
         assertThat(findEnv(envName))
                 .describedAs("Expected env '%s' to have a value", envName)

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-jvm-config-mesh
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+  additional_jvm_args: >-
+    {{- range .Values.bitbucket.mesh.additionalJvmArgs }}
+    {{ . }}
+    {{- end }}
+    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bitbucket.mesh.resources.container.requests.cpu }}
+  max_heap: {{ .Values.bitbucket.mesh.resources.jvm.maxHeap }}
+  min_heap: {{ .Values.bitbucket.mesh.resources.jvm.minHeap }}
