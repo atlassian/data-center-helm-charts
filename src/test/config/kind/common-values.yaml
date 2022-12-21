@@ -23,6 +23,9 @@ DC_APP_REPLACEME:
 
   # applicable to Bitbucket only
   mesh:
+    enabled: true
+    nodeAutoRegistration: true
+    setByDefault: true
     resources:
       jvm:
         maxHeap: "1g"
