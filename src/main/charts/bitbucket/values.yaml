@@ -790,7 +790,9 @@ bitbucket:
       #
       tag: "1.3.0"
 
-    # -- Number of Bitbucket Mesh nodes
+    # -- Number of Bitbucket Mesh nodes. Do not change it. Currently, only the quorum of 3 mesh nodes is supported.
+    # Reducing the number of replicas will result in mesh degradation while increasing the number of Mesh nodes
+    # will result in new nodes being unused by the Bitbucket server.
     #
     replicaCount: 3
 

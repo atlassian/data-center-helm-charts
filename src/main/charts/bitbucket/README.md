@@ -63,7 +63,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.mesh.podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podLabels | object | `{}` | Custom labels that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podManagementPolicy | string | `"OrderedReady"` |  |
-| bitbucket.mesh.replicaCount | int | `3` | Number of Bitbucket Mesh nodes  |
+| bitbucket.mesh.replicaCount | int | `3` | Number of Bitbucket Mesh nodes. Do not change it. Currently, only the quorum of 3 mesh nodes is supported. Reducing the number of replicas will result in mesh degradation while increasing the number of Mesh nodes will result in new nodes being unused by the Bitbucket server.  |
 | bitbucket.mesh.resources | object | `{"container":{"limits":{"cpu":"2","memory":"2G"},"requests":{"cpu":"1","memory":"2G"}},"jvm":{"maxHeap":"1g","minHeap":"512m"}}` | Bitbucket Mesh resources requests and limits  |
 | bitbucket.mesh.resources.container | object | `{"limits":{"cpu":"2","memory":"2G"},"requests":{"cpu":"1","memory":"2G"}}` | Bitbucket Mesh container cpu/mem requests and limits  |
 | bitbucket.mesh.resources.jvm | object | `{"maxHeap":"1g","minHeap":"512m"}` | Bitbucket Mesh JVM heap settings  |
