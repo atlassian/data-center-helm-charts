@@ -37,7 +37,7 @@ spec:
       containers:
         - name: bitbucket-mesh
           image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.bitbucket.mesh.image.pullPolicy }}
           ports:
             - name: mesh
               containerPort: {{ .Values.bitbucket.mesh.service.port }}
