@@ -786,7 +786,7 @@ bitbucket:
       #
       pullPolicy: IfNotPresent
 
-      # -- The docker image tag to be used - defaults to the Chart appVersion
+      # -- The docker image tag to be used
       #
       tag: "1.3.0"
 
@@ -802,7 +802,7 @@ bitbucket:
       #
       port: 7777
 
-      # -- The type of K8s service to use for Bitbucket
+      # -- The type of K8s service to use for Bitbucket mesh service
       #
       type: ClusterIP
 
@@ -810,7 +810,7 @@ bitbucket:
       #
       loadBalancerIP:
 
-      # -- The context path that Bitbucket will use.
+      # -- Bitbucket mesh service annotations
       #
       annotations: {}
 
@@ -845,7 +845,7 @@ bitbucket:
           cpu: "2"
           memory: "2G"
 
-    # -- Mesh home volume settings
+    # -- Mesh home volume settings. Disabling persistence results in data loss!
     #
     volume:
       create: true
