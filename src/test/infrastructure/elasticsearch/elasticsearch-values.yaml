@@ -1,27 +1,15 @@
----
-
-global:
-  coordinating:
-    name: coo
-
-master:
-  replicas: 1
-  podAnnotations:
-    "atlassian.com/business_unit": "Engineering: Enterprise DC"
-  persistence:
-    enabled: false
-
-data:
-  replicas: 1
-  podAnnotations:
-    "atlassian.com/business_unit": "Engineering: Enterprise DC"
-  persistence:
-    enabled: false
-
-coordinating:
-  replicas: 1
-  podAnnotations:
-    "atlassian.com/business_unit": "Engineering: Enterprise DC"
-
-sysctlImage:
+persistence:
   enabled: false
+
+secret:
+  enabled: false
+
+createCert: false
+
+sysctlInitContainer:
+  enabled: false
+
+podAnnotations:
+  "atlassian.com/business_unit": "Engineering: Enterprise DC"
+
+maxUnavailable: ""

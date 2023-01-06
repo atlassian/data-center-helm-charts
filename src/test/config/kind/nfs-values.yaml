@@ -1,0 +1,11 @@
+# this will go to StorageClass spec to make sure RWX volumes are mounted with the correct settings
+nfs:
+  mountOptions:
+  - rw
+  - lookupcache=pos
+  - noatime
+  - intr
+  - _netdev
+  - nfsvers=3
+  - rsize=32768
+  - wsize=32768
