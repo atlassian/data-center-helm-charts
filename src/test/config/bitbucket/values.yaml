@@ -14,6 +14,12 @@ database:
 bitbucket:
   clustering:
     enabled: ${clustering.enabled}
+  mesh:
+    enabled: true
+    nodeAutoRegistration: true
+    image:
+      repository: tarkasteve/bitbucket-mesh
+      tag: "1.4.0"
   license:
     secretName: bitbucket-license
   sysadminCredentials:
