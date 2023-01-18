@@ -177,7 +177,7 @@ spec:
       initContainers:
       containers:
         - name: bitbucket-mesh
-          image: atlassian/bitbucket-mesh:1.3.0
+          image: atlassian/bitbucket-mesh:1.4.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: mesh
