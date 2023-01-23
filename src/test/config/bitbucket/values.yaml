@@ -14,9 +14,6 @@ database:
 bitbucket:
   clustering:
     enabled: ${clustering.enabled}
-  mesh:
-    enabled: true
-    nodeAutoRegistration: true
   license:
     secretName: bitbucket-license
   sysadminCredentials:
