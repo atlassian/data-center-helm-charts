@@ -611,7 +611,7 @@ confluence:
   # Use AWS S3 to store attachments. From Confluence 8.1 onwards.
   #
   s3AttachmentsStorage:
-    # Bucket name to store attachments. If a bucket name is defined, Confluence will automatically
+    # Bucket name to store attachments. If a bucket name and region (see below) are defined, Confluence will automatically
     # use AWS S3 to store attachments. Only bucket name is required, not the full arn. This can also be defined in
     # `confluence.additionalEnvironmentVariables` as `CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_NAME`
     # or `confluence.additionalJvmArgs` as `-Dconfluence.filestore.attachments.s3.bucket.name=<bucket-name>`
