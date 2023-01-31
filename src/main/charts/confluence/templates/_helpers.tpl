@@ -111,9 +111,9 @@ Pod labels
 {{- end }}
 
 {{- define "confluence.sysprop.s3Config" -}}
-{{- if and .Values.confluence.s3AttachmentsStorage.bucketName .Values.confluence.s3AttachmentsStorage.awsRegion }}
+{{- if and .Values.confluence.s3AttachmentsStorage.bucketName .Values.confluence.s3AttachmentsStorage.region }}
 -Dconfluence.filestore.attachments.s3.bucket.name={{ .Values.confluence.s3AttachmentsStorage.bucketName }}
--Dconfluence.filestore.attachments.s3.bucket.region={{ .Values.confluence.s3AttachmentsStorage.awsRegion }}
+-Dconfluence.filestore.attachments.s3.bucket.region={{ .Values.confluence.s3AttachmentsStorage.region }}
 {{- end }}
 {{- end }}
 

@@ -172,7 +172,7 @@ class ServiceAccountTest {
     @EnumSource(value = Product.class, names = {"confluence"})
     void service_account_iam_annotation(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".s3AttachmentsStorage.eksIrsa.roleArn", "dummy-arn"));
+                "serviceAccount.eksIrsa.roleArn", "dummy-arn"));
 
         assertThat(resources.get(ServiceAccount).getAnnotations()).isObject(Map.of("eks.amazonaws.com/role-arn", "dummy-arn"));
 

@@ -25,7 +25,7 @@ class ConfluenceS3EnabledTest {
     void confluence_s3_storage_env_vars(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product+".s3AttachmentsStorage.bucketName", "my-bucket",
-                product+".s3AttachmentsStorage.awsRegion", "my-region"
+                product+".s3AttachmentsStorage.region", "my-region"
         ));
 
         final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
@@ -33,5 +33,15 @@ class ConfluenceS3EnabledTest {
         assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.bucket.region=my-region");
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"})
+    void confluence_s3_storage_missing_env_vars(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product+".s3AttachmentsStorage.bucketName", "my-bucket"
+        ));
+
+        final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+        assertThat(configMap).hasTextNotContaining("-Dconfluence.filestore.attachments.s3.bucket.name=my-bucket");
+    }
 
 }
