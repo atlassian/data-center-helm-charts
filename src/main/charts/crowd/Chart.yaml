@@ -2,28 +2,28 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.7.1
-appVersion: 5.1.0
+version: 1.8.1
+appVersion: 5.1.1
 kubeVersion: ">=1.21.x-0"
 keywords:
-  - Crowd
-  - Crowd Server
-  - Crowd Data Center
-  - Crowd DC
-  - Atlassian
+- Crowd
+- Crowd Server
+- Crowd Data Center
+- Crowd DC
+- Atlassian
 home: https://atlassian.github.io/data-center-helm-charts/
 icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
 sources:
-  - https://github.com/atlassian/data-center-helm-charts
-  - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+- https://github.com/atlassian/data-center-helm-charts
+- https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
 deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Patch release to fix Artifacthub metadata
+    - kind: changed
+      description: Fix artifacthub annotations
 
 dependencies:
-  - name: common
-    version: 1.0.0
-    repository: https://atlassian.github.io/data-center-helm-charts
+- name: common
+  version: 1.0.0
+  repository: https://atlassian.github.io/data-center-helm-charts

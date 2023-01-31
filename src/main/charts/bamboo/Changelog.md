@@ -1,5 +1,26 @@
 # Change Log
 
+## 1.8.1
+
+**Release date:** 2022-12-12
+
+![AppVersion: 9.0.1](https://img.shields.io/static/v1?label=AppVersion&message=9.0.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix artifacthub.io annotations
+
+## 1.8.0
+
+**Release date:** 2022-12-9
+
+![AppVersion: 9.0.1](https://img.shields.io/static/v1?label=AppVersion&message=9.0.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* CLIP-1644: Stop supporting 1.19-1.20 k8s (#486)
+* Update appVersion to 9.0.1
+* Use `ingress.https` flag to enable tls in ingress (#487)
 
 ## 1.7.1
 

@@ -2,28 +2,28 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.7.1
-appVersion: 7.21.7
+version: 1.8.1
+appVersion: 7.21.9
 kubeVersion: ">=1.21.x-0"
 keywords:
-  - Bitbucket
-  - Bitbucket Server
-  - Bitbucket Data Center
-  - Bitbucket DC
-  - Atlassian
+- Bitbucket
+- Bitbucket Server
+- Bitbucket Data Center
+- Bitbucket DC
+- Atlassian
 home: https://atlassian.github.io/data-center-helm-charts/
 icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
 sources:
-  - https://github.com/atlassian/data-center-helm-charts
-  - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+- https://github.com/atlassian/data-center-helm-charts
+- https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
 deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Patch release to fix Artifacthub metadata
+    - kind: changed
+      description: Fix artifacthub annotations
 
 dependencies:
-  - name: common
-    version: 1.0.0
-    repository: https://atlassian.github.io/data-center-helm-charts
+- name: common
+  version: 1.0.0
+  repository: https://atlassian.github.io/data-center-helm-charts
