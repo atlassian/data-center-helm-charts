@@ -6,7 +6,7 @@ Since 8.1.0 Confluence supports storing attachments in AWS S3. To enable this fe
 confluence:
   s3AttachmentsStorage:
     bucketName: confluence-attachments-bucket
-    awsRegion: us-east-1
+    region: us-east-1
 ```
 
 # AWS Authentication
@@ -38,10 +38,7 @@ If Confluence is deployed to AWS EKS, it is strongly recommended to use [IAM rol
 The Confluence service account will be automatically annotated with a role `ARN` if it is defined, for example:
 
 ```yaml
-confluence:
-  s3AttachmentsStorage:
-    bucketName: confluence-attachments-bucket
-    awsRegion: us-east-1
+serviceAccount:
   eksIrsa:
     roleArn: arn:aws:iam::37583956:role/confluence-s3-role
 ```
