@@ -608,7 +608,7 @@ confluence:
     #
     usePodNameAsClusterNodeName: true
 
-  # Use AWS S3 to store attachments. From Confluence 8.1 onwards
+  # Use AWS S3 to store attachments. From Confluence 8.1 onwards.
   #
   s3AttachmentsStorage:
     # Bucket name to store attachments. If a bucket name is defined, Confluence will automatically
