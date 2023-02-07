@@ -449,8 +449,8 @@ jira:
     # -- Ehcache object port
     #
     ehcacheobject: 40011
-     
-  # Confirm that Jira is up and running with a ReadinessProbe
+  
+  # Confirm that Jira is available with a ReadinessProbe
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
   #
   readinessProbe:
@@ -468,6 +468,34 @@ jira:
     # before the pod fails readiness checks.
     #
     failureThreshold: 30
+  
+  # Confirm that Jira is up and running with a StartupProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  #
+  startupProbe:
+    
+    # -- How often (in seconds) the Jira container startup probe will run
+    #
+    periodSeconds: 5
+    
+    # -- The number of consecutive failures of the Jira container startup probe
+    # before the pod fails startup checks and is terminated.
+    #
+    failureThreshold: 24
+
+  # Ensure that pods are working correctly with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  #
+  livenessProbe:
+    
+    # -- How often (in seconds) the Jira container liveness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Jira container liveness probe
+    # before the pod fails liveness checks and is terminated.
+    #
+    failureThreshold: 2
 
   # Jira log configuration
   #
