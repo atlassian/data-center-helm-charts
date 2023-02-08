@@ -47,6 +47,9 @@ See examples of provisioning Kubernetes clusters on cloud-based providers:
 ### :material-remote-desktop: SSH
 * See an example of [SSH service in Bitbucket on Kubernetes](bitbucket/BITBUCKET_SSH.md)
 
+### :material-remote-desktop: Mesh
+* See an example of [Bitbucket Mesh on Kubernetes](bitbucket/BITBUCKET_MESH.md)
+
 ## Other
 
 ### :material-file-document-edit: Logging
