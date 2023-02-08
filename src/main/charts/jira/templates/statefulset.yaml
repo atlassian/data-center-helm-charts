@@ -122,7 +122,7 @@ spec:
             initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.jira.livenessProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
