@@ -57,8 +57,8 @@ Kubernetes: `>=1.21.x-0`
 | confluence.resources.jvm.minHeap | string | `"1g"` | The minimum amount of heap memory that will be used by the Confluence JVM  |
 | confluence.resources.jvm.reservedCodeCache | string | `"256m"` | The memory reserved for the Confluence JVM code cache  |
 | confluence.s3AttachmentsStorage.bucketName | string | `nil` |  |
+| confluence.s3AttachmentsStorage.bucketRegion | string | `nil` |  |
 | confluence.s3AttachmentsStorage.endpointOverride | string | `nil` | EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use Minio as object storage https://min.io/  |
-| confluence.s3AttachmentsStorage.region | string | `nil` |  |
 | confluence.securityContext.fsGroup | int | `2002` | The GID used by the Confluence docker image GID will default to 2002 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | confluence.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service  |

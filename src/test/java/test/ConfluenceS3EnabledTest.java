@@ -25,7 +25,7 @@ class ConfluenceS3EnabledTest {
     void confluence_s3_storage_env_vars(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product+".s3AttachmentsStorage.bucketName", "my-bucket",
-                product+".s3AttachmentsStorage.region", "my-region"
+                product+".s3AttachmentsStorage.bucketRegion", "my-region"
         ));
 
         final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
@@ -38,7 +38,7 @@ class ConfluenceS3EnabledTest {
     void confluence_s3_storage_endpoint_override(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product+".s3AttachmentsStorage.bucketName", "my-bucket",
-                product+".s3AttachmentsStorage.region", "my-region",
+                product+".s3AttachmentsStorage.bucketRegion", "my-region",
                 product+".s3AttachmentsStorage.endpointOverride", "http://minio.svc.cluster.local"
         ));
 
@@ -52,7 +52,7 @@ class ConfluenceS3EnabledTest {
     void confluence_s3_storage_no_endpoint_override(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product+".s3AttachmentsStorage.bucketName", "my-bucket",
-                product+".s3AttachmentsStorage.region", "my-region"
+                product+".s3AttachmentsStorage.bucketRegion", "my-region"
         ));
 
         final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");

@@ -629,7 +629,7 @@ confluence:
 
     # AWS region where the S3 bucket is located.
     #
-    region:
+    bucketRegion:
     
     # -- EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use
     # Minio as object storage https://min.io/
