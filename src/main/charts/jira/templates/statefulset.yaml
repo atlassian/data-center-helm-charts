@@ -126,8 +126,8 @@ spec:
             httpGet:
               port: {{ .Values.jira.ports.http }}
               path: {{ .Values.jira.service.contextPath }}/
-            periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.jira.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.jira.startupProbe.failureThreshold }}
           livenessProbe:
             httpGet:
               port: {{ .Values.jira.ports.http }}
