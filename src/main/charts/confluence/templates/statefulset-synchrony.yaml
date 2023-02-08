@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "synchrony.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.synchrony.replicaCount }}
   serviceName: {{ include "synchrony.fullname" . }}
   selector:
     matchLabels:
@@ -101,7 +101,7 @@ spec:
         - name: entrypoint-script
           configMap:
             name: {{ include "synchrony.fullname" . }}-entrypoint
-            defaultMode: 0744
+            defaultMode: {{ .Values.volumes.defaultMode | default "484" }}
         {{ include "synchrony.volumes" . | nindent 8 }}
   {{ include "synchrony.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}
