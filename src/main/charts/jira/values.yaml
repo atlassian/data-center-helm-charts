@@ -487,6 +487,11 @@ jira:
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
   #
   livenessProbe:
+
+    # -- Whether to apply the livenessProbe check to pod.
+    #
+
+    enabled: true
     
     # -- How often (in seconds) the Jira container liveness probe will run
     #

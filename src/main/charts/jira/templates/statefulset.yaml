@@ -122,6 +122,7 @@ spec:
             initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
+          {{- if .Values.livenessProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
@@ -132,6 +133,7 @@ spec:
               port: {{ .Values.jira.ports.http }}
             initialDelaySeconds: {{ .Values.jira.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.livenessProbe.periodSeconds }}
+          {{ end }}
           {{- with .Values.jira.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}
