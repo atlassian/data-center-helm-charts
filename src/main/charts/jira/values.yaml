@@ -479,7 +479,7 @@ jira:
     periodSeconds: 5
     
     # -- The number of consecutive failures of the Jira container startup probe
-    # before the pod fails startup checks and is terminated.
+    # before the pod fails startup checks.
     #
     failureThreshold: 120
 
@@ -493,7 +493,7 @@ jira:
     periodSeconds: 5
 
     # -- The number of consecutive failures of the Jira container liveness probe
-    # before the pod fails liveness checks and is terminated.
+    # before the pod fails liveness checks.
     #
     failureThreshold: 2
 
