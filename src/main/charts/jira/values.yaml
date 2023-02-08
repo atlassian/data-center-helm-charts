@@ -495,7 +495,7 @@ jira:
     # -- The number of consecutive failures of the Jira container liveness probe
     # before the pod fails liveness checks.
     #
-    failureThreshold: 2
+    failureThreshold: 1
 
   # Jira log configuration
   #
