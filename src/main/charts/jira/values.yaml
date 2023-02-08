@@ -467,7 +467,7 @@ jira:
     # -- The number of consecutive failures of the Jira container readiness probe
     # before the pod fails readiness checks.
     #
-    failureThreshold: 30
+    failureThreshold: 2
   
   # Confirm that Jira is up and running with a StartupProbe
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
