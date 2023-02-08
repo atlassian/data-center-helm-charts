@@ -123,9 +123,8 @@ spec:
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
           startupProbe:
-            httpGet:
+            tcpSocket:
               port: {{ .Values.jira.ports.http }}
-              path: {{ .Values.jira.service.contextPath }}/
             periodSeconds: {{ .Values.jira.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.startupProbe.failureThreshold }}
           livenessProbe:
