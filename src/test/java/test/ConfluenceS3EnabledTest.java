@@ -35,6 +35,31 @@ class ConfluenceS3EnabledTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"confluence"})
+    void confluence_s3_storage_endpoint_override(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product+".s3AttachmentsStorage.bucketName", "my-bucket",
+                product+".s3AttachmentsStorage.region", "my-region",
+                product+".s3AttachmentsStorage.endpointOverride", "http://minio.svc.cluster.local"
+        ));
+
+        final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+        assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.bucket.name=my-bucket");
+        assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.endpoint.override=http://minio.svc.cluster.local");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"})
+    void confluence_s3_storage_no_endpoint_override(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product+".s3AttachmentsStorage.bucketName", "my-bucket",
+                product+".s3AttachmentsStorage.region", "my-region"
+        ));
+
+        final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+        assertThat(configMap).hasTextNotContaining("-Dconfluence.filestore.attachments.s3.endpoint.override");
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"})
     void confluence_s3_storage_missing_env_vars(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product+".s3AttachmentsStorage.bucketName", "my-bucket"

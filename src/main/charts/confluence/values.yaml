@@ -623,17 +623,18 @@ confluence:
   s3AttachmentsStorage:
 
     # Bucket name to store attachments. If a bucket name and region (see below) are defined, Confluence will automatically
-    # use AWS S3 to store attachments. Only bucket name is required, not the full arn. This can also be defined in
-    # `confluence.additionalEnvironmentVariables` as `CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_NAME`
-    # or `confluence.additionalJvmArgs` as `-Dconfluence.filestore.attachments.s3.bucket.name=<bucket-name>`
+    # use AWS S3 to store attachments. Only bucket name is required, not the full arn.
     #
     bucketName:
 
-    # AWS region where the S3 bucket is located. This can also be defined in
-    # `confluence.additionalEnvironmentVariables` as `CONFLUENCE_FILESTORE_ATTACHMENTS_S3_BUCKET_REGION`
-    # or `confluence.additionalJvmArgs` as `-Dconfluence.filestore.attachments.s3.bucket.region=<aws-region>`
+    # AWS region where the S3 bucket is located.
     #
     region:
+    
+    # -- EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use
+    # Minio as object storage https://min.io/
+    #
+    endpointOverride:
 
   # Confluence Pod resource requests
   #

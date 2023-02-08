@@ -114,6 +114,9 @@ Pod labels
 {{- if and .Values.confluence.s3AttachmentsStorage.bucketName .Values.confluence.s3AttachmentsStorage.region }}
 -Dconfluence.filestore.attachments.s3.bucket.name={{ .Values.confluence.s3AttachmentsStorage.bucketName }}
 -Dconfluence.filestore.attachments.s3.bucket.region={{ .Values.confluence.s3AttachmentsStorage.region }}
+{{- if .Values.confluence.s3AttachmentsStorage.endpointOverride }}
+-Dconfluence.filestore.attachments.s3.endpoint.override={{ .Values.confluence.s3AttachmentsStorage.endpointOverride }}
+{{- end }}
 {{- end }}
 {{- end }}
 
