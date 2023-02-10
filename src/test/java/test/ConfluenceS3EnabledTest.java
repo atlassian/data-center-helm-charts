@@ -29,8 +29,8 @@ class ConfluenceS3EnabledTest {
         ));
 
         final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
-        assertThat(configMap).hasTextContaining("\s-Dconfluence.filestore.attachments.s3.bucket.name=my-bucket");
-        assertThat(configMap).hasTextContaining("\s-Dconfluence.filestore.attachments.s3.bucket.region=my-region");
+        assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.bucket.name=my-bucket");
+        assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.bucket.region=my-region");
     }
 
     @ParameterizedTest
@@ -43,9 +43,8 @@ class ConfluenceS3EnabledTest {
         ));
 
         final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
-        assertThat(configMap).hasTextContaining("\s-Dconfluence.filestore.attachments.s3.bucket.name=my-bucket");
-        assertThat(configMap).hasTextContaining("\s-Dconfluence.filestore.attachments.s3.bucket.region=my-region");
-        assertThat(configMap).hasTextContaining("\s-Dconfluence.filestore.attachments.s3.endpoint.override=http://minio.svc.cluster.local");
+        assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.bucket.name=my-bucket");
+        assertThat(configMap).hasTextContaining("-Dconfluence.filestore.attachments.s3.endpoint.override=http://minio.svc.cluster.local");
     }
 
     @ParameterizedTest
