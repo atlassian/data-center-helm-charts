@@ -10,9 +10,9 @@ You can learn more details about Bitbucket Mesh on the [official documentation p
 
     **Bitbucket version**
 
-    By default the Helm charts target the latest Bitbucket LTS version. However
-    mesh is only supported from version 8.0. You will need to select an 8.x
-    version of Bitbucket to deploy Mesh. See below for details.
+    By default, the Helm charts target the latest Bitbucket LTS version. However,
+    Mesh is only supported from version 8.0. You will need to select an 8.x
+    version of Bitbucket to deploy Mesh. Learn more details below.
 
     **Mesh agent version**
 
@@ -28,20 +28,21 @@ You can learn more details about Bitbucket Mesh on the [official documentation p
 
     **Mesh node co-location**
 
-    Currently, we will not be supporting deploying Mesh nodes into multiple
+    We don't currently support deploying Mesh nodes into multiple
     availability zones. Just like the shared file system based deployments, the
     Mesh nodes (that is, the repository storage) and the application nodes must
     be co-located.
 
     **Other Mesh deployment requirements**
 
-    For more details on the requirements and limitations of Mesh deployments see
-    [the Bitbucket Mesh FAQ](https://confluence.atlassian.com/enterprise/bitbucket-data-center-faq-776663707.html#BitbucketDataCenterFAQ-Mesh){.external}
+    For more details on the requirements and limitations of Mesh deployments, check the
+    [the Bitbucket Mesh FAQ](https://confluence.atlassian.com/enterprise/bitbucket-data-center-faq-776663707.html#BitbucketDataCenterFAQ-Mesh){.external}.
+
 
 ### Configuring your Bitbucket and Mesh deployment
 
-For backwards-compatibility the Helm charts default to Mesh being disabled. To
-enable it you will need to configure the service under `bitbucket:` stanza in
+For backwards compatibility, the Helm charts default to Mesh being disabled. To
+enable it, you will need to configure the service under `bitbucket:` stanza in
 the `values.yaml` file, substituting the values below from the above steps where
 appropriate:
 
@@ -59,20 +60,19 @@ bitbucket:
 ### Adding the Mesh nodes to Bitbucket
 
 To enable the deployed Mesh nodes you need to add them to the Bitbucket Data
-Center instance via the administration interface. To do this you will need the
+Center instance in the administration area. To do so, you'll need the
 service URL of each node; these are usually of the form `bitbucket-mesh-<num>`. Check the Kubernetes
-official documentation on how to get [DNS record for a
-service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}.
+official documentation to learn how to get a [DNS record for a service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services){.external}.
 
-To connect the mesh node:
+To connect the Mesh node:
 
 1. In your Bitbucket Data Center instance, navigate to **Administration** > **Git** > **Bitbucket Mesh**.
 1. Enter the URL of the Mesh node in the Node URL field (e.g. `http://bitbucket-mesh-1:7777`).
 1. (Optional) Enter a name for the Mesh node in the Node name field.
-1. Select Add Mesh node.
+1. Select **Add Mesh node**.
 
-For full details see [the documentation for configuring Mesh](https://confluence.atlassian.com/bitbucketserver/set-up-and-configure-mesh-nodes-1128304356.html#SetupandconfigureMeshnodes-ConnectingtheMeshnodetoBitbucket).
+[Learn more details about Mesh configuration](https://confluence.atlassian.com/bitbucketserver/set-up-and-configure-mesh-nodes-1128304356.html#SetupandconfigureMeshnodes-ConnectingtheMeshnodetoBitbucket).
 
 ### Migrating existing repositories to Mesh
 
-For migrating repositories to Mesh see [the official documentation](https://confluence.atlassian.com/bitbucketserver/migrate-repositories-to-bitbucket-mesh-1128304358.html).
+[Learn how to migrate repositories to Mesh](https://confluence.atlassian.com/bitbucketserver/migrate-repositories-to-bitbucket-mesh-1128304358.html).
