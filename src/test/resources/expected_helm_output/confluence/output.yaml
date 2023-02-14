@@ -164,7 +164,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 8091
-              path: /heartbeat
+              path: /synchrony/heartbeat
             initialDelaySeconds: 5
             periodSeconds: 1
             failureThreshold: 10
