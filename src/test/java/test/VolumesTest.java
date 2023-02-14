@@ -299,7 +299,7 @@ class VolumesTest {
     void synchrony_volume_custom_default_mode(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true",
-                "volumes.defaultMode", "485"
+                "volumes.defaultPermissionsMode", "485"
         ));
 
         final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());

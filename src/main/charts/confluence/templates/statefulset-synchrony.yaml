@@ -101,7 +101,7 @@ spec:
         - name: entrypoint-script
           configMap:
             name: {{ include "synchrony.fullname" . }}-entrypoint
-            defaultMode: {{ .Values.volumes.defaultMode | default "484" }}
+            defaultMode: {{ .Values.volumes.defaultPermissionsMode | default "484" }}
         {{ include "synchrony.volumes" . | nindent 8 }}
   {{ include "synchrony.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}
