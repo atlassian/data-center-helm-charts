@@ -27,7 +27,7 @@ rm -rf "$PACKAGE_DIR"
 for chart in "$CHARTS_SRC_DIR"/*/
   do
     echo "Packaging chart $chart"
-    helm package "$chart" --destination "$PACKAGE_DIR"
+    helm package --sign --key 'Yifei Zhang' --keyring ~/.gnupg/secring.gpg "$chart" --destination "$PACKAGE_DIR"
   done
 
 echo "Uploading chart packages as Github releases"

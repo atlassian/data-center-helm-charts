@@ -1799,6 +1799,37 @@ entries:
           description: Fix artifacthub annotations
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
+    appVersion: 7.19.5
+    created: "2023-02-14T03:47:01.488548359Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.0.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: f71ff04ecfc89042146f300116e4853cc7260b75df5326f9776f2a8f8d34a7b9
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.9.1/confluence-1.9.1.tgz
+    version: 1.9.1
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Fix artifacthub annotations
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
     appVersion: 7.19.4
     created: "2022-12-11T23:57:42.68368Z"
     dependencies:
@@ -4424,4 +4455,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2022-12-11T23:57:43.596057Z"
+generated: "2023-02-14T03:47:02.166512349Z"
