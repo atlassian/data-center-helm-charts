@@ -857,6 +857,12 @@ synchrony:
   #
   readinessProbe:
 
+    # -- The healthcheck path to check against for the Synchrony container 
+    # useful when configuring behind a reverse-proxy or loadbalancer
+    # https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html
+    #
+    healthcheckPath: "/synchrony/heartbeat"
+
     # -- The initial delay (in seconds) for the Synchrony container readiness probe,
     # after which the probe will start running.
     #
