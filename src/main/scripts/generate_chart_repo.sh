@@ -41,7 +41,7 @@ docker run --user "$(id -u):$(id -g)" \
   upload \
   --skip-existing \
   --package-path /releases \
-  --owner atlassian \
+  --owner yzha645 \
   --git-repo data-center-helm-charts \
   --token "$GITHUB_TOKEN"
 
@@ -57,7 +57,7 @@ docker run \
   --rm \
   quay.io/helmpack/chart-releaser:v1.2.1 \
   index \
-  --owner atlassian \
+  --owner yzha645 \
   --git-repo data-center-helm-charts \
   --charts-repo https://atlassian.github.io/data-center-helm-charts \
   --index-path /index/index.yaml \
@@ -65,3 +65,5 @@ docker run \
   --token "$GITHUB_TOKEN"
 
 git add $PUBLISH_DIR/index.yaml
+
+# some change
