@@ -10,6 +10,8 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * CLIP-1767: Replica count for Synchrony; defaultMode made configurable in volumes (#509)
+* DCCLIP-270: Confluence S3 storage support (#493)
+* DCCLIP-322: Add S3 docs examples (#494)
 
 ## 1.9.0
 

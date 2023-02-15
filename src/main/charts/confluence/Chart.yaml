@@ -22,6 +22,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: added
       description: "Replica count for Synchrony; defaultMode made configurable in volumes"
+    - kind: added
+      description: "With Confluence 8.1.0 attachment data can now be stored and managed via Amazon S3. This Helm chart change adds support for configuring Amazon S3 against Confluence running in K8s. For more details see the official release notes: https://confluence.atlassian.com/doc/confluence-8-1-release-notes-1206791873.html"
 
 dependencies:
 - name: common
