@@ -9,6 +9,8 @@
 ![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
+* DCCLIP-270: Confluence S3 storage support
+* DCCLIP-322: Add S3 docs examples
 
 ## 1.8.1
 
