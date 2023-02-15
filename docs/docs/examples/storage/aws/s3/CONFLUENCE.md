@@ -3,6 +3,7 @@
 Since 8.1.0 Confluence supports storing attachments in AWS S3. To enable this feature, update the image `tag` to `8.1.0` and define bucket name and AWS region in `confluence.s3AttachmentsStorage`, for example:
 
 ```yaml
+tag: 8.1.0
 confluence:
   s3AttachmentsStorage:
     bucketName: confluence-attachments-bucket
