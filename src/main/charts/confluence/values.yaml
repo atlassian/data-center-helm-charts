@@ -119,6 +119,15 @@ serviceAccount:
     #
     name:
 
+  # Use EKS IRSA. See: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+  #
+  eksIrsa:
+
+    # Defining a full arn of AWS role to assume will automatically annotate confluence,
+    # e.g. `eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/S3Access`.
+    # "-Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token" will be automatically added to Confluence JVM arguments
+    roleArn:
+
 # REQUIRED - Database configuration
 #
 # Confluence requires a backend database. The configuration below can be used to define the
@@ -612,6 +621,25 @@ confluence:
     # name of the Data Center cluster node.
     #
     usePodNameAsClusterNodeName: true
+
+  # Use AWS S3 to store attachments. From Confluence 8.1 onwards.
+  #
+
+  s3AttachmentsStorage:
+
+    # Bucket name to store attachments. If a bucket name and region (see below) are defined, Confluence will automatically
+    # use AWS S3 to store attachments. Only bucket name is required, not the full arn.
+    #
+    bucketName:
+
+    # AWS region where the S3 bucket is located.
+    #
+    bucketRegion:
+    
+    # -- EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use
+    # Minio as object storage https://min.io/
+    #
+    endpointOverride:
 
   # Confluence Pod resource requests
   #
