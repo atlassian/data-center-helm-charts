@@ -185,7 +185,7 @@ spec:
         - name: entrypoint-script
           configMap:
             name: unittest-confluence-synchrony-entrypoint
-            defaultMode: 0744
+            defaultMode: 484
         - name: synchrony-home
           emptyDir: {}
         - name: shared-home

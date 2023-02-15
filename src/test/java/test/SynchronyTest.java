@@ -1,6 +1,7 @@
 package test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.IntNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -73,6 +74,21 @@ class SynchronyTest {
                 .hasTextContaining("-Xms1g")
                 .hasTextContaining("-Xmx2g")
                 .hasTextContaining("-XX:ActiveProcessorCount=2");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_replica_count(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.replicaCount", "2"
+        ));
+
+        StatefulSet synchronySts = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+
+        IntNode expectedReplicas = new IntNode(2);
+
+        assertThat(synchronySts.getSpec().path("replicas")).isEqualTo(expectedReplicas);
     }
 
     @ParameterizedTest

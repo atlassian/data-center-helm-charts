@@ -384,6 +384,11 @@ volumes:
   # those needs to be defined in synchrony.additionalVolumeMounts
   #
   additionalSynchrony: []
+  
+  # -- Mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511
+  # Typically overridden in volumes from Secrets and ConfigMaps to make mounted files executable
+  #
+  defaultPermissionsMode: 484
 
 # Ingress configuration
 #
@@ -795,6 +800,10 @@ synchrony:
   # If disabled, then collaborative editing will be disabled in Confluence.
   enabled: false
 
+  # -- Number of Synchrony pods
+  # 
+  replicaCount: 1
+  
   # -- Custom annotations that will be applied to all Synchrony pods.
   # When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined)
   podAnnotations: {}
