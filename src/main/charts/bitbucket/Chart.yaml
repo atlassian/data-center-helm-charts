@@ -20,6 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
+    - kind: changed
+      description: Update appVersion to the latest LTS
 
 dependencies:
 - name: common
