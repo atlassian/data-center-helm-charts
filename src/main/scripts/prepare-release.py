@@ -50,16 +50,17 @@ def gen_changelog(repo_path):
 
     changelog = cli.log(f'{lasttag}..main', graph=True, pretty='format:%s', abbrev_commit=True, date='relative')
     changelog = changelog.split('\n')
-
-    return list(filter(changelog_filter, changelog))
+    filtered_changelog = list(filter(changelog_filter, changelog))
+    sanitized_changelog = map(lambda c: re.sub(r'CLIP-[0-9]{2,4}(?![0-9]): ', '', c), filtered_changelog)
+    return list(sanitized_changelog)
 
 
 def format_changelog_yaml(changelog):
     # The artifacthub annotations are a single string, but formatted
     # like YAML. Replacing the leading '*' with '-' should be
     # sufficient.
-    c2 = map(lambda c: re.sub(r'^\* ', '- ', c), changelog)
-    return '\n'.join(c2)
+    c2 = map(lambda c: re.sub(r'^\* ', '- "', c), changelog)
+    return '\n'.join(c2) + "\""
 
 
 def update_changelog_file(version, changelog, chartversions):
