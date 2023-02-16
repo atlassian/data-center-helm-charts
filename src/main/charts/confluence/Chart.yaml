@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.8.1
+version: 1.9.1
 appVersion: 7.19.5
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,8 +20,10 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Fix artifacthub annotations
+    - kind: added
+      description: "Replica count for Synchrony; defaultMode made configurable in volumes"
+    - kind: added
+      description: "With Confluence 8.1.0 attachment data can now be stored and managed via Amazon S3. This Helm chart change adds support for configuring Amazon S3 against Confluence running in K8s. For more details see the official release notes: https://confluence.atlassian.com/doc/confluence-8-1-release-notes-1206791873.html"
 
 dependencies:
 - name: common

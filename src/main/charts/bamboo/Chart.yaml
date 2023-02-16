@@ -2,8 +2,8 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: 1.8.1
-appVersion: 9.1.1
+version: 1.9.1
+appVersion: 9.2.1
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Bamboo
@@ -21,8 +21,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Fix artifacthub annotations
-
+      description: Fix artifact hub annotation yaml
 dependencies:
 - name: common
   version: 1.0.0

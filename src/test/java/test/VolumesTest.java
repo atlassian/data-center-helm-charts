@@ -1,6 +1,7 @@
 package test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
@@ -278,6 +279,33 @@ class VolumesTest {
                 .hasTextEqualTo("foo");
         assertThat(additionalVolumeClaimTemplate.path("spec").path("resources").path("requests").path("storage"))
                 .hasTextEqualTo("2Gi");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_volume_default_mode(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree("{\"name\":\"entrypoint-script\",\"configMap\":{\"name\":\"unittest-confluence-synchrony-entrypoint\",\"defaultMode\":484}}");
+        assertThat(statefulSet.getVolume("entrypoint-script")).contains(jsonNode);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_volume_custom_default_mode(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.defaultPermissionsMode", "485"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(synchronyStatefulSetName());
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree("{\"name\":\"entrypoint-script\",\"configMap\":{\"name\":\"unittest-confluence-synchrony-entrypoint\",\"defaultMode\":485}}");
+        assertThat(statefulSet.getVolume("entrypoint-script")).contains(jsonNode);
     }
 
     private void verifyVolumeClaimTemplate(JsonNode volumeClaimTemplate, final String expectedVolumeName, final String... expectedAccessModes) {
