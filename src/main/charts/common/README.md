@@ -54,7 +54,7 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Names
 
-| Helper identifier       | Description                                                | Expected Inpput   |
+| Helper identifier       | Description                                                | Expected Input   |
 |-------------------------|------------------------------------------------------------|-------------------|
 | `common.names.chart`    | Chart name plus version                                    | `.` Chart context |
 | `common.names.name`     | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
