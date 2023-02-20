@@ -33,9 +33,9 @@ def get_chart_versions():
     return versions
 
 
-def gen_changelog(product):
-    repo = git.Repo(".")
-    cli = git.Git(".")
+def gen_changelog(product, path):
+    repo = git.Repo(path)
+    cli = git.Git(path)
 
     lasttag = repo.tags[-1]
     tagver = re.sub(r'^[^-]+-', '', lasttag.name)
@@ -163,7 +163,7 @@ def main():
 
     chartversions = get_chart_versions()
     for product in products:
-        changelog = gen_changelog(product)
+        changelog = gen_changelog(product, ".")
         log.info(product + ' changelog:\n%s' % '\n'.join(changelog))
         update_changelog_file(product, args.version, changelog, chartversions)
         update_charts_yaml(product, args.version, changelog)
