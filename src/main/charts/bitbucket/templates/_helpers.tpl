@@ -55,6 +55,15 @@ Pod labels
 {{- end }}
 {{- end }}
 
+{{/*
+Mesh Pod labels
+*/}}
+{{- define "bitbucket.mesh.podLabels" -}}
+{{ with .Values.bitbucket.mesh.podLabels }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "bitbucket.baseUrl" -}}
 {{ ternary "https" "http" .Values.ingress.https -}}
 ://
@@ -126,10 +135,28 @@ Define pod annotations here to allow template overrides when used as a sub chart
 {{- end }}
 
 {{/*
+Define pod annotations here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bitbucket.mesh.podAnnotations" -}}
+{{- with .Values.bitbucket.mesh.podAnnotations }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Define additional init containers here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.additionalInitContainers" -}}
 {{- with .Values.additionalInitContainers }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional init containers here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bitbucket.mesh.additionalInitContainers" -}}
+{{- with .Values.bitbucket.mesh.additionalInitContainers }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}
@@ -166,6 +193,15 @@ Define additional environment variables here to allow template overrides when us
 */}}
 {{- define "bitbucket.additionalEnvironmentVariables" -}}
 {{- with .Values.bitbucket.additionalEnvironmentVariables }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional environment variables here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bitbucket.mesh.additionalEnvironmentVariables" -}}
+{{- with .Values.bitbucket.mesh.additionalEnvironmentVariables }}
 {{- toYaml . }}
 {{- end }}
 {{- end }}
@@ -265,6 +301,23 @@ volumeClaimTemplates:
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.mesh.volumeClaimTemplates" -}}
+{{- if .Values.bitbucket.mesh.volume.create }}
+volumeClaimTemplates:
+- metadata:
+    name: mesh-home
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    {{- if .Values.bitbucket.mesh.volume.storageClass }}
+    storageClassName: {{ .Values.bitbucket.mesh.volume.storageClass | quote }}
+    {{- end }}
+    {{- with .Values.bitbucket.mesh.volume.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 {{- end }}
 {{- end }}
 

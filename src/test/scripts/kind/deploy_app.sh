@@ -43,11 +43,15 @@ deploy_app() {
   fi
   sed -i "s/DC_APP_REPLACEME/${DC_APP}/g" ../../../test/config/kind/common-values.yaml
   sed -i "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ../../../test/config/kind/common-values.yaml
+  if [ ${DC_APP} == "bitbucket" ]; then
+    # this is to test mesh
+    IMAGE_OVERRIDE="--set image.tag=8.6.1"
+  fi
   helm upgrade --install ${DC_APP} ./ \
                -f ../../../test/config/kind/common-values.yaml \
                -n atlassian \
                --wait --timeout=360s \
-               --debug
+               --debug ${IMAGE_OVERRIDE}
 
   if [ ${DC_APP} == "bamboo" ]; then
     echo "[INFO]: Deploying Bamboo agent..."

@@ -1,0 +1,71 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled .Values.bitbucket.mesh.setByDefault -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-configure-job
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      annotations:
+        {{- include "bitbucket.mesh.podAnnotations" . | nindent 8 }}
+      labels:
+        app.kubernetes.io/name: {{ include "common.names.name" . }}-mesh-job
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "bitbucket.mesh.podLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: bitbucket-mesh-configure-services
+          image: curlimages/curl
+          command: ["/scripts/configure-mesh.sh"]
+          env:
+            {{ with .Values.bitbucket.sysadminCredentials }}
+            - name: SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .usernameSecretKey }}
+            - name: SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .passwordSecretKey }}
+              {{ end }}
+          volumeMounts:
+            - name: configure-mesh
+              mountPath: /scripts
+      restartPolicy: Never
+      volumes:
+            - name: configure-mesh
+              configMap:
+                name: {{ include "common.names.fullname" . }}-mesh-scripts
+                items:
+                  - key: configure-mesh.sh
+                    path: configure-mesh.sh
+                defaultMode: 0777
+      {{- with .Values.bitbucket.mesh.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.mesh.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.mesh.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.mesh.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.bitbucket.mesh.schedulerName }}
+      schedulerName: {{ .Values.bitbucket.mesh.schedulerName  | quote }}
+      {{- end }}
+  backoffLimit: 4
+{{- end }}

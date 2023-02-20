@@ -1,0 +1,26 @@
+{{- if .Values.bitbucket.mesh.enabled }}
+{{- range $index := until (.Values.bitbucket.mesh.replicaCount | int) }}
+{{- with $ }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-{{ $index }}
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.bitbucket.mesh.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.bitbucket.mesh.service.type }}
+  ports:
+    - port: {{ .Values.bitbucket.mesh.service.port }}
+      targetPort: mesh
+      protocol: TCP
+      name: mesh
+  selector:
+    statefulset.kubernetes.io/pod-name: {{ include "common.names.fullname" . }}-mesh-{{ $index }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

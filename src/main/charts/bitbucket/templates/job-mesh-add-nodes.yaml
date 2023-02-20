@@ -1,0 +1,78 @@
+{{- if and .Values.bitbucket.sysadminCredentials.secretName .Values.bitbucket.mesh.enabled .Values.bitbucket.mesh.nodeAutoRegistration -}}
+{{- range $index := until (.Values.bitbucket.mesh.replicaCount | int) }}
+{{- with $ }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-mesh-register-job-{{ $index }}
+  labels:
+    app.kubernetes.io/name: {{ include "common.names.name" . }}-mesh-job
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      annotations:
+        {{- include "bitbucket.mesh.podAnnotations" . | nindent 8 }}
+      labels:
+        app.kubernetes.io/name: {{ include "common.names.name" . }}-mesh-job
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "bitbucket.mesh.podLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: bitbucket-mesh-register-services
+          image: curlimages/curl
+          command: ["/scripts/register-mesh-node.sh"]
+          args: ["{{ $index }}"]
+          env:
+            {{ with .Values.bitbucket.sysadminCredentials }}
+            - name: SYSADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .usernameSecretKey }}
+            - name: SYSADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .passwordSecretKey }}
+              {{ end }}
+          volumeMounts:
+          - name: register-mesh-node
+            mountPath: /scripts
+      volumes:
+      - name: register-mesh-node
+        configMap:
+          name: {{ include "common.names.fullname" . }}-mesh-scripts
+          items:
+            - key: register-mesh-node.sh
+              path: register-mesh-node.sh
+          defaultMode: 0777
+      restartPolicy: Never
+      {{- with .Values.bitbucket.mesh.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.mesh.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.mesh.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bitbucket.mesh.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.bitbucket.mesh.schedulerName }}
+      schedulerName: {{ .Values.bitbucket.mesh.schedulerName  | quote }}
+      {{- end }}
+  backoffLimit: 4
+---
+{{- end }}
+{{- end }}
+{{- end }}
