@@ -52,6 +52,7 @@ jobs:
         run: |
           echo "[INFO]: Preparing release ${GITHUB_REF_NAME##*/}"
           cd data-center-helm-charts
+          git checkout ${GITHUB_REF_NAME}
           python src/main/scripts/prepare_release.py ${GITHUB_REF_NAME##*/}
 
       - name: Configure Git
