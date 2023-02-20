@@ -23,14 +23,11 @@ jobs:
 
       - name: Checkout repo
         run: |
-          git clone https://github.com/bianchi2/data-center-helm-charts
-
+          git clone https://github.com/atlassian/data-center-helm-charts
+          
       - name: Test git
         run: |
           git --version
-          cd data-center-helm-charts
-          git checkout ${GITHUB_REF_NAME}
-          git log --graph --pretty=format:%s --abbrev-commit --date=relative jira-1.9.1..main -- src/main/charts/bamboo
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
