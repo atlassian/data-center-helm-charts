@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-jvm-config-mesh
   labels:
-    helm.sh/chart: bitbucket-1.8.1
+    helm.sh/chart: bitbucket-1.9.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.9"
+    app.kubernetes.io/version: "7.21.10"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -51,10 +51,10 @@ kind: Service
 metadata:
   name: unittest-bitbucket-mesh-0
   labels:
-    helm.sh/chart: bitbucket-1.8.1
+    helm.sh/chart: bitbucket-1.9.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.9"
+    app.kubernetes.io/version: "7.21.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -73,10 +73,10 @@ kind: Service
 metadata:
   name: unittest-bitbucket-mesh-1
   labels:
-    helm.sh/chart: bitbucket-1.8.1
+    helm.sh/chart: bitbucket-1.9.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.9"
+    app.kubernetes.io/version: "7.21.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -95,10 +95,10 @@ kind: Service
 metadata:
   name: unittest-bitbucket-mesh-2
   labels:
-    helm.sh/chart: bitbucket-1.8.1
+    helm.sh/chart: bitbucket-1.9.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.9"
+    app.kubernetes.io/version: "7.21.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -148,10 +148,10 @@ kind: StatefulSet
 metadata:
   name: unittest-bitbucket-mesh
   labels:
-    helm.sh/chart: bitbucket-1.8.1
+    helm.sh/chart: bitbucket-1.9.1
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "7.21.9"
+    app.kubernetes.io/version: "7.21.10"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 3
@@ -177,7 +177,7 @@ spec:
       initContainers:
       containers:
         - name: bitbucket-mesh
-          image: atlassian/bitbucket-mesh:1.4.0
+          image: atlassian/bitbucket-mesh:1.5.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: mesh
