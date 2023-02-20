@@ -27,7 +27,9 @@ public class KubeResource {
     public JsonNode getSpec() {
         return node.required("spec");
     }
-
+    public JsonNode getConfigMapData() {
+        return node.required("data");
+    }
     public String getName() {
         return getMetadata().required("name").asText();
     }
@@ -57,6 +59,8 @@ public class KubeResource {
                 return new Service(node);
             case Deployment:
                 return new Deployment(node);
+            case ConfigMap:
+                return new ConfigMap(node);
             default:
                 return new KubeResource(kind, node);
         }

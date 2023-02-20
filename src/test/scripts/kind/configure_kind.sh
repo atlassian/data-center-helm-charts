@@ -17,6 +17,7 @@ kubectl wait --for=condition=ready pod \
 
 echo "[INFO]: Deploy NFS server"
 helm install nfs src/test/infrastructure/nfs-server \
+    --set image.tag=2.0 \
      -n atlassian \
      --timeout=360s \
      --wait

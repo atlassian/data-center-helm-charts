@@ -26,6 +26,9 @@ public final class KubeResources {
         return getAll(Kind.StatefulSet, StatefulSet.class);
     }
 
+    public Traversable<ConfigMap> getConfigMaps() {
+        return getAll(Kind.ConfigMap, ConfigMap.class);
+    }
     public Traversable<Deployment> getDeployments() {
         return getAll(Kind.Deployment, Deployment.class);
     }
@@ -42,6 +45,11 @@ public final class KubeResources {
     public Deployment getDeployment(final String name) {
         return getDeployments().find(dep -> name.equals(dep.getName()))
                 .getOrElseThrow(() -> new AssertionError("No Deployment found with name " + name));
+    }
+
+    public ConfigMap getConfigMap(final String name) {
+        return getConfigMaps().find(cm -> name.equals(cm.getName()))
+                .getOrElseThrow(() -> new AssertionError("No ConfigMap found with name " + name));
     }
 
     public KubeResource get(Kind kind) {

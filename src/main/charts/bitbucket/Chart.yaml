@@ -2,8 +2,8 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.8.1
-appVersion: 7.21.9
+version: 1.9.1
+appVersion: 7.21.10
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Bitbucket
@@ -21,7 +21,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
     - kind: changed
-      description: Fix artifacthub annotations
+      description: Fix artifact hub annotation yaml
 
 dependencies:
 - name: common

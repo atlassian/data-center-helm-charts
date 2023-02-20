@@ -119,6 +119,15 @@ serviceAccount:
     #
     name:
 
+  # Use EKS IRSA. See: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+  #
+  eksIrsa:
+
+    # Defining a full arn of AWS role to assume will automatically annotate confluence,
+    # e.g. `eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/S3Access`.
+    # "-Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token" will be automatically added to Confluence JVM arguments
+    roleArn:
+
 # REQUIRED - Database configuration
 #
 # Confluence requires a backend database. The configuration below can be used to define the
@@ -375,6 +384,11 @@ volumes:
   # those needs to be defined in synchrony.additionalVolumeMounts
   #
   additionalSynchrony: []
+  
+  # -- Mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511
+  # Typically overridden in volumes from Secrets and ConfigMaps to make mounted files executable
+  #
+  defaultPermissionsMode: 484
 
 # Ingress configuration
 #
@@ -608,6 +622,25 @@ confluence:
     #
     usePodNameAsClusterNodeName: true
 
+  # Use AWS S3 to store attachments. From Confluence 8.1 onwards.
+  #
+
+  s3AttachmentsStorage:
+
+    # Bucket name to store attachments. If a bucket name and region (see below) are defined, Confluence will automatically
+    # use AWS S3 to store attachments. Only bucket name is required, not the full arn.
+    #
+    bucketName:
+
+    # AWS region where the S3 bucket is located.
+    #
+    bucketRegion:
+    
+    # -- EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use
+    # Minio as object storage https://min.io/
+    #
+    endpointOverride:
+
   # Confluence Pod resource requests
   #
   resources:
@@ -767,6 +800,10 @@ synchrony:
   # If disabled, then collaborative editing will be disabled in Confluence.
   enabled: false
 
+  # -- Number of Synchrony pods
+  # 
+  replicaCount: 1
+  
   # -- Custom annotations that will be applied to all Synchrony pods.
   # When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined)
   podAnnotations: {}
@@ -828,6 +865,12 @@ synchrony:
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
   #
   readinessProbe:
+
+    # -- The healthcheck path to check against for the Synchrony container 
+    # useful when configuring behind a reverse-proxy or loadbalancer
+    # https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html
+    #
+    healthcheckPath: "/synchrony/heartbeat"
 
     # -- The initial delay (in seconds) for the Synchrony container readiness probe,
     # after which the probe will start running.
