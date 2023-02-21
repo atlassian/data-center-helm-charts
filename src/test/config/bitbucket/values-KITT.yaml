@@ -30,10 +30,3 @@ bitbucket:
   mesh:
     podAnnotations:
       "atlassian.com/business_unit": "server_engineering"
-    enabled: true
-    nodeAutoRegistration: true
-    setByDefault: true
-
-image:
-  # test Bitbucket mesh
-  tag: 8.6.1
