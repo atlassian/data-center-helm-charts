@@ -42,9 +42,9 @@ jobs:
 
       - name: Update README files with helm-docs
         run: |
-          cd src/test/scripts
-          python update_versions.py
-
+          cd src/main/charts
+          helm-docs
+          
       - name: Commit changes and raise a PR
         run: |
           CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
