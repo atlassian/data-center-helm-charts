@@ -38,10 +38,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip gitpython ruamel_yaml
 
+      - name: Install Helm Docs
+        uses: envoy/install-helm-docs@v1.0.0
+        with:
+          version: 1.11.0
+
       - name: Generate changelog and Chart annotations
         run: |
           echo "[INFO]: Preparing release ${GITHUB_REF_NAME##*/}"
           python src/main/scripts/prepare_release.py ${GITHUB_REF_NAME##*/}
+
+      - name: Update README files with helm-docs
+        run: |
+          cd src/main/charts
+          helm-docs
 
       - name: Configure Git
         run: |
