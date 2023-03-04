@@ -8,7 +8,7 @@ fi
 
 RELEASE_VERSION=$1
 if [[ -z $RELEASE_VERSION ]]; then
-  echo "Must specify release version, e.g. 1.10.2"
+  echo "Must pass release version as an argument, e.g. 1.10.2"
   exit 1
 fi
 
