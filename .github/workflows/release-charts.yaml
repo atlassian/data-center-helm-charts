@@ -15,7 +15,6 @@ jobs:
       HELM_SIGNING_KEY: ${{ secrets.TEST_SIGN_HELM }}
       HELM_SIGNING_KEY_ID: ${{ secrets.HELM_SIGNING_KEY_ID }}
       GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
-      PYTHONPATH: /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages
     steps:
       - name: Checkout
         uses: actions/checkout@v2

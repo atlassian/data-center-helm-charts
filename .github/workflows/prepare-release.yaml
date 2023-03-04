@@ -9,7 +9,6 @@ jobs:
   prepare-release:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PYTHONPATH: /opt/hostedtoolcache/Python/3.9.14/x64/lib/python3.9/site-packages
     runs-on: ubuntu-latest
 
     steps:
