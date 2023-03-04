@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.9.1
+    helm.sh/chart: jira-1.10.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.3"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-1.9.1
+    helm.sh/chart: jira-1.10.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.3"
@@ -36,7 +36,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.9.1
+    helm.sh/chart: jira-1.10.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.3"
@@ -59,7 +59,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.9.1
+    helm.sh/chart: jira-1.10.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.3"
@@ -74,7 +74,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 12fa07c7bd6205f2f1710eec1161b09b2f46fceb60e17f96929e6a63a7d7053f
+        checksum/config-jvm: 1a29043c943e8ecc080951043f1815a57f6328d8ccc4bb7ad9d7d37939eed969
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -186,7 +186,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.9.1
+    helm.sh/chart: jira-1.10.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.3"
@@ -218,7 +218,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.9.1
+    helm.sh/chart: jira-1.10.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.3"

@@ -48,6 +48,35 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username.  |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key  |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
+| bitbucket.mesh.additionalEnvironmentVariables | object | `{}` | Defines any additional environment variables to be passed to the Bitbucket mesh containers.  |
+| bitbucket.mesh.additionalFiles | string | `nil` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container  |
+| bitbucket.mesh.additionalInitContainers | object | `{}` | Additional initContainer definitions that will be added to all Bitbucket pods  |
+| bitbucket.mesh.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Bitbucket Mesh JVM, e.g. system properties.  |
+| bitbucket.mesh.affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket mesh pods  |
+| bitbucket.mesh.enabled | bool | `false` | Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html  |
+| bitbucket.mesh.image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket-mesh","tag":"1.3.0"}` | The Bitbucket Mesh image to use https://hub.docker.com/r/atlassian/bitbucket-mesh  |
+| bitbucket.mesh.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
+| bitbucket.mesh.image.repository | string | `"atlassian/bitbucket-mesh"` | The Bitbucket Mesh image repository https://hub.docker.com/r/atlassian/bitbucket-mesh  |
+| bitbucket.mesh.image.tag | string | `"1.3.0"` | The docker image tag to be used - defaults to the Chart appVersion  |
+| bitbucket.mesh.nodeAutoRegistration | bool | `false` | Experimental! Automatically register Bitbucket mesh nodes with the Bitbucket server. `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials to post-install node registration jobs that are created only for new Helm chart installations. It is recommended to manually register Mesh nodes in Butbucket UI.     |
+| bitbucket.mesh.nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket Mesh pods  |
+| bitbucket.mesh.podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket Mesh pods  |
+| bitbucket.mesh.podLabels | object | `{}` | Custom labels that will be applied to all Bitbucket Mesh pods  |
+| bitbucket.mesh.podManagementPolicy | string | `"OrderedReady"` |  |
+| bitbucket.mesh.replicaCount | int | `3` | Number of Bitbucket Mesh nodes. Do not change it. Currently, only the quorum of 3 mesh nodes is supported. Reducing the number of replicas will result in mesh degradation while increasing the number of Mesh nodes will result in new nodes being unused by the Bitbucket server.  |
+| bitbucket.mesh.resources | object | `{"container":{"limits":{"cpu":"2","memory":"2G"},"requests":{"cpu":"1","memory":"2G"}},"jvm":{"maxHeap":"1g","minHeap":"512m"}}` | Bitbucket Mesh resources requests and limits  |
+| bitbucket.mesh.resources.container | object | `{"limits":{"cpu":"2","memory":"2G"},"requests":{"cpu":"1","memory":"2G"}}` | Bitbucket Mesh container cpu/mem requests and limits  |
+| bitbucket.mesh.resources.jvm | object | `{"maxHeap":"1g","minHeap":"512m"}` | Bitbucket Mesh JVM heap settings  |
+| bitbucket.mesh.schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bitbucket pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
+| bitbucket.mesh.service.annotations | object | `{}` | The context path that Bitbucket will use.  |
+| bitbucket.mesh.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
+| bitbucket.mesh.service.port | int | `7777` | Bitbucket Mesh port  |
+| bitbucket.mesh.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket  |
+| bitbucket.mesh.setByDefault | bool | `false` | Experimental! Automatically create all new repositories on Bitbucket mesh nodes. `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials to node post-install job. It is recommended to manually configure it in Bitbucket UI.  |
+| bitbucket.mesh.shutdown.terminationGracePeriodSeconds | int | `35` | The termination grace period for pods during shutdown. This should be set to the Bitbucket internal grace period (default 30 seconds), plus a small buffer to allow the JVM to fully terminate.  |
+| bitbucket.mesh.tolerations | object | `{}` | Standard K8s tolerations that will be applied to all Bitbucket Mesh pods  |
+| bitbucket.mesh.topologySpreadConstraints | object | `{}` | Defines topology spread constraints for Bitbucket Mesh pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
+| bitbucket.mesh.volume | object | `{"create":true,"mountPath":"/var/atlassian/application-data/mesh","resources":{"requests":{"storage":"1Gi"}},"storageClass":null}` | Mesh home volume settings  |
 | bitbucket.mirror.upstreamUrl | string | `nil` | Specifies the URL of the upstream Bitbucket server for this mirror.  |
 | bitbucket.podManagementStrategy | string | `"OrderedReady"` | Pod management strategy. Bitbucket Data Center requires the "OrderedReady" value but for Bitbucket Mirrors you can use the "Parallel" option. To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies  |
 | bitbucket.ports.hazelcast | int | `5701` | The port on which the Hazelcast listens for client traffic  |

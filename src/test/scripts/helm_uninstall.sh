@@ -43,5 +43,7 @@ if [ "$shouldCleanNfsPod" == true ]; then
   kubectl delete -n "$TARGET_NAMESPACE" pvc -l "app.kubernetes.io/instance=$PRODUCT_RELEASE_NAME-nfs" --ignore-not-found=true 2>/dev/null || true
 fi
 
+kubectl delete -n "$TARGET_NAMESPACE" jobs -l app.kubernetes.io/instance="${PRODUCT_RELEASE_NAME}" --ignore-not-found=true 
+
 # Always exit with a zero status code, to avoid failing the build during uninstall
 exit 0

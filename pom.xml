@@ -150,6 +150,10 @@
         <!-- Deploy standalone Elasticsearch for BB? -->
         <chart.testValues.es.deploy>true</chart.testValues.es.deploy>
 
+        <!-- Deploy Mesh nodes for BB? -->
+        <chart.testValues.mesh.deploy>false</chart.testValues.mesh.deploy>
+        <chart.testValues.mesh.version>1.4.0</chart.testValues.mesh.version>
+
     </properties>
 
     <build>

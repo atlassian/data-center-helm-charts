@@ -2,6 +2,9 @@
 
 replicaCount: ${replica.count}
 
+image:
+  tag: 8.0.0
+
 database:
   url: jdbc:postgresql://${helm.release.prefix}-bitbucket-pgsql:5432/bitbucket
   driver: org.postgresql.Driver
@@ -11,6 +14,12 @@ database:
 bitbucket:
   clustering:
     enabled: ${clustering.enabled}
+  mesh:
+    enabled: ${chart.testValues.mesh.deploy}
+    nodeAutoRegistration: true
+    setByDefault: true
+    image:
+      version: ${chart.testValues.mesh.version}
   license:
     secretName: bitbucket-license
   sysadminCredentials:

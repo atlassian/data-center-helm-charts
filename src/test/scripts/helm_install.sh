@@ -79,7 +79,7 @@ setup() {
 
   # Install the bitnami postgresql Helm chart
   helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
-  
+
   # add elastic helm repo
   helm repo add elastic https://helm.elastic.co --force-update
 

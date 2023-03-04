@@ -62,4 +62,21 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 #################################################################################
 {{- end}}
 
+{{- if and (.Values.bitbucket.mesh.enabled) (not .Values.bitbucket.mesh.nodeAutoRegistration)}}
+
+Bitbucket Mesh deployed. You can register Mesh nodes at {{ if .Values.ingress.create }}{{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ include "bitbucket.ingressPath" . }}{{ else }}${BITBUCKET_URL}{{ end }}/admin/git/mesh using the following URLs:
+
+{{- range $index := until (.Values.bitbucket.mesh.replicaCount | int) }}
+{{- with $ }}
+  * http://{{ include "common.names.fullname" . }}-mesh-{{ $index }}:{{ .Values.bitbucket.mesh.service.port }}
+{{- end }}
+{{- end }}
+
+{{ if eq .Values.bitbucket.mesh.service.type "LoadBalancer" }}
+You may use LoadBalancer URLs to register Mesh nodes with Bitbucket server. Get LoadBalancer hostnames:
+
+  $ for service in {0..2}; do kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-mesh-$service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}; done
+{{- end }}
+{{- end }}
+
 For further documentation, see https://atlassian.github.io/data-center-helm-charts/

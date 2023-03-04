@@ -25,3 +25,8 @@ volumes:
     subPath: ${helm.release.prefix}-bitbucket # Since all of our pods share the same EFS PV, we use subpath mounts to prevent interference
     nfsPermissionFixer:
       enabled: true
+
+bitbucket:
+  mesh:
+    podAnnotations:
+      "atlassian.com/business_unit": "server_engineering"
