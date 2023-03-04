@@ -12,7 +12,6 @@ jobs:
       pull-requests: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      HELM_SIGNING_KEY: ${{ secrets.TEST_SIGN_HELM }}
       HELM_SIGNING_KEY_ID: ${{ secrets.HELM_SIGNING_KEY_ID }}
       GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
     steps:
