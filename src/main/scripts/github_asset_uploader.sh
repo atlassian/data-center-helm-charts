@@ -14,7 +14,7 @@ fi
 
 if [[ -z $GITHUB_REPOSITORY ]]; then
   echo "GITHUB_REPOSITORY env var is not set. Using the default atlassian/data/center-helm-charts"
-  export GITHUB_REPOSITORY="atlassian/data/center=helm-charts"
+  export GITHUB_REPOSITORY="atlassian/data-center-helm-charts"
 fi
 
 PRODUCTS=(bamboo bamboo-agent bitbucket confluence crowd jira)
