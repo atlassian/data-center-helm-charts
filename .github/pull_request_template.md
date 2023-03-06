@@ -5,6 +5,5 @@ _Provide description for the PR_
 ## Checklist
 - [ ] I have added unit tests
 - [ ] I have applied the change to all applicable products
-- [ ] I have added the change description to the `changelog.md` and `Chart.yaml` files
-- [ ] (Atlassian only) I have run the E2E test (if applicable)
+- [ ] The E2E test has passed (use `e2e` label)
 - [ ] (Atlassian only) Internal Bamboo CI is passing

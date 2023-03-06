@@ -27,20 +27,19 @@ rm -rf "$PACKAGE_DIR"
 for chart in "$CHARTS_SRC_DIR"/*/
   do
     echo "Packaging chart $chart"
-    helm package "$chart" --destination "$PACKAGE_DIR"
+    helm package --sign --key "${HELM_SIGNING_KEY_ID}" --keyring ~/.gnupg/secring.gpg "$chart" --destination "$PACKAGE_DIR"
   done
 
 echo "Uploading chart packages as Github releases"
 # This will scan $PACKAGE_DIR for the tgz files that 'helm package' just generated, and upload them to the GitHub
 # repo as Release artifacts. GitHub will create corresponding git tags for each chart.
-docker run --user "$(id -u):$(id -g)" \
-  -v "$(pwd)/$PACKAGE_DIR:/releases" \
-  --entrypoint cr \
+docker run -v "$(pwd)/$PACKAGE_DIR:/releases" \
   --rm \
-  quay.io/helmpack/chart-releaser:v1.2.1 \
+  quay.io/helmpack/chart-releaser:v1.5.0 \
   upload \
   --skip-existing \
   --package-path /releases \
+  --release-notes-file RELEASE_NOTES.md \
   --owner atlassian \
   --git-repo data-center-helm-charts \
   --token "$GITHUB_TOKEN"
@@ -51,16 +50,15 @@ echo "Regenerating chart repo index.yaml"
 # $PUBLISH_DIR for committing to git.
 docker run \
   --user "$(id -u):$(id -g)" \
-  -v "$(pwd)/$PUBLISH_DIR:/index" \
+  -v "$(pwd):/index" \
   -v "$(pwd)/$PACKAGE_DIR:/packages" \
-  --entrypoint cr \
+  --workdir="/index" \
   --rm \
-  quay.io/helmpack/chart-releaser:v1.2.1 \
+  quay.io/helmpack/chart-releaser:v1.5.0 \
   index \
   --owner atlassian \
   --git-repo data-center-helm-charts \
-  --charts-repo https://atlassian.github.io/data-center-helm-charts \
-  --index-path /index/index.yaml \
+  --index-path /index/docs/docs/index.yaml \
   --package-path /packages \
   --token "$GITHUB_TOKEN"
 

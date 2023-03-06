@@ -1,0 +1,104 @@
+name: Release Helm Charts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HELM_SIGNING_KEY_ID: ${{ secrets.HELM_SIGNING_KEY_ID }}
+      GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.9.4
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.14'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip gitpython ruamel_yaml
+
+      - name: Generate Release Notes for GitHub Releases
+        run: |
+          cd src/main/scripts
+          products=(bamboo bamboo-agent bitbucket confluence crowd jira)
+          export REPO_PATH="${GITHUB_WORKSPACE}"
+          export CHARTS_LOCATION="src/main/charts"
+          for product in "${products[@]}"; do
+            echo "[INFO]: Generating ${REPO_PATH}/${CHARTS_LOCATION}/${product}/RELEASE_NOTES.md"
+            REL_NOTES_LIST=$(python3 -W ignore -c "import prepare_release; print (prepare_release.gen_changelog(\"${product}\", \"${REPO_PATH}\"))")
+            python -c "list=${REL_NOTES_LIST}; print('\n'.join(list))" > "${REPO_PATH}"/"${CHARTS_LOCATION}"/"${product}"/RELEASE_NOTES.md
+          done
+
+      - name: Execute helm dependency update for bamboo chart
+        run: helm dependency update src/main/charts/bamboo
+      - name: Execute helm dependency update for bamboo-agent chart
+        run: helm dependency update src/main/charts/bamboo-agent
+      - name: Execute helm dependency update for bitbucket chart
+        run: helm dependency update src/main/charts/bitbucket
+      - name: Execute helm dependency update for confluence chart
+        run: helm dependency update src/main/charts/confluence
+      - name: Execute helm dependency update for crowd chart
+        run: helm dependency update src/main/charts/crowd
+      - name: Execute helm dependency update for jira chart
+        run: helm dependency update src/main/charts/jira
+
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-region: ${{ secrets.HELM_SIGNING_KEY_AWS_REGION }}
+          role-to-assume: ${{ secrets.HELM_SIGNING_KEY_AWS_IAM_ROLE }}
+          role-session-name: HelmSignSession
+
+      - name: Get Helm Signing Key
+        run: |
+          aws secretsmanager get-secret-value --secret-id ${{ secrets.HELM_SIGNING_KEY_AWS_SECRET_ID }} --query 'SecretBinary' --output text --region ${{ secrets.HELM_SIGNING_KEY_AWS_REGION }} | base64 --decode > helm_key
+          gpg --import helm_key
+          gpg --export > ~/.gnupg/pubring.gpg
+          gpg --export-secret-keys > ~/.gnupg/secring.gpg
+          gpg --output src/main/scripts/helm_key.pub --export ${{ secrets.HELM_SIGNING_KEY_EMAIL }}
+          
+      - name: Release Helm Charts
+        run: |
+          src/main/scripts/generate_chart_repo.sh ${GH_TOKEN}
+
+      - name: Commit and push index.yaml
+        run: |
+          git checkout -b update-index-yaml-${GITHUB_RUN_ID}
+          git commit -m "Update index.yaml post release"
+          git push origin update-index-yaml-${GITHUB_RUN_ID}
+          gh pr create --title "Update index.yaml" --body "Update index.yaml after release" --base main --head update-index-yaml-${GITHUB_RUN_ID}
+      
+      - name: Upload Public Key To Release Assets
+        run: |
+          cd src/main/scripts
+          export RELEASE_VERSION=$(python3 -W ignore -c "import prepare_release; print (prepare_release.get_chart_versions(\"${GITHUB_WORKSPACE}/src/main/charts\"))" | sed "s/'/\"/g" | python -c 'import sys, json; print (json.load(sys.stdin)["bamboo"]["version"])')
+          ./github_asset_uploader.sh ${RELEASE_VERSION}
+          
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf ~/.gnupg || true
+          rm -rf helm_key

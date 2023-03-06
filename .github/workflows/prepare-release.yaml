@@ -1,0 +1,70 @@
+name: Prepare Release
+
+on:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  prepare-release:
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: refs/heads/main
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.9.4
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.14'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip gitpython ruamel_yaml
+
+      - name: Install Helm Docs
+        uses: envoy/install-helm-docs@v1.0.0
+        with:
+          version: 1.11.0
+
+      - name: Generate changelog and Chart annotations
+        run: |
+          echo "[INFO]: Preparing release ${GITHUB_REF_NAME##*/}"
+          python src/main/scripts/prepare_release.py ${GITHUB_REF_NAME##*/}
+
+      - name: Update README files with helm-docs
+        run: |
+          cd src/main/charts
+          helm-docs
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Lint yamls with ah cli
+        run: |
+          docker run --workdir="/charts" -u root -v ${GITHUB_WORKSPACE}/src/main/charts:/charts artifacthub/ah ah lint
+
+      - name: Commit changes and raise a PR
+        run: |
+          git checkout ${GITHUB_REF_NAME}
+          git add -A
+          git commit -m "Prepare release ${GITHUB_REF_NAME##*/}"
+          git push origin ${GITHUB_REF_NAME}
+          gh pr create --title "Release/${GITHUB_REF_NAME##*/}" --body "Prepare to release ${GITHUB_REF_NAME##*/}" --base main --head ${GITHUB_REF_NAME}
