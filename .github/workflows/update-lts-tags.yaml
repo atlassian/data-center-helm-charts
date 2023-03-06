@@ -25,6 +25,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml requests
 
+      - name: Install Helm Docs
+        uses: envoy/install-helm-docs@v1.0.0
+        with:
+          version: 1.11.0
+
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
@@ -35,6 +40,11 @@ jobs:
           cd src/test/scripts
           python update_versions.py
 
+      - name: Update README files with helm-docs
+        run: |
+          cd src/main/charts
+          helm-docs
+          
       - name: Commit changes and raise a PR
         run: |
           CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
