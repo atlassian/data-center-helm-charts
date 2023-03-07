@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Pin Kubectl version
-        uses: azure/setup-kubectl@v2.0
+        uses: azure/setup-kubectl@v3.0
         with:
           version: 'v1.24.0'
 
