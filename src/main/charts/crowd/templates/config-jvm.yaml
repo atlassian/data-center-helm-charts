@@ -6,7 +6,6 @@ metadata:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
   additional_jvm_args: >-
-    {{ include "crowd.sysprop.hazelcastListenPort" . }}
     {{ include "crowd.sysprop.clusterNodeName" . }}
     {{ include "crowd.sysprop.fluentdAppender" . }}
     {{- range .Values.crowd.additionalJvmArgs }}

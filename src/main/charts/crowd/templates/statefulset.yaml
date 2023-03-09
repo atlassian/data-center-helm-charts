@@ -62,9 +62,6 @@ spec:
             - name: http
               containerPort: {{ .Values.crowd.ports.http }}
               protocol: TCP
-            - name: hazelcast
-              containerPort: {{ .Values.crowd.ports.hazelcast }}
-              protocol: TCP
             {{- include "crowd.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
@@ -92,6 +89,10 @@ spec:
               subPath: {{ .key }}
             {{ end }}
           env:
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"
