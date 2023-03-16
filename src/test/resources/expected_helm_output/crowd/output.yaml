@@ -74,6 +74,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 4be56db03d67e84090c118cf39550dc38b4ecc9d632c9e4c393b8f8ba4ae26c9
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
@@ -103,10 +104,20 @@ spec:
           readinessProbe:
             httpGet:
               port: 8095
-              path: /
+              path: /crowd/status
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
+          startupProbe:
+            tcpSocket:
+              port: 8095
+            periodSeconds: 5
+            failureThreshold: 120
+          livenessProbe:
+            tcpSocket:
+              port: 8095
+            periodSeconds: 5
+            failureThreshold: 1
           resources:
             requests:
               cpu: "2"

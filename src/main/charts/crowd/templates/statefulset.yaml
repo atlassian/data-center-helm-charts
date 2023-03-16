@@ -66,10 +66,22 @@ spec:
           readinessProbe:
             httpGet:
               port: {{ .Values.crowd.ports.http }}
-              path: /
+              path: /crowd/status
             initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
+          {{- if .Values.crowd.livenessProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.crowd.ports.http }}
+            periodSeconds: {{ .Values.crowd.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.crowd.startupProbe.failureThreshold }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.crowd.ports.http }}
+            periodSeconds: {{ .Values.crowd.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.crowd.livenessProbe.failureThreshold }}
+          {{ end }}
           {{- with .Values.crowd.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}
