@@ -32,6 +32,7 @@ jobs:
       TF_VAR_bitbucket_admin_password: ${{ secrets.TF_VAR_BITBUCKET_ADMIN_PASSWORD }}
       TF_VAR_kinesis_log_producers_role_arns: ${{ secrets.TF_VAR_KINESIS_LOG_PRODUCERS_ROLE_ARNS }}
       TF_VAR_osquery_fleet_enrollment_secret_name: ${{ secrets.TF_VAR_OSQUERY_FLEET_ENROLLMENT_SECRET_NAME }}
+      TF_VAR_osquery_fleet_entrollment_host: ${{ secrets.TF_VAR_OSQUERY_FLEET_ENROLLMENT_HOST }}
       USE_DOMAIN: "true"
 
     steps:
@@ -41,7 +42,7 @@ jobs:
           fetch-depth: 0
 
       - name: Pin Kubectl version
-        uses: azure/setup-kubectl@v2.0
+        uses: azure/setup-kubectl@v3.0
         with:
           version: 'v1.24.0'
 
