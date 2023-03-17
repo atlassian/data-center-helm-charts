@@ -24,8 +24,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
-    -Dcrowd.cluster.hazelcast.listenPort=5701
-    -Dcrowd.clusterNodeName.useHostname=true
+    -Dcluster.node.name=$(KUBE_POD_NAME)
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
   max_heap: 768m
@@ -50,10 +49,6 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: 5701
-      targetPort: hazelcast
-      protocol: TCP
-      name: hazelcast
   selector:
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
@@ -79,7 +74,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 0af7682de25579fd3d86c662497450fe445f371c82e7d7abf66051e94d204fab
+        checksum/config-jvm: 4be56db03d67e84090c118cf39550dc38b4ecc9d632c9e4c393b8f8ba4ae26c9
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
@@ -100,22 +95,29 @@ spec:
           command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: crowd
-          image: "atlassian/crowd:4.2.2"
+          image: "atlassian/crowd:5.1.2"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8095
               protocol: TCP
-            - name: hazelcast
-              containerPort: 5701
-              protocol: TCP
           readinessProbe:
             httpGet:
               port: 8095
-              path: /
+              path: /crowd/status
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 30
+          startupProbe:
+            tcpSocket:
+              port: 8095
+            periodSeconds: 5
+            failureThreshold: 120
+          livenessProbe:
+            tcpSocket:
+              port: 8095
+            periodSeconds: 5
+            failureThreshold: 1
           resources:
             requests:
               cpu: "2"
@@ -124,11 +126,15 @@ spec:
             - name: local-home
               mountPath: "/var/atlassian/application-data/crowd"
             - name: local-home
-              mountPath: "/opt/atlassian/crowd/logs"
+              mountPath: "/opt/atlassian/crowd/apache-tomcat/logs"
               subPath: "logs"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/crowd/shared"
           env:
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
@@ -238,42 +244,3 @@ spec:
     - name: shared-home
       emptyDir: {}
   restartPolicy: Never
----
-# Source: crowd/templates/nfs-permission-fixer.yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: unittest-crowd-nfs-fixer
-  labels:
-    helm.sh/chart: crowd-1.10.0
-    app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.1.2"
-    app.kubernetes.io/managed-by: Helm
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-spec:
-  template:
-    metadata:
-      name: unittest-crowd-nfs-fixer
-      labels:
-        helm.sh/chart: crowd-1.10.0
-        app.kubernetes.io/name: crowd
-        app.kubernetes.io/instance: unittest-crowd
-        app.kubernetes.io/version: "5.1.2"
-        app.kubernetes.io/managed-by: Helm
-    spec:
-      restartPolicy: Never
-      containers:
-        - name: nfs-fixer
-          image: alpine
-          securityContext:
-            runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
-          volumeMounts:
-            - name: shared-home
-              mountPath: "/shared-home"
-          command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
-      volumes:
-        - name: shared-home
-          emptyDir: {}

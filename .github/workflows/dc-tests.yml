@@ -48,3 +48,8 @@ jobs:
       dc_app: bamboo
     secrets:
       BAMBOO_LICENSE: "${{ secrets.TF_VAR_BAMBOO_LICENSE }}"
+
+  crowd:
+    uses: ./.github/workflows/kind.yaml
+    with:
+      dc_app: crowd

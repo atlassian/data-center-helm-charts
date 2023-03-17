@@ -25,32 +25,6 @@ default
 {{- end }}
 
 {{/*
-The name of the ClusterRole that will be created.
-If the name is defined in the chart values, then use that,
-else use the name of the Helm release.
-*/}}
-{{- define "crowd.clusterRoleName" -}}
-{{- if .Values.serviceAccount.clusterRole.name }}
-{{- .Values.serviceAccount.clusterRole.name }}
-{{- else }}
-{{- include "common.names.fullname" . -}}
-{{- end }}
-{{- end }}
-
-{{/*
-The name of the ClusterRoleBinding that will be created.
-If the name is defined in the chart values, then use that,
-else use the name of the ClusterRole.
-*/}}
-{{- define "crowd.clusterRoleBindingName" -}}
-{{- if .Values.serviceAccount.clusterRoleBinding.name }}
-{{- .Values.serviceAccount.clusterRoleBinding.name }}
-{{- else }}
-{{- include "crowd.clusterRoleName" . -}}
-{{- end }}
-{{- end }}
-
-{{/*
 Pod labels
 */}}
 {{- define "crowd.podLabels" -}}
@@ -59,12 +33,8 @@ Pod labels
 {{- end }}
 {{- end }}
 
-{{- define "crowd.sysprop.hazelcastListenPort" -}}
--Dcrowd.cluster.hazelcast.listenPort={{ .Values.crowd.ports.hazelcast }}
-{{- end }}
-
 {{- define "crowd.sysprop.clusterNodeName" -}}
--Dcrowd.clusterNodeName.useHostname={{ .Values.crowd.clustering.usePodNameAsClusterNodeName }}
+-Dcluster.node.name=$(KUBE_POD_NAME)
 {{- end }}
 
 {{- define "crowd.sysprop.fluentdAppender" -}}
@@ -278,21 +248,6 @@ volumeClaimTemplates:
 {{- end }}
 {{- end }}
 {{- end }}
-
-{{- define "crowd.clusteringEnvVars" -}}
-{{ if .Values.crowd.clustering.enabled }}
-- name: KUBERNETES_NAMESPACE
-  valueFrom:
-    fieldRef:
-      fieldPath: metadata.namespace
-- name: HAZELCAST_KUBERNETES_SERVICE_NAME
-  value: {{ include "common.names.fullname" . | quote }}
-- name: ATL_CLUSTER_TYPE
-  value: "kubernetes"
-- name: ATL_CLUSTER_NAME
-  value: {{ include "common.names.fullname" . | quote }}
-{{ end }}
-{{ end }}
 
 {{- define "flooredCPU" -}}
     {{- if hasSuffix "m" (. | toString) }}

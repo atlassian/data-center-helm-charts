@@ -68,6 +68,8 @@ verify_ingress() {
   STATUS_ENDPOINT_PATH="status"
   if [ ${DC_APP} == "bamboo" ]; then
     STATUS_ENDPOINT_PATH="rest/api/latest/status"
+  elif [ ${DC_APP} == "crowd" ]; then
+    STATUS_ENDPOINT_PATH="crowd/status"
   fi
   echo "[INFO]: Checking ${DC_APP} status"
   # give ingress controller a few seconds before polling

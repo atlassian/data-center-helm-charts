@@ -18,9 +18,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.crowd.ports.hazelcast }}
-      targetPort: hazelcast
-      protocol: TCP
-      name: hazelcast
   selector:
     {{- include "common.labels.selectorLabels" . | nindent 4 }}

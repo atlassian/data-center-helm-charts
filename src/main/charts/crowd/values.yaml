@@ -42,9 +42,9 @@ image:
   #
   pullPolicy: IfNotPresent
 
-  # -- The docker image tag to be used
+  # -- The docker image tag to be used. Defaults to appVersion in Chart.yaml
   #
-  tag: 4.2.2
+  tag: ""
 
 # K8s ServiceAccount configuration. Give fine-grained identity and authorization
 # to Pods
@@ -73,38 +73,6 @@ serviceAccount:
   # -- Annotations to add to the ServiceAccount (if created)
   #
   annotations: {}
-
-  # Define permissions
-  # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
-  #
-  clusterRole:
-
-    # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
-    # already exists.
-    #
-    create: true
-
-    # -- The name of the ClusterRole to be used. If not specified, but
-    # the "serviceAccount.clusterRole.create" flag is set to 'true',
-    # then the ClusterRole name will be auto-generated.
-    #
-    name:
-
-  # Grant permissions defined in ClusterRole
-  # https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding
-  #
-  clusterRoleBinding:
-
-    # -- Set to 'true' if a ClusterRole should be created, or 'false' if it
-    # already exists.
-    #
-    create: true
-
-    # -- The name of the ClusterRoleBinding to be created. If not specified, but
-    # the "serviceAccount.clusterRoleBinding.create" flag is set to 'true',
-    # then the ClusterRoleBinding name will be auto-generated.
-    #
-    name:
 
 # Crowd configuration
 #
@@ -173,10 +141,6 @@ crowd:
     #
     http: 8095
 
-    # -- The port on which the Crowd container listens for Hazelcast traffic
-    #
-    hazelcast: 5701
-
   # Confirm that Crowd is up and running with a ReadinessProbe
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
   #
@@ -196,6 +160,35 @@ crowd:
     #
     failureThreshold: 30
 
+  startupProbe:
+
+    # -- How often (in seconds) the Crowd container startup probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Crowd container startup probe
+    # before the pod fails startup checks.
+    #
+    failureThreshold: 120
+
+  # Ensure that pods are working correctly with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  #
+  livenessProbe:
+
+    # -- Whether to apply the livenessProbe check to pod.
+    #
+
+    enabled: true
+
+    # -- How often (in seconds) the Crowd container liveness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Crowd container liveness probe
+    # before the pod fails liveness checks.
+    #
+    failureThreshold: 1
   # Crowd log configuration
   #
   accessLog:
@@ -207,13 +200,14 @@ crowd:
     # -- The path within the Crowd container where the local-home volume should be
     # mounted in order to capture access logs.
     #
-    mountPath: "/opt/atlassian/crowd/logs"
+    mountPath: "/opt/atlassian/crowd/apache-tomcat/logs"
 
     # -- The subdirectory within the local-home volume where access logs should be
     # stored.
     #
     localHomeSubPath: "logs"
 
+  # TODO: This may be unnecessary if it's not possible to generate crowd.cfg.xml
   # Data Center clustering
   #
   clustering:
@@ -223,10 +217,6 @@ crowd:
     #
     enabled: false
 
-    # -- Set to 'true' if the K8s pod name should be used as the end-user-visible
-    # name of the Data Center cluster node.
-    #
-    usePodNameAsClusterNodeName: true
 
   shutdown:
 
@@ -489,7 +479,7 @@ fluentd:
   #     @type multiline
   #     format_firstline /\d{4}-\d{1,2}-\d{1,2}/
   #     </parse>
-  #     path /opt/atlassian/crowd/logs/access_log.*
+  #     path /opt/atlassian/crowd/apache-tomcat/logs/access_log.*
   #     pos_file /tmp/crowdlog.pos
   #     tag crowd-access-logs
   #   </source>
@@ -647,6 +637,7 @@ volumes:
       # -- Image repository for the permission fixer init container. Defaults to alpine
       #
       imageRepo: alpine
+
       # -- Image tag for the permission fixer init container. Defaults to latest
       #
       imageTag: latest

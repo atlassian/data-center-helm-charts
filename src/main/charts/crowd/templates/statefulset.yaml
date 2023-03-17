@@ -62,17 +62,26 @@ spec:
             - name: http
               containerPort: {{ .Values.crowd.ports.http }}
               protocol: TCP
-            - name: hazelcast
-              containerPort: {{ .Values.crowd.ports.hazelcast }}
-              protocol: TCP
             {{- include "crowd.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.crowd.ports.http }}
-              path: /
+              path: /crowd/status
             initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
+          {{- if .Values.crowd.livenessProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.crowd.ports.http }}
+            periodSeconds: {{ .Values.crowd.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.crowd.startupProbe.failureThreshold }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.crowd.ports.http }}
+            periodSeconds: {{ .Values.crowd.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.crowd.livenessProbe.failureThreshold }}
+          {{ end }}
           {{- with .Values.crowd.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}
@@ -92,6 +101,10 @@ spec:
               subPath: {{ .key }}
             {{ end }}
           env:
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"
