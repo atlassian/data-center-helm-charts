@@ -76,10 +76,10 @@ Kubernetes: `>=1.21.x-0`
 | fluentd.httpPort | int | `9880` | The port on which the Fluentd sidecar will listen  |
 | fluentd.imageRepo | string | `"fluent/fluentd-kubernetes-daemonset"` | The Fluentd sidecar image repository  |
 | fluentd.imageTag | string | `"v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image tag  |
-| image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/crowd","tag":null}` | Image configuration  |
+| image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/crowd","tag":""}` | Image configuration  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | image.repository | string | `"atlassian/crowd"` | The Docker Crowd Docker image to use https://hub.docker.com/r/atlassian/crowd  |
-| image.tag | string | `nil` | The docker image tag to be used  |
+| image.tag | string | `""` | The docker image tag to be used. Defaults to appVersion in Chart.yaml  |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource when NOT using the K8s ingress-nginx controller.  |
 | ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used.  Please follow documentation of your ingress controller. If the cluster contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic.  |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a pre-provisioned Ingress Controller being available.  |
