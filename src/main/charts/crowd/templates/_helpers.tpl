@@ -34,7 +34,7 @@ Pod labels
 {{- end }}
 
 {{- define "crowd.sysprop.clusterNodeName" -}}
--Dcluster.node.name=$(KUBE_POD_NAME)
+-Dcluster.node.name=${KUBE_POD_NAME}
 {{- end }}
 
 {{- define "crowd.sysprop.fluentdAppender" -}}

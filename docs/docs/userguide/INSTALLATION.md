@@ -30,6 +30,11 @@ helm show values atlassian-data-center/<product> > values.yaml
     If deploying Bamboo, be sure to read about the current limitations relating to [Bamboo deployments and values.yaml](../../troubleshooting/LIMITATIONS/#deployment)
 
 ## 3. Configure database
+
+!!!warning "Crowd deployments"
+
+    Crowd Data Center Helm chart does not support unattended installation. Connection to the database must be manually configured during the product setup.
+
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the usage of the database provisioned as part of the [prerequisites](PREREQUISITES.md). 
 
 !!!tip "Automated setup steps"
@@ -125,11 +130,13 @@ By default, the Helm charts will not configure the products for Data Center clus
 !!!warning "Bamboo clustering"
     Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
 
+!!!warning "Crowd clustering"
+    Clustering is on by default. To disable clustering, set `crowd.clustering.enabled` to false in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
   
 ## 7. Configure license 
 
 !!!info "Pre-configuring license"
-    Pre-provisioning a license in this way is only applicable to `Confluence`, `Bitbucket` and `Bamboo` deployments. For `Jira` deployments a license can be supplied via the setup wizard post deployment.
+    Pre-provisioning a license in this way is only applicable to `Confluence`, `Bitbucket` and `Bamboo` deployments. For `Jira` and `Crowd` deployments a license can be supplied via the setup wizard post deployment.
 
 You can configure the product license if you provide a `license` stanzas within the `values.yaml` obtained in [step 2](#2-obtain-valuesyaml). To do that, create a Kubernetes secret to hold the product license:
 
