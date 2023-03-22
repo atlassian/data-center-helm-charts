@@ -239,6 +239,11 @@ agent:
     #   labelSelector:
     #     matchLabels:
 
+  # -- Defines any additional volumes mounts for the Bamboo agent container. These
+  # can refer to existing volumes, or new volumes can be defined via
+  # 'volumes.additional'.
+  #
+  additionalVolumeMounts: {}
 
 # -- Custom annotations that will be applied to all Bamboo agent pods
 #
@@ -289,3 +294,13 @@ additionalInitContainers: []
 #
 additionalLabels: {}
 #  name: <value>
+
+# -- Defines additional volumes that should be applied to all Bamboo agent pods.
+# Note that this will not create any corresponding volume mounts;
+# those needs to be defined in bamboo.additionalVolumeMounts
+#
+volumes: {}
+  #additional:
+
+
+

@@ -82,6 +82,9 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
 
+          volumeMounts:
+            {{- include "bamboo-agent.additionalVolumeMounts" . | nindent 12 }}
+
           {{ if .Values.agent.additionalPorts }}
           ports:
           {{- include "agent.additionalPorts" . | nindent 12 }}
@@ -111,3 +114,5 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
+      volumes:
+        {{ include "bamboo-agent.volumes" . | nindent 8 }}
