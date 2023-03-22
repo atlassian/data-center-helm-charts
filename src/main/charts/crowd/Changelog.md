@@ -12,7 +12,6 @@
 * Fix typo in helpers. Add warnings about Crowd in docs (#534)
 * Update appVersions for DC apps (#533)
 * Update crowd helm chart (#532)
-* Update appVersions for DC apps (#531)
 
 ## 1.10.0
 

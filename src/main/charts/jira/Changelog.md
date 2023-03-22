@@ -9,7 +9,6 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Update appVersions for DC apps (#533)
-* Update appVersions for DC apps (#531)
 * JIRA - Add livenessProbe check to monitor the health of applications for each pod (#511)
 
 ## 1.10.0

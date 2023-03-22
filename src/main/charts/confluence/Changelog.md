@@ -10,7 +10,6 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Update appVersions for DC apps (#531)
-* Update appVersions for DC apps (#525)
 
 ## 1.10.0
 
