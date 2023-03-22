@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.10.0
+version: 1.11.0
 appVersion: 5.1.2
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add Bitbucket Mesh to Bitbucket Helm chart (#501)"
+    - "Fix typo in helpers. Add warnings about Crowd in docs (#534)"
+    - "Update appVersions for DC apps (#533)"
+    - "Update crowd helm chart (#532)"
 
 dependencies:
 - name: common
