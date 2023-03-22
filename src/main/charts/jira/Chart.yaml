@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.10.0
+version: 1.11.0
 appVersion: 9.4.4
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,7 +21,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add Bitbucket Mesh to Bitbucket Helm chart (#501)"
+    - "Update appVersions for DC apps (#533)"
+    - "Update appVersions for DC apps (#531)"
+    - "JIRA - Add livenessProbe check to monitor the health of applications for each pod (#511)"
 
 dependencies:
 - name: common
