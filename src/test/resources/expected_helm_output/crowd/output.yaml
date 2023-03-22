@@ -24,7 +24,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
-    -Dcluster.node.name=$(KUBE_POD_NAME)
+    -Dcluster.node.name=${KUBE_POD_NAME}
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
   max_heap: 768m
