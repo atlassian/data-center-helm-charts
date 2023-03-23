@@ -4,6 +4,5 @@ volumes:
     nfsPermissionFixer:
       enabled: true
 
-jira:
-  priorityClassName: "high"
+priorityClassName: "high"
 

@@ -174,8 +174,8 @@ spec:
       topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.jira.priorityClassName }}
-      priorityClassName: {{ .Values.jira.priorityClassName }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
