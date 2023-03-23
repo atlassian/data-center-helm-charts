@@ -171,7 +171,7 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
-      priorityClassName: "high"
+      priorityClassName: high
       volumes:
         - name: local-home
           emptyDir: {}
