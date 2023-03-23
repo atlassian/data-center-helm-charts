@@ -100,7 +100,7 @@ Define additional environment variables here to allow template overrides when us
 {{/*
 Define additional volumes here to allow template overrides when used as a sub chart
 */}}
-{{- define "bamboo-agent.volumes" -}}
+{{- define "bamboo-agent.additionalVolumes" -}}
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}

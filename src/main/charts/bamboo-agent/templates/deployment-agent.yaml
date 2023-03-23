@@ -115,4 +115,4 @@ spec:
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
       volumes:
-        {{ include "bamboo-agent.volumes" . | nindent 8 }}
+        {{ include "bamboo-agent.additionalVolumes" . | nindent 8 }}
