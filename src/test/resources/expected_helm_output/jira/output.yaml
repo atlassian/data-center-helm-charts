@@ -79,13 +79,13 @@ spec:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
     spec:
+      serviceAccountName: unittest-jira
+      terminationGracePeriodSeconds: 30
       hostAliases:
         - ip: "127.0.0.1"
           hostnames:
           - "foo.local"
           - "bar.local"
-      serviceAccountName: unittest-jira
-      terminationGracePeriodSeconds: 30
       securityContext:
         fsGroup: 2001
       initContainers:
