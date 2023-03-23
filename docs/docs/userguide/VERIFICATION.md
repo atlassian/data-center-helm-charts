@@ -1,22 +1,22 @@
 # Verification
 
-From release 1.11.0, all the Helm charts are signed with GPG key, following the instruction by official [Helm documentation](https://helm.sh/docs/topics/provenance/). 
+From release 1.11.0, all the Helm charts are signed with a GPG key, following the instructions on the official [Helm documentation](https://helm.sh/docs/topics/provenance/). 
 
 To verify the integrity of the charts, 
-1. download chart `.tgz` file, `.prov` file and `helm_key.pub` from [release assets](https://github.com/atlassian/data-center-helm-charts/releases), 
+1. Download chart `.tgz` file, `.prov` file and `helm_key.pub` from [release assets](https://github.com/atlassian/data-center-helm-charts/releases), 
 
-2. and then import the public key into your GPG keyring. (Install GnuPG tool if you haven't done so already.) 
+2. Import the public key into your local GPG keyring. (Install GnuPG tool if you haven't done so already.) 
     
     ```shell
     gpg --import helm_key.pub 
     ```
    
-3. because Helm currently only supports the legacy gpg format, export the keyring to the legacy format:
+3. At present, Helm only supports the legacy gpg format so export the keyring into the legacy format:
     ```
     gpg --export >~/.gnupg/pubring.gpg
     ```
    
-4. verify the chart.
+4. Verify the chart.
     ```
     helm verify /path/to/product.tgz 
     ```
