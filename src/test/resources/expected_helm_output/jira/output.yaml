@@ -83,9 +83,9 @@ spec:
       terminationGracePeriodSeconds: 30
       hostAliases:
         - hostnames:
-          - "foo.local"
-          - "bar.local"
-          ip: "127.0.0.1"
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2001
       initContainers:
