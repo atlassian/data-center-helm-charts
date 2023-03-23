@@ -81,6 +81,7 @@ Kubernetes: `>=1.21.x-0`
 | jira.ports.ehcache | int | `40001` | Ehcache port  |
 | jira.ports.ehcacheobject | int | `40011` | Ehcache object port  |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic  |
+| jira.priorityClassName | string | `""` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | jira.readinessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks.  |
 | jira.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running.  |
 | jira.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Jira container readiness probe will run  |
