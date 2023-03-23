@@ -543,11 +543,6 @@ jira:
     #
     command: "/shutdown-wait.sh"
 
-  # -- Pod PriorityClassName
-  # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
-  #
-  priorityClassName: ""
-
   # Pod resource requests
   #
   resources:
@@ -783,6 +778,11 @@ affinity: {}
 #
 schedulerName:
 
+# -- Pod PriorityClassName
+# https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
+  
 # -- Additional container definitions that will be added to all Jira pods
 #
 additionalContainers: []
