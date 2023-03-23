@@ -82,10 +82,10 @@ spec:
       serviceAccountName: unittest-jira
       terminationGracePeriodSeconds: 30
       hostAliases:
-        - ip: "127.0.0.1"
-          hostnames:
+        - hostnames:
           - "foo.local"
           - "bar.local"
+          ip: "127.0.0.1"
       securityContext:
         fsGroup: 2001
       initContainers:
