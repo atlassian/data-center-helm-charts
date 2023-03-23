@@ -37,6 +37,7 @@ The diagram below provides a high level overview of what a typical deployment mi
 ## Installing the Helm charts
 
 * [Prerequisites and setup](userguide/PREREQUISITES.md) - everything you need to do before installing the Helm charts
+* [Verification](userguide/VERIFICATION.md) - verify the integrity of the Helm charts
 * [Installation](userguide/INSTALLATION.md) - the steps to install the Helm charts
 * [Migration](userguide/MIGRATION.md) - what you have to do if you're migrating an existing deployment to Kubernetes
 
