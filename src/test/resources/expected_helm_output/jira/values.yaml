@@ -3,3 +3,7 @@ volumes:
   sharedHome:
     nfsPermissionFixer:
       enabled: true
+
+jira:
+  priorityClassName: "high"
+
