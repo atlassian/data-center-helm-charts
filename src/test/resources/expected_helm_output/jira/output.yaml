@@ -74,7 +74,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 771857a2558fb415651f1d2d4ba1258f07e5808dc535944d21a8908dbd971597
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -149,7 +148,7 @@ spec:
               path: /status
             initialDelaySeconds: 10
             periodSeconds: 5
-            failureThreshold: 1
+            failureThreshold: 10
           startupProbe:
             tcpSocket:
               port: 8080
