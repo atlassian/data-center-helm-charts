@@ -207,17 +207,6 @@ crowd:
     #
     localHomeSubPath: "logs"
 
-  # TODO: This may be unnecessary if it's not possible to generate crowd.cfg.xml
-  # Data Center clustering
-  #
-  clustering:
-
-    # -- Set to 'true' if Data Center clustering should be enabled
-    # This will automatically configure cluster peer discovery between cluster nodes.
-    #
-    enabled: false
-
-
   shutdown:
 
     # -- The termination grace period for pods during shutdown. This

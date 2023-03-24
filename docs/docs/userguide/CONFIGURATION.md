@@ -223,8 +223,11 @@ The Helm charts are not opinionated whether they have a [Kubernetes namespace](h
 If you wish, you can run multiple Helm releases of the same product in the same namespace.
 
 ## :fontawesome-solid-network-wired: Clustering
-By default, the Helm charts will not configure the products for Data Center clustering except Crowd. In order to enable clustering, the `enabled` property for clustering must be set to `true`.
+By default, the Helm charts will not configure the products for Data Center clustering. In order to enable clustering, the `enabled` property for clustering must be set to `true`.
 
+!!!warning "Clustering by default for Crowd"
+	  Crowd does not offer clustering configuration via Helm Chart. Set `crowd.clustering.enabled` to `true/false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
+      
 !!!note ""
 
     === "Jira"
