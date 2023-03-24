@@ -257,7 +257,7 @@ By default, the Helm charts will not configure the products for Data Center clus
 
     === "Crowd"
 
-        Clustering is enabled by default. To disable clustering, set crowd.clustering.enabled to false in ${CROWD_HOME}/shared/crowd.cfg.xml and rollout restart Crowd StatefulSet after the initial product setup is complete.
+        Clustering is enabled by default. To disable clustering, set `crowd.clustering.enabled` to `false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
 
 
 In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
