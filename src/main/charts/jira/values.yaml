@@ -822,3 +822,11 @@ additionalFiles: []
 #    type: secret
 #    key: keystore.jks
 #    mountPath: /var/ssl
+
+# -- Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file.
+# https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+additionalHosts: []
+#  - ip: "127.0.0.1"
+#    hostnames:
+#    - "foo.local"
+#    - "bar.local"

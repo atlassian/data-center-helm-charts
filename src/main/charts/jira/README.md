@@ -27,6 +27,7 @@ Kubernetes: `>=1.21.x-0`
 |-----|------|---------|-------------|
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Jira pods  |
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container. Configuration details below (camelCase is important!): 'name'      - References existing ConfigMap or secret name. 'type'      - 'configMap' or 'secret' 'key'       - The file name. 'mountPath' - The destination directory in a container. VolumeMount and Volumes are added with this name and index position, for example; custom-config-0, keystore-2  |
+| additionalHosts | list | `[]` | Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file. https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Jira pods  |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources  |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Jira pods  |

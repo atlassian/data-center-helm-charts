@@ -24,6 +24,8 @@ spec:
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "jira.additionalHosts" . | nindent 8 }}
       {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
