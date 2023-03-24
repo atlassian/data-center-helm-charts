@@ -67,3 +67,4 @@ Kubernetes: `>=1.21.x-0`
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to be used by the pods. If not specified, but  the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name  will be auto-generated, otherwise the 'default' ServiceAccount will be used. https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server  |
 | tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Bamboo agent pods  |
 | volumes | object | `{}` | Defines additional volumes that should be applied to all Bamboo agent pods. Note that this will not create any corresponding volume mounts; those needs to be defined in bamboo.additionalVolumeMounts  |
+| tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Bamboo agent pods  |

@@ -29,7 +29,7 @@ prod_base = "src/main/charts"
 
 jira_keys_pattern = r'(CLIP|DCCLIP)-[0-9]{1,5}(?![0-9]): '
 drop_commits_pattern = r'^\* Prepare release [0-9].{1,4}'
-
+update_app_versions_commit_msg = r'(\* Update appVersions for DC apps|.*#(\d+))'
 
 # parse Chart.yaml to get K8s version, app version and Helm chart version
 # to use those when generating changelog/release notes
@@ -53,7 +53,7 @@ def get_chart_versions(path=prod_base):
     return versions
 
 
-def gen_changelog(product, path):
+def gen_changelog(product, path, changelog=None, test=False):
     repo = git.Repo(path)
     cli = git.Git(path)
     tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
@@ -63,14 +63,29 @@ def gen_changelog(product, path):
     log.info(f'Generating {product} changelog since {tag_ver}')
 
     # git log will pick up commits in src/main/charts/$product directory only
-    changelog = cli.log(f'{last_tag}..main', "--", prod_base + '/' + product, graph=True, pretty='format:%s',
-                        abbrev_commit=True, date='relative', )
-
+    if not changelog and not test:
+        changelog = cli.log(f'{last_tag}..main', "--", prod_base + '/' + product, graph=True, pretty='format:%s',
+                            abbrev_commit=True, date='relative', )
     changelog = changelog.split('\n')
     pattern = re.compile(drop_commits_pattern)
     # we don't need pre-release commits that update chart.yamls and changelogs
     # this pattern is based on the commit message from a GitHub action that prepares Helm release
     filtered_changelog = list(filter(lambda x: not pattern.match(x), changelog))
+
+    # if there are multiple commits with identical message but different PR number, e.g.
+    # Update appVersions for DC apps (#123), Update appVersions for DC apps (#124)
+    # we need to leave just one - the latest.
+    matching_messages = []
+    for message in filtered_changelog:
+        match = re.search(update_app_versions_commit_msg, message)
+        if match:
+            matching_messages.append(message)
+
+    if matching_messages:
+        highest_message = sorted(matching_messages, key=lambda x: int(re.search(r'#(\d+)', x).group(1)), reverse=True)[
+            0]
+        filtered_changelog = [m for m in filtered_changelog if
+                              m == highest_message or 'Update appVersions for DC apps' not in m]
 
     if len(filtered_changelog) == 0 or filtered_changelog.count(''):
         # It is possible that there are no commits to the Helm chart, but we still need to release
@@ -200,7 +215,7 @@ def main():
 
     chartversions = get_chart_versions()
     for product in products:
-        changelog = gen_changelog(product, ".")
+        changelog = gen_changelog(product, ".", None, False)
         log.info(product + ' changelog:\n%s' % '\n'.join(changelog))
         update_changelog_file(product, args.version, changelog, chartversions)
         update_charts_yaml(product, args.version, changelog)
