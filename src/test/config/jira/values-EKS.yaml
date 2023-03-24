@@ -21,9 +21,5 @@ volumes:
     nfsPermissionFixer:
       enabled: true
 
-jira:
-  readinessProbe:
-    failureThreshold: 30
-
 nodeSelector:
   node_purpose: ci
