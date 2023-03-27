@@ -5,7 +5,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/atlassian/data-center-helm-charts/blob/main/CONTRIBUTING.md) 
 [![Maven unit tests](https://github.com/atlassian/data-center-helm-charts/actions/workflows/maven.yml/badge.svg)](https://github.com/atlassian/data-center-helm-charts/actions/workflows/maven.yml)
 
-This project contains [Helm charts](https://helm.sh/){.external} for installing Atlassian's [Jira Data Center](https://www.atlassian.com/enterprise/data-center/jira){.external}, [Confluence Data Center](https://www.atlassian.com/enterprise/data-center/confluence){.external}, [Bitbucket Data Center](https://www.atlassian.com/enterprise/data-center/bitbucket){.external}, [Bamboo Data Center](https://www.atlassian.com/software/bamboo){.external} and [Crowd Data Center](https://www.atlassian.com/software/crowd) on Kubernetes.
+This project contains [Helm charts](https://helm.sh/){.external} for installing Atlassian's [Jira Data Center](https://www.atlassian.com/enterprise/data-center/jira){.external}, [Confluence Data Center](https://www.atlassian.com/enterprise/data-center/confluence){.external}, [Bitbucket Data Center](https://www.atlassian.com/enterprise/data-center/bitbucket){.external}, [Bamboo Data Center](https://www.atlassian.com/software/bamboo){.external} and [Crowd Data Center](https://www.atlassian.com/software/crowd){.external} on Kubernetes.
 
 Use the charts to install and operate Data Center products within a Kubernetes cluster of your choice. It can be a managed environment, such as [Amazon EKS](https://aws.amazon.com/eks/){.external}, [Azure Kubernetes Service](https://azure.microsoft.com/en-au/services/kubernetes-service/){.external}, [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine){.external}, or a custom on-premise system.
 
@@ -24,7 +24,6 @@ Use the charts to install and operate Data Center products within a Kubernetes c
 
     * **Jira** currently has [limitations with scaling](troubleshooting/LIMITATIONS.md#jira-and-horizontal-scaling).
     * **Bamboo** has a number of limitations, [particularly with deployment and clustering](troubleshooting/LIMITATIONS/#deployment).
-    * **Crowd** is not officially supported.
     
     Read more about these [product and platform limitations](troubleshooting/LIMITATIONS.md).
 
@@ -53,9 +52,9 @@ The diagram below provides a high level overview of what a typical deployment mi
 ## Product versions
 The minimum versions that we support for each product are:
 
-| Jira DC                                                                                                            | Confluence DC                                                                                         | Bitbucket DC                                                                                                                           | Bamboo DC                                                                                        |
-|--------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html){.external} | [7.13](https://confluence.atlassian.com/doc/confluence-7-13-release-notes-1044114085.html){.external}  | [7.12](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-12-release-notes-1044112744.html){.external} | [8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external}|
+| Jira DC                                                                                                            | Confluence DC                                                                                         | Bitbucket DC                                                                                                                           | Bamboo DC                                                                                        | Crowd DC                                                                                        |
+|--------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------
+| [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html){.external} | [7.13](https://confluence.atlassian.com/doc/confluence-7-13-release-notes-1044114085.html){.external}  | [7.12](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-12-release-notes-1044112744.html){.external} | [8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external}| [4.3](https://confluence.atlassian.com/crowd043/crowd-documentation-1086408091.html){.external}|
       
 
 ## Feedback
