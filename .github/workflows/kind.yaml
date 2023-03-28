@@ -17,8 +17,8 @@ on:
         description: 'Bamboo license'
 
 jobs:
-  if: ${{ github.event.label.name == 'kind' || github.event_name == 'workflow_dispatch' }}
   kind-testing:
+    if: ${{ github.event.label.name == 'kind' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     env:
       # See: https://github.com/kubernetes-sigs/kind/tags
