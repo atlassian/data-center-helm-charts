@@ -1,6 +1,6 @@
 # jira
 
-![Version: 1.10.0](https://img.shields.io/badge/Version-1.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.4.4](https://img.shields.io/badge/AppVersion-9.4.4-informational?style=flat-square)
+![Version: 1.11.0](https://img.shields.io/badge/Version-1.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.4.4](https://img.shields.io/badge/AppVersion-9.4.4-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
@@ -25,6 +25,7 @@ Kubernetes: `>=1.21.x-0`
 |-----|------|---------|-------------|
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Jira pods  |
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container. Configuration details below (camelCase is important!): 'name'      - References existing ConfigMap or secret name. 'type'      - 'configMap' or 'secret' 'key'       - The file name. 'mountPath' - The destination directory in a container. VolumeMount and Volumes are added with this name and index position, for example; custom-config-0, keystore-2  |
+| additionalHosts | list | `[]` | Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file. https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Jira pods  |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources  |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Jira pods  |
@@ -78,7 +79,7 @@ Kubernetes: `>=1.21.x-0`
 | jira.ports.ehcache | int | `40001` | Ehcache port  |
 | jira.ports.ehcacheobject | int | `40011` | Ehcache object port  |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic  |
-| jira.readinessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks.  |
+| jira.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks.  |
 | jira.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Jira container readiness probe, after which the probe will start running.  |
 | jira.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Jira container readiness probe will run  |
 | jira.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Jira pod  |
@@ -102,6 +103,7 @@ Kubernetes: `>=1.21.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Jira pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Jira pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Jira pods  |
+| priorityClassName | string | `nil` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | replicaCount | int | `1` | The initial number of Jira pods that should be started at deployment time. Note that Jira requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Jira pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created)  |

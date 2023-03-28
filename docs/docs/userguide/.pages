@@ -1,5 +1,6 @@
 nav:
     - PREREQUISITES.md
+    - VERIFICATION.md
     - INSTALLATION.md
     - CONFIGURATION.md
     - MIGRATION.md

@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.10.0
+    helm.sh/chart: jira-1.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.4"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-1.10.0
+    helm.sh/chart: jira-1.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.4"
@@ -36,7 +36,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.10.0
+    helm.sh/chart: jira-1.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.4"
@@ -59,7 +59,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.10.0
+    helm.sh/chart: jira-1.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.4"
@@ -74,13 +74,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 1a29043c943e8ecc080951043f1815a57f6328d8ccc4bb7ad9d7d37939eed969
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
     spec:
       serviceAccountName: unittest-jira
       terminationGracePeriodSeconds: 30
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2001
       initContainers:
@@ -144,7 +148,7 @@ spec:
               path: /status
             initialDelaySeconds: 10
             periodSeconds: 5
-            failureThreshold: 1
+            failureThreshold: 10
           startupProbe:
             tcpSocket:
               port: 8080
@@ -171,6 +175,7 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      priorityClassName: high
       volumes:
         - name: local-home
           emptyDir: {}
@@ -186,7 +191,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.10.0
+    helm.sh/chart: jira-1.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.4"
@@ -218,7 +223,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.10.0
+    helm.sh/chart: jira-1.11.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.4"

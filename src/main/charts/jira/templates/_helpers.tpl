@@ -220,6 +220,16 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- end }}
 {{- end }}
 
+
+{{/*
+Define additional hosts here to allow template overrides when used as a sub chart
+*/}}
+{{- define "jira.additionalHosts" -}}
+{{- with .Values.additionalHosts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
 {{- define "jira.volumeClaimTemplates" -}}
 {{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.jira.additionalVolumeClaimTemplates }}
 volumeClaimTemplates:

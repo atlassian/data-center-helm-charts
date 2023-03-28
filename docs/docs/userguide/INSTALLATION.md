@@ -131,7 +131,7 @@ By default, the Helm charts will not configure the products for Data Center clus
     Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
 
 !!!warning "Crowd clustering"
-    Clustering is on by default. To disable clustering, set `crowd.clustering.enabled` to false in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
+	  Crowd does not offer clustering configuration via Helm Chart. Set `crowd.clustering.enabled` to `true/false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
   
 ## 7. Configure license 
 

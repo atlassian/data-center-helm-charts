@@ -24,6 +24,8 @@ spec:
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "jira.additionalHosts" . | nindent 8 }}
       {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
@@ -173,6 +175,9 @@ spec:
       {{- with .Values.jira.topologySpreadConstraints }}
       topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}

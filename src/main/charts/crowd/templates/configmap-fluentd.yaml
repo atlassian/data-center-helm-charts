@@ -6,13 +6,18 @@ metadata:
   labels:
   {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
+  {{ if .Values.fluentd.customConfigFile }}
+{{- range $key, $value := .Values.fluentd.fluentdCustomConfig }}
+  {{ $key }}: |
+{{ $value | indent 4 }}
+  {{- end }}
+  {{ else }}
   fluent.conf: |
     <source>
       @type http
       port {{ .Values.fluentd.httpPort }}
       bind 0.0.0.0
     </source>
-
     <filter **>
       @type record_transformer
       <record>
@@ -35,4 +40,5 @@ data:
       logstash_prefix {{ .Values.fluentd.elasticsearch.indexNamePrefix }}
     </match>
     {{ end }}
+  {{ end }}
 {{ end }}

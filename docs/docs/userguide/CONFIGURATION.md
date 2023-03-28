@@ -225,6 +225,9 @@ If you wish, you can run multiple Helm releases of the same product in the same 
 ## :fontawesome-solid-network-wired: Clustering
 By default, the Helm charts will not configure the products for Data Center clustering. In order to enable clustering, the `enabled` property for clustering must be set to `true`.
 
+!!!warning "Clustering by default for Crowd"
+	  Crowd does not offer clustering configuration via Helm Chart. Set `crowd.clustering.enabled` to `true/false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
+      
 !!!note ""
 
     === "Jira"
@@ -254,6 +257,10 @@ By default, the Helm charts will not configure the products for Data Center clus
     === "Bamboo"
 
         Because of the limitations outlined under [Bamboo and clustering](../troubleshooting/LIMITATIONS.md#cluster-size) the `clustering` stanza is not available as a configurable property in the Bamboo `values.yaml`.
+
+    === "Crowd"
+
+        Clustering is enabled by default. To disable clustering, set `crowd.clustering.enabled` to `false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
 
 
 In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
