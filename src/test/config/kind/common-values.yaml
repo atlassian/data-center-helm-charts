@@ -21,23 +21,6 @@ DC_APP_REPLACEME:
   # this applies to Bamboo only and will be ignored in other Helm charts
   disableAgentAuth: true
 
-  # applicable to Bitbucket only
-  mesh:
-    enabled: true
-    nodeAutoRegistration: true
-    setByDefault: true
-    resources:
-      jvm:
-        maxHeap: "1g"
-        minHeap: "512m"
-      container:
-        requests:
-          cpu: "20m"
-          memory: "1G"
-        limits:
-          cpu: "2"
-          memory: "2G"
-
 database:
   type: DB_TYPE_REPLACEME
   url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME

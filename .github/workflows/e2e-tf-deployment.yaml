@@ -40,9 +40,11 @@ jobs:
 
     steps:
       - name: Checkout Helm charts
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
 
       - name: Pin Kubectl version
         uses: azure/setup-kubectl@v3.0

@@ -3,24 +3,11 @@
 name: DC apps tests in KinD
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '**.xml'
-      - '**.yaml'
-      - '**.properties'
-      - 'LICENSE'
-      - 'Makefile'
-      - '.gitignore'
-      - '.java-version'
   workflow_dispatch:
-  pull_request:
+  pull_request_target:
+    types: [ labeled ]
 
 jobs:
-
   jira:
     uses: ./.github/workflows/kind.yaml
     with:
