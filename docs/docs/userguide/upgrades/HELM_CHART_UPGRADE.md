@@ -97,8 +97,26 @@ to avoid mixed version during the upgrade. In this option the product will have 
 will only apply when the target product version is zero-downtime compatible. If you are not sure about this see the links above. 
 * **No product upgrade**: Upgrade the Helm chart with no change in product version. We recommend this method when the target product version is the same as the current product version, or for any other reason you may not want to change the product version but still upgrade the helm chart. 
  
+## 4. Get the current Helm release values
+
+!!! warning "--reuse-values argument"
+    Do not pass `--reuse-values` to `helm upgrade` command because the default values in the new Helm chart version will be ignored
+    which can result in templating errors and upgrade failures.
+
+
+If you have not saved the original values file used during the initial Helm chart installation, you can retrieve user-supplied values:
+
+```shell
+helm get values <release-name> -n <namespace> -o yaml > values.yaml
+```
+
+Use this file in the argument to `helm upgrade` command, for example:
+
+```shell
+-f /home/user/values.yaml
+```
  
-## 4. Upgrade the Helm chart
+## 5. Upgrade the Helm chart
  
 !!! hint "Tip: Monitor the pods during the upgrade process"
      You can monitor the pod activities during the upgrade by running the following command in a separate terminal: 
@@ -131,7 +149,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         ```shell
         helm upgrade <release-name> atlassian-data-center/<product> \
          --version <target-helm-chart-version> \
-         --reuse-values \
+         -f <path-to-values-yaml> \
          --set replicaCount=1 \
          --wait \
          --namespace <namespace>
@@ -144,7 +162,7 @@ will only apply when the target product version is zero-downtime compatible. If 
         of nodes as before the upgrade: 
         ```shell
         helm upgrade <release-name> atlassian-data-center/confluence \
-         --reuse-values \
+         -f <path-to-values-yaml> \
          --set replicaCount=<n> \
          --wait \
          --namespace <namespace>
@@ -186,7 +204,7 @@ will only apply when the target product version is zero-downtime compatible. If 
             ```shell
             helm upgrade <release-name> atlassian-data-center/jira \
              --version <target-helm-chart-version> \
-             --reuse-values \
+             -f <path-to-values-yaml> \
              --wait \
              --namespace <namespace>
             ```
@@ -211,7 +229,7 @@ will only apply when the target product version is zero-downtime compatible. If 
              ```shell
              helm upgrade <release-name> atlassian-data-center/confluence \
                  --version <target-helm-chart-version> \
-                 --reuse-values \
+                 -f <path-to-values-yaml> \
                  --wait \
                  --namespace <namespace>
              ```
@@ -238,7 +256,7 @@ will only apply when the target product version is zero-downtime compatible. If 
             ```shell
             helm upgrade <release-name> atlassian-data-center/bitbucket \
              --version <target-helm-chart-version> \
-             --reuse-values \
+             -f <path-to-values-yaml> \
              --wait \
              --namespace <namespace>
             ```
@@ -272,7 +290,7 @@ will only apply when the target product version is zero-downtime compatible. If 
     ```shell 
     helm upgrade <release-name> atlassian-data-center/<product> \
         --version <helm-chart-target-version> \
-        --reuse-values \
+        -f <path-to-values-yaml> \
         --set image.tag=<current-product-tag> \
         --wait \
         --namespace <namespace>
@@ -284,7 +302,7 @@ will only apply when the target product version is zero-downtime compatible. If 
     ```shell 
     helm upgrade <release-name> atlassian-data-center/<product> \
          --version <helm-chart-target-version> \
-         --reuse-values \
+         -f <path-to-values-yaml> \
          --wait \
          --namespace <namespace>
     ```
