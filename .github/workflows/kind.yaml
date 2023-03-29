@@ -18,6 +18,7 @@ on:
 
 jobs:
   kind-testing:
+    if: ${{ github.event.label.name == 'kind' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     env:
       # See: https://github.com/kubernetes-sigs/kind/tags
@@ -29,7 +30,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
 
       - name: Pin Kubectl version
         uses: azure/setup-kubectl@v3.0
