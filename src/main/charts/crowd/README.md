@@ -39,7 +39,6 @@ Kubernetes: `>=1.21.x-0`
 | crowd.additionalPorts | list | `[]` | Defines any additional ports for the Crowd container.  |
 | crowd.additionalVolumeClaimTemplates | list | `[]` | Defines additional volumeClaimTemplates that should be applied to the Crowd pod. Note that this will not create any corresponding volume mounts; those needs to be defined in crowd.additionalVolumeMounts  |
 | crowd.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Crowd container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
-| crowd.clustering.enabled | bool | `false` | Set to 'true' if Data Center clustering should be enabled This will automatically configure cluster peer discovery between cluster nodes.  |
 | crowd.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
 | crowd.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
 | crowd.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Crowd container liveness probe before the pod fails liveness checks.  |
