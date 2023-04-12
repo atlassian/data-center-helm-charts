@@ -398,7 +398,8 @@ ingress:
 
   # -- The base path for the Ingress Resource. For example '/crowd'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
-  # 'company.k8s.com/crowd'
+  # 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context
+  # on the application level, only "/" and "/crowd" paths are supported. 
   #
   path: "/"
 
