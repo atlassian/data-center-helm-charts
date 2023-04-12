@@ -61,6 +61,10 @@ import:
 
 Using this approach will restore the full dataset as part of the Helm install process.
 
+## Crowd
+
+### LoadBalancer service type
+If a kubernetes environment has multiple cluster nodes and `loadBalancer` is used for Crowd `service.type`, Crowd pods may receive client requests from different cluster node ip address. This will cause a session expiry in the client browser. You can resolve it by unticking "Require consistent client IP address" in Session configuration.
 ## Platform limitations
 These configurations are explicitly not supported, and the Helm charts don’t work without modifications in these environments:
 

@@ -86,7 +86,9 @@ crowd:
     #
     port: 80
 
-    # -- The type of K8s service to use for Crowd
+    # -- The type of K8s service to use for Crowd.
+    # For loadBalancer type, deselect the consistent client IP address in Crowd Session configuration.
+    # Read more: https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS/#loadbalancer-service-type
     #
     type: ClusterIP
 
