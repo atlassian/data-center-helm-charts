@@ -67,6 +67,9 @@ Using this approach will restore the full dataset as part of the Helm install pr
 If a Kubernetes cluster has multiple cluster nodes and Crowd `service.type` is `LoadBalancer`, Crowd pods may receive client requests from different cluster node IPs. This will cause session invalidation in the client browser, which is a security feature of Crowd. You can resolve it by either:
 
 * Unticking "Require consistent client IP address" in Session configuration or
+* Configuring AWS LoadBalancer with session affinity by annotating a service. You can find more details in [AWS LoadBalancer documentation](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/service/annotations/).
+
+* Unticking "Require consistent client IP address" in Session configuration or
 * Configuring AWS Loadbalancer with session affinity by annotating a serrvice. You can find more details in [AWS LoadBalancer documentation](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/service/annotations/).
 
 ## Platform limitations
