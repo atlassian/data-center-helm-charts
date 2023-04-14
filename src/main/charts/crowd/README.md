@@ -56,7 +56,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen  |
-| crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd  |
+| crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd. For loadBalancer type, deselect the consistent client IP address in Crowd Session configuration. Read more: https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS/#loadbalancer-service-type  |
 | crowd.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Crowd container. Set to 'false' to disable this behaviour.  |
 | crowd.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/shutdown-wait.sh) for details.  |
 | crowd.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate.  |
