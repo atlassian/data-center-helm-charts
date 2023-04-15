@@ -7,3 +7,6 @@ volumes:
 bitbucket:
   mesh:
     enabled: true
+    priorityClassName: "high"
+
+priorityClassName: "high"

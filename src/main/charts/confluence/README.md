@@ -105,6 +105,7 @@ Kubernetes: `>=1.21.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Confluence pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Confluence pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Confluence pods  |
+| priorityClassName | string | `nil` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | replicaCount | int | `1` | The initial number of Confluence pods that should be started at deployment time. Note that Confluence requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Confluence pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created)  |
@@ -128,7 +129,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.ports.hazelcast | int | `5701` | The port on which the Synchrony container listens for Hazelcast traffic  |
 | synchrony.ports.http | int | `8091` | The port on which the Synchrony container listens for HTTP traffic  |
 | synchrony.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Synchrony container readiness probe before the pod fails readiness checks.  |
-| synchrony.readinessProbe.healthcheckPath | string | `"/synchrony/heartbeat"` | The healthcheck path to check against for the Synchrony container  useful when configuring behind a reverse-proxy or loadbalancer https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html  |
+| synchrony.readinessProbe.healthcheckPath | string | `"/synchrony/heartbeat"` | The healthcheck path to check against for the Synchrony container useful when configuring behind a reverse-proxy or loadbalancer https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html  |
 | synchrony.readinessProbe.initialDelaySeconds | int | `5` | The initial delay (in seconds) for the Synchrony container readiness probe, after which the probe will start running.  |
 | synchrony.readinessProbe.periodSeconds | int | `1` | How often (in seconds) the Synchrony container readiness probe will run  |
 | synchrony.replicaCount | int | `1` | Number of Synchrony pods  |

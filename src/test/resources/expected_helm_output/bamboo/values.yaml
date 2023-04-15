@@ -27,3 +27,4 @@ bamboo:
   import:
     type: "clean"
 
+priorityClassName: "high"

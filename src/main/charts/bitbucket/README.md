@@ -58,11 +58,12 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.mesh.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | bitbucket.mesh.image.repository | string | `"atlassian/bitbucket-mesh"` | The Bitbucket Mesh image repository https://hub.docker.com/r/atlassian/bitbucket-mesh  |
 | bitbucket.mesh.image.tag | string | `"1.5.0"` | The docker image tag to be used  |
-| bitbucket.mesh.nodeAutoRegistration | bool | `false` | Experimental! Automatically register Bitbucket mesh nodes with the Bitbucket server. `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials to post-install node registration jobs that are created only for new Helm chart installations. It is recommended to manually register Mesh nodes in Butbucket UI.     |
+| bitbucket.mesh.nodeAutoRegistration | bool | `false` | Experimental! Automatically register Bitbucket mesh nodes with the Bitbucket server. `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials to post-install node registration jobs that are created only for new Helm chart installations. It is recommended to manually register Mesh nodes in Butbucket UI.  |
 | bitbucket.mesh.nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podLabels | object | `{}` | Custom labels that will be applied to all Bitbucket Mesh pods  |
 | bitbucket.mesh.podManagementPolicy | string | `"OrderedReady"` |  |
+| bitbucket.mesh.priorityClassName | string | `nil` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | bitbucket.mesh.replicaCount | int | `3` | Number of Bitbucket Mesh nodes. Do not change it. Currently, only the quorum of 3 mesh nodes is supported. Reducing the number of replicas will result in mesh degradation while increasing the number of Mesh nodes will result in new nodes being unused by the Bitbucket server.  |
 | bitbucket.mesh.resources | object | `{"container":{"limits":{"cpu":"2","memory":"2G"},"requests":{"cpu":"1","memory":"2G"}},"jvm":{"maxHeap":"1g","minHeap":"512m"}}` | Bitbucket Mesh resources requests and limits  |
 | bitbucket.mesh.resources.container | object | `{"limits":{"cpu":"2","memory":"2G"},"requests":{"cpu":"1","memory":"2G"}}` | Bitbucket Mesh container cpu/mem requests and limits  |
@@ -142,6 +143,7 @@ Kubernetes: `>=1.21.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bitbucket pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Bitbucket pods  |
+| priorityClassName | string | `nil` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | replicaCount | int | `1` | The initial number of Bitbucket pods that should be started at deployment time. Note that if Bitbucket is fully configured (see above) during initial deployment a 'replicaCount' greater than 1 can be supplied.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bitbucket pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created)  |

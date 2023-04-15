@@ -3,3 +3,5 @@ volumes:
   sharedHome:
     nfsPermissionFixer:
       enabled: true
+
+priorityClassName: "high"

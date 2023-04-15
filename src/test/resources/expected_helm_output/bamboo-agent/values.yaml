@@ -1,2 +1,4 @@
 agent:
   server: "bamboo.bamboo.svc.cluster.local"
+
+priorityClassName: "high"

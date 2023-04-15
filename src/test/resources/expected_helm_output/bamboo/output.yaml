@@ -72,7 +72,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: c2910b6516ddb4404f6340c709a9fb23e26a87c16ac9fabd4ccbacca4e041ac8
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
@@ -191,6 +190,7 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      priorityClassName: high
       volumes:
         - name: local-home
           emptyDir: {}

@@ -763,7 +763,7 @@ bitbucket:
     # `bitbucket.sysadminCredentials.secretName` needs to be defined to provide credentials
     # to post-install node registration jobs that are created only for new Helm chart installations.
     # It is recommended to manually register Mesh nodes in Butbucket UI.
-    #    
+    #
     nodeAutoRegistration: false
 
     # -- Experimental! Automatically create all new repositories on Bitbucket mesh nodes.
@@ -911,7 +911,12 @@ bitbucket:
     # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
     #
     schedulerName:
-    
+
+    # -- Pod PriorityClassName
+    # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+    #
+    priorityClassName:
+
     # See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     #
     podManagementPolicy: OrderedReady
@@ -1116,6 +1121,11 @@ affinity: {}
 # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
 #
 schedulerName:
+
+# -- Pod PriorityClassName
+# https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
 
 # -- Additional container definitions that will be added to all Bitbucket pods
 #

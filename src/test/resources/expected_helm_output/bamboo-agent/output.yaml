@@ -46,7 +46,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 0b3311c358edff165763d21b3c05bd38c4392e41d4781764d79f4b690ae80dda
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent
@@ -93,3 +92,4 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      priorityClassName: high

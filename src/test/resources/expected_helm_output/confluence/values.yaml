@@ -11,3 +11,5 @@ additionalHosts:
 - ip: "192.168.1.1"
   hostnames:
     - "test.example.com"
+
+priorityClassName: "high"

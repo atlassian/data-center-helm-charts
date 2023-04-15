@@ -384,7 +384,7 @@ volumes:
   # those needs to be defined in synchrony.additionalVolumeMounts
   #
   additionalSynchrony: []
-  
+
   # -- Mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511
   # Typically overridden in volumes from Secrets and ConfigMaps to make mounted files executable
   #
@@ -635,7 +635,7 @@ confluence:
     # AWS region where the S3 bucket is located.
     #
     bucketRegion:
-    
+
     # -- EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use
     # Minio as object storage https://min.io/
     #
@@ -801,9 +801,9 @@ synchrony:
   enabled: false
 
   # -- Number of Synchrony pods
-  # 
+  #
   replicaCount: 1
-  
+
   # -- Custom annotations that will be applied to all Synchrony pods.
   # When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined)
   podAnnotations: {}
@@ -866,7 +866,7 @@ synchrony:
   #
   readinessProbe:
 
-    # -- The healthcheck path to check against for the Synchrony container 
+    # -- The healthcheck path to check against for the Synchrony container
     # useful when configuring behind a reverse-proxy or loadbalancer
     # https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html
     #
@@ -1083,6 +1083,11 @@ affinity: {}
 # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
 #
 schedulerName:
+
+# -- Pod PriorityClassName
+# https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
 
 # -- Additional container definitions that will be added to all Confluence pods
 #

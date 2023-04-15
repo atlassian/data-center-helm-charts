@@ -115,6 +115,9 @@ spec:
       {{- if .Values.bitbucket.mesh.schedulerName }}
       schedulerName: {{ .Values.bitbucket.mesh.schedulerName  | quote }}
       {{- end }}
+      {{- if .Values.bitbucket.mesh.priorityClassName }}
+      priorityClassName: {{ .Values.bitbucket.mesh.priorityClassName }}
+      {{- end }}
       volumes:
         {{ include "fluentd.config.volume" . | nindent 8 }}
         {{- range $i, $n := .Values.bitbucket.mesh.additionalFiles }}

@@ -110,6 +110,7 @@ Kubernetes: `>=1.21.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Bamboo pods  |
+| priorityClassName | string | `nil` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | replicaCount | int | `1` | The initial number of Bamboo pods that should be started at deployment time. Note that Bamboo requires manual configuration via the browser post deployment after the first pod is deployed.  At present Bamboo Data Center utilizes an `active-passive` clustering model. This architecture is not ideal where K8s deployments are concerned. As such a Bamboo server cluster comprising only `1` pod is the recommended topology for now. For more detail see: https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS#cluster-size  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created)  |
