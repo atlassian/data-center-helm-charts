@@ -96,3 +96,12 @@ Define additional environment variables here to allow template overrides when us
 {{- toYaml . }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define additional hosts here to allow template overrides when used as a sub chart
+*/}}
+{{- define "agent.additionalHosts" -}}
+{{- with .Values.additionalHosts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}

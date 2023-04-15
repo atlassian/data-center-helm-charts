@@ -168,13 +168,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: b71a595b0d023bfb5c38aa20556ae89892c6aa76818f0ba2da2fa77b6b4703fb
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
     spec:
       serviceAccountName: unittest-bitbucket
       terminationGracePeriodSeconds: 35
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       initContainers:
       containers:
         - name: bitbucket-mesh
@@ -266,13 +270,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 79aabe50509160f24589464153813be346f3f99505e0f0bfc03c10cb81709252
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
     spec:
       serviceAccountName: unittest-bitbucket
       terminationGracePeriodSeconds: 35
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2003
       initContainers:

@@ -24,6 +24,8 @@ spec:
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "crowd.additionalHosts" . | nindent 8 }}
       {{- if .Values.crowd.securityContextEnabled }}
       {{- with .Values.crowd.securityContext }}
       securityContext:

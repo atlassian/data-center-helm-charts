@@ -46,13 +46,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 0b3311c358edff165763d21b3c05bd38c4392e41d4781764d79f4b690ae80dda
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent
     spec:
       serviceAccountName: unittest-bamboo-agent
       terminationGracePeriodSeconds: 30
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2005
       initContainers:
