@@ -207,6 +207,9 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       volumes:
         {{- range $i, $n := .Values.additionalFiles }}
         - name: {{ .name }}-{{$i}}

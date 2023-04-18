@@ -7,7 +7,9 @@ volumes:
 bitbucket:
   mesh:
     enabled: true
+    priorityClassName: "high"
 
+priorityClassName: "high"
 additionalHosts:
   - ip: "127.0.0.1"
     hostnames:

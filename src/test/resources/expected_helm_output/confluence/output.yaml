@@ -180,6 +180,7 @@ spec:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
               value: "https:///synchrony"
+      priorityClassName: high
       volumes:
         - name: entrypoint-script
           configMap:
@@ -302,6 +303,7 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      priorityClassName: high
       volumes:
         - name: local-home
           emptyDir: {}

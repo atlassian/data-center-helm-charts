@@ -832,6 +832,11 @@ affinity: {}
 #
 schedulerName:
 
+# -- Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster.
+# For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
+
 # -- Additional container definitions that will be added to all Bamboo pods
 #
 additionalContainers: []

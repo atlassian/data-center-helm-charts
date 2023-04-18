@@ -251,7 +251,7 @@ crowd:
     # size, the reserved code cache size, plus other JVM overheads, must be
     # accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example.
     #
-    container: 
+    container:
 
       requests:
         # -- Initial CPU request by Crowd pod
@@ -401,7 +401,7 @@ ingress:
   # -- The base path for the Ingress Resource. For example '/crowd'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
   # 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context
-  # on the application level, only "/" and "/crowd" paths are supported. 
+  # on the application level, only "/" and "/crowd" paths are supported.
   #
   path: "/"
 
@@ -680,6 +680,11 @@ affinity: {}
 # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
 #
 schedulerName:
+
+# -- Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster.
+# For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
 
 # -- Additional container definitions that will be added to all Crowd pods
 #

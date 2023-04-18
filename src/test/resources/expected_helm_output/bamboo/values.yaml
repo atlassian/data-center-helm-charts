@@ -27,6 +27,8 @@ bamboo:
   import:
     type: "clean"
 
+
+priorityClassName: "high"
 additionalHosts:
   - ip: "127.0.0.1"
     hostnames:
