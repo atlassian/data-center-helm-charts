@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo-agent
 description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
-version: 1.11.0
+version: 1.12.0
 appVersion: 9.2.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#531)"
+    - "Add priorityClassName to pod spec (#557)"
+    - "Add hostAliases for all DC products (#556)"
 dependencies:
 - name: common
   version: 1.0.0

@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.11.0
+version: 1.12.0
 appVersion: 5.1.2
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,9 +20,12 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Fix typo in helpers. Add warnings about Crowd in docs (#534)"
-    - "Update appVersions for DC apps (#533)"
-    - "Update crowd helm chart (#532)"
+    - "Add priorityClassName to pod spec (#557)"
+    - "Add hostAliases for all DC products (#556)"
+    - "Crowd service type edge case documentation (#554)"
+    - "Add a warning to Crowd's values.yaml ingress.path field (#550)"
+    - "Update fluentd cm template for crowd (#547)"
+    - "Documentation for Crowd (#544)"
 
 dependencies:
 - name: common

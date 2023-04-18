@@ -1,6 +1,21 @@
 # Change Log
 
 
+## 1.12.0
+
+**Release date:** 2023-4-18
+
+![AppVersion: 5.1.2](https://img.shields.io/static/v1?label=AppVersion&message=5.1.2&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Add priorityClassName to pod spec (#557)
+* Add hostAliases for all DC products (#556)
+* Crowd service type edge case documentation (#554)
+* Add a warning to Crowd's values.yaml ingress.path field (#550)
+* Update fluentd cm template for crowd (#547)
+* Documentation for Crowd (#544)
+
 ## 1.11.0
 
 **Release date:** 2023-3-22

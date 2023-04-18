@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.12.0
+
+**Release date:** 2023-4-18
+
+![AppVersion: 9.4.5](https://img.shields.io/static/v1?label=AppVersion&message=9.4.5&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Add priorityClassName to pod spec (#557)
+* Update appVersions for DC apps (#558)
+
 ## 1.11.0
 
 **Release date:** 2023-3-22
