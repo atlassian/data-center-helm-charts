@@ -74,13 +74,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8eef88b26359d6c809f03533d205d79eb19f723a28f1c3b05882b523309a2dab
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
     spec:
       serviceAccountName: unittest-crowd
       terminationGracePeriodSeconds: 30
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2004
       initContainers:

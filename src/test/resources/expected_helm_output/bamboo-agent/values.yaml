@@ -1,2 +1,8 @@
 agent:
   server: "bamboo.bamboo.svc.cluster.local"
+
+additionalHosts:
+  - ip: "127.0.0.1"
+    hostnames:
+    - "foo.local"
+    - "bar.local"

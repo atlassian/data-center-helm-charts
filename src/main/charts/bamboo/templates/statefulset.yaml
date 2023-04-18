@@ -24,6 +24,8 @@ spec:
     spec:
       serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "bamboo.additionalHosts" . | nindent 8 }}
       {{- if .Values.bamboo.securityContextEnabled }}
       {{- with .Values.bamboo.securityContext }}
       securityContext:
