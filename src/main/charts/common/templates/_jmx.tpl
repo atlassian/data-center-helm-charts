@@ -16,7 +16,7 @@ Jmx config volume mount
 {{- define "common.jmx.config.volumeMounts" -}}
 {{- if .Values.monitoring.exposeJmxMetrics }}
 - name: jmx-config
-  mountPath: /opt/atlassian/confluence/jmx
+  mountPath: /opt/atlassian/jmx
 {{- end }}
 {{- end }}
 
@@ -52,6 +52,6 @@ Jmx javaagent
 */}}
 {{- define "common.jmx.javaagent" -}}
 {{- if .Values.monitoring.exposeJmxMetrics }}
--javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar" ( .Values.volumes.sharedHome.mountPath)) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/confluence/jmx/jmx-config.yaml
+-javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar" ( .Values.volumes.sharedHome.mountPath)) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml
 {{- end }}
 {{- end }}
