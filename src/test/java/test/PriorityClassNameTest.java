@@ -23,35 +23,53 @@ class PriorityClassNameTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void priority_class_names(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "synchrony.enabled", "true",
-                "bitbucket.mesh.enabled", "true",
-                "bitbucket.mesh.priorityClassName", "high",
                 "priorityClassName", "high"
                 ));
 
-        if (product.name().equals("bamboo_agent")) {
-            Deployment bambooAgent = resources.getDeployment(product.getHelmReleaseName());
-            JsonNode priorityClassName = bambooAgent.getPodSpec().get("priorityClassName");
-            assertEquals("high", priorityClassName.asText());
-        } else {
-            StatefulSet dcProduct = resources.getStatefulSet(product.getHelmReleaseName());
-            JsonNode priorityClassName = dcProduct.getPodSpec().get("priorityClassName");
-            assertEquals("high", priorityClassName.asText());
-        }
+        StatefulSet dcProduct = resources.getStatefulSet(product.getHelmReleaseName());
+        JsonNode priorityClassName = dcProduct.getPodSpec().get("priorityClassName");
+        assertEquals("high", priorityClassName.asText());
+    }
 
-        if (product.name().equals("confluence")) {
-            StatefulSet synchronySts = resources.getStatefulSet("unittest-confluence-synchrony");
-            JsonNode priorityClassName = synchronySts.getPodSpec().get("priorityClassName");
-            assertEquals("high", priorityClassName.asText());
-        }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.INCLUDE)
+    void priority_class_names_bamboo_agent(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "priorityClassName", "high"
+        ));
 
-        if (product.name().equals("bitbucket")) {
-            StatefulSet bitbucketMeshSts = resources.getStatefulSet("unittest-bitbucket-mesh");
-            JsonNode priorityClassName = bitbucketMeshSts.getPodSpec().get("priorityClassName");
-            assertEquals("high", priorityClassName.asText());
-        }
+        Deployment bambooAgent = resources.getDeployment(product.getHelmReleaseName());
+        JsonNode priorityClassName = bambooAgent.getPodSpec().get("priorityClassName");
+        assertEquals("high", priorityClassName.asText());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void priority_class_names_bitbucket_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "priorityClassName", "high",
+                "bitbucket.mesh.enabled", "true",
+                "bitbucket.mesh.priorityClassName", "high"
+        ));
+
+        StatefulSet bitbucketMeshSts = resources.getStatefulSet("unittest-bitbucket-mesh");
+        JsonNode priorityClassName = bitbucketMeshSts.getPodSpec().get("priorityClassName");
+        assertEquals("high", priorityClassName.asText());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void priority_class_names_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "priorityClassName", "high",
+                "synchrony.enabled", "true"
+        ));
+
+        StatefulSet synchronySts = resources.getStatefulSet("unittest-confluence-synchrony");
+        JsonNode priorityClassName = synchronySts.getPodSpec().get("priorityClassName");
+        assertEquals("high", priorityClassName.asText());
     }
 }
