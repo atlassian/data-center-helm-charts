@@ -1122,8 +1122,8 @@ affinity: {}
 #
 schedulerName:
 
-# -- Pod PriorityClassName
-# https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+# -- Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster.
+# For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
 #
 priorityClassName:
 

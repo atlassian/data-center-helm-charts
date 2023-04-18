@@ -56,7 +56,7 @@ Kubernetes: `>=1.21.x-0`
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo agent pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo agent pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Bamboo agent pods  |
-| priorityClassName | string | `nil` | Pod PriorityClassName https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
+| priorityClassName | string | `nil` | Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster. For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | replicaCount | int | `1` | The initial number of Bamboo agent pods that should be started at deployment time.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Bamboo agent pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created)  |
