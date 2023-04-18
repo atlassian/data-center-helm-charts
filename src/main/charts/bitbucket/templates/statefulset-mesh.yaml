@@ -32,6 +32,8 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.mesh.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "bitbucket.additionalHosts" . | nindent 8 }}
       initContainers:
         {{- include "bitbucket.mesh.additionalInitContainers" . | nindent 8 }}
       containers:

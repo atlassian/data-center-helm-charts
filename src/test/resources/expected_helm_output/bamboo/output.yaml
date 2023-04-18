@@ -78,6 +78,11 @@ spec:
     spec:
       serviceAccountName: unittest-bamboo
       terminationGracePeriodSeconds: 30
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2005
       initContainers:

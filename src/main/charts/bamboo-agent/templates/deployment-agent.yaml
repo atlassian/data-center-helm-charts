@@ -20,6 +20,8 @@ spec:
     spec:
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "agent.additionalHosts" . | nindent 8 }}
       {{- if .Values.agent.securityContextEnabled }}
       {{- with .Values.agent.securityContext }}
       securityContext:

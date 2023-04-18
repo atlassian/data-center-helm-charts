@@ -2,3 +2,9 @@ agent:
   server: "bamboo.bamboo.svc.cluster.local"
 
 priorityClassName: "high"
+additionalHosts:
+  - ip: "127.0.0.1"
+    hostnames:
+    - "foo.local"
+    - "bar.local"
+
