@@ -4,7 +4,7 @@ description: A Library Helm Chart for grouping common logic between Atlassian ch
 type: library
 version: 1.2.1
 # Please make sure that version and appVersion are always the same.
-appVersion: 1.2.1
+appVersion: 1.2.2
 keywords:
   - common
   - helper
