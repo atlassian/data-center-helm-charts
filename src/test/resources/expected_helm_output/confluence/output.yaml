@@ -254,7 +254,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: a0b3cdb6da34dab1ff00929900a238851a9609bf9e2a76a79170f59c18bbedd8
+        checksum/config-jvm: 46f563bf6df6f38389c531368acd8060fc8f01fc0995ec88f838cbf52a930c12
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

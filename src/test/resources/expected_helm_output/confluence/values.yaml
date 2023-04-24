@@ -16,3 +16,4 @@ priorityClassName: "high"
 
 monitoring:
   exposeJmxMetrics: true
+
