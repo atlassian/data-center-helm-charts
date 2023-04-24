@@ -19,3 +19,6 @@ database:
 
 synchrony:
   enabled: true
+
+monitoring:
+  exposeJmxMetrics: true

@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-1.11.0
+    helm.sh/chart: crowd-1.12.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.1.2"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jvm-config
   labels:
-    helm.sh/chart: crowd-1.11.0
+    helm.sh/chart: crowd-1.12.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.1.2"
@@ -27,8 +27,49 @@ data:
     -Dcluster.node.name=${KUBE_POD_NAME}
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
+    -javaagent:/var/atlassian/application-data/crowd/shared/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 768m
   min_heap: 384m
+---
+# Source: crowd/templates/configmap-jmx-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-crowd-jmx-config
+  labels:
+    helm.sh/chart: crowd-1.12.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "5.1.2"
+    app.kubernetes.io/managed-by: Helm
+data:
+  jmx-config.yaml: |
+    lowercaseOutputLabelNames: true
+    lowercaseOutputName: true
+    rules:
+      - pattern: ".*"
+---
+# Source: crowd/templates/service-jmx.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-crowd-jmx
+  labels:
+    helm.sh/chart: crowd-1.12.0
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
+    app.kubernetes.io/version: "5.1.2"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: jmx
+      name: jmx
+  selector:
+    app.kubernetes.io/name: crowd
+    app.kubernetes.io/instance: unittest-crowd
 ---
 # Source: crowd/templates/service.yaml
 apiVersion: v1
@@ -36,7 +77,7 @@ kind: Service
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-1.11.0
+    helm.sh/chart: crowd-1.12.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.1.2"
@@ -59,7 +100,7 @@ kind: StatefulSet
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-1.11.0
+    helm.sh/chart: crowd-1.12.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.1.2"
@@ -74,16 +115,28 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8eef88b26359d6c809f03533d205d79eb19f723a28f1c3b05882b523309a2dab
+        checksum/config-jvm: 4834f01ea3048f73429ddc4d0b09d6872e19993dbc277ea450f824b1aae8c4e1
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
     spec:
       serviceAccountName: unittest-crowd
       terminationGracePeriodSeconds: 30
+      hostAliases:
+        - hostnames:
+          - foo.local
+          - bar.local
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2004
       initContainers:
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/crowd/shared"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/crowd/shared"
+              name: shared-home
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -100,6 +153,9 @@ spec:
           ports:
             - name: http
               containerPort: 8095
+              protocol: TCP
+            - name: jmx
+              containerPort: 9999
               protocol: TCP
           readinessProbe:
             httpGet:
@@ -130,6 +186,8 @@ spec:
               subPath: "logs"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/crowd/shared"
+            - name: jmx-config
+              mountPath: /opt/atlassian/jmx
           env:
             - name: KUBE_POD_NAME
               valueFrom:
@@ -168,11 +226,15 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      priorityClassName: high
       volumes:
         - name: local-home
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: jmx-config
+          configMap:
+            name: unittest-crowd-jmx-config
 ---
 # Source: crowd/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -183,7 +245,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-1.11.0
+    helm.sh/chart: crowd-1.12.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.1.2"
@@ -214,7 +276,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-1.11.0
+    helm.sh/chart: crowd-1.12.0
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.1.2"

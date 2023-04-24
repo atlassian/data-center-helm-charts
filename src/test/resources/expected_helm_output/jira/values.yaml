@@ -11,3 +11,6 @@ additionalHosts:
     - "bar.local"
 
 priorityClassName: "high"
+
+monitoring:
+  exposeJmxMetrics: true

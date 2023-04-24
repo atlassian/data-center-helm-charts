@@ -251,7 +251,7 @@ crowd:
     # size, the reserved code cache size, plus other JVM overheads, must be
     # accommodated. Allowing for (maxHeap+codeCache)*1.5 would be an example.
     #
-    container: 
+    container:
 
       requests:
         # -- Initial CPU request by Crowd pod
@@ -401,7 +401,7 @@ ingress:
   # -- The base path for the Ingress Resource. For example '/crowd'. Based on a
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
   # 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context
-  # on the application level, only "/" and "/crowd" paths are supported. 
+  # on the application level, only "/" and "/crowd" paths are supported.
   #
   path: "/"
 
@@ -681,6 +681,11 @@ affinity: {}
 #
 schedulerName:
 
+# -- Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster.
+# For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
+
 # -- Additional container definitions that will be added to all Crowd pods
 #
 additionalContainers: []
@@ -728,3 +733,43 @@ additionalHosts: []
 #    hostnames:
 #    - "foo.local"
 #    - "bar.local"
+
+# Monitoring
+#
+monitoring:
+
+  # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
+  #
+  exposeJmxMetrics: false
+
+  # -- Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar
+  # to shared home and provide an absolute path in jmxExporterCustomJarLocation
+  #
+  fetchJmxExporterJar: true
+
+  # -- Image repository with jmx_exporter jar
+  #
+  jmxExporterImageRepo: bitnami/jmx-exporter
+
+  # -- Image tag to be used to pull jmxExporterImageRepo
+  #
+  jmxExporterImageTag: 0.18.0
+
+  # -- Port number on which metrics will be available
+  #
+  jmxExporterPort: 9999
+
+  # -- JMX exporter port type
+  #
+  jmxExporterPortType: ClusterIP
+
+  # -- Location of jmx_exporter jar file if mounted from a secret or manually copied to shared home
+  #
+  jmxExporterCustomJarLocation:
+
+  # -- Custom jmx config with the rules. Make sure to keep jmx-config key
+  #
+  jmxExporterCustomConfig: {}
+  # jmx-config: |
+  #   rules:
+  #     - pattern: ".*"

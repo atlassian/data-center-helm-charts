@@ -88,3 +88,19 @@ verify_ingress() {
    exit 1
   fi
 }
+
+verify_metrics() {
+  METRICS_DEFAULT_PORT="9999"
+  METRICS_DEFAULT_PATH="/metrics"
+  STATUS=$(kubectl exec ${DC_APP}-0 -c ${DC_APP} -n atlassian -- curl -s -o /dev/null -w '%{http_code}' http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH})
+  if [ $STATUS -ne 200 ]; then
+    echo "[ERROR]: Status code is ${STATUS}"
+    exit 1
+  fi
+
+  kubectl exec ${DC_APP}-0 -c ${DC_APP} -n atlassian -- curl -s http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH} | grep jvm_classes_currently_loaded
+  if [ $? -ne 0 ]; then
+    echo "[ERROR]: Failed to find jvm_classes_currently_loaded metric"
+    exit 1
+  fi
+}

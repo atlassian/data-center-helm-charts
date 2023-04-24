@@ -32,8 +32,21 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.mesh.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "bitbucket.additionalHosts" . | nindent 8 }}
       initContainers:
         {{- include "bitbucket.mesh.additionalInitContainers" . | nindent 8 }}
+        {{- if and .Values.monitoring.exposeJmxMetrics .Values.monitoring.fetchJmxExporterJar }}
+        - name: fetch-jmx-exporter
+          image: {{ .Values.monitoring.jmxExporterImageRepo}}:{{ .Values.monitoring.jmxExporterImageTag}}
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "{{ .Values.bitbucket.mesh.volume.mountPath }}"]
+          volumeMounts:
+            - mountPath: {{ .Values.bitbucket.mesh.volume.mountPath | quote }}
+              name: mesh-home
+          securityContext:
+            runAsUser: 0 # make sure we run as root to avoid permission denied
+        {{- end }}
       containers:
         - name: bitbucket-mesh
           image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
@@ -42,6 +55,7 @@ spec:
             - name: mesh
               containerPort: {{ .Values.bitbucket.mesh.service.port }}
               protocol: TCP
+            {{- include "common.jmx.port" . | nindent 12 }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.bitbucket.mesh.service.port }}
@@ -60,6 +74,7 @@ spec:
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
             {{ end }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
           {{- with .Values.bitbucket.mesh.resources.container }}
           resources:
             {{- toYaml . | nindent 12 }}
@@ -90,6 +105,10 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: {{ include "common.names.fullname" . }}-jvm-config-mesh
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: JMX_ENABLED
+              value: "true"
+            {{ end }}
             {{- include "bitbucket.mesh.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
             preStop:
@@ -115,6 +134,9 @@ spec:
       {{- if .Values.bitbucket.mesh.schedulerName }}
       schedulerName: {{ .Values.bitbucket.mesh.schedulerName  | quote }}
       {{- end }}
+      {{- if .Values.bitbucket.mesh.priorityClassName }}
+      priorityClassName: {{ .Values.bitbucket.mesh.priorityClassName }}
+      {{- end }}
       volumes:
         {{ include "fluentd.config.volume" . | nindent 8 }}
         {{- range $i, $n := .Values.bitbucket.mesh.additionalFiles }}
@@ -125,5 +147,6 @@ spec:
               - key: {{ .key }}
                 path: {{ .key }}
         {{ end }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "bitbucket.mesh.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}

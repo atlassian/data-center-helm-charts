@@ -1,0 +1,20 @@
+{{- if .Values.monitoring.exposeJmxMetrics}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-jmx
+  labels:
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+  {{- with .Values.jira.service.annotations }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.monitoring.jmxExporterPortType }}
+  ports:
+    - port: {{ .Values.monitoring.jmxExporterPort}}
+      targetPort: jmx
+      name: jmx
+  selector:
+  {{- include "common.labels.selectorLabels" . | nindent 4 }}
+{{- end }}

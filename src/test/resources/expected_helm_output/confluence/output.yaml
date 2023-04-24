@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jvm-config
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -30,9 +30,28 @@ data:
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
+    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 256m
+---
+# Source: confluence/templates/configmap-jmx-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-confluence-jmx-config
+  labels:
+    helm.sh/chart: confluence-1.12.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/managed-by: Helm
+data:
+  jmx-config.yaml: |
+    lowercaseOutputLabelNames: true
+    lowercaseOutputName: true
+    rules:
+      - pattern: ".*"
 ---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1
@@ -56,16 +75,38 @@ data:
        synchrony.core \
        sql
 ---
+# Source: confluence/templates/service-jmx.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-confluence-jmx
+  labels:
+    helm.sh/chart: confluence-1.12.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: jmx
+      name: jmx
+  selector:
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+---
 # Source: confluence/templates/service-synchrony.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -89,10 +130,10 @@ kind: Service
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -116,10 +157,10 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -146,7 +187,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:7.19.7"
+          image: "atlassian/confluence:7.19.8"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -181,6 +222,7 @@ spec:
                   fieldPath: status.podIP
             - name: SYNCHRONY_SERVICE_URL
               value: "https:///synchrony"
+      priorityClassName: high
       volumes:
         - name: entrypoint-script
           configMap:
@@ -197,10 +239,10 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -212,7 +254,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 2452f931dc89dde810c66471c57f286ea5ea8be142b4fb71f6f9bd01c6e1e6fb
+        checksum/config-jvm: a0b3cdb6da34dab1ff00929900a238851a9609bf9e2a76a79170f59c18bbedd8
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -226,6 +268,13 @@ spec:
           - test.example.com
           ip: 192.168.1.1
       initContainers:
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/shared-home"
+              name: shared-home
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -237,7 +286,7 @@ spec:
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
       containers:
         - name: confluence
-          image: "atlassian/confluence:7.19.7"
+          image: "atlassian/confluence:7.19.8"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -245,6 +294,9 @@ spec:
               protocol: TCP
             - name: hazelcast
               containerPort: 5701
+              protocol: TCP
+            - name: jmx
+              containerPort: 9999
               protocol: TCP
           readinessProbe:
             httpGet:
@@ -265,6 +317,8 @@ spec:
               subPath: "logs"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - name: jmx-config
+              mountPath: /opt/atlassian/jmx
           env:
             - name: ATL_TOMCAT_SCHEME
               value: "https"
@@ -304,11 +358,15 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      priorityClassName: high
       volumes:
         - name: local-home
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: jmx-config
+          configMap:
+            name: unittest-confluence-jmx-config
 ---
 # Source: confluence/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -319,10 +377,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -350,10 +408,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-1.11.0
+    helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.7"
+    app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

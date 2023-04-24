@@ -384,7 +384,7 @@ volumes:
   # those needs to be defined in synchrony.additionalVolumeMounts
   #
   additionalSynchrony: []
-  
+
   # -- Mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511
   # Typically overridden in volumes from Secrets and ConfigMaps to make mounted files executable
   #
@@ -635,7 +635,7 @@ confluence:
     # AWS region where the S3 bucket is located.
     #
     bucketRegion:
-    
+
     # -- EXPERIMENTAL Feature! Override the default AWS API endpoint with a custom one, for example to use
     # Minio as object storage https://min.io/
     #
@@ -791,6 +791,46 @@ confluence:
     # port 5005 open.
     enabled: false
 
+# Monitoring
+#
+monitoring:
+
+  # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
+  #
+  exposeJmxMetrics: false
+
+  # -- Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar
+  # to shared home and provide an absolute path in jmxExporterCustomJarLocation
+  #
+  fetchJmxExporterJar: true
+
+  # -- Image repository with jmx_exporter jar
+  #
+  jmxExporterImageRepo: bitnami/jmx-exporter
+
+  # -- Image tag to be used to pull jmxExporterImageRepo
+  #
+  jmxExporterImageTag: 0.18.0
+
+  # -- Port number on which metrics will be available
+  #
+  jmxExporterPort: 9999
+
+  # -- JMX exporter port type
+  #
+  jmxExporterPortType: ClusterIP
+
+  # -- Location of jmx_exporter jar file if mounted from a secret or manually copied to shared home
+  #
+  jmxExporterCustomJarLocation:
+
+  # -- Custom jmx config with the rules. Make sure to keep jmx-config key
+  #
+  jmxExporterCustomConfig: {}
+  # jmx-config: |
+  #   rules:
+  #     - pattern: ".*"
+
 # Confluence Synchrony configuration
 # https://confluence.atlassian.com/doc/configuring-synchrony-858772125.html
 synchrony:
@@ -801,9 +841,9 @@ synchrony:
   enabled: false
 
   # -- Number of Synchrony pods
-  # 
+  #
   replicaCount: 1
-  
+
   # -- Custom annotations that will be applied to all Synchrony pods.
   # When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined)
   podAnnotations: {}
@@ -866,7 +906,7 @@ synchrony:
   #
   readinessProbe:
 
-    # -- The healthcheck path to check against for the Synchrony container 
+    # -- The healthcheck path to check against for the Synchrony container
     # useful when configuring behind a reverse-proxy or loadbalancer
     # https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html
     #
@@ -1083,6 +1123,11 @@ affinity: {}
 # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
 #
 schedulerName:
+
+# -- Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster.
+# For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
 
 # -- Additional container definitions that will be added to all Confluence pods
 #

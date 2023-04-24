@@ -34,3 +34,6 @@ bitbucket:
 
   elasticSearch:
     baseUrl: http://${helm.release.prefix}-bitbucket-elasticsearch-master:9200
+
+monitoring:
+  exposeJmxMetrics: true

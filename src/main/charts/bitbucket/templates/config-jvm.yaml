@@ -10,5 +10,6 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bitbucket.resources.container.requests.cpu }}
+    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.bitbucket.resources.jvm.maxHeap }}
   min_heap: {{ .Values.bitbucket.resources.jvm.minHeap }}

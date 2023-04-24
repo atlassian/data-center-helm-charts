@@ -74,6 +74,11 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_ingress
 
+      - name: Verify ${{inputs.dc_app}} metrics availability
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_metrics
+
       - name: Test scaling ${{inputs.dc_app}}
         run: |
           echo "[INFO]: Scaling ${DC_APP} to 2 replicas"

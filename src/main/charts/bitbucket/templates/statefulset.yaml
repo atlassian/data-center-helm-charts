@@ -32,6 +32,8 @@ spec:
     spec:
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "bitbucket.additionalHosts" . | nindent 8 }}
       {{- if .Values.bitbucket.securityContextEnabled }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
@@ -48,6 +50,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
         {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume) }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
@@ -77,6 +80,7 @@ spec:
               containerPort: {{ .Values.bitbucket.ports.hazelcast }}
               protocol: TCP
             {{- include "bitbucket.additionalPorts" . | nindent 12 }}
+            {{- include "common.jmx.port" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
@@ -99,6 +103,7 @@ spec:
               {{- end }}
             {{- end }}
             {{- include "bitbucket.additionalVolumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}
             {{- include "bitbucket.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
@@ -183,6 +188,10 @@ spec:
                   name: {{ include "common.names.fullname" . }}-jvm-config
             - name: APPLICATION_MODE
               value: {{ .Values.bitbucket.applicationMode | default "default" | quote }}
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: JMX_ENABLED
+              value: "true"
+            {{ end }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
             preStop:
@@ -209,6 +218,9 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       volumes:
         {{- range $i, $n := .Values.additionalFiles }}
         - name: {{ .name }}-{{$i}}
@@ -220,4 +232,5 @@ spec:
         {{ end }}
         {{ include "bitbucket.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "bitbucket.volumeClaimTemplates" . | nindent 2 }}

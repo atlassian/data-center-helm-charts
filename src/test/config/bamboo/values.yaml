@@ -24,3 +24,6 @@ database:
   url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql:5432/bamboo
   credentials:
     secretName: bamboo-database-credentials
+
+monitoring:
+  exposeJmxMetrics: true

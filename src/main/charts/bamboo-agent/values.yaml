@@ -1,24 +1,24 @@
 ## Atlassian Bamboo Data Center remote agent Helm values
-# 
-# HEADS UP! 
+#
+# HEADS UP!
 #
 # A running and configured Bamboo server instance is a prerequisite for agent deployment!
-# Ensure that a valid security token and Bamboo server base URL have been supplied for the 
+# Ensure that a valid security token and Bamboo server base URL have been supplied for the
 # relevant properties below i.e:
 # - agent.securityToken
 # - agent.server
 #
-# Additionally, the Bamboo server must have; "Remote agent authentication" *disabled* and  
+# Additionally, the Bamboo server must have; "Remote agent authentication" *disabled* and
 # "Security token verification" *enabled*. Details on these features and how to enable
 # and disable them here:
 # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html
 ##
 
-# -- The initial number of Bamboo agent pods that should be started at deployment time. 
+# -- The initial number of Bamboo agent pods that should be started at deployment time.
 #
 replicaCount: 1
 
-# Image configuration 
+# Image configuration
 #
 image:
 
@@ -26,33 +26,33 @@ image:
   # https://hub.docker.com/r/atlassian/bamboo-agent-base
   #
   repository: atlassian/bamboo-agent-base
-  
+
   # -- Image pull policy
   #
   pullPolicy: IfNotPresent
-  
+
   # -- The docker image tag to be used - defaults to the Chart appVersion
   #
   tag: ""
-  
-# K8s ServiceAccount configuration. Give fine-grained identity and authorization 
+
+# K8s ServiceAccount configuration. Give fine-grained identity and authorization
 # to Pods
 #
 serviceAccount:
 
-  # -- Set to 'true' if a ServiceAccount should be created, or 'false' if it 
+  # -- Set to 'true' if a ServiceAccount should be created, or 'false' if it
   # already exists.
   #
   create: true
-  
-  # -- The name of the ServiceAccount to be used by the pods. If not specified, but 
-  # the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name 
+
+  # -- The name of the ServiceAccount to be used by the pods. If not specified, but
+  # the "serviceAccount.create" flag is set to 'true', then the ServiceAccount name
   # will be auto-generated, otherwise the 'default' ServiceAccount will be used.
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   #
   name:
-  
-  # -- For Docker images hosted in private registries, define the list of image pull 
+
+  # -- For Docker images hosted in private registries, define the list of image pull
   # secrets that should be utilized by the created ServiceAccount
   # https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   #
@@ -63,26 +63,26 @@ serviceAccount:
   #
   annotations: {}
 
-# Bamboo agent configuration 
+# Bamboo agent configuration
 #
 agent:
-  
+
   # The security token with which the agent will authenticate to the Bamboo server
   # Additional details here:
   # https://confluence.atlassian.com/bamboo/agent-authentication-289277196.html#Agentauthentication-SecuritytokenverificationSecuritytokenverification
   #
   securityToken:
 
-    # -- The name of the K8s Secret that contains the security token. When specified the token 
-    # will be automatically utilised on agent boot. An Example of creating a K8s secret for the 
+    # -- The name of the K8s Secret that contains the security token. When specified the token
+    # will be automatically utilised on agent boot. An Example of creating a K8s secret for the
     # secret below:
     # 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>'
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
     #
     secretName:
-      
+
     secretKey: security-token
-    
+
   # The K8s DNS record for the Bamboo server service. Should be of the form, <service_name>.<namespace>.svc.cluster.local
   # for example: "bamboo-server.bamboo.svc.cluster.local"
   #
@@ -123,7 +123,7 @@ agent:
     # -- Command to use to check the startup status. This is provided by the agent image.
     #
     command: "/probe-startup.sh"
-  
+
     # -- The initial delay (in seconds) for the Bamboo agent container startup probe,
     # after which the probe will start running.
     #
@@ -132,7 +132,7 @@ agent:
     # -- How often (in seconds) the Bamboo agent container startup probe will run
     #
     periodSeconds: 1
-    
+
     # -- The number of consecutive failures of the Bamboo agent container startup probe
     # before the pod fails readiness checks.
     #
@@ -153,8 +153,8 @@ agent:
     # -- How often (in seconds) the Bamboo agent container readiness probe will run
     #
     periodSeconds: 5
-    
-    # -- The number of consecutive failures of the Bamboo agent container readiness probe 
+
+    # -- The number of consecutive failures of the Bamboo agent container readiness probe
     # before the pod fails readiness checks.
     #
     failureThreshold: 30
@@ -177,38 +177,38 @@ agent:
     #
     command: "/shutdown-wait.sh"
 
-  # Pod resource requests 
+  # Pod resource requests
   #
   resources:
-  
-    # JVM Memory / Heap Size definitions. These values below are based on the 
+
+    # JVM Memory / Heap Size definitions. These values below are based on the
     # defaults defined for the Bamboo agent docker container.
     # https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
     #
     jvm:
-      
+
       # -- The maximum amount of heap memory that will be used by the Bamboo agent JVM
       #
       maxHeap: "512m"
-      
+
       # -- The minimum amount of heap memory that will be used by the Bamboo agent JVM
       #
       minHeap: "256m"
-      
+
     # Specifies the standard K8s resource requests and/or limits for the Bamboo agent
-    # container. It is important that if the memory resources are specified here, 
-    # they must allow for the size of the Bamboo agent JVM. That means the maximum heap 
-    # size, plus other JVM overheads, must be accommodated. 
+    # container. It is important that if the memory resources are specified here,
+    # they must allow for the size of the Bamboo agent JVM. That means the maximum heap
+    # size, plus other JVM overheads, must be accommodated.
     # Allowing for (maxHeap)*1.5 would be an example.
     #
     container:
-      
+
       requests:
-      
+
         # -- Initial CPU request by Bamboo agent pod
         #
         cpu: "1" # If changing the cpu value update 'ActiveProcessorCount' below
-        
+
         # -- Initial Memory request by Bamboo agent pod
         #
         memory: "2G"
@@ -217,7 +217,7 @@ agent:
       #    memory: "2G"
 
   # -- Defines any additional environment variables to be passed to the Bamboo agent
-  # container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for 
+  # container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for
   # supported variables.
   #
   additionalEnvironmentVariables: []
@@ -273,6 +273,11 @@ affinity: {}
 #
 schedulerName:
 
+# -- Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster.
+# For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+#
+priorityClassName:
+
 # -- Additional container definitions that will be added to all Bamboo agent pods
 #
 additionalContainers: []
@@ -289,3 +294,11 @@ additionalInitContainers: []
 #
 additionalLabels: {}
 #  name: <value>
+
+# -- Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file.
+# https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+additionalHosts: []
+#  - ip: "127.0.0.1"
+#    hostnames:
+#    - "foo.local"
+#    - "bar.local"

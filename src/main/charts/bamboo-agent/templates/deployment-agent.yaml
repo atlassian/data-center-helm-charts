@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}        
+        checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}
         {{- include "agent.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "common.labels.selectorLabels" . | nindent 8 }}
@@ -20,6 +20,8 @@ spec:
     spec:
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "agent.additionalHosts" . | nindent 8 }}
       {{- if .Values.agent.securityContextEnabled }}
       {{- with .Values.agent.securityContext }}
       securityContext:
@@ -31,7 +33,7 @@ spec:
       {{- end }}
       {{- end }}
       initContainers:
-        {{- include "agent.additionalInitContainers" . | nindent 8 }}    
+        {{- include "agent.additionalInitContainers" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "agent.image" . | quote }}
@@ -43,7 +45,7 @@ spec:
                 secretKeyRef:
                   name: {{ . }}
                   key: {{ $.Values.agent.securityToken.secretKey }}
-            {{ end }}            
+            {{ end }}
             - name: BAMBOO_SERVER
               value: {{ include "agent.bambooServerServiceDns" . }}
             - name: WRAPPER_JAVA_INITMEMORY
@@ -110,4 +112,7 @@ spec:
       {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}

@@ -298,3 +298,12 @@ volumeClaimTemplates:
     {{- . }}
     {{- end }}
 {{- end}}
+
+{{/*
+Define additional hosts here to allow template overrides when used as a sub chart
+*/}}
+{{- define "bamboo.additionalHosts" -}}
+{{- with .Values.additionalHosts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}

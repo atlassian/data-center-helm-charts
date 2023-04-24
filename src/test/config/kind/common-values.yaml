@@ -46,3 +46,7 @@ ingress:
   create: true
   host: localhost
   https: false
+
+monitoring:
+  exposeJmxMetrics: true
+

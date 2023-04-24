@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.11.0
+    helm.sh/chart: jira-1.12.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.5"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-1.11.0
+    helm.sh/chart: jira-1.12.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.5"
@@ -26,9 +26,50 @@ data:
   additional_jvm_args: >-
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
+    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 768m
   min_heap: 384m
   reserved_code_cache: 512m
+---
+# Source: jira/templates/configmap-jmx-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-jira-jmx-config
+  labels:
+    helm.sh/chart: jira-1.12.0
+    app.kubernetes.io/name: jira
+    app.kubernetes.io/instance: unittest-jira
+    app.kubernetes.io/version: "9.4.5"
+    app.kubernetes.io/managed-by: Helm
+data:
+  jmx-config.yaml: |
+    lowercaseOutputLabelNames: true
+    lowercaseOutputName: true
+    rules:
+      - pattern: ".*"
+---
+# Source: jira/templates/service-jmx.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-jira-jmx
+  labels:
+    helm.sh/chart: jira-1.12.0
+    app.kubernetes.io/name: jira
+    app.kubernetes.io/instance: unittest-jira
+    app.kubernetes.io/version: "9.4.5"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: jmx
+      name: jmx
+  selector:
+    app.kubernetes.io/name: jira
+    app.kubernetes.io/instance: unittest-jira
 ---
 # Source: jira/templates/service.yaml
 apiVersion: v1
@@ -36,7 +77,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.11.0
+    helm.sh/chart: jira-1.12.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.5"
@@ -59,7 +100,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.11.0
+    helm.sh/chart: jira-1.12.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.5"
@@ -74,6 +115,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 810997b0ead21fd8586aba9d673c90de10df01b7b6f523ac00a043e1937d9d87
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -88,6 +130,13 @@ spec:
       securityContext:
         fsGroup: 2001
       initContainers:
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/shared-home"
+              name: shared-home
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -142,6 +191,9 @@ spec:
             - name: ehcacheobject
               containerPort: 40011
               protocol: TCP
+            - name: jmx
+              containerPort: 9999
+              protocol: TCP
           readinessProbe:
             httpGet:
               port: 8080
@@ -171,6 +223,8 @@ spec:
               subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - name: jmx-config
+              mountPath: /opt/atlassian/jmx
           lifecycle:
             preStop:
               exec:
@@ -181,6 +235,9 @@ spec:
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: jmx-config
+          configMap:
+            name: unittest-jira-jmx-config
 ---
 # Source: jira/templates/tests/test-application-status.yaml
 apiVersion: v1
@@ -191,7 +248,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.11.0
+    helm.sh/chart: jira-1.12.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.5"
@@ -223,7 +280,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.11.0
+    helm.sh/chart: jira-1.12.0
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.5"

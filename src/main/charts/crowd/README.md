@@ -1,6 +1,6 @@
 # crowd
 
-![Version: 1.11.0](https://img.shields.io/badge/Version-1.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.1.2](https://img.shields.io/badge/AppVersion-5.1.2-informational?style=flat-square)
+![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.1.2](https://img.shields.io/badge/AppVersion-5.1.2-informational?style=flat-square)
 
 A chart for installing Crowd Data Center on Kubernetes
 
@@ -17,7 +17,7 @@ Kubernetes: `>=1.21.x-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://atlassian.github.io/data-center-helm-charts | common | 1.0.0 |
+| https://atlassian.github.io/data-center-helm-charts | common | 1.1.0 |
 
 ## Values
 
@@ -86,14 +86,23 @@ Kubernetes: `>=1.21.x-0`
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced.  |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client.  |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/  This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'.  |
-| ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/crowd'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context on the application level, only "/" and "/crowd" paths are supported.   |
+| ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/crowd'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context on the application level, only "/" and "/crowd" paths are supported.  |
 | ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds.  |
 | ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed.  |
 | ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed.  |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext.  Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls  |
+| monitoring.exposeJmxMetrics | bool | `false` | Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter  |
+| monitoring.fetchJmxExporterJar | bool | `true` | Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar to shared home and provide an absolute path in jmxExporterCustomJarLocation  |
+| monitoring.jmxExporterCustomConfig | object | `{}` | Custom jmx config with the rules. Make sure to keep jmx-config key  |
+| monitoring.jmxExporterCustomJarLocation | string | `nil` | Location of jmx_exporter jar file if mounted from a secret or manually copied to shared home  |
+| monitoring.jmxExporterImageRepo | string | `"bitnami/jmx-exporter"` | Image repository with jmx_exporter jar  |
+| monitoring.jmxExporterImageTag | string | `"0.18.0"` | Image tag to be used to pull jmxExporterImageRepo  |
+| monitoring.jmxExporterPort | int | `9999` | Port number on which metrics will be available  |
+| monitoring.jmxExporterPortType | string | `"ClusterIP"` | JMX exporter port type  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Crowd pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Crowd pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Crowd pods  |
+| priorityClassName | string | `nil` | Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster. For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | replicaCount | int | `1` | The initial number of Crowd pods that should be started at deployment time. Note that Crowd requires manual configuration via the browser post deployment after the first pod is deployed. This configuration must be completed before scaling up additional pods. As such this value should always be kept as 1, but can be altered once manual configuration is complete.  |
 | schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Crowd pods. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the ServiceAccount (if created)  |

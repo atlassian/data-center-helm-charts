@@ -18,6 +18,11 @@ spec:
       targetPort: mesh
       protocol: TCP
       name: mesh
+    {{- if .Values.monitoring.exposeJmxMetrics}}
+    - port: {{ .Values.monitoring.jmxExporterPort}}
+      targetPort: jmx
+      name: jmx
+    {{- end }}
   selector:
     statefulset.kubernetes.io/pod-name: {{ include "common.names.fullname" . }}-mesh-{{ $index }}
 ---

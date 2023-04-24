@@ -11,6 +11,7 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.jira.resources.container.requests.cpu }}
+    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.jira.resources.jvm.maxHeap }}
   min_heap: {{ .Values.jira.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.jira.resources.jvm.reservedCodeCache }}

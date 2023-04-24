@@ -2,8 +2,8 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.11.0
-appVersion: 7.19.7
+version: 1.12.0
+appVersion: 7.19.8
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Confluence
@@ -20,9 +20,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#531)"
+    - "Add priorityClassName to pod spec (#557)"
 
 dependencies:
 - name: common
-  version: 1.0.0
+  version: 1.1.0
   repository: https://atlassian.github.io/data-center-helm-charts

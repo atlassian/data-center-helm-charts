@@ -24,6 +24,8 @@ spec:
     spec:
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
+      hostAliases:
+        {{- include "crowd.additionalHosts" . | nindent 8 }}
       {{- if .Values.crowd.securityContextEnabled }}
       {{- with .Values.crowd.securityContext }}
       securityContext:
@@ -40,6 +42,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "crowd.additionalInitContainers" . | nindent 8 }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
@@ -63,6 +66,7 @@ spec:
               containerPort: {{ .Values.crowd.ports.http }}
               protocol: TCP
             {{- include "crowd.additionalPorts" . | nindent 12 }}
+            {{- include "common.jmx.port" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.crowd.ports.http }}
@@ -92,6 +96,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "crowd.volumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "crowd.additionalVolumeMounts" . | nindent 12 }}
             {{- include "crowd.additionalLibraries" . | nindent 12 }}
             {{- include "crowd.additionalBundledPlugins" . | nindent 12 }}
@@ -165,6 +170,9 @@ spec:
       topologySpreadConstraints:
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName  | quote }}
       {{- end }}
@@ -179,4 +187,5 @@ spec:
         {{ end }}
         {{ include "crowd.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "crowd.volumeClaimTemplates" . | nindent 2 }}
