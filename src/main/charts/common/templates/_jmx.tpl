@@ -55,11 +55,7 @@ Jmx javaagent
 */}}
 {{- define "common.jmx.javaagent" -}}
 {{- if .Values.monitoring.exposeJmxMetrics }}
-{{- $subPath := "" }}
-{{- if .Values.volumes.sharedHome.subPath }}
-{{- $subPath = printf "/%s" .Values.volumes.sharedHome.subPath }}
-{{- end }}
--javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s%s/jmx_prometheus_javaagent.jar"  .Values.volumes.sharedHome.mountPath $subPath ) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml
+-javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar"  .Values.volumes.sharedHome.mountPath) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml
 {{- end }}
 {{- end }}
 
