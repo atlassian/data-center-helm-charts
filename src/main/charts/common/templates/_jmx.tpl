@@ -29,10 +29,13 @@ Jmx init container
 - name: fetch-jmx-exporter
   image: {{ .Values.monitoring.jmxExporterImageRepo}}:{{ .Values.monitoring.jmxExporterImageTag}}
   command: ["cp"]
-  args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "{{ .Values.volumes.sharedHome.mountPath }}"]
+  args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "{{ .Values.volumes.sharedHome.mountPath }}/{{ .Values.volumes.sharedHome.subPath }}"]
   volumeMounts:
     - mountPath: {{ .Values.volumes.sharedHome.mountPath | quote }}
       name: shared-home
+      {{- if .Values.volumes.sharedHome.subPath }}
+      subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
+      {{- end }}
 {{- end }}
 {{- end }}
 
@@ -52,6 +55,28 @@ Jmx javaagent
 */}}
 {{- define "common.jmx.javaagent" -}}
 {{- if .Values.monitoring.exposeJmxMetrics }}
--javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar" ( .Values.volumes.sharedHome.mountPath)) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml
+{{- $subPath := "" }}
+{{- if .Values.volumes.sharedHome.subPath }}
+{{- $subPath = printf "/%s" .Values.volumes.sharedHome.subPath }}
+{{- end }}
+-javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s%s/jmx_prometheus_javaagent.jar"  .Values.volumes.sharedHome.mountPath $subPath ) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml
+{{- end }}
+{{- end }}
+
+{{/*
+Jmx configuration yaml
+*/}}
+{{- define "common.jmx.config" -}}
+{{ if .Values.monitoring.jmxExporterCustomConfig }}
+{{- range $key, $value := .Values.monitoring.jmxExporterCustomConfig }}
+{{ $key }}: |
+{{ $value | indent 2 }}
+{{- end }}
+{{ else }}
+jmx-config.yaml: |
+  lowercaseOutputLabelNames: true
+  lowercaseOutputName: true
+  rules:
+    - pattern: ".*"
 {{- end }}
 {{- end }}
