@@ -43,7 +43,7 @@ Out of the box, Prometheus and Grafana services are not exposed, and the simples
 
 
 ```
-kubect port-forward prometheus-prometheus-kube-prometheus-prometheus-0 9090:9090 -n <prometheus-stack-namespace>
+kubectl port-forward prometheus-prometheus-kube-prometheus-prometheus-0 9090:9090 -n <prometheus-stack-namespace>
 ```
 After `ServiceMonitor` is created, verify it is in Prometheus targets. Go to `http://localhost:9090` in your local browser, navigate to **Status -> Targets**. You should be able to see your product pods as targets.
 
