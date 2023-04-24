@@ -235,7 +235,7 @@ spec:
         - name: fetch-jmx-exporter
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
-          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/mesh"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/mesh/"]
           volumeMounts:
             - mountPath: "/var/atlassian/application-data/mesh"
               name: mesh-home
@@ -360,7 +360,7 @@ spec:
         - name: fetch-jmx-exporter
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
-          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home/"]
           volumeMounts:
             - mountPath: "/var/atlassian/application-data/shared-home"
               name: shared-home
