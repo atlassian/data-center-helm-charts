@@ -44,7 +44,6 @@ class JmxMetricsTest {
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
 
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
 
         // assert jmx port
@@ -135,7 +134,6 @@ class JmxMetricsTest {
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
 
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(localHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(localHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(localHomePath);
 
