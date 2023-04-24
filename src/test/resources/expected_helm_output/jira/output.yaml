@@ -115,7 +115,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: caf3dbcd0ff13f2d913b3206c0bd41ec04a6288f0b756def35b704b03a94e1a8
+        checksum/config-jvm: 810997b0ead21fd8586aba9d673c90de10df01b7b6f523ac00a043e1937d9d87
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -130,13 +130,6 @@ spec:
       securityContext:
         fsGroup: 2001
       initContainers:
-        - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
-          command: ["cp"]
-          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
-          volumeMounts:
-            - mountPath: "/var/atlassian/application-data/shared-home"
-              name: shared-home
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -146,6 +139,13 @@ spec:
             - name: shared-home
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/shared-home"
+              name: shared-home
       containers:
         - name: jira
           image: "atlassian/jira-software:9.4.5"

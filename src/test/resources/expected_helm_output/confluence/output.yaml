@@ -254,7 +254,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 46f563bf6df6f38389c531368acd8060fc8f01fc0995ec88f838cbf52a930c12
+        checksum/config-jvm: 705b517555fce927c54cb9ef8407e808a74f44a4c09a077cb2edc3824d117e22
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -268,13 +268,6 @@ spec:
           - test.example.com
           ip: 192.168.1.1
       initContainers:
-        - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
-          command: ["cp"]
-          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
-          volumeMounts:
-            - mountPath: "/var/atlassian/application-data/shared-home"
-              name: shared-home
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -284,6 +277,13 @@ spec:
             - name: shared-home
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/shared-home"
+              name: shared-home
       containers:
         - name: confluence
           image: "atlassian/confluence:7.19.8"

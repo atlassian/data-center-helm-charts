@@ -130,13 +130,6 @@ spec:
       securityContext:
         fsGroup: 2004
       initContainers:
-        - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
-          command: ["cp"]
-          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/crowd/shared"]
-          volumeMounts:
-            - mountPath: "/var/atlassian/application-data/crowd/shared"
-              name: shared-home
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -146,6 +139,13 @@ spec:
             - name: shared-home
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/crowd/shared"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/crowd/shared"
+              name: shared-home
       containers:
         - name: crowd
           image: "atlassian/crowd:5.1.2"

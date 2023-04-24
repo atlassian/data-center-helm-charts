@@ -42,7 +42,6 @@ spec:
       {{- end }}
       initContainers:
         {{- include "jira.additionalInitContainers" . | nindent 8 }}
-        {{- include "common.jmx.initContainer" . | nindent 8 }}
         {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
@@ -57,6 +56,7 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "jira.image" . | quote }}
