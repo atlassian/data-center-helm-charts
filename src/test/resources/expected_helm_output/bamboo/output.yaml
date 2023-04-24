@@ -211,7 +211,7 @@ spec:
             - name: ATL_IMPORT_OPTION
               value: clean
             - name: ATL_IMPORT_PATH
-              value: 
+              value:
             - name: ATL_BAMBOO_ENABLE_UNATTENDED_SETUP
               value: "true"
           ports:
