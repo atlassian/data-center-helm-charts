@@ -6,16 +6,5 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
-{{ if .Values.monitoring.jmxExporterCustomConfig }}
-{{- range $key, $value := .Values.monitoring.jmxExporterCustomConfig }}
-  {{ $key }}: |
-{{ $value | indent 4 }}
-  {{- end }}
-  {{ else }}
-  jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
-    rules:
-      - pattern: ".*"
-{{- end }}
+{{- include "common.jmx.config" . | nindent 2 }}
 {{- end }}

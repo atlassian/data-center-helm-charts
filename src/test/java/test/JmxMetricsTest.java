@@ -43,7 +43,7 @@ class JmxMetricsTest {
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
 
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath + "/");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
 
         // assert jmx port
@@ -62,6 +62,31 @@ class JmxMetricsTest {
             // assert jmx env var
             statefulSet.getContainer().getEnv().assertHasValue("JMX_ENABLED", "true");
         }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void expose_jmx_metrics_enabled_custom_vol_paths(Product product) throws Exception {
+        String sharedHomePath = "/var/atlassian/application-data/custom-shared-home";
+        if (product.name().equals("crowd")) {
+            sharedHomePath= "/var/atlassian/application-data/crowd/custom-shared";
+        }
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true",
+                "volumes.sharedHome.subPath", product.name(),
+                "volumes.sharedHome.mountPath", sharedHomePath
+
+        ));
+
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+
+        // assert jmx_exporter init container
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath + "/" + product.name());
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("subPath")).hasTextEqualTo(product.name());
+        // assert jvm configmap has javaagent
+        final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+        assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+sharedHomePath+ "/" + product + "/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
     }
 
     @ParameterizedTest
