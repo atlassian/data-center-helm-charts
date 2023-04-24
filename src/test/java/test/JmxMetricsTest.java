@@ -86,7 +86,7 @@ class JmxMetricsTest {
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("subPath")).hasTextEqualTo(product.name());
         // assert jvm configmap has javaagent
         final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
-        assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+sharedHomePath+ "/" + product + "/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+        assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+ sharedHomePath + "/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
     }
 
     @ParameterizedTest
