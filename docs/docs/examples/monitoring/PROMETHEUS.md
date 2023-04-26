@@ -54,7 +54,7 @@ To access Grafana, run (replace pod name with an actual Grafana pod name):
 kubectl port-forward prometheus-grafana-656c669c85-g5kb4 3000:3000 -n <prometheus-stack-namespace>
 ```
 
-and go to `http://localhost:3000` in your browser. The default credentials are `admin:prom-operator` (can be overridden when deploying kube-prometheus-stack).
+and go to `http://localhost:3000` in your browser. The default credentials are `admin:prom-operator` (these can be overridden when deploying kube-prometheus-stack).
 Alternatively, you may expose grafana service as a LoadBalancer.
 
 
