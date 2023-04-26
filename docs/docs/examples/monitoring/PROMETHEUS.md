@@ -55,7 +55,7 @@ kubectl port-forward prometheus-grafana-656c669c85-g5kb4 3000:3000 -n <prometheu
 ```
 
 and go to `http://localhost:3000` in your browser. The default credentials are `admin:prom-operator` (these can be overridden when deploying kube-prometheus-stack).
-Alternatively, you may expose grafana service as a LoadBalancer.
+Alternatively, you may expose grafana service as a `LoadBalancer` `Service` type.
 
 
 You can then create a new [Dashboard](https://grafana.com/docs/grafana/latest/dashboards/) and use any of the exported metrics. To get the list of available metrics, run:
