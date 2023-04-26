@@ -5,7 +5,7 @@ Once you have [installed your product](../userguide/INSTALLATION.md), use this d
 
 When `monitoring.exposeJmxMetrics` is enabled, [JMX exporter](https://github.com/prometheus/jmx_exporter) runs as javaagent to expose http server and serve metrics of a local JVM. In other words, JMX MBeans (if enabled in the product) are exposed and available to be scraped by [Prometheus](https://prometheus.io/).
 
-[JMX exporter jar](https://github.com/prometheus/jmx_exporter) isn't available in products dependencies or container images, that is why when `monitoring.exposeJmxMetrics`
+[JMX exporter jar](https://github.com/prometheus/jmx_exporter){.external} isn't available in products dependencies or container images, that is why when `monitoring.exposeJmxMetrics`
 is enabled there are 2 ways to get it:
 
 * copy from an init container ([bitnami/jmx-exporter DockerHub image](https://hub.docker.com/r/bitnami/jmx-exporter)) - the **default** option in values.yaml which works out of the box
