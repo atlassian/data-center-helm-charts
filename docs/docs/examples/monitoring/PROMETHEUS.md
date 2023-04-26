@@ -30,7 +30,7 @@ spec:
 The above example assumes that:
 
 * the DC Helm release name is `confluence`
-* Prometheus custom resource is watching service monitors using the following labelSelector:
+* Prometheus custom resource is watching service monitors using the following `labelSelector`:
   ```
   serviceMonitorSelector:
     matchLabels:
