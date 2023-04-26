@@ -56,6 +56,7 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
         - name: crowd
           image: {{ include "crowd.image" . | quote }}
@@ -65,6 +66,7 @@ spec:
               containerPort: {{ .Values.crowd.ports.http }}
               protocol: TCP
             {{- include "crowd.additionalPorts" . | nindent 12 }}
+            {{- include "common.jmx.port" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.crowd.ports.http }}
@@ -94,6 +96,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "crowd.volumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "crowd.additionalVolumeMounts" . | nindent 12 }}
             {{- include "crowd.additionalLibraries" . | nindent 12 }}
             {{- include "crowd.additionalBundledPlugins" . | nindent 12 }}
@@ -184,4 +187,5 @@ spec:
         {{ end }}
         {{ include "crowd.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "crowd.volumeClaimTemplates" . | nindent 2 }}

@@ -51,6 +51,7 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "bamboo.image" . | quote }}
@@ -156,6 +157,7 @@ spec:
             - name: jms
               containerPort: {{ .Values.bamboo.ports.jms }}
               protocol: TCP
+            {{- include "common.jmx.port" . | nindent 12 }}
             {{- include "bamboo.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
@@ -174,6 +176,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "bamboo.volumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "bamboo.additionalVolumeMounts" . | nindent 12 }}
             {{- include "bamboo.additionalLibraries" . | nindent 12 }}
             {{- include "bamboo.additionalBundledPlugins" . | nindent 12 }}
@@ -221,4 +224,5 @@ spec:
         {{ end }}
         {{ include "bamboo.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "bamboo.volumeClaimTemplates" . | nindent 2 }}

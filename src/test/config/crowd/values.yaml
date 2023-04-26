@@ -1,8 +1,6 @@
 # This file contains overrides for the crowd Helm chart's values.yaml file
 
 crowd:
-  clustering:
-    enabled: ${clustering.enabled}
   resources:
     container:
       requests:
@@ -16,5 +14,5 @@ database:
   credentials:
     secretName: crowd-database-credentials
 
-synchrony:
-  enabled: true
+monitoring:
+  exposeJmxMetrics: true

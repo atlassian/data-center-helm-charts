@@ -56,6 +56,7 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
         - name: confluence
           image: {{ include "confluence.image" . | quote }}
@@ -67,6 +68,7 @@ spec:
             - name: hazelcast
               containerPort: {{ .Values.confluence.ports.hazelcast }}
               protocol: TCP
+            {{- include "common.jmx.port" . | nindent 12 }}
             {{- include "confluence.additionalPorts" . | nindent 12 }}
           readinessProbe:
             httpGet:
@@ -85,6 +87,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "confluence.volumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "confluence.additionalVolumeMounts" . | nindent 12 }}
             {{- include "confluence.additionalLibraries" . | nindent 12 }}
             {{- include "confluence.additionalBundledPlugins" . | nindent 12 }}
@@ -189,4 +192,5 @@ spec:
         {{ end }}
         {{ include "confluence.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "confluence.volumeClaimTemplates" . | nindent 2 }}

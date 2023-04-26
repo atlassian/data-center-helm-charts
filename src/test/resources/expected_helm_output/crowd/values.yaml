@@ -13,3 +13,5 @@ additionalHosts:
     - "foo.local"
     - "bar.local"
 
+monitoring:
+  exposeJmxMetrics: true

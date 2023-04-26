@@ -56,6 +56,7 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "jira.image" . | quote }}
@@ -117,6 +118,7 @@ spec:
               containerPort: {{ .Values.jira.ports.ehcacheobject }}
               protocol: TCP
             {{- include "jira.additionalPorts" . | nindent 12 }}
+            {{- include "common.jmx.port" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.jira.ports.http }}
@@ -146,6 +148,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "jira.volumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "jira.additionalVolumeMounts" . | nindent 12 }}
             {{- include "jira.additionalLibraries" . | nindent 12 }}
             {{- include "jira.additionalBundledPlugins" . | nindent 12 }}
@@ -193,4 +196,5 @@ spec:
         {{ end }}
         {{ include "jira.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "jira.volumeClaimTemplates" . | nindent 2 }}

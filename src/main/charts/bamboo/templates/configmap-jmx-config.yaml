@@ -1,0 +1,10 @@
+{{- if .Values.monitoring.exposeJmxMetrics }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-jmx-config
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- include "common.jmx.config" . | nindent 2 }}
+{{- end }}

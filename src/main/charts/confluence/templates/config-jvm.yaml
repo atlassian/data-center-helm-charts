@@ -19,6 +19,7 @@ data:
     {{- if .Values.serviceAccount.eksIrsa.roleArn }}
     -Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
     {{- end }}
+    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
     {{ include "confluence.sysprop.s3Config" . | indent 4 | trim }}
   max_heap: {{ .Values.confluence.resources.jvm.maxHeap }}
   min_heap: {{ .Values.confluence.resources.jvm.minHeap }}

@@ -30,9 +30,28 @@ data:
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
+    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 256m
+---
+# Source: confluence/templates/configmap-jmx-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-confluence-jmx-config
+  labels:
+    helm.sh/chart: confluence-1.12.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/managed-by: Helm
+data:
+  jmx-config.yaml: |
+    lowercaseOutputLabelNames: true
+    lowercaseOutputName: true
+    rules:
+      - pattern: ".*"
 ---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1
@@ -55,6 +74,28 @@ data:
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
        sql
+---
+# Source: confluence/templates/service-jmx.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-confluence-jmx
+  labels:
+    helm.sh/chart: confluence-1.12.0
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: jmx
+      name: jmx
+  selector:
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
 ---
 # Source: confluence/templates/service-synchrony.yaml
 apiVersion: v1
@@ -213,7 +254,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 46f563bf6df6f38389c531368acd8060fc8f01fc0995ec88f838cbf52a930c12
+        checksum/config-jvm: 705b517555fce927c54cb9ef8407e808a74f44a4c09a077cb2edc3824d117e22
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -236,6 +277,13 @@ spec:
             - name: shared-home
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/shared-home"
+              name: shared-home
       containers:
         - name: confluence
           image: "atlassian/confluence:7.19.8"
@@ -246,6 +294,9 @@ spec:
               protocol: TCP
             - name: hazelcast
               containerPort: 5701
+              protocol: TCP
+            - name: jmx
+              containerPort: 9999
               protocol: TCP
           readinessProbe:
             httpGet:
@@ -266,6 +317,8 @@ spec:
               subPath: "logs"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - name: jmx-config
+              mountPath: /opt/atlassian/jmx
           env:
             - name: ATL_TOMCAT_SCHEME
               value: "https"
@@ -311,6 +364,9 @@ spec:
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: jmx-config
+          configMap:
+            name: unittest-confluence-jmx-config
 ---
 # Source: confluence/templates/tests/test-application-status.yaml
 apiVersion: v1

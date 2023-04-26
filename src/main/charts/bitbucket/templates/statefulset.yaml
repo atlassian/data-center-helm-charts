@@ -64,6 +64,7 @@ spec:
               {{- end }}
           command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
+        {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ include "bitbucket.image" . | quote }}
@@ -79,6 +80,7 @@ spec:
               containerPort: {{ .Values.bitbucket.ports.hazelcast }}
               protocol: TCP
             {{- include "bitbucket.additionalPorts" . | nindent 12 }}
+            {{- include "common.jmx.port" . | nindent 12 }}
           readinessProbe:
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
@@ -101,6 +103,7 @@ spec:
               {{- end }}
             {{- end }}
             {{- include "bitbucket.additionalVolumeMounts" . | nindent 12 }}
+            {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}
             {{- include "bitbucket.additionalBundledPlugins" . | nindent 12 }}
             {{- range $i, $n := .Values.additionalFiles }}
@@ -185,6 +188,10 @@ spec:
                   name: {{ include "common.names.fullname" . }}-jvm-config
             - name: APPLICATION_MODE
               value: {{ .Values.bitbucket.applicationMode | default "default" | quote }}
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: JMX_ENABLED
+              value: "true"
+            {{ end }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
             preStop:
@@ -225,4 +232,5 @@ spec:
         {{ end }}
         {{ include "bitbucket.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
+        {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "bitbucket.volumeClaimTemplates" . | nindent 2 }}

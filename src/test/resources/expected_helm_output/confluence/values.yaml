@@ -13,3 +13,7 @@ additionalHosts:
     - "test.example.com"
 
 priorityClassName: "high"
+
+monitoring:
+  exposeJmxMetrics: true
+

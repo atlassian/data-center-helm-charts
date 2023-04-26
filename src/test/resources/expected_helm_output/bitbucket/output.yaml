@@ -25,6 +25,7 @@ metadata:
 data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=1
+    -javaagent:/var/atlassian/application-data/mesh/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 512m
 ---
@@ -42,8 +43,49 @@ metadata:
 data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=2
+    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 512m
+---
+# Source: bitbucket/templates/configmap-jmx-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-bitbucket-jmx-config
+  labels:
+    helm.sh/chart: bitbucket-1.12.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "8.9.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  jmx-config.yaml: |
+    lowercaseOutputLabelNames: true
+    lowercaseOutputName: true
+    rules:
+      - pattern: ".*"
+---
+# Source: bitbucket/templates/service-jmx.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bitbucket-jmx
+  labels:
+    helm.sh/chart: bitbucket-1.12.0
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "8.9.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: jmx
+      name: jmx
+  selector:
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
 ---
 # Source: bitbucket/templates/service-mesh.yaml
 apiVersion: v1
@@ -64,6 +106,9 @@ spec:
       targetPort: mesh
       protocol: TCP
       name: mesh
+    - port: 9999
+      targetPort: jmx
+      name: jmx
   selector:
     statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-0
 ---
@@ -86,6 +131,9 @@ spec:
       targetPort: mesh
       protocol: TCP
       name: mesh
+    - port: 9999
+      targetPort: jmx
+      name: jmx
   selector:
     statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-1
 ---
@@ -108,6 +156,9 @@ spec:
       targetPort: mesh
       protocol: TCP
       name: mesh
+    - port: 9999
+      targetPort: jmx
+      name: jmx
   selector:
     statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-2
 ---
@@ -168,7 +219,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: a6d496f85145b5f3209b15344fefff4a2263ffbcf1ba780ce1430ff5181148f7
+        checksum/config-jvm: 196e61f853214d77e3fb5b3c57c04464c4fb28e1ffdec69f257ad84f553c6825
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -181,6 +232,15 @@ spec:
           - bar.local
           ip: 127.0.0.1
       initContainers:
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/mesh"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/mesh"
+              name: mesh-home
+          securityContext:
+            runAsUser: 0 # make sure we run as root to avoid permission denied
       containers:
         - name: bitbucket-mesh
           image: atlassian/bitbucket-mesh:1.5.0
@@ -188,6 +248,9 @@ spec:
           ports:
             - name: mesh
               containerPort: 7777
+              protocol: TCP
+            - name: jmx
+              containerPort: 9999
               protocol: TCP
           readinessProbe:
             tcpSocket:
@@ -198,6 +261,8 @@ spec:
           volumeMounts:
             - name: mesh-home
               mountPath: "/var/atlassian/application-data/mesh"
+            - name: jmx-config
+              mountPath: /opt/atlassian/jmx
           resources:
             limits:
               cpu: "2"
@@ -231,12 +296,17 @@ spec:
                 configMapKeyRef:
                   key: additional_jvm_args
                   name: unittest-bitbucket-jvm-config-mesh
+            - name: JMX_ENABLED
+              value: "true"
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
       priorityClassName: high
       volumes:
+        - name: jmx-config
+          configMap:
+            name: unittest-bitbucket-jmx-config
   volumeClaimTemplates:
   - metadata:
       name: mesh-home
@@ -272,7 +342,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 79e98cbc96a0f1e42488aed4f1b21a34041ccc0e33d2ccfb5f3227f26db2b954
+        checksum/config-jvm: 3ad8dba1613e51f049cfe401770a5058ab0b91a5d802503f3413e3c51a2df22a
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -287,6 +357,13 @@ spec:
       securityContext:
         fsGroup: 2003
       initContainers:
+        - name: fetch-jmx-exporter
+          image: bitnami/jmx-exporter:0.18.0
+          command: ["cp"]
+          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          volumeMounts:
+            - mountPath: "/var/atlassian/application-data/shared-home"
+              name: shared-home
       containers:
         - name: bitbucket
           image: "atlassian/bitbucket:8.9.0"
@@ -301,6 +378,9 @@ spec:
             - name: hazelcast
               containerPort: 5701
               protocol: TCP
+            - name: jmx
+              containerPort: 9999
+              protocol: TCP
           readinessProbe:
             httpGet:
               port: 7990
@@ -311,6 +391,8 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/bitbucket"
+            - name: jmx-config
+              mountPath: /opt/atlassian/jmx
           resources:
             requests:
               cpu: "2"
@@ -349,6 +431,8 @@ spec:
                   name: unittest-bitbucket-jvm-config
             - name: APPLICATION_MODE
               value: "default"
+            - name: JMX_ENABLED
+              value: "true"
           lifecycle:
             preStop:
               exec:
@@ -357,6 +441,9 @@ spec:
       volumes:
         - name: local-home
           emptyDir: {}
+        - name: jmx-config
+          configMap:
+            name: unittest-bitbucket-jmx-config
 ---
 # Source: bitbucket/templates/tests/test-application-status.yaml
 apiVersion: v1

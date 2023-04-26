@@ -34,3 +34,6 @@ additionalHosts:
     hostnames:
     - "foo.local"
     - "bar.local"
+
+monitoring:
+  exposeJmxMetrics: true

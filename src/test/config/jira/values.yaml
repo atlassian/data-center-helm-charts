@@ -5,7 +5,7 @@ jira:
     enabled: ${clustering.enabled}
   additionalJvmArgs:
     - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
-    - -Djira.websudo.is.disabled=true 
+    - -Djira.websudo.is.disabled=true
     - -Datlassian.allow.insecure.url.parameter.login=true
     - -XX:ActiveProcessorCount=2
   readinessProbe:
@@ -16,3 +16,6 @@ database:
   driver: org.postgresql.Driver
   credentials:
     secretName: jira-database-credentials
+
+monitoring:
+  exposeJmxMetrics: true
