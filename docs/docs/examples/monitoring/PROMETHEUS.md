@@ -70,7 +70,7 @@ and go to `http://localhost:9999/metrics` in your local browser.
 
 !!!warning "JMX service security"
     By default, JMX services are created as ClusterIP types, i.e. they are not available outside the Kubernetes cluster.
-    If your Prometheus instance, is deployed outside the Kubernetes cluster, you will need to expose the jmx service:
+    If your Prometheus instance, is deployed outside the Kubernetes cluster, you will need to expose the `JMX` service:
     ```
     monitoring:
       jmxExporterPortType: LoadBalancer
