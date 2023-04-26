@@ -36,7 +36,7 @@ The above example assumes that:
     matchLabels:
       release: prometheus-stack
   ```
-  which is the case if [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) release name is `prometheus-stack`
+which is the case if [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) release name is `prometheus-stack`
 
 
 Out of the box, Prometheus and Grafana services are not exposed, and the simplest way to access them is to forward the service port (replace pod name with an actual Prometheus pod name):
