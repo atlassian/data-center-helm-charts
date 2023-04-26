@@ -9,7 +9,7 @@ When `monitoring.exposeJmxMetrics` is enabled, [JMX exporter](https://github.com
 is enabled there are 2 ways to get it:
 
 * copy from an init container ([bitnami/jmx-exporter DockerHub image](https://hub.docker.com/r/bitnami/jmx-exporter)) - the **default** option in values.yaml which works out of the box
-* manually download from [jmx exporter GitHub releases page](https://github.com/prometheus/jmx_exporter/tags) and copy to shared-home or mount as a secret
+* manually download from [JMX exporter GitHub releases page](https://github.com/prometheus/jmx_exporter/tags){.external} and copy to shared-home or mount as a secret
 
 
 === "Init Container"
