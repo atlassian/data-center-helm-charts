@@ -4,7 +4,7 @@
 
 Install [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) Helm chart (call your release `prometheus-stack`).
 
-Once [JMX metrics are exposed](../../../userguide/OPERATION/#monitoring) in your product Helm chart, Helm will create a dedicated jmx service, and you can now create a `ServiceMonitor` object so that Prometheus starts scraping metrics:
+Once [JMX metrics are exposed](../../../userguide/OPERATION/#monitoring) in your product Helm chart, Helm will create a dedicated `JMX` service, and you can now create a `ServiceMonitor` object so that Prometheus starts scraping metrics:
 
 
 ```yaml
