@@ -47,6 +47,29 @@ data:
     rules:
       - pattern: ".*"
 ---
+# Source: bamboo/templates/service-jms.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: unittest-bamboo-jms
+  labels:
+    helm.sh/chart: bamboo-1.12.0
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "9.2.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - port: 54663
+      targetPort: jms
+      protocol: TCP
+      name: jms
+  selector:
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+---
 # Source: bamboo/templates/service-jmx.yaml
 apiVersion: v1
 kind: Service
@@ -113,7 +136,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 6a2d1b3064ea870e5fb6beb167be510c3f11d8d9528a1b920be7fe6611f12cc2
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo

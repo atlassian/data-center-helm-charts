@@ -1,0 +1,24 @@
+{{- if .Values.bamboo.jmsService.enabled}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-jms
+  labels:
+  {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+  {{- with .Values.bamboo.jmsService.annotations }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.bamboo.jmsService.type }}
+  {{- if and (eq .Values.bamboo.jmsService.type "LoadBalancer") (not (empty .Values.bamboo.jmsService.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.bamboo.jmsService.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.bamboo.jmsService.port }}
+      targetPort: jms
+      protocol: TCP
+      name: jms
+  selector:
+  {{- include "common.labels.selectorLabels" . | nindent 4 }}
+{{- end }}
