@@ -39,7 +39,20 @@ At present Bamboo Data Center utilizes an [active-passive clustering model](http
     At present, Bamboo server cluster sizes comprising only `1` pod is the only supported topology for now.
 
 ### Server and agent affinity
-The Bamboo server and Bamboo agents must be deployed to the same cluster. You cannot have Bamboo agents in one cluster communicating with a Bamboo server in another.
+It is preferable that the Bamboo server and agents are be deployed to the same cluster due to security and performance reasons. If agents are deployed outside the Kubernetes cluster, you need to expose Bamboo server JMS port as `LoadBalancer` or `NodeIP`:
+
+```
+bamboo:
+  jmsService:
+    enabled: true
+    type: (LoadBalancer|NodeIP)
+```
+!!!warning "Security and performance considerations"
+   
+   If Bamboo server JMS port is exposed, it is highly recommended that you either allow access to it for Bamboo agents CIDR only (inbound security group rules if on AWS), and/or secure remote agent by configuring SSL for [AMQ](https://confluence.atlassian.com/bamkb/how-to-secure-your-remote-agent-bamboo-server-757465762.html){.external}.
+   
+   Deploying Bamboo agents to the same cluster with the server or at least to the same region/availability zone/datacenter is highly recommended to avoid performance and latency issues.
+
 
 ### Bamboo to Cloud App Link
 When configuring application links between Bamboo server and any Atlassian Cloud server product, the Bamboo server base URL needs to be used. [See public issue for more detail](https://jira.atlassian.com/browse/BAM-21439).
