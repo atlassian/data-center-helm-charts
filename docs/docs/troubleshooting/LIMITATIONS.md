@@ -39,7 +39,7 @@ At present Bamboo Data Center utilizes an [active-passive clustering model](http
     At present, Bamboo server cluster sizes comprising only `1` pod is the only supported topology for now.
 
 ### Server and agent affinity
-It is preferable that the Bamboo server and agents are be deployed to the same cluster due to security and performance reasons. If agents are deployed outside the Kubernetes cluster, you need to expose Bamboo server JMS port as LoadBalancer or NodeIP:
+It is preferable that the Bamboo server and agents are be deployed to the same cluster due to security and performance reasons. If agents are deployed outside the Kubernetes cluster, you need to expose Bamboo server JMS port as `LoadBalancer` or `NodeIP`:
 
 ```
 bamboo:
