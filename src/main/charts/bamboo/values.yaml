@@ -489,7 +489,7 @@ bamboo:
   #
   service:
 
-    # -- The port on which the Bamboo K8s Service will listen
+    # -- The port on which the Bamboo K8s Service will listen for http traffic
     #
     port: 80
 
@@ -507,6 +507,30 @@ bamboo:
     contextPath:
 
     # -- Additional annotations to apply to the Service
+    #
+    annotations: {}
+
+  # K8s Service configuration for JMS
+  #
+  jmsService:
+
+    # -- Whether to create a separate Service for JMS Agent traffic
+    #
+    enabled: false
+
+    # -- The port on which the Bamboo K8s Service will listen for Agent traffic
+    #
+    port: 54663
+
+    # -- The type of K8s service to use for JMS
+    #
+    type: ClusterIP
+
+    # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
+    #
+    loadBalancerIP:
+
+    # -- Additional annotations to apply to the JMS Service
     #
     annotations: {}
 

@@ -27,6 +27,9 @@ bamboo:
   import:
     type: "clean"
 
+  jmsService:
+    enabled: true
+
 
 priorityClassName: "high"
 additionalHosts:

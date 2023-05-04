@@ -44,6 +44,11 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.import | object | `{"path":null,"type":"clean"}` | Bamboo can optionally import an existing exported dataset on first-run. These optional values can configure the import file or skip this stage entirely. For more details on importing and exporting see the documentation:  https://confluence.atlassian.com/bamboo/exporting-data-for-backup-289277255.html https://confluence.atlassian.com/bamboo/importing-data-from-backup-289277260.html  |
 | bamboo.import.path | string | `nil` | Path to the existing export to import to the new installation. This should be accessible by the cluster node; e.g. via the shared-home or `additionalVolumeMounts` below.  |
 | bamboo.import.type | string | `"clean"` | Import type. Valid values are `clean` (for a new install) or `import`, in which case you should provide the file path. The default is `clean`.  |
+| bamboo.jmsService.annotations | object | `{}` | Additional annotations to apply to the JMS Service  |
+| bamboo.jmsService.enabled | bool | `false` | Whether to create a separate Service for JMS Agent traffic  |
+| bamboo.jmsService.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
+| bamboo.jmsService.port | int | `54663` | The port on which the Bamboo K8s Service will listen for Agent traffic  |
+| bamboo.jmsService.type | string | `"ClusterIP"` | The type of K8s service to use for JMS  |
 | bamboo.license | object | `{"secretKey":"license","secretName":null}` | The Bamboo DC license that should be used. If supplied here the license configuration will be skipped in the setup wizard.  |
 | bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information  |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information  |
@@ -63,7 +68,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | bamboo.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
-| bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen  |
+| bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen for http traffic  |
 | bamboo.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bamboo  |
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour.  |
 | bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/shutdown-wait.sh) for details.  |
