@@ -4,7 +4,7 @@ The instructions outlined on this page provide details on how you can enable [Pr
 
 ## 1. Install Prometheus Operator
 
-Install [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) Helm chart (call your release `prometheus-stack`).
+Install [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack){.external} Helm chart (call your release `prometheus-stack`).
 
 ## 2. Expose JMX metrics
 
