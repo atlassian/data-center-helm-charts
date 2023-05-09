@@ -1,11 +1,19 @@
-# Prometheus Monitoring
+# Monitoring
 
-## Prometheus Operator
+The instructions outlined on this page provide details on how you can enable [Prometheus](https://prometheus.io/){.external} monitoring on your stack with [Grafana](https://grafana.com/){.external}
+
+## 1. Install Prometheus Operator
 
 Install [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) Helm chart (call your release `prometheus-stack`).
 
-Once [JMX metrics are exposed](../../../userguide/OPERATION/#monitoring) in your product Helm chart, Helm will create a dedicated `JMX` service, and you can now create a `ServiceMonitor` object so that Prometheus starts scraping metrics:
+## 2. Expose JMX metrics
 
+Enable and expose [JMX metrics](../../../userguide/OPERATION/#expose-jmx-metrics) in your product Helm chart, Helm will create a dedicated `JMX` service. 
+
+
+## 3. Create a ServiceMonitor
+
+Now that `JMX` metrics are exposed, we need a way of scraping them. Using the `yaml` below create a `ServiceMonitor` object so that Prometheus cam scraping the exposed JMX metrics
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -27,26 +35,34 @@ spec:
       app.kubernetes.io/name: confluence
 ```
 
-The above example assumes that:
 
-* the DC Helm release name is `confluence`
-* Prometheus custom resource is watching service monitors using the following `labelSelector`:
-  ```
-  serviceMonitorSelector:
-    matchLabels:
-      release: prometheus-stack
-  ```
-which is the case if [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) release name is `prometheus-stack`
+!!!Info "Note"
+    The above example assumes that:
 
+      * the DC Helm release name is `confluence`
+      * The Prometheus custom resource is watching the `ServiceMonitor`'s using the following `labelSelector`:
+    ```
+    serviceMonitorSelector:
+        matchLabels:
+          release: prometheus-stack
+    ```
+    
 
-Out of the box, Prometheus and Grafana services are not exposed, and the simplest way to access them is to forward the service port (replace pod name with an actual Prometheus pod name):
+    which is the case if [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) release name is `prometheus-stack`
 
-
+## 4. Expose Prometheus service
+Out of the box Prometheus services are not exposed, the simplest way to do this is to forward the service port (replace pod name with an actual Prometheus pod name):
 ```
 kubectl port-forward prometheus-prometheus-kube-prometheus-prometheus-0 9090:9090 -n <prometheus-stack-namespace>
 ```
-After `ServiceMonitor` is created, verify it is in Prometheus targets. Go to `http://localhost:9090` in your local browser, navigate to **Status -> Targets**. You should be able to see your product pods as targets.
 
+## 4. Confirm Prometheus is working
+
+After the `ServiceMonitor` has been created, verify it is in Prometheus `targets`. 
+
+Navigate to the URL `http://localhost:9090` in your browser and then select; **Status -> Targets**. You should be able to see your product pods as targets.
+
+## 5. Access Grafana
 
 To access Grafana, run (replace pod name with an actual Grafana pod name):
 
