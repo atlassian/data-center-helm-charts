@@ -14,6 +14,8 @@ import test.model.StatefulSet;
 import java.util.Map;
 
 import static test.jackson.JsonNodeAssert.assertThat;
+import static test.model.Kind.Secret;
+import static test.model.Kind.ServiceMonitor;
 
 class JmxMetricsTest {
 
@@ -176,5 +178,51 @@ class JmxMetricsTest {
         // assert jmx configmap created and has expected config
         final var jmxConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jmx-config").getDataByKey("jmx-config.yaml");
         assertThat(jmxConfigMap).hasTextContaining("- pattern: \".*\"");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void service_monitor_bitbucket_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.serviceMonitor.create", "true",
+                product + ".mesh.enabled", "true"
+        ));
+
+        for (int i = 0; i < 3; i++) {
+            String meshReplicaName = product.getHelmReleaseName() + "-mesh-" + i + "-service-monitor";
+            resources.assertContains(ServiceMonitor, meshReplicaName);
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_monitor_enabled_with_custom_values(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.serviceMonitor.create", "true",
+                "monitoring.serviceMonitor.prometheusLabelSelector.release", "myprometheus",
+                "monitoring.serviceMonitor.scrapeIntervalSeconds", "60"
+        ));
+
+        resources.assertContains(ServiceMonitor, product.getHelmReleaseName() + "-service-monitor");
+
+        final var serviceMonitorSpec = resources.get(ServiceMonitor).getSpec();
+        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("interval")).hasTextEqualTo("60s");
+
+        final var serviceMonitorMetadata = resources.get(ServiceMonitor).getMetadata();
+        assertThat(serviceMonitorMetadata.path("labels").path("release")).hasTextEqualTo("myprometheus");
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_monitor_enabled_(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.serviceMonitor.create", "true"
+        ));
+
+        resources.assertContains(ServiceMonitor, product.getHelmReleaseName() + "-service-monitor");
+        final var serviceMonitorSpec = resources.get(ServiceMonitor).getSpec();
+        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("interval")).hasTextEqualTo("30s");
+        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("path")).hasTextEqualTo("/metrics");
+        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("port")).hasTextEqualTo("jmx");
+        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("scheme")).hasTextEqualTo("http");
     }
 }
