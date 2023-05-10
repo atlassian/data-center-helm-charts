@@ -12,7 +12,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-  - interval: {{ printf "%ds" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds | quote }}
+  - interval: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds }}
     path: /metrics
     port: jmx
     scheme: http

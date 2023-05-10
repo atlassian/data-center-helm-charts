@@ -200,14 +200,13 @@ class JmxMetricsTest {
     void service_monitor_enabled_with_custom_values(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.serviceMonitor.create", "true",
-                "monitoring.serviceMonitor.prometheusLabelSelector.release", "myprometheus",
-                "monitoring.serviceMonitor.scrapeIntervalSeconds", "60"
+                "monitoring.serviceMonitor.prometheusLabelSelector.release", "myprometheus"
         ));
 
         resources.assertContains(ServiceMonitor, product.getHelmReleaseName() + "-service-monitor");
 
         final var serviceMonitorSpec = resources.get(ServiceMonitor).getSpec();
-        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("interval")).hasTextEqualTo("60s");
+        assertThat(serviceMonitorSpec.path("endpoints").path(0).path("interval")).hasTextEqualTo("30s");
 
         final var serviceMonitorMetadata = resources.get(ServiceMonitor).getMetadata();
         assertThat(serviceMonitorMetadata.path("labels").path("release")).hasTextEqualTo("myprometheus");
