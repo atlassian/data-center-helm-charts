@@ -10,7 +10,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-  - interval: {{ printf "%ds" (default 30 .Values.monitoring.serviceMonitor.scrapeIntervalSeconds)}}
+  - interval: {{ printf "%ds" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds | quote }}
     path: /metrics
     port: jmx
     scheme: http
