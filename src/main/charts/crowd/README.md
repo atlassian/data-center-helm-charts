@@ -99,6 +99,9 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.jmxExporterImageTag | string | `"0.18.0"` | Image tag to be used to pull jmxExporterImageRepo  |
 | monitoring.jmxExporterPort | int | `9999` | Port number on which metrics will be available  |
 | monitoring.jmxExporterPortType | string | `"ClusterIP"` | JMX exporter port type  |
+| monitoring.serviceMonitor.create | bool | `false` | Create ServiceMonitor to start scraping metrics. ServiceMonitor CRD needs to be created in advance.  |
+| monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
+| monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Crowd pods  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Crowd pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Crowd pods  |
