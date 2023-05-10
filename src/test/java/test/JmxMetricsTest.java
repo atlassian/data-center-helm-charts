@@ -185,7 +185,8 @@ class JmxMetricsTest {
     void service_monitor_bitbucket_mesh(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.serviceMonitor.create", "true",
-                product + ".mesh.enabled", "true"
+                product + ".mesh.enabled", "true",
+                product + ".mesh.replicaCount", "3"
         ));
 
         for (int i = 0; i < 3; i++) {

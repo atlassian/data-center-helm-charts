@@ -785,6 +785,6 @@ monitoring:
     prometheusLabelSelector: {}
       # release: prometheus
     
-    # -- Scrape interval for the JMX service. Defaults to 30 seconds
+    # -- Scrape interval for the JMX service.
     #
-    scrapeIntervalSeconds:
+    scrapeIntervalSeconds: 30
