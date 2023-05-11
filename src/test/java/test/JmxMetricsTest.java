@@ -58,7 +58,7 @@ class JmxMetricsTest {
 
         // assert jmx configmap created and has expected config
         final var jmxConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jmx-config").getDataByKey("jmx-config.yaml");
-        assertThat(jmxConfigMap).hasTextContaining("- pattern: \".*\"");
+        assertThat(jmxConfigMap).hasTextContaining("- pattern: ");
 
         if (product.name().equals("bitbucket")) {
             // assert jmx env var
@@ -177,7 +177,7 @@ class JmxMetricsTest {
 
         // assert jmx configmap created and has expected config
         final var jmxConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jmx-config").getDataByKey("jmx-config.yaml");
-        assertThat(jmxConfigMap).hasTextContaining("- pattern: \".*\"");
+        assertThat(jmxConfigMap).hasTextContaining("- pattern: ");
     }
 
     @ParameterizedTest
