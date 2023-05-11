@@ -1167,7 +1167,9 @@
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "jira"
+  ],
   "templating": {
     "list": [
       {
@@ -1221,7 +1223,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Jira Indexing",
-  "uid": "9v-K6L_nk",
   "version": 1,
   "weekStart": ""
 }

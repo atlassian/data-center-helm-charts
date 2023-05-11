@@ -2333,7 +2333,9 @@
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "jira"
+  ],
   "templating": {
     "list": [
       {
@@ -2387,7 +2389,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Jira Response Times",
-  "uid": "dA8tm85nz",
   "version": 1,
   "weekStart": ""
 }
