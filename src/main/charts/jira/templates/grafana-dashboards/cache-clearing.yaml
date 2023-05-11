@@ -9,7 +9,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 data:
-  cache-clearing.json: |-
+  {{ include "common.names.fullname" . }}-{{ .Release.Namespace}}-cache-clearing.json: |-
     {
       "annotations": {
         "list": [
@@ -150,9 +150,9 @@ data:
                 "uid": "${query0}"
               },
               "exemplar": true,
-              "expr": "rate(com_atlassian_jira_metrics_Count{category00=\"cacheManager\",name=\"flushAll\"}[5m])",
+              "expr": "rate(com_atlassian_jira_metrics_Count{namespace=\"{{ .Release.Namespace }}\", category00=\"cacheManager\",name=\"flushAll\"}[5m])",
               "interval": "",
-              "legendFormat": "{{tag_invokerPluginKey}}",
+              "legendFormat": "{{ "{{" }} tag_invokerPluginKey {{ "}}" }}",
               "refId": "A"
             }
           ],
@@ -247,9 +247,9 @@ data:
                 "uid": "${query0}"
               },
               "exemplar": true,
-              "expr": "sum by (tag_pluginKeyAtCreation) (rate(com_atlassian_jira_metrics_Count{category00=\"cache\",name=\"removeAll\"}[5m]))",
+              "expr": "sum by (tag_pluginKeyAtCreation) (rate(com_atlassian_jira_metrics_Count{namespace=\"{{ .Release.Namespace }}\", category00=\"cache\",name=\"removeAll\"}[5m]))",
               "interval": "",
-              "legendFormat": "{{tag_pluginKeyAtCreation}}",
+              "legendFormat": "{{ "{{" }} tag_pluginKeyAtCreation {{ "}}" }}",
               "refId": "A"
             }
           ],
@@ -345,7 +345,7 @@ data:
                 "uid": "${query0}"
               },
               "exemplar": true,
-              "expr": "sum without (instance) (com_atlassian_jira_metrics_Count{category00=\"plugin\",name=\"counter\",category01=\"enabled\"})",
+              "expr": "sum without (instance) (com_atlassian_jira_metrics_Count{namespace=\"{{ .Release.Namespace }}\", category00=\"plugin\",name=\"counter\",category01=\"enabled\"})",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -360,7 +360,7 @@ data:
                 "uid": "${query0}"
               },
               "exemplar": true,
-              "expr": "sum without (instance) (com_atlassian_jira_metrics_Count{category00=\"plugin\",name=\"counter\",category01=\"disabled\"})",
+              "expr": "sum without (instance) (com_atlassian_jira_metrics_Count{namespace=\"{{ .Release.Namespace }}\", category00=\"plugin\",name=\"counter\",category01=\"disabled\"})",
               "hide": false,
               "instant": false,
               "interval": "",
@@ -459,9 +459,9 @@ data:
                 "uid": "${query0}"
               },
               "exemplar": true,
-              "expr": "sum by (tag_pluginKeyAtCreation) (rate(com_atlassian_jira_metrics_Count{category00=\"cachedReference\",name=\"reset\"}[5m]))",
+              "expr": "sum by (tag_pluginKeyAtCreation) (rate(com_atlassian_jira_metrics_Count{namespace=\"{{ .Release.Namespace }}\", category00=\"cachedReference\",name=\"reset\"}[5m]))",
               "interval": "",
-              "legendFormat": "{{tag_pluginKeyAtCreation}}",
+              "legendFormat": "{{ "{{" }} tag_pluginKeyAtCreation {{ "}}" }}",
               "refId": "A"
             }
           ],
@@ -502,7 +502,7 @@ data:
       },
       "timepicker": {},
       "timezone": "",
-      "title": "Cache clearing",
+      "title": "Jira Cache clearing",
       "uid": "bi4AbQtnk",
       "version": 49,
       "weekStart": ""
