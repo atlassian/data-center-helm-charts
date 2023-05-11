@@ -482,7 +482,9 @@
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "jira"
+  ],
   "templating": {
      "list":[
         {
@@ -530,13 +532,12 @@
      ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Jira Cache Clearing",
-  "uid": "bi4AbQtnk",
   "version": 1,
   "weekStart": ""
 }

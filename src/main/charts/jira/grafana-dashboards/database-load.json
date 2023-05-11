@@ -2306,7 +2306,9 @@
   "refresh": "",
   "schemaVersion": 34,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "jira"
+  ],
   "templating": {
      "list":[
         {
@@ -2352,13 +2354,12 @@
      ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "Europe/Warsaw",
+  "timezone": "",
   "title": "Jira Database Load",
-  "uid": "qqVaZU5nz",
-  "version": 138,
+  "version": 1,
   "weekStart": ""
 }
