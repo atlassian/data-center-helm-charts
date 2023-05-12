@@ -1,0 +1,14 @@
+{{- if .Values.monitoring.grafana.createDashboards }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-general-dashboard
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+    {{- with .Values.monitoring.grafana.dashboardLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+data:
+  {{ include "common.names.fullname" . }}-{{ .Release.Namespace}}-general.json: |-
+{{ .Files.Get "grafana-dashboards/general.json" | indent 4 }}
+{{- end }}
