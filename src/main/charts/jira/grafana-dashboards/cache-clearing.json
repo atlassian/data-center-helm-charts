@@ -143,7 +143,8 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus"
+            "type": "prometheus",
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "rate(com_atlassian_jira_metrics_Count{namespace=\"$namespace\", service=\"$service\", category00=\"cacheManager\",name=\"flushAll\"}[5m])",
