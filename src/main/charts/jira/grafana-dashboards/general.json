@@ -2121,7 +2121,8 @@
                         "color": "red"
                      }
                   ]
-               }
+               },
+               "unit": "ms"
             },
             "overrides": []
          }
