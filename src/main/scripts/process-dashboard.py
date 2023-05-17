@@ -41,9 +41,10 @@ templating_string = '{"list":[{"current":{"selected":true,"text":"default","valu
 templating = json.loads(templating_string)
 data['templating'] = templating
 
+
 # Finding and replacing values
-for panel in data.get('panels', []):
-    if panel['type'] != 'row':
+def process_panels(panels):
+    for panel in panels:
         print('Processing panel ' + panel['title'])
         for target in panel.get('targets', []):
             print('Processing expression ' + target['expr'])
@@ -68,6 +69,13 @@ for panel in data.get('panels', []):
             # i.e. it has an opening curly bracket. Make sure all expressions in the source json have those
             expr = expr.replace('{', '{namespace="$namespace", service="$service", ')
             target['expr'] = expr
+
+        nested_panels = panel.get('panels', [])
+        if nested_panels:
+            process_panels(nested_panels)
+
+
+process_panels(data['panels'])
 
 print('Saving the file to ' + args.dest)
 with open(args.dest, 'w') as file:
