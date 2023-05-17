@@ -4,7 +4,20 @@ The instructions outlined on this page provide details on how you can enable [Pr
 
 ## 1. Install Prometheus Operator
 
-Install [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack){.external} Helm chart (call your release `prometheus-stack`).
+Install [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack){.external} Helm chart 
+
+Fetch the repo and perform an update
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
+Now install the Prometheus stack
+```bash
+helm install prometheus-stack prometheus-community/kube-prometheus-stack
+```
+
+!!!info "Release name"
+    For the purposes of this guide the Prometheus stack has been installed with the release name `prometheus-stack`. 
 
 ## 2. Expose JMX metrics
 
@@ -56,13 +69,13 @@ Out of the box Prometheus services are not exposed, the simplest way to do this 
 kubectl port-forward prometheus-prometheus-kube-prometheus-prometheus-0 9090:9090 -n <prometheus-stack-namespace>
 ```
 
-## 4. Confirm Prometheus is working
+## 5. Confirm Prometheus is working
 
 After the `ServiceMonitor` has been created, verify it is in Prometheus `targets`. 
 
 Navigate to the URL `http://localhost:9090` in your browser and then select; **Status -> Targets**. You should be able to see your product pods as targets.
 
-## 5. Access Grafana
+## 6. Access Grafana
 
 To access Grafana, run (replace pod name with an actual Grafana pod name):
 
