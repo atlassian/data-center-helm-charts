@@ -1,0 +1,3 @@
+nav:
+    - Prometheus and Grafana: PROMETHEUS.md
+    - Product specific dashboards: PRE_CANNED_CHARTS.md

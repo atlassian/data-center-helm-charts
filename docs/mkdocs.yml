@@ -18,6 +18,7 @@ theme:
     - search.highlight
     - navigation.instant
     - navigation.tabs
+    - content.code.copy
 repo_url: https://github.com/atlassian/data-center-helm-charts
 repo_name: atlassian/data-center-helm-charts
 edit_uri: edit/main/docs/docs/

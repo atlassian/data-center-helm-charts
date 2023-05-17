@@ -5,7 +5,7 @@ nav:
     - CONFIGURATION.md
     - MIGRATION.md
     - OPERATION.md
-    - PROMETHEUS.md
+    - monitoring
     - upgrades
     - resource_management
     - ...
