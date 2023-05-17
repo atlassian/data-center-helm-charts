@@ -831,6 +831,21 @@ monitoring:
   #   rules:
   #     - pattern: ".*"
 
+  serviceMonitor:
+
+    # -- Create ServiceMonitor to start scraping metrics. ServiceMonitor CRD needs to be created in advance.
+    #
+    create: false
+
+    # -- ServiceMonitorSelector of the prometheus instance.
+    #
+    prometheusLabelSelector: {}
+      # release: prometheus
+
+    # -- Scrape interval for the JMX service.
+    #
+    scrapeIntervalSeconds: 30
+
 # Confluence Synchrony configuration
 # https://confluence.atlassian.com/doc/configuring-synchrony-858772125.html
 synchrony:

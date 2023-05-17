@@ -1,0 +1,19 @@
+{{- if .Values.monitoring.serviceMonitor.create }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}-service-monitor
+  labels:
+  {{- with .Values.monitoring.serviceMonitor.prometheusLabelSelector }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+  - interval: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds }}
+    path: /metrics
+    port: jmx
+    scheme: http
+  selector:
+    matchLabels:
+    {{- include "common.labels.selectorLabels" . | nindent 6 }}
+{{- end }}
