@@ -27,10 +27,10 @@ Follow [these instructions](../../../userguide/OPERATION/#expose-jmx-metrics) fo
 
 ## 3. Create a ServiceMonitor
     
-Now that `JMX` metrics are exposed, we need a way of scraping them. There are two ways this can be done:
+Now that `JMX` metrics are exposed, we need a way of scraping them. This will be done using the [Prometheus custom resource definition; ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/tree/e1ed82c75b05d3579f2349369b6077b4c0b9b4f8#customresourcedefinitions){.external}. There are two ways this `ServiceMonitor` can be provisioned:
 
 1. Automatically - using `helm upgrade`
-2. Manually - deploy a new `serviceMonitor` kind
+2. Manually - deploy a new `serviceMonitor` CRD
 
 === "Automatically"
 
