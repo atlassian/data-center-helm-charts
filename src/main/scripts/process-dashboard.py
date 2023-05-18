@@ -7,6 +7,7 @@ import argparse
 parser = argparse.ArgumentParser(description="Read remote JSON file")
 parser.add_argument("--source", help="URL of the target remote JSON file")
 parser.add_argument("--dest", help="Local path of the destination processed json")
+parser.add_argument("--product", help="Product")
 args = parser.parse_args()
 
 if args.source is None:
@@ -14,7 +15,11 @@ if args.source is None:
     sys.exit(1)
 
 if args.dest is None:
-    print("Error: --dest argument is required. This must an absolute path to the destination json file.")
+    print("Error: --dest argument is required. This must be an absolute path to the destination json file.")
+    sys.exit(1)
+
+if args.product is None:
+    print("Error: --product argument is required. This must be the product of the dashboard to be converted.")
     sys.exit(1)
 
 print('Fetching a remote file ' + args.source)
@@ -22,19 +27,24 @@ file = urllib.request.urlopen(args.source)
 data = json.load(file)
 file.close()
 
+if args.product == 'jira':
+    product_unique_metric = 'com_atlassian_jira_issue_assigned_count_Value'
+elif args.product == 'confluence':
+    product_unique_metric = 'Confluence_MailTaskQueue_ErrorQueueSize'
+
 # mind double escaping // in regex
 templating_string = '{"list":[{"current":{"selected":true,"text":"default","value":"default"},"hide":0,' \
                     '"includeAll":false,"label":"Data Source","multi":false,"name":"datasource","options":[],' \
                     '"query":"prometheus","queryValue":"","refresh":1,"regex":"","skipUrlSync":false,' \
                     '"type":"datasource"},{"datasource":{"type":"prometheus","uid":"$datasource"},' \
-                    '"definition":"Confluence_MailTaskQueue_ErrorQueueSize","hide":0,"includeAll":false,' \
+                    '"definition":"' + product_unique_metric + '","hide":0,"includeAll":false,' \
                     '"multi":false,"name":"namespace","options":[],"query":{' \
-                    '"query":"Confluence_MailTaskQueue_ErrorQueueSize","refId":"StandardVariableQuery"},"refresh":1,' \
+                    '"query":"' + product_unique_metric + '","refId":"StandardVariableQuery"},"refresh":1,' \
                     '"regex":"/namespace=\\"([^\\"]*)\\"/","skipUrlSync":false,"sort":0,"type":"query"},' \
                     '{"datasource":{"type":"prometheus","uid":"$datasource"},' \
-                    '"definition":"Confluence_MailTaskQueue_ErrorQueueSize","hide":0,"includeAll":false,' \
+                    '"definition":"' + product_unique_metric + '","hide":0,"includeAll":false,' \
                     '"multi":false,"name":"service","options":[],"query":{' \
-                    '"query":"Confluence_MailTaskQueue_ErrorQueueSize","refId":"StandardVariableQuery"},"refresh":1,' \
+                    '"query":"' + product_unique_metric + '","refId":"StandardVariableQuery"},"refresh":1,' \
                     '"regex":"/service=\\"([^\\"]*)\\"/","skipUrlSync":false,"sort":0,"type":"query"}]} '
 
 # add datasource, namespace and service variables
