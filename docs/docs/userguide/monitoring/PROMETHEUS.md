@@ -20,6 +20,33 @@ Now install the Prometheus stack
 helm install prometheus-stack prometheus-community/kube-prometheus-stack
 ```
 
+!!!tip "Persist Prometheus & Grafana data"
+
+    By default, the Prometheus stack configures Pods to store data using an `emptyDir` volume, meaning data is not persisted when the Pods are redeployed/restarted. To maintain state, persistence storage for Prometheus and Grafana can be enabled. This can be done by updating the `prometheusSpec` stanza for the Prometheus stack. 
+    
+    ```yaml linenums="1" title="Maintain chart and metric state"
+    grafana:
+      persistence:
+        enabled: true
+        size: 10Gi
+      sidecar:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard
+          labelValue: dc_monitoring
+    prometheus:
+      prometheusSpec:
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Gi
+    ```
+    
+
 ## 2. Expose JMX metrics
 
 Follow [these instructions](../../../userguide/OPERATION/#expose-jmx-metrics) for details on how to enable and expose `JMX` for your product via a dedicated `Service`. 
