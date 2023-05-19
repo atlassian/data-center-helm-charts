@@ -79,6 +79,7 @@ def process_panels(panels):
                 # we assume that the expression has the following format: expression{},
                 # i.e. it has an opening curly bracket. Make sure all expressions in the source json have those
                 expr = expr.replace('{', '{namespace="$namespace", service="$service", ')
+                expr = expr.replace(', }', '}')
                 target['expr'] = expr
 
         nested_panels = panel.get('panels', [])
