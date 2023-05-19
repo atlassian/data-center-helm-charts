@@ -4,7 +4,7 @@ The instructions outlined on this page provide details on how you can enable [Pr
 
 ## 1. Install Prometheus stack
 
-!!!tip "Note"
+!!!abstract "Note"
     * This approach will also install Grafana
     * For the purposes of this guide the Prometheus stack will be installed with the release name `prometheus-stack`.
 
@@ -22,7 +22,7 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack
 
 !!!tip "Persist Prometheus & Grafana data"
 
-    By default, the Prometheus stack configures Pods to store data using an `emptyDir` volume, meaning data is not persisted when the Pods are redeployed/restarted. To maintain state, persistence storage for Prometheus and Grafana can be enabled. This can be done by updating the `prometheusSpec` stanza for the Prometheus stack. 
+    By default, the Prometheus stack configures Pods to store data using an `emptyDir` volume, meaning data is not persisted when the Pods are redeployed/restarted. To maintain state, persistence storage for Prometheus and Grafana can be enabled. This can be done by updateing the `prometheus-stack` with the following `yaml`. 
     
     ```yaml linenums="1" title="Maintain chart and metric state"
     grafana:
@@ -44,6 +44,12 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack
               resources:
                 requests:
                   storage: 10Gi
+    ```
+
+    This `yaml` (added to a file called `prometheus-persistence.yaml`) can then be used to upgrade the `prometheus-stack`
+
+    ```bash
+    helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack -f prometheus-persistence.yaml --wait --namespace <prometheus-stack-namespace> 
     ```
     
 
@@ -134,7 +140,7 @@ To access Grafana, run (replace pod name with an actual Grafana pod name):
 kubectl port-forward prometheus-stack-grafana-57dc5589b-2wh98 3000:3000 -n <prometheus-stack-namespace>
 ```
 
-!!!tip "Grafana details"
+!!!info "Grafana details"
 
     * The name of the Grafana pod (`prometheus-stack-grafana-57dc5589b-2wh98`) may vary slightly between deploys
     * The default credentials are `admin:prom-operator` (these can be overridden when deploying kube-prometheus-stack). Alternatively, you may expose grafana service as a `LoadBalancer` `Service` type.
