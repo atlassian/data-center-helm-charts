@@ -33,7 +33,7 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack
         dashboards:
           enabled: true
           label: grafana_dashboard
-          labelValue: dc_monitoring
+          labelValue: 1
     prometheus:
       prometheusSpec:
         storageSpec:
