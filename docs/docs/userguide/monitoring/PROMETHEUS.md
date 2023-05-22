@@ -22,7 +22,7 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack
 
 !!!tip "Persist Prometheus & Grafana data"
 
-    By default, the Prometheus stack configures Pods to store data using an `emptyDir` volume, meaning data is not persisted when the Pods are redeployed/restarted. To maintain state, persistence storage for Prometheus and Grafana can be enabled. This can be done by updateing the `prometheus-stack` with the following `yaml`. 
+    By default, the Prometheus stack configures Pods to store data using an `emptyDir` volume, meaning data is not persisted when the Pods are redeployed/restarted. To maintain state, persistent storage for Prometheus and Grafana can be enabled. This can be done by updating the `prometheus-stack` with the following `yaml`:
     
     ```yaml linenums="1" title="Maintain chart and metric state"
     grafana:
