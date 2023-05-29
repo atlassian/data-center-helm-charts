@@ -31,6 +31,8 @@ if args.product == 'jira':
     product_unique_metric = 'com_atlassian_jira_issue_assigned_count_Value'
 elif args.product == 'confluence':
     product_unique_metric = 'Confluence_MailTaskQueue_ErrorQueueSize'
+elif args.product == 'bitbucket':
+    product_unique_metric = 'com_atlassian_bitbucket_Repositories_Count'
 
 # mind double escaping // in regex
 templating_string = '{"list":[{"current":{"selected":true,"text":"default","value":"default"},"hide":0,' \
