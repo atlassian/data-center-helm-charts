@@ -1,0 +1,21 @@
+{{- if and .Values.monitoring.grafana.createDashboards .Values.bitbucket.mesh.enabled }}
+{{- $grafanaDashboards := .Files.Glob "grafana-dashboards/mesh/*.json" -}}
+{{- range $index, $grafanaDashboard := $grafanaDashboards -}}
+{{- with $ }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+{{- $fileName := split "/" $index }}
+  name: {{ include "common.names.fullname" . }}-{{ $fileName._1 | trimSuffix ".json" }}-dashboard
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+    {{- with .Values.monitoring.grafana.dashboardLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+data:
+  {{ $fileName._1}}: |
+{{ .Files.Get $index | indent 4 }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
