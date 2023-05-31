@@ -1,0 +1,21 @@
+{{- if .Values.monitoring.grafana.createDashboards }}
+{{- $grafanaDashboards := .Files.Glob "grafana-dashboards/*.json" -}}
+{{- range $index, $grafanaDashboard := $grafanaDashboards -}}
+{{- with $ }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+{{- $fileName := split "/" $index }}
+  name: {{ include "common.names.fullname" . }}-{{ $fileName._1 | trimSuffix ".json" }}-dashboard
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+    {{- with .Values.monitoring.grafana.dashboardLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+data:
+  {{ include "common.names.fullname" . }}-{{ .Release.Namespace}}-{{ $fileName._1}}: |
+{{ .Files.Get $index | indent 4 }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
