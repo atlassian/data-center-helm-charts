@@ -3,10 +3,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafana"
-        },
+        "datasource": "-- Grafana --",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -20,10 +17,7 @@
         "type": "dashboard"
       },
       {
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafana"
-        },
+        "datasource": "-- Grafana --",
         "enable": true,
         "expr": "",
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -51,7 +45,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 33,
+  "id": null,
+  "iteration": 1657596877967,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -69,8 +64,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -131,12 +124,10 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "mode": "single"
         }
       },
       "span": 0,
@@ -149,7 +140,7 @@
           "exemplar": true,
           "expr": "rate(com_atlassian_jira_metrics_Count{namespace=\"$namespace\", service=\"$service\", category00=\"cacheManager\",name=\"flushAll\"}[5m])",
           "interval": "",
-          "legendFormat": "{{ tag_invokerPluginKey }}",
+          "legendFormat": "{{ pod }} {{tag_invokerPluginKey}}",
           "refId": "A"
         }
       ],
@@ -170,8 +161,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -232,12 +221,10 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "mode": "single"
         }
       },
       "span": 0,
@@ -250,7 +237,7 @@
           "exemplar": true,
           "expr": "sum by (tag_pluginKeyAtCreation) (rate(com_atlassian_jira_metrics_Count{namespace=\"$namespace\", service=\"$service\", category00=\"cache\",name=\"removeAll\"}[5m]))",
           "interval": "",
-          "legendFormat": "{{ tag_pluginKeyAtCreation }}",
+          "legendFormat": "{{ pod }} {{tag_pluginKeyAtCreation}}",
           "refId": "A"
         }
       ],
@@ -271,8 +258,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -333,12 +318,10 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "mode": "single"
         }
       },
       "pluginVersion": "8.3.6",
@@ -390,8 +373,6 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -452,12 +433,10 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "mode": "single"
         }
       },
       "span": 0,
@@ -470,7 +449,7 @@
           "exemplar": true,
           "expr": "sum by (tag_pluginKeyAtCreation) (rate(com_atlassian_jira_metrics_Count{namespace=\"$namespace\", service=\"$service\", category00=\"cachedReference\",name=\"reset\"}[5m]))",
           "interval": "",
-          "legendFormat": "{{ tag_pluginKeyAtCreation }}",
+          "legendFormat": "{{ pod }} {{tag_pluginKeyAtCreation}}",
           "refId": "A"
         }
       ],
@@ -479,78 +458,75 @@
     }
   ],
   "refresh": "",
-  "revision": 1,
-  "schemaVersion": 38,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "jira"
   ],
   "templating": {
-     "list":[
-        {
-         "current": {
-           "selected": true,
-           "text": "default",
-           "value": "default"
-         },
-         "hide": 0,
-         "includeAll": false,
-         "label": "Data Source",
-         "multi": false,
-         "name": "datasource",
-         "options": [],
-         "query": "prometheus",
-         "queryValue": "",
-         "refresh": 1,
-         "regex": "",
-         "skipUrlSync": false,
-         "type": "datasource"
-       },
-        {
-           "datasource":{
-              "type":"prometheus",
-              "uid": "$datasource"
-           },
-           "definition":"com_atlassian_jira_issue_assigned_count_Value",
-           "hide":0,
-           "includeAll":false,
-           "multi":false,
-           "name":"namespace",
-           "options":[],
-           "query":{
-              "query":"com_atlassian_jira_issue_assigned_count_Value",
-              "refId":"StandardVariableQuery"
-           },
-           "refresh":1,
-           "regex":"/namespace=\"([^\"]*)\"/",
-           "skipUrlSync":false,
-           "sort":0,
-           "type":"query"
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "default",
+          "value": "default"
         },
-        {
-           "datasource":{
-              "type":"prometheus",
-              "uid": "$datasource"
-           },
-           "definition":"com_atlassian_jira_issue_assigned_count_Value",
-           "hide":0,
-           "includeAll":false,
-           "multi":false,
-           "name":"service",
-           "options":[
-              
-           ],
-           "query":{
-              "query":"com_atlassian_jira_issue_assigned_count_Value",
-              "refId":"StandardVariableQuery"
-           },
-           "refresh":1,
-           "regex":"/service=\"([^\"]*)\"/",
-           "skipUrlSync":false,
-           "sort":0,
-           "type":"query"
-        }
-     ]
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "com_atlassian_jira_issue_assigned_count_Value",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "namespace",
+        "options": [],
+        "query": {
+          "query": "com_atlassian_jira_issue_assigned_count_Value",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/namespace=\"([^\"]*)\"/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "com_atlassian_jira_issue_assigned_count_Value",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "service",
+        "options": [],
+        "query": {
+          "query": "com_atlassian_jira_issue_assigned_count_Value",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/service=\"([^\"]*)\"/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",

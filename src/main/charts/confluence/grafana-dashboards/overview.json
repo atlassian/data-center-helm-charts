@@ -112,7 +112,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "java_lang_Runtime_Pid{namespace=\"$namespace\", service=\"$service\", }",
+          "expr": "java_lang_Runtime_Pid{namespace=\"$namespace\", service=\"$service\"}",
           "interval": "",
           "legendFormat": "{{ pod }}",
           "refId": "A"
@@ -191,7 +191,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "java_lang_Runtime_Uptime{namespace=\"$namespace\", service=\"$service\", }/1000",
+          "expr": "java_lang_Runtime_Uptime{namespace=\"$namespace\", service=\"$service\"}/1000",
           "interval": "",
           "legendFormat": "{{ pod }}",
           "refId": "A"
@@ -270,7 +270,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "java_lang_Runtime_StartTime{namespace=\"$namespace\", service=\"$service\", }",
+          "expr": "java_lang_Runtime_StartTime{namespace=\"$namespace\", service=\"$service\"}",
           "interval": "",
           "legendFormat": "{{ pod }}",
           "refId": "A"
@@ -349,7 +349,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "java_lang_OperatingSystem_AvailableProcessors{namespace=\"$namespace\", service=\"$service\", }",
+          "expr": "java_lang_OperatingSystem_AvailableProcessors{namespace=\"$namespace\", service=\"$service\"}",
           "interval": "",
           "legendFormat": "{{ pod }}",
           "refId": "A"
@@ -523,7 +523,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(java_lang_G1_Old_Generation_CollectionTime{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(java_lang_G1_Old_Generation_CollectionTime{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "format": "time_series",
           "hide": false,
           "interval": "60s",
@@ -536,7 +536,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(java_lang_G1_Young_Generation_CollectionTime{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(java_lang_G1_Young_Generation_CollectionTime{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "hide": false,
           "interval": "",
           "legendFormat": "G1_Young_Generation ({{ pod }})",
@@ -635,7 +635,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "(java_lang_OperatingSystem_ProcessCpuLoad{namespace=\"$namespace\", service=\"$service\", } * 100)",
+          "expr": "(java_lang_OperatingSystem_ProcessCpuLoad{namespace=\"$namespace\", service=\"$service\"} * 100)",
           "interval": "",
           "legendFormat": "cpu load ({{ pod }})",
           "refId": "A"
@@ -841,7 +841,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "com_atlassian_confluence_metrics_Mean{namespace=\"$namespace\", service=\"$service\", category00=\"jvm\", category01=\"gc\", }",
+          "expr": "com_atlassian_confluence_metrics_Mean{namespace=\"$namespace\", service=\"$service\", category00=\"jvm\", category01=\"gc\"}",
           "legendFormat": "{{ pod }} - {{tag_cause}}",
           "range": true,
           "refId": "A"
@@ -935,7 +935,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(java_lang_G1_Old_Generation_CollectionCount{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(java_lang_G1_Old_Generation_CollectionCount{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "format": "time_series",
           "hide": false,
           "interval": "1m",
@@ -948,7 +948,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(java_lang_G1_Young_Generation_CollectionCount{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(java_lang_G1_Young_Generation_CollectionCount{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "hide": false,
           "interval": "",
           "legendFormat": "G1_Young_Generation ({{ pod }})",
@@ -1068,7 +1068,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(Standalone_GlobalRequestProcessor_requestCount{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(Standalone_GlobalRequestProcessor_requestCount{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}} count ({{ pod }})",
@@ -1080,7 +1080,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(Standalone_GlobalRequestProcessor_errorCount{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(Standalone_GlobalRequestProcessor_errorCount{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}} error ({{ pod }})",
@@ -1178,7 +1178,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "(Standalone_ThreadPool_currentThreadCount{namespace=\"$namespace\", service=\"$service\", } / Standalone_ThreadPool_maxThreads{namespace=\"$namespace\", service=\"$service\", }) * 100",
+          "expr": "(Standalone_ThreadPool_currentThreadCount{namespace=\"$namespace\", service=\"$service\"} / Standalone_ThreadPool_maxThreads{namespace=\"$namespace\", service=\"$service\"}) * 100",
           "hide": false,
           "interval": "",
           "legendFormat": "used {{name}} ({{ pod }})",
@@ -1280,7 +1280,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "increase(Standalone_GlobalRequestProcessor_processingTime{namespace=\"$namespace\", service=\"$service\", }[10m]) / increase(Standalone_GlobalRequestProcessor_requestCount{namespace=\"$namespace\", service=\"$service\", }[10m])",
+          "expr": "increase(Standalone_GlobalRequestProcessor_processingTime{namespace=\"$namespace\", service=\"$service\"}[10m]) / increase(Standalone_GlobalRequestProcessor_requestCount{namespace=\"$namespace\", service=\"$service\"}[10m])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{name}} ({{ pod }})",
@@ -1382,7 +1382,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "Standalone_Manager_activeSessions{namespace=\"$namespace\", service=\"$service\", }",
+          "expr": "Standalone_Manager_activeSessions{namespace=\"$namespace\", service=\"$service\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "active sessions: {{context}} ({{ pod }})",
@@ -1394,7 +1394,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "Standalone_Manager_rejectedSessions{namespace=\"$namespace\", service=\"$service\", }",
+          "expr": "Standalone_Manager_rejectedSessions{namespace=\"$namespace\", service=\"$service\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "rejected sessions: {{context}} ({{ pod }})",
