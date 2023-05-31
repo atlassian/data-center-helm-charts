@@ -33,6 +33,8 @@ elif args.product == 'confluence':
     product_unique_metric = 'Confluence_MailTaskQueue_ErrorQueueSize'
 elif args.product == 'bitbucket':
     product_unique_metric = 'com_atlassian_bitbucket_Repositories_Count'
+elif args.product == 'bitbucket-mesh':
+    product_unique_metric = 'metrics_grpc_Value'
 
 # mind double escaping // in regex
 templating_string = '{"list":[{"current":{"selected":true,"text":"default","value":"default"},"hide":0,' \
