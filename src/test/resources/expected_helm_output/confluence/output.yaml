@@ -47,11 +47,15 @@ metadata:
     app.kubernetes.io/version: "7.19.8"
     app.kubernetes.io/managed-by: Helm
 data:
-  jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
+  jmx-config.yaml: |  
     rules:
-      - pattern: ".*"
+    - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+      name: java_lang_$2_$3
+    - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+      name: java_lang_Memory_HeapMemoryUsage_$1
+    - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+      name: java_lang_G1_$1_Generation_$2
+    - pattern: '.*'
 ---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1
