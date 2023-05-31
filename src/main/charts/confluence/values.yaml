@@ -846,6 +846,17 @@ monitoring:
     #
     scrapeIntervalSeconds: 30
 
+  grafana:
+
+    # -- Create ConfigMaps with Grafana dashboards
+    #
+    createDashboards: false
+
+    # -- Label selector for Grafana dashboard importer sidecar
+    #
+    dashboardLabels: {}
+      # grafana_dashboard: dc_monitoring
+
 # Confluence Synchrony configuration
 # https://confluence.atlassian.com/doc/configuring-synchrony-858772125.html
 synchrony:
