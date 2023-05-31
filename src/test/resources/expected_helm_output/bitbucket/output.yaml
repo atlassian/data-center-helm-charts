@@ -60,10 +60,14 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
     rules:
-      - pattern: ".*"
+    - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+      name: java_lang_$2_$3
+    - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+      name: java_lang_Memory_HeapMemoryUsage_$1
+    - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+      name: java_lang_G1_$1_Generation_$2
+    - pattern: '.*'
 ---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
@@ -219,7 +223,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 196e61f853214d77e3fb5b3c57c04464c4fb28e1ffdec69f257ad84f553c6825
+        checksum/config-jvm: 542f41ad009e4cc9258bac26b181db555ac9b397332a2a1dfcd43db242a2f3cf
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -342,7 +346,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 3ad8dba1613e51f049cfe401770a5058ab0b91a5d802503f3413e3c51a2df22a
+        checksum/config-jvm: e422d3c67328a6f6217f9e2f6de9784257fe70493db6568816f527cdb74536f4
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
