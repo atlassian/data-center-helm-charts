@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -44,14 +44,18 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 data:
-  jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
+  jmx-config.yaml: |  
     rules:
-      - pattern: ".*"
+    - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+      name: java_lang_$2_$3
+    - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+      name: java_lang_Memory_HeapMemoryUsage_$1
+    - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+      name: java_lang_G1_$1_Generation_$2
+    - pattern: '.*'
 ---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1
@@ -84,7 +88,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -106,7 +110,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -133,7 +137,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -160,7 +164,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -187,7 +191,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:7.19.8"
+          image: "atlassian/confluence:7.19.9"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -242,7 +246,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -286,7 +290,7 @@ spec:
               name: shared-home
       containers:
         - name: confluence
-          image: "atlassian/confluence:7.19.8"
+          image: "atlassian/confluence:7.19.9"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -380,7 +384,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -411,7 +415,7 @@ metadata:
     helm.sh/chart: confluence-1.12.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "7.19.8"
+    app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
