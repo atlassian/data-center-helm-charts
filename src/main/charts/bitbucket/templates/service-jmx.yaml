@@ -15,6 +15,9 @@ spec:
     - port: {{ .Values.monitoring.jmxExporterPort}}
       targetPort: jmx
       name: jmx
+    - port: 9998
+      targetPort: 9998
+      name: jmx-mesh-sidecar
   selector:
   {{- include "common.labels.selectorLabels" . | nindent 4 }}
 {{- end }}

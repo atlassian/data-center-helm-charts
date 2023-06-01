@@ -44,6 +44,7 @@ data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=2
     -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
+    -Dplugin.bitbucket-git.mesh.sidecar.jvmArgs=-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9998:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 512m
 ---
@@ -83,6 +84,9 @@ spec:
     - port: 9999
       targetPort: jmx
       name: jmx
+    - port: 9998
+      targetPort: 9998
+      name: jmx-mesh-sidecar
   selector:
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
