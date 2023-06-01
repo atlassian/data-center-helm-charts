@@ -10,6 +10,12 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.crowd.service.type }}
+  sessionAffinity: {{ .Values.crowd.service.sessionAffinity }}
+  {{- if .Values.crowd.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.crowd.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  {{- end }}
   {{- if and (eq .Values.crowd.service.type "LoadBalancer") (not (empty .Values.crowd.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.crowd.service.loadBalancerIP }}
   {{- end }}

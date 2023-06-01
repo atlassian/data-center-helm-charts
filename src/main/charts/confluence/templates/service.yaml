@@ -10,6 +10,12 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.confluence.service.type }}
+  sessionAffinity: {{ .Values.confluence.service.sessionAffinity }}
+  {{- if .Values.confluence.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.confluence.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  {{- end }}
   {{- if and (eq .Values.confluence.service.type "LoadBalancer") (not (empty .Values.confluence.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.confluence.service.loadBalancerIP }}
   {{- end }}

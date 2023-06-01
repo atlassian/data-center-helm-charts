@@ -34,6 +34,54 @@ Some key considerations to note when configuring the controller are:
 !!!info "Request body size"
     By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. The maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
 
+
+## :material-directions-fork: LoadBalancer/NodePort Service Type
+
+!!!info "Feature Availability"
+    Service session affinity configuration is available starting from Helm chart version 1.13
+
+It is possible to make the Atlassian product available from outside of the Kubernetes cluster without using an ingress controller.
+
+### NodePort Service Type
+
+When installing Helm release, you can set:
+
+```yaml
+jira:
+  service:
+      type: NodePort
+      sessionAffinity: ClientIP
+      sessionAffinityConfig:
+        clientIP:
+          timeoutSeconds: 10800
+```
+
+The service port will be exposed on a random port from the ephemeral port range (`30000`-`32767`) on all worker nodes. You can provision a LoadBalancer with `443` or `80` (or both) listeners that will forward traffic to the node port (you can get service node port by running `kubectl describe $service -n $namespace`). Both LoadBalancer and Kubernetes service should be configured to maintain session affinity. LoadBalancer session affinity should be configured as per instructions for your Kubernetes/cloud provider. Service session affinity is configured by overriding the default Helm chart values (see the above example). Make sure you configure networking rules to allow the LoadBalancer to communicate with the Kubernetes cluster worker node on the node port.
+
+!!!tip
+    For more information about Kubernetes service session affinity, see [Kubernetes documentation](https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity){.external}.
+
+### LoadBalancer Service Type
+    
+LoadBalancer service type is the automated way to expose the service on the node port, create a LoadBalancer for it and configure networking rules allowing communication between the LoadBalancer and the Kubernetes cluster worker nodes:
+
+```yaml
+jira:
+  service:
+      type: LoadBalancer
+      sessionAffinity: ClientIP
+      sessionAffinityConfig:
+        clientIP:
+          timeoutSeconds: 10800
+```
+
+!!!warning "AWS EKS users"
+    If you install the Helm chart for the first time, you will need to skip overriding `sessionAffinity` in your `values.yaml`, otherwise the LoadBalancer will not be created and you will see the following error:
+    ```
+    Error syncing load balancer: failed to ensure load balancer: unsupported load balancer affinity: ClientIP
+    ```
+    Once the Helm chart is installed with the default `sessionAffinity`, run `helm upgrade` with `$productName.service.sessionAffinity` set to `ClientIP`.
+
 ## :material-folder-home: Volumes
 The Data Center products make use of filesystem storage. Each DC node has its own `local-home` volume, and all nodes in the DC cluster share a single `shared-home` volume.
 
