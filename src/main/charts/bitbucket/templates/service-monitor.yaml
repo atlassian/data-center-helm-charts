@@ -14,6 +14,10 @@ spec:
     path: /metrics
     port: jmx
     scheme: http
+  - interval: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds }}
+    path: /metrics
+    port: jmx-mesh-sidecar
+    scheme: http
   selector:
     matchLabels:
     {{- include "common.labels.selectorLabels" . | nindent 6 }}

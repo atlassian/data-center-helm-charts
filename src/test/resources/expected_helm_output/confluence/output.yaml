@@ -142,6 +142,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -176,7 +177,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -258,7 +258,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 98ec3be5b6cd098e344c596deb5b0110d093c95959572d68f8dc576d05252162
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

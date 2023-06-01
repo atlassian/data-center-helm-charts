@@ -93,6 +93,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -123,7 +124,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 87a915f6c05ff7a2c0ca23e78fcae442ecc11103764d4305f3db688b5016647c
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
