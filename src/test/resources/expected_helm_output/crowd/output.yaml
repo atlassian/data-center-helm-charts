@@ -85,6 +85,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -115,7 +116,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 4834f01ea3048f73429ddc4d0b09d6872e19993dbc277ea450f824b1aae8c4e1
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd

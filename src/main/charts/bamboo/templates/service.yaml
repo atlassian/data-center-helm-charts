@@ -10,6 +10,12 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.bamboo.service.type }}
+  sessionAffinity: {{ .Values.bamboo.service.sessionAffinity }}
+  {{- if .Values.bamboo.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.bamboo.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  {{- end }}
   {{- if and (eq .Values.bamboo.service.type "LoadBalancer") (not (empty .Values.bamboo.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.bamboo.service.loadBalancerIP }}
   {{- end }}

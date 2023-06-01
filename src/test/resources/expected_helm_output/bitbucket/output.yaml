@@ -176,6 +176,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -219,7 +220,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 196e61f853214d77e3fb5b3c57c04464c4fb28e1ffdec69f257ad84f553c6825
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -342,7 +342,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 3ad8dba1613e51f049cfe401770a5058ab0b91a5d802503f3413e3c51a2df22a
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket

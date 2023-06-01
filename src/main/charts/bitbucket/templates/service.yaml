@@ -11,6 +11,12 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.bitbucket.service.type }}
+  sessionAffinity: {{ .Values.bitbucket.service.sessionAffinity }}
+  {{- if .Values.bitbucket.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.bitbucket.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  {{- end }}
   {{- if and (eq .Values.bitbucket.service.type "LoadBalancer") (not (empty .Values.bitbucket.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.bitbucket.service.loadBalancerIP }}
   {{- end }}
