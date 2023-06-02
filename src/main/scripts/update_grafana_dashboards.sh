@@ -30,11 +30,14 @@ for PRODUCT in ${PRODUCTS[@]}; do \
   mkdir -p ${HELM_CHARTS_BASE_DIR}/${PRODUCT_DIR}/${CHART_DASHBOARDS_DEST_DIR}
   for JSON in ${JSONS[@]}; \
       do \
+      if [ ${PRODUCT} == "bitbucket" ] && [ ${JSON} == "ticket-status.json" ]; then
+        MESH_SIDECAR_ARG="--mesh sidecar"
+      fi
       python3 ${PATH_TO_SCRIPT} \
       --source \
         https://raw.githubusercontent.com/${GITHUB_DASHBOARDS_REPOSITORY}/${GIT_BRANCH}/${PRODUCT}/$JSON \
       --dest \
         ${HELM_CHARTS_BASE_DIR}/${PRODUCT_DIR}/${CHART_DASHBOARDS_DEST_DIR}/$JSON \
-      --product ${PRODUCT};
+      --product ${PRODUCT} ${MESH_SIDECAR_ARG};
       done
 done

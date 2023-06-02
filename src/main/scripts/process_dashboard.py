@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser(description="Read remote JSON file")
 parser.add_argument("--source", help="URL of the target remote JSON file")
 parser.add_argument("--dest", help="Local path of the destination processed json")
 parser.add_argument("--product", help="Product")
+parser.add_argument("--mesh", help="sidecar")
 args = parser.parse_args()
 
 if args.source is None:
@@ -81,6 +82,13 @@ def process_panels(panels):
                 target['legendFormat'] = replace_instance_with_pod
                 expr = target['expr']
                 expr = expr.replace('{{instance}}', '{{ pod }}')
+                # bitbucket server has 2 endpoints - the server itself and Mesh sidecar, we need to add
+                # endpoint="jmx" to all expressions in dashboards that are being processed without --mesh sidecar arg
+                if args.product == "bitbucket":
+                    jmx_endpoint = "jmx"
+                    if args.mesh == "sidecar":
+                        jmx_endpoint = "jmx-mesh-sidecar"
+                    expr = expr.replace('{', '{endpoint="' + jmx_endpoint + '", ')
                 # we need namespace and service filters in all expressions to make dashboards flexible
                 # we assume that the expression has the following format: expression{},
                 # i.e. it has an opening curly bracket. Make sure all expressions in the source json have those
@@ -98,4 +106,3 @@ process_panels(data['panels'])
 print('Saving the file to ' + args.dest)
 with open(args.dest, 'w') as file:
     json.dump(data, file, indent=2)
- 
