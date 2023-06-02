@@ -47,11 +47,15 @@ metadata:
     app.kubernetes.io/version: "7.19.9"
     app.kubernetes.io/managed-by: Helm
 data:
-  jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
+  jmx-config.yaml: |  
     rules:
-      - pattern: ".*"
+    - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+      name: java_lang_$2_$3
+    - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+      name: java_lang_Memory_HeapMemoryUsage_$1
+    - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+      name: java_lang_G1_$1_Generation_$2
+    - pattern: '.*'
 ---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1
@@ -138,6 +142,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -172,7 +177,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -254,7 +258,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 705b517555fce927c54cb9ef8407e808a74f44a4c09a077cb2edc3824d117e22
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

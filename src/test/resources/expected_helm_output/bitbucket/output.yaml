@@ -44,6 +44,7 @@ data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=2
     -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
+    -Dplugin.bitbucket-git.mesh.sidecar.jvmArgs=-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9998:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 512m
 ---
@@ -60,10 +61,14 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
     rules:
-      - pattern: ".*"
+    - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+      name: java_lang_$2_$3
+    - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+      name: java_lang_Memory_HeapMemoryUsage_$1
+    - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+      name: java_lang_G1_$1_Generation_$2
+    - pattern: '.*'
 ---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
@@ -83,6 +88,9 @@ spec:
     - port: 9999
       targetPort: jmx
       name: jmx
+    - port: 9998
+      targetPort: 9998
+      name: jmx-mesh-sidecar
   selector:
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
@@ -176,6 +184,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -219,7 +228,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 196e61f853214d77e3fb5b3c57c04464c4fb28e1ffdec69f257ad84f553c6825
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -342,7 +350,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 3ad8dba1613e51f049cfe401770a5058ab0b91a5d802503f3413e3c51a2df22a
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket

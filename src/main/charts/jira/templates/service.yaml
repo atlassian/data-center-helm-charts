@@ -10,6 +10,12 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.jira.service.type }}
+  sessionAffinity: {{ .Values.jira.service.sessionAffinity }}
+  {{- if .Values.jira.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.jira.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
+  {{- end }}
   {{- if and (eq .Values.jira.service.type "LoadBalancer") (not (empty .Values.jira.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.jira.service.loadBalancerIP }}
   {{- end }}

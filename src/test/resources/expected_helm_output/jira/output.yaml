@@ -43,11 +43,19 @@ metadata:
     app.kubernetes.io/version: "9.4.6"
     app.kubernetes.io/managed-by: Helm
 data:
-  jmx-config.yaml: |
-    lowercaseOutputLabelNames: true
-    lowercaseOutputName: true
+  jmx-config.yaml: |  
+    ---
+    startDelaySeconds: 0
     rules:
-      - pattern: ".*"
+      - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+        name: java_lang_$2_$3
+      - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+        name: java_lang_Memory_HeapMemoryUsage_$1
+      - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+        name: java_lang_G1_$1_Generation_$2
+      - pattern: '.*'
+    blacklistObjectNames:
+      - 'com.atlassian.jira:connectionpool=connections,connection=*,name=BasicDataSource'
 ---
 # Source: jira/templates/service-jmx.yaml
 apiVersion: v1
@@ -85,6 +93,7 @@ metadata:
   annotations:
 spec:
   type: ClusterIP
+  sessionAffinity: None
   ports:
     - port: 80
       targetPort: http
@@ -115,7 +124,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 810997b0ead21fd8586aba9d673c90de10df01b7b6f523ac00a043e1937d9d87
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira

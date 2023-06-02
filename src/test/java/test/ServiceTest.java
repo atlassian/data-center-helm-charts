@@ -43,6 +43,34 @@ class ServiceTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_default_session_affinity(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.port", "1234",
+                product + ".service.type", "NodePort"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getSpec().path("sessionAffinity")).hasTextEqualTo("None");
+        assertThat(service.getSpec().path("sessionAffinityConfig")).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_client_ip_session_affinity(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.sessionAffinity", "ClientIP",
+                product + ".service.sessionAffinityConfig.clientIP.timeoutSeconds", "10"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getSpec().path("sessionAffinity")).hasTextEqualTo("ClientIP");
+        assertThat(service.getSpec().path("sessionAffinityConfig").path("clientIP").path("timeoutSeconds")).hasValueEqualTo(10);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void service_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".service.annotations.testAnnotation1", "test1",

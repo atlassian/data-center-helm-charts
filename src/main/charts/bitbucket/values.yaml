@@ -475,6 +475,23 @@ bitbucket:
     #
     type: ClusterIP
 
+    # -- Session affinity type. If you want to make sure that connections from a particular client
+    # are passed to the same pod each time, set sessionAffinity to ClientIP.
+    # See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity
+    #
+    sessionAffinity: None
+
+    # -- Session affinity configuration
+    #
+    sessionAffinityConfig:
+
+      clientIP:
+
+        # -- Specifies the seconds of ClientIP type session sticky time.
+        # The value must be > 0 && <= 86400 (for 1 day) if ServiceAffinity == "ClientIP". Default value is 10800 (for 3 hours).
+        #
+        timeoutSeconds:
+
     # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
     #
     loadBalancerIP:
@@ -1057,6 +1074,17 @@ monitoring:
     # -- Scrape interval for the JMX service.
     #
     scrapeIntervalSeconds: 30
+
+  grafana:
+
+    # -- Create ConfigMaps with Grafana dashboards
+    #
+    createDashboards: false
+
+    # -- Label selector for Grafana dashboard importer sidecar
+    #
+    dashboardLabels: {}
+      # grafana_dashboard: dc_monitoring
 
 # Fluentd configuration
 #
