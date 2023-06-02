@@ -1,3 +1,16 @@
+"""
+This script fetches JSON files, processes them and writes the resulting files to a local destination.
+Its main function is to convert dashboard jsons https://github.com/atlassian-labs/data-center-grafana-dashboards
+to a K8s friendly format. In particular:
+* add namespace and service environment variables to templating
+* add namespace and service environment variables to every expression
+* remove non k8s specific labels if any
+* replace instance with pod in panel legends
+* remove extra commas
+* in case of Bitbucket, set endpoint=jmx to all expressions in the dashboards
+* in case of Bitbucket, set endpoint=jmx-mesh-sidecar to all expressions in the dashboards processed with --mesh sidecar
+"""
+
 import json
 import re
 import sys
@@ -23,7 +36,7 @@ if args.product is None:
     print("Error: --product argument is required. This must be the product of the dashboard to be converted.")
     sys.exit(1)
 
-print(f"Fetching a remote file {args.source}")
+print('Fetching a remote file ' + args.source)
 file = urllib.request.urlopen(args.source)
 data = json.load(file)
 file.close()
