@@ -35,6 +35,8 @@ elif args.product == 'bitbucket':
     product_unique_metric = 'com_atlassian_bitbucket_Repositories_Count'
 elif args.product == 'bitbucket-mesh':
     product_unique_metric = 'metrics_grpc_Value'
+elif args.product == 'bamboo':
+    product_unique_metric = 'java_lang_Memory_HeapMemoryUsage_committed{product=\\"bamboo\\"}'
 
 # mind double escaping // in regex
 templating_string = '{"list":[{"current":{"selected":true,"text":"default","value":"default"},"hide":0,' \
