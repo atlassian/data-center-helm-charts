@@ -23,7 +23,7 @@ if args.product is None:
     print("Error: --product argument is required. This must be the product of the dashboard to be converted.")
     sys.exit(1)
 
-print('Fetching a remote file ' + args.source)
+print(f"Fetching a remote file {args.source}")
 file = urllib.request.urlopen(args.source)
 data = json.load(file)
 file.close()
