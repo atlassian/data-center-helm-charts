@@ -114,7 +114,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_ActiveConnections{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_ActiveConnections{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Active connections ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -209,7 +209,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_IdleConnections{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_IdleConnections{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Idle connections ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -304,7 +304,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_ThreadsAwaitingConnection{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_ThreadsAwaitingConnection{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Threads awaiting connections ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -399,7 +399,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_TotalConnections{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_zaxxer_hikari_Pool_bitbucket_TotalConnections{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Total connections ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -494,7 +494,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(org_hibernate_core_bitbucket_core_QueryCacheHitCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(org_hibernate_core_bitbucket_core_QueryCacheHitCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Query cache hit ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -589,7 +589,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(org_hibernate_core_bitbucket_core_SecondLevelCacheHitCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(org_hibernate_core_bitbucket_core_SecondLevelCacheHitCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} Second level query cache hit ({{ pod }})",
           "range": true,
@@ -685,7 +685,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(org_hibernate_core_bitbucket_core_QueryCacheMissCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(org_hibernate_core_bitbucket_core_QueryCacheMissCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Query cache miss ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -780,7 +780,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(org_hibernate_core_bitbucket_core_SecondLevelCacheMissCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(org_hibernate_core_bitbucket_core_SecondLevelCacheMissCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} Second level query cache miss ({{ pod }})",
           "range": true,

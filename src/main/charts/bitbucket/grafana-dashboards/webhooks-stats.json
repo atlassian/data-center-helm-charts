@@ -115,7 +115,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_PublishCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_PublishCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Publish count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -210,7 +210,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchSuccessCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchSuccessCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Success count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -305,7 +305,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchRejectedCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchRejectedCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Rejected count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -400,7 +400,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchLastRejectedTimestamp{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchLastRejectedTimestamp{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Last rejection ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -495,7 +495,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchInFlightCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchInFlightCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} In-flight count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -590,7 +590,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchFailureCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchFailureCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Failure count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -685,7 +685,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchErrorCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchErrorCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Error count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -780,7 +780,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_webhooks_Webhooks_DispatchCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx-mesh-sidecar\"}[5m])",
           "legendFormat": "{{name}} Dispatch count ({{ pod }})",
           "range": true,
           "refId": "A"
