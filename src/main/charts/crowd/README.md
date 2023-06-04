@@ -1,6 +1,6 @@
 # crowd
 
-![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.1.2](https://img.shields.io/badge/AppVersion-5.1.2-informational?style=flat-square)
+![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.1.3](https://img.shields.io/badge/AppVersion-5.1.3-informational?style=flat-square)
 
 A chart for installing Crowd Data Center on Kubernetes
 
@@ -56,6 +56,9 @@ Kubernetes: `>=1.21.x-0`
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen  |
+| crowd.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
+| crowd.service.sessionAffinityConfig | object | `{"clientIP":{"timeoutSeconds":null}}` | Session affinity configuration  |
+| crowd.service.sessionAffinityConfig.clientIP.timeoutSeconds | string | `nil` | Specifies the seconds of ClientIP type session sticky time. The value must be > 0 && <= 86400(for 1 day) if ServiceAffinity == "ClientIP". Default value is 10800 (for 3 hours).  |
 | crowd.service.type | string | `"ClusterIP"` | The type of K8s service to use for Crowd. For loadBalancer type, deselect the consistent client IP address in Crowd Session configuration. Read more: https://atlassian.github.io/data-center-helm-charts/troubleshooting/LIMITATIONS/#loadbalancer-service-type  |
 | crowd.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Crowd container. Set to 'false' to disable this behaviour.  |
 | crowd.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/shutdown-wait.sh) for details.  |
