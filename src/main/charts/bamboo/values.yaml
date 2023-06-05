@@ -816,6 +816,17 @@ monitoring:
     #
     scrapeIntervalSeconds: 30
 
+  grafana:
+
+    # -- Create ConfigMaps with Grafana dashboards
+    #
+    createDashboards: false
+
+    # -- Label selector for Grafana dashboard importer sidecar
+    #
+    dashboardLabels: { }
+    # grafana_dashboard: dc_monitoring
+
 # Fluentd configuration
 #
 # Bamboo log collection and aggregation can be enabled using Fluentd. This config
