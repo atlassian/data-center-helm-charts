@@ -139,7 +139,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "up",
+          "expr": "up{namespace=\"$namespace\", service=\"$service\"}",
           "interval": "",
           "legendFormat": "{{ pod }}",
           "refId": "A"
