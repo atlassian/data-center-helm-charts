@@ -104,3 +104,33 @@ verify_metrics() {
     exit 1
   fi
 }
+
+verify_dashboards() {
+  echo "[INFO]: Verifying ConfigMaps with Grafana dashboards"
+  DASHBPOARDS_COUNT=$(find src/main/charts/"${DC_APP}"/grafana-dashboards  -name 'bitbucket-mesh' -prune -o -type f -print | wc -l)
+  CONFIGMAPS_COUNT=$(kubectl get cm -l=grafana_dashboard=dc_monitoring -n atlassian --no-headers -o custom-columns=":metadata.name" | wc -l)
+  if [ "${DASHBPOARDS_COUNT}" -ne "${CONFIGMAPS_COUNT}" ]; then
+    echo "[ERROR]: Count does not match! Dashboards count is ${DASHBPOARDS_COUNT}, configmaps count is ${CONFIGMAPS_COUNT}"
+    exit 1
+  fi
+
+  DASHBOARDS=($(find src/main/charts/${DC_APP}/grafana-dashboards  -name 'bitbucket-mesh' -prune -o -type f -print))
+  for dashboard in "${DASHBOARDS[@]}"; do
+    echo "[INFO]: Comparing $dashboard with its respective ConfigMap"
+    dashboard_json=$(cat "${dashboard}")
+    file_name=$(basename "${dashboard}" |cut -d '.' -f 1)
+    cm_data=$(kubectl get cm/${DC_APP}-${file_name}-dashboard -n atlassian -o jsonpath="{.data.${DC_APP}-atlassian-${file_name}\.json}")
+    if [ "${dashboard_json}" != "${cm_data}" ]; then
+        echo "[ERROR]: ConfigMap ${DC_APP}-${file_name}-dashboard data isn't identical to ${file_name}.json"
+        echo "******************************************************************"
+        echo -e "JSON:\n"
+        cat "${dashboard}"
+        echo "******************************************************************"
+        echo -e "ConfigMap:\n"
+        echo "${cm_data}"
+        exit 1
+    fi
+  done
+}
+
+

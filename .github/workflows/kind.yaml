@@ -78,6 +78,12 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_metrics
 
+      - name: Verify ${{inputs.dc_app}} grafana dashboards
+        if: env.DC_APP != 'crowd'
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_dashboards
+
       - name: Test scaling ${{inputs.dc_app}}
         run: |
           echo "[INFO]: Scaling ${DC_APP} to 2 replicas"
