@@ -45,7 +45,19 @@ data:
     lowercaseOutputLabelNames: true
     lowercaseOutputName: true
     rules:
-      - pattern: ".*"
+      - pattern: '(java.lang)<type=(\w+)><>(\w+):'
+        name: java_lang_$2_$3
+        labels:
+          product: "bamboo"
+      - pattern: 'java.lang<type=Memory><HeapMemoryUsage>(\w+)'
+        name: java_lang_Memory_HeapMemoryUsage_$1
+        labels:
+          product: "bamboo"
+      - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
+        name: java_lang_G1_$1_Generation_$2
+        labels:
+          product: "bamboo"
+      - pattern: '.*'
 ---
 # Source: bamboo/templates/service-jms.yaml
 apiVersion: v1
@@ -137,7 +149,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 6a2d1b3064ea870e5fb6beb167be510c3f11d8d9528a1b920be7fe6611f12cc2
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo

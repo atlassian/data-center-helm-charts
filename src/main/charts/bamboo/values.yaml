@@ -824,7 +824,7 @@ monitoring:
 
     # -- Label selector for Grafana dashboard importer sidecar
     #
-    dashboardLabels: { }
+    dashboardLabels: {}
     # grafana_dashboard: dc_monitoring
 
 # Fluentd configuration
