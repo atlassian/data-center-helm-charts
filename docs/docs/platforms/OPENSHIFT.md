@@ -5,7 +5,7 @@
 
     If you have followed our documentation on how to configure the Helm charts, and you're using correctly created components, we will then provide support if you encounter an error with installation after running the `helm install` command.
 
-    Read more about [what we support and what we don’t](troubleshooting/SUPPORT_BOUNDARIES.md).
+    Read more about [what we support and what we don’t](../troubleshooting/SUPPORT_BOUNDARIES.md).
 
 The Helm charts are vendor agnostic and create objects from standard APIs that [OpenShift](https://www.openshift.com/){.external} fully supports.
 
