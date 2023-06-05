@@ -134,5 +134,3 @@ verify_dashboards() {
     fi
   done
 }
-
-
