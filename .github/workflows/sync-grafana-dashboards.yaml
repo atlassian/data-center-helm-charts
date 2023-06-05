@@ -1,0 +1,49 @@
+name: Update Grafana Dashboards
+
+on:
+  schedule:
+    - cron: '0 1 * * SUN' # At 1AM on every Sunday
+  workflow_dispatch:
+
+jobs:
+  sync_dashboards:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.14'
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Process Grafana Dashboards
+        run: |
+          src/main/scripts/update_grafana_dashboards.sh
+          
+      - name: Commit changes and raise a PR
+        run: |
+          CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
+          if [ ${CHANGES} -ne 0 ]; then
+            OPEN_PRS=$(gh pr list --state open | grep "Update Grafana Dashboards for DC apps" || true)
+            if [[ ${OPEN_PRS} ]]; then
+              echo "Not raising PR because there are open PRs to update dashboards. Merge or close them to let the workflow raise new PRs"
+            else
+              git checkout -b update-grafana-dashboards-${GITHUB_RUN_ID}
+              git add -A
+              git commit -m "Update Grafana dashboards for DC apps"
+              git push origin update-grafana-dashboards-${GITHUB_RUN_ID}
+              gh pr create --title "Update Grafana Dashboards for DC apps" --body "Update Grafana dashboards for DC apps" --base main --head update-grafana-dashboards-${GITHUB_RUN_ID}
+            fi
+          else
+            echo "All Helm charts have up to date Grafana dashboards"
+          fi
