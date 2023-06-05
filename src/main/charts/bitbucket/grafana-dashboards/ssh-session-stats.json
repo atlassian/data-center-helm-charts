@@ -115,7 +115,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshSessions_ActiveSessionCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshSessions_ActiveSessionCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Active session count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -210,7 +210,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshSessions_MaxActiveSessionCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshSessions_MaxActiveSessionCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Max session count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -305,7 +305,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshSessions_SessionCreatedCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshSessions_SessionCreatedCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} Session created count ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -400,7 +400,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshSessions_SessionClosedCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshSessions_SessionClosedCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} Session closed count ({{ pod }})",
           "range": true,
@@ -496,7 +496,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshSessions_SessionExceptionCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshSessions_SessionExceptionCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} Session exception count ({{ pod }})",
           "range": true,

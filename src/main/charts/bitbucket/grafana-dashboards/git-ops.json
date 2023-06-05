@@ -115,7 +115,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneRequestCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneRequestCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} HTTP ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -126,7 +126,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneRequestCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneRequestCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH ({{ pod }})",
           "range": true,
@@ -224,7 +224,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneBytesRead{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneBytesRead{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{name}} HTTP bytes read ({{ pod }})",
@@ -237,7 +237,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneBytesRead{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneBytesRead{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH bytes read ({{ pod }})",
           "range": true,
@@ -249,7 +249,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneBytesWritten{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneBytesWritten{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} HTTP bytes written ({{ pod }})",
           "range": true,
@@ -261,7 +261,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneBytesWritten{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneBytesWritten{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH bytes written ({{ pod }})",
           "range": true,
@@ -358,7 +358,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_RequestCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_RequestCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} HTTP ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -369,7 +369,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_RequestCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_RequestCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH ({{ pod }})",
           "range": true,
@@ -464,7 +464,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_TotalBytesRead{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_TotalBytesRead{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "HTTP bytes read ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -475,7 +475,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_TotalBytesRead{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_TotalBytesRead{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "SSH bytes read ({{ pod }})",
           "range": true,
@@ -487,7 +487,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_TotalBytesWritten{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_TotalBytesWritten{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "HTTP bytes written ({{ pod }})",
           "range": true,
@@ -499,7 +499,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_TotalBytesWritten{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_TotalBytesWritten{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "SSH bytes written ({{ pod }})",
           "range": true,
@@ -595,7 +595,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneCacheMiss{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneCacheMiss{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "legendFormat": "{{name}} HTTP miss ({{ pod }})",
           "range": true,
           "refId": "A"
@@ -606,7 +606,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneCacheMiss{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneCacheMiss{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH miss ({{ pod }})",
           "range": true,
@@ -618,7 +618,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneCacheHit{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_CloneCacheHit{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} HTTP hit ({{ pod }})",
           "range": true,
@@ -630,7 +630,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneCacheHit{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_CloneCacheHit{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH hit ({{ pod }})",
           "range": true,
@@ -752,7 +752,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_FetchRequestCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_FetchRequestCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{name}} HTTP ({{ pod }})",
@@ -765,7 +765,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_FetchRequestCount{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_FetchRequestCount{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH ({{ pod }})",
           "range": true,
@@ -863,7 +863,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_FetchBytesRead{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_FetchBytesRead{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{name}} HTTP bytes read ({{ pod }})",
@@ -876,7 +876,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_FetchBytesRead{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_FetchBytesRead{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH bytes read ({{ pod }})",
           "range": true,
@@ -888,7 +888,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_FetchBytesWritten{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_HttpHostingStatistics_FetchBytesWritten{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} HTTP bytes written ({{ pod }})",
           "range": true,
@@ -900,7 +900,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_FetchBytesWritten{namespace=\"$namespace\", service=\"$service\"}[5m])",
+          "expr": "increase(com_atlassian_bitbucket_SshHostingStatistics_FetchBytesWritten{namespace=\"$namespace\", service=\"$service\", endpoint=\"jmx\"}[5m])",
           "hide": false,
           "legendFormat": "{{name}} SSH bytes written ({{ pod }})",
           "range": true,
