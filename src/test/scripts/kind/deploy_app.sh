@@ -111,6 +111,8 @@ verify_dashboards() {
   CONFIGMAPS_COUNT=$(kubectl get cm -l=grafana_dashboard=dc_monitoring -n atlassian --no-headers -o custom-columns=":metadata.name" | wc -l)
   if [ "${DASHBPOARDS_COUNT}" -ne "${CONFIGMAPS_COUNT}" ]; then
     echo "[ERROR]: Count does not match! Dashboards count is ${DASHBPOARDS_COUNT}, configmaps count is ${CONFIGMAPS_COUNT}"
+    echo -e "[ERROR]: ConfigMaps with grafana_dashboard=dc_monitoring label in atlassian namespace:\n"
+    kubectl get cm -l=grafana_dashboard=dc_monitoring -n atlassian --no-headers -o custom-columns=":metadata.name"
     exit 1
   fi
 
