@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 223,
+  "id": 414,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -873,7 +873,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "$datasource"
       },
       "gridPos": {
         "h": 1,
@@ -887,7 +887,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "prometheus"
+            "uid": "$datasource"
           },
           "refId": "A"
         }
@@ -1330,7 +1330,7 @@
           "expr": "Catalina_Manager_activeSessions{namespace=\"$namespace\", service=\"$service\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "active sessions: {{context}} ({{ pod }})",
+          "legendFormat": "active on {{context}} ({{ pod }})",
           "range": true,
           "refId": "A"
         },
@@ -1344,7 +1344,7 @@
           "expr": "Catalina_Manager_rejectedSessions{namespace=\"$namespace\", service=\"$service\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "rejected sessions: {{context}} ({{ pod }})",
+          "legendFormat": "rejected on {{context}} ({{ pod }})",
           "range": true,
           "refId": "C"
         }
@@ -1356,7 +1356,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "$datasource"
       },
       "gridPos": {
         "h": 1,
@@ -1370,7 +1370,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "prometheus"
+            "uid": "$datasource"
           },
           "refId": "A"
         }
@@ -1381,7 +1381,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1462,7 +1462,7 @@
           },
           "editorMode": "builder",
           "expr": "com_zaxxer_hikari_Pool_HikariPool_2_ActiveConnections",
-          "legendFormat": "__auto",
+          "legendFormat": "{{ pod }}",
           "range": true,
           "refId": "A"
         },
@@ -1474,7 +1474,7 @@
           "editorMode": "builder",
           "expr": "com_zaxxer_hikari_Pool_HikariPool_2_TotalConnections",
           "hide": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{ pod }}",
           "range": true,
           "refId": "B"
         }
@@ -1485,13 +1485,43 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1519,18 +1549,16 @@
       },
       "id": 42,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.4.7",
       "targets": [
@@ -1539,25 +1567,55 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "com_zaxxer_hikari_Pool_HikariPool_2_ThreadsAwaitingConnection",
-          "legendFormat": "__auto",
+          "legendFormat": "{{ pod }}",
           "range": true,
           "refId": "A"
         }
       ],
       "title": "Threads awaiting connection",
-      "type": "stat"
+      "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1572,7 +1630,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -1584,18 +1643,16 @@
       },
       "id": 44,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.4.7",
       "targets": [
@@ -1604,15 +1661,15 @@
             "type": "prometheus",
             "uid": "$datasource"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "com_zaxxer_hikari_Pool_HikariPool_2_IdleConnections",
-          "legendFormat": "__auto",
+          "legendFormat": "{{ pod }}",
           "range": true,
           "refId": "A"
         }
       ],
       "title": "Idle connections",
-      "type": "stat"
+      "type": "timeseries"
     }
   ],
   "refresh": "",
