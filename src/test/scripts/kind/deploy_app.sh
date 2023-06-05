@@ -116,7 +116,7 @@ verify_dashboards() {
     exit 1
   fi
 
-  DASHBOARDS=$(find src/main/charts/"${DC_APP}"/grafana-dashboards -name 'bitbucket-mesh' -prune -o -type f -print)
+  DASHBOARDS=($(find src/main/charts/"${DC_APP}"/grafana-dashboards -name 'bitbucket-mesh' -prune -o -type f -print))
   for dashboard in "${DASHBOARDS[@]}"; do
     echo "[INFO]: Comparing $dashboard with its respective ConfigMap"
     dashboard_json=$(cat "${dashboard}")
