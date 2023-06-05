@@ -24,17 +24,17 @@ parser.add_argument("--product", help="Product")
 parser.add_argument("--mesh", help="sidecar")
 args = parser.parse_args()
 
-if args.source is None:
-    print("Error: --source argument is required. This must be URL of a raw JSON file.")
-    sys.exit(1)
-
-if args.dest is None:
-    print("Error: --dest argument is required. This must be an absolute path to the destination json file.")
-    sys.exit(1)
-
-if args.product is None:
-    print("Error: --product argument is required. This must be the product of the dashboard to be converted.")
-    sys.exit(1)
+# if args.source is None:
+#     print("Error: --source argument is required. This must be URL of a raw JSON file.")
+#     sys.exit(1)
+#
+# if args.dest is None:
+#     print("Error: --dest argument is required. This must be an absolute path to the destination json file.")
+#     sys.exit(1)
+#
+# if args.product is None:
+#     print("Error: --product argument is required. This must be the product of the dashboard to be converted.")
+#     sys.exit(1)
 
 print('Fetching a remote file ' + args.source)
 file = urllib.request.urlopen(args.source)
@@ -82,9 +82,10 @@ def process_panels(panels):
                 # make sure datasource is templated and there is no hardcoded ID
                 datasource = json.loads('{"type":"prometheus","uid":"$datasource"}')
                 target['datasource'] = datasource
-                # we don't need product labels in K8s
-                remove_product_label = re.sub(r'product="[^"]*"', '', target['expr'])
-                target['expr'] = remove_product_label
+                # we don't need product labels in K8s except for Bamboo
+                if args.product != "bamboo":
+                    remove_product_label = re.sub(r'product="[^"]*"', '', target['expr'])
+                    target['expr'] = remove_product_label
                 # we don't need instance labels in K8s because pod IPs are dynamic
                 remove_instance_label = re.sub(r'instance="[^"]*"', '', target['expr'])
                 target['expr'] = remove_instance_label
