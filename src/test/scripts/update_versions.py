@@ -104,6 +104,7 @@ def update_mesh_tag():
         doc = yaml.safe_load(content)
         current_version = doc['bitbucket']['mesh']['image']['tag']
         logging.info("Current version: %s", current_version)
+        logging.info("New version: %s", new_version)
 
     new_content = content.replace(current_version, new_version)
     with open(bitbucket_values_file, "w") as stream:
