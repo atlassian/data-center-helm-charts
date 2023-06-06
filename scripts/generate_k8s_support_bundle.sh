@@ -20,9 +20,6 @@ NODE_LOG="node_logs"
 RESOURCE_LOG="resource_logs"
 HELM_DATA="helm_data"
 
-CAPTURE_APP_LOGS=false
-CAPTURE_NGINX_LOGS=false
-
 setup_directories() {
   if [ -z "${ENV_STATS}" ]; then
     ENV_STATS="./k8s-support/k8s-$CLUSTER_NAME-$REGION"
@@ -172,7 +169,7 @@ get_node_data
 if [ -n "${INGRESS_CONTROLLER_NAMESPACE}" ]; then
     get_nginx_data
 fi
-if [ "${CAPTURE_APP_LOGS}" = true ]; then
+if [ -n "${CAPTURE_APP_LOGS}" ]; then
     get_app_logs
 fi
 create_archive
