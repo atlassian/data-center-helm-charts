@@ -122,7 +122,7 @@ display_help()
    echo ""
    echo "options:"
    echo "-a     Include application logs."
-   echo "-i     Include ingress-nginx logs. Supply ingess controller namepsace with this flag."
+   echo "-i     Include ingress-nginx logs. Supply ingess controller namespace with this flag."
    echo "-h     Print help."
    echo
    exit 0;
