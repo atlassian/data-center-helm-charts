@@ -56,14 +56,14 @@ get_pod_data() {
 
 get_nginx_data() {
   echo "[INFO]: Getting Ingress controller (NGINX) logs..."
-  NGINX_PODS=($(kubectl get pods -n ingress-nginx --no-headers -o custom-columns=":metadata.name"))
+  NGINX_PODS=($(kubectl get pods -n "${INGRESS_CONTROLLER_NAMESPACE}" --no-headers -o custom-columns=":metadata.name"))
   for POD in "${NGINX_PODS[@]}"; do
-    kubectl logs "${POD}" -n ingress-nginx > "${ENV_STATS}"/${NGINX_LOG}/"${POD}"_log.log 2>&1
-    kubectl describe pod "${POD}" -n ingress-nginx > "${ENV_STATS}"/${NGINX_LOG}/"${POD}"_describe.log 2>&1
+    kubectl logs "${POD}" -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${NGINX_LOG}/"${POD}"_log.log 2>&1
+    kubectl describe pod "${POD}" -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${NGINX_LOG}/"${POD}"_describe.log 2>&1
   done
 
   # checking status of Nginx ingress is important to troubleshoot any LoadBalancer issues
-  kubectl describe svc -n ingress-nginx > "${ENV_STATS}"/${NGINX_LOG}/nginx_svc_describe.log 2>&1
+  kubectl describe svc -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${NGINX_LOG}/nginx_svc_describe.log 2>&1
 }
 
 get_event_data() {
@@ -125,13 +125,13 @@ display_help()
    echo ""
    echo "options:"
    echo "-a     Include application logs."
-   echo "-i     Include ingress-nginx logs."
+   echo "-i     Include ingress-nginx logs. Supply ingess controller namepsace with this flag."
    echo "-h     Print help."
    echo
    exit 0;
 }
 
-while getopts "ac:r:n:hi" option
+while getopts "ac:r:n:h:i:" option
 do
   case "${option}" in
     c)
@@ -147,7 +147,7 @@ do
       CAPTURE_APP_LOGS=true
       ;;
     i)
-      CAPTURE_NGINX_LOGS=true
+      INGRESS_CONTROLLER_NAMESPACE=${OPTARG}
       ;;
     h)
       display_help
@@ -169,7 +169,7 @@ get_pod_data
 get_event_data
 get_resource_data
 get_node_data
-if [ "${CAPTURE_NGINX_LOGS}" = true ]; then
+if [ -n "${INGRESS_CONTROLLER_NAMESPACE}" ]; then
     get_nginx_data
 fi
 if [ "${CAPTURE_APP_LOGS}" = true ]; then
