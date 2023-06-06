@@ -16,7 +16,7 @@ else
     # if no arguments are passed, use the default array
     # When dashboards for a new DC product are added
     # makes sure it is added in this array
-    PRODUCTS=("bitbucket" "bitbucket-mesh" "confluence" "jira" "bamboo")
+    PRODUCTS=("bitbucket" "bitbucket-mesh" "confluence" "jira" "bamboo" "crowd")
 fi
 
 for PRODUCT in ${PRODUCTS[@]}; do \
