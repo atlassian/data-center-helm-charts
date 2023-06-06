@@ -23,32 +23,6 @@ HELM_DATA="helm_data"
 CAPTURE_APP_LOGS=false
 CAPTURE_NGINX_LOGS=false
 
-SCRIPT=$(basename "$0")
-
-#argument_checks() {
-#  if [ -z "${CLUSTER_NAME}" ]; then
-#    echo "[ERROR]: cluster name not provided as the first argument to the script"
-#    print_usage
-#    exit 1
-#  fi
-#
-#  if [ -z "${REGION}" ]; then
-#    echo "[ERROR]: region not provided as the second argument to the script"
-#    print_usage
-#    exit 1
-#  fi
-#
-#  if [ -z "${NAMESPACE}" ]; then
-#    echo "[ERROR]: cluster namespace not provided as the third argument to the script"
-#    print_usage
-#    exit 1
-#  fi
-#}
-
-#print_usage() {
-#  printf "[INFO]: usage: %s [-ha] <cluster_name> <region> <namespace>" "${SCRIPT}"
-#}
-
 setup_directories() {
   if [ -z "${ENV_STATS}" ]; then
     ENV_STATS="./k8s-support/k8s-$CLUSTER_NAME-$REGION"
