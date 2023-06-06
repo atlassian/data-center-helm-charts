@@ -4,7 +4,7 @@
 # be used to facilitate investigations into problematic deployments.
 #
 # Usage:
-# 1. Ensure you are already authenticated to the target cluster.
+# 1. Ensure you are already authenticated to the target cluster
 # 2. Ensure kubeconfig is updated to point to the target cluster
 # 3. Run: generate_k8s_support_bundle.sh <cluster_name> <region> <namespace>
 #
