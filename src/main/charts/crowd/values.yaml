@@ -805,3 +805,14 @@ monitoring:
     # -- Scrape interval for the JMX service.
     #
     scrapeIntervalSeconds: 30
+
+  grafana:
+
+    # -- Create ConfigMaps with Grafana dashboards
+    #
+    createDashboards: false
+
+    # -- Label selector for Grafana dashboard importer sidecar
+    #
+    dashboardLabels: {}
+    # grafana_dashboard: dc_monitoring
