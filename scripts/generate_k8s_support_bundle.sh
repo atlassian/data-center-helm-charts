@@ -134,12 +134,6 @@ display_help()
 while getopts "ac:r:n:hi" option
 do
   case "${option}" in
-    a)
-      CAPTURE_APP_LOGS=true
-      ;;
-    h)
-      display_help
-      ;;
     c)
       CLUSTER_NAME=${OPTARG}
       ;;
@@ -149,8 +143,14 @@ do
     n)
       NAMESPACE=${OPTARG}
       ;;
+    a)
+      CAPTURE_APP_LOGS=true
+      ;;
     i)
       CAPTURE_NGINX_LOGS=true
+      ;;
+    h)
+      display_help
       ;;
     \?)
       display_help
