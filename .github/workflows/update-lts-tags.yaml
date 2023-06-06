@@ -3,7 +3,6 @@ name: Update LTS Tags
 on:
   schedule:
     - cron: '0 0 * * SUN' # At 00:00 on every Sunday
-  workflow_dispatch:
 
 jobs:
   lts_check:
