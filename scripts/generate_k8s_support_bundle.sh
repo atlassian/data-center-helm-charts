@@ -74,16 +74,16 @@ get_pod_status() {
 }
 
 get_resource_data() {
-  echo "[INFO]: Getting resource descriptions..."
+  echo "[INFO]: Getting resource logs..."
   RESOURCES=(svc ingress pvc pv)
   for RESOURCE in "${RESOURCES[@]}"; do
-    echo "[INFO]: Description obtained for ${RESOURCE}"
+    echo "[INFO]: Logs obtained for ${RESOURCE}"
     kubectl describe "${RESOURCE}" -n "${NAMESPACE}" > "${ENV_STATS}"/${RESOURCE_LOG}/"${RESOURCE}"_describe.log 2>&1
   done
 }
 
 get_node_data() {
-  echo "[INFO]: Getting node descriptions..."
+  echo "[INFO]: Getting node logs..."
   kubectl describe nodes > "${ENV_STATS}"/${NODE_LOG}/nodes.log 2>&1
 }
 
@@ -123,12 +123,13 @@ display_help()
    echo "options:"
    echo "-a     Include application logs."
    echo "-i     Include ingress-nginx logs. Supply ingess controller namespace with this flag."
+   echo "-o     Include node logs."
    echo "-h     Print help."
    echo
    exit 0;
 }
 
-while getopts "ac:r:n:h:i:" option
+while getopts "aohc:r:n:i:" option
 do
   case "${option}" in
     c)
@@ -146,6 +147,9 @@ do
     i)
       INGRESS_CONTROLLER_NAMESPACE=${OPTARG}
       ;;
+    o)
+      CAPTURE_NODE_LOGS=true
+      ;;
     h)
       display_help
       ;;
@@ -159,13 +163,16 @@ if [ -z "${CLUSTER_NAME}" ] || [ -z "${REGION}" ] || [ -z "${NAMESPACE}" ]; then
     display_help
 fi
 
+### GENERATE SUPPORT BUNDLE ###
 setup_directories
 get_helm_chart_data
 get_pod_status
 get_pod_data
 get_event_data
 get_resource_data
-get_node_data
+if [ -n "${CAPTURE_NODE_LOGS}" ]; then
+  get_node_data
+fi
 if [ -n "${INGRESS_CONTROLLER_NAMESPACE}" ]; then
     get_nginx_data
 fi
@@ -173,7 +180,9 @@ if [ -n "${CAPTURE_APP_LOGS}" ]; then
     get_app_logs
 fi
 create_archive
+
 echo "[INFO]: Logs and events saved to ${ENV_STATS}"
+
 ls -la "${ENV_STATS}"
 
 
