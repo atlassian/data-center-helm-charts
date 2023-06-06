@@ -1465,8 +1465,8 @@
             "uid": "$datasource"
           },
           "editorMode": "builder",
-          "expr": "com_mchange_v2_c3p0_PooledDataSource_numBusyConnections",
-          "legendFormat": "__auto",
+          "expr": "com_mchange_v2_c3p0_PooledDataSource_numBusyConnections{namespace=\"$namespace\", service=\"$service\"}",
+          "legendFormat": "busy ({{ pod }})",
           "range": true,
           "refId": "A"
         },
@@ -1476,9 +1476,9 @@
             "uid": "$datasource"
           },
           "editorMode": "builder",
-          "expr": "com_mchange_v2_c3p0_PooledDataSource_numConnections",
+          "expr": "com_mchange_v2_c3p0_PooledDataSource_numConnections{namespace=\"$namespace\", service=\"$service\"}",
           "hide": false,
-          "legendFormat": "__auto",
+          "legendFormat": "total ({{ pod }})",
           "range": true,
           "refId": "B"
         }
@@ -1572,8 +1572,8 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "com_mchange_v2_c3p0_PooledDataSource_numBusyConnections",
-          "legendFormat": "{{ pod }}",
+          "expr": "com_mchange_v2_c3p0_PooledDataSource_numBusyConnections{namespace=\"$namespace\", service=\"$service\"}",
+          "legendFormat": "busy {{ pod }}",
           "range": true,
           "refId": "A"
         },
@@ -1583,9 +1583,9 @@
             "uid": "$datasource"
           },
           "editorMode": "builder",
-          "expr": "com_mchange_v2_c3p0_PooledDataSource_maxPoolSize",
+          "expr": "com_mchange_v2_c3p0_PooledDataSource_maxPoolSize{namespace=\"$namespace\", service=\"$service\"}",
           "hide": false,
-          "legendFormat": "__auto",
+          "legendFormat": "maxPoolSize ({{ pod }})",
           "range": true,
           "refId": "B"
         }
@@ -1679,7 +1679,7 @@
           },
           "editorMode": "code",
           "expr": "com_mchange_v2_c3p0_PooledDataSource_numIdleConnections{namespace=\"$namespace\", service=\"$service\"}",
-          "legendFormat": "{{ pod }}",
+          "legendFormat": "idle {{ pod }}",
           "range": true,
           "refId": "A"
         }
