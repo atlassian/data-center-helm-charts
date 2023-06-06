@@ -1,0 +1,26 @@
+name: Process Dashboard Script Testing
+
+on:
+  push:
+    paths:
+      - 'src/main/scripts/process_dash*'
+  workflow_dispatch:
+
+jobs:
+  run-process-dashboard-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.14'
+
+      - name: Run tests
+        run: |
+          python src/main/scripts/process_dashboard_test.py
