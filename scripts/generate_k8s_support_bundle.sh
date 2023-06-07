@@ -6,27 +6,26 @@
 # Usage:
 # 1. Ensure you are already authenticated to the target cluster
 # 2. Ensure kubeconfig is updated to point to the target cluster
-# 3. Run: generate_k8s_support_bundle.sh <cluster_name> <region> <namespace>
+# 3. Ensure you have privileges to list and read objects in the target namespace
+# 3. Run: generate_k8s_support_bundle.sh -n <namespace>
 #
 
-CLUSTER_NAME=""
-REGION=""
 NAMESPACE=""
 
 POD_LOG="pod_logs"
 EVENT_LOG="event_logs"
-NGINX_LOG="nginx_logs"
+INGRESS_LOG="ingress_logs"
 NODE_LOG="node_logs"
 RESOURCE_LOG="resource_logs"
 HELM_DATA="helm_data"
 
 setup_directories() {
   if [ -z "${ENV_STATS}" ]; then
-    ENV_STATS="./k8s-support/k8s-$CLUSTER_NAME-$REGION"
+    ENV_STATS="./k8s-support"
   fi
   mkdir -p "${ENV_STATS}"       \
   "${ENV_STATS}/${POD_LOG}"     \
-  "${ENV_STATS}/${NGINX_LOG}"   \
+  "${ENV_STATS}/${INGRESS_LOG}"   \
   "${ENV_STATS}/${EVENT_LOG}"   \
   "${ENV_STATS}/${RESOURCE_LOG}"\
   "${ENV_STATS}/${NODE_LOG}"    \
@@ -43,7 +42,7 @@ get_helm_chart_data() {
 }
 
 get_pod_data() {
-  echo "[INFO]: Getting Pod logs..."
+  echo "[INFO]: Getting pod logs..."
   PODS=($(kubectl get pods -n "${NAMESPACE}" --no-headers -o custom-columns=":metadata.name"))
   for POD in "${PODS[@]}"; do
     kubectl logs "${POD}" -n "${NAMESPACE}" > "${ENV_STATS}"/${POD_LOG}/"${POD}"_log.log 2>&1
@@ -52,38 +51,38 @@ get_pod_data() {
 }
 
 get_nginx_data() {
-  echo "[INFO]: Getting Ingress controller (NGINX) logs..."
+  echo "[INFO]: Getting Ingress controller logs..."
   NGINX_PODS=($(kubectl get pods -n "${INGRESS_CONTROLLER_NAMESPACE}" --no-headers -o custom-columns=":metadata.name"))
   for POD in "${NGINX_PODS[@]}"; do
-    kubectl logs "${POD}" -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${NGINX_LOG}/"${POD}"_log.log 2>&1
-    kubectl describe pod "${POD}" -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${NGINX_LOG}/"${POD}"_describe.log 2>&1
+    kubectl logs "${POD}" -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${INGRESS_LOG}/"${POD}"_log.log 2>&1
+    kubectl describe pod "${POD}" -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${INGRESS_LOG}/"${POD}"_describe.log 2>&1
   done
 
-  # checking status of Nginx ingress is important to troubleshoot any LoadBalancer issues
-  kubectl describe svc -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${NGINX_LOG}/nginx_svc_describe.log 2>&1
+  # checking status of ingress controller svc may be important to troubleshoot any LoadBalancer issues
+  kubectl describe svc -n "${INGRESS_CONTROLLER_NAMESPACE}" > "${ENV_STATS}"/${INGRESS_LOG}/nginx_svc_describe.log 2>&1
 }
 
 get_event_data() {
-  echo "[INFO]: Getting events logs..."
+  echo "[INFO]: Getting namespace events..."
   kubectl get events -o wide -n "${NAMESPACE}" > "${ENV_STATS}"/${EVENT_LOG}/events.log 2>&1
 }
 
 get_pod_status() {
-  echo "[INFO]: Getting Pod status..."
+  echo "[INFO]: Getting all pods..."
   kubectl get pods -o wide -n "${NAMESPACE}" > "${ENV_STATS}"/current_pod_status.log 2>&1
 }
 
 get_resource_data() {
-  echo "[INFO]: Getting resource logs..."
-  RESOURCES=(svc ingress pvc pv)
+  echo "[INFO]: Describing resources..."
+  RESOURCES=(svc ingress pvc sts pv)
   for RESOURCE in "${RESOURCES[@]}"; do
-    echo "[INFO]: Logs obtained for ${RESOURCE}"
+    echo "[INFO]: Describing ${RESOURCE}"
     kubectl describe "${RESOURCE}" -n "${NAMESPACE}" > "${ENV_STATS}"/${RESOURCE_LOG}/"${RESOURCE}"_describe.log 2>&1
   done
 }
 
 get_node_data() {
-  echo "[INFO]: Getting node logs..."
+  echo "[INFO]: Describing nodes..."
   kubectl describe nodes > "${ENV_STATS}"/${NODE_LOG}/nodes.log 2>&1
 }
 
@@ -116,28 +115,23 @@ create_archive() {
 
 display_help()
 {
-   echo "To run this script a <cluster_name>, <region> and <namespace> must be supplied."
+   echo "To run this script <namespace> must be supplied."
    echo ""
-   echo "Syntax: generate_k8s_support_bundle.sh -c <cluster_name> -r <region> -n <namespace> "
+   echo "Syntax: generate_k8s_support_bundle.sh -n <namespace>"
    echo ""
    echo "options:"
+   echo "-n     Target namespace."
    echo "-a     Include application logs."
-   echo "-i     Include ingress-nginx logs. Supply ingess controller namespace with this flag."
-   echo "-o     Include node logs."
+   echo "-i     Include ingress controller logs. Supply ingess controller namespace with this flag."
+   echo "-o     Include worker node definitions. RBAC to list and get nodes is required."
    echo "-h     Print help."
    echo
    exit 0;
 }
 
-while getopts "aohc:r:n:i:" option
+while getopts "aoh:n:i:" option
 do
   case "${option}" in
-    c)
-      CLUSTER_NAME=${OPTARG}
-      ;;
-    r)
-      REGION=${OPTARG}
-      ;;
     n)
       NAMESPACE=${OPTARG}
       ;;
@@ -159,7 +153,12 @@ do
   esac
 done
 
-if [ -z "${CLUSTER_NAME}" ] || [ -z "${REGION}" ] || [ -z "${NAMESPACE}" ]; then
+if ! command -v kubectl &>/dev/null; then
+    echo "[ERROR]: kubectl is not installed or not found in PATH"
+    exit 1
+fi
+
+if [ -z "${NAMESPACE}" ]; then
     display_help
 fi
 
@@ -184,5 +183,3 @@ create_archive
 echo "[INFO]: Logs and events saved to ${ENV_STATS}"
 
 ls -la "${ENV_STATS}"
-
-
