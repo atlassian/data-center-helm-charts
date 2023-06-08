@@ -1,4 +1,6 @@
+import json
 import logging
+import urllib.request
 
 import requests
 import yaml
@@ -88,6 +90,36 @@ def latest_minor(version, mac_versions):
     return minor_versions[-1]
 
 
+def update_mesh_tag():
+    logging.info("-------------------------------")
+    logging.info('- Updating Bitbucket Mesh tag -')
+    logging.info("-------------------------------")
+    mesh_repo = 'atlassian/bitbucket-mesh'
+    new_version = product_versions.get_lts_version(['mesh']).replace(tag_suffix, "")
+    bitbucket_values_file = '../../main/charts/bitbucket/values.yaml'
+    expected_bitbucket_output_file = '../resources/expected_helm_output/bitbucket/output.yaml'
+
+    with open(bitbucket_values_file, "r") as stream:
+        content = stream.read()
+        doc = yaml.safe_load(content)
+        current_version = doc['bitbucket']['mesh']['image']['tag']
+        logging.info("Current version: %s", current_version)
+        logging.info("New version: %s", new_version)
+
+    new_content = content.replace(current_version, new_version)
+    with open(bitbucket_values_file, "w") as stream:
+        stream.write(new_content)
+
+    logging.info('Updated values file: %s', bitbucket_values_file)
+    with open(expected_bitbucket_output_file, "r") as file:
+        file_contents = file.read()
+
+    modified_contents = file_contents.replace(mesh_repo + ':' + current_version, mesh_repo + ':' + new_version)
+    logging.info('Updated expected output file: %s', expected_bitbucket_output_file)
+    with open(expected_bitbucket_output_file, 'w') as file:
+        file.write(modified_contents)
+
+
 logging.info("Updating product versions in helm charts")
 for product in products:
     logging.info("-------------------------")
@@ -105,4 +137,5 @@ for product in products:
     logging.info(f"Latest version: %s, tagname: {version}{tag_suffix}", version)
     update_versions(product, new_version_tag)
 
+update_mesh_tag()
 logging.info(">>>> ATTENTION - Don't forget to update the product Changelogs.md - ATTENTION <<<<")

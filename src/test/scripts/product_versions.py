@@ -8,7 +8,8 @@ known_supported_version = {
 	'jira-software': '8.13.8',
 	'confluence': '7.12.2',
 	'stash': '7.12.1',
-	'bamboo': '8.1.1'  # Bamboo has not LTS versions.
+	'mesh': '2.0.1',
+	'bamboo': '8.1.1'  # Bamboo has no LTS versions.
 }
 
 # If tag suffix is desired - e.g. 7.8.0-jdk11 -> tag_suffix = "-jdk11"
