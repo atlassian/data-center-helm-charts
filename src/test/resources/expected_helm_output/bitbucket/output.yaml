@@ -251,7 +251,7 @@ spec:
             runAsUser: 0 # make sure we run as root to avoid permission denied
       containers:
         - name: bitbucket-mesh
-          image: atlassian/bitbucket-mesh:1.5.0
+          image: atlassian/bitbucket-mesh:2.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: mesh
