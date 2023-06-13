@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: 1.12.0
+version: 1.13.0
 appVersion: 5.1.3
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,12 +20,14 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add priorityClassName to pod spec (#557)"
-    - "Add hostAliases for all DC products (#556)"
-    - "Crowd service type edge case documentation (#554)"
-    - "Add a warning to Crowd's values.yaml ingress.path field (#550)"
-    - "Update fluentd cm template for crowd (#547)"
-    - "Documentation for Crowd (#544)"
+    - "Update appVersions for DC apps (#599)"
+    - "Update Grafana dashboards for DC apps (#596)"
+    - "Update Grafana dashboards for DC apps (#595)"
+    - "Crowd dashboard (#593)"
+    - "Bamboo dashboard (#588)"
+    - "Make sessionAffinity configurable in service spec (#582)"
+    - "Add optional ServiceMonitors to DC Helm Charts (#573)"
+    - "Expose JMX beans on http endpoint (#562)"
 
 dependencies:
 - name: common
