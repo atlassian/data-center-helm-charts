@@ -3,6 +3,42 @@ entries:
   bamboo:
   - annotations:
       artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#599)"
+        - "Update Grafana dashboards for DC apps (#589)"
+        - "Bamboo dashboard (#588)"
+        - "Make sessionAffinity configurable in service spec (#582)"
+        - "Add optional ServiceMonitors to DC Helm Charts (#573)"
+        - "Enable JMS traffic via Service (#570)"
+        - "Expose JMX beans on http endpoint (#562)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.0
+    created: "2023-06-13T03:59:46.944397447Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.2
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: f8202f853d775f04c698c25cf97fca4000af3755a3dec75a05c03cb9db648c83
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.13.0/bamboo-1.13.0.tgz
+    version: 1.13.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Add priorityClassName to pod spec (#557)"
         - "Add hostAliases for all DC products (#556)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -636,6 +672,38 @@ entries:
   bamboo-agent:
   - annotations:
       artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#599)"
+        - "Bamboo dashboard (#588)"
+        - "Expose JMX beans on http endpoint (#562)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.0
+    created: "2023-06-13T03:59:47.179057405Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.2
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: ee0cefc4f52ec64be8bcf0ac3939717957b783b497388fd6255819fbb2e638d7
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.13.0/bamboo-agent-1.13.0.tgz
+    version: 1.13.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Add priorityClassName to pod spec (#557)"
         - "Add hostAliases for all DC products (#556)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -1222,6 +1290,44 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#599)"
+        - "Bamboo dashboard (#588)"
+        - "Update Grafana dashboards for Bitbucket (#586)"
+        - "Add Bitbucket Mesh Grafana dashboards (#583)"
+        - "Add Bitbucket server dashboards to Helm chart (#585)"
+        - "Pass javaagent to mesh JVM (#584)"
+        - "Make sessionAffinity configurable in service spec (#582)"
+        - "Add optional ServiceMonitors to DC Helm Charts (#573)"
+        - "Expose JMX beans on http endpoint (#562)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.1
+    created: "2023-06-13T03:59:47.429254353Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.2
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: cfa19322fbbd3926d7f0bfd426557a6b5da8ff126c3861ab08c48a9b52151872
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.13.0/bitbucket-1.13.0.tgz
+    version: 1.13.0
   - annotations:
       artifacthub.io/changes: |-
         - "Add priorityClassName to pod spec (#557)"
@@ -2325,6 +2431,42 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/common-1.0.0/common-1.0.0.tgz
     version: 1.0.0
   confluence:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#599)"
+        - "Bamboo dashboard (#588)"
+        - "Make sessionAffinity configurable in service spec (#582)"
+        - "Cleanup dashboards"
+        - "Add Confluence Grafana dashboards (#575)"
+        - "Add optional ServiceMonitors to DC Helm Charts (#573)"
+        - "Expose JMX beans on http endpoint (#562)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.19.9
+    created: "2023-06-13T03:59:47.891020835Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.2
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 59ef6467b7d688c7c591f68bbf73a8fa64ee1206968d2f49c1fc60df43f979a8
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.13.0/confluence-1.13.0.tgz
+    version: 1.13.0
   - annotations:
       artifacthub.io/changes: '- "Add priorityClassName to pod spec (#557)"'
       artifacthub.io/containsSecurityUpdates: "true"
@@ -3445,6 +3587,43 @@ entries:
   crowd:
   - annotations:
       artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#599)"
+        - "Update Grafana dashboards for DC apps (#596)"
+        - "Update Grafana dashboards for DC apps (#595)"
+        - "Crowd dashboard (#593)"
+        - "Bamboo dashboard (#588)"
+        - "Make sessionAffinity configurable in service spec (#582)"
+        - "Add optional ServiceMonitors to DC Helm Charts (#573)"
+        - "Expose JMX beans on http endpoint (#562)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.1.3
+    created: "2023-06-13T03:59:48.124399519Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.2
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 360a32e4540f25f68fe4253568a9f158929cb934934f2ab3189c3aa51af8a2b4
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.13.0/crowd-1.13.0.tgz
+    version: 1.13.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Add priorityClassName to pod spec (#557)"
         - "Add hostAliases for all DC products (#556)"
         - "Crowd service type edge case documentation (#554)"
@@ -4378,6 +4557,44 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#599)"
+        - "Update Grafana dashboards for DC apps (#589)"
+        - "Bamboo dashboard (#588)"
+        - "Make sessionAffinity configurable in service spec (#582)"
+        - "Cleanup dashboards"
+        - "Jira Grafana Dashboards (#578)"
+        - "Add optional ServiceMonitors to DC Helm Charts (#573)"
+        - "Expose JMX beans on http endpoint (#562)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.7
+    created: "2023-06-13T03:59:48.349815746Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.2
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: da03a1aa34ed306ba49048239584369d2d5266e3404b3aeb6af966e807e7d8ec
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.13.0/jira-1.13.0.tgz
+    version: 1.13.0
   - annotations:
       artifacthub.io/changes: |-
         - "Add priorityClassName to pod spec (#557)"
@@ -5423,4 +5640,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-04-24T09:32:39.691170576Z"
+generated: "2023-06-13T03:59:48.351000314Z"
