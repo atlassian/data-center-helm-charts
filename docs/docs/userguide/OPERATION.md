@@ -1,7 +1,7 @@
 # Operation
 Once you have [installed your product](../userguide/INSTALLATION.md), use this document if you want to scale your product, update your product, or see what examples we have.
 
-## Monitoring
+## Expose JMX Metrics
 
 When `monitoring.exposeJmxMetrics` is enabled, [JMX exporter](https://github.com/prometheus/jmx_exporter){.external} runs as javaagent to expose http server and serve metrics of a local JVM. In other words, JMX MBeans (if enabled in the product) are exposed and available to be scraped by [Prometheus](https://prometheus.io/){.external}.
 

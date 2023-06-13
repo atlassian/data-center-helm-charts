@@ -5,6 +5,7 @@ nav:
     - CONFIGURATION.md
     - MIGRATION.md
     - OPERATION.md
+    - monitoring
     - upgrades
     - resource_management
     - ...
