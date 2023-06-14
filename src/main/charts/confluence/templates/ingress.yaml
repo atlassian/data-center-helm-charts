@@ -31,13 +31,6 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: {{ include "confluence.ingressPath" . }}
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ include "common.names.fullname" . }}
-                port:
-                  number: {{ $.Values.confluence.service.port }}
           {{ if .Values.synchrony.enabled }}
           - path: /synchrony
             pathType: Prefix
@@ -47,4 +40,11 @@ spec:
                 port:
                   number: {{ $.Values.synchrony.service.port }}
           {{ end }}
+          - path: {{ include "confluence.ingressPath" . }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "common.names.fullname" . }}
+                port:
+                  number: {{ $.Values.confluence.service.port }}
 {{ end }}
