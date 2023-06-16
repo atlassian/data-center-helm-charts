@@ -80,6 +80,7 @@ spec:
             - name: ATL_PROXY_PORT
               value: {{ include "jira.ingressPort" . | quote }}
             {{ end }}
+            {{- include "jira.s3AvatarsStorageEnvVars" . | nindent 12 }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
             {{- include "jira.clusteringEnvVars" . | nindent 12 }}
             - name: SET_PERMISSIONS

@@ -262,6 +262,19 @@ volumeClaimTemplates:
 {{- end }}
 {{- end }}
 
+{{- define "jira.s3AvatarsStorageEnvVars" -}}
+{{- if and .Values.jira.s3AvatarsStorage.bucketName .Values.jira.s3AvatarsStorage.bucketRegion }}
+- name: ATL_S3AVATARS_BUCKET_NAME
+  value: {{ .Values.jira.s3AvatarsStorage.bucketName | quote }}
+- name: ATL_S3AVATARS_REGION
+  value: {{ .Values.jira.s3AvatarsStorage.bucketRegion | quote }}
+{{- if .Values.jira.s3AvatarsStorage.endpointOverride }}
+- name: ATL_S3AVATARS_ENDPOINT_OVERRIDE
+  value: {{ .Values.jira.s3AvatarsStorage.endpointOverride | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
 {{- define "jira.databaseEnvVars" -}}
 {{- if .Values.jira.forceConfigUpdate }}
 - name: ATL_FORCE_CFG_UPDATE

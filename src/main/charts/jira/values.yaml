@@ -73,6 +73,15 @@ serviceAccount:
   #
   annotations: {}
 
+  # Use EKS IRSA. See: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+  #
+  eksIrsa:
+
+    # Defining a full arn of AWS role to assume will automatically annotate jira,
+    # e.g. `eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/S3Access`.
+    # "-Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token" will be automatically added to Jira JVM arguments
+    roleArn:
+
 
 # REQUIRED - Database configuration
 #
@@ -532,6 +541,24 @@ jira:
     # stored.
     #
     localHomeSubPath: "log"
+
+  # Use AWS S3 to store attachments. From Confluence 8.1 onwards.
+  #
+
+  s3AvatarsStorage:
+
+    # Bucket name to store avatars. If a bucket name and region (see below) are defined, Jira will automatically
+    # use AWS S3 to store avatars. Only bucket name is required, not the full arn.
+    #
+    bucketName:
+
+    # AWS region where the S3 bucket is located.
+    #
+    bucketRegion:
+
+    # Override the default AWS API endpoint with a custom one
+    #
+    endpointOverride:
 
   # Data Center clustering
   #
