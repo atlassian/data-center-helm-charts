@@ -1,13 +1,14 @@
 # AWS S3 Avatars Storage
 
-Since 9.9.0 Jira supports storing avatars in AWS S3. To enable this feature, update the image `tag` to `9.9.0` and define bucket name and AWS region in `jira.s3AvatarsStorage`, for example:
+Since 9.9.0 Jira supports storing avatars in AWS S3. To enable this feature, update the image `tag` to `9.9.0` and define bucket name and AWS region in `jira.s3Storage.avatars`, for example:
 
 ```yaml
 tag: 9.9.0
 jira:
-  s3AvatarsStorage:
-    bucketName: jira-avatars-bucket
-    bucketRegion: us-east-1
+  s3Storage:
+    avatars:
+      bucketName: jira-avatars-bucket
+      bucketRegion: us-east-1
 ```
 
 # AWS Authentication

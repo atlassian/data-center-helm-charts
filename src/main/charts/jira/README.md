@@ -87,9 +87,9 @@ Kubernetes: `>=1.21.x-0`
 | jira.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Jira JVM  |
 | jira.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Jira JVM  |
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache  |
-| jira.s3AvatarsStorage.bucketName | string | `nil` |  |
-| jira.s3AvatarsStorage.bucketRegion | string | `nil` |  |
-| jira.s3AvatarsStorage.endpointOverride | string | `nil` |  |
+| jira.s3Storage.avatars.bucketName | string | `nil` |  |
+| jira.s3Storage.avatars.bucketRegion | string | `nil` |  |
+| jira.s3Storage.avatars.endpointOverride | string | `nil` |  |
 | jira.securityContext.fsGroup | int | `2001` | The GID used by the Jira docker image GID will default to 2001 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260  |
 | jira.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | jira.service.annotations | object | `{}` | Additional annotations to apply to the Service  |

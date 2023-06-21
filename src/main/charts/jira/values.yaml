@@ -542,23 +542,24 @@ jira:
     #
     localHomeSubPath: "log"
 
-  # Use AWS S3 to store attachments. From Confluence 8.1 onwards.
+  # Use AWS S3 to store avatars. From Jira 9.9 onwards.
   #
 
-  s3AvatarsStorage:
+  s3Storage:
 
-    # Bucket name to store avatars. If a bucket name and region (see below) are defined, Jira will automatically
-    # use AWS S3 to store avatars. Only bucket name is required, not the full arn.
-    #
-    bucketName:
+    avatars:
+      # Bucket name to store avatars. If a bucket name and region (see below) are defined, Jira will automatically
+      # use AWS S3 to store avatars. Only bucket name is required, not the full arn.
+      #
+      bucketName:
 
-    # AWS region where the S3 bucket is located.
-    #
-    bucketRegion:
+      # AWS region where the S3 bucket is located.
+      #
+      bucketRegion:
 
-    # Override the default AWS API endpoint with a custom one
-    #
-    endpointOverride:
+      # Override the default AWS API endpoint with a custom one
+      #
+      endpointOverride:
 
   # Data Center clustering
   #

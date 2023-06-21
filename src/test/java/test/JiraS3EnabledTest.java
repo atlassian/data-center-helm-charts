@@ -9,8 +9,6 @@ import test.model.Product;
 
 import java.util.Map;
 
-import static test.jackson.JsonNodeAssert.assertThat;
-
 class JiraS3EnabledTest {
     private Helm helm;
 
@@ -24,40 +22,8 @@ class JiraS3EnabledTest {
     @EnumSource(value = Product.class, names = {"jira"})
     void jira_s3_avatars_storage_env_vars(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".s3AvatarsStorage.bucketName", "my-bucket",
-                product + ".s3AvatarsStorage.bucketRegion", "my-region"
-        ));
-
-        resources.getStatefulSet(product.getHelmReleaseName())
-                .getContainer()
-                .getEnv()
-                .assertHasValue("ATL_S3AVATARS_BUCKET_NAME", "my-bucket")
-                .assertHasValue("ATL_S3AVATARS_REGION", "my-region");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"})
-    void jira_s3_avatars_storage_endpoint_override(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".s3AvatarsStorage.bucketName", "my-bucket",
-                product + ".s3AvatarsStorage.bucketRegion", "my-region",
-                product + ".s3AvatarsStorage.endpointOverride", "http://minio.svc.cluster.local"
-        ));
-
-        resources.getStatefulSet(product.getHelmReleaseName())
-                .getContainer()
-                .getEnv()
-                .assertHasValue("ATL_S3AVATARS_BUCKET_NAME", "my-bucket")
-                .assertHasValue("ATL_S3AVATARS_REGION", "my-region")
-                .assertHasValue("ATL_S3AVATARS_ENDPOINT_OVERRIDE", "http://minio.svc.cluster.local");
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"})
-    void jira_s3_avatars_storage_no_endpoint_override(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".s3AvatarsStorage.bucketName", "my-bucket",
-                product + ".s3AvatarsStorage.bucketRegion", "my-region"
+                product + ".s3Storage.avatars.bucketName", "my-bucket",
+                product + ".s3Storage.avatars.bucketRegion", "my-region"
         ));
 
         resources.getStatefulSet(product.getHelmReleaseName())
@@ -70,9 +36,26 @@ class JiraS3EnabledTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"jira"})
+    void jira_s3_avatars_storage_endpoint_override(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".s3Storage.avatars.bucketName", "my-bucket",
+                product + ".s3Storage.avatars.bucketRegion", "my-region",
+                product + ".s3Storage.avatars.endpointOverride", "http://minio.svc.cluster.local"
+        ));
+
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_S3AVATARS_BUCKET_NAME", "my-bucket")
+                .assertHasValue("ATL_S3AVATARS_REGION", "my-region")
+                .assertHasValue("ATL_S3AVATARS_ENDPOINT_OVERRIDE", "http://minio.svc.cluster.local");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira"})
     void jira_s3_avatars_storage_missing_env_vars(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".s3AvatarsStorage.bucketName", "my-bucket"
+                product + ".s3Storage.avatars.bucketName", "my-bucket"
         ));
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
