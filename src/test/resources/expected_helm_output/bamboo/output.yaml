@@ -175,6 +175,8 @@ spec:
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - mountPath: "/var/atlassian/application-data/shared-home"
               name: shared-home
