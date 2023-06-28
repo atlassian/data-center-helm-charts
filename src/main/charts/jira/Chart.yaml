@@ -22,6 +22,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
     - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
+    - "Add s3 avatars storage support for Jira (#608)"
 
 dependencies:
 - name: common
