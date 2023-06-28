@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.13.0
+version: 1.13.1
 appVersion: 9.4.7
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,14 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#599)"
-    - "Update Grafana dashboards for DC apps (#589)"
-    - "Bamboo dashboard (#588)"
-    - "Make sessionAffinity configurable in service spec (#582)"
-    - "Cleanup dashboards"
-    - "Jira Grafana Dashboards (#578)"
-    - "Add optional ServiceMonitors to DC Helm Charts (#573)"
-    - "Expose JMX beans on http endpoint (#562)"
+    - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
 
 dependencies:
 - name: common

@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.13.0
+version: 1.13.1
 appVersion: 7.19.10
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,13 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#599)"
-    - "Bamboo dashboard (#588)"
-    - "Make sessionAffinity configurable in service spec (#582)"
-    - "Cleanup dashboards"
-    - "Add Confluence Grafana dashboards (#575)"
-    - "Add optional ServiceMonitors to DC Helm Charts (#573)"
-    - "Expose JMX beans on http endpoint (#562)"
+    - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
 
 dependencies:
 - name: common

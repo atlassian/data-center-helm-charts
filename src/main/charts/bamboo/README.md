@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 1.13.0](https://img.shields.io/badge/Version-1.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.3.0](https://img.shields.io/badge/AppVersion-9.3.0-informational?style=flat-square)
+![Version: 1.13.1](https://img.shields.io/badge/Version-1.13.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.3.0](https://img.shields.io/badge/AppVersion-9.3.0-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -17,7 +17,7 @@ Kubernetes: `>=1.21.x-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://atlassian.github.io/data-center-helm-charts | common | 1.2.2 |
+| https://atlassian.github.io/data-center-helm-charts | common | 1.2.3 |
 
 ## Values
 
