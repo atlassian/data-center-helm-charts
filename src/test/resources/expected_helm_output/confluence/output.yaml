@@ -259,7 +259,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 855a67744b9013e47f59dd74544e466523e27aa83089eb47e4f13669b2eb47e2
+        checksum/config-jvm: e0074ebdb2ca8c75025a320cd06e1f7f91a4e6ba9373aa2613dea60173b6820a
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -286,6 +286,8 @@ spec:
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - mountPath: "/var/atlassian/application-data/shared-home"
               name: shared-home

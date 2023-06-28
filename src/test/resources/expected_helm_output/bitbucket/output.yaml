@@ -228,7 +228,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 7326894755525f6bc6852ed1c786e59edd9835655aff54a10d23984b78dbfa6e
+        checksum/config-jvm: 555059c124174714f5af246982a12557062630668dc4091f918588d717a7158a
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -351,7 +351,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 23593e00dee3ed0e0e14d7602f385e78ffe991965b0651c13946a3044f86d5be
+        checksum/config-jvm: e7b1c55864ed92e419c97ddcd716baf79a8f2e0134799d945f65df0c445d149f
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -370,6 +370,8 @@ spec:
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - mountPath: "/var/atlassian/application-data/shared-home"
               name: shared-home
