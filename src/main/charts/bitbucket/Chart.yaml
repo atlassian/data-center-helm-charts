@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.13.0
+version: 1.13.1
 appVersion: 8.9.2
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,15 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#599)"
-    - "Bamboo dashboard (#588)"
-    - "Update Grafana dashboards for Bitbucket (#586)"
-    - "Add Bitbucket Mesh Grafana dashboards (#583)"
-    - "Add Bitbucket server dashboards to Helm chart (#585)"
-    - "Pass javaagent to mesh JVM (#584)"
-    - "Make sessionAffinity configurable in service spec (#582)"
-    - "Add optional ServiceMonitors to DC Helm Charts (#573)"
-    - "Expose JMX beans on http endpoint (#562)"
+    - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
 
 dependencies:
 - name: common
