@@ -21,6 +21,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
     - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
+    - "Swap ingress paths for priority based rules (#602)"
 
 dependencies:
 - name: common

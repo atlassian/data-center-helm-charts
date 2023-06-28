@@ -10,6 +10,7 @@
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
 * Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)
+* Swap ingress paths for priority based rules (#602)
 
 ## 1.13.0
 
