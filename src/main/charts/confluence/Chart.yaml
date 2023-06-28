@@ -30,5 +30,5 @@ annotations:
 
 dependencies:
 - name: common
-  version: 1.2.2
+  version: 1.2.3
   repository: https://atlassian.github.io/data-center-helm-charts

@@ -25,5 +25,5 @@ annotations:
     - "Expose JMX beans on http endpoint (#562)"
 dependencies:
 - name: common
-  version: 1.2.2
+  version: 1.2.3
   repository: https://atlassian.github.io/data-center-helm-charts
