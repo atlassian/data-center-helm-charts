@@ -696,9 +696,14 @@ confluence:
         # -- Initial Memory request by Confluence pod
         #
         memory: "2G"
-      #  limits:
-      #    cpu: "2"
-      #    memory: "2G"
+      limits:
+        # -- Initial CPU limit by Confluence pod.
+        #
+        cpu: "2"
+
+        # -- Initial Memory limit by Confluence pod
+        #
+        memory: "2G"
 
   shutdown:
 
@@ -1005,9 +1010,14 @@ synchrony:
         # -- Initial Memory request Synchrony pod
         #
         memory: "2.5G"
-      #  limits:
-      #    cpu: "2"
-      #    memory: "2.5G"      
+      limits:
+        # -- Initial CPU limit by Synchrony pod
+        #
+        cpu: "2"
+
+        # -- Initial Memory limit by Synchrony pod
+        #
+        memory: "2.5G"      
 
   # -- Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g.
   # system properties.
