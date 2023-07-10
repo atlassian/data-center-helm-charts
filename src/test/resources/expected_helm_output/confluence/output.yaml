@@ -215,10 +215,10 @@ spec:
             periodSeconds: 1
             failureThreshold: 10
           resources:
-            requests:
+            limits:
               cpu: "2"
               memory: 2.5G
-            limits:
+            requests:
               cpu: "2"
               memory: 2.5G
           env:
@@ -316,12 +316,12 @@ spec:
             periodSeconds: 5
             failureThreshold: 6
           resources:
-            requests:
-              cpu: "2"
-              memory: 2G
             limits:
               cpu: "2"
               memory: 2.5G
+            requests:
+              cpu: "2"
+              memory: 2G
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/confluence"
