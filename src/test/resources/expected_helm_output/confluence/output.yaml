@@ -318,7 +318,7 @@ spec:
           resources:
             limits:
               cpu: "2"
-              memory: 2.5G
+              memory: 2G
             requests:
               cpu: "2"
               memory: 2G
