@@ -218,6 +218,9 @@ spec:
             requests:
               cpu: "2"
               memory: 2.5G
+            limits:
+              cpu: "2"
+              memory: 2.5G
           env:
             - name: SET_PERMISSIONS
               value: "true"
@@ -316,6 +319,9 @@ spec:
             requests:
               cpu: "2"
               memory: 2G
+            limits:
+              cpu: "2"
+              memory: 2.5G
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/confluence"
