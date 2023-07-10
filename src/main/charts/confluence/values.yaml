@@ -1005,9 +1005,9 @@ synchrony:
         # -- Initial Memory request Synchrony pod
         #
         memory: "2.5G"
-    #  limits:
-    #    cpu: "2"
-    #    memory: "2.5G"      
+      #  limits:
+      #    cpu: "2"
+      #    memory: "2.5G"      
 
   # -- Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g.
   # system properties.
