@@ -215,6 +215,9 @@ spec:
             periodSeconds: 1
             failureThreshold: 10
           resources:
+            limits:
+              cpu: "2"
+              memory: 2.5G
             requests:
               cpu: "2"
               memory: 2.5G
@@ -313,6 +316,9 @@ spec:
             periodSeconds: 5
             failureThreshold: 6
           resources:
+            limits:
+              cpu: "2"
+              memory: 2G
             requests:
               cpu: "2"
               memory: 2G
