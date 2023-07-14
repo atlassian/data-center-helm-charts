@@ -22,7 +22,7 @@ public class RequestsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent", "confluence"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void sts_empty_limits(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
 
