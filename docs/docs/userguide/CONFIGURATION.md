@@ -389,6 +389,35 @@ container.
 
 For more details on the above, and how 3rd party libraries can be supplied to a Pod see the example [External libraries and plugins](../examples/external_libraries/EXTERNAL_LIBS.md)
 
+### :material-book-cog: P1 Plugins
+
+While `additionalLibraries` and `additionalBundledPlugins` will mount files to `/opt/atlassian/<product-name>/lib` and `/opt/atlassian/<product-name>/<product-name>/WEB-INF/atlassian-bundled-plugins` respectively, plugins built on [Atlassian Plugin Framework 1](https://confluence.atlassian.com/adminjiraserver/important-directories-and-files-938847744.html#Importantdirectoriesandfiles-%3Cjira-application-dir%3E/atlassian-jira/WEB-INF/lib/){.external} need to be stored in `/opt/atlassian/<product-name>/<product-name>/WEB-INF/lib`. While there's no dedicated Helm values stanza for P1 plugins, it is fairly easy to persist them (the below example is for Jira deployed in namespace `atlassian`):
+
+* In your shared-home, create a directory called `p1-plugins`:
+  ```
+  kubectl exec -ti jira-0 -n atlassian \
+          -- mkdir -p /var/atlassian/application-data/shared-home/p1-plugins
+  ```
+
+* Copy a P1 plugin to the newly created directory in shared-home:
+  ```
+  kubectl cp hello.jar \
+    atlassian/jira-0:/var/atlassian/application-data/shared-home/p1-plugins/hello.jar
+  ```
+
+* Add the following to your custom values:
+  ```
+  jira:
+    additionalVolumeMounts:
+      - name: shared-home
+        mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/hello.jar
+        subPath: p1-plugins/hello.jar
+  ```
+
+Run `helm upgrade` to find `/var/atlassian/application-data/shared-home/p1-plugins/hello.jar` mounted into `/opt/atlassian/jira/atlassian-jira/WEB-INF/lib` in all pods of Jira StatefulSet.
+
+You can use the same approach to mount any files from a `shared-home` volume into any location in the container to persist such files across container restarts.
+
 ## :octicons-cpu-16: CPU and memory requests
 
 The Helm charts allow you to specify container-level CPU and memory [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits){.external} e.g.
