@@ -394,19 +394,19 @@ For more details on the above, and how 3rd party libraries can be supplied to a 
 While `additionalLibraries` and `additionalBundledPlugins` will mount files to `/opt/atlassian/<product-name>/lib` and `/opt/atlassian/<product-name>/<product-name>/WEB-INF/atlassian-bundled-plugins` respectively, plugins built on [Atlassian Plugin Framework 1](https://confluence.atlassian.com/adminjiraserver/important-directories-and-files-938847744.html#Importantdirectoriesandfiles-%3Cjira-application-dir%3E/atlassian-jira/WEB-INF/lib/){.external} need to be stored in `/opt/atlassian/<product-name>/<product-name>/WEB-INF/lib`. While there's no dedicated Helm values stanza for P1 plugins, it is fairly easy to persist them (the below example is for Jira deployed in namespace `atlassian`):
 
 * In your shared-home, create a directory called `p1-plugins`:
-  ```
+  ```bash
   kubectl exec -ti jira-0 -n atlassian \
           -- mkdir -p /var/atlassian/application-data/shared-home/p1-plugins
   ```
 
 * Copy a P1 plugin to the newly created directory in shared-home:
-  ```
+  ```bash
   kubectl cp hello.jar \
     atlassian/jira-0:/var/atlassian/application-data/shared-home/p1-plugins/hello.jar
   ```
 
 * Add the following to your custom values:
-  ```
+  ```yaml
   jira:
     additionalVolumeMounts:
       - name: shared-home
