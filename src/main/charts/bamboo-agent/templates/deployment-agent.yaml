@@ -94,9 +94,6 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.agent.shutdown.command | quote }}]
-
-      volumes:
-        {{ include "agent.additionalVolumes" . | nindent 8 }}
       {{- include "agent.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -120,3 +117,5 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
+      volumes:
+        {{ include "agent.additionalVolumes" . | nindent 8 }}
