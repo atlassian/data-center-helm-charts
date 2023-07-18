@@ -46,7 +46,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 360273b3bd7e392686870893d32f85e9d62bfad5e23ebfda8ef1446380aed3d8
+        checksum/config-jvm: d0685bc6949522d80bfe320152f82e0dc7c29debf088f40740bcd42c8d0aeed3
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent
@@ -94,8 +94,10 @@ spec:
             requests:
               cpu: "1"
               memory: 2G
+          volumeMounts:
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
+      volumes:
       priorityClassName: high

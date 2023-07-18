@@ -83,7 +83,8 @@ spec:
           resources:
           {{- toYaml . | nindent 12 }}
           {{- end }}
-
+          volumeMounts:
+            {{- include "agent.additionalVolumeMounts" . | nindent 12 }}
           {{ if .Values.agent.additionalPorts }}
           ports:
           {{- include "agent.additionalPorts" . | nindent 12 }}
@@ -93,6 +94,9 @@ spec:
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.agent.shutdown.command | quote }}]
+
+      volumes:
+        {{ include "agent.additionalVolumes" . | nindent 8 }}
       {{- include "agent.additionalContainers" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
