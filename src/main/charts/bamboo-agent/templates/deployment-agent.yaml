@@ -83,7 +83,8 @@ spec:
           resources:
           {{- toYaml . | nindent 12 }}
           {{- end }}
-
+          volumeMounts:
+            {{- include "agent.additionalVolumeMounts" . | nindent 12 }}
           {{ if .Values.agent.additionalPorts }}
           ports:
           {{- include "agent.additionalPorts" . | nindent 12 }}
@@ -116,3 +117,5 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
+      volumes:
+        {{ include "agent.additionalVolumes" . | nindent 8 }}

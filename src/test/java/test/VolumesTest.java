@@ -119,32 +119,48 @@ class VolumesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class)
     void additionalVolumeDefinition(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.additional[0].name", "my-volume",
                 "volumes.additional[0].persistentVolumeClaim.claimName", "my-volume-pvc"
         ));
-
-        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        assertThat(statefulSet.getVolume("my-volume").get().path("persistentVolumeClaim").path("claimName"))
-                .hasTextEqualTo("my-volume-pvc");
+        if (product.name().equals("bamboo_agent")) {
+            final var deployment = resources.getDeployment(product.getHelmReleaseName());
+            assertThat(deployment.getVolume("my-volume").get().path("persistentVolumeClaim").path("claimName"))
+                    .hasTextEqualTo("my-volume-pvc");
+        } else {
+            final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+            assertThat(statefulSet.getVolume("my-volume").get().path("persistentVolumeClaim").path("claimName"))
+                    .hasTextEqualTo("my-volume-pvc");
+        }
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class)
     void additionalVolumeMounts(Product product) throws Exception {
-        final var pname = product.name().toLowerCase();
+        var pname = product.name().toLowerCase();
+        if (product.name().equals("bamboo_agent")) {
+            pname = "agent";
+        }
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 pname + ".additionalVolumeMounts[0].name", "my-volume-mount",
                 pname + ".additionalVolumeMounts[0].mountPath", "/my-volume-path",
                 pname + ".additionalVolumeMounts[0].subPath", "extra_path"
         ));
 
-        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        final var mount = statefulSet.getContainer().getVolumeMount("my-volume-mount");
-        assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
-        assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
+        if (product.name().equals("bamboo_agent")) {
+            final var deployment = resources.getDeployment(product.getHelmReleaseName());
+            final var mount = deployment.getContainer().getVolumeMount("my-volume-mount");
+            assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
+            assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
+
+        } else {
+            final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+            final var mount = statefulSet.getContainer().getVolumeMount("my-volume-mount");
+            assertThat(mount.get("mountPath")).hasTextEqualTo("/my-volume-path");
+            assertThat(mount.get("subPath")).hasTextEqualTo("extra_path");
+        }
     }
 
     @ParameterizedTest
