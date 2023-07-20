@@ -105,3 +105,21 @@ Define additional hosts here to allow template overrides when used as a sub char
 {{- toYaml . }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define additional volumes here to allow template overrides when used as a sub chart
+*/}}
+{{- define "agent.additionalVolumes" -}}
+{{- with .Values.volumes.additional }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional volume mounts here to allow template overrides when used as a sub chart
+*/}}
+{{- define "agent.additionalVolumeMounts" -}}
+{{- with .Values.agent.additionalVolumeMounts }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
