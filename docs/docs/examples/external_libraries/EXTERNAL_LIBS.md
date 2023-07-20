@@ -144,7 +144,7 @@ nfsPermissionFixer:
     If taking this approach ensure the last thing your custom command does is apply the relevant permissions to the `shared-home` mount, see line `10` in `yaml` 
     snippet above. 
 
-    Each product chart has a `sharedHome.permissionFix.command` helper for doing this. look at Jira's helper [sharedHome.permissionFix.command](https://github.com/atlassian/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L102) 
+    Each product chart has a `<product>.sharedHome.permissionFix.command` helper for doing this. look at Jira's helper [jira.sharedHome.permissionFix.command](https://github.com/atlassian/data-center-helm-charts/blob/main/src/main/charts/jira/templates/_helpers.tpl#L102) 
     for more details on how these permissions are applied by default.
 
 Remember to also update the `additionalLibraries` stanza accordingly:
