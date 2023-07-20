@@ -1,0 +1,206 @@
+{{ if or .Values.jira.tomcatConfig.generateByHelm .Values.jira.seraphConfig.generateByHelm }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-server-config
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if .Values.jira.tomcatConfig.generateByHelm }}
+  server.xml: |
+{{- if .Values.jira.tomcatConfig.customServerXml }}
+{{- .Values.jira.tomcatConfig.customServerXml | nindent 6 }}
+{{- else }}
+    <?xml version="1.0" encoding="utf-8"?>
+    <Server port="{{ .Values.jira.tomcatConfig.mgmtPort | default "8005" }}"
+            shutdown="SHUTDOWN">
+
+      <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+      <Listener className="org.apache.catalina.core.AprLifecycleListener"
+                SSLEngine="on"/>
+      <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+      <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+      <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+      <Service name="Catalina">
+
+        <Connector port="{{ .Values.jira.tomcatConfig.port | default "8080" }}"
+                   maxThreads="{{ .Values.jira.tomcatConfig.maxThreads | default "100" }}"
+                   minSpareThreads="{{ .Values.jira.tomcatConfig.minSpareThreads | default "10" }}"
+                   connectionTimeout="{{ .Values.jira.tomcatConfig.connectionTimeout | default "20000" }}"
+                   enableLookups="{{ .Values.jira.tomcatConfig.enableLookups | default "false" }}"
+                   protocol="{{ .Values.jira.tomcatConfig.protocol | default "HTTP/1.1" }}"
+                   redirectPort="{{ .Values.jira.tomcatConfig.redirectPort | default "8443" }}"
+                   acceptCount="{{ .Values.jira.tomcatConfig.acceptCount | default "10" }}"
+                   secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.jira.tomcatConfig.secure }}"
+                   scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.jira.tomcatConfig.scheme }}"
+                   proxyName="{{ .Values.ingress.host | default .Values.jira.tomcatConfig.proxyName }}"
+                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.jira.tomcatConfig.proxyPort }}"
+
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^\`&quot;&lt;&gt;"
+                   bindOnInit="false"
+                   maxHttpHeaderSize="{{ .Values.jira.tomcatConfig.maxHttpHeaderSize | default "8192" }}"
+                   useBodyEncodingForURI="true"
+                   disableUploadTimeout="true" />
+
+        <Engine name="Catalina"
+                defaultHost="localhost">
+
+          <Host name="localhost"
+                appBase="webapps"
+                unpackWARs="true"
+                autoDeploy="true">
+
+            <Context path="{{ .Values.jira.service.contextPath | default "" }}"
+                     docBase="${catalina.home}/atlassian-jira"
+                     reloadable="false"
+                     useHttpOnly="true">
+              <Resource name="UserTransaction"
+                        auth="Container"
+                        type="javax.transaction.UserTransaction"
+                        factory="org.objectweb.jotm.UserTransactionFactory"
+                        jotm.timeout="60"/>
+              <Manager pathname=""/>
+              <JarScanner scanManifest="false"/>
+              <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve"
+                     threshold="120" />
+            </Context>
+
+          </Host>
+          <Valve className="org.apache.catalina.valves.AccessLogValve"
+                 pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
+        </Engine>
+
+      </Service>
+    </Server>
+{{- end }}
+{{- end }}
+{{- if .Values.jira.seraphConfig.generateByHelm }}
+  seraph-config.xml: |
+    <security-config>
+        <parameters>
+            <init-param>
+                <!--
+                  The login URL to redirect to when the user tries to access a protected resource (rather than clicking on
+                  an explicit login link). Most of the time, this will be the same value as 'link.login.url'.
+                    - if the URL is absolute (contains '://'), then redirect that URL (for SSO applications)
+                    - else the context path will be prepended to this URL
+
+                    If '${originalurl}' is present in the URL, it will be replaced with the URL that the user requested.
+                    This gives SSO login pages the chance to redirect to the original page
+
+                    '${pageCaps}' should be supported accordingly to com.atlassian.sal.api.page.PageCapability
+
+                    '${userRole}' when specified, should cause logout after login to an user with privileges lesser than requested
+                -->
+                <param-name>login.url</param-name>
+                <param-value>/login.jsp?permissionViolation=true&amp;os_destination=${originalurl}&amp;page_caps=${pageCaps}&amp;user_role=${userRole}</param-value>
+                <!--<param-value>http://sso.mycompany.com/login?redirectTo=${originalurl}</param-value>-->
+            </init-param>
+            <init-param>
+                <!--
+                  the URL to redirect to when the user explicitly clicks on a login link (rather than being redirected after
+                  trying to access a protected resource). Most of the time, this will be the same value as 'login.url'.
+                    - same properties as login.url above
+                -->
+                <param-name>link.login.url</param-name>
+                <param-value>/login.jsp?os_destination=${originalurl}</param-value>
+                <!--<param-value>/secure/Dashboard.jspa?os_destination=${originalurl}</param-value>-->
+                <!--<param-value>http://sso.mycompany.com/login?redirectTo=${originalurl}</param-value>-->
+            </init-param>
+            <init-param>
+                <!-- URL for logging out.
+                     - If relative, Seraph just redirects to this URL, which is responsible for calling Authenticator.logout().
+                     - If absolute (eg. SSO applications), Seraph calls Authenticator.logout() and redirects to the URL
+                     -->
+                <param-name>logout.url</param-name>
+                <param-value>/secure/Logout!default.jspa</param-value>
+                <!--<param-value>http://sso.mycompany.com/logout</param-value>-->
+            </init-param>
+            <!--
+              The path to *forward* to when the user tries to POST to a protected resource (rather than clicking on
+              an explicit login link). Note that this is done using a servlet FORWARD, not a redirect. Information
+              about the original request can be gotten from the javax.servlet.forward.* request attributes.
+
+              At this point you will probably want to save the user's POST params so he can log in again and retry
+              the POST.
+
+              Defaults to undefined, in which case Seraph will just do a redirect instead of a FORWARD.
+            -->
+            <init-param>
+                <param-name>login.forward.path</param-name>
+                <param-value>/secure/XsrfErrorAction.jspa</param-value>
+            </init-param>
+            <!-- The key that the original URL is stored with in the session -->
+            <init-param>
+                <param-name>original.url.key</param-name>
+                <param-value>os_security_originalurl</param-value>
+            </init-param>
+            <init-param>
+                <param-name>login.cookie.key</param-name>
+                <param-value>seraph.rememberme.cookie</param-value>
+            </init-param>
+            <!-- This property sets the default remember me cookie max age in seconds.  It is currently set to 2 weeks -->
+            <init-param>
+                <param-name>autologin.cookie.age</param-name>
+                <param-value>{{ .Values.jira.seraphConfig.autoLoginCookieAge | default "1209600" }}</param-value>
+            </init-param>
+            <!-- Basic Authentication can be enabled by passing the authentication type as a configurable url parameter.
+            With this example, you will need to pass http://mycompany.com/anypage?os_authType=basic in the url to enable Basic Authentication -->
+            <init-param>
+                <param-name>authentication.type</param-name>
+                <param-value>os_authType</param-value>
+            </init-param>
+            <!--  If this parameter is set to true, the cookie will never be set secure.  This is useful if you're logging
+                  into JIRA via https, but want to browse JIRA over http.  This flag will ensure that the remember me option
+                  works correctly.
+            <init-param>
+                <param-name>insecure.cookie</param-name>
+                <param-value>true</param-value>
+            </init-param> -->
+
+            <init-param>
+                <param-name>invalidate.session.on.login</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            <init-param>
+                <param-name>invalidate.session.exclude.list</param-name>
+                <param-value>ASESSIONID,jira.websudo.timestamp,jira.user.project.admin</param-value>
+            </init-param>
+        </parameters>
+
+        <!-- CROWD:START - If enabling Crowd SSO integration uncomment the following SSOSeraphAuthenticator and comment out the JiraSeraphAuthenticator below -->
+        <!--
+        <authenticator class="com.atlassian.jira.security.login.SSOSeraphAuthenticator"/>
+        -->
+        <!-- CROWD:END -->
+
+        <!-- CROWD:START - The authenticator below here will need to be commented out for Crowd SSO integration -->
+        <authenticator class="com.atlassian.jira.security.login.JiraSeraphAuthenticator"/>
+        <!-- CROWD:END -->
+
+        <!-- NB: the URL to redirect to is now specified by login.url above -->
+        <services>
+            <service class="com.atlassian.jira.security.JiraPathService" />
+
+            <service class="com.atlassian.seraph.service.WebworkService">
+                <init-param>
+                    <param-name>action.extension</param-name>
+                    <param-value>jspa</param-value>
+                </init-param>
+            </service>
+
+            <service class="com.atlassian.jira.plugin.webwork.JiraSeraphSecurityService" />
+        </services>
+
+        <rolemapper class="com.atlassian.jira.security.JiraRoleMapper"/>
+
+        <elevatedsecurityguard class="com.atlassian.jira.security.login.JiraElevatedSecurityGuard"/>
+
+        <interceptors>
+            <interceptor class="com.atlassian.jira.web.filters.JiraLoginInterceptor" />
+        </interceptors>
+    </security-config>
+{{- end }}
+{{ end }}

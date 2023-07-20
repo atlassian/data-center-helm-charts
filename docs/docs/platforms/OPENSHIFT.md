@@ -7,60 +7,18 @@
 
     Read more about [what we support and what we don’t](../troubleshooting/SUPPORT_BOUNDARIES.md).
 
+## Why It Doesn't Work Out-of-the-Box on OpenShift
+
 The Helm charts are vendor agnostic and create objects from standard APIs that [OpenShift](https://www.openshift.com/){.external} fully supports.
 
-However, by default OpenShift will not allow running containers as users specified in the image `Dockerfiles`
-or `securityContext.fsGroup` in a statefulset/deployment spec. You will see the following error in stateful set events if you deploy with default Helm chart values:
+However, by default OpenShift will not allow running containers as users specified in the image `Dockerfiles` (which is root in case of Data Center images),
+or `securityContext.fsGroup` in a Statefulset/Deployment spec is forbidden. You will see the following error in StatefulSet events if you deploy any DC product with default Helm chart values:
 
 ```
 create Pod jira-0 in StatefulSet jira failed error: pods "jira-0" is forbidden: unable to validate against any security context constraint: [provider "anyuid": Forbidden: not usable by user or serviceaccount, provider restricted: .spec.securityContext.fsGroup: Invalid value: []int64{2001}: 2001 is not an allowed group, spec.initContainers[0].securityContext.runAsUser: Invalid value: 0: must be in the ranges: [1003170000, 1003179999]
 ```
 
-There are a couple of ways to fix this.
-
-## Attach `anyuid` policies
-If possible, attach `anyuid` policy to 2 serviceAccounts. Here's an example for a Bitbucket installation.
-Please, note that the service account names vary depending on the Data Center product:
-
-=== "For Bitbucket pods"
-
-    ```shell
-    oc adm policy add-scc-to-user anyuid -z bitbucket -n git
-    ```
-
-=== "For NFS permission fixer pod"
-
-    ```shell
-    oc adm policy add-scc-to-user anyuid -z default -n git
-    ```
-
-Typically, the `volumes.sharedHome.persistentVolumeClaim.nfsPermissionFixer` needs to be set to `true` to make volume writable.
-It depends on the storage backend though.
-
-## Disable security context
-
-As an alternative, (if letting containers run as pre-defined users is not possible), set `product_name.securityContextEnabled` to `false`, for example, `confluence.securityContextEnabled: false`.
-As a result the container will start as a user with an OpenShift generated ID.
-You will also need to disable NFS permission fixer init container as it starts as root. Set `volumes.sharedHome.nfsPermissionFixer.enabled` to false.
-
-## Permission issues
-
-If a container starts without `anyuid` enabled, applications can't write to `${APPLICATION_HOME}/logs`, `${APPLICATION_HOME}/work` and `${APPLICATION_HOME}/temp`.
-If you see in logs that the server fails to start with `permission denied` errors, you may want to declare these directories as runtime volumes. To do so, you need to declare additional volume mounts and additional volumes in `values.yaml`:
-
-```
-confluence:
-  additionalVolumeMounts:
-    - name: tomcat-work
-      # this example is for Confluence
-      mountPath: /opt/atlassian/confluence/work
-volumes:
-  additional:
-    - name: tomcat-work
-      emptyDir: {}
-```
-
-While it's possible to declare runtime volumes for empty directories, it is not possible for `${APPLICATION_HOME}/conf`. When starting up, Jira and Confluence generate a few configuration files which is a part of the image entrypoint. Without `anyuid` SCC, an unprivileged user can't write to `${APPLICATION_HOME}/conf`. When starting Jira in OpenShift without `anyuid` SCC attached to jira service account, you will see the following log:
+While it is possible to disable `securityContext`, there are further issues with generating config files (which happens in the container entrypoint):
 
 ```
 INFO:root:Generating /etc/container_id from template container_id.j2
@@ -75,15 +33,46 @@ INFO:root:Running Jira with command '/opt/atlassian/jira/bin/start-jira.sh', arg
 executing as current user
 ```
 
-While this is a non-fatal error and Jira is able to proceed with startup, failure to properly generate configuration files like server.xml will result in a number of errors when using Jira.
+While these are non-fatal errors and Jira/Confluence is able to proceed with startup, failure to properly generate configuration files like `server.xml` will result in a number of errors when using Jira or Confluence.
 
-To mitigate the problem, either attach anyuid policy to Jira (or Confluence) service account **or** build your own container image if existing security practices do not allow anyuid. You need to inherit the Jira (or Confluence) official image and make a few directories/files writable for users belonging to a `root` group (which users in OpenShfit containers belong to):
 
+## OpenShift (Run as NonRoot) Friendly Values
+
+!!! info "Supported in 1.14.0+"
+    OpenShift friendly values are available since 1.14.0. If you can't upgrade, consider using `additionalFiles` to mount server.xml
+    and seraph-config.xml as ConfigMaps (ConfigMaps should be created outside the Helm chart)
+
+Use the following values (in addition to any custom values) to mitigate the above mentioned permissions and security issues:
+
+```yaml
+confluence:
+
+  # securityContext is set by OpenShift automatically
+  # so we need to exclude it from the template
+  securityContextEnabled: false
+
+  # Tomcat's server.xml will be mounted as a ConfigMap
+  # rather than generated in the container entrypoint
+  tomcatConfig:
+    generateByHelm: true
+
+  # seraph-config.xml will be mounted as a ConfigMap
+  # rather than generated in the container entrypoint
+  seraphConfig:
+    generateByHelm: true
+
+volumes:
+  sharedHome:
+    # nfs-permission-fixer container is run as root which isn't configurable
+    # so we need to disable this init container
+    # you need to make sure that the shared-home is writable
+    # for the unprivileged user in the container.
+    # Typically CSI driver or kubelet will take care of it
+    nfsPermissionFixer:
+      enabled: false
 ```
-FROM atlassian/jira-software:$JIRA_VERSION
-RUN chgrp -R 0 /opt/atlassian/jira/conf && chmod -R g=u /opt/atlassian/jira/conf && \
-    chgrp 0 /etc/container_id && chmod g=u /etc/container_id
-```
+
+Both `tomcatConfig` and `seraphConfig` have a number of properties which you can override if necessary. Look at `tomcatConfig` stanza in the chart's values.yaml for more details.
 
 ## OpenShift Routes
 
