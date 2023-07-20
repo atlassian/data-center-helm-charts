@@ -229,7 +229,7 @@ agent:
   #    containerPort: 5555
   #    protocol: TCP
 
-  # -- Defines any additional volumes mounts for the Bamboo agent container. These
+  # -- Defines any additional volume mounts for the Bamboo agent container. These
   # can refer to existing volumes, or new volumes can be defined via
   # 'volumes.additional'.
   #
