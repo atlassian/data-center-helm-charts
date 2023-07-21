@@ -160,7 +160,7 @@ Create default value for ingress path
 {{/*
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
-{{- define "sharedHome.permissionFix.command" -}}
+{{- define "confluence.sharedHome.permissionFix.command" -}}
 {{- $securityContext := .Values.confluence.securityContext }}
 {{- with .Values.volumes.sharedHome.nfsPermissionFixer }}
     {{- if .command }}

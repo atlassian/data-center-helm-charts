@@ -47,7 +47,7 @@ Pod labels
 {{/*
 The command that should be run by the nfs-fixer init container to correct the permissions of the shared-home root directory.
 */}}
-{{- define "sharedHome.permissionFix.command" -}}
+{{- define "jira.sharedHome.permissionFix.command" -}}
 {{- $securityContext := .Values.jira.securityContext }}
 {{- with .Values.volumes.sharedHome.nfsPermissionFixer }}
     {{- if .command }}
