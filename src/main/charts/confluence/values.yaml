@@ -742,8 +742,7 @@ confluence:
   #
   tomcatConfig:
 
-    # -- Mount server.xml as a ConfigMap. Uncomment configuration elements if necessary to
-    # override defaults in the ConfigMap template
+    # -- Mount server.xml as a ConfigMap. Override configuration elements if necessary
     #
     generateByHelm: false
 
