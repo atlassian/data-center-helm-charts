@@ -54,7 +54,7 @@ spec:
               {{- if .Values.volumes.sharedHome.subPath }}
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
-          command: ["sh", "-c", {{ include "sharedHome.permissionFix.command" . | quote }}]
+          command: ["sh", "-c", {{ include "crowd.sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
