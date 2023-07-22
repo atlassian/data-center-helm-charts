@@ -595,6 +595,10 @@ bamboo:
   #
   readinessProbe:
 
+    # -- Whether to apply the readinessProbe check to pod.
+    #
+    enabled: true
+
     # -- The initial delay (in seconds) for the Bamboo container readiness probe,
     # after which the probe will start running.
     #
@@ -608,6 +612,46 @@ bamboo:
     # before the pod fails readiness checks.
     #
     failureThreshold: 30
+
+    # -- Custom readinessProbe to override the default /status httpGet
+    #
+    customProbe: {}
+#      tcpSocket:
+#        port: 8080
+#      periodSeconds: 5
+#      failureThreshold: 120
+
+  # Confirm that Bamboo is up and running with a StartupProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  #
+  startupProbe:
+
+    # -- How often (in seconds) the Bamboo container startup probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bamboo container startup probe
+    # before the pod fails startup checks.
+    #
+    failureThreshold: 120
+
+  # Ensure that the server responds with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  #
+  livenessProbe:
+
+    # -- Whether to apply the livenessProbe check to pod.
+    #
+    enabled: true
+
+    # -- How often (in seconds) the Bamboo container liveness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bamboo container liveness probe
+    # before the pod fails liveness checks.
+    #
+    failureThreshold: 1
 
   # Bamboo log configuration
   #

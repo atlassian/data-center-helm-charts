@@ -67,13 +67,21 @@ spec:
               protocol: TCP
             {{- include "crowd.additionalPorts" . | nindent 12 }}
             {{- include "common.jmx.port" . | nindent 12 }}
+          {{- if .Values.crowd.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.crowd.readinessProbe.customProbe}}
+            {{- with .Values.crowd.readinessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             httpGet:
               port: {{ .Values.crowd.ports.http }}
               path: /crowd/status
             initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.crowd.livenessProbe.enabled }}
           startupProbe:
             tcpSocket:

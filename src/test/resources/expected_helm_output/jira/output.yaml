@@ -124,7 +124,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 36288f81182ca6bc44dab45bb83de7d546a3a0861f2bf4f77fa752c68b82ed5e
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira

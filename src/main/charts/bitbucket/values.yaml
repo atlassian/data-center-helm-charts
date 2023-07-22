@@ -40,7 +40,7 @@ replicaCount: 1
 #
 image:
 
-  # -- The Confluence Docker image to use
+  # -- The Bitbucket Docker image to use
   # https://hub.docker.com/r/atlassian/bitbucket-server
   #
   repository: atlassian/bitbucket
@@ -192,7 +192,7 @@ volumes:
 
   # Each pod requires its own volume for 'local-home'. This is needed for key data
   # that help define how Bitbucket works.
-  # https://confluence.atlassian.com/bitbucketserver/set-the-home-directory-776640890.html
+  # https://Bitbucket.atlassian.com/bitbucketserver/set-the-home-directory-776640890.html
   #
   localHome:
 
@@ -245,7 +245,7 @@ volumes:
   # environment.
   #
   # Details on how an NFS should be stood up for Bitbucket can be found here:
-  # https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
+  # https://Bitbucket.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
   #
   # Additional information on utilizing an NFS with the Helm charts can be found here:
   # https://atlassian.github.io/data-center-helm-charts/examples/storage/nfs/NFS/
@@ -660,6 +660,64 @@ bitbucket:
       #
       passwordSecretKey: password
 
+  readinessProbe:
+    # -- Whether to apply the readinessProbe check to pod.
+    #
+    enabled: true
+
+    # -- The initial delay (in seconds) for the Bitbucket container readiness probe,
+    # after which the probe will start running.
+    #
+    initialDelaySeconds: 10
+
+    # -- How often (in seconds) the Bitbucket container readiness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bitbucket container readiness probe
+    # before the pod fails readiness checks.
+    #
+    failureThreshold: 60
+
+    # -- Custom readinessProbe to override the default /status httpGet
+    #
+    customProbe: {}
+#      tcpSocket:
+#        port: 8080
+#      periodSeconds: 5
+#      failureThreshold: 120
+
+  # Confirm that Bitbucket is up and running with a StartupProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  #
+  startupProbe:
+
+    # -- How often (in seconds) the Bitbucket container startup probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bitbucket container startup probe
+    # before the pod fails startup checks.
+    #
+    failureThreshold: 120
+
+  # Ensure that the server responds with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  #
+  livenessProbe:
+
+    # -- Whether to apply the livenessProbe check to pod.
+    #
+    enabled: true
+
+    # -- How often (in seconds) the Bitbucket container liveness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bitbucket container liveness probe
+    # before the pod fails liveness checks.
+    #
+    failureThreshold: 1
 
   # Elasticsearch config
   #
@@ -772,7 +830,7 @@ bitbucket:
   # Mesh configuration
   mesh:
 
-    # -- Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html
+    # -- Enable Bitbucket Mesh. See: https://Bitbucket.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html
     #
     enabled: false
 

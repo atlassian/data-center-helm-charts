@@ -120,13 +120,21 @@ spec:
               protocol: TCP
             {{- include "jira.additionalPorts" . | nindent 12 }}
             {{- include "common.jmx.port" . | nindent 12 }}
+          {{- if .Values.jira.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.jira.readinessProbe.customProbe}}
+            {{- with .Values.jira.readinessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             httpGet:
               port: {{ .Values.jira.ports.http }}
               path: {{ .Values.jira.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.jira.livenessProbe.enabled }}
           startupProbe:
             tcpSocket:

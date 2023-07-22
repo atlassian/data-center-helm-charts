@@ -52,8 +52,13 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.license | object | `{"secretKey":"license","secretName":null}` | The Bamboo DC license that should be used. If supplied here the license configuration will be skipped in the setup wizard.  |
 | bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information  |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information  |
+| bamboo.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
+| bamboo.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Bamboo container liveness probe before the pod fails liveness checks.  |
+| bamboo.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container liveness probe will run  |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic  |
 | bamboo.ports.jms | int | `54663` | JMS port  |
+| bamboo.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
+| bamboo.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe before the pod fails readiness checks.  |
 | bamboo.readinessProbe.initialDelaySeconds | int | `30` | The initial delay (in seconds) for the Bamboo container readiness probe, after which the probe will start running.  |
 | bamboo.readinessProbe.periodSeconds | int | `10` | How often (in seconds) the Bamboo container readiness probe will run  |
@@ -76,6 +81,8 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour.  |
 | bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/shutdown-wait.sh) for details.  |
 | bamboo.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate.  |
+| bamboo.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bamboo container startup probe before the pod fails startup checks.  |
+| bamboo.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container startup probe will run  |
 | bamboo.sysadminCredentials | object | `{"displayNameSecretKey":"displayName","emailAddressSecretKey":"emailAddress","passwordSecretKey":"password","secretName":null,"usernameSecretKey":"username"}` | The admin user configuration, and credentials that Bamboo should use. If supplied here the admin configuration will be skipped in the setup wizard.  |
 | bamboo.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret that contains the sysadmin display name  |
 | bamboo.sysadminCredentials.emailAddressSecretKey | string | `"emailAddress"` | The key in the Kubernetes Secret that contains the sysadmin email address  |

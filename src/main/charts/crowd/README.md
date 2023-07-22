@@ -44,7 +44,9 @@ Kubernetes: `>=1.21.x-0`
 | crowd.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Crowd container liveness probe before the pod fails liveness checks.  |
 | crowd.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container liveness probe will run  |
 | crowd.ports.http | int | `8095` | The port on which the Crowd container listens for HTTP traffic  |
-| crowd.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks.  |
+| crowd.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
+| crowd.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
+| crowd.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks.  |
 | crowd.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Crowd container readiness probe, after which the probe will start running.  |
 | crowd.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container readiness probe will run  |
 | crowd.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Crowd pod  |

@@ -593,6 +593,10 @@ confluence:
   #
   readinessProbe:
 
+    # -- Whether to apply the readinessProbe check to pod.
+    #
+    enabled: true
+
     # -- The initial delay (in seconds) for the Confluence container readiness probe,
     # after which the probe will start running.
     #
@@ -606,6 +610,46 @@ confluence:
     # before the pod fails readiness checks.
     #
     failureThreshold: 6
+
+    # -- Custom readinessProbe to override the default /status httpGet
+    #
+    customProbe: {}
+#      tcpSocket:
+#        port: 8080
+#      periodSeconds: 5
+#      failureThreshold: 120
+
+  # Confirm that Confluence is up and running with a StartupProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  #
+  startupProbe:
+
+    # -- How often (in seconds) the Confluence container startup probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Confluence container startup probe
+    # before the pod fails startup checks.
+    #
+    failureThreshold: 120
+
+  # Ensure that the server responds with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  #
+  livenessProbe:
+
+    # -- Whether to apply the livenessProbe check to pod.
+    #
+    enabled: true
+
+    # -- How often (in seconds) the Confluence container liveness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Confluence container liveness probe
+    # before the pod fails liveness checks.
+    #
+    failureThreshold: 1
 
   # Confluence log configuration
   #
@@ -1018,7 +1062,7 @@ synchrony:
       #
       #   # -- Initial Memory limit by Synchrony pod
       #   #
-      #   memory: "2.5G"      
+      #   memory: "2.5G"
 
   # -- Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g.
   # system properties.

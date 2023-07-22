@@ -49,12 +49,15 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username.  |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key  |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
+| bitbucket.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
+| bitbucket.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Bitbucket container liveness probe before the pod fails liveness checks.  |
+| bitbucket.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container liveness probe will run  |
 | bitbucket.mesh.additionalEnvironmentVariables | object | `{}` | Defines any additional environment variables to be passed to the Bitbucket mesh containers.  |
 | bitbucket.mesh.additionalFiles | string | `nil` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container  |
 | bitbucket.mesh.additionalInitContainers | object | `{}` | Additional initContainer definitions that will be added to all Bitbucket pods  |
 | bitbucket.mesh.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Bitbucket Mesh JVM, e.g. system properties.  |
 | bitbucket.mesh.affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket mesh pods  |
-| bitbucket.mesh.enabled | bool | `false` | Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html  |
+| bitbucket.mesh.enabled | bool | `false` | Enable Bitbucket Mesh. See: https://Bitbucket.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html  |
 | bitbucket.mesh.image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket-mesh","tag":"2.0.1"}` | The Bitbucket Mesh image to use https://hub.docker.com/r/atlassian/bitbucket-mesh  |
 | bitbucket.mesh.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | bitbucket.mesh.image.repository | string | `"atlassian/bitbucket-mesh"` | The Bitbucket Mesh image repository https://hub.docker.com/r/atlassian/bitbucket-mesh  |
@@ -84,6 +87,11 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.ports.hazelcast | int | `5701` | The port on which the Hazelcast listens for client traffic  |
 | bitbucket.ports.http | int | `7990` | The port on which the Bitbucket container listens for HTTP traffic  |
 | bitbucket.ports.ssh | int | `7999` | The port on which the Bitbucket container listens for SSH traffic  |
+| bitbucket.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
+| bitbucket.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
+| bitbucket.readinessProbe.failureThreshold | int | `60` | The number of consecutive failures of the Bitbucket container readiness probe before the pod fails readiness checks.  |
+| bitbucket.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bitbucket container readiness probe, after which the probe will start running.  |
+| bitbucket.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container readiness probe will run  |
 | bitbucket.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bitbucket pod  |
 | bitbucket.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bitbucket pod  |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |
@@ -108,6 +116,8 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.sshService.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | bitbucket.sshService.port | int | `22` | Port to expose the SSH service on.  |
 | bitbucket.sshService.type | string | `"LoadBalancer"` | SSH Service type  |
+| bitbucket.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bitbucket container startup probe before the pod fails startup checks.  |
+| bitbucket.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container startup probe will run  |
 | bitbucket.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret that contains the sysadmin display name  |
 | bitbucket.sysadminCredentials.emailAddressSecretKey | string | `"emailAddress"` | The key in the Kubernetes Secret that contains the sysadmin email address  |
 | bitbucket.sysadminCredentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the sysadmin password  |
@@ -130,7 +140,7 @@ Kubernetes: `>=1.21.x-0`
 | fluentd.imageTag | string | `"v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image tag  |
 | image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/bitbucket","tag":""}` | Image configuration  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
-| image.repository | string | `"atlassian/bitbucket"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server  |
+| image.repository | string | `"atlassian/bitbucket"` | The Bitbucket Docker image to use https://hub.docker.com/r/atlassian/bitbucket-server  |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion  |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource when NOT using the K8s ingress-nginx controller.  |
 | ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used.  Please follow documentation of your ingress controller. If the cluster contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic.  |
