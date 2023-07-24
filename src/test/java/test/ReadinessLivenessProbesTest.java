@@ -27,6 +27,8 @@ public class ReadinessLivenessProbesTest {
 
         assertThat(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe")).isEmpty();
+        assertThat(resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("startupProbe")).isNotNull();
     }
 
     @ParameterizedTest
@@ -38,7 +40,7 @@ public class ReadinessLivenessProbesTest {
         assertThat(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe")).isEmpty();
         assertThat(resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("startupProbe")).isEmpty();
+                product.getHelmReleaseName()).getContainer().get("startupProbe")).isNotNull();
     }
 
     @ParameterizedTest

@@ -174,12 +174,12 @@ spec:
             failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
-          {{- if .Values.bamboo.livenessProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.bamboo.ports.http }}
             periodSeconds: {{ .Values.bamboo.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.bamboo.startupProbe.failureThreshold }}
+          {{- if .Values.bamboo.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.bamboo.ports.http }}
