@@ -57,7 +57,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container liveness probe will run  |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic  |
 | bamboo.ports.jms | int | `54663` | JMS port  |
-| bamboo.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
+| bamboo.readinessProbe.customProbe | object | `{}` | Custom ReadinessProbe to override the default /status httpGet  |
 | bamboo.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe before the pod fails readiness checks.  |
 | bamboo.readinessProbe.initialDelaySeconds | int | `30` | The initial delay (in seconds) for the Bamboo container readiness probe, after which the probe will start running.  |
