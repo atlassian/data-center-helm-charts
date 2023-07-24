@@ -58,12 +58,12 @@ public class ReadinessLivenessProbesTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_liveness_probe_overrides(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".livenessProbe.periodSeconds", "10",
-                product + ".livenessProbe.failureThreshold", "10"));
+                product + ".livenessProbe.periodSeconds", "1111",
+                product + ".livenessProbe.failureThreshold", "1111"));
 
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("1111", resources.getStatefulSet(
                         product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("1111", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
     }
 
@@ -71,15 +71,15 @@ public class ReadinessLivenessProbesTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_readiness_probe_overrides(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".readinessProbe.initialDelaySeconds", "10",
-                product + ".readinessProbe.periodSeconds", "10",
-                product + ".readinessProbe.failureThreshold", "10"));
+                product + ".readinessProbe.initialDelaySeconds", "2222",
+                product + ".readinessProbe.periodSeconds", "2222",
+                product + ".readinessProbe.failureThreshold", "2222"));
 
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("2222", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("initialDelaySeconds").asText());
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("2222", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("periodSeconds").asText());
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("2222", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("failureThreshold").asText());
     }
 
@@ -88,15 +88,15 @@ public class ReadinessLivenessProbesTest {
     void test_readiness_probe_custom_probe(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".readinessProbe.customProbe.tcpSocket.port", "9999",
-                product + ".readinessProbe.customProbe.periodSeconds", "10",
-                product + ".readinessProbe.customProbe.failureThreshold", "10",
+                product + ".readinessProbe.customProbe.periodSeconds", "3333",
+                product + ".readinessProbe.customProbe.failureThreshold", "3333",
                 product + ".readinessProbe.customProbe.foo", "bar"));
 
         assertEquals("9999", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("tcpSocket").get("port").asText());
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("3333", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("periodSeconds").asText());
-        assertEquals("10", resources.getStatefulSet(
+        assertEquals("3333", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("failureThreshold").asText());
         assertEquals("bar", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("foo").asText());
