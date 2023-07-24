@@ -245,7 +245,7 @@ volumes:
   # environment.
   #
   # Details on how an NFS should be stood up for Bitbucket can be found here:
-  # https://Bitbucket.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
+  # https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
   #
   # Additional information on utilizing an NFS with the Helm charts can be found here:
   # https://atlassian.github.io/data-center-helm-charts/examples/storage/nfs/NFS/
