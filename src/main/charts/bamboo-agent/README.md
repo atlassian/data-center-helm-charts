@@ -24,13 +24,14 @@ Kubernetes: `>=1.21.x-0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Bamboo agent pods  |
+| additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container. Configuration details below (camelCase is important!): 'name'      - References existing ConfigMap or secret name. 'type'      - 'configMap' or 'secret' 'key'       - The file name. 'mountPath' - The destination directory in a container. VolumeMount and Volumes are added with this name and index position, for example; custom-config-0, keystore-2  |
 | additionalHosts | list | `[]` | Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file. https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ |
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Bamboo agent pods  |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources  |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Bamboo agent pods  |
 | agent.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Bamboo agent container. See https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base for supported variables.  |
 | agent.additionalPorts | list | `[]` | Defines any additional ports for the Bamboo agent container.  |
-| agent.additionalVolumeMounts | object | `{}` | Defines any additional volumes mounts for the Bamboo agent container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'.  |
+| agent.additionalVolumeMounts | object | `{}` | Defines any additional volume mounts for the Bamboo agent container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additional'.  |
 | agent.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
 | agent.readinessProbe.command | string | `"/probe-readiness.sh"` | Command to use to check the readiness status. This is provided by the agent image.  |
 | agent.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo agent container readiness probe before the pod fails readiness checks.  |
