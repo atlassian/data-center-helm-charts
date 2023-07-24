@@ -11,8 +11,7 @@
 
 The Helm charts are vendor agnostic and create objects from standard APIs that [OpenShift](https://www.openshift.com/){.external} fully supports.
 
-However, by default OpenShift will not allow running containers as users specified in the image `Dockerfiles` (which is root in case of Data Center images),
-or `securityContext.fsGroup` in a Statefulset/Deployment spec is forbidden. You will see the following error in StatefulSet events if you deploy any DC product with default Helm chart values:
+However, by default OpenShift will not allow running containers as users specified in the image `Dockerfiles` (which is root in case of Data Center images). Also, it is forbidden to set container's `securityContext` (which OpenShift does automatically). You will see the following error in `StatefulSet` events if you deploy any DC product with default Helm chart values:
 
 ```
 create Pod jira-0 in StatefulSet jira failed error: pods "jira-0" is forbidden: unable to validate against any security context constraint: [provider "anyuid": Forbidden: not usable by user or serviceaccount, provider restricted: .spec.securityContext.fsGroup: Invalid value: []int64{2001}: 2001 is not an allowed group, spec.initContainers[0].securityContext.runAsUser: Invalid value: 0: must be in the ranges: [1003170000, 1003179999]
@@ -33,14 +32,13 @@ INFO:root:Running Jira with command '/opt/atlassian/jira/bin/start-jira.sh', arg
 executing as current user
 ```
 
-While these are non-fatal errors and Jira/Confluence is able to proceed with startup, failure to properly generate configuration files like `server.xml` will result in a number of errors when using Jira or Confluence.
-
+While these are non-fatal errors and Jira/Confluence is able to proceed with startup, failure to properly generate configuration files like `server.xml` will result in a number of runtime errors.
 
 ## OpenShift (Run as NonRoot) Friendly Values
 
-!!! info "Supported in 1.14.0+"
-    OpenShift friendly values are available since 1.14.0. If you can't upgrade, consider using `additionalFiles` to mount server.xml
-    and seraph-config.xml as ConfigMaps (ConfigMaps should be created outside the Helm chart)
+!!! info "Supported in 1.14.0+ for Jira and Confluence Only"
+    OpenShift friendly values are available since **1.14.0**. If you can't upgrade, consider using `additionalFiles` to mount `server.xml`
+    and `seraph-config.xml` as ConfigMaps which should be created outside the Helm chart.
 
 Use the following values (in addition to any custom values) to mitigate the above mentioned permissions and security issues:
 
@@ -72,7 +70,8 @@ volumes:
       enabled: false
 ```
 
-Both `tomcatConfig` and `seraphConfig` have a number of properties which you can override if necessary. Look at `tomcatConfig` stanza in the chart's values.yaml for more details.
+!!! warning "ATL_TOMCAT_* Environment Variables"
+    `ATL_TOMCAT_*` environment variables passed to the Helm chart in `additionalEnvironmentVariables` will be ignored, because `server.xml` is mounted as a ConfigMap rather than generated in the container entrypoint from a Jinja template. Both `tomcatConfig` and `seraphConfig` have a number of properties which you can override if necessary. Look at `tomcatConfig` stanza in the chart's values.yaml for more details.
 
 ## OpenShift Routes
 
