@@ -830,7 +830,7 @@ bitbucket:
   # Mesh configuration
   mesh:
 
-    # -- Enable Bitbucket Mesh. See: https://Bitbucket.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html
+    # -- Enable Bitbucket Mesh. See: https://confluence.atlassian.com/bitbucketserver/bitbucket-mesh-1128304351.html
     #
     enabled: false
 
