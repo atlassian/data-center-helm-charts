@@ -85,6 +85,11 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "agent.additionalVolumeMounts" . | nindent 12 }}
+            {{- range $i, $n := .Values.additionalFiles }}
+            - name: {{ .name }}-{{$i}}
+              mountPath: {{ .mountPath }}/{{ .key }}
+              subPath: {{ .key }}
+            {{ end }}
           {{ if .Values.agent.additionalPorts }}
           ports:
           {{- include "agent.additionalPorts" . | nindent 12 }}
@@ -119,3 +124,11 @@ spec:
       {{- end }}
       volumes:
         {{ include "agent.additionalVolumes" . | nindent 8 }}
+        {{- range $i, $n := .Values.additionalFiles }}
+        - name: {{ .name }}-{{$i}}
+          {{ .type }}:
+            {{ if hasPrefix .type "secret" }}{{ .type}}Name{{ else }}name{{ end }}: {{ .name }}
+            items:
+              - key: {{ .key }}
+                path: {{ .key }}
+        {{ end }}

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
+import test.model.Deployment;
 import test.model.Product;
 import test.model.StatefulSet;
 
@@ -25,7 +26,7 @@ class AdditionalFilesTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class)
     void additional_files_config_map_creates_volumes(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "additionalFiles[0].name", "custom-config-test",
@@ -34,8 +35,14 @@ class AdditionalFilesTest {
                 "additionalFiles[0].mountPath", "/var/atlassian"
         ));
 
-        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        JsonNode configMap = getVolume(statefulSet, "configMap");
+        JsonNode configMap;
+        if (product.name().equals("bamboo_agent")) {
+            Deployment deployment = resources.getDeployment(product.getHelmReleaseName());
+            configMap = getDeploymentVolume(deployment, "configMap");
+        } else {
+            StatefulSet statefulset = resources.getStatefulSet(product.getHelmReleaseName());
+            configMap = getStsVolume(statefulset, "configMap");
+        }
 
         assertThat(configMap.path("name")).hasTextEqualTo("custom-config-test");
         assertThat(configMap.path("items").path(0).path("key")).hasTextEqualTo("log4j.properties");
@@ -44,7 +51,7 @@ class AdditionalFilesTest {
 
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class)
     void additional_files_secret_creates_new_secrets(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "bitbucket.mesh.enabled", "true",
@@ -58,23 +65,30 @@ class AdditionalFilesTest {
                 "bitbucket.mesh.additionalFiles[0].mountPath", "/var/secret"
         ));
 
-        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        StatefulSet[] stsToCheck = {statefulSet};
-        if (product.name().contains("bitbucket")) {
-            StatefulSet meshStatefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
-            stsToCheck = new StatefulSet[]{statefulSet, meshStatefulSet};
-        }
-
-        for (var sts : stsToCheck) {
-            JsonNode configMap = getVolume(sts, "secret");
+        if (product.name().equals("bamboo_agent")) {
+            Deployment deployment = resources.getDeployment(product.getHelmReleaseName());
+            JsonNode configMap = getDeploymentVolume(deployment, "secret");
             assertThat(configMap.path("secretName")).hasTextEqualTo("custom-config-test");
             assertThat(configMap.path("items").path(0).path("key")).hasTextEqualTo("secretKey");
             assertThat(configMap.path("items").path(0).path("path")).hasTextEqualTo("secretKey");
+        } else {
+            StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+            StatefulSet[] stsToCheck = {statefulSet};
+            if (product.name().contains("bitbucket")) {
+                StatefulSet meshStatefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
+                stsToCheck = new StatefulSet[]{statefulSet, meshStatefulSet};
+            }
+            for (var sts : stsToCheck) {
+                JsonNode configMap = getStsVolume(sts, "secret");
+                assertThat(configMap.path("secretName")).hasTextEqualTo("custom-config-test");
+                assertThat(configMap.path("items").path(0).path("key")).hasTextEqualTo("secretKey");
+                assertThat(configMap.path("items").path(0).path("path")).hasTextEqualTo("secretKey");
+            }
         }
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class)
     void additional_files_configMap_create_volume_mounts(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "bitbucket.mesh.enabled", "true",
@@ -89,29 +103,43 @@ class AdditionalFilesTest {
         ));
 
         String name = "custom-config-test-0";
-        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
-        StatefulSet[] stsToCheck = {statefulSet};
-        if (product.name().contains("bitbucket")) {
-            StatefulSet meshStatefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
-            stsToCheck = new StatefulSet[]{statefulSet, meshStatefulSet};
-        }
-
-        for (var sts : stsToCheck) {
-            String[] containers = {product.name()};
-            if (product.name().contains("bitbucket") && sts.getName().contains("mesh")) {
-                containers = new String[]{product.name() + "-mesh"};
+        if (product.name().equals("bamboo_agent")) {
+            Deployment deployment = resources.getDeployment(product.getHelmReleaseName());
+            JsonNode volumeMount = deployment.getContainer("bamboo-agent").getVolumeMount(name);
+            assertThat(volumeMount.path("name")).hasTextEqualTo("custom-config-test-0");
+            assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/var/secret/secretKey");
+            assertThat(volumeMount.path("subPath")).hasTextEqualTo("secretKey");
+        } else {
+            StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+            StatefulSet[] stsToCheck = {statefulSet};
+            if (product.name().contains("bitbucket")) {
+                StatefulSet meshStatefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
+                stsToCheck = new StatefulSet[]{statefulSet, meshStatefulSet};
             }
-            for (var container : containers) {
-                JsonNode volumeMount = sts.getContainer(container).getVolumeMount(name);
-                assertThat(volumeMount.path("name")).hasTextEqualTo("custom-config-test-0");
-                assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/var/secret/secretKey");
-                assertThat(volumeMount.path("subPath")).hasTextEqualTo("secretKey");
+
+            for (var sts : stsToCheck) {
+                String[] containers = {product.name()};
+                if (product.name().contains("bitbucket") && sts.getName().contains("mesh")) {
+                    containers = new String[]{product.name() + "-mesh"};
+                }
+                for (var container : containers) {
+                    JsonNode volumeMount = sts.getContainer(container).getVolumeMount(name);
+                    assertThat(volumeMount.path("name")).hasTextEqualTo("custom-config-test-0");
+                    assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/var/secret/secretKey");
+                    assertThat(volumeMount.path("subPath")).hasTextEqualTo("secretKey");
+                }
             }
         }
     }
 
-    private JsonNode getVolume(StatefulSet statefulSet, String secret) {
+    private JsonNode getStsVolume(StatefulSet statefulSet, String secret) {
         return statefulSet
+                .getVolume("custom-config-test-0")
+                .getOrElseThrow(() -> new AssertionError("custom config map is missing"))
+                .path(secret);
+    }
+    private JsonNode getDeploymentVolume(Deployment deployment, String secret) {
+        return deployment
                 .getVolume("custom-config-test-0")
                 .getOrElseThrow(() -> new AssertionError("custom config map is missing"))
                 .path(secret);
