@@ -91,6 +91,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.crowd.ports.http }}
+            initialDelaySeconds: {{ .Values.crowd.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.livenessProbe.failureThreshold }}
           {{ end }}

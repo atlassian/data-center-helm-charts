@@ -48,9 +48,11 @@ public class ReadinessLivenessProbesTest {
     void test_liveness_probe_defaults(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
 
+        assertEquals("60", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("initialDelaySeconds").asText());
         assertEquals("5", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
-        assertEquals("1", resources.getStatefulSet(
+        assertEquals("12", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
     }
 
@@ -58,9 +60,12 @@ public class ReadinessLivenessProbesTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_liveness_probe_overrides(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".livenessProbe.initialDelaySeconds", "1111",
                 product + ".livenessProbe.periodSeconds", "1111",
                 product + ".livenessProbe.failureThreshold", "1111"));
 
+        assertEquals("1111", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("initialDelaySeconds").asText());
         assertEquals("1111", resources.getStatefulSet(
                         product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
         assertEquals("1111", resources.getStatefulSet(

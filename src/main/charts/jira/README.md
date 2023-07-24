@@ -74,7 +74,8 @@ Kubernetes: `>=1.21.x-0`
 | jira.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
 | jira.forceConfigUpdate | bool | `false` | The Docker entrypoint.py generates application configuration on first start; not all of these files are regenerated on subsequent starts. By default, dbconfig.xml is generated only once. Set `forceConfigUpdate` to true to change this behavior.  |
 | jira.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
-| jira.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Jira container liveness probe before the pod fails liveness checks.  |
+| jira.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Jira container liveness probe before the pod fails liveness checks.  |
+| jira.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | jira.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Jira container liveness probe will run  |
 | jira.ports.ehcache | int | `40001` | Ehcache port  |
 | jira.ports.ehcacheobject | int | `40011` | Ehcache object port  |

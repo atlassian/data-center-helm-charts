@@ -105,6 +105,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.bitbucket.ports.http }}
+            initialDelaySeconds: {{ .Values.bitbucket.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bitbucket.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.bitbucket.livenessProbe.failureThreshold }}
           {{ end }}

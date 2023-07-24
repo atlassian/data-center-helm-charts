@@ -50,7 +50,8 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key  |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | bitbucket.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
-| bitbucket.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Bitbucket container liveness probe before the pod fails liveness checks.  |
+| bitbucket.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Bitbucket container liveness probe before the pod fails liveness checks.  |
+| bitbucket.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | bitbucket.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container liveness probe will run  |
 | bitbucket.mesh.additionalEnvironmentVariables | object | `{}` | Defines any additional environment variables to be passed to the Bitbucket mesh containers.  |
 | bitbucket.mesh.additionalFiles | string | `nil` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container  |

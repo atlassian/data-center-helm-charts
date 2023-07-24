@@ -53,7 +53,8 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information  |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information  |
 | bamboo.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
-| bamboo.livenessProbe.failureThreshold | int | `1` | The number of consecutive failures of the Bamboo container liveness probe before the pod fails liveness checks.  |
+| bamboo.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Bamboo container liveness probe before the pod fails liveness checks.  |
+| bamboo.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | bamboo.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container liveness probe will run  |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic  |
 | bamboo.ports.jms | int | `54663` | JMS port  |

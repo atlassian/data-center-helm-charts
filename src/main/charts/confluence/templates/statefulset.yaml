@@ -94,6 +94,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.confluence.ports.http }}
+            initialDelaySeconds: {{ .Values.confluence.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.confluence.livenessProbe.failureThreshold }}
           {{ end }}

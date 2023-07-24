@@ -144,6 +144,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
+            initialDelaySeconds: {{ .Values.jira.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.livenessProbe.failureThreshold }}
           {{ end }}

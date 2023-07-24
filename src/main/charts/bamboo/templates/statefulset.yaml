@@ -183,6 +183,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.bamboo.ports.http }}
+            initialDelaySeconds: {{ .Values.bamboo.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.bamboo.livenessProbe.failureThreshold }}
           {{ end }}

@@ -203,13 +203,17 @@ crowd:
     failureThreshold: 120
 
   # Ensure that the server responds with a LivenessProbe
-  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe
   #
   livenessProbe:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
     enabled: true
+
+    # -- Time to wait before starting the first probe
+    #
+    initialDelaySeconds: 60
 
     # -- How often (in seconds) the Crowd container liveness probe will run
     #
@@ -218,7 +222,7 @@ crowd:
     # -- The number of consecutive failures of the Crowd container liveness probe
     # before the pod fails liveness checks.
     #
-    failureThreshold: 1
+    failureThreshold: 12
 
   # Crowd log configuration
   #
