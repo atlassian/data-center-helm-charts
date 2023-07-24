@@ -192,7 +192,7 @@ volumes:
 
   # Each pod requires its own volume for 'local-home'. This is needed for key data
   # that help define how Bitbucket works.
-  # https://Bitbucket.atlassian.com/bitbucketserver/set-the-home-directory-776640890.html
+  # https://confluence.atlassian.com/bitbucketserver/set-the-home-directory-776640890.html
   #
   localHome:
 
