@@ -746,7 +746,7 @@ confluence:
     #
     generateByHelm: false
 
-    mgmtPort: "8005"
+    mgmtPort: "8000"
     port: "8090"
     maxThreads: "100"
     minSpareThreads: "10"
