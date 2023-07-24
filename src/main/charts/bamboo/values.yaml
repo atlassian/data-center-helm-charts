@@ -613,7 +613,7 @@ bamboo:
     #
     failureThreshold: 30
 
-    # -- Custom readinessProbe to override the default /status httpGet
+    # -- Custom ReadinessProbe to override the default /status httpGet
     #
     customProbe: {}
 #      tcpSocket:
