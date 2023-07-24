@@ -310,7 +310,7 @@ additionalLabels: {}
 
 # -- Additional existing ConfigMaps and Secrets not managed by Helm that should be
 # mounted into service container. Configuration details below (camelCase is important!):
-  # 'name'      - References existing ConfigMap or secret name.
+  # 'name'      - References existing ConfigMap or Secret name.
   # 'type'      - 'configMap' or 'secret'
   # 'key'       - The file name.
   # 'mountPath' - The destination directory in a container.
