@@ -81,13 +81,34 @@ spec:
               protocol: TCP
             {{- include "bitbucket.additionalPorts" . | nindent 12 }}
             {{- include "common.jmx.port" . | nindent 12 }}
+          {{- if .Values.bitbucket.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.bitbucket.readinessProbe.customProbe}}
+            {{- with .Values.bitbucket.readinessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             httpGet:
               port: {{ .Values.bitbucket.ports.http }}
               path: {{ .Values.bitbucket.service.contextPath }}/status
-            periodSeconds: 5
-            failureThreshold: 60
-            initialDelaySeconds: 10
+            initialDelaySeconds: {{ .Values.bitbucket.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bitbucket.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bitbucket.readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.bitbucket.ports.http }}
+            periodSeconds: {{ .Values.bitbucket.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bitbucket.startupProbe.failureThreshold }}
+          {{- if .Values.bitbucket.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.bitbucket.ports.http }}
+            initialDelaySeconds: {{ .Values.bitbucket.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bitbucket.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bitbucket.livenessProbe.failureThreshold }}
+          {{ end }}
           {{- with .Values.bitbucket.containerSecurityContext}}
           securityContext:
             {{- toYaml . | nindent 12}}

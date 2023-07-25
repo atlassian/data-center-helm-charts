@@ -259,7 +259,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 812811dc3b3747f8499c6dd36933c6d46d2936d2834396d242cf62a3c78f2fd7
+        checksum/config-jvm: 48627f8bc51b802d94aab69a45067723a3e32d2c96722a2dafe15b6e1e039e98
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -312,6 +312,17 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
             failureThreshold: 6
+          startupProbe:
+            tcpSocket:
+              port: 8090
+            periodSeconds: 5
+            failureThreshold: 120
+          livenessProbe:
+            tcpSocket:
+              port: 8090
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 12
           resources:
             requests:
               cpu: "2"

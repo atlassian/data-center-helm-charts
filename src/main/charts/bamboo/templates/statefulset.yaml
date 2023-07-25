@@ -159,13 +159,34 @@ spec:
               protocol: TCP
             {{- include "common.jmx.port" . | nindent 12 }}
             {{- include "bamboo.additionalPorts" . | nindent 12 }}
+          {{- if .Values.bamboo.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.bamboo.readinessProbe.customProbe}}
+            {{- with .Values.bamboo.readinessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             httpGet:
               port: {{ .Values.bamboo.ports.http }}
               path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status
             initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.bamboo.ports.http }}
+            periodSeconds: {{ .Values.bamboo.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bamboo.startupProbe.failureThreshold }}
+          {{- if .Values.bamboo.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.bamboo.ports.http }}
+            initialDelaySeconds: {{ .Values.bamboo.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bamboo.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.bamboo.livenessProbe.failureThreshold }}
+          {{ end }}
           {{- with .Values.bamboo.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}

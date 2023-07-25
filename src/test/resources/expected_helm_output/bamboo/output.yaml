@@ -147,7 +147,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: e1fc09f56eb31324ba64a808ad827b121cc3bb0090a080cb1568ed6209d86e8e
+        checksum/config-jvm: f0b8abb88ca5b753eba6a8b2bda952f779a172eed45195dc22461008d174995c
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
@@ -267,6 +267,17 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 30
+          startupProbe:
+            tcpSocket:
+              port: 8085
+            periodSeconds: 5
+            failureThreshold: 120
+          livenessProbe:
+            tcpSocket:
+              port: 8085
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 12
           resources:
             requests:
               cpu: "2"

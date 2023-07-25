@@ -481,6 +481,10 @@ jira:
   #
   readinessProbe:
 
+    # -- Whether to apply the readinessProbe check to pod.
+    #
+    enabled: true
+
     # -- The initial delay (in seconds) for the Jira container readiness probe,
     # after which the probe will start running.
     #
@@ -494,6 +498,14 @@ jira:
     # before the pod fails readiness checks.
     #
     failureThreshold: 10
+
+    # -- Custom readinessProbe to override the default /status httpGet
+    #
+    customProbe: {}
+#      tcpSocket:
+#        port: 8080
+#      periodSeconds: 5
+#      failureThreshold: 120
 
   # Confirm that Jira is up and running with a StartupProbe
   # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
@@ -509,15 +521,18 @@ jira:
     #
     failureThreshold: 120
 
-  # Ensure that pods are working correctly with a LivenessProbe
-  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  # Ensure that the server responds with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe
   #
   livenessProbe:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
-
     enabled: true
+
+    # -- Time to wait before starting the first probe
+    #
+    initialDelaySeconds: 60
 
     # -- How often (in seconds) the Jira container liveness probe will run
     #
@@ -526,7 +541,7 @@ jira:
     # -- The number of consecutive failures of the Jira container liveness probe
     # before the pod fails liveness checks.
     #
-    failureThreshold: 1
+    failureThreshold: 12
 
   # Jira log configuration
   #

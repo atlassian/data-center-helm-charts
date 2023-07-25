@@ -120,22 +120,31 @@ spec:
               protocol: TCP
             {{- include "jira.additionalPorts" . | nindent 12 }}
             {{- include "common.jmx.port" . | nindent 12 }}
+          {{- if .Values.jira.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.jira.readinessProbe.customProbe}}
+            {{- with .Values.jira.readinessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             httpGet:
               port: {{ .Values.jira.ports.http }}
               path: {{ .Values.jira.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
-          {{- if .Values.jira.livenessProbe.enabled }}
+            {{- end }}
+          {{- end }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
             periodSeconds: {{ .Values.jira.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.startupProbe.failureThreshold }}
+          {{- if .Values.jira.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
+            initialDelaySeconds: {{ .Values.jira.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.livenessProbe.failureThreshold }}
           {{ end }}

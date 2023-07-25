@@ -40,7 +40,7 @@ replicaCount: 1
 #
 image:
 
-  # -- The Confluence Docker image to use
+  # -- The Bitbucket Docker image to use
   # https://hub.docker.com/r/atlassian/bitbucket-server
   #
   repository: atlassian/bitbucket
@@ -660,6 +660,68 @@ bitbucket:
       #
       passwordSecretKey: password
 
+  readinessProbe:
+    # -- Whether to apply the readinessProbe check to pod.
+    #
+    enabled: true
+
+    # -- The initial delay (in seconds) for the Bitbucket container readiness probe,
+    # after which the probe will start running.
+    #
+    initialDelaySeconds: 10
+
+    # -- How often (in seconds) the Bitbucket container readiness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bitbucket container readiness probe
+    # before the pod fails readiness checks.
+    #
+    failureThreshold: 60
+
+    # -- Custom readinessProbe to override the default /status httpGet
+    #
+    customProbe: {}
+#      tcpSocket:
+#        port: 8080
+#      periodSeconds: 5
+#      failureThreshold: 120
+
+  # Confirm that Bitbucket is up and running with a StartupProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  #
+  startupProbe:
+
+    # -- How often (in seconds) the Bitbucket container startup probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bitbucket container startup probe
+    # before the pod fails startup checks.
+    #
+    failureThreshold: 120
+
+  # Ensure that the server responds with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe
+  #
+  livenessProbe:
+
+    # -- Whether to apply the livenessProbe check to pod.
+    #
+    enabled: true
+
+    # -- Time to wait before starting the first probe
+    #
+    initialDelaySeconds: 60
+
+    # -- How often (in seconds) the Bitbucket container liveness probe will run
+    #
+    periodSeconds: 5
+
+    # -- The number of consecutive failures of the Bitbucket container liveness probe
+    # before the pod fails liveness checks.
+    #
+    failureThreshold: 12
 
   # Elasticsearch config
   #

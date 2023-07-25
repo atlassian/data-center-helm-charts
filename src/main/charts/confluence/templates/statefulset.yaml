@@ -70,13 +70,34 @@ spec:
               protocol: TCP
             {{- include "common.jmx.port" . | nindent 12 }}
             {{- include "confluence.additionalPorts" . | nindent 12 }}
+          {{- if .Values.confluence.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.confluence.readinessProbe.customProbe}}
+            {{- with .Values.confluence.readinessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             httpGet:
               port: {{ .Values.confluence.ports.http }}
               path: {{ .Values.confluence.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.confluence.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.confluence.readinessProbe.failureThreshold }}
+            {{- end }}
+          {{- end }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.confluence.ports.http }}
+            periodSeconds: {{ .Values.confluence.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.confluence.startupProbe.failureThreshold }}
+          {{- if .Values.confluence.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.confluence.ports.http }}
+            initialDelaySeconds: {{ .Values.confluence.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.confluence.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.confluence.livenessProbe.failureThreshold }}
+          {{ end }}
           {{- with .Values.confluence.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}

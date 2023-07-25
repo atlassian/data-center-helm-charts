@@ -176,7 +176,7 @@ spec:
               path: /crowd/status
             initialDelaySeconds: 10
             periodSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 10
           startupProbe:
             tcpSocket:
               port: 8095
@@ -185,8 +185,9 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 8095
+            initialDelaySeconds: 60
             periodSeconds: 5
-            failureThreshold: 1
+            failureThreshold: 12
           resources:
             requests:
               cpu: "2"

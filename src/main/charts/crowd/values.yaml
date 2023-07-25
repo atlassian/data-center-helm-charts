@@ -165,6 +165,10 @@ crowd:
   #
   readinessProbe:
 
+    # -- Whether to apply the readinessProbe check to pod.
+    #
+    enabled: true
+
     # -- The initial delay (in seconds) for the Crowd container readiness probe,
     # after which the probe will start running.
     #
@@ -177,7 +181,15 @@ crowd:
     # -- The number of consecutive failures of the Crowd container readiness probe
     # before the pod fails readiness checks.
     #
-    failureThreshold: 30
+    failureThreshold: 10
+
+    # -- Custom readinessProbe to override the default /status httpGet
+    #
+    customProbe: {}
+#      tcpSocket:
+#        port: 8080
+#      periodSeconds: 5
+#      failureThreshold: 120
 
   startupProbe:
 
@@ -190,15 +202,18 @@ crowd:
     #
     failureThreshold: 120
 
-  # Ensure that pods are working correctly with a LivenessProbe
-  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  # Ensure that the server responds with a LivenessProbe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe
   #
   livenessProbe:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
-
     enabled: true
+
+    # -- Time to wait before starting the first probe
+    #
+    initialDelaySeconds: 60
 
     # -- How often (in seconds) the Crowd container liveness probe will run
     #
@@ -207,7 +222,8 @@ crowd:
     # -- The number of consecutive failures of the Crowd container liveness probe
     # before the pod fails liveness checks.
     #
-    failureThreshold: 1
+    failureThreshold: 12
+
   # Crowd log configuration
   #
   accessLog:
@@ -790,7 +806,7 @@ monitoring:
   # jmx-config: |
   #   rules:
   #     - pattern: ".*"
-  
+
   serviceMonitor:
 
     # -- Create ServiceMonitor to start scraping metrics. ServiceMonitor CRD needs to be created in advance.
@@ -801,7 +817,7 @@ monitoring:
     #
     prometheusLabelSelector: {}
       # release: prometheus
-    
+
     # -- Scrape interval for the JMX service.
     #
     scrapeIntervalSeconds: 30
