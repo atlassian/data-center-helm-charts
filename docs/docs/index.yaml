@@ -2,6 +2,37 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add liveness probes, make readinessProbes configurable (#626)"
+        - "make sharedHome.permissionFix.command helper to be per-product (#622)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.1
+    created: "2023-07-25T09:31:54.61368957Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 2775b8580d3ca24c444c0af0316d07e7ee3383c0c6f349975f61d4ad987ed365
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.14.0/bamboo-1.14.0.tgz
+    version: 1.14.0
+  - annotations:
       artifacthub.io/changes: '- "Run jmx init container as root: get fix from common
         chart ver 1.2.3 (#608)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -701,6 +732,38 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add liveness probes, make readinessProbes configurable (#626)"
+        - "Add additionalFiles to bamboo-agent Helm chart (#625)"
+        - "Add additionalVolumes and additionalVolumeMounts to bamboo-agent (#619)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.1
+    created: "2023-07-25T09:31:54.825405081Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: aeca1edefc25a14dd320e213676bc56dac97fc76d2c970101fce1bb67179667c
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.14.0/bamboo-agent-1.14.0.tgz
+    version: 1.14.0
+  - annotations:
       artifacthub.io/changes: '- "Run jmx init container as root: get fix from common
         chart ver 1.2.3 (#608)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -1350,6 +1413,37 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add liveness probes, make readinessProbes configurable (#626)"
+        - "make sharedHome.permissionFix.command helper to be per-product (#622)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.3
+    created: "2023-07-25T09:31:55.060803267Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 63b2efaa755b75686eba65c8a0637bca1cb5f7fd2495ad3dd922bdad985a22a0
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.14.0/bitbucket-1.14.0.tgz
+    version: 1.14.0
   - annotations:
       artifacthub.io/changes: '- "Run jmx init container as root: get fix from common
         chart ver 1.2.3 (#608)"'
@@ -2544,6 +2638,40 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Add liveness probes, make readinessProbes configurable (#626)"
+        - "Support running Jira and Confluence containers as non root (incl running in OpenShift) (#623)"
+        - "make sharedHome.permissionFix.command helper to be per-product (#622)"
+        - "Unset default limits for Confluence (#616)"
+        - "Synchrony missing container limits (#615)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.19.11
+    created: "2023-07-25T09:31:55.504969618Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: c67d9e02e7942f3b178efc793d15875467526c560b75ee52f42977ec211086e7
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.14.0/confluence-1.14.0.tgz
+    version: 1.14.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
         - "Swap ingress paths for priority based rules (#602)"
       artifacthub.io/containsSecurityUpdates: "true"
@@ -3728,6 +3856,37 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add liveness probes, make readinessProbes configurable (#626)"
+        - "make sharedHome.permissionFix.command helper to be per-product (#622)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.1.3
+    created: "2023-07-25T09:31:55.728854333Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 2b9ea2b8424a77cfc76d1577fb3423ecefaf2821c94a59aba6a17ccf16a6c0a7
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.14.0/crowd-1.14.0.tgz
+    version: 1.14.0
+  - annotations:
       artifacthub.io/changes: '- "Run jmx init container as root: get fix from common
         chart ver 1.2.3 (#608)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -4729,6 +4888,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add liveness probes, make readinessProbes configurable (#626)"
+        - "Support running Jira and Confluence containers as non root (incl running in OpenShift) (#623)"
+        - "make sharedHome.permissionFix.command helper to be per-product (#622)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.8
+    created: "2023-07-25T09:31:55.933682502Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 17a79b62767eb02292d16db7551f2947acb33c02c58aa2e31194a3f20787c428
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.14.0/jira-1.14.0.tgz
+    version: 1.14.0
   - annotations:
       artifacthub.io/changes: |-
         - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
@@ -5844,4 +6036,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-06-28T03:38:02.865462905Z"
+generated: "2023-07-25T09:31:55.935376986Z"
