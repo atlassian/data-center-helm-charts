@@ -784,6 +784,57 @@ confluence:
   #
   additionalJvmArgs: []
 
+  # -- By default Tomcat's server.xml is generated in the container entrypoint from a template
+  # shipped with an official Confluence image. However, server.xml generation may fail if container
+  # is not run as root, which is a common case if Confluence is deployed to OpenShift.
+  #
+  tomcatConfig:
+
+    # -- Mount server.xml as a ConfigMap. Override configuration elements if necessary
+    #
+    generateByHelm: false
+
+    mgmtPort: "8000"
+    port: "8090"
+    maxThreads: "100"
+    minSpareThreads: "10"
+    connectionTimeout: "20000"
+    enableLookups: "false"
+    protocol: "org.apache.coyote.http11.Http11NioProtocol"
+    redirectPort: "8443"
+    acceptCount: "10"
+    debug: "0"
+    uriEncoding: "UTF-8"
+    # secure is retrieved from ingress.https value
+    secure:
+    # scheme is set depending on ingress.https value (http if false, https if true)
+    scheme:
+    # proxyName is retrieved from ingress.host value
+    proxyName:
+    # proxyPort is set depending on ingress.https value (80 if http, 443 if https)
+    proxyPort:
+    maxHttpHeaderSize: "8192"
+    proxyInternalIps:
+
+    # -- Custom server.xml to be mounted into /opt/atlassian/confluence/conf
+    #
+    customServerXml: |
+#      <?xml version='1.0' encoding='utf-8'?>
+#      <Server port="8005" shutdown="SHUTDOWN">
+#      </Server>
+
+  # -- By default seraph-config.xml is generated in the container entrypoint from a template
+  # shipped with an official Confluence image. However, seraph-config.xml generation may fail if container
+  # is not run as root, which is a common case if Confluence is deployed to OpenShift.
+  #
+  seraphConfig:
+
+    # -- Mount seraph-config.xml as a ConfigMap. Override configuration elements if necessary
+    #
+    generateByHelm: false
+
+    autoLoginCookieAge: "1209600"
+
   # -- Specifies a list of additional Java libraries that should be added to the
   # Confluence container. Each item in the list should specify the name of the volume
   # that contains the library, as well as the name of the library file within that
