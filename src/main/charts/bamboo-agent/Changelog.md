@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.14.0
+
+**Release date:** 2023-7-25
+
+![AppVersion: 9.3.1](https://img.shields.io/static/v1?label=AppVersion&message=9.3.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Add liveness probes, make readinessProbes configurable (#626)
+* Add additionalFiles to bamboo-agent Helm chart (#625)
+* Add additionalVolumes and additionalVolumeMounts to bamboo-agent (#619)
+
 ## 1.13.1
 
 **Release date:** 2023-6-28

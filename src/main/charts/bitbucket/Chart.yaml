@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.13.1
+version: 1.14.0
 appVersion: 8.9.3
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Run jmx init container as root: get fix from common chart ver 1.2.3 (#608)"
+    - "Add liveness probes, make readinessProbes configurable (#626)"
+    - "make sharedHome.permissionFix.command helper to be per-product (#622)"
 
 dependencies:
 - name: common
