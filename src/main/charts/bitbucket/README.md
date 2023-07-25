@@ -49,10 +49,11 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username.  |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key  |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
-| bitbucket.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
+| bitbucket.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | bitbucket.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Bitbucket container liveness probe before the pod fails liveness checks.  |
 | bitbucket.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | bitbucket.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container liveness probe will run  |
+| bitbucket.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | bitbucket.mesh.additionalEnvironmentVariables | object | `{}` | Defines any additional environment variables to be passed to the Bitbucket mesh containers.  |
 | bitbucket.mesh.additionalFiles | string | `nil` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container  |
 | bitbucket.mesh.additionalInitContainers | object | `{}` | Additional initContainer definitions that will be added to all Bitbucket pods  |
@@ -93,6 +94,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.readinessProbe.failureThreshold | int | `60` | The number of consecutive failures of the Bitbucket container readiness probe before the pod fails readiness checks.  |
 | bitbucket.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Bitbucket container readiness probe, after which the probe will start running.  |
 | bitbucket.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container readiness probe will run  |
+| bitbucket.readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | bitbucket.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bitbucket pod  |
 | bitbucket.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bitbucket pod  |
 | bitbucket.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Bitbucket JVM The same value will be used by the Elasticsearch JVM. |

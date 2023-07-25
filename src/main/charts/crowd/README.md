@@ -40,16 +40,18 @@ Kubernetes: `>=1.21.x-0`
 | crowd.additionalVolumeClaimTemplates | list | `[]` | Defines additional volumeClaimTemplates that should be applied to the Crowd pod. Note that this will not create any corresponding volume mounts; those needs to be defined in crowd.additionalVolumeMounts  |
 | crowd.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Crowd container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | crowd.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
-| crowd.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
+| crowd.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | crowd.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Crowd container liveness probe before the pod fails liveness checks.  |
 | crowd.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | crowd.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container liveness probe will run  |
+| crowd.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | crowd.ports.http | int | `8095` | The port on which the Crowd container listens for HTTP traffic  |
 | crowd.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
 | crowd.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | crowd.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks.  |
 | crowd.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Crowd container readiness probe, after which the probe will start running.  |
 | crowd.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container readiness probe will run  |
+| crowd.readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | crowd.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Crowd pod  |
 | crowd.resources.container.requests.memory | string | `"1G"` | Initial Memory request by Crowd pod  |
 | crowd.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Crowd JVM  |
