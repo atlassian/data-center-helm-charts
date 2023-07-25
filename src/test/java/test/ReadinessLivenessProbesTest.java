@@ -60,7 +60,22 @@ public class ReadinessLivenessProbesTest {
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
         assertEquals("4444", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("timeoutSeconds").asText());
+    }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_liveness_probe_enabled_defaults(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".livenessProbe.enabled", "true"));
+
+        assertEquals("60", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("initialDelaySeconds").asText());
+        assertEquals("5", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
+        assertEquals("12", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
+        assertEquals("1", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("timeoutSeconds").asText());
     }
 
     @ParameterizedTest
