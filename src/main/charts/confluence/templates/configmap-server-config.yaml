@@ -1,0 +1,156 @@
+{{ if or .Values.confluence.tomcatConfig.generateByHelm .Values.confluence.seraphConfig.generateByHelm }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-server-config
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if .Values.confluence.tomcatConfig.generateByHelm }}
+  server.xml: |
+{{- if .Values.confluence.tomcatConfig.customServerXml }}
+{{- .Values.confluence.tomcatConfig.customServerXml | nindent 6 }}
+{{- else }}
+    <?xml version="1.0" encoding="utf-8"?>
+    <Server port="{{ .Values.confluence.tomcatConfig.mgmtPort | default "8000" }}"
+            shutdown="SHUTDOWN">
+      <Service name="Catalina">
+        <Connector port="{{ .Values.confluence.tomcatConfig.port | default "8090" }}"
+                   maxThreads="{{ .Values.confluence.tomcatConfig.maxThreads | default "48" }}"
+                   minSpareThreads="{{ .Values.confluence.tomcatConfig.minSpareThreads | default "10" }}"
+                   connectionTimeout="{{ .Values.confluence.tomcatConfig.connectionTimeout | default "20000" }}"
+                   enableLookups="{{ .Values.confluence.tomcatConfig.enableLookups | default "false" }}"
+                   protocol="{{ .Values.confluence.tomcatConfig.protocol | default "org.apache.coyote.http11.Http11NioProtocol" }}"
+                   redirectPort="{{ .Values.confluence.tomcatConfig.redirectPort | default "8443" }}"
+                   acceptCount="{{ .Values.confluence.tomcatConfig.acceptCount | default "10" }}"
+                   debug="{{ .Values.confluence.tomcatConfig.debug | default "0" }}"
+                   URIEncoding="{{ .Values.confluence.tomcatConfig.uriEncoding | default "UTF-8" }}"
+                   secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.confluence.tomcatConfig.secure }}"
+                   scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.confluence.tomcatConfig.scheme }}"
+                   proxyName="{{ .Values.ingress.host | default .Values.confluence.tomcatConfig.proxyName }}"
+                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.confluence.tomcatConfig.proxyPort }}"
+                   maxHttpHeaderSize="{{ .Values.confluence.tomcatConfig.maxHttpHeaderSize | default "8192" }}" />
+
+        <Engine name="Standalone"
+                defaultHost="localhost"
+                debug="0">
+          <Host name="localhost"
+                debug="0"
+                appBase="webapps"
+                unpackWARs="true"
+                autoDeploy="false"
+                startStopThreads="4">
+            <Context path="{{ .Values.confluence.service.contextPath | default "" }}"
+                     docBase="../confluence"
+                     debug="0"
+                     reloadable="false"
+                     useHttpOnly="true">
+              <!-- Logging configuration for Confluence is specified in confluence/WEB-INF/classes/log4j.properties -->
+              <Manager pathname=""/>
+              <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve"
+                     threshold="60"/>
+            {{ if .Values.confluence.accessLog.enabled }}
+              <Valve className="org.apache.catalina.valves.AccessLogValve"
+                     requestAttributesEnabled="true"
+                     directory="logs"
+                     prefix="confluence_access"
+                     suffix=".log"
+                     rotatable="true"
+                     pattern="%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;" />
+              <Valve className="org.apache.catalina.valves.RemoteIpValve"
+                     proxiesHeader="x-forwarded-by"
+                     internalProxies="{{ .Values.confluence.tomcatConfig.proxyInternalIps | default "" }}"
+                     remoteIpHeader="x-forwarded-for"
+                     protocolHeader="x-forwarded-proto"
+                     requestAttributesEnabled="true"
+                     resolveHosts="false" />
+            {{ end }}
+            </Context>
+            <Context path="${confluence.context.path}/synchrony-proxy"
+                     docBase="../synchrony-proxy"
+                     debug="0"
+                     reloadable="false"
+                     useHttpOnly="true">
+              <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve"
+                     threshold="60"/>
+            </Context>
+          </Host>
+        </Engine>
+      </Service>
+    </Server>
+{{- end }}
+{{- end }}
+{{- if .Values.confluence.seraphConfig.generateByHelm }}
+  seraph-config.xml: |
+    <security-config>
+        <parameters>
+            <init-param>
+                <param-name>login.url</param-name>
+                <param-value>/login.action?os_destination=${originalurl}&amp;permissionViolation=true</param-value>
+            </init-param>
+            <init-param>
+                <param-name>link.login.url</param-name>
+                <param-value>/login.action</param-value>
+            </init-param>
+            <init-param>
+                <param-name>cookie.encoding</param-name>
+                <param-value>cNf</param-value>
+            </init-param>
+            <init-param>
+                <param-name>login.cookie.key</param-name>
+                <param-value>seraph.confluence</param-value>
+            </init-param>
+
+            {% if atl_autologin_cookie_age is defined %}
+              <init-param>
+                  <param-name>autologin.cookie.age</param-name>
+                  <param-value>{{ .Values.confluence.seraphConfig.autoLoginCookieAge | default "1209600" }}</param-value>
+              </init-param>
+            {% endif %}
+
+            <!--only basic authentication available-->
+            <init-param>
+                <param-name>authentication.type</param-name>
+                <param-value>os_authType</param-value>
+            </init-param>
+
+            <!-- Invalidate session on login to prevent session fixation attack -->
+             <init-param>
+                <param-name>invalidate.session.on.login</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            <!-- Add names for session attributes that must not be copied to a new session when the old one gets invalidated.
+              Currently it is empty (i.e. all attributes will be copied). -->
+            <init-param>
+                <param-name>invalidate.session.exclude.list</param-name>
+                <param-value></param-value>
+            </init-param>
+        </parameters>
+
+        <rolemapper class="com.atlassian.confluence.security.ConfluenceRoleMapper"/>
+        <controller class="com.atlassian.confluence.setup.seraph.ConfluenceSecurityController"/>
+
+        <!-- Default Confluence authenticator, which uses the configured user management for authentication. -->
+        <authenticator class="com.atlassian.confluence.user.ConfluenceAuthenticator"/>
+
+        <!-- Custom authenticators appear below. To enable one of them, comment out the default authenticator above and uncomment the one below. -->
+
+        <!-- Authenticator with support for Crowd single-sign on (SSO). -->
+        <!-- <authenticator class="com.atlassian.confluence.user.ConfluenceCrowdSSOAuthenticator"/> -->
+
+        <!-- Specialised version of the default authenticator which adds authenticated users to confluence-users if they aren't already a member. -->
+        <!-- <authenticator class="com.atlassian.confluence.user.ConfluenceGroupJoiningAuthenticator"/> -->
+
+        <services>
+            <service class="com.atlassian.seraph.service.PathService">
+                <init-param>
+                    <param-name>config.file</param-name>
+                    <param-value>seraph-paths.xml</param-value>
+                </init-param>
+            </service>
+        </services>
+
+        <elevatedsecurityguard class="com.atlassian.confluence.security.seraph.ConfluenceElevatedSecurityGuard"/>
+    </security-config>
+{{- end }}
+{{ end }}
