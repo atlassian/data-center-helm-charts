@@ -34,8 +34,7 @@ public class ReadinessLivenessProbesTest {
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_liveness_probe_disabled(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".livenessProbe.enabled", "false"));
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
 
         assertThat(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe")).isEmpty();
@@ -45,31 +44,23 @@ public class ReadinessLivenessProbesTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void test_liveness_probe_defaults(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
-
-        assertEquals("60", resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("initialDelaySeconds").asText());
-        assertEquals("5", resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
-        assertEquals("12", resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_liveness_probe_overrides(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".livenessProbe.enabled", "true",
                 product + ".livenessProbe.initialDelaySeconds", "1111",
-                product + ".livenessProbe.periodSeconds", "1111",
-                product + ".livenessProbe.failureThreshold", "1111"));
+                product + ".livenessProbe.periodSeconds", "2222",
+                product + ".livenessProbe.failureThreshold", "3333",
+                product + ".livenessProbe.timeoutSeconds", "4444"));
 
         assertEquals("1111", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("initialDelaySeconds").asText());
-        assertEquals("1111", resources.getStatefulSet(
+        assertEquals("2222", resources.getStatefulSet(
                         product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
-        assertEquals("1111", resources.getStatefulSet(
+        assertEquals("3333", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
+        assertEquals("4444", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("timeoutSeconds").asText());
+
     }
 
     @ParameterizedTest
@@ -78,7 +69,8 @@ public class ReadinessLivenessProbesTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".readinessProbe.initialDelaySeconds", "2222",
                 product + ".readinessProbe.periodSeconds", "2222",
-                product + ".readinessProbe.failureThreshold", "2222"));
+                product + ".readinessProbe.failureThreshold", "2222",
+                product + ".readinessProbe.timeoutSeconds", "3333"));
 
         assertEquals("2222", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("initialDelaySeconds").asText());
@@ -86,6 +78,9 @@ public class ReadinessLivenessProbesTest {
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("periodSeconds").asText());
         assertEquals("2222", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("failureThreshold").asText());
+        assertEquals("3333", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("readinessProbe").get("timeoutSeconds").asText());
+
     }
 
     @ParameterizedTest
@@ -95,6 +90,7 @@ public class ReadinessLivenessProbesTest {
                 product + ".readinessProbe.customProbe.tcpSocket.port", "9999",
                 product + ".readinessProbe.customProbe.periodSeconds", "3333",
                 product + ".readinessProbe.customProbe.failureThreshold", "3333",
+                product + ".readinessProbe.customProbe.timeoutSeconds", "4444",
                 product + ".readinessProbe.customProbe.foo", "bar"));
 
         assertEquals("9999", resources.getStatefulSet(
@@ -103,6 +99,8 @@ public class ReadinessLivenessProbesTest {
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("periodSeconds").asText());
         assertEquals("3333", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("failureThreshold").asText());
+        assertEquals("4444", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("readinessProbe").get("timeoutSeconds").asText());
         assertEquals("bar", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe").get("foo").asText());
     }

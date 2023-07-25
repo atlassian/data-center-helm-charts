@@ -93,6 +93,7 @@ spec:
               path: {{ .Values.bitbucket.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.bitbucket.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bitbucket.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.bitbucket.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.bitbucket.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
@@ -107,6 +108,7 @@ spec:
               port: {{ .Values.bitbucket.ports.http }}
             initialDelaySeconds: {{ .Values.bitbucket.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bitbucket.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.bitbucket.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.bitbucket.livenessProbe.failureThreshold }}
           {{ end }}
           {{- with .Values.bitbucket.containerSecurityContext}}

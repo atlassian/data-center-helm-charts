@@ -494,6 +494,10 @@ jira:
     #
     periodSeconds: 5
 
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
+
     # -- The number of consecutive failures of the Jira container readiness probe
     # before the pod fails readiness checks.
     #
@@ -528,7 +532,7 @@ jira:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
-    enabled: true
+    enabled: false
 
     # -- Time to wait before starting the first probe
     #
@@ -537,6 +541,10 @@ jira:
     # -- How often (in seconds) the Jira container liveness probe will run
     #
     periodSeconds: 5
+
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
 
     # -- The number of consecutive failures of the Jira container liveness probe
     # before the pod fails liveness checks.

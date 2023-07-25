@@ -171,6 +171,7 @@ spec:
               path: {{ .Values.bamboo.service.contextPath }}/rest/api/latest/status
             initialDelaySeconds: {{ .Values.bamboo.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.bamboo.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.bamboo.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
@@ -185,6 +186,7 @@ spec:
               port: {{ .Values.bamboo.ports.http }}
             initialDelaySeconds: {{ .Values.bamboo.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.bamboo.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.bamboo.livenessProbe.failureThreshold }}
           {{ end }}
           {{- with .Values.bamboo.containerSecurityContext}}

@@ -132,6 +132,7 @@ spec:
               path: {{ .Values.jira.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.jira.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jira.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.jira.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
@@ -146,6 +147,7 @@ spec:
               port: {{ .Values.jira.ports.http }}
             initialDelaySeconds: {{ .Values.jira.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jira.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.jira.livenessProbe.failureThreshold }}
           {{ end }}
           {{- with .Values.jira.containerSecurityContext}}

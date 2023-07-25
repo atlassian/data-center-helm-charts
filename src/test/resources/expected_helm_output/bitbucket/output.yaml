@@ -228,7 +228,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 0ea032a1623ffae83c3ce0bca16d5e4c438bf579a5e2d19574f44e5db0da1aae
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -351,7 +350,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: d91a30f5b871fcb02a5dd509ac21fe4d7e30f799b8583caa7a3bdac1d16118a3
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -398,18 +396,13 @@ spec:
               path: /status
             initialDelaySeconds: 10
             periodSeconds: 5
+            timeoutSeconds: 1
             failureThreshold: 60
           startupProbe:
             tcpSocket:
               port: 7990
             periodSeconds: 5
             failureThreshold: 120
-          livenessProbe:
-            tcpSocket:
-              port: 7990
-            initialDelaySeconds: 60
-            periodSeconds: 5
-            failureThreshold: 12
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/bitbucket"
