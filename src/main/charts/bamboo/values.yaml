@@ -608,6 +608,10 @@ bamboo:
     #
     periodSeconds: 10
 
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
+
     # -- The number of consecutive failures of the Bamboo container readiness probe
     # before the pod fails readiness checks.
     #
@@ -642,7 +646,7 @@ bamboo:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
-    enabled: true
+    enabled: false
 
     # -- Time to wait before starting the first probe
     #
@@ -651,6 +655,10 @@ bamboo:
     # -- How often (in seconds) the Bamboo container liveness probe will run
     #
     periodSeconds: 5
+
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
 
     # -- The number of consecutive failures of the Bamboo container liveness probe
     # before the pod fails liveness checks.

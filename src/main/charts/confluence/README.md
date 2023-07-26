@@ -46,10 +46,11 @@ Kubernetes: `>=1.21.x-0`
 | confluence.jvmDebug.enabled | bool | `false` | Set to 'true' for remote debugging. Confluence JVM will be started with debugging port 5005 open. |
 | confluence.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Confluence license key  |
 | confluence.license.secretName | string | `nil` | The name of the K8s Secret that contains the Confluence license key. If specified, then the license will be automatically populated during Confluence setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
-| confluence.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
+| confluence.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | confluence.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Confluence container liveness probe before the pod fails liveness checks.  |
 | confluence.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | confluence.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Confluence container liveness probe will run  |
+| confluence.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | confluence.ports.hazelcast | int | `5701` | The port on which the Confluence container listens for Hazelcast traffic  |
 | confluence.ports.http | int | `8090` | The port on which the Confluence container listens for HTTP traffic  |
 | confluence.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
@@ -57,6 +58,7 @@ Kubernetes: `>=1.21.x-0`
 | confluence.readinessProbe.failureThreshold | int | `6` | The number of consecutive failures of the Confluence container readiness probe before the pod fails readiness checks.  |
 | confluence.readinessProbe.initialDelaySeconds | int | `10` | The initial delay (in seconds) for the Confluence container readiness probe, after which the probe will start running.  |
 | confluence.readinessProbe.periodSeconds | int | `5` | How often (in seconds) the Confluence container readiness probe will run  |
+| confluence.readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | confluence.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Confluence pod.  |
 | confluence.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Confluence pod  |
 | confluence.resources.jvm.maxHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Confluence JVM  |

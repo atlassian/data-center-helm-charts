@@ -606,6 +606,10 @@ confluence:
     #
     periodSeconds: 5
 
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
+
     # -- The number of consecutive failures of the Confluence container readiness probe
     # before the pod fails readiness checks.
     #
@@ -640,7 +644,7 @@ confluence:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
-    enabled: true
+    enabled: false
 
     # -- Time to wait before starting the first probe
     #
@@ -649,6 +653,10 @@ confluence:
     # -- How often (in seconds) the Confluence container liveness probe will run
     #
     periodSeconds: 5
+
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
 
     # -- The number of consecutive failures of the Confluence container liveness probe
     # before the pod fails liveness checks.

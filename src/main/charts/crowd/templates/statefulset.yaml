@@ -79,6 +79,7 @@ spec:
               path: /crowd/status
             initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.crowd.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
@@ -93,6 +94,7 @@ spec:
               port: {{ .Values.crowd.ports.http }}
             initialDelaySeconds: {{ .Values.crowd.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.crowd.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.crowd.livenessProbe.failureThreshold }}
           {{ end }}
           {{- with .Values.crowd.containerSecurityContext}}

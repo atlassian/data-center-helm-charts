@@ -52,10 +52,11 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.license | object | `{"secretKey":"license","secretName":null}` | The Bamboo DC license that should be used. If supplied here the license configuration will be skipped in the setup wizard.  |
 | bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information  |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information  |
-| bamboo.livenessProbe.enabled | bool | `true` | Whether to apply the livenessProbe check to pod.  |
+| bamboo.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | bamboo.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Bamboo container liveness probe before the pod fails liveness checks.  |
 | bamboo.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | bamboo.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container liveness probe will run  |
+| bamboo.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic  |
 | bamboo.ports.jms | int | `54663` | JMS port  |
 | bamboo.readinessProbe.customProbe | object | `{}` | Custom ReadinessProbe to override the default /status httpGet  |
@@ -63,6 +64,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe before the pod fails readiness checks.  |
 | bamboo.readinessProbe.initialDelaySeconds | int | `30` | The initial delay (in seconds) for the Bamboo container readiness probe, after which the probe will start running.  |
 | bamboo.readinessProbe.periodSeconds | int | `10` | How often (in seconds) the Bamboo container readiness probe will run  |
+| bamboo.readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | bamboo.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Bamboo pod  |
 | bamboo.resources.container.requests.memory | string | `"2G"` | Initial Memory request by Bamboo pod  |
 | bamboo.resources.jvm.maxHeap | string | `"1024m"` | The maximum amount of heap memory that will be used by the Bamboo JVM  |

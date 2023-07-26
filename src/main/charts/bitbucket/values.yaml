@@ -674,6 +674,10 @@ bitbucket:
     #
     periodSeconds: 5
 
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
+
     # -- The number of consecutive failures of the Bitbucket container readiness probe
     # before the pod fails readiness checks.
     #
@@ -708,7 +712,7 @@ bitbucket:
 
     # -- Whether to apply the livenessProbe check to pod.
     #
-    enabled: true
+    enabled: false
 
     # -- Time to wait before starting the first probe
     #
@@ -717,6 +721,10 @@ bitbucket:
     # -- How often (in seconds) the Bitbucket container liveness probe will run
     #
     periodSeconds: 5
+
+    # -- Number of seconds after which the probe times out
+    #
+    timeoutSeconds: 1
 
     # -- The number of consecutive failures of the Bitbucket container liveness probe
     # before the pod fails liveness checks.

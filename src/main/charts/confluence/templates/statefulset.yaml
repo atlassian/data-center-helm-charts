@@ -82,6 +82,7 @@ spec:
               path: {{ .Values.confluence.service.contextPath }}/status
             initialDelaySeconds: {{ .Values.confluence.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.confluence.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.confluence.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
@@ -96,6 +97,7 @@ spec:
               port: {{ .Values.confluence.ports.http }}
             initialDelaySeconds: {{ .Values.confluence.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.confluence.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.confluence.livenessProbe.failureThreshold }}
           {{ end }}
           {{- with .Values.confluence.containerSecurityContext}}
