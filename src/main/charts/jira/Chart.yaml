@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.14.0
+version: 1.14.1
 appVersion: 9.4.8
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,9 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add liveness probes, make readinessProbes configurable (#626)"
-    - "Support running Jira and Confluence containers as non root (incl running in OpenShift) (#623)"
-    - "make sharedHome.permissionFix.command helper to be per-product (#622)"
+    - "Disable liveness probes by default, make timeoutSeconds configurable (#630)"
 
 dependencies:
 - name: common
