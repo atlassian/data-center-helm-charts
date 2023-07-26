@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo-agent
 description: A chart for installing Bamboo Data Center remote agents on Kubernetes
 type: application
-version: 1.14.0
+version: 1.14.1
 appVersion: 9.3.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,9 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add liveness probes, make readinessProbes configurable (#626)"
-    - "Add additionalFiles to bamboo-agent Helm chart (#625)"
-    - "Add additionalVolumes and additionalVolumeMounts to bamboo-agent (#619)"
+    - "Update Helm chart version"
 dependencies:
 - name: common
   version: 1.2.3
