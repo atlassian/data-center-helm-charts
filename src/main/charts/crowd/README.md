@@ -113,6 +113,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Crowd pods  |
+| pdb | object | `{"annotations":{},"enabled":false,"labels":{},"maxUnavailable":null,"minAvailable":null}` | PodDisruptionBudget: https://kubernetes.io/docs/tasks/run-application/configure-pdb/ You can specify only one of maxUnavailable and minAvailable in a single PodDisruptionBudget  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Crowd pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Crowd pods  |
 | priorityClassName | string | `nil` | Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster. For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |

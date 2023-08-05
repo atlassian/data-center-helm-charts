@@ -1039,3 +1039,13 @@ additionalFiles: []
 #    type: secret
 #    key: keystore.jks
 #    mountPath: /var/ssl
+
+# -- PodDisruptionBudget: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+# You can specify only one of maxUnavailable and minAvailable in a single PodDisruptionBudget
+#
+pdb:
+  enabled: false
+  labels: {}
+  annotations: {}
+  minAvailable:
+  maxUnavailable:
