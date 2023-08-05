@@ -1,0 +1,16 @@
+{{- range $i, $key := .Values.additionalConfigMaps -}}
+{{- with $ }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-{{ $key.name }}
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- range $key.keys }}
+  {{ .fileName -}}: |
+{{  .content | trim | indent 4 }}
+{{- end }}
+---
+{{- end }}
+{{- end }}

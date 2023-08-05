@@ -22,6 +22,9 @@ spec:
     metadata:
       annotations:
         checksum/config-jvm: {{ include (print $.Template.BasePath "/config-jvm.yaml") . | sha256sum }}
+        {{- if .Values.additionalConfigMaps }}
+        checksum/config-additional: {{ include (print $.Template.BasePath "/configmap-additional-config.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.fluentd.enabled }}
         checksum/config-fluentd: {{ include (print $.Template.BasePath "/configmap-fluentd.yaml") . | sha256sum }}
         {{- end }}
@@ -134,6 +137,13 @@ spec:
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
             {{ end }}
+            {{- range $i, $n := .Values.additionalConfigMaps }}
+            {{- range .keys }}
+            - name: {{ .fileName | replace "_" "-" | replace "." "-" }}
+              mountPath: {{ .mountPath }}/{{ .fileName }}
+              subPath: {{ .fileName }}
+            {{ end }}
+            {{- end }}
           {{- with .Values.bitbucket.resources.container }}
           resources:
             {{- toYaml . | nindent 12 }}
@@ -253,6 +263,18 @@ spec:
               - key: {{ .key }}
                 path: {{ .key }}
         {{ end }}
+        {{- range $i, $key := .Values.additionalConfigMaps }}
+        {{- with $ }}
+        {{- range $key.keys }}
+        - name: {{ .fileName | replace "_" "-" | replace "." "-" }}
+          configMap:
+            name: {{ include "common.names.fullname" $ }}-{{ $key.name }}
+            items:
+              - key: {{ .fileName }}
+                path: {{ .fileName }}
+            {{- end }}
+        {{ end }}
+        {{- end }}
         {{ include "bitbucket.volumes" . | nindent 8 }}
         {{ include "fluentd.config.volume" . | nindent 8 }}
         {{ include "common.jmx.config.volume" . | nindent 8 }}
