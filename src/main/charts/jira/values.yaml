@@ -848,6 +848,11 @@ monitoring:
     #
     dashboardLabels: {}
       # grafana_dashboard: dc_monitoring
+    
+    # -- Annotations added to Grafana dashboards ConfigMaps
+    #
+    dashboardAnnotations: {}
+      # k8s-sidecar-target-directory: /tmp/dashboards/example-folder
 
 # Fluentd configuration
 #
