@@ -17,7 +17,7 @@ import static test.jackson.JsonNodeAssert.assertThat;
 /**
  * Tests the various permutations of the "<product>.service" value structure in the Helm charts
  */
-class AdditionalConfigMapsTest {
+class AdditionalFilesTest {
     private Helm helm;
 
     @BeforeEach
