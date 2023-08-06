@@ -1040,7 +1040,7 @@ additionalFiles: []
 #    key: keystore.jks
 #    mountPath: /var/ssl
 
-# -- Create additional ConfigMaps with gives names, keys and content. Helm release name will be used as prefix
+# -- Create additional ConfigMaps with given names, keys and content. Helm release name will be used as prefix
 # for a ConfigMap name, fileName is used as subPath
 #
 additionalConfigMaps: []
