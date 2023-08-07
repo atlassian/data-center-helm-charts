@@ -2,6 +2,38 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
+        - "Add annotations to Grafana dashboards ConfigMaps (#637)"
+        - "Add additional ConfigMaps to Helm Charts (#635)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.1
+    created: "2023-08-07T23:31:32.363514943Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 5da3a317c9a9de6f775a5ebda06b9c260fca1e6f9e1d4725e1d89f2fc7deb120
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.15.0/bamboo-1.15.0.tgz
+    version: 1.15.0
+  - annotations:
       artifacthub.io/changes: '- "Disable liveness probes by default, make timeoutSeconds
         configurable (#630)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -766,6 +798,35 @@ entries:
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.3.1
+    created: "2023-08-07T23:31:32.487477345Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 1617f7b37dafad52d612dcf647fae61c2e06eb712413e9d54d6d5847fea28c0d
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.15.0/bamboo-agent-1.15.0.tgz
+    version: 1.15.0
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.1
     created: "2023-07-26T00:47:38.675100718Z"
     dependencies:
     - name: common
@@ -1472,6 +1533,38 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
+        - "Add annotations to Grafana dashboards ConfigMaps (#637)"
+        - "Add additional ConfigMaps to Helm Charts (#635)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.3
+    created: "2023-08-07T23:31:32.635097351Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: ad848a5292d4335e65e822507007882c17a5fc93352b3accc9625727bff04d97
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.15.0/bitbucket-1.15.0.tgz
+    version: 1.15.0
   - annotations:
       artifacthub.io/changes: '- "Disable liveness probes by default, make timeoutSeconds
         configurable (#630)"'
@@ -2726,6 +2819,39 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
+        - "Add annotations to Grafana dashboards ConfigMaps (#637)"
+        - "Add additional ConfigMaps to Helm Charts (#635)"
+        - "Update appVersions for DC apps (#638)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 7.19.12
+    created: "2023-08-07T23:31:32.894337709Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: e47cba084087994d0ab4f1ac0fab25a42ef4fb173a881c5697d96df554462a68
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.15.0/confluence-1.15.0.tgz
+    version: 1.15.0
+  - annotations:
       artifacthub.io/changes: '- "Disable liveness probes by default, make timeoutSeconds
         configurable (#630)"'
       artifacthub.io/containsSecurityUpdates: "true"
@@ -3975,6 +4101,39 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
+        - "Add annotations to Grafana dashboards ConfigMaps (#637)"
+        - "Add additional ConfigMaps to Helm Charts (#635)"
+        - "Update appVersions for DC apps (#638)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.1.4
+    created: "2023-08-07T23:31:33.024695185Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: e82759c2efbf1850f8a63a760351f3036763060620fc23e26a509e549104f09d
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.15.0/crowd-1.15.0.tgz
+    version: 1.15.0
+  - annotations:
       artifacthub.io/changes: '- "Disable liveness probes by default, make timeoutSeconds
         configurable (#630)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -5037,6 +5196,40 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
+        - "Add annotations to Grafana dashboards ConfigMaps (#637)"
+        - "Add additional ConfigMaps to Helm Charts (#635)"
+        - "Update appVersions for DC apps (#638)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.9
+    created: "2023-08-07T23:31:33.14055502Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.3
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: e872447749b60304889ffd42f27ef1a2a369c5f9aba15e49cdd7421d7407551d
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.15.0/jira-1.15.0.tgz
+    version: 1.15.0
   - annotations:
       artifacthub.io/changes: '- "Disable liveness probes by default, make timeoutSeconds
         configurable (#630)"'
@@ -6216,4 +6409,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-07-26T00:47:39.599914133Z"
+generated: "2023-08-07T23:31:33.141769515Z"
