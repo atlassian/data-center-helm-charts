@@ -987,6 +987,11 @@ monitoring:
     dashboardLabels: {}
       # grafana_dashboard: dc_monitoring
 
+    # -- Annotations added to Grafana dashboards ConfigMaps. See: https://github.com/kiwigrid/k8s-sidecar#usage
+    #
+    dashboardAnnotations: {}
+      # k8s-sidecar-target-directory: /tmp/dashboards/example-folder
+
 # Confluence Synchrony configuration
 # https://confluence.atlassian.com/doc/configuring-synchrony-858772125.html
 synchrony:

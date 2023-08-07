@@ -12,6 +12,12 @@ metadata:
     {{- with .Values.monitoring.grafana.dashboardLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+  {{- if .Values.monitoring.grafana.dashboardAnnotations }}
+  annotations:
+    {{- with .Values.monitoring.grafana.dashboardAnnotations}}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
 data:
   {{ include "common.names.fullname" . }}-{{ .Release.Namespace}}-{{ $fileName._1}}: |
 {{ .Files.Get $index | indent 4 }}

@@ -1156,6 +1156,11 @@ monitoring:
     dashboardLabels: {}
       # grafana_dashboard: dc_monitoring
 
+    # -- Annotations added to Grafana dashboards ConfigMaps. See: https://github.com/kiwigrid/k8s-sidecar#usage
+    #
+    dashboardAnnotations: {}
+      # k8s-sidecar-target-directory: /tmp/dashboards/example-folder
+
 # Fluentd configuration
 #
 # Bitbucket log collection and aggregation can be enabled using Flunetd. This config
