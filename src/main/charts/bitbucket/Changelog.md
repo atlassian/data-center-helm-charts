@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.15.0
+
+**Release date:** 2023-8-7
+
+![AppVersion: 8.9.3](https://img.shields.io/static/v1?label=AppVersion&message=8.9.3&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)
+* Add annotations to Grafana dashboards ConfigMaps (#637)
+* Add additional ConfigMaps to Helm Charts (#635)
+
 ## 1.14.1
 
 **Release date:** 2023-7-26

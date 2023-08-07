@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.14.1
+version: 1.15.0
 appVersion: 8.9.3
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Disable liveness probes by default, make timeoutSeconds configurable (#630)"
+    - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
+    - "Add annotations to Grafana dashboards ConfigMaps (#637)"
+    - "Add additional ConfigMaps to Helm Charts (#635)"
 
 dependencies:
 - name: common
