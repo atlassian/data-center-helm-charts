@@ -858,6 +858,11 @@ monitoring:
     dashboardLabels: {}
     # grafana_dashboard: dc_monitoring
 
+    # -- Annotations added to Grafana dashboards ConfigMaps. See: https://github.com/kiwigrid/k8s-sidecar#usage
+    #
+    dashboardAnnotations: {}
+      # k8s-sidecar-target-directory: /tmp/dashboards/example-folder
+
 # -- PodDisruptionBudget: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 # You can specify only one of maxUnavailable and minAvailable in a single PodDisruptionBudget. When both minAvailable and maxUnavailable are set, maxUnavailable takes precedence.
 #
