@@ -1330,9 +1330,9 @@ additionalHosts: []
 #    - "bar.local"
 
 # -- PodDisruptionBudget: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-# You can specify only one of maxUnavailable and minAvailable in a single PodDisruptionBudget
+# You can specify only one of maxUnavailable and minAvailable in a single PodDisruptionBudget. When both minAvailable and maxUnavailable are set, maxUnavailable takes precedence.
 #
-pdb:
+podDisruptionBudget:
   enabled: false
   labels: {}
   annotations: {}

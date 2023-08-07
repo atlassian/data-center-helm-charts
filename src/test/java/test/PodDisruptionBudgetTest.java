@@ -24,8 +24,8 @@ public class PodDisruptionBudgetTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void pod_disruption_budget_enabled_min_available(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "pdb.enabled", "true",
-                "pdb.minAvailable", "1"
+                "podDisruptionBudget.enabled", "true",
+                "podDisruptionBudget.minAvailable", "1"
         ));
 
         KubeResource pdb = resources.get(Kind.PodDisruptionBudget, product.getHelmReleaseName());
@@ -36,9 +36,9 @@ public class PodDisruptionBudgetTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void pod_disruption_budget_min_available_max_unavailable(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "pdb.enabled", "true",
-                "pdb.minAvailable", "1",
-                "pdb.maxUnavailable", "2"
+                "podDisruptionBudget.enabled", "true",
+                "podDisruptionBudget.minAvailable", "1",
+                "podDisruptionBudget.maxUnavailable", "2"
         ));
 
         // assert that when both mixAvailable and maxUnavailable are defined, only maxUnavailable is set in pdb
@@ -51,9 +51,9 @@ public class PodDisruptionBudgetTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void pod_disruption_budget_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "pdb.enabled", "true",
-                "pdb.minAvailable", "1",
-                "pdb.annotations.foo", "bar"
+                "podDisruptionBudget.enabled", "true",
+                "podDisruptionBudget.minAvailable", "1",
+                "podDisruptionBudget.annotations.foo", "bar"
         ));
 
         KubeResource pdb = resources.get(Kind.PodDisruptionBudget, product.getHelmReleaseName());
@@ -64,9 +64,9 @@ public class PodDisruptionBudgetTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void pod_disruption_budget_labels(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "pdb.enabled", "true",
-                "pdb.minAvailable", "1",
-                "pdb.labels.foo", "bar"
+                "podDisruptionBudget.enabled", "true",
+                "podDisruptionBudget.minAvailable", "1",
+                "podDisruptionBudget.labels.foo", "bar"
         ));
 
         KubeResource pdb = resources.get(Kind.PodDisruptionBudget, product.getHelmReleaseName());
