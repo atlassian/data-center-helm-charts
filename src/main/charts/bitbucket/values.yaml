@@ -1334,6 +1334,16 @@ additionalHosts: []
 #    - "foo.local"
 #    - "bar.local"
 
+# -- PodDisruptionBudget: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+# You can specify only one of maxUnavailable and minAvailable in a single PodDisruptionBudget. When both minAvailable and maxUnavailable are set, maxUnavailable takes precedence.
+#
+podDisruptionBudget:
+  enabled: false
+  labels: {}
+  annotations: {}
+  minAvailable:
+  maxUnavailable:
+
 # -- Create additional ConfigMaps with given names, keys and content. Ther Helm release name will be used as a prefix
 # for a ConfigMap name, fileName is used as subPath
 #
