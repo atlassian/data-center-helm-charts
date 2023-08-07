@@ -1049,3 +1049,20 @@ podDisruptionBudget:
   annotations: {}
   minAvailable:
   maxUnavailable:
+
+# -- Create additional ConfigMaps with given names, keys and content. Ther Helm release name will be used as a prefix
+# for a ConfigMap name, fileName is used as subPath
+#
+additionalConfigMaps: []
+#  - name: extra-configmap
+#    keys:
+#      - fileName: hello.properties
+#        mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/classes
+#        content: |
+#          foo=bar
+#          hello=world
+#      - fileName: hello.xml
+#        mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/classes
+#        content: |
+#          <xml>
+#          </xml>
