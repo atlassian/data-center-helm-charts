@@ -1,6 +1,6 @@
 # confluence
 
-![Version: 1.14.1](https://img.shields.io/badge/Version-1.14.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.19.11](https://img.shields.io/badge/AppVersion-7.19.11-informational?style=flat-square)
+![Version: 1.14.1](https://img.shields.io/badge/Version-1.14.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.19.12](https://img.shields.io/badge/AppVersion-7.19.12-informational?style=flat-square)
 
 A chart for installing Confluence Data Center on Kubernetes
 
@@ -23,6 +23,7 @@ Kubernetes: `>=1.21.x-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| additionalConfigMaps | list | `[]` | Create additional ConfigMaps with given names, keys and content. Ther Helm release name will be used as a prefix for a ConfigMap name, fileName is used as subPath  |
 | additionalContainers | list | `[]` | Additional container definitions that will be added to all Confluence pods  |
 | additionalFiles | list | `[]` | Additional existing ConfigMaps and Secrets not managed by Helm that should be mounted into service container. Configuration details below (camelCase is important!): 'name'      - References existing ConfigMap or secret name. 'type'      - 'configMap' or 'secret' 'key'       - The file name. 'mountPath' - The destination directory in a container. VolumeMount and Volumes are added with this name and index position, for example; custom-config-0, keystore-2  |
 | additionalHosts | list | `[]` | Additional host aliases for each pod, equivalent to adding them to the /etc/hosts file. https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ |
