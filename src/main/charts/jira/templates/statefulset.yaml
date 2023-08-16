@@ -222,6 +222,9 @@ spec:
         - name: {{ .fileName | replace "_" "-" | replace "." "-" }}
           configMap:
             name: {{ include "common.names.fullname" $ }}-{{ $key.name }}
+            {{- if .defaultMode }}
+            defaultMode: {{ .defaultMode }}
+            {{- end }}
             items:
               - key: {{ .fileName }}
                 path: {{ .fileName }}

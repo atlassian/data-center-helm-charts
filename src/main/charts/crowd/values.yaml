@@ -783,6 +783,7 @@ additionalConfigMaps: []
 #    keys:
 #      - fileName: hello.properties
 #        mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/classes
+#        defaultMode:
 #        content: |
 #          foo=bar
 #          hello=world
