@@ -69,6 +69,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Crowd container. Set to 'false' to disable this behaviour.  |
 | crowd.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/src/master/shutdown-wait.sh) for details.  |
 | crowd.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate.  |
+| crowd.startupProbe.enabled | bool | `true` | Whether to apply the startupProbe check to pod.  |
 | crowd.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Crowd container startup probe before the pod fails startup checks.  |
 | crowd.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container startup probe will run  |
 | crowd.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Crowd pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |

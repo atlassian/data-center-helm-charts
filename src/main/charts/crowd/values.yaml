@@ -197,6 +197,10 @@ crowd:
 
   startupProbe:
 
+    # -- Whether to apply the startupProbe check to pod.
+    #
+    enabled: true
+
     # -- How often (in seconds) the Crowd container startup probe will run
     #
     periodSeconds: 5
