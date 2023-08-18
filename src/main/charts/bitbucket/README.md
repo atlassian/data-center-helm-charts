@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 1.15.0](https://img.shields.io/badge/Version-1.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.9.4](https://img.shields.io/badge/AppVersion-8.9.4-informational?style=flat-square)
+![Version: 1.15.1](https://img.shields.io/badge/Version-1.15.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.9.4](https://img.shields.io/badge/AppVersion-8.9.4-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
@@ -120,6 +120,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.sshService.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | bitbucket.sshService.port | int | `22` | Port to expose the SSH service on.  |
 | bitbucket.sshService.type | string | `"LoadBalancer"` | SSH Service type  |
+| bitbucket.startupProbe.enabled | bool | `true` | Whether to apply the startupProbe check to pod.  |
 | bitbucket.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bitbucket container startup probe before the pod fails startup checks.  |
 | bitbucket.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container startup probe will run  |
 | bitbucket.sysadminCredentials.displayNameSecretKey | string | `"displayName"` | The key in the Kubernetes Secret that contains the sysadmin display name  |

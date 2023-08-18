@@ -86,11 +86,13 @@ spec:
             failureThreshold: {{ .Values.crowd.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
+          {{- if .Values.crowd.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.crowd.ports.http }}
             periodSeconds: {{ .Values.crowd.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.crowd.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:

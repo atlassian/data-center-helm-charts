@@ -89,11 +89,13 @@ spec:
             failureThreshold: {{ .Values.confluence.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
+          {{- if .Values.confluence.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.confluence.ports.http }}
             periodSeconds: {{ .Values.confluence.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.confluence.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.confluence.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:

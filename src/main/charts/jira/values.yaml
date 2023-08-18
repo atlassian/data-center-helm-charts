@@ -516,6 +516,10 @@ jira:
   #
   startupProbe:
 
+    # -- Whether to apply the startupProbe check to pod.
+    #
+    enabled: true
+
     # -- How often (in seconds) the Jira container startup probe will run
     #
     periodSeconds: 5

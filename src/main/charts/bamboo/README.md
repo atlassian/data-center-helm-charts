@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 1.15.0](https://img.shields.io/badge/Version-1.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.3.2](https://img.shields.io/badge/AppVersion-9.3.2-informational?style=flat-square)
+![Version: 1.15.1](https://img.shields.io/badge/Version-1.15.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.3.2](https://img.shields.io/badge/AppVersion-9.3.2-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -85,6 +85,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bamboo container. Set to 'false' to disable this behaviour.  |
 | bamboo.shutdown.command | string | `"/shutdown-wait.sh"` | By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/), using a script supplied by the Docker image. If any other shutdown behaviour is needed it can be achieved by overriding this value. Note that the shutdown command needs to wait for the application shutdown completely before exiting; see [the default command](https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/shutdown-wait.sh) for details.  |
 | bamboo.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate.  |
+| bamboo.startupProbe.enabled | bool | `true` | Whether to apply the startupProbe check to pod.  |
 | bamboo.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Bamboo container startup probe before the pod fails startup checks.  |
 | bamboo.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Bamboo container startup probe will run  |
 | bamboo.sysadminCredentials | object | `{"displayNameSecretKey":"displayName","emailAddressSecretKey":"emailAddress","passwordSecretKey":"password","secretName":null,"usernameSecretKey":"username"}` | The admin user configuration, and credentials that Bamboo should use. If supplied here the admin configuration will be skipped in the setup wizard.  |

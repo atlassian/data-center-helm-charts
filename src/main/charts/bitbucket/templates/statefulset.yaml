@@ -100,11 +100,13 @@ spec:
             failureThreshold: {{ .Values.bitbucket.readinessProbe.failureThreshold }}
             {{- end }}
           {{- end }}
+          {{- if .Values.bitbucket.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.bitbucket.ports.http }}
             periodSeconds: {{ .Values.bitbucket.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.bitbucket.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.bitbucket.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:

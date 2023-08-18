@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.15.0
+version: 1.15.1
 appVersion: 9.4.9
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,10 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add PodDisruptionBudget to Atlassian DC Helm Charts (#636)"
-    - "Add annotations to Grafana dashboards ConfigMaps (#637)"
-    - "Add additional ConfigMaps to Helm Charts (#635)"
-    - "Update appVersions for DC apps (#638)"
+    - "Make startup probes optional (#646)"
 
 dependencies:
 - name: common
