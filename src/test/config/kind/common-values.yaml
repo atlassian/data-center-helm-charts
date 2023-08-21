@@ -53,3 +53,11 @@ monitoring:
     createDashboards: true
     dashboardLabels:
       grafana_dashboard: dc_monitoring
+
+synchrony:
+  enabled: true
+  resources:
+    container:
+      requests:
+        cpu: 20m
+        memory: 1G

@@ -168,7 +168,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.readinessProbe.initialDelaySeconds | int | `5` | The initial delay (in seconds) for the Synchrony container readiness probe, after which the probe will start running.  |
 | synchrony.readinessProbe.periodSeconds | int | `1` | How often (in seconds) the Synchrony container readiness probe will run  |
 | synchrony.replicaCount | int | `1` | Number of Synchrony pods  |
-| synchrony.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Synchrony pod  |
+| synchrony.resources.container.requests.cpu | string | `"2"` | Initial CPU request by Synchrony pod. Because the container CPU request value is used in -XX:ActiveProcessorCount argument to Synchrony JVM  only integers are allowed, e.g. 1, 2, 3 etc. If you want to have a small CPU claim, set it as 30m, 50m, etc. Any container cpu request value containing `m` character will be converted to -XX:ActiveProcessorCount=1 See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu  |
 | synchrony.resources.container.requests.memory | string | `"2.5G"` | Initial Memory request Synchrony pod  |
 | synchrony.resources.jvm.maxHeap | string | `"2g"` | The minimum amount of heap memory that will be used by the Synchrony JVM  |
 | synchrony.resources.jvm.minHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Synchrony JVM  |

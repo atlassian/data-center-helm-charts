@@ -78,6 +78,35 @@ class SynchronyTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_small_cpu_request(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.resources.container.requests.cpu", "20m"
+        ));
+
+        final var entrypoint = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-synchrony-entrypoint")
+                .getNode("data", "start-synchrony.sh");
+
+        assertThat(entrypoint)
+                .hasTextContaining("-XX:ActiveProcessorCount=1");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_custom_cpu_request(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.resources.container.requests.cpu", "5"
+        ));
+
+        final var entrypoint = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-synchrony-entrypoint")
+                .getNode("data", "start-synchrony.sh");
+
+        assertThat(entrypoint)
+                .hasTextContaining("-XX:ActiveProcessorCount=5");
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
     void synchrony_replica_count(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true",
