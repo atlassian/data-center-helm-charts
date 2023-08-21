@@ -66,10 +66,31 @@ public class AdditionalConfigMapsTest {
 
         JsonNode configMapVolume = getStsVolume(statefulset, "configMap");
         assertThat(configMapVolume.path("name")).hasTextEqualTo(product.getHelmReleaseName() + "-extra-configmap");
+        assertThat(configMapVolume.path("defaultMode")).isEmpty();
         assertThat(configMapVolume.path("items").path(0).path("key")).hasTextEqualTo("hello.txt");
         assertThat(configMapVolume.path("items").path(0).path("path")).hasTextEqualTo("hello.txt");
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_configmap_volumes_default_mode(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "additionalConfigMaps[0].name", "extra-configmap",
+                "additionalConfigMaps[0].keys[0].defaultMode", "487",
+                "additionalConfigMaps[0].keys[0].fileName", "hello.txt",
+                "additionalConfigMaps[0].keys[0].mountPath", "/opt/files",
+                "additionalConfigMaps[0].keys[0].content", "helloworld"
+        ));
+
+        StatefulSet statefulset = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulset.getVolumes().get(0).get("name")).hasTextEqualTo("hello-txt");
+
+        JsonNode configMapVolume = getStsVolume(statefulset, "configMap");
+        assertThat(configMapVolume.path("name")).hasTextEqualTo(product.getHelmReleaseName() + "-extra-configmap");
+        assertThat(configMapVolume.path("defaultMode")).hasValueEqualTo(487);
+        assertThat(configMapVolume.path("items").path(0).path("key")).hasTextEqualTo("hello.txt");
+        assertThat(configMapVolume.path("items").path(0).path("path")).hasTextEqualTo("hello.txt");
+    }
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additional_configmap_volume_mounts(Product product) throws Exception {
