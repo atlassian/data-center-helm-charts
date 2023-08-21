@@ -1123,6 +1123,7 @@ synchrony:
         # -- Initial CPU request by Synchrony pod. Because the container CPU request value is used in -XX:ActiveProcessorCount argument to Synchrony JVM
         #  only integers are allowed, e.g. 1, 2, 3 etc. If you want to have a small CPU claim, set it to 30m, 50m, etc.
         # Any container cpu request value containing `m` character will be converted to -XX:ActiveProcessorCount=1
+        #
         # See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu
         #
         cpu: "2"
