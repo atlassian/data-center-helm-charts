@@ -1,4 +1,9 @@
 {{ if .Values.synchrony.enabled }}
+{{- $activeProcessorCount := 1 -}}
+{{- $cpuRequest := .Values.synchrony.resources.container.requests.cpu | toString -}}
+{{- if not (contains "m" $cpuRequest) }}
+  {{- $activeProcessorCount = .Values.synchrony.resources.container.requests.cpu -}}
+{{- end }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -19,7 +24,7 @@ data:
        {{- range .Values.synchrony.additionalJvmArgs }}
        {{ . }} \
        {{- end }}
-       -XX:ActiveProcessorCount={{ .Values.synchrony.resources.container.requests.cpu }} \
+       -XX:ActiveProcessorCount={{ $activeProcessorCount }} \
        -classpath /opt/atlassian/confluence/confluence/WEB-INF/packages/synchrony-standalone.jar:/opt/atlassian/confluence/confluence/WEB-INF/lib/* \
        synchrony.core \
        sql
