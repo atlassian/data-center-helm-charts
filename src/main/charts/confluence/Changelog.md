@@ -1,6 +1,17 @@
 # Change Log
 
 
+## 1.15.2
+
+**Release date:** 2023-8-22
+
+![AppVersion: 7.19.12](https://img.shields.io/static/v1?label=AppVersion&message=7.19.12&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Allow small cpu requests for Synchrony container (#650)
+* Add defaultMode to additionalConfigMaps (#647)
+
 ## 1.15.1
 
 **Release date:** 2023-8-17

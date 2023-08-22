@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.15.1
+version: 1.15.2
 appVersion: 9.4.9
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,7 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Make startup probes optional (#646)"
+    - "Add defaultMode to additionalConfigMaps (#647)"
 
 dependencies:
 - name: common
