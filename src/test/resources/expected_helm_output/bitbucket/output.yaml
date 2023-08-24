@@ -400,11 +400,6 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 1
             failureThreshold: 60
-          startupProbe:
-            tcpSocket:
-              port: 7990
-            periodSeconds: 5
-            failureThreshold: 120
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/bitbucket"

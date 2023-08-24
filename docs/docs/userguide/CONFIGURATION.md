@@ -476,3 +476,43 @@ The Helm charts also allow you to specify:
 * [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}.
 
 These are standard Kubernetes structures that will be included in the pods.
+
+## :material-kubernetes: Startup, Readiness and Liveness Probes
+
+### ReadinessProbe
+
+By default, `readinessProbe` is defined for the main (server) container in all Atlassian DC Helm charts. A `readinessProbe` makes http calls to the application status endpoint. A pod is not marked as Ready until readinessProbe receives any code greater than or equal to 200 and less than 400 which indicates success.
+If a pod is not in a Ready state, there is no [endpoint](https://kubernetes.io/docs/concepts/services-networking/service/#endpoints){.external} associated with a [service](https://kubernetes.io/docs/concepts/services-networking/service){.external}, as a result such a pod receives no traffic (if this is the only pod in the StatefulSet, you may see 503 response from the [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/){.external}).
+
+It is possible to disable `readinessProbe` (set `<product>.readinessProbe.enabled=false`) which may make sense if this is the first (cold) start of a DC product in Kubernetes. With a disabled `readinessProbe`, the pod almost immediately becomes ready after it has been started, and the Ingress URL will take you to a page showing node start process. We strongly recommend enabling `readinessProbe` after the application has been fully migrated and setup in Kubernetes.
+
+Depending on the dataset size, resources allocation and application configuration, you may want to adjust readinessProbe to work best for your particular DC workload:
+
+```
+readinessProbe:
+  # -- Whether to apply the readinessProbe check to pod.
+  #
+  enabled: true
+
+  # -- The initial delay (in seconds) for the container readiness probe,
+  # after which the probe will start running.
+  #
+  initialDelaySeconds: 10
+
+  # -- How often (in seconds) the container readiness probe will run
+  #
+  periodSeconds: 5
+
+  # -- Number of seconds after which the probe times out
+  #
+  timeoutSeconds: 1
+
+  # -- The number of consecutive failures of the container readiness probe
+  # before the pod fails readiness checks.
+  #
+  failureThreshold: 60
+```
+
+### Startup and Liveness Probes
+
+Both `startupProbe` and `livenessProbe` are disabled by default. Make sure you go through [Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/){.external} before enabling such probes. Misconfiguration can result in unwanted container restarts and failed "cold" starts.

@@ -268,11 +268,6 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 1
             failureThreshold: 30
-          startupProbe:
-            tcpSocket:
-              port: 8085
-            periodSeconds: 5
-            failureThreshold: 120
           resources:
             requests:
               cpu: "2"

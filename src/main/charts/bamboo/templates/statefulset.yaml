@@ -182,6 +182,7 @@ spec:
           startupProbe:
             tcpSocket:
               port: {{ .Values.bamboo.ports.http }}
+            initialDelaySeconds: {{ .Values.bamboo.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.bamboo.startupProbe.failureThreshold }}
           {{- end }}

@@ -27,8 +27,6 @@ public class ReadinessLivenessProbesTest {
 
         assertThat(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("readinessProbe")).isEmpty();
-        assertThat(resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("startupProbe")).isNotNull();
     }
 
     @ParameterizedTest
@@ -38,8 +36,6 @@ public class ReadinessLivenessProbesTest {
 
         assertThat(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("livenessProbe")).isEmpty();
-        assertThat(resources.getStatefulSet(
-                product.getHelmReleaseName()).getContainer().get("startupProbe")).isNotNull();
     }
 
     @ParameterizedTest
@@ -122,10 +118,25 @@ public class ReadinessLivenessProbesTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void test_startup_probe_disabled(Product product) throws Exception {
+    void test_startup_probe_enabled(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".startupProbe.enabled", "false"));
+                product + ".startupProbe.enabled", "true"));
 
+        assertThat(resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("startupProbe")).isNotNull();
+
+        assertEquals("120", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("startupProbe").get("failureThreshold").asText());
+        assertEquals("60", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("startupProbe").get("initialDelaySeconds").asText());
+        assertEquals("5", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("startupProbe").get("periodSeconds").asText());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_startup_probe_defaults(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
         assertThat(resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("startupProbe")).isEmpty();
     }
@@ -134,11 +145,15 @@ public class ReadinessLivenessProbesTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_startup_probe_customized(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".startupProbe.enabled", "true",
                 product + ".startupProbe.failureThreshold", "1200",
+                product + ".startupProbe.initialDelaySeconds", "1200",
                 product + ".startupProbe.periodSeconds", "14"));
 
         assertEquals("1200", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("startupProbe").get("failureThreshold").asText());
+        assertEquals("1200", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("startupProbe").get("initialDelaySeconds").asText());
         assertEquals("14", resources.getStatefulSet(
                 product.getHelmReleaseName()).getContainer().get("startupProbe").get("periodSeconds").asText());
     }

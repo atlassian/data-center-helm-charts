@@ -93,6 +93,7 @@ spec:
           startupProbe:
             tcpSocket:
               port: {{ .Values.confluence.ports.http }}
+            initialDelaySeconds: {{ .Values.confluence.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.confluence.startupProbe.failureThreshold }}
           {{- end }}

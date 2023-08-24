@@ -104,6 +104,7 @@ spec:
           startupProbe:
             tcpSocket:
               port: {{ .Values.bitbucket.ports.http }}
+            initialDelaySeconds: {{ .Values.bitbucket.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bitbucket.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.bitbucket.startupProbe.failureThreshold }}
           {{- end }}

@@ -143,6 +143,7 @@ spec:
           startupProbe:
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
+            initialDelaySeconds: {{ .Values.jira.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.jira.startupProbe.failureThreshold }}
           {{- end }}
