@@ -6,7 +6,7 @@ metadata:
   labels:
   {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
-  {{- with .Values.jira.service.annotations }}
+  {{- with .Values.monitoring.jmxServiceAnnotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
