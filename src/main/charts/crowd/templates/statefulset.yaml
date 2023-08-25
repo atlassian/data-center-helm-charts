@@ -90,6 +90,7 @@ spec:
           startupProbe:
             tcpSocket:
               port: {{ .Values.crowd.ports.http }}
+            initialDelaySeconds: {{ .Values.crowd.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.crowd.startupProbe.failureThreshold }}
           {{- end }}

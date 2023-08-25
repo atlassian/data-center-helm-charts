@@ -698,7 +698,11 @@ bitbucket:
 
     # -- Whether to apply the startupProbe check to pod.
     #
-    enabled: true
+    enabled: false
+
+    # -- Time to wait before starting the first probe
+    #
+    initialDelaySeconds: 60
 
     # -- How often (in seconds) the Bitbucket container startup probe will run
     #
