@@ -798,6 +798,10 @@ monitoring:
   # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
   #
   exposeJmxMetrics: false
+  
+  # -- Annotations added to the jmx service
+  #
+  jmxServiceAnnotations: {}
 
   # -- Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar
   # to shared home and provide an absolute path in jmxExporterCustomJarLocation

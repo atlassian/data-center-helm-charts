@@ -134,7 +134,8 @@ class JmxMetricsTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.exposeJmxMetrics", "true",
                 "monitoring.jmxExporterPort", "9000",
-                "monitoring.jmxExporterPortType", "NodePort"
+                "monitoring.jmxExporterPortType", "NodePort",
+                "monitoring.jmxServiceAnnotations.foo", "bar"
         ));
 
         final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName()+"-jmx");
@@ -143,6 +144,9 @@ class JmxMetricsTest {
                 .hasTextEqualTo("NodePort");
         VavrAssertions.assertThat(service.getPort("jmx"))
                 .hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(9000));
+        assertThat(service.getAnnotations()).isObject(Map.of(
+                "foo", "bar"
+        ));
     }
 
     @ParameterizedTest
