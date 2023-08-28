@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.15.3
+
+**Release date:** 2023-8-28
+
+![AppVersion: 8.9.4](https://img.shields.io/static/v1?label=AppVersion&message=8.9.4&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Decouple server and jmx annotations (#654)
+* Disable startup probes by default (#653)
+
 ## 1.15.2
 
 **Release date:** 2023-8-22
