@@ -969,8 +969,32 @@ tolerations: []
 
 # -- Standard K8s affinities that will be applied to all Jira pods
 #
-affinity: {}
-#  name: <value>
+affinity: {} 
+#affinity example to prohibit schedule of pods in same az and on same host to maximise availability in jira ha
+# affinity: |
+#   podAntiAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       - labelSelector:
+#           matchLabels:
+#             {{- include "common.labels.selectorLabels" . | nindent 10 }}
+#           matchExpressions:
+#             - key: app.kubernetes.io/component
+#               operator: NotIn
+#               values:
+#                 - test
+#         topologyKey: kubernetes.io/hostname
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#       - weight: 100
+#         podAffinityTerm:
+#           labelSelector:
+#             matchLabels:
+#               {{- include "common.labels.selectorLabels" . | nindent 12 }}
+#             matchExpressions:
+#               - key: app.kubernetes.io/component
+#                 operator: NotIn
+#                 values:
+#                   - test
+#           topologyKey: topology.kubernetes.io/zone
 
 # -- Standard K8s schedulerName that will be applied to all Jira pods.
 # Check Kubernetes documentation on how to configure multiple schedulers:
