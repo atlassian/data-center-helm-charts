@@ -119,6 +119,7 @@ Kubernetes: `>=1.21.x-0`
 | jira.tomcatConfig.customServerXml | string | `""` | Custom server.xml to be mounted into /opt/atlassian/jira/conf  |
 | jira.tomcatConfig.generateByHelm | bool | `false` | Mount server.xml as a ConfigMap. Override configuration elements if necessary  |
 | jira.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Jira pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
+| jira.useChartNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. The default, the container name is jira (Helm chart name)  |
 | monitoring.exposeJmxMetrics | bool | `false` | Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter  |
 | monitoring.fetchJmxExporterJar | bool | `true` | Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar to shared home and provide an absolute path in jmxExporterCustomJarLocation  |
 | monitoring.grafana.createDashboards | bool | `false` | Create ConfigMaps with Grafana dashboards  |

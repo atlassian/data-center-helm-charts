@@ -69,7 +69,7 @@ spec:
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ if .Values.bitbucket.useChartNameAsContainerName}}{{ include "common.names.fullname" . }}{{ else }}{{ .Chart.Name }}{{ end }}
           image: {{ include "bitbucket.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

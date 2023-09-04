@@ -84,4 +84,24 @@ class ContainersTest {
         final var icontainer = statefulSet.getContainer("my_container");
         assertThat(icontainer.get("image")).hasTextEqualTo("my_image");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void defaultContainerNames(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var containerName = statefulSet.getContainer().get("name");
+        assertThat(containerName).hasTextEqualTo(product.name());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void containerNamesAsHelmChartName(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".useChartNameAsContainerName", "true"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var containerName = statefulSet.getContainer().get("name");
+        assertThat(containerName).hasTextEqualTo(product.getHelmReleaseName());
+    }
 }

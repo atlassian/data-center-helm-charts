@@ -483,6 +483,10 @@ ingress:
 #
 confluence:
 
+  # -- Whether the main container should acquire helm release name. The default, the container name is confluence (Helm chart name)
+  #
+  useChartNameAsContainerName: false
+
   # K8s Confluence Service configuration
   #
   service:

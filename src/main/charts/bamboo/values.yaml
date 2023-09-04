@@ -380,6 +380,10 @@ ingress:
 #
 bamboo:
 
+  # -- Whether the main container should acquire helm release name. The default, the container name is bamboo (Helm chart name)
+  #
+  useChartNameAsContainerName: false
+
   # -- To skip the setup wizard post deployment set this property to 'true' and
   # ensure values for all 'REQUIRED' and 'UNATTENDED-SETUP' stanzas
   # (see banner of this file) have been supplied.
