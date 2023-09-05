@@ -967,23 +967,25 @@ tolerations: []
 #   operator: <operator>
 #   key: <key>
 
-# -- Standard K8s affinities that will be applied to all Jira pods which can be defined as a string and an object
-# See values.yaml description for more details
+# -- Standard K8s affinities that will be applied to all Jira pods which
+# Affinity can be defined either as a string or an object. See values.yaml description for more details
 #
 affinity:
+# Affinity example defined as an object. When affinity is defined as an object it cannot be templated
+# affinity
 #   podAntiAffinity:
 #     requiredDuringSchedulingIgnoredDuringExecution:
 #       - labelSelector:
 #           matchLabels:
-#             {{- include "common.labels.selectorLabels" . | nindent 10 }}
+#             app: jira
 #           matchExpressions:
 #             - key: app.kubernetes.io/component
 #               operator: NotIn
 #               values:
 #                 - test
 #         topologyKey: kubernetes.io/hostname
-# Affinity example defined as an object
-# Affinity example defined as a string to prohibit schedule of pods in same az and on same host to maximise availability in jira ha
+# Affinity example defined as a templated string to prohibit schedule of pods in same az and on same host to maximise availability in jira ha
+# When affinity defined as a string, it can be templated. In the below example {{ include }} will be automatically resolved to application label selector
 # affinity: |
 #   podAntiAffinity:
 #     requiredDuringSchedulingIgnoredDuringExecution:
@@ -996,18 +998,6 @@ affinity:
 #               values:
 #                 - test
 #         topologyKey: kubernetes.io/hostname
-#     preferredDuringSchedulingIgnoredDuringExecution:
-#       - weight: 100
-#         podAffinityTerm:
-#           labelSelector:
-#             matchLabels:
-#               {{- include "common.labels.selectorLabels" . | nindent 12 }}
-#             matchExpressions:
-#               - key: app.kubernetes.io/component
-#                 operator: NotIn
-#                 values:
-#                   - test
-#           topologyKey: topology.kubernetes.io/zone
 
 # -- Standard K8s schedulerName that will be applied to all Jira pods.
 # Check Kubernetes documentation on how to configure multiple schedulers:
