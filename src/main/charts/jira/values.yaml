@@ -798,7 +798,7 @@ monitoring:
   # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
   #
   exposeJmxMetrics: false
-  
+
   # -- Annotations added to the jmx service
   #
   jmxServiceAnnotations: {}
@@ -967,10 +967,23 @@ tolerations: []
 #   operator: <operator>
 #   key: <key>
 
-# -- Standard K8s affinities that will be applied to all Jira pods
+# -- Standard K8s affinities that will be applied to all Jira pods which can be defined as a string and an object
+# See values.yaml description for more details
 #
-affinity: {} 
-#affinity example to prohibit schedule of pods in same az and on same host to maximise availability in jira ha
+affinity:
+#   podAntiAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       - labelSelector:
+#           matchLabels:
+#             {{- include "common.labels.selectorLabels" . | nindent 10 }}
+#           matchExpressions:
+#             - key: app.kubernetes.io/component
+#               operator: NotIn
+#               values:
+#                 - test
+#         topologyKey: kubernetes.io/hostname
+# Affinity example defined as an object
+# Affinity example defined as a string to prohibit schedule of pods in same az and on same host to maximise availability in jira ha
 # affinity: |
 #   podAntiAffinity:
 #     requiredDuringSchedulingIgnoredDuringExecution:
