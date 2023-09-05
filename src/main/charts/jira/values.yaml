@@ -392,7 +392,7 @@ jira:
 
   # -- Whether the main container should acquire helm release name. The default, the container name is jira (Helm chart name)
   #
-  useChartNameAsContainerName: false
+  useHelmReleaseNameAsContainerName: false
 
   # K8s Service configuration
   #

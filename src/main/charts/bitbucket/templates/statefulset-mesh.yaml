@@ -48,7 +48,7 @@ spec:
             runAsUser: 0 # make sure we run as root to avoid permission denied
         {{- end }}
       containers:
-        - name: {{ if .Values.bitbucket.useChartNameAsContainerName}}{{ include "common.names.fullname" . }}-mesh{{ else }}{{ .Chart.Name }}-mesh{{ end }}
+        - name: {{ if .Values.bitbucket.useHelmReleaseNameAsContainerName}}{{ include "common.names.fullname" . }}-mesh{{ else }}{{ .Chart.Name }}-mesh{{ end }}
           image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
           imagePullPolicy: {{ .Values.bitbucket.mesh.image.pullPolicy }}
           ports:

@@ -98,7 +98,7 @@ class ContainersTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void containerNamesAsHelmChartName(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product.name() + ".useChartNameAsContainerName", "true"
+                product.name() + ".useHelmReleaseNameAsContainerName", "true"
         ));
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         final var containerName = statefulSet.getContainer().get("name");

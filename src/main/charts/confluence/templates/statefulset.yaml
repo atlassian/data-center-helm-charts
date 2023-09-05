@@ -61,7 +61,7 @@ spec:
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
       containers:
-        - name: {{ if .Values.confluence.useChartNameAsContainerName}}{{ include "common.names.fullname" . }}{{ else }}{{ .Chart.Name }}{{ end }}
+        - name: {{ if .Values.confluence.useHelmReleaseNameAsContainerName}}{{ include "common.names.fullname" . }}{{ else }}{{ .Chart.Name }}{{ end }}
           image: {{ include "confluence.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
