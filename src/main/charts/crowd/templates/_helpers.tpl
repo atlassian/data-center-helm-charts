@@ -117,8 +117,8 @@ For each additional library declared, generate a volume mount that injects that 
 Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "crowd.podAnnotations" -}}
-{{- with .Values.podAnnotations }}
-{{- toYaml . }}
+{{- range $key, $value := .Values.podAnnotations }}
+{{ $key }}: {{ tpl $value $ }}
 {{- end }}
 {{- end }}
 

@@ -117,8 +117,8 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "jira.podAnnotations" -}}
-{{- with .Values.podAnnotations }}
-{{- toYaml . }}
+{{- range $key, $value := .Values.podAnnotations }}
+{{ $key }}: {{ tpl $value $ }}
 {{- end }}
 {{- end }}
 
