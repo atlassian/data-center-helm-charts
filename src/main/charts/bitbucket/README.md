@@ -130,7 +130,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.sysadminCredentials.secretName | string | `nil` | The name of the Kubernetes Secret that contains the Bitbucket sysadmin credentials If specified, then these will be automatically populated during Bitbucket setup. Otherwise, they will need to be provided via the browser after initial startup.  |
 | bitbucket.sysadminCredentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the sysadmin username  |
 | bitbucket.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Bitbucket pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
-| bitbucket.useHelmReleaseNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. The default, the container name is bitbucket (Helm chart name)  |
+| bitbucket.useHelmReleaseNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. By default the container name is `bitbucket` which corresponds to the name of the Helm Chart.  |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password  |
 | database.credentials.secretName | string | `nil` | from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | database.credentials.usernameSecretKey | string | `"username"` | The key ('username') in the Secret used to store the database login username  |

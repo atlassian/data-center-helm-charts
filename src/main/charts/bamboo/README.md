@@ -97,7 +97,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.sysadminCredentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the sysadmin username  |
 | bamboo.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Bamboo pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
 | bamboo.unattendedSetup | bool | `true` | To skip the setup wizard post deployment set this property to 'true' and ensure values for all 'REQUIRED' and 'UNATTENDED-SETUP' stanzas (see banner of this file) have been supplied.  For release 1.0.0 this value is by default set to 'true' and should not be changed.  |
-| bamboo.useHelmReleaseNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. The default, the container name is bamboo (Helm chart name)  |
+| bamboo.useHelmReleaseNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. By default the container name is `bamboo` which corresponds to the name of the Helm Chart.  |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password  |
 | database.credentials.secretName | string | `nil` | from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | database.credentials.usernameSecretKey | string | `"username"` | The key ('username') in the Secret used to store the database login username  |

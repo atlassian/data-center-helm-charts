@@ -78,7 +78,7 @@ serviceAccount:
 #
 crowd:
 
-  # -- Whether the main container should acquire helm release name. The default, the container name is crowd (Helm chart name)
+  # -- Whether the main container should acquire helm release name. By default the container name is `crowd` which corresponds to the name of the Helm Chart.
   #
   useHelmReleaseNameAsContainerName: false
 
