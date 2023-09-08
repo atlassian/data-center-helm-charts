@@ -268,8 +268,8 @@ For each additional Synchrony library declared, generate a volume mount that inj
 Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "confluence.podAnnotations" -}}
-{{- with .Values.podAnnotations }}
-{{- toYaml . }}
+{{- range $key, $value := .Values.podAnnotations }}
+{{ $key }}: {{ tpl $value $ }}
 {{- end }}
 {{- end }}
 

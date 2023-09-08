@@ -117,8 +117,8 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
 Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "bamboo.podAnnotations" -}}
-{{- with .Values.podAnnotations }}
-{{- toYaml . }}
+{{- range $key, $value := .Values.podAnnotations }}
+{{ $key }}: {{ tpl $value $ }}
 {{- end }}
 {{- end }}
 

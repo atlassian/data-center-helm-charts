@@ -129,8 +129,8 @@ The command that should be run to start the fluentd service
 Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.podAnnotations" -}}
-{{- with .Values.podAnnotations }}
-{{- toYaml . }}
+{{- range $key, $value := .Values.podAnnotations }}
+{{ $key }}: {{ tpl $value $ }}
 {{- end }}
 {{- end }}
 
