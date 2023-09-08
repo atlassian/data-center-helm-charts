@@ -390,6 +390,10 @@ ingress:
 #
 jira:
 
+  # -- Whether the main container should acquire helm release name. The default, the container name is jira (Helm chart name)
+  #
+  useHelmReleaseNameAsContainerName: false
+
   # K8s Service configuration
   #
   service:
@@ -798,7 +802,7 @@ monitoring:
   # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
   #
   exposeJmxMetrics: false
-  
+
   # -- Annotations added to the jmx service
   #
   jmxServiceAnnotations: {}

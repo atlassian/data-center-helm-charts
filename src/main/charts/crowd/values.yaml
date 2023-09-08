@@ -78,6 +78,10 @@ serviceAccount:
 #
 crowd:
 
+  # -- Whether the main container should acquire helm release name. By default the container name is `crowd` which corresponds to the name of the Helm Chart.
+  #
+  useHelmReleaseNameAsContainerName: false
+
   # K8s Crowd Service configuration
   #
   service:
