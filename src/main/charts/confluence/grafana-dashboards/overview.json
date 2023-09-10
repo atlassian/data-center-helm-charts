@@ -740,7 +740,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "100*(jvm_memory_bytes_used{namespace=\"$namespace\", service=\"$service\", area=\"heap\",}/jvm_memory_bytes_max{namespace=\"$namespace\", service=\"$service\", area=\"heap\",})",
+          "expr": "100*(jvm_memory_bytes_used{namespace=\"$namespace\", service=\"$service\", area=\"heap\"}/jvm_memory_bytes_max{namespace=\"$namespace\", service=\"$service\", area=\"heap\"})",
           "interval": "",
           "legendFormat": "Used {{ area }} ({{ pod }})",
           "refId": "A"
