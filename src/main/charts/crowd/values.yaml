@@ -388,6 +388,12 @@ crowd:
   #   labelSelector:
   #     matchLabels:
 
+  # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
+  #
+  additionalCertificates:
+    secretName:
+    customCmd:
+
 # Ingress configuration
 #
 # To make the Atlassian product available from outside the K8s cluster an Ingress

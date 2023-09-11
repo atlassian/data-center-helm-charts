@@ -21,6 +21,10 @@ DC_APP_REPLACEME:
   # this applies to Bamboo only and will be ignored in other Helm charts
   disableAgentAuth: true
 
+  # check if init container not failing when importing a custom crt into the default Java keystore
+  additionalCertificates:
+    secretName: certificate
+
 database:
   type: DB_TYPE_REPLACEME
   url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME
@@ -61,3 +65,5 @@ synchrony:
       requests:
         cpu: 20m
         memory: 1G
+  additionalCertificates:
+    secretName: certificate

@@ -68,6 +68,18 @@ spec:
           command: ["sh", "-c", {{ include "bitbucket.sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
+        {{- if .Values.bitbucket.additionalCertificates.secretName }}
+        - name: import-certs
+          image: {{ include "bitbucket.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: keystore
+              mountPath: /var/ssl
+            - name: certs
+              mountPath: /tmp/crt
+          command: ["/bin/bash"]
+          args: ["-c", {{ include "bitbucket.addCrtToKeystoreCmd" . }}]
+        {{- end }}
       containers:
         - name: {{ if .Values.bitbucket.useHelmReleaseNameAsContainerName}}{{ include "common.names.fullname" . }}{{ else }}{{ .Chart.Name }}{{ end }}
           image: {{ include "bitbucket.image" . | quote }}
@@ -130,6 +142,10 @@ spec:
               {{- if .Values.volumes.sharedHome.subPath }}
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
+            {{- end }}
+            {{- if .Values.bitbucket.additionalCertificates.secretName }}
+            - name: keystore
+              mountPath: /var/ssl
             {{- end }}
             {{- include "bitbucket.additionalVolumeMounts" . | nindent 12 }}
             {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}

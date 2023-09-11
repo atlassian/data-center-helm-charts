@@ -14,6 +14,9 @@ data:
     {{- if .Values.serviceAccount.eksIrsa.roleArn }}
     -Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
     {{- end }}
+    {{- if .Values.jira.additionalCertificates.secretName }}
+    -Djavax.net.ssl.trustStore=/var/ssl/cacerts
+    {{- end }}
     {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.jira.resources.jvm.maxHeap }}
   min_heap: {{ .Values.jira.resources.jvm.minHeap }}

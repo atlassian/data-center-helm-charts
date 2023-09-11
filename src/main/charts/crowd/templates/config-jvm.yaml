@@ -12,6 +12,9 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.crowd.resources.container.requests.cpu }}
+    {{- if .Values.crowd.additionalCertificates.secretName }}
+    -Djavax.net.ssl.trustStore=/var/ssl/cacerts
+    {{- end }}
     {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.crowd.resources.jvm.maxHeap }}
   min_heap: {{ .Values.crowd.resources.jvm.minHeap }}

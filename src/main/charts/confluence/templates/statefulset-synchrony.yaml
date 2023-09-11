@@ -32,6 +32,19 @@ spec:
       {{- end }}
       hostAliases:
         {{- include "confluence.additionalHosts" . | nindent 8 }}
+      {{- if .Values.synchrony.additionalCertificates.secretName }}
+      initContainers:
+      - name: import-certs
+        image: {{ include "confluence.image" . | quote }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+          - name: keystore
+            mountPath: /var/ssl
+          - name: certs
+            mountPath: /tmp/crt
+        command: ["/bin/bash"]
+        args: ["-c", {{ include "synchrony.addCrtToKeystoreCmd" . }}]
+      {{- end }}
       containers:
         - name: synchrony
           image: {{ include "confluence.image" . | quote }}

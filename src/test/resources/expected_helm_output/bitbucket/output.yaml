@@ -228,7 +228,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: db89b933a78ce40c704c28a43ad838c5cd69bc7f29eed430073ee69d43739dd2
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -351,7 +350,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 913bbd0e175be8c1070e165be31cd49b51de5090005b14472255801e07e37120
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket

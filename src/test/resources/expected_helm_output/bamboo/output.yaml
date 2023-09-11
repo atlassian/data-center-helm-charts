@@ -147,7 +147,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 649cd0d664c2bd3a2a110a443ba424ee0c042453567313692c48e4eede6ee447
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo

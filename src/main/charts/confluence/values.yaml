@@ -933,6 +933,12 @@ confluence:
     # port 5005 open.
     enabled: false
 
+  # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
+  #
+  additionalCertificates:
+    secretName:
+    customCmd:
+
 # Monitoring
 #
 monitoring:
@@ -1199,6 +1205,12 @@ synchrony:
   #   labelSelector:
   #     matchLabels:
   #       app.kubernetes.io/name: confluence-synchrony
+
+  # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
+  #
+  additionalCertificates:
+    secretName:
+    customCmd:
 
 # Fluentd configuration
 #

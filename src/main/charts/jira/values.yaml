@@ -795,6 +795,12 @@ jira:
   #   labelSelector:
   #     matchLabels:
 
+  # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
+  #
+  additionalCertificates:
+    secretName:
+    customCmd:
+
 # Monitoring
 #
 monitoring:

@@ -10,6 +10,9 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bamboo.resources.container.requests.cpu }}
+    {{- if .Values.bamboo.additionalCertificates.secretName }}
+    -Djavax.net.ssl.trustStore=/var/ssl/cacerts
+    {{- end }}
     {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.bamboo.resources.jvm.maxHeap }}
   min_heap: {{ .Values.bamboo.resources.jvm.minHeap }}

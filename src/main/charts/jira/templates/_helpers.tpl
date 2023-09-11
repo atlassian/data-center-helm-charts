@@ -111,6 +111,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
   mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/seraph-config.xml
   subPath: seraph-config.xml
 {{- end }}
+{{- if .Values.jira.additionalCertificates.secretName }}
+- name: keystore
+  mountPath: /var/ssl
+{{- end }}
 {{- end }}
 
 {{/*
@@ -222,6 +226,13 @@ For each additional plugin declared, generate a volume mount that injects that l
     items:
       - key: seraph-config.xml
         path: seraph-config.xml
+{{- end }}
+{{- if .Values.jira.additionalCertificates.secretName }}
+- name: keystore
+  emptyDir: {}
+- name: certs
+  secret:
+    secretName: {{ .Values.jira.additionalCertificates.secretName }}
 {{- end }}
 {{- end }}
 
@@ -366,3 +377,11 @@ volumeClaimTemplates:
     {{- . }}
     {{- end }}
 {{- end}}
+
+{{- define "jira.addCrtToKeystoreCmd" }}
+{{- if .Values.jira.additionalCertificates.customCmd}}
+{{ .Values.jira.additionalCertificates.customCmd}}
+{{- else }}
+set -e; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts
+{{- end }}
+{{- end }}
