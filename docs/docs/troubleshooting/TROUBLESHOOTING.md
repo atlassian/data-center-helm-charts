@@ -78,3 +78,14 @@ kubectl get pods --all-namespaces -o=json | jq -c \
 '.items[] | {name: .metadata.name, namespace: .metadata.namespace, claimName:.spec.volumes[] | select( has ("persistentVolumeClaim") ).persistentVolumeClaim.claimName }'
 ```
 Find all the application pods in the output and verify they have the correct claims (shared home and local home). For more details follow the [documentation for persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external}.
+
+## Self signed certificates
+
+Accessing applications or websites that are encrypted with SSL using certificates not signed by a public authority will result in a connection error. The stacktrace will contain the following:
+
+```shell
+caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException:
+       PKIX path building failed:sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+```
+
+To fix the issue, follow the steps listed in the [Self Signed Certificates configuration guide](../userguide/CONFIGURATION.md#self-signed-certificates).
