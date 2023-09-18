@@ -522,13 +522,9 @@ readinessProbe:
 
 ## :material-certificate: Self Signed Certificates
 
-Accessing applications or websites that are encrypted with SSL using certificates not signed by a public authority will result in a connection error. The stacktrace will contain the following:
+To add self signed certificates to the default Java truststore, follow the below steps.
 
-```shell
-caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed:sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
-```
-
-To fix the issue, self signed certificates need to be added to Java truststore. First off, you need to create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external} containing base64-encoded certificate(s). Here's an example [kubectl command](https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#use-source-files){.external} to create a secret from 2 local files:
+* Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external} containing base64-encoded certificate(s). Here's an example [kubectl command](https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#use-source-files){.external} to create a secret from 2 local files:
 
 ```shell
 kubectl create secret generic dev-certificates \
@@ -546,7 +542,7 @@ data:
 
 !!!info "You can have as many keys (certificates) in the secret as required. All keys will be mounted as files to `/tmp/crt` in the container and imported into Java truststore. In the example above, certificates will be mounted as `/tmp/crt/stg.crt` and `/tmp/crt/dev.crt`. File extension in the secret keys does not matter as long as the file is a valid certificate."
 
-Once done, provide the secret name in Helm values: 
+* Provide the secret name in Helm values:
 
 ```yaml
 jira:
@@ -554,7 +550,7 @@ jira:
      secretName: dev-certificates
 ```
 
-Helm chart will add additional `volumeMounts` and `volumes` to the pod(s), as well as an extra init container that will:
+The product Helm chart will add additional `volumeMounts` and `volumes` to the pod(s), as well as an extra init container that will:
 
 * copy the default Java cacerts to a runtime volume shared between the init container and the main container at `/var/ssl`
 * run [keytool -import](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html){.external} to import all certificates in `/tmp/crt` mounted from `dev-certificates` secret to `/var/ssl/cacerts`
