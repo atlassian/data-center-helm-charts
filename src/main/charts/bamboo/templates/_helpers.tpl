@@ -111,6 +111,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
   {{- if .Values.volumes.sharedHome.subPath }}
   subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
   {{- end }}
+{{- if .Values.bamboo.additionalCertificates.secretName }}
+- name: keystore
+  mountPath: /var/ssl
+{{- end }}
 {{- end }}
 
 {{/*
@@ -204,6 +208,13 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{ include "bamboo.volumes.sharedHome" . }}
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
+{{- end }}
+{{- if .Values.bamboo.additionalCertificates.secretName }}
+- name: keystore
+  emptyDir: {}
+- name: certs
+  secret:
+    secretName: {{ .Values.bamboo.additionalCertificates.secretName }}
 {{- end }}
 {{- end }}
 
@@ -305,5 +316,13 @@ Define additional hosts here to allow template overrides when used as a sub char
 {{- define "bamboo.additionalHosts" -}}
 {{- with .Values.additionalHosts }}
 {{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{- define "bamboo.addCrtToKeystoreCmd" }}
+{{- if .Values.bamboo.additionalCertificates.customCmd}}
+{{ .Values.bamboo.additionalCertificates.customCmd}}
+{{- else }}
+set -e; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts
 {{- end }}
 {{- end }}

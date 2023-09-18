@@ -47,6 +47,18 @@ spec:
           securityContext:
             runAsUser: 0 # make sure we run as root to avoid permission denied
         {{- end }}
+        {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
+        - name: import-certs
+          image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: keystore
+              mountPath: /var/ssl
+            - name: certs
+              mountPath: /tmp/crt
+          command: ["/bin/bash"]
+          args: ["-c", {{ include "bitbucketMesh.addCrtToKeystoreCmd" . }}]
+        {{- end }}
       containers:
         - name: {{ if .Values.bitbucket.useHelmReleaseNameAsContainerName}}{{ include "common.names.fullname" . }}-mesh{{ else }}{{ .Chart.Name }}-mesh{{ end }}
           image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
@@ -74,6 +86,10 @@ spec:
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
             {{ end }}
+            {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
+            - name: keystore
+              mountPath: /var/ssl
+            {{- end }}
             {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
           {{- with .Values.bitbucket.mesh.resources.container }}
           resources:
@@ -147,6 +163,13 @@ spec:
               - key: {{ .key }}
                 path: {{ .key }}
         {{ end }}
+        {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
+        - name: keystore
+          emptyDir: {}
+        - name: certs
+          secret:
+            secretName: {{ .Values.bitbucket.mesh.additionalCertificates.secretName }}
+        {{- end }}
         {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "bitbucket.mesh.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}

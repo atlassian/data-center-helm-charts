@@ -21,6 +21,9 @@ data:
        -Xss{{ .Values.synchrony.resources.jvm.stackSize }} \
        -Dsynchrony.port={{ .Values.synchrony.ports.http }} \
        -Dcluster.listen.port={{ .Values.synchrony.ports.hazelcast }} \
+       {{- if .Values.synchrony.additionalCertificates.secretName }}
+       -Djavax.net.ssl.trustStore=/var/ssl/cacerts \
+       {{- end }}
        {{- range .Values.synchrony.additionalJvmArgs }}
        {{ . }} \
        {{- end }}

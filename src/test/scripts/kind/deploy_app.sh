@@ -30,6 +30,9 @@ create_secrets() {
   kubectl create secret generic ${DC_APP}-app-license \
           --from-literal=license=${LICENSE} \
           -n atlassian
+
+  openssl req -x509 -newkey rsa:4096 -keyout key.pem -out mycert.crt -days 365 -nodes -subj '/CN=localhost'
+  kubectl create secret generic certificate --from-file=mycert.crt=mycert.crt -n atlassian
 }
 
 deploy_app() {

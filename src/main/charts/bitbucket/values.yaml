@@ -1028,6 +1028,12 @@ bitbucket:
       #
       terminationGracePeriodSeconds: 35
 
+    # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
+    #
+    additionalCertificates:
+      secretName:
+      customCmd:
+
   # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.
   #
@@ -1101,6 +1107,12 @@ bitbucket:
   #   whenUnsatisfiable: ScheduleAnyway
   #   labelSelector:
   #     matchLabels:
+
+  # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
+  #
+  additionalCertificates:
+    secretName:
+    customCmd:
 
 # Monitoring
 #

@@ -96,6 +96,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Crowd logs get captured in 
   {{- if .Values.volumes.sharedHome.subPath }}
   subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
   {{- end }}
+{{- if .Values.crowd.additionalCertificates.secretName }}
+- name: keystore
+  mountPath: /var/ssl
+{{- end }}
 {{ end }}
 
 {{/*
@@ -190,6 +194,13 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
+{{- if .Values.crowd.additionalCertificates.secretName }}
+- name: keystore
+  emptyDir: {}
+- name: certs
+  secret:
+    secretName: {{ .Values.crowd.additionalCertificates.secretName }}
+{{- end }}
 {{- end }}
 
 {{- define "crowd.volumes.localHome" -}}
@@ -264,5 +275,13 @@ Define additional hosts here to allow template overrides when used as a sub char
 {{- define "crowd.additionalHosts" -}}
 {{- with .Values.additionalHosts }}
 {{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{- define "crowd.addCrtToKeystoreCmd" }}
+{{- if .Values.crowd.additionalCertificates.customCmd}}
+{{ .Values.crowd.additionalCertificates.customCmd}}
+{{- else }}
+set -e; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts
 {{- end }}
 {{- end }}
