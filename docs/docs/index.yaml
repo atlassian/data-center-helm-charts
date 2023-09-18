@@ -3,6 +3,38 @@ entries:
   bamboo:
   - annotations:
       artifacthub.io/changes: |-
+        - "Allow templating of pod annotations (#662)"
+        - "Make securityContext configurable for jmx exporter init container (#670)"
+        - "Add user provided certificates to the default Java truststore (#663)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.3
+    created: "2023-09-18T06:13:48.626819027Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 5879e6937657d0039af642dc8d5feec4e7e605f3fe0035fb470827589ad7a365
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.16.0/bamboo-1.16.0.tgz
+    version: 1.16.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Decouple server and jmx annotations (#654)"
         - "Disable startup probes by default (#653)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -868,6 +900,36 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Make securityContext configurable for jmx exporter
+        init container (#670)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.3
+    created: "2023-09-18T06:13:48.755918708Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 5a58ee0b4ebf18bdffb967f3334f6c564531aa0687c08a72de4eb1d482345313
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.16.0/bamboo-agent-1.16.0.tgz
+    version: 1.16.0
+  - annotations:
       artifacthub.io/changes: '- "Update Helm chart version"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -1688,6 +1750,38 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Allow templating of pod annotations (#662)"
+        - "Make securityContext configurable for jmx exporter init container (#670)"
+        - "Add user provided certificates to the default Java truststore (#663)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.5
+    created: "2023-09-18T06:13:48.907357564Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: bdaf70e4dc3e2fbd370ad8bd210a6b173dc35e07dca21470def9fd41c092d2cb
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.16.0/bitbucket-1.16.0.tgz
+    version: 1.16.0
   - annotations:
       artifacthub.io/changes: |-
         - "Decouple server and jmx annotations (#654)"
@@ -3070,6 +3164,38 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Allow templating of pod annotations (#662)"
+        - "Make securityContext configurable for jmx exporter init container (#670)"
+        - "Add user provided certificates to the default Java truststore (#663)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.1
+    created: "2023-09-18T06:13:49.170544589Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: b677bdf7a1562f6d7a5834bbd1c2e9bd9e5d05944da45736b04264770e8fa5b4
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.16.0/confluence-1.16.0.tgz
+    version: 1.16.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Decouple server and jmx annotations (#654)"
         - "Update appVersions for DC apps (#655)"
         - "Disable startup probes by default (#653)"
@@ -4413,6 +4539,38 @@ entries:
   crowd:
   - annotations:
       artifacthub.io/changes: |-
+        - "Allow templating of pod annotations (#662)"
+        - "Make securityContext configurable for jmx exporter init container (#670)"
+        - "Add user provided certificates to the default Java truststore (#663)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.1.5
+    created: "2023-09-18T06:13:49.308078574Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 474a64860d507561cdad8ee2e341872114c08b0918333f591ee24b318affb976
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.16.0/crowd-1.16.0.tgz
+    version: 1.16.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Decouple server and jmx annotations (#654)"
         - "Disable startup probes by default (#653)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -5581,6 +5739,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Allow templating of pod annotations (#662)"
+        - "Make securityContext configurable for jmx exporter init container (#670)"
+        - "Add user provided certificates to the default Java truststore (#663)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.10
+    created: "2023-09-18T06:13:49.449453506Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 1d29c4a6eaa476c9e37956c78aa2d4406004809da72d800be6b19427900e7405
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.16.0/jira-1.16.0.tgz
+    version: 1.16.0
   - annotations:
       artifacthub.io/changes: |-
         - "Decouple server and jmx annotations (#654)"
@@ -6875,4 +7066,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-09-18T00:30:07.233895706Z"
+generated: "2023-09-18T06:13:49.451199428Z"
