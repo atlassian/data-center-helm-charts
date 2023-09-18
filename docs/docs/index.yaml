@@ -2957,6 +2957,27 @@ entries:
     version: 0.6.0
   common:
   - apiVersion: v2
+    appVersion: 1.2.4
+    created: "2023-09-18T00:30:06.554790636Z"
+    description: A Library Helm Chart for grouping common logic between Atlassian
+      charts. This chart is not deployable by itself.
+    digest: 60a5076eebad02500274d356773b5caee6b2ff8d15dc3c35bb103cf94250d18a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/atlassian.svg
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    - Atlassian
+    name: common
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    type: library
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/common-1.2.4/common-1.2.4.tgz
+    version: 1.2.4
+  - apiVersion: v2
     appVersion: 1.2.3
     created: "2023-06-28T02:23:46.965935055Z"
     description: A Library Helm Chart for grouping common logic between Atlassian
@@ -6947,4 +6968,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-08-28T05:35:49.487913293Z"
+generated: "2023-09-18T00:30:07.233895706Z"
