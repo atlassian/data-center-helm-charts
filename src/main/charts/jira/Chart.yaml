@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: 1.15.3
+version: 1.16.0
 appVersion: 9.4.10
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,8 +21,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Decouple server and jmx annotations (#654)"
-    - "Disable startup probes by default (#653)"
+    - "Make securityContext configurable for jmx exporter init container (#670)"
+    - "Add user provided certificates to the default Java truststore (#663)"
 
 dependencies:
 - name: common
