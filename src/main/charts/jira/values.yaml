@@ -809,6 +809,19 @@ monitoring:
   #
   exposeJmxMetrics: false
 
+  # --  JMX exporter init container configuration
+  #
+  jmxExporterInitContainer:
+
+    # -- Whether to run JMX exporter init container as root to copy JMX exporter binary to shared home volume.
+    # Set to false if running containers as root is not allowed in the cluster.
+    #
+    runAsRoot: true
+
+    # -- Custom SecurityContext for the jmx exporter init container
+    #
+    customSecurityContext: {}
+
   # -- Annotations added to the jmx service
   #
   jmxServiceAnnotations: {}

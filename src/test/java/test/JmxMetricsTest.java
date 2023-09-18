@@ -68,6 +68,41 @@ class JmxMetricsTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void expose_jmx_metrics_enabled_init_container_run_as_root(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true"
+        ));
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("securityContext").path("runAsUser")).hasValueEqualTo(0);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void expose_jmx_metrics_enabled_init_container_no_root(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true",
+                "monitoring.jmxExporterInitContainer.runAsRoot", "false"
+        ));
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("securityContext")).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void expose_jmx_metrics_enabled_init_container_custom_security_context(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true",
+                "monitoring.jmxExporterInitContainer.runAsRoot", "false",
+                "monitoring.jmxExporterInitContainer.customSecurityContext.fsGroup", "1009",
+                "monitoring.jmxExporterInitContainer.customSecurityContext.runAsUser", "true"
+        ));
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("securityContext").path("fsGroup")).hasValueEqualTo(1009);
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("securityContext").path("runAsUser")).hasToString("true");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void expose_jmx_metrics_enabled_custom_vol_paths(Product product) throws Exception {
         String sharedHomePath = "/var/atlassian/application-data/custom-shared-home";
         if (product.name().equals("crowd")) {

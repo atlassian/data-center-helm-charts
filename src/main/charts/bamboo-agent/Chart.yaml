@@ -23,5 +23,5 @@ annotations:
     - "Update Helm chart version"
 dependencies:
 - name: common
-  version: 1.2.3
+  version: 1.2.4
   repository: https://atlassian.github.io/data-center-helm-charts
