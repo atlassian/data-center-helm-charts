@@ -2,9 +2,9 @@ apiVersion: v2
 name: common
 description: A Library Helm Chart for grouping common logic between Atlassian charts. This chart is not deployable by itself.
 type: library
-version: 1.2.3
+version: 1.2.4
 # Please make sure that version and appVersion are always the same.
-appVersion: 1.2.3
+appVersion: 1.2.4
 keywords:
   - common
   - helper
