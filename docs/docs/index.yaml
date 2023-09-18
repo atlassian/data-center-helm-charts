@@ -399,8 +399,7 @@ entries:
     version: 1.9.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Fix artifacthub annotations
+        - "Fix artifacthub annotations"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.1
@@ -463,8 +462,7 @@ entries:
     version: 1.8.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: fixed
-          description: Patch release to fix Artifacthub metadata
+        - "Patch release to fix Artifacthub metadata"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.0
@@ -553,22 +551,9 @@ entries:
     version: 1.7.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Bamboo updated to 9.0.0 version
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/455
-        - kind: changed
-          description: Ingress Class Name is moved under spec.
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/450
-        - kind: changed
-          description: Improved documentation
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/448
-            url: https://github.com/atlassian/data-center-helm-charts/pull/440
+        - "Bamboo updated to 9.0.0 version (#455)"
+        - "Ingress Class Name is moved under spec (#450)"
+        - "Improved documentation (#448)"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.0
@@ -1271,8 +1256,7 @@ entries:
     version: 1.9.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Fix artifacthub annotations
+        - "Fix artifacthub annotations"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.1
@@ -1335,8 +1319,7 @@ entries:
     version: 1.8.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: fixed
-          description: Patch release to fix Artifacthub metadata
+        - "Patch release to fix Artifacthub metadata"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.0
@@ -1425,11 +1408,7 @@ entries:
     version: 1.7.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Bamboo Agent updated to 9.0.0 version
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/455
+        - "Bamboo Agent updated to 9.0.0 version (#455)"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.0.0
@@ -2113,8 +2092,7 @@ entries:
     version: 1.9.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Fix artifacthub annotations
+        - "Fix artifacthub annotations"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 7.21.7
@@ -2181,8 +2159,7 @@ entries:
     version: 1.8.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: fixed
-          description: Patch release to fix Artifacthub metadata
+        - "Patch release to fix Artifacthub metadata"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 7.21.5
@@ -2271,22 +2248,9 @@ entries:
     version: 1.7.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Bitbucket updated to 7.21.5 version
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/455
-        - kind: changed
-          description: Ingress Class Name is moved under spec.
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/450
-        - kind: changed
-          description: Improved documentation
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/448
-            url: https://github.com/atlassian/data-center-helm-charts/pull/440
+        - "Bitbucket updated to 7.21.5 version (#455)"
+        - "Ingress Class Name is moved under spec (#450)"
+        - "Improved documentation (#448)"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 7.21.5
@@ -3513,8 +3477,7 @@ entries:
     version: 1.9.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Fix artifacthub annotations
+        - "Fix artifacthub annotations"
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 7.19.4
@@ -3583,8 +3546,7 @@ entries:
     version: 1.8.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: fixed
-          description: Patch release to fix Artifacthub metadata
+        - "Patch release to fix Artifacthub metadata"
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 7.19.2
@@ -3673,22 +3635,9 @@ entries:
     version: 1.7.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Confluence updated to 7.19.2 version
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/455
-        - kind: changed
-          description: Ingress Class Name is moved under spec.
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/450
-        - kind: changed
-          description: Improved documentation
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/448
-            url: https://github.com/atlassian/data-center-helm-charts/pull/440
+        - "Confluence updated to 7.19.2 version (#455)"
+        - "Ingress Class Name is moved under spec (#450)"
+        - "Improved documentation (#448)"
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 7.19.2
@@ -3757,26 +3706,10 @@ entries:
     version: 1.5.1
   - annotations:
       artifacthub.io/changes: |
-        - kind: added
-          description: Use the custom ports for Confluence service
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/419
-        - kind: added
-          description: Use the custom ports for Synchrony service
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/419
-        - kind: changed
-          description: Fixed Synchrony ingress path
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/429
-        - kind: changed
-          description: Confluence updated to 7.13.8 version
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/430
+        - "Use the custom ports for Confluence service (#419)"
+        - "Use the custom ports for Synchrony service (#419)"
+        - "Fixed Synchrony ingress path (#429)"
+        - "Confluence updated to 7.13.8 version (#430)"
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: 7.13.8
@@ -4888,8 +4821,7 @@ entries:
     version: 1.9.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Fix artifacthub annotations
+        - "Fix artifacthub annotations"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 5.1.0
@@ -4952,8 +4884,7 @@ entries:
     version: 1.8.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: fixed
-          description: Patch release to fix Artifacthub metadata
+        - "Patch release to fix Artifacthub metadata"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 5.0.2
@@ -5042,22 +4973,9 @@ entries:
     version: 1.7.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Crowd updated to 5.0.2 version
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/455
-        - kind: changed
-          description: Ingress Class Name is moved under spec.
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/450
-        - kind: changed
-          description: Improved documentation
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/448
-            url: https://github.com/atlassian/data-center-helm-charts/pull/440
+        - "Crowd updated to 5.0.2 version (#455)"
+        - "Ingress Class Name is moved under spec (#450)"
+        - "Improved documentation (#448)"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 5.0.2
@@ -6083,8 +6001,7 @@ entries:
     version: 1.9.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Fix artifacthub annotations
+        - "Fix artifacthub annotations"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.4.0
@@ -6149,8 +6066,7 @@ entries:
     version: 1.8.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: fixed
-          description: Patch release to fix Artifacthub metadata
+        - "Patch release to fix Artifacthub metadata"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 8.20.13
@@ -6241,17 +6157,8 @@ entries:
     version: 1.7.0
   - annotations:
       artifacthub.io/changes: |
-        - kind: changed
-          description: Ingress Class Name is moved under spec.
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/450
-        - kind: changed
-          description: Improved documentation
-          links:
-          - name: Github PR
-            url: https://github.com/atlassian/data-center-helm-charts/pull/448
-            url: https://github.com/atlassian/data-center-helm-charts/pull/440
+        - "Ingress Class Name is moved under spec (#450)"
+        - "Improved documentation (#448)"
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 8.20.13
