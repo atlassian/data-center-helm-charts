@@ -21,6 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
+    - "Allow templating of pod annotations (#662)"
     - "Make securityContext configurable for jmx exporter init container (#670)"
     - "Add user provided certificates to the default Java truststore (#663)"
 

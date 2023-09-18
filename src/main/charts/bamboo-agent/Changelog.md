@@ -8,6 +8,7 @@
 ![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
 ![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
 
+* Allow templating of pod annotations (#662)
 * Make securityContext configurable for jmx exporter init container (#670)
 
 ## 1.15.3
