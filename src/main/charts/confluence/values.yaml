@@ -951,8 +951,8 @@ monitoring:
   #
   jmxExporterInitContainer:
 
-    # -- Whether to run jmx exporter init container as root to be able to copy jmx exporter binary to shared home volume.
-    # Set to false if running containers as root is not allowed in the cluster
+    # -- Whether to run JMX exporter init container as root to copy JMX exporter binary to shared home volume.
+    # Set to false if running containers as root is not allowed in the cluster.
     #
     runAsRoot: true
 

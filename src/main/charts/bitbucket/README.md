@@ -174,7 +174,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.jmxExporterImageTag | string | `"0.18.0"` | Image tag to be used to pull jmxExporterImageRepo  |
 | monitoring.jmxExporterInitContainer | object | `{"customSecurityContext":{},"runAsRoot":true}` | JMX exporter init container configuration  |
 | monitoring.jmxExporterInitContainer.customSecurityContext | object | `{}` | Custom SecurityContext for the jmx exporter init container  |
-| monitoring.jmxExporterInitContainer.runAsRoot | bool | `true` | Whether to run jmx exporter init container as root to be able to copy jmx exporter binary to shared home volume. Set to false if running containers as root is not allowed in the cluster  |
+| monitoring.jmxExporterInitContainer.runAsRoot | bool | `true` | Whether to run JMX exporter init container as root to copy JMX exporter binary to shared home volume. Set to false if running containers as root is not allowed in the cluster.  |
 | monitoring.jmxExporterPort | int | `9999` | Port number on which metrics will be available  |
 | monitoring.jmxExporterPortType | string | `"ClusterIP"` | JMX exporter port type  |
 | monitoring.jmxServiceAnnotations | object | `{}` | Annotations added to the jmx service  |
