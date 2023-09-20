@@ -2,6 +2,35 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.3
+    created: "2023-09-20T23:33:30.705188383Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: c40ecb859ef32678ffe8f684037b3c81e4a9e9170efb81cd9f7e2d3525969be7
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.16.1/bamboo-1.16.1.tgz
+    version: 1.16.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Allow templating of pod annotations (#662)"
         - "Make securityContext configurable for jmx exporter init container (#670)"
@@ -900,6 +929,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.3
+    created: "2023-09-20T23:33:30.844063129Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: d93810fbb949449d793bfe5f745b6978fe0d34f5dd50f5499de1aff053791604
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.16.1/bamboo-agent-1.16.1.tgz
+    version: 1.16.1
+  - annotations:
       artifacthub.io/changes: '- "Make securityContext configurable for jmx exporter
         init container (#670)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -1750,6 +1808,36 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Make it possible to use one Bitbucket svc for http
+        and ssh without an ingress (#675)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.5
+    created: "2023-09-20T23:33:31.000730872Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 39781034c0646b37ea9141a26dbc1f0ae934f3e91f60d1e97bc492268807a763
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.16.1/bitbucket-1.16.1.tgz
+    version: 1.16.1
   - annotations:
       artifacthub.io/changes: |-
         - "Allow templating of pod annotations (#662)"
@@ -3163,6 +3251,35 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.1
+    created: "2023-09-20T23:33:31.325377521Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 49299d50b1e7ce5c962d85addd7cdbeb9857700679c87a7e80daa440c7e2cd2d
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.16.1/confluence-1.16.1.tgz
+    version: 1.16.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Allow templating of pod annotations (#662)"
         - "Make securityContext configurable for jmx exporter init container (#670)"
@@ -4538,6 +4655,35 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.1.5
+    created: "2023-09-20T23:33:31.480467989Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 9a4bd78675b80738f50c968653e7dc03dda34ce7a2fd08bce1480b5d2111b2eb
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.16.1/crowd-1.16.1.tgz
+    version: 1.16.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Allow templating of pod annotations (#662)"
         - "Make securityContext configurable for jmx exporter init container (#670)"
@@ -5739,6 +5885,36 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.10
+    created: "2023-09-20T23:33:31.617788801Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: a98a0089bebf5b5fffc5d083277838a2c20e55e68647f31f281c677f4e3b8d83
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.16.1/jira-1.16.1.tgz
+    version: 1.16.1
   - annotations:
       artifacthub.io/changes: |-
         - "Allow templating of pod annotations (#662)"
@@ -7066,4 +7242,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-09-18T06:13:49.451199428Z"
+generated: "2023-09-20T23:33:31.619552316Z"
