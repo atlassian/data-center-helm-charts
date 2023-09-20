@@ -178,6 +178,8 @@ spec:
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
             {{- include "bitbucket.sysadminEnvVars" . | nindent 12 }}
             {{- include "bitbucket.elasticSearchEnvVars" . | nindent 12 }}
+            - name: PLUGIN_SSH_PORT
+              value: {{ .Values.bitbucket.ports.ssh | quote }}
             {{ if .Values.ingress.host }}
             - name: SERVER_PROXY_NAME
               value: {{ .Values.ingress.host | quote }}

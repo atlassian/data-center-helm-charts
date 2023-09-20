@@ -8,6 +8,7 @@ import test.helm.Helm;
 import test.model.Kind;
 import test.model.Product;
 import test.model.Service;
+import test.model.StatefulSet;
 
 import java.util.Map;
 
@@ -62,5 +63,42 @@ class BitbucketSshServiceTest {
 
         resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv().
                 assertHasValue("PLUGIN_SSH_BASEURL", "ssh://hostname:7999/");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, mode = INCLUDE, names = "bitbucket")
+    void bitbucket_default_ssh_svc_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+        var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+        assertThat(service.getPort("ssh")).hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(7999));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, mode = INCLUDE, names = "bitbucket")
+    void bitbucket_override_ssh_svc_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".service.sshPort", "23"));
+        var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+        assertThat(service.getPort("ssh")).hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(23));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, mode = INCLUDE, names = "bitbucket")
+    void bitbucket_default_ssh_listen_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        statefulSet.getContainer("bitbucket").getEnv().assertHasValue("PLUGIN_SSH_PORT", "7999");
+        assertThat(statefulSet.getContainer("bitbucket").getPort("ssh").path("containerPort")).hasValueEqualTo(7999);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, mode = INCLUDE, names = "bitbucket")
+    void bitbucket_override_ssh_listen_port(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".ports.ssh", "7000"
+        ));
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        statefulSet.getContainer("bitbucket").getEnv().assertHasValue("PLUGIN_SSH_PORT", "7000");
+        assertThat(statefulSet.getContainer("bitbucket").getPort("ssh").path("containerPort")).hasValueEqualTo(7000);
     }
 }
