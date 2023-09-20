@@ -70,7 +70,7 @@ class BitbucketSshServiceTest {
     void bitbucket_default_ssh_svc_port(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
         var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
-        assertThat(service.getPort("ssh")).hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(22));
+        assertThat(service.getPort("ssh")).hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(7999));
     }
 
     @ParameterizedTest
