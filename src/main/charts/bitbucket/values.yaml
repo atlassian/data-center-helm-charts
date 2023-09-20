@@ -471,9 +471,13 @@ bitbucket:
   #
   service:
 
-    # -- The port on which the Bitbucket K8s Service will listen
+    # -- The port on which the Bitbucket K8s HTTP Service will listen
     #
     port: 80
+
+    # -- The port on which the Bitbucket K8s SSH Service will listen
+    #
+    sshPort: 7999
 
     # -- The type of K8s service to use for Bitbucket
     #
@@ -575,7 +579,7 @@ bitbucket:
     #
     http: 7990
 
-    # -- The port on which the Bitbucket container listens for SSH traffic
+    # -- The port on which the Bitbucket SSH service will listen on. Must be within 1024-65535 range
     #
     ssh: 7999
 

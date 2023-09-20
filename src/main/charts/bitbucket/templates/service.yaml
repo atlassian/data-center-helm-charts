@@ -25,7 +25,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.bitbucket.ports.ssh }}
+    - port: {{ .Values.bitbucket.service.sshPort }}
       targetPort: ssh
       protocol: TCP
       name: ssh
