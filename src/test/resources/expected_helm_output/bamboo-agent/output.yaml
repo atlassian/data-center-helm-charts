@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-bamboo-agent
   labels:
-    helm.sh/chart: bamboo-agent-1.16.0
+    helm.sh/chart: bamboo-agent-1.16.1
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
     app.kubernetes.io/version: "9.3.3"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-agent-jvm-config
   labels:
-    helm.sh/chart: bamboo-agent-1.16.0
+    helm.sh/chart: bamboo-agent-1.16.1
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
     app.kubernetes.io/version: "9.3.3"
@@ -32,7 +32,7 @@ kind: Deployment
 metadata:
   name: unittest-bamboo-agent
   labels:
-    helm.sh/chart: bamboo-agent-1.16.0
+    helm.sh/chart: bamboo-agent-1.16.1
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
     app.kubernetes.io/version: "9.3.3"
@@ -46,7 +46,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: bd2224471332549f54191fd26e6bf9e55ec72d0d21e64e4e2b3405efcc79ae54
+        checksum/config-jvm: 4a87fc1f68928528293a2759633ebeae7390cd5c5c6554d013a16d9a67d563ce
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent

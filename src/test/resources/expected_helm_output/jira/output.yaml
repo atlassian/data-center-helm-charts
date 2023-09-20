@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -37,7 +37,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jmx-config
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -63,7 +63,7 @@ kind: Service
 metadata:
   name: unittest-jira-jmx
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -85,7 +85,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -109,7 +109,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -124,7 +124,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 69130bff4ac576a8d8ebca096092601f35eab6120b1aa3399e5f3c212ef66b9a
+        checksum/config-jvm: b4210e09400c4596286691bcfa29b5c3581c1fe1cb6f6e8e45058a7ba28c622e
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -250,7 +250,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"
@@ -282,7 +282,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-1.16.0
+    helm.sh/chart: jira-1.16.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.4.10"

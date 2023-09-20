@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.16.0
+version: 1.16.1
 appVersion: 8.5.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,9 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Allow templating of pod annotations (#662)"
-    - "Make securityContext configurable for jmx exporter init container (#670)"
-    - "Add user provided certificates to the default Java truststore (#663)"
+    - "Update Helm chart version"
 
 dependencies:
 - name: common
