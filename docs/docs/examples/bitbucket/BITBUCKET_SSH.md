@@ -131,4 +131,8 @@ ingress:
 
 The above service annotations are specific to the Classic LoadBalancer, however, you can provide [NLB](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html){.external} specific [annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/service/annotations/){.external} as well.
 
-The default `bitbucket.service.sshPort` is set to `22` so that AWS can create a listener for this port, and as a result your ssh git URL will look like `ssh://bitbucket.example.com/project/repo`. Even though `ingress` is disabled, `ingress.host` needs to be set because it is used in a few conditions in the StatefulSet template.
+The default `bitbucket.service.sshPort` is set to `22` so that AWS can create a listener for this port, and as a result your ssh git URL will look like `ssh://bitbucket.example.com/project/repo`. 
+
+!!!info "Ingress host"
+
+    Even though `ingress` is disabled, `ingress.host` needs to be set because it is used in a few conditions in the StatefulSet template.
