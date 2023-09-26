@@ -130,7 +130,7 @@ Define pod annotations here to allow template overrides when used as a sub chart
 */}}
 {{- define "bitbucket.podAnnotations" -}}
 {{- range $key, $value := .Values.podAnnotations }}
-{{ $key }}: {{ tpl $value $ }}
+{{ $key }}: {{ tpl $value $ | quote }}
 {{- end }}
 {{- end }}
 

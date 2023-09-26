@@ -44,6 +44,11 @@ volumes:
       # this is the default storageclass name created when deploying the provisioner
       storageClassName: nfs-client
 
+podAnnotations:
+  annotation: "{{ \"podOfTucuxis\" | upper }}"
+  quote: "true"
+  normal: annotation-comes-here
+
 # KinD is deployed with custom settings, namely extraPortMappings for ports 80 and 443
 # to make sure ingress traffic is available at http://localhost
 ingress:
