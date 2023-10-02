@@ -25,7 +25,9 @@ class PodAnnotationsTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "podAnnotations.podAnnotation1", "podOfHumpbacks",
                 "podAnnotations.podAnnotation2", "podOfOrcas",
-                "podAnnotations.podAnnotation3", "'{{ \"podOfTucuxis\" | b64enc }}'"
+                "podAnnotations.podAnnotation3", "'{{ \"podOfTucuxis\" | b64enc }}'",
+                "podAnnotations.podAnnotation4", "'{{ \"podOfTucuxis\" | upper }}'"
+
         ));
 
         final var annotations = resources.getStatefulSet(product.getHelmReleaseName()).getPodMetadata().get("annotations");
@@ -33,7 +35,8 @@ class PodAnnotationsTest {
         assertThat(annotations).isObject(Map.of(
                 "podAnnotation1", "podOfHumpbacks",
                 "podAnnotation2", "podOfOrcas",
-                "podAnnotation3", b64enc("podOfTucuxis")
+                "podAnnotation3", "'" + b64enc("podOfTucuxis") + "'",
+                "podAnnotation4", "'PODOFTUCUXIS'"
         ));
     }
 
@@ -43,7 +46,8 @@ class PodAnnotationsTest {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "podAnnotations.podAnnotation1", "podOfHumpbacks",
                 "podAnnotations.podAnnotation2", "podOfOrcas",
-                "podAnnotations.podAnnotation3", "'{{ \"podOfTucuxis\" | b64enc }}'"
+                "podAnnotations.podAnnotation3", "'{{ \"podOfTucuxis\" | b64enc }}'",
+                "podAnnotations.podAnnotation4", "'{{ \"podOfTucuxis\" | upper }}'"
         ));
 
         final var annotations = resources.getDeployment(product.getHelmReleaseName()).getPodMetadata().get("annotations");
@@ -51,7 +55,8 @@ class PodAnnotationsTest {
         assertThat(annotations).isObject(Map.of(
                 "podAnnotation1", "podOfHumpbacks",
                 "podAnnotation2", "podOfOrcas",
-                "podAnnotation3", b64enc("podOfTucuxis")
+                "podAnnotation3", "'" + b64enc("podOfTucuxis") + "'",
+                "podAnnotation4", "'PODOFTUCUXIS'"
         ));
     }
 
