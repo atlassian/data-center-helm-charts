@@ -543,6 +543,26 @@ bitbucket:
     #
     annotations: {}
 
+  hazelcastService:
+
+    # -- Enable or disable an additional Hazelcast service Bitbucket nodes use to join a cluster
+    # It is recommended to create a separate Hazelcast service if Bitbucket service
+    # is of LoadBalancer type (e.g. NLB), i.e. not expose Hazelcast port at all
+    #
+    enabled: false
+
+    # -- The port on which the Bitbucket K8s Hazelcast Service will listen
+    #
+    port: 5701
+
+    # -- The type of the Hazelcast K8s service to use for Bitbucket
+    #
+    type: ClusterIP
+
+    # -- Additional annotations to apply to the Hazelcast Service
+    #
+    annotations: {}
+
   # Standard K8s field that holds pod-level security attributes and common container settings.
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.

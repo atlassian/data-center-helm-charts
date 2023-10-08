@@ -131,4 +131,31 @@ class ServiceTest {
                 "confluence", "qwerty-synchrony"
         ));
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket", "confluence"})
+    void dedicated_hazelcast_service(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".hazelcastService.enabled", "true"
+        ));
+
+        final var hazelcastService = resources.get(Kind.Service, Service.class, product.getHelmReleaseName() + "-hazelcast");
+
+        assertThat(hazelcastService.getType()).hasTextEqualTo("ClusterIP");
+        assertThat(hazelcastService.getPort("hazelcast"))
+                .hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(5701));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+        assertThat(service.getPort("hazelcast")).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket", "confluence"})
+    void hazelcast_one_service(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+        assertThat(service.getPort("hazelcast"))
+                .hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(5701));
+    }
 }

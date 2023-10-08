@@ -1,0 +1,21 @@
+{{ if .Values.confluence.hazelcastService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-hazelcast
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.confluence.hazelcastService.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.confluence.service.type }}
+  ports:
+    - port: {{ .Values.confluence.ports.hazelcast }}
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    {{- include "common.labels.selectorLabels" . | nindent 4 }}
+{{ end }}
