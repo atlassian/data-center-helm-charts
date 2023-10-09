@@ -101,6 +101,9 @@ kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-t
 
 VAULT_TOKEN=$(kubectl logs curl-token | jq .auth.client_token | sed 's/"//g')
 
+kubectl logs curl-token
+echo ">>> ${VAULT_TOKEN}"
+
 if [ -z "${VAULT_TOKEN}" ]; then
   echo "[ERROR]: Can't get Vault token. Vault response was:"
   kubectl logs curl-token
