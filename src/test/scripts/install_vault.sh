@@ -93,7 +93,7 @@ kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/dbpassword\" {capa
 
 echo "[INFO]: Testing Kubernetes role"
 
-kubectl run --attach=true curl-token --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
+kubectl run curl-token --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
 
 kubectl wait  --for=jsonpath='{.status.phase}'=Succeeded pod/curl-token
 
