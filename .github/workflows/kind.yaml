@@ -53,6 +53,10 @@ jobs:
         run: |
           src/test/scripts/kind/configure_kind.sh
 
+      - name: Deploy and Configure Vault
+        run: |
+          src/test/scripts/install_vault.sh
+
       - name: Deploy postgres database
         run: |
           source src/test/scripts/kind/deploy_app.sh
