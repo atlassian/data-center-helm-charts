@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
+echo "[INFO]: Creating vault namespace"
 kubectl create namespace vault
+echo "[INFO]: Installing Vault helm chart"
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm install vault hashicorp/vault \
      -n vault \
      --version 0.25.0
 
+echo "[INFO]: Waiting for Vault pod to be running"
+
 sleep 60
+
+echo "[INFO]: Getting keys"
 
 kubectl exec vault-0 -n vault \
    -- vault operator init \
@@ -16,16 +22,24 @@ kubectl exec vault-0 -n vault \
 
 VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_hex[]" cluster-keys.json)
 
+echo "[INFO]: Unsealing Vault"
+
 kubectl exec vault-0 -n vault \
         -- vault operator unseal $VAULT_UNSEAL_KEY
 
 VAULT_ROOT_TOKEN=$(jq -r ".root_token" cluster-keys.json)
 
+echo "[INFO]: Creating token-reviewer service account"
+
 kubectl create sa token-reviewer -n vault
+
+echo "[INFO]: Creating token-reviewer vault-client-auth-delegator ClusterRoleBinding"
 
 kubectl create clusterrolebinding vault-client-auth-delegator \
         --clusterrole=system:auth-delegator \
         --serviceaccount=vault:token-reviewer
+
+echo "[INFO]: Creating token-reviewer-jwt secrtet"
 
 kubectl apply -f - <<EOF
 apiVersion: v1
@@ -38,25 +52,40 @@ metadata:
 type: kubernetes.io/service-account-token
 EOF
 
+echo "[INFO]: Getting token-reviewer jwt token"
+
 JWT_REVIEW_TOKEN=$(kubectl get secrets token-reviewer-jwt -n vault -o jsonpath='{.data.token}' | base64 -d)
+
+echo "[INFO]: Logging in"
 
 kubectl exec vault-0 -n vault -- vault login "${VAULT_ROOT_TOKEN}"
 
+echo "[INFO]: Enable kv2 secre engine at database path"
+
 kubectl exec vault-0 -n vault -- vault secrets enable -version=2 -path="database" kv
+
+echo "[INFO]: Writing dbpassword secret"
 
 kubectl exec vault-0 -n vault -- vault kv put database/dbpassword password=${DC_APP}pwd
 
+echo "[INFO]: Enabling Kubernetes auth method"
+
 kubectl exec vault-0 -n vault -- vault auth enable kubernetes
+
+echo "[INFO]: Configuring Kubernetes auth method"
 
 kubectl exec vault-0 -n vault -- vault write auth/kubernetes/config \
         token_reviewer_jwt="${JWT_REVIEW_TOKEN}" \
         kubernetes_host=https://kubernetes.default.svc.cluster.local \
         kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
+echo "[INFO]: Creating dbpassword role"
+
 kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/dbpassword \
         bound_service_account_names="*" \
         bound_service_account_namespaces="*" \
-        policies=db-password \
+        policies=dbpassword \
         ttl=1h
 
-kubectl exec vault-0 -n vault -- echo 'path "database/dbpassword" {capabilities = ["list","read"]}' | vault policy-write db-password -
+echo "[INFO]: Creating dbpassword policy"
+kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/dbpassword\" {capabilities = [\"list\",\"read\"]}' | vault policy write dbpassword -"
