@@ -10,7 +10,8 @@ helm install vault hashicorp/vault \
 
 echo "[INFO]: Waiting for Vault pod to be running"
 
-sleep 60
+kubectl wait --for=jsonpath='{.status.phase}'=Running pod/curl-token -n vault
+
 
 echo "[INFO]: Getting keys"
 
@@ -93,14 +94,20 @@ kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/dbpassword\" {capa
 
 echo "[INFO]: Testing Kubernetes role"
 
-kubectl run curl-token --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
+kubectl run curl-token --restart=Never --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
 
 kubectl wait  --for=jsonpath='{.status.phase}'=Succeeded pod/curl-token
 
 VAULT_TOKEN=$(kubectl logs curl-token | jq .auth.client_token | sed 's/"//g')
 
-kubectl run curl-secret --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://localhost:8200/v1/database/data/database/dbpassword
+if [ -z "${VAULT_TOKEN}" ]; then
+  echo "[ERROR]: Can't get Vault token. Vault response was:"
+  kubectl logs curl-token
+  exit 1
+fi
 
-kubectl wait  --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
+kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://localhost:8200/v1/database/data/database/dbpassword
+
+kubectl wait --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
 
 kubectl logs curl-secret
