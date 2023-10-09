@@ -4,9 +4,9 @@ kubectl create namespace vault
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm install vault hashicorp/vault \
      -n vault \
-     --version 0.25.0 \
-     --timeout=180s \
-     --wait
+     --version 0.25.0
+
+sleep 60
 
 kubectl exec vault-0 -n vault \
    -- vault operator init \
