@@ -10,7 +10,7 @@ helm install vault hashicorp/vault \
 
 echo "[INFO]: Waiting for Vault pod to be running"
 
-kubectl wait --for=jsonpath='{.status.phase}'=Running pod/curl-token -n vault
+kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Running pod/curl-token -n vault
 
 
 echo "[INFO]: Getting keys"
@@ -96,7 +96,7 @@ echo "[INFO]: Testing Kubernetes role"
 
 kubectl run curl-token --restart=Never --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
 
-kubectl wait  --for=jsonpath='{.status.phase}'=Succeeded pod/curl-token
+kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-token
 
 VAULT_TOKEN=$(kubectl logs curl-token | jq .auth.client_token | sed 's/"//g')
 
@@ -108,6 +108,6 @@ fi
 
 kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://localhost:8200/v1/database/data/database/dbpassword
 
-kubectl wait --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
+kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
 
 kubectl logs curl-secret
