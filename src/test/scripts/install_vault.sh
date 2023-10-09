@@ -93,10 +93,8 @@ kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/dbpassword\" {capa
 
 echo "[INFO]: Testing Kubernetes role"
 
-kubectl run curl-token --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
+kubectl port-forward vault-0 8200:8200 -n vault &
 
-VAULT_TOKEN=$(kubectl logs curl-token | jq .auth.client_token | sed 's/"//g')
+VAULT_TOKEN=$(curl -s -X "POST" "http://localhost:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}" | jq .auth.client_token | sed 's/"//g')
 
-kubectl run curl-secret --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://localhost:8200/v1/database/data/database/dbpassword
-
-kubectl logs curl-secret
+curl -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://localhost:8200/v1/database/data/database/dbpassword
