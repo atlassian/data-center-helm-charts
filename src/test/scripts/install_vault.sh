@@ -10,7 +10,7 @@ helm install vault hashicorp/vault \
 
 echo "[INFO]: Waiting for Vault pod to be running"
 
-kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Running pod/curl-token -n vault
+kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Running pod/curl-0 -n vault
 
 
 echo "[INFO]: Getting keys"
