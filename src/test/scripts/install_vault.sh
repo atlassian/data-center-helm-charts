@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+NAMESPACE=$1
+ATLASSIAN_NAMESPACE=${NAMESPACE:-atlassian}
 
 echo "[INFO]: Creating vault namespace"
 kubectl create namespace vault
@@ -85,7 +87,7 @@ echo "[INFO]: Creating dbpassword role"
 
 kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/dbpassword \
         bound_service_account_names="*" \
-        bound_service_account_namespaces="*" \
+        bound_service_account_namespaces="${ATLASSIAN_NAMESPACE}" \
         policies=dbpassword \
         ttl=1h
 
@@ -94,8 +96,30 @@ kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/data/dbpassword\" 
 
 
 echo "[INFO]: Testing Kubernetes role"
+echo "[INFO]: Creating a test service account ${DC_APP}-test in ${ATLASSIAN_NAMESPACE} namespace"
 
-kubectl run curl-token --restart=Never --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_REVIEW_TOKEN}\"}"
+kubectl create sa ${DC_APP}-test -n ${ATLASSIAN_NAMESPACE}
+
+echo "[INFO]: Creating ${DC_APP}-jwt secrtet in ${ATLASSIAN_NAMESPACE} namespace"
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ${DC_APP}-test-jwt-token
+  namespace: ${ATLASSIAN_NAMESPACE}
+  annotations:
+    kubernetes.io/service-account.name: ${DC_APP}-test
+type: kubernetes.io/service-account-token
+EOF
+
+echo "[INFO]: Getting ${DC_APP}-test jwt token"
+
+JWT_TEST_TOKEN=$(kubectl get secrets ${DC_APP}-test-jwt-token -n ${ATLASSIAN_NAMESPACE} -o jsonpath='{.data.token}' | base64 -d)
+
+echo "[INFO]: Getting Vault token"
+
+kubectl run curl-token --restart=Never --image appropriate/curl -- -s -X "POST" "http://vault-internal.vault.svc.cluster.local:8200/v1/auth/kubernetes/login" -d "{\"role\": \"dbpassword\", \"jwt\": \"${JWT_TEST_TOKEN}\"}"
 
 kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-token
 
@@ -106,6 +130,8 @@ if [ -z "${VAULT_TOKEN}" ]; then
   kubectl logs curl-token
   exit 1
 fi
+
+echo "[INFO]: Getting Vault secret"
 
 kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://vault-internal.vault.svc.cluster.local:8200/v1/database/data/dbpassword
 

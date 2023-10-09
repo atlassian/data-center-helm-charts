@@ -55,7 +55,7 @@ jobs:
 
       - name: Deploy and Configure Vault
         run: |
-          src/test/scripts/install_vault.sh
+          src/test/scripts/install_vault.sh atlassian
 
       - name: Deploy postgres database
         run: |
