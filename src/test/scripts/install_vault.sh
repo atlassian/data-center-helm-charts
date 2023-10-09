@@ -101,9 +101,6 @@ kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-t
 
 VAULT_TOKEN=$(kubectl logs curl-token | jq .auth.client_token | sed 's/"//g')
 
-kubectl logs curl-token
-echo ">>> ${VAULT_TOKEN}"
-
 if [ -z "${VAULT_TOKEN}" ]; then
   echo "[ERROR]: Can't get Vault token. Vault response was:"
   kubectl logs curl-token
@@ -114,4 +111,10 @@ kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header 
 
 kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
 
-kubectl logs curl-secret
+PASSWORD=$(kubectl logs curl-secret | jq .data.data.password | sed 's/"//g')
+
+if [ $PASSWORD != ${DC_APP}pwd ]; then
+  echo "[ERROR]: Can't get password or passwords do not match. Response from Vault:"
+  kubectl logs curl-secret
+  exit 1
+fi
