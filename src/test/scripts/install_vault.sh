@@ -90,7 +90,7 @@ kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/dbpassword \
         ttl=1h
 
 echo "[INFO]: Creating dbpassword policy"
-kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/dbpassword\" {capabilities = [\"list\",\"read\"]}' | vault policy write dbpassword -"
+kubectl exec vault-0 -n vault -- sh -c "echo 'path \"database/data/dbpassword\" {capabilities = [\"list\",\"read\"]}' | vault policy write dbpassword -"
 
 
 echo "[INFO]: Testing Kubernetes role"
@@ -110,7 +110,7 @@ if [ -z "${VAULT_TOKEN}" ]; then
   exit 1
 fi
 
-kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://vault-internal.vault.svc.cluster.local:8200/v1/database/data/dbpassword
+kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: \"${VAULT_TOKEN}\"" http://vault-internal.vault.svc.cluster.local:8200/v1/database/data/dbpassword
 
 kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
 
