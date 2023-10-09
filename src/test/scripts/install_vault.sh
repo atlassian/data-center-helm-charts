@@ -110,7 +110,7 @@ if [ -z "${VAULT_TOKEN}" ]; then
   exit 1
 fi
 
-kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: "${VAULT_TOKEN}" http://vault-internal.vault.svc.cluster.local:8200/v1/database/data/dbpassword
+kubectl run curl-secret --restart=Never --image appropriate/curl -- -s --header "X-Vault-Token: ${VAULT_TOKEN}" http://vault-internal.vault.svc.cluster.local:8200/v1/database/data/dbpassword
 
 kubectl wait --timeout=60s --for=jsonpath='{.status.phase}'=Succeeded pod/curl-secret
 
