@@ -70,7 +70,7 @@ create_secret() {
   kubectl exec vault-0 -n vault -- vault kv put database/dbpassword password=${DC_APP}pwd
 }
 
-enable_k8s_auth_method {
+enable_k8s_auth_method() {
   echo "[INFO]: Getting token-reviewer jwt token"
   echo "[INFO]: Enabling Kubernetes auth method"
   kubectl exec vault-0 -n vault -- vault auth enable kubernetes
