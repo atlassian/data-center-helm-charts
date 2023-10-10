@@ -47,6 +47,11 @@ deploy_app() {
   sed -i "s/DC_APP_REPLACEME/${DC_APP}/g" ../../../test/config/kind/common-values.yaml
   sed -i "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ../../../test/config/kind/common-values.yaml
 
+ if [ ${DC_APP} == "jira" ]; then
+    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s"
+ fi
+
+
   helm upgrade --install ${DC_APP} ./ \
                -f ../../../test/config/kind/common-values.yaml \
                -n atlassian \
