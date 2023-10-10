@@ -24,9 +24,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+  {{- if not .Values.confluence.hazelcastService.enabled }}
     - port: {{ .Values.confluence.ports.hazelcast }}
       targetPort: hazelcast
       protocol: TCP
       name: hazelcast
+  {{- end }}
   selector:
     {{- include "common.labels.selectorLabels" . | nindent 4 }}

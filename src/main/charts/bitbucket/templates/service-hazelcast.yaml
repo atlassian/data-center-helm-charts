@@ -1,0 +1,21 @@
+{{ if .Values.bitbucket.hazelcastService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-hazelcast
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.bitbucket.hazelcastService.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.bitbucket.service.type }}
+  ports:
+    - port: {{ .Values.bitbucket.ports.hazelcast }}
+      targetPort: hazelcast
+      protocol: TCP
+      name: hazelcast
+  selector:
+    {{- include "common.labels.selectorLabels" . | nindent 4 }}
+{{ end }}

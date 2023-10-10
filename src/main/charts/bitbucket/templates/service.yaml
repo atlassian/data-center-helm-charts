@@ -29,9 +29,11 @@ spec:
       targetPort: ssh
       protocol: TCP
       name: ssh
+  {{- if not .Values.bitbucket.hazelcastService.enabled }}
     - port: {{ .Values.bitbucket.ports.hazelcast }}
       targetPort: hazelcast
       protocol: TCP
       name: hazelcast
+  {{- end }}
   selector:
     {{- include "common.labels.selectorLabels" . | nindent 4 }}

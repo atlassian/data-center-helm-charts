@@ -49,6 +49,10 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.elasticSearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the Elasticsearch password.  |
 | bitbucket.elasticSearch.credentials.secretName | string | `nil` | from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | bitbucket.elasticSearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the Elasticsearch username.  |
+| bitbucket.hazelcastService.annotations | object | `{}` | Additional annotations to apply to the Hazelcast Service  |
+| bitbucket.hazelcastService.enabled | bool | `false` | Enable or disable an additional Hazelcast service that Bitbucket nodes can use to join a cluster. It is recommended to create a separate Hazelcast service if the Bitbucket service uses a LoadBalancer type (e.g., NLB), ensuring that the Hazelcast port is not exposed at all. |
+| bitbucket.hazelcastService.port | int | `5701` | The port on which the Bitbucket K8s Hazelcast Service will listen  |
+| bitbucket.hazelcastService.type | string | `"ClusterIP"` | The type of the Hazelcast K8s service to use for Bitbucket  |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key  |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | bitbucket.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
