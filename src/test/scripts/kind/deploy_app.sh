@@ -57,14 +57,14 @@ deploy_app() {
 
   # testing
  if [ ${DC_APP} == "jira" ]; then
-    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s --set jira.additionalEnvironmentVariables[0].name=ATL_JDBC_SECRET_CLASS --set jira.additionalEnvironmentVariables[0].value=com.atlassian.secrets.store.vault.SecretStore --set jira.additionalEnvironmentVariables[1].name=SECRET_STORE_VAULT_KUBE_AUTH_ROLE --set jira.additionalEnvironmentVariables[1].value=dbpassword"
+    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s --set jira.additionalEnvironmentVariables[0].name=ATL_JDBC_SECRET_CLASS --set jira.additionalEnvironmentVariables[0].value=com.atlassian.secrets.store.vault.VaultSecretStore --set jira.additionalEnvironmentVariables[1].name=SECRET_STORE_VAULT_KUBE_AUTH_ROLE --set jira.additionalEnvironmentVariables[1].value=dbpassword"
  fi
 
 
   helm upgrade --install ${DC_APP} ./ \
                -f ../../../test/config/kind/common-values.yaml \
                -n atlassian \
-               --wait --timeout=360s \
+               --wait --timeout=60s \
                --debug ${IMAGE_OVERRIDE}
 
   if [ ${DC_APP} == "bamboo" ]; then
