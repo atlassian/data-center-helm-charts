@@ -57,7 +57,7 @@ deploy_app() {
 
   # testing
  if [ ${DC_APP} == "jira" ]; then
-    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s --set jira.additionalEnvironmentVariables[0].name=ATL_JDBC_SECRET_CLASS --set jira.additionalEnvironmentVariables[0].value=com.atlassian.secrets.store.vault.VaultSecretStore --set jira.additionalEnvironmentVariables[1].name=SECRET_STORE_VAULT_KUBE_AUTH_ROLE --set jira.additionalEnvironmentVariables[1].value=dbpassword"
+    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s --set jira.additionalEnvironmentVariables[0].name=ATL_JDBC_SECRET_CLASS --set jira.additionalEnvironmentVariables[0].value=com.atlassian.secrets.store.vault.VaultSecretStore --set jira.additionalEnvironmentVariables[1].name=SECRET_STORE_VAULT_KUBE_AUTH_ROLE --set jira.additionalEnvironmentVariables[1].value=dbpassword --set jira.additionalEnvironmentVariables[2].name=ATL_UNSET_SENSITIVE_ENV_VARS --set jira.additionalEnvironmentVariables[2].value=\"false\""
  fi
 
 
