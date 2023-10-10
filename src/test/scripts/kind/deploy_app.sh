@@ -17,10 +17,18 @@ deploy_postgres() {
 create_secrets() {
   echo "[INFO]: Creating db, admin and license secrets"
 
-  kubectl create secret generic ${DC_APP}-db-creds \
-          --from-literal=username="${DC_APP}" \
-          --from-literal=password="${DC_APP}pwd" \
-          -n atlassian
+  if [ ${DC_APP} == "jira" ]; then
+     kubectl create secret generic ${DC_APP}-db-creds \
+              --from-literal=username=jira \
+              --from-literal=password="{\"mount\": \"database\", \"path\": \"dbpassword\", \"key\": \"password\", \"endpoint\": \"http://vault-internal.vault.svc.cluster.local:8200\", \"authenticationType\": \"KUBERNETES\"}" \
+              -n atlassian
+  else
+    kubectl create secret generic ${DC_APP}-db-creds \
+            --from-literal=username="${DC_APP}" \
+            --from-literal=password="${DC_APP}pwd" \
+            -n atlassian
+  fi
+
   kubectl create secret generic ${DC_APP}-admin \
           --from-literal=username="admin" \
           --from-literal=password="${DC_APP}pwd" \

@@ -25,6 +25,10 @@ DC_APP_REPLACEME:
   additionalCertificates:
     secretName: certificate
 
+  additionalEnvironmentVariables:
+    - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
+      value: dbpassword
+
 database:
   type: DB_TYPE_REPLACEME
   url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME
@@ -73,9 +77,4 @@ synchrony:
   additionalCertificates:
     secretName: certificate
 
-jira:
-  additionalEnvironmentVariables:
-    - name: ATL_JDBC_PASSWORD
-      value: "{\"mount\": \"database\", \"path\": \"dbpassword\", \"key\": \"password\", \"endpoint\": \"http://vault-internal.vault.svc.cluster.local:8200\", \"authenticationType\": \"KUBERNETES\"}"
-    - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
-      value: dbpassword
+
