@@ -25,10 +25,6 @@ DC_APP_REPLACEME:
   additionalCertificates:
     secretName: certificate
 
-  additionalEnvironmentVariables:
-    - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
-      value: dbpassword
-
 database:
   type: DB_TYPE_REPLACEME
   url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME

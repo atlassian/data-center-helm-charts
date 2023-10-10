@@ -55,8 +55,9 @@ deploy_app() {
   sed -i "s/DC_APP_REPLACEME/${DC_APP}/g" ../../../test/config/kind/common-values.yaml
   sed -i "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ../../../test/config/kind/common-values.yaml
 
+  # testing
  if [ ${DC_APP} == "jira" ]; then
-    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s"
+    IMAGE_OVERRIDE="--set image.repository=eivantsov/jira --set image.tag=vaultk8s --set jira.additionalEnvironmentVariables[0].name=ATL_JDBC_SECRET_CLASS --set jira.additionalEnvironmentVariables[0].value=com.atlassian.secrets.store.vault.SecretStore --set jira.additionalEnvironmentVariables[1].name=SECRET_STORE_VAULT_KUBE_AUTH_ROLE --set jira.additionalEnvironmentVariables[1].value=dbpassword"
  fi
 
 
