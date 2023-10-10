@@ -64,7 +64,7 @@ deploy_app() {
   helm upgrade --install ${DC_APP} ./ \
                -f ../../../test/config/kind/common-values.yaml \
                -n atlassian \
-               --wait --timeout=60s \
+               --wait --timeout=360s \
                --debug ${IMAGE_OVERRIDE}
 
   if [ ${DC_APP} == "bamboo" ]; then
