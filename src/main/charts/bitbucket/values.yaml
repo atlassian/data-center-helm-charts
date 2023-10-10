@@ -545,10 +545,9 @@ bitbucket:
 
   hazelcastService:
 
-    # -- Enable or disable an additional Hazelcast service Bitbucket nodes use to join a cluster
-    # It is recommended to create a separate Hazelcast service if Bitbucket service
-    # is of LoadBalancer type (e.g. NLB), i.e. not expose Hazelcast port at all
-    #
+    # -- Enable or disable an additional Hazelcast service that Bitbucket nodes can use to join a cluster.
+    # It is recommended to create a separate Hazelcast service if the Bitbucket service
+    # uses a LoadBalancer type (e.g., NLB), ensuring that the Hazelcast port is not exposed at all.
     enabled: false
 
     # -- The port on which the Bitbucket K8s Hazelcast Service will listen

@@ -531,10 +531,9 @@ confluence:
 
   hazelcastService:
 
-    # -- Enable or disable an additional Hazelcast service Confluence nodes use to join a cluster
-    # It is recommended to create a separate Hazelcast service if Confluence service
-    # is of LoadBalancer type (e.g. NLB), i.e. not expose Hazelcast port at all
-    #
+    # -- Enable or disable an additional Hazelcast service that Confluence nodes can use to join a cluster.
+    # It is recommended to create a separate Hazelcast service if the Confluence service
+    # uses a LoadBalancer type (e.g., NLB), ensuring that the Hazelcast port is not exposed at all.
     enabled: false
 
     # -- The port on which the Confluence K8s Hazelcast Service will listen
