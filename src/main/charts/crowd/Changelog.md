@@ -1,6 +1,16 @@
 # Change Log
 
 
+## 1.16.3
+
+**Release date:** 2023-10-11
+
+![AppVersion: 5.2.0](https://img.shields.io/static/v1?label=AppVersion&message=5.2.0&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update Helm chart version
+
 ## 1.16.2
 
 **Release date:** 2023-10-8
