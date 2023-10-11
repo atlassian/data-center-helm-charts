@@ -6,6 +6,35 @@ entries:
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.3.3
+    created: "2023-10-11T21:45:46.695383544Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 80c40900bdd32537760016efb73b87c5d9f44bed161d338d73362e6f73ee372f
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.16.4/bamboo-1.16.4.tgz
+    version: 1.16.4
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.3
     created: "2023-10-11T01:56:37.759483399Z"
     dependencies:
     - name: common
@@ -991,6 +1020,35 @@ entries:
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 9.3.3
+    created: "2023-10-11T21:45:46.839780189Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 1310efcc40d7097a2a8168fd84763e86c1370586da25fee78859c484147f884a
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.16.4/bamboo-agent-1.16.4.tgz
+    version: 1.16.4
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.3.3
     created: "2023-10-11T01:56:38.321345626Z"
     dependencies:
     - name: common
@@ -1924,6 +1982,35 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Fix hazelcast svc type (#689)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.5
+    created: "2023-10-11T21:45:46.999253311Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: cdb46a18173745d03345b4fe2331b54b4f77301b642a1941c7f2a55a116f09b4
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.16.4/bitbucket-1.16.4.tgz
+    version: 1.16.4
   - annotations:
       artifacthub.io/changes: '- "Make it possible to create a dedicated hazelcast
         svc (#686)"'
@@ -3426,6 +3513,35 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: '- "Fix hazelcast svc type (#689)"'
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.2
+    created: "2023-10-11T21:45:47.336701093Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 82389db25c487b940c522bf6bed6a30fd45042066b919671dc21c7b26f9c021f
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.16.4/confluence-1.16.4.tgz
+    version: 1.16.4
+  - annotations:
       artifacthub.io/changes: '- "Make it possible to create a dedicated hazelcast
         svc (#686)"'
       artifacthub.io/containsSecurityUpdates: "true"
@@ -4895,6 +5011,35 @@ entries:
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
     appVersion: 5.2.0
+    created: "2023-10-11T21:45:47.474320214Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: f39af2c04ac961c038ffa75e1a8d546ede18c6ec84ce67afb4fee926ed9a809a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.16.4/crowd-1.16.4.tgz
+    version: 1.16.4
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.2.0
     created: "2023-10-11T01:56:38.880680514Z"
     dependencies:
     - name: common
@@ -6181,6 +6326,36 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.11
+    created: "2023-10-11T21:45:47.647337484Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.4
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 70447a95e8a47ae93f3193c4b619f2e79b83a44c242aa5d0e5d6bc1ef239a1f9
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.16.4/jira-1.16.4.tgz
+    version: 1.16.4
   - annotations:
       artifacthub.io/changes: '- "Update Helm chart version"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -7600,4 +7775,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-10-11T01:56:39.034196371Z"
+generated: "2023-10-11T21:45:47.649258219Z"
