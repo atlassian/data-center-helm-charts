@@ -136,12 +136,14 @@ class ServiceTest {
     @EnumSource(value = Product.class, names = {"bitbucket", "confluence"})
     void dedicated_hazelcast_service(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product.name() + ".hazelcastService.enabled", "true"
+                product.name() + ".hazelcastService.enabled", "true",
+                product.name() + ".hazelcastService.type", "myType"
+
         ));
 
         final var hazelcastService = resources.get(Kind.Service, Service.class, product.getHelmReleaseName() + "-hazelcast");
 
-        assertThat(hazelcastService.getType()).hasTextEqualTo("ClusterIP");
+        assertThat(hazelcastService.getType()).hasTextEqualTo("myType");
         assertThat(hazelcastService.getPort("hazelcast"))
                 .hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(5701));
 
