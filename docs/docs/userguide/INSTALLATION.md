@@ -46,7 +46,9 @@ Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configu
 Create a Kubernetes secret to store the connectivity details of the database:
 
 ```shell
-kubectl create secret generic <secret_name> --from-literal=username='<db_username>' --from-literal=password='<db_password>'
+kubectl create secret generic <secret_name> \
+        --from-literal=username='<db_username>' \
+        --from-literal=password='<db_password>'
 ``` 
 
 Using the Kubernetes secret, update the `database` stanza within `values.yaml` appropriately. Refer to the commentary within the `values.yaml` file for additional details on how to configure the remaining database values:
@@ -66,6 +68,101 @@ database:
     For additional information on how the above values should be configured, see the [Database connectivity section of the configuration guide](CONFIGURATION.md#database-connectivity).
 
     Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
+
+### 3.1 Obfuscate Database Password (Optional)
+
+Instead of creating a Kubernetes secret with the database password and writing it to a plain text configuration file in the container, you can configure Bitbucket, Confluence and Jira to use external secrets stores, such as AWS SecretsManager and Hashicorp Vault.
+
+=== "Jira and Confluence"
+      
+      :warning: JDBC encryption can only be used with Confluence instances that have already been set up. Go through [step 3](#3-configure-database) and the rest of the installation steps first.
+
+      **AWS Secrets Manager**
+
+      1. Follow steps 1-4 from [AWS Secrets Manager in Jira](https://confluence.atlassian.com/adminjiraserver/configuring-aws-secrets-manager-1282250155.html){.external} (the same steps work for Confluence)
+      
+      2. Create (or update, if this is an existing deployment) a Kubernetes secret to store the connectivity details of the database. Instead of a plain text password in the `password` key, use the configuration json, for example:
+      
+        ```shell
+        kubectl create secret generic <secret_name> \
+                --from-literal=username='<db_username>' \
+                --from-literal=password='{"region":"ap-southeast-2","secretId":"database-secret-id", "secretPointer": "password"}' \
+                -n atlassian
+        ```
+        You will find more details on each key in the json in [Jira documentation](https://confluence.atlassian.com/adminjiraserver/configuring-aws-secrets-manager-1282250155.html#ConfiguringAWSSecretsManager-step-5Step5:Addtheencrypteddatatoyourdbconfig.xmlfile){.external}.
+      
+      3. Define the secrets store provider by passing an additional environment variable to the container in values.yaml:
+
+        ```
+        jira.additionalEnvironmentVariables:
+          - name: ATL_JDBC_SECRET_CLASS
+            value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
+        ```
+      4. **Not applicable to new installations**. To force update Jira's `dbconfig.xml` and Confluence's `confluence.cfg.xml` set `ATL_FORCE_CFG_UPDATE` to true:
+
+        ```
+        jira.additionalEnvironmentVariables:
+          - name: ATL_JDBC_SECRET_CLASS
+            value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
+          - name: ATL_FORCE_CFG_UPDATE
+            value: "true"
+        ```
+
+
+      :simple-amazonaws: [EKS IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html){.external} and IAM Profiles (loading credentials from the Amazon EC2 metadata service) are recommended ways to configure AWS authentication. To enable EKS IRSA, set IAM role arn in `values.yaml`:
+      
+      ```yaml
+      serviceAccount:
+        eksIrsa:
+          roleArn: arn:aws:iam::123456789012:role/SecretsStoreAcccessJira
+      ```
+
+      **Hashicorp Vault (Token Authentication)**
+      
+      1. Follow steps 1 and 2 from [Configuring Jira with HashiCorp Vault](https://link-to-be-added){.external} (the same steps work for Confluence)
+
+      2. Create (or update, if this is an existing deployment) a Kubernetes secret to store the connectivity details of the database. Instead of a plain text password in the `password` key, use the configuration json, for example:
+      
+        ```shell
+        kubectl create secret generic <secret_name> \
+                --from-literal=username='<db_username>' \
+                --from-literal=password='{"mount": "secret", "path": "sample/secret", "key": "password", "endpoint": "https://127.0.0.1:8200"}' \
+                --from-literal=token='vault-token' \
+                -n atlassian
+        ```
+        You will find more details on each key in the json in [Jira documentation](https://link-to-be-added#subsection){.external}.
+      
+      3. Define the secrets store provider and vault token by passing additional environment variables to the container in values.yaml:
+
+        ```
+        jira.additionalEnvironmentVariables:
+          - name: ATL_JDBC_SECRET_CLASS
+            value: com.atlassian.secrets.store.vault.VaultSecretStore
+          - name: SECRET_STORE_VAULT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: <secret_name>
+                key: token
+        ```
+      4. **Not applicable to new installations**. To force update Jira's `dbconfig.xml` and Confluence's `confluence.cfg.xml` set `ATL_FORCE_CFG_UPDATE` to true:
+
+        ```
+        jira.additionalEnvironmentVariables:
+          - name: ATL_JDBC_SECRET_CLASS
+            value: com.atlassian.secrets.store.vault.VaultSecretStore
+          - name: SECRET_STORE_VAULT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: <secret_name>
+                key: token
+          - name: ATL_FORCE_CFG_UPDATE
+            value: "true"
+        ```
+
+=== "Bitbucket"
+      [Read more about using AWS Secrets Manager in Bitbucket](https://confluence.atlassian.com/bitbucketserver/configuring-bitbucket-with-aws-secrets-manager-1279066293.html){.external}
+      [Read more about using HashiCorp Vault in Bitbucket](https://link-to-be-added){.external}
+
     
 ## 4. Configure Ingress
 Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external} provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
