@@ -22,8 +22,8 @@ data:
     {{- if .Values.confluence.additionalCertificates.secretName }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}
-    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
-    {{ include "confluence.sysprop.s3Config" . | indent 4 | trim }}
+    {{- include "common.jmx.javaagent" . | indent 4 -}}
+    {{- include "confluence.sysprop.s3Config" . | indent 4 }}
   max_heap: {{ .Values.confluence.resources.jvm.maxHeap }}
   min_heap: {{ .Values.confluence.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.confluence.resources.jvm.reservedCodeCache }}
