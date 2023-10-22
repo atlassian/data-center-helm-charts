@@ -165,6 +165,22 @@ class JmxMetricsTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void expose_jmx_metrics_enabled_custom_config(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true",
+                "monitoring.jmxExporterCustomConfig.rules[0].name", "custom-rule",
+                "monitoring.jmxExporterCustomConfig.rules[0].pattern", "^abc"
+        ));
+
+        // assert jmx configmap has custom config
+        final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jmx-config").getDataByKey("jmx-config.yaml");
+        assertThat(jmvConfigMap).hasTextContaining("rules:");
+        assertThat(jmvConfigMap).hasTextContaining("- name: custom-rule");
+        assertThat(jmvConfigMap).hasTextContaining("pattern: ^abc");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void jmx_service_test(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.exposeJmxMetrics", "true",

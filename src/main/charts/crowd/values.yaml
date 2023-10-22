@@ -861,12 +861,11 @@ monitoring:
   #
   jmxExporterCustomJarLocation:
 
-  # -- Custom jmx config with the rules. Make sure to keep jmx-config key
+  # -- Custom jmx config with the rules
   #
   jmxExporterCustomConfig: {}
-  # jmx-config: |
-  #   rules:
-  #     - pattern: ".*"
+  #  rules:
+  #   - pattern: ".*"
 
   serviceMonitor:
 
