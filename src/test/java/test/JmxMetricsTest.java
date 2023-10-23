@@ -164,7 +164,7 @@ class JmxMetricsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, mode = EnumSource.Mode.EXCLUDE, names = {"bamboo_agent"})
     void expose_jmx_metrics_enabled_custom_config(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.exposeJmxMetrics", "true",
