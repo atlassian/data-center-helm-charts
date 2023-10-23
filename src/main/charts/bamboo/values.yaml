@@ -885,7 +885,7 @@ monitoring:
   #
   jmxExporterCustomJarLocation:
 
-  # -- Custom jmx config with the rules
+  # -- Custom JMX config with the rules
   #
   jmxExporterCustomConfig: {}
   #  rules:
