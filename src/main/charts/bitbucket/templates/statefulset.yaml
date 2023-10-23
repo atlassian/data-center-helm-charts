@@ -136,6 +136,7 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+            {{/* jmxExporter is saved to shared home but mirrors don't have one, so we need at least emptyDir */}}
             {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume
                (and (eq .Values.bitbucket.applicationMode "mirror") .Values.monitoring.exposeJmxMetrics) }}
             - name: shared-home
