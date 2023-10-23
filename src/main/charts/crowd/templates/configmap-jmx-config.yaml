@@ -6,6 +6,12 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
+  {{- if .Values.monitoring.jmxExporterCustomConfig }}
+  jmx-config.yaml: |
+  {{- with .Values.monitoring.jmxExporterCustomConfig }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
   jmx-config.yaml: |
     rules:
       - pattern: '(java.lang)<type=(\w+)><>(\w+):'
@@ -21,4 +27,5 @@ data:
         labels:
           product: "crowd"
       - pattern: '.*'
+  {{- end }}
 {{- end }}

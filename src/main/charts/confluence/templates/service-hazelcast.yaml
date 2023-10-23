@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  type: {{ .Values.confluence.service.type }}
+  type: {{ .Values.confluence.hazelcastService.type }}
   ports:
     - port: {{ .Values.confluence.ports.hazelcast }}
       targetPort: hazelcast

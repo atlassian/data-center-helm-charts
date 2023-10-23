@@ -6,7 +6,13 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
-  jmx-config.yaml: |  
+  {{- if .Values.monitoring.jmxExporterCustomConfig }}
+  jmx-config.yaml: |
+  {{- with .Values.monitoring.jmxExporterCustomConfig }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  jmx-config.yaml: |
     rules:
     - pattern: '(java.lang)<type=(\w+)><>(\w+):'
       name: java_lang_$2_$3
@@ -15,4 +21,5 @@ data:
     - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
       name: java_lang_G1_$1_Generation_$2
     - pattern: '.*'
+  {{- end }}
 {{- end }}

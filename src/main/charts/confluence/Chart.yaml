@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.16.3
+version: 1.16.4
 appVersion: 8.5.2
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Make it possible to create a dedicated hazelcast svc (#686)"
+    - "Fix hazelcast svc type (#689)"
 
 dependencies:
 - name: common

@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  type: {{ .Values.bitbucket.service.type }}
+  type: {{ .Values.bitbucket.hazelcastService.type }}
   ports:
     - port: {{ .Values.bitbucket.ports.hazelcast }}
       targetPort: hazelcast

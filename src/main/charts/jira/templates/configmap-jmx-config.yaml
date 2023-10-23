@@ -6,7 +6,13 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
-  jmx-config.yaml: |  
+  {{- if .Values.monitoring.jmxExporterCustomConfig }}
+  jmx-config.yaml: |
+  {{- with .Values.monitoring.jmxExporterCustomConfig }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  jmx-config.yaml: |
     ---
     startDelaySeconds: 0
 
@@ -21,4 +27,5 @@ data:
 
     blacklistObjectNames:
       - 'com.atlassian.jira:connectionpool=connections,connection=*,name=BasicDataSource'
+  {{- end }}
 {{- end}}

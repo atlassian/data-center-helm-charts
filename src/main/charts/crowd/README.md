@@ -1,6 +1,6 @@
 # crowd
 
-![Version: 1.16.3](https://img.shields.io/badge/Version-1.16.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.2.0](https://img.shields.io/badge/AppVersion-5.2.0-informational?style=flat-square)
+![Version: 1.16.4](https://img.shields.io/badge/Version-1.16.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.2.0](https://img.shields.io/badge/AppVersion-5.2.0-informational?style=flat-square)
 
 A chart for installing Crowd Data Center on Kubernetes
 
@@ -109,7 +109,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.grafana.createDashboards | bool | `false` | Create ConfigMaps with Grafana dashboards  |
 | monitoring.grafana.dashboardAnnotations | object | `{}` | Annotations added to Grafana dashboards ConfigMaps. See: https://github.com/kiwigrid/k8s-sidecar#usage  |
 | monitoring.grafana.dashboardLabels | object | `{}` | Label selector for Grafana dashboard importer sidecar  |
-| monitoring.jmxExporterCustomConfig | object | `{}` | Custom jmx config with the rules. Make sure to keep jmx-config key  |
+| monitoring.jmxExporterCustomConfig | object | `{}` | Custom JMX config with the rules  |
 | monitoring.jmxExporterCustomJarLocation | string | `nil` | Location of jmx_exporter jar file if mounted from a secret or manually copied to shared home  |
 | monitoring.jmxExporterImageRepo | string | `"bitnami/jmx-exporter"` | Image repository with jmx_exporter jar  |
 | monitoring.jmxExporterImageTag | string | `"0.18.0"` | Image tag to be used to pull jmxExporterImageRepo  |
