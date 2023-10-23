@@ -127,12 +127,12 @@ Instead of creating a Kubernetes secret with the database password and writing i
         kubectl create secret generic <secret_name> \
                 --from-literal=username='<db_username>' \
                 --from-literal=password='{"mount": "secret", "path": "sample/secret", "key": "password", "endpoint": "https://127.0.0.1:8200"}' \
-                --from-literal=token='vault-token' \
+                --from-literal=token='<vault-token>' \
                 -n atlassian
         ```
         You will find more details on each key in the json in [Jira documentation](https://link-to-be-added#subsection){.external}.
       
-      3. Define the secrets store provider and vault token by passing additional environment variables to the container in values.yaml:
+      3. Define the secrets store provider and vault token by passing additional environment variables to the container in values.yaml. Note that `ATL_UNSET_SENSITIVE_ENV_VARS` needs to be set to false, otherwise the value of `SECRET_STORE_VAULT_TOKEN` will not be available to the server process:
 
         ```
         jira.additionalEnvironmentVariables:
@@ -143,6 +143,8 @@ Instead of creating a Kubernetes secret with the database password and writing i
               secretKeyRef:
                 name: <secret_name>
                 key: token
+          - name: ATL_UNSET_SENSITIVE_ENV_VARS
+            value: "false"
         ```
       4. **Not applicable to new installations**. To force update Jira's `dbconfig.xml` and Confluence's `confluence.cfg.xml` set `ATL_FORCE_CFG_UPDATE` to true:
 
@@ -155,12 +157,15 @@ Instead of creating a Kubernetes secret with the database password and writing i
               secretKeyRef:
                 name: <secret_name>
                 key: token
+          - name: ATL_UNSET_SENSITIVE_ENV_VARS
+            value: "false"
           - name: ATL_FORCE_CFG_UPDATE
             value: "true"
         ```
 
 === "Bitbucket"
       [Read more about using AWS Secrets Manager in Bitbucket](https://confluence.atlassian.com/bitbucketserver/configuring-bitbucket-with-aws-secrets-manager-1279066293.html){.external}
+
       [Read more about using HashiCorp Vault in Bitbucket](https://link-to-be-added){.external}
 
     
