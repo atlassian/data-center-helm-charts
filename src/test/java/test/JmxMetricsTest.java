@@ -221,6 +221,47 @@ class JmxMetricsTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void expose_jmx_metrics_enabled_bitbucket_mirror(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true",
+                product.name() + ".applicationMode", "mirror"
+        ));
+
+        String sharedHomePath = "/var/atlassian/application-data/shared-home";
+
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+
+        // assert jmx_exporter init container
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
+
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
+
+        // assert jmx port
+        assertThat(statefulSet.getContainer(product.name()).getPort("jmx").path("containerPort")).hasValueEqualTo(9999);
+        assertThat(statefulSet.getContainer(product.name()).getPort("jmx").path("protocol")).hasTextEqualTo("TCP");
+
+        // assert jvm configmap has javaagent
+        final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+        assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+sharedHomePath+"/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+
+        // assert jmx configmap created and has expected config
+        final var jmxConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jmx-config").getDataByKey("jmx-config.yaml");
+        assertThat(jmxConfigMap).hasTextContaining("- pattern: ");
+
+        // assert shared-home volume mount and volume are defined even though not explicitly set in volumes.SharedHome
+
+        assertThat(statefulSet.getContainer("bitbucket").getVolumeMount("shared-home").path("mountPath")).hasTextEqualTo(sharedHomePath);
+
+        assertThat(statefulSet.getVolumes().get(1).path("name")).hasTextEqualTo("shared-home");
+        assertThat(statefulSet.getVolumes().get(1).path("emptyDir")).isNotNull();
+
+        statefulSet.getContainer().getEnv().assertHasValue("JMX_ENABLED", "true");
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void service_monitor_bitbucket_mesh(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.serviceMonitor.create", "true",

@@ -282,6 +282,9 @@ Define additional hosts here to allow template overrides when used as a sub char
 {{ else if .Values.volumes.sharedHome.customVolume }}
 - name: shared-home
 {{- toYaml .Values.volumes.sharedHome.customVolume | nindent 2 }}
+{{- else if and (eq .Values.bitbucket.applicationMode "mirror") .Values.monitoring.exposeJmxMetrics }}
+- name: shared-home
+  emptyDir: {}
 {{- end }}
 {{- end }}
 
