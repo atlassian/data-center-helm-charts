@@ -47,7 +47,7 @@ metadata:
     app.kubernetes.io/version: "8.5.2"
     app.kubernetes.io/managed-by: Helm
 data:
-  jmx-config.yaml: |  
+  jmx-config.yaml: |
     rules:
     - pattern: '(java.lang)<type=(\w+)><>(\w+):'
       name: java_lang_$2_$3
@@ -259,7 +259,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 000799b6a3ea474c140c23988fffd6696a44e374e012855ac84a6367e87550f1
+        checksum/config-jvm: ec42dd3f689fa9b17594b1c6cdc94ad16defee60a99d937953071e5bde2bb1dc
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

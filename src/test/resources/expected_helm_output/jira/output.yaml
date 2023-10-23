@@ -43,7 +43,7 @@ metadata:
     app.kubernetes.io/version: "9.4.11"
     app.kubernetes.io/managed-by: Helm
 data:
-  jmx-config.yaml: |  
+  jmx-config.yaml: |
     ---
     startDelaySeconds: 0
     rules:

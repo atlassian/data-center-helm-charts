@@ -173,7 +173,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.grafana.createDashboards | bool | `false` | Create ConfigMaps with Grafana dashboards  |
 | monitoring.grafana.dashboardAnnotations | object | `{}` | Annotations added to Grafana dashboards ConfigMaps. See: https://github.com/kiwigrid/k8s-sidecar#usage  |
 | monitoring.grafana.dashboardLabels | object | `{}` | Label selector for Grafana dashboard importer sidecar  |
-| monitoring.jmxExporterCustomConfig | object | `{}` | Custom JMX config with the rules. Make sure to keep jmx-config key  |
+| monitoring.jmxExporterCustomConfig | object | `{}` | Custom JMX config with the rules  |
 | monitoring.jmxExporterCustomJarLocation | string | `nil` | Location of jmx_exporter jar file if mounted from a secret or manually copied to shared home  |
 | monitoring.jmxExporterImageRepo | string | `"bitnami/jmx-exporter"` | Image repository with jmx_exporter jar  |
 | monitoring.jmxExporterImageTag | string | `"0.18.0"` | Image tag to be used to pull jmxExporterImageRepo  |
