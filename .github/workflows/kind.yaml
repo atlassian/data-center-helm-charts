@@ -73,11 +73,6 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_ingress
 
-      - name: Verify ${{inputs.dc_app}} metrics availability
-        run: |
-          source src/test/scripts/kind/deploy_app.sh
-          verify_metrics
-
       - name: Verify ${{inputs.dc_app}} grafana dashboards
         run: |
           source src/test/scripts/kind/deploy_app.sh
@@ -89,6 +84,11 @@ jobs:
           kubectl scale sts/${DC_APP} --replicas=2 -n atlassian
           sleep 10
           kubectl wait --for=condition=ready pod/${DC_APP}-1 -n atlassian --timeout=360s
+
+      - name: Verify ${{inputs.dc_app}} metrics availability
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_metrics
 
       - name: Get debug info
         if: always()
