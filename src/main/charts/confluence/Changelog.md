@@ -1,6 +1,18 @@
 # Change Log
 
 
+## 1.16.5
+
+**Release date:** 2023-10-24
+
+![AppVersion: 8.5.2](https://img.shields.io/static/v1?label=AppVersion&message=8.5.2&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix custom jmx config (#699)
+* Copy cacerts first, then import certs (#696)
+* Fix config-jvm template to avoid wrong new line (#694)
+
 ## 1.16.4
 
 **Release date:** 2023-10-11

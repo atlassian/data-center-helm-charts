@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: 1.16.4
+version: 1.16.5
 appVersion: 8.9.6
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Fix hazelcast svc type (#689)"
+    - "Fix custom jmx config (#699)"
+    - "Fix jmx init container for Bitbucket mirror (#695)"
+    - "Copy cacerts first, then import certs (#696)"
 
 dependencies:
 - name: common

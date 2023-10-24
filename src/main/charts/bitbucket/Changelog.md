@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.16.5
+
+**Release date:** 2023-10-24
+
+![AppVersion: 8.9.6](https://img.shields.io/static/v1?label=AppVersion&message=8.9.6&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix custom jmx config (#699)
+* Fix jmx init container for Bitbucket mirror (#695)
+* Copy cacerts first, then import certs (#696)
+
 ## 1.16.4
 
 **Release date:** 2023-10-11
