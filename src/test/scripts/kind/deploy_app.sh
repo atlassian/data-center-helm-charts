@@ -62,6 +62,21 @@ deploy_app() {
                  --set agent.resources.container.requests.cpu=20m \
                  --wait --timeout=360s --debug
   fi
+
+  if [ "${DC_APP}" == "bitbucket" ]; then
+    echo "[INFO]: Deploying Bitbucket Mirror..."
+    helm upgrade --install bitbucket-mirror ./ \
+                 --set bitbucket.applicationMode="mirror" \
+                 --set bitbucket.mirror.upstreamUrl="http://bitbucket" \
+                 --set ingress.host="bitbucket-mirror" \
+                 --set ingress.https="false" \
+                 --set monitoring.exposeJmxMetrics="true" \
+                 --set bitbucket.readinessProbe.enabled="false" \
+                 --set bitbucket.resources.container.requests.cpu="20m" \
+                 --set bitbucket.resources.container.requests.memory="1G" \
+                 --wait --timeout=360s --debug \
+                 -n atlassian
+  fi
 }
 
 verify_ingress() {
@@ -95,11 +110,16 @@ verify_ingress() {
 verify_metrics() {
   METRICS_DEFAULT_PORT="9999"
   METRICS_DEFAULT_PATH="/metrics"
-  STATUS=$(kubectl exec ${DC_APP}-0 -c ${DC_APP} -n atlassian -- curl -s -o /dev/null -w '%{http_code}' http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH})
-  if [ $STATUS -ne 200 ]; then
-    echo "[ERROR]: Status code is ${STATUS}"
-    exit 1
-  fi
+
+  DC_PODS=($(kubectl get pods -n atlassian -l=app.kubernetes.io/name=${DC_APP} --no-headers -o custom-columns=":metadata.name"))
+  for POD in "${DC_PODS[@]}"; do
+    echo "[INFO]: Checking metrics in pod: atlassian/${POD}"
+    STATUS=$(kubectl exec "${POD}" -c ${DC_APP} -n atlassian -- curl -s -o /dev/null -w '%{http_code}' http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH})
+    if [ $STATUS -ne 200 ]; then
+      echo "[ERROR]: Status code is ${STATUS}"
+      exit 1
+    fi
+  done
 
   kubectl exec ${DC_APP}-0 -c ${DC_APP} -n atlassian -- curl -s http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH} | grep jvm_classes_currently_loaded
   if [ $? -ne 0 ]; then
