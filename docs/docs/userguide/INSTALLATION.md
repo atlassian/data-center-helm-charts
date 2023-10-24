@@ -93,20 +93,22 @@ Instead of creating a Kubernetes secret with the database password and writing i
       
       3. Define the secrets store provider by passing an additional environment variable to the container in values.yaml:
 
-        ```
-        jira.additionalEnvironmentVariables:
-          - name: ATL_JDBC_SECRET_CLASS
-            value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
-        ```
+          ```
+          jira:
+            additionalEnvironmentVariables:
+              - name: ATL_JDBC_SECRET_CLASS
+                value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
+          ```
       4. **Not applicable to new installations**. To force update Jira's `dbconfig.xml` and Confluence's `confluence.cfg.xml` set `ATL_FORCE_CFG_UPDATE` to true:
 
-        ```
-        jira.additionalEnvironmentVariables:
-          - name: ATL_JDBC_SECRET_CLASS
-            value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
-          - name: ATL_FORCE_CFG_UPDATE
-            value: "true"
-        ```
+          ```
+          jira:
+            additionalEnvironmentVariables:
+              - name: ATL_JDBC_SECRET_CLASS
+                value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
+              - name: ATL_FORCE_CFG_UPDATE
+                value: "true"
+          ```
 
 
       :simple-amazonaws: [EKS IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html){.external} and IAM Profiles (loading credentials from the Amazon EC2 metadata service) are recommended ways to configure AWS authentication. To enable EKS IRSA, set IAM role arn in `values.yaml`:
@@ -123,44 +125,46 @@ Instead of creating a Kubernetes secret with the database password and writing i
 
       2. Create (or update, if this is an existing deployment) a Kubernetes secret to store the connectivity details of the database. Instead of a plain text password in the `password` key, use the configuration json, for example:
       
-        ```shell
-        kubectl create secret generic <secret_name> \
-                --from-literal=username='<db_username>' \
-                --from-literal=password='{"mount": "secret", "path": "sample/secret", "key": "password", "endpoint": "https://127.0.0.1:8200"}' \
-                --from-literal=token='<vault-token>' \
-                -n atlassian
-        ```
+          ```shell
+          kubectl create secret generic <secret_name> \
+                  --from-literal=username='<db_username>' \
+                  --from-literal=password='{"mount": "secret", "path": "sample/secret", "key": "password", "endpoint": "https://127.0.0.1:8200"}' \
+                  --from-literal=token='<vault-token>' \
+                  -n atlassian
+          ```
         You will find more details on each key in the json in [Jira documentation](https://link-to-be-added#subsection){.external}.
       
       3. Define the secrets store provider and vault token by passing additional environment variables to the container in values.yaml. Note that `ATL_UNSET_SENSITIVE_ENV_VARS` needs to be set to false, otherwise the value of `SECRET_STORE_VAULT_TOKEN` will not be available to the server process:
 
         ```
-        jira.additionalEnvironmentVariables:
-          - name: ATL_JDBC_SECRET_CLASS
-            value: com.atlassian.secrets.store.vault.VaultSecretStore
-          - name: SECRET_STORE_VAULT_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: <secret_name>
-                key: token
-          - name: ATL_UNSET_SENSITIVE_ENV_VARS
-            value: "false"
+        jira:
+          additionalEnvironmentVariables:
+            - name: ATL_JDBC_SECRET_CLASS
+              value: com.atlassian.secrets.store.vault.VaultSecretStore
+            - name: SECRET_STORE_VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: <secret_name>
+                  key: token
+            - name: ATL_UNSET_SENSITIVE_ENV_VARS
+              value: "false"
         ```
       4. **Not applicable to new installations**. To force update Jira's `dbconfig.xml` and Confluence's `confluence.cfg.xml` set `ATL_FORCE_CFG_UPDATE` to true:
 
         ```
-        jira.additionalEnvironmentVariables:
-          - name: ATL_JDBC_SECRET_CLASS
-            value: com.atlassian.secrets.store.vault.VaultSecretStore
-          - name: SECRET_STORE_VAULT_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: <secret_name>
-                key: token
-          - name: ATL_UNSET_SENSITIVE_ENV_VARS
-            value: "false"
-          - name: ATL_FORCE_CFG_UPDATE
-            value: "true"
+        jira:
+          additionalEnvironmentVariables:
+            - name: ATL_JDBC_SECRET_CLASS
+              value: com.atlassian.secrets.store.vault.VaultSecretStore
+            - name: SECRET_STORE_VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: <secret_name>
+                  key: token
+            - name: ATL_UNSET_SENSITIVE_ENV_VARS
+              value: "false"
+            - name: ATL_FORCE_CFG_UPDATE
+              value: "true"
         ```
         
       **Hashicorp Vault (Kubernetes Authentication)**
@@ -186,27 +190,29 @@ Instead of creating a Kubernetes secret with the database password and writing i
       3. Define the secrets store provider and the Vault role passing additional environment variables to the container in values.yaml. Note that `ATL_UNSET_SENSITIVE_ENV_VARS` needs to be set to false, otherwise the value of `SECRET_STORE_VAULT_KUBE_AUTH_ROLE` will not be available to the server process:
 
         ```
-        jira.additionalEnvironmentVariables:
-          - name: ATL_JDBC_SECRET_CLASS
-            value: com.atlassian.secrets.store.vault.VaultSecretStore
-          - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
-            value: jira-role
-          - name: ATL_UNSET_SENSITIVE_ENV_VARS
-            value: "false"
+        jira:
+          additionalEnvironmentVariables:
+            - name: ATL_JDBC_SECRET_CLASS
+              value: com.atlassian.secrets.store.vault.VaultSecretStore
+            - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
+              value: jira-role
+            - name: ATL_UNSET_SENSITIVE_ENV_VARS
+              value: "false"
         ```
 
       4. **Not applicable to new installations**. To force update Jira's `dbconfig.xml` and Confluence's `confluence.cfg.xml` set `ATL_FORCE_CFG_UPDATE` to true:
 
         ```
-        jira.additionalEnvironmentVariables:
-          - name: ATL_JDBC_SECRET_CLASS
-            value: com.atlassian.secrets.store.vault.VaultSecretStore
-          - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
-            value: jira-role
-          - name: ATL_UNSET_SENSITIVE_ENV_VARS
-            value: "false"
-          - name: ATL_FORCE_CFG_UPDATE
-            value: "true"
+        jira:
+          additionalEnvironmentVariables:
+            - name: ATL_JDBC_SECRET_CLASS
+              value: com.atlassian.secrets.store.vault.VaultSecretStore
+            - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
+              value: jira-role
+            - name: ATL_UNSET_SENSITIVE_ENV_VARS
+              value: "false"
+            - name: ATL_FORCE_CFG_UPDATE
+              value: "true"
         ```
         
       5. **Optional**. There are two optional environment variables to override defaults:
@@ -217,9 +223,85 @@ Instead of creating a Kubernetes secret with the database password and writing i
         If necessary, add them to `additionalEnvironmentVariables`.
 
 === "Bitbucket"
-      [Read more about using AWS Secrets Manager in Bitbucket](https://confluence.atlassian.com/bitbucketserver/configuring-bitbucket-with-aws-secrets-manager-1279066293.html){.external}
 
-      [Read more about using HashiCorp Vault in Bitbucket](https://link-to-be-added){.external}
+    **AWS Secrets Manager**
+
+    1. Follow steps 1-4 from [AWS Secrets Manager in Bitbucket](https://confluence.atlassian.com/bitbucketserver/configuring-bitbucket-with-aws-secrets-manager-1279066293.html){.external}.
+
+    2. Create (or update, if this is an existing deployment) a Kubernetes secret to store the connectivity details of the database. Instead of a plain text password in the `password` key, use the configuration json, for example:
+
+        ```shell
+        kubectl create secret generic <secret_name> \
+                --from-literal=username='<db_username>' \
+                --from-literal=password='{"region":"ap-southeast-2","secretId":"database-secret-id", "secretPointer": "password"}' \
+                -n atlassian
+        ```
+
+    3. Define the secrets store provider by passing an additional environment variable to the container in values.yaml:
+
+        ```
+        bitbucket:
+          additionalEnvironmentVariables:
+          - name: JDBC_PASSWORD_DECRYPTER_CLASSNAME
+            value: com.atlassian.secrets.store.aws.AwsSecretsManagerStore
+        ```
+
+      **Hashicorp Vault (Token Authentication)**
+
+      1. Follow steps 1 and 2 from [Configuring Jira with HashiCorp Vault](https://link-to-be-added){.external} (the same steps work for Confluence)
+
+      2. Create (or update, if this is an existing deployment) a Kubernetes secret to store the connectivity details of the database. Instead of a plain text password in the `password` key, use the configuration json, for example:
+      
+          ```shell
+          kubectl create secret generic <secret_name> \
+                  --from-literal=username='<db_username>' \
+                  --from-literal=password='{"mount": "secret", "path": "sample/secret", "key": "password", "endpoint": "https://127.0.0.1:8200"}' \
+                  -n atlassian
+          ```
+
+      3. Define the secrets store provider and the Vault token by passing additional environment variables to the container in values.yaml:
+
+        ```
+        bitbucket:
+          additionalEnvironmentVariables:
+            - name: JDBC_PASSWORD_DECRYPTER_CLASSNAME
+              value: com.atlassian.secrets.store.vault.VaultSecretStore
+            - name: SECRET_STORE_VAULT_TOKEN
+              value: bitbucket-role
+        ```
+
+    **Hashicorp Vault (Kubernetes Authentication)**
+
+    1. Follow steps 1 and 2 from [Configuring Jira with HashiCorp Vault](https://link-to-be-added){.external} (the same steps work for Confluence)
+
+    2. Create (or update, if this is an existing deployment) a Kubernetes secret to store the connectivity details of the database. Instead of a plain text password in the `password` key, use the configuration json, for example:
+    
+        ```shell
+        kubectl create secret generic <secret_name> \
+                --from-literal=username='<db_username>' \
+                --from-literal=password='{"mount": "secret", "path": "sample/secret", "key": "password", "endpoint": "https://127.0.0.1:8200", "authenticationType": "KUBERNETES"}' \
+                -n atlassian
+        ```
+
+    3. Define the secrets store provider and the Vault role by passing additional environment variables to the container in values.yaml:
+
+        ```
+        bitbucket:
+          additionalEnvironmentVariables:
+            - name: JDBC_PASSWORD_DECRYPTER_CLASSNAME
+              value: com.atlassian.secrets.store.vault.VaultSecretStore
+            - name: SECRET_STORE_VAULT_KUBE_AUTH_ROLE
+              value: bitbucket-role
+        ```
+      
+    4. **Optional**. There are two optional environment variables to override defaults:
+    
+      * `SECRET_STORE_VAULT_KUBE_AUTH_PATH` defines mount path of the configured Kubernetes method (defaults to `kubernetes`)
+      * `SECRET_STORE_VAULT_KUBE_AUTH_JWT_PATH` defines an absolute path to ServiceAccount token file in the container (defaults to `/var/run/secrets/kubernetes.io/serviceaccount/token`)
+      
+      If necessary, add them to `additionalEnvironmentVariables`.
+
+    [Read more about using HashiCorp Vault in Bitbucket](https://link-to-be-added){.external}
 
 
 ## 4. Configure Ingress
