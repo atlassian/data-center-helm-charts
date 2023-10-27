@@ -868,7 +868,7 @@ monitoring:
     #
     customSecurityContext: {}
 
-    # -- Resources requests and limits for the JXM Exporter init container
+    # -- Resources requests and limits for the JMX exporter init container
     # See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
     #
     resources: {}
