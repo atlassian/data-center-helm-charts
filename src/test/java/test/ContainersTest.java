@@ -104,4 +104,33 @@ class ContainersTest {
         final var containerName = statefulSet.getContainer().get("name");
         assertThat(containerName).hasTextEqualTo(product.getHelmReleaseName());
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void nfx_permission_fixer_container_default_no_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+        ));
+
+        final var nfsPermissionFixerContainer = resources.getStatefulSet(product.getHelmReleaseName()).getInitContainers().get(0);
+        assertThat(nfsPermissionFixerContainer.get("resources")).isNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void nfx_permission_fixer_container_default_custom_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                "volumes.sharedHome.nfsPermissionFixer.resources.requests.cpu", "1",
+                "volumes.sharedHome.nfsPermissionFixer.resources.requests.memory", "2Gi",
+                "volumes.sharedHome.nfsPermissionFixer.resources.limits.cpu", "2",
+                "volumes.sharedHome.nfsPermissionFixer.resources.limits.memory", "3Gi"
+        ));
+
+        final var nfsPermissionFixerContainer = resources.getStatefulSet(product.getHelmReleaseName()).getInitContainers().get(0);
+        assertThat(nfsPermissionFixerContainer.get("resources").get("requests").get("cpu")).hasValueEqualTo(1);
+        assertThat(nfsPermissionFixerContainer.get("resources").get("requests").get("memory")).hasTextEqualTo("2Gi");
+        assertThat(nfsPermissionFixerContainer.get("resources").get("limits").get("cpu")).hasValueEqualTo(2);
+        assertThat(nfsPermissionFixerContainer.get("resources").get("limits").get("memory")).hasTextEqualTo("3Gi");
+    }
 }

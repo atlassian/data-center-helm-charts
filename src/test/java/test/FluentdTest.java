@@ -27,8 +27,9 @@ class FluentdTest {
                 "fluentd.enabled", "true",
                 "fluentd.elasticsearch.hostname", "myelastic"));
 
-        resources.getStatefulSet(product.getHelmReleaseName())
+        final var fluentdContainer = resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer("fluentd");
+        assertThat(fluentdContainer.getResources()).isEmpty();
 
         final var fluentdConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-fluentd-config");
         final var config = fluentdConfigMap.getNode("data", "fluent.conf").asText();
@@ -105,5 +106,23 @@ class FluentdTest {
         assertThat(checksumWithChanges)
                 .isNotNull()
                 .isNotEqualTo(checksum);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void fluentd_sidecar_enabled_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true",
+                "fluentd.resources.requests.cpu", "1",
+                "fluentd.resources.requests.memory", "2Gi",
+                "fluentd.resources.limits.cpu", "2",
+                "fluentd.resources.limits.memory", "3Gi"));
+
+        final var fluentdContainerResources = resources.getStatefulSet(product.getHelmReleaseName()).getContainer("fluentd").getResources();
+
+        assertThat(fluentdContainerResources.path("requests").path("cpu").toString()).contains("1");
+        assertThat(fluentdContainerResources.path("requests").path("memory").toString()).contains("2Gi");
+        assertThat(fluentdContainerResources.path("limits").path("cpu").toString()).contains("2");
+        assertThat(fluentdContainerResources.path("limits").path("memory").toString()).contains("3Gi");
     }
 }

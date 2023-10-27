@@ -500,9 +500,21 @@ fluentd:
   # -- The Fluentd sidecar image repository
   #
   imageRepo: fluent/fluentd-kubernetes-daemonset
+
   # -- The Fluentd sidecar image tag
   #
   imageTag: v1.11.5-debian-elasticsearch7-1.2
+
+  # -- Resources requests and limits for fluentd sidecar container
+  # See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+  #
+  resources: {}
+  #  requests:
+  #    cpu: "1m"
+  #    memory: "20Mi"
+  #  limits:
+  #    cpu: "1"
+  #    memory: "1G"
 
   # -- The command used to start Fluentd. If not supplied the default command
   # will be used: "fluentd -c /fluentd/etc/fluent.conf -v"
@@ -693,6 +705,17 @@ volumes:
       #
       imageTag: latest
 
+      # -- Resources requests and limits for nfsPermissionFixer init container
+      # See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+      #
+      resources: {}
+      #  requests:
+      #    cpu: "1m"
+      #    memory: "20Mi"
+      #  limits:
+      #    cpu: "1"
+      #    memory: "1G"
+
       # -- By default, the fixer will change the group ownership of the volume's root directory
       # to match the Crowd container's GID (2002), and then ensures the directory is
       # group-writeable. If this is not the desired behaviour, command used can be specified
@@ -831,6 +854,17 @@ monitoring:
     # -- Custom SecurityContext for the jmx exporter init container
     #
     customSecurityContext: {}
+
+    # -- Resources requests and limits for the JXM Exporter init container
+    # See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+    #
+    resources: {}
+    #  requests:
+    #    cpu: "1m"
+    #    memory: "20Mi"
+    #  limits:
+    #    cpu: "1"
+    #    memory: "1G"
 
   # -- Annotations added to the jmx service
   #

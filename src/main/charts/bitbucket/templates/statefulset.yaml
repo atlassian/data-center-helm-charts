@@ -57,6 +57,12 @@ spec:
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
           imagePullPolicy: IfNotPresent
+          {{- if .Values.volumes.sharedHome.nfsPermissionFixer.resources }}
+          resources:
+          {{- with .Values.volumes.sharedHome.nfsPermissionFixer.resources }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
           securityContext:
             runAsUser: 0 # make sure we run as root so we get the ability to change the volume permissions
           volumeMounts:

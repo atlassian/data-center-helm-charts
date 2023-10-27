@@ -52,6 +52,9 @@ class JmxMetricsTest {
         assertThat(statefulSet.getContainer(product.name()).getPort("jmx").path("containerPort")).hasValueEqualTo(9999);
         assertThat(statefulSet.getContainer(product.name()).getPort("jmx").path("protocol")).hasTextEqualTo("TCP");
 
+        // assert no resources are set
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("resources")).isEmpty();
+
         // assert jvm configmap has javaagent
         final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
         assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+sharedHomePath+"/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
@@ -65,6 +68,7 @@ class JmxMetricsTest {
             statefulSet.getContainer().getEnv().assertHasValue("JMX_ENABLED", "true");
         }
     }
+
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)

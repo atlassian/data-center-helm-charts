@@ -30,6 +30,12 @@ Jmx init container
   image: {{ .Values.monitoring.jmxExporterImageRepo}}:{{ .Values.monitoring.jmxExporterImageTag}}
   command: ["cp"]
   args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "{{ .Values.volumes.sharedHome.mountPath }}"]
+  {{- if .Values.monitoring.jmxExporterInitContainer.resources }}
+  resources:
+  {{- with .Values.monitoring.jmxExporterInitContainer.resources }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
   {{- if .Values.monitoring.jmxExporterInitContainer.runAsRoot }}
   securityContext:
     runAsUser: 0

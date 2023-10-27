@@ -3,6 +3,12 @@
 - name: fluentd
   image: {{ .Values.fluentd.imageRepo }}:{{ .Values.fluentd.imageTag }}
   command: ["sh", "-c", {{ include "fluentd.start.command" . | quote }}]
+{{- if .Values.fluentd.resources }}
+  resources:
+  {{- with .Values.fluentd.resources }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
   volumeMounts:
     - name: fluentd-config
       mountPath: /fluentd/etc
