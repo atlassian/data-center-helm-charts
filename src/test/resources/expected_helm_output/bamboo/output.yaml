@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-jvm-config
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -35,7 +35,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-jmx-config
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -63,7 +63,7 @@ kind: Service
 metadata:
   name: unittest-bamboo-jms
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -86,7 +86,7 @@ kind: Service
 metadata:
   name: unittest-bamboo-jmx
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -108,7 +108,7 @@ kind: Service
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -132,7 +132,7 @@ kind: StatefulSet
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -147,7 +147,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 32c85660e7f161574b3d1b0c76b707c3ebed671cbf3286d70bcbe1e65056001b
+        checksum/config-jvm: 202333c4befa8cbb5597ef0ada97cda78d937a39891080ed98aa9bbeb186af31
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
@@ -305,7 +305,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"
@@ -349,7 +349,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-1.16.5
+    helm.sh/chart: bamboo-1.16.6
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.4.0"

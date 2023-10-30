@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.16.6
+
+**Release date:** 2023-10-30
+
+![AppVersion: 9.4.11](https://img.shields.io/static/v1?label=AppVersion&message=9.4.11&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* JMX container resources (#707)
+
 ## 1.16.5
 
 **Release date:** 2023-10-24
