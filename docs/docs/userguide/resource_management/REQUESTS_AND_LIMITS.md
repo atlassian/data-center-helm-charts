@@ -41,3 +41,39 @@ container:
     cpu: "2" 
     memory: "2G"
 ```
+
+## Init and Additional Containers
+
+By default, NFS permission fixer and JMX init containers, as well as Fluentd additional container don't have resources requests and limits. You can set them in `values.yaml`:
+
+```yaml
+volumes:
+  sharedHome:
+    nfsPermissionFixer:
+      resources:
+        requests:
+          cpu: 1
+          memory: 256Mi
+        limits:
+          cpu: 1
+          memory: 256Mi
+
+monitoring:
+  jmxExporterInitContainer:
+    resources:
+      requests:
+        cpu: 1
+        memory: 256Mi
+      limits:
+        cpu: 1
+        memory: 256Mi  
+
+fluentd:
+  resources:
+    requests:
+      cpu: 1
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+```
