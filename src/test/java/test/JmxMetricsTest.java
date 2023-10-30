@@ -82,6 +82,25 @@ class JmxMetricsTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void jmx_init_container_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                "monitoring.exposeJmxMetrics", "true",
+                "monitoring.jmxExporterInitContainer.resources.requests.cpu", "1",
+                "monitoring.jmxExporterInitContainer.resources.requests.memory", "2Gi",
+                "monitoring.jmxExporterInitContainer.resources.limits.cpu", "2",
+                "monitoring.jmxExporterInitContainer.resources.limits.memory", "3Gi"));
+
+        final var jmxContainerResources = resources.getStatefulSet(product.getHelmReleaseName()).getInitContainers().get(1);
+
+        assertThat(jmxContainerResources.get("resources").get("requests").get("cpu")).hasValueEqualTo(1);
+        assertThat(jmxContainerResources.get("resources").get("requests").get("memory")).hasTextEqualTo("2Gi");
+        assertThat(jmxContainerResources.get("resources").get("limits").get("cpu")).hasValueEqualTo(2);
+        assertThat(jmxContainerResources.get("resources").get("limits").get("memory")).hasTextEqualTo("3Gi");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void expose_jmx_metrics_enabled_init_container_no_root(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.exposeJmxMetrics", "true",
