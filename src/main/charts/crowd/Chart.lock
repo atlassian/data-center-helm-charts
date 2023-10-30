@@ -1,6 +1,6 @@
 dependencies:
 - name: common
   repository: https://atlassian.github.io/data-center-helm-charts
-  version: 1.2.4
-digest: sha256:a373258f4c668f70e249c8310ba3a105e9b86301a9a7eb659b95d8449eafc05b
-generated: "2023-09-18T10:42:11.392333+10:00"
+  version: 1.2.5
+digest: sha256:41fb4b794a78e95332a6a5b205d8dcaa13770d9dbf21a286516fb465224b9697
+generated: "2023-10-31T06:50:47.757617+11:00"

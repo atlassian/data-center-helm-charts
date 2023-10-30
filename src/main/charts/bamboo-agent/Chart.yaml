@@ -23,5 +23,5 @@ annotations:
     - "Update appVersions for DC apps (#697)"
 dependencies:
 - name: common
-  version: 1.2.4
+  version: 1.2.5
   repository: https://atlassian.github.io/data-center-helm-charts
