@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.16.5
+version: 1.16.6
 appVersion: 8.5.2
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,9 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Fix custom jmx config (#699)"
-    - "Copy cacerts first, then import certs (#696)"
-    - "Fix config-jvm template to avoid wrong new line (#694)"
+    - "JMX container resources (#707)"
 
 dependencies:
 - name: common
