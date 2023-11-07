@@ -29,22 +29,22 @@ public class HelmValuesAndAnalyticsTest {
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
     void support_configmap_created(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product.name() + ".additionalEnvironmentVariables[0].name", "AWS_TOKEN",
-                product.name() + ".additionalEnvironmentVariables[0].values", "qwerty123"
-                ));
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
         KubeResource additionalConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values");
-        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextContaining("Sanitized by Support Utility");
-        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextNotContaining("qwerty123");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).isNotNull();
+        assertThat(additionalConfigMap.getConfigMapData().get("analytics.json")).isNotNull();
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
     void support_configmap_created_with_sanitized_envs(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".additionalEnvironmentVariables[0].name", "AWS_TOKEN",
+                product.name() + ".additionalEnvironmentVariables[0].value", "qwerty123"
+                ));
         KubeResource additionalConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values");
-        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).isNotNull();
-        assertThat(additionalConfigMap.getConfigMapData().get("analytics.json")).isNotNull();
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextContaining("Sanitized by Support Utility");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextNotContaining("qwerty123");
     }
 
     @ParameterizedTest
