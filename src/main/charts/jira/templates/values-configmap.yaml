@@ -1,0 +1,23 @@
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-helm-values
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+  values.yaml: |
+  {{- include "jira.sanitizedValues" . }}
+{{- end }}
+{{- if .Values.atlassianAnalyticsAndSupport.analytics.enabled }}
+  analytics.json: |
+    {
+      "replicas": {{ .Values.replicaCount }},
+      "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+      "isIngressEnabled": {{ .Values.ingress.create }},
+      "k8sVersion": "{{ .Capabilities.KubeVersion }}",
+      "isS3AvatarsEnabled": {{ if and .Values.jira.s3Storage.avatars.bucketName .Values.jira.s3Storage.avatars.bucketRegion }}true{{ else }}false{{ end }}
+    }
+{{- end }}
+{{- end }}

@@ -1,4 +1,20 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/* Define a sanitized list of additionalEnvironmentVariables */}}
+{{- define "jira.sanitizedAdditionalEnvVars" -}}
+{{- range .Values.jira.additionalEnvironmentVariables }}
+- name: {{ .name }}
+  value: {{ if regexMatch "(?i)(secret|token|password)" .name }}"Sanitized by Support Utility"{{ else}}{{ .value }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define sanitized Helm values */}}
+{{- define "jira.sanitizedValues" -}}
+{{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "jira.sanitizedAdditionalEnvVars" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" |  nindent 4 }}
+{{- end }}
+
 {{/*
 Create default value for ingress port
 */}}
@@ -114,6 +130,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 {{- if .Values.jira.additionalCertificates.secretName }}
 - name: keystore
   mountPath: /var/ssl
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+- name: helm-values
+  mountPath: /opt/atlassian/helm
 {{- end }}
 {{- end }}
 
@@ -233,6 +253,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: certs
   secret:
     secretName: {{ .Values.jira.additionalCertificates.secretName }}
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+- name: helm-values
+  configMap:
+    name: {{ include "common.names.fullname" . }}-helm-values
 {{- end }}
 {{- end }}
 
