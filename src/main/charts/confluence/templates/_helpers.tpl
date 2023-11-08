@@ -1,4 +1,20 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/* Define a sanitized list of additionalEnvironmentVariables */}}
+{{- define "confluence.sanitizedAdditionalEnvVars" -}}
+{{- range .Values.confluence.additionalEnvironmentVariables }}
+- name: {{ .name }}
+  value: {{ if regexMatch "(?i)(secret|token|password)" .name }}"Sanitized by Support Utility"{{ else}}{{ .value }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define sanitized Helm values */}}
+{{- define "confluence.sanitizedValues" -}}
+{{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "confluence.sanitizedAdditionalEnvVars" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" |  nindent 4 }}
+{{- end }}
+
 {{/*
 Create default value for ingress port
 */}}
@@ -228,6 +244,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Confluence logs get capture
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  mountPath: /opt/atlassian/helm
+{{- end }}
 {{ end }}
 
 {{/*
@@ -409,6 +429,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: certs
   secret:
     secretName: {{ .Values.confluence.additionalCertificates.secretName }}
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  configMap:
+    name: {{ include "common.names.fullname" . }}-helm-values
 {{- end }}
 {{- end }}
 

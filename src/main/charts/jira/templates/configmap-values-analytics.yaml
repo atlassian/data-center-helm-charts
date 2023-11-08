@@ -1,4 +1,4 @@
-{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
-{{- if .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+{{- if .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
   values.yaml: |
   {{- include "jira.sanitizedValues" . }}
 {{- end }}

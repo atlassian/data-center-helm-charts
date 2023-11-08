@@ -1141,3 +1141,17 @@ additionalConfigMaps: []
 #        content: |
 #          <xml>
 #          </xml>
+
+atlassianAnalyticsAndSupport:
+
+  # - Mount ConfigMap with selected Helm chart values as a JSON
+  # which DC products will read and send analytics events to Atlassian data pipelines
+  #
+  analytics:
+    enabled: true
+
+  # - Mount ConfigMap with selected Helm chart values as a YAML file
+  # which can be optionally including to support.zip
+  #
+  helmValues:
+    enabled: true

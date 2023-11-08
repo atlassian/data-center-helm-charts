@@ -27,7 +27,7 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_created(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
         KubeResource additionalConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values");
@@ -36,7 +36,7 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_created_with_sanitized_envs(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product.name() + ".additionalEnvironmentVariables[0].name", "AWS_TOKEN",
@@ -48,7 +48,7 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_created_with_values_only(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                "atlassianAnalyticsAndSupport.analytics.enabled", "false"
@@ -59,10 +59,10 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_created_with_analytics_only(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "atlassianAnalyticsAndSupport.mountHelmValues.enabled", "false"
+                "atlassianAnalyticsAndSupport.helmValues.enabled", "false"
         ));
 
         KubeResource additionalConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values");
@@ -71,10 +71,10 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_not_created(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "atlassianAnalyticsAndSupport.mountHelmValues.enabled", "false",
+                "atlassianAnalyticsAndSupport.helmValues.enabled", "false",
                 "atlassianAnalyticsAndSupport.analytics.enabled", "false"
         ));
 
@@ -84,7 +84,7 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void volume_mount_is_created(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
@@ -93,11 +93,11 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void volume_mount_is_not_created(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "atlassianAnalyticsAndSupport.analytics.enabled", "false",
-                "atlassianAnalyticsAndSupport.mountHelmValues.enabled", "false"
+                "atlassianAnalyticsAndSupport.helmValues.enabled", "false"
         ));
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         assertThrows(AssertionError.class, () -> {
@@ -106,7 +106,7 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void volume_is_created(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
@@ -114,11 +114,11 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void volume_is_not_created(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "atlassianAnalyticsAndSupport.analytics.enabled", "false",
-                "atlassianAnalyticsAndSupport.mountHelmValues.enabled", "false"
+                "atlassianAnalyticsAndSupport.helmValues.enabled", "false"
         ));
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         assertThrows(NoSuchElementException.class, () -> {

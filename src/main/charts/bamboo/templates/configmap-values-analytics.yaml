@@ -1,0 +1,22 @@
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-helm-values
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+  values.yaml: |
+  {{- include "bamboo.sanitizedValues" . }}
+{{- end }}
+{{- if .Values.atlassianAnalyticsAndSupport.analytics.enabled }}
+  analytics.json: |
+    {
+      "replicas": {{ .Values.replicaCount }},
+      "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+      "isIngressEnabled": {{ .Values.ingress.create }},
+      "k8sVersion": "{{ .Capabilities.KubeVersion }}"
+    }
+{{- end }}
+{{- end }}

@@ -155,6 +155,10 @@ spec:
             - name: keystore
               mountPath: /var/ssl
             {{- end }}
+            {{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+            - name: helm-values
+              mountPath: /opt/atlassian/helm
+            {{- end }}
             {{- include "bitbucket.additionalVolumeMounts" . | nindent 12 }}
             {{- include "common.jmx.config.volumeMounts" . | nindent 12 }}
             {{- include "bitbucket.additionalLibraries" . | nindent 12 }}

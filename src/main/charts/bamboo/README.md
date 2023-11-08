@@ -29,6 +29,8 @@ Kubernetes: `>=1.21.x-0`
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Bamboo pods  |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources  |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Bamboo pods  |
+| atlassianAnalyticsAndSupport.analytics.enabled | bool | `true` |  |
+| atlassianAnalyticsAndSupport.helmValues.enabled | bool | `true` |  |
 | bamboo.accessLog.localHomeSubPath | string | `"log"` | The subdirectory within the local-home volume where access logs should be stored.  |
 | bamboo.accessLog.mountPath | string | `"/opt/atlassian/bamboo/logs"` | The path within the Bamboo container where the local-home volume should be mounted in order to capture access logs.  |
 | bamboo.additionalBundledPlugins | list | `[]` | Specifies a list of additional Bamboo plugins that should be added to the Bamboo container. Note plugins installed via this method will appear as bundled plugins rather than user plugins. These should be specified in the same manner as the 'additionalLibraries' property. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/  NOTE: only .jar files can be loaded using this approach. OBR's can be extracted (unzipped) to access the associated .jar  An alternative to this method is to install the plugins via "Manage Apps" in the product system administration UI.  |

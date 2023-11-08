@@ -1,4 +1,20 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/* Define a sanitized list of additionalEnvironmentVariables */}}
+{{- define "bamboo.sanitizedAdditionalEnvVars" -}}
+{{- range .Values.bamboo.additionalEnvironmentVariables }}
+- name: {{ .name }}
+  value: {{ if regexMatch "(?i)(secret|token|password)" .name }}"Sanitized by Support Utility"{{ else}}{{ .value }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define sanitized Helm values */}}
+{{- define "bamboo.sanitizedValues" -}}
+{{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "bamboo.sanitizedAdditionalEnvVars" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" |  nindent 4 }}
+{{- end }}
+
 {{/*
 Deduce the base URL for bamboo.
 */}}
@@ -115,6 +131,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  mountPath: /opt/atlassian/helm
+{{- end }}
 {{- end }}
 
 {{/*
@@ -215,6 +235,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: certs
   secret:
     secretName: {{ .Values.bamboo.additionalCertificates.secretName }}
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  configMap:
+    name: {{ include "common.names.fullname" . }}-helm-values
 {{- end }}
 {{- end }}
 

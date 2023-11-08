@@ -131,7 +131,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
-{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 - name: helm-values
   mountPath: /opt/atlassian/helm
 {{- end }}
@@ -254,7 +254,7 @@ For each additional plugin declared, generate a volume mount that injects that l
   secret:
     secretName: {{ .Values.jira.additionalCertificates.secretName }}
 {{- end }}
-{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.mountHelmValues.enabled }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 - name: helm-values
   configMap:
     name: {{ include "common.names.fullname" . }}-helm-values
