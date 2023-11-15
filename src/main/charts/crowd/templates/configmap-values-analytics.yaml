@@ -16,7 +16,8 @@ data:
       "replicas": {{ .Values.replicaCount }},
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
-      "k8sVersion": "{{ .Capabilities.KubeVersion }}"
+      "k8sVersion": "{{ .Capabilities.KubeVersion }}",
+      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | quote }}{{ else }}"Unknown"{{ end }}
     }
 {{- end }}
 {{- end }}

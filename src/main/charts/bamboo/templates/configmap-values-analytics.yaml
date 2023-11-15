@@ -17,6 +17,7 @@ data:
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
       "k8sVersion": "{{ .Capabilities.KubeVersion }}"
+      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | quote }}{{ else }}"Unknown"{{ end }}
     }
 {{- end }}
 {{- end }}

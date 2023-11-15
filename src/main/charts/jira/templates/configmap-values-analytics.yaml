@@ -17,7 +17,8 @@ data:
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
       "k8sVersion": "{{ .Capabilities.KubeVersion }}",
-      "isS3AvatarsEnabled": {{ if and .Values.jira.s3Storage.avatars.bucketName .Values.jira.s3Storage.avatars.bucketRegion }}true{{ else }}false{{ end }}
+      "isS3AvatarsEnabled": {{ if and .Values.jira.s3Storage.avatars.bucketName .Values.jira.s3Storage.avatars.bucketRegion }}true{{ else }}false{{ end }},
+      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.jira.service.type }}{{ .Values.jira.service.type | quote }}{{ else }}"Unknown"{{ end }}
     }
 {{- end }}
 {{- end }}
