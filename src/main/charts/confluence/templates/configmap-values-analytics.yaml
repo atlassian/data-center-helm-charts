@@ -13,11 +13,12 @@ data:
 {{- if .Values.atlassianAnalyticsAndSupport.analytics.enabled }}
   analytics.json: |
     {
+      "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ .Values.image.tag | quote }}{{ end }},
       "replicas": {{ .Values.replicaCount }},
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
       "k8sVersion": "{{ .Capabilities.KubeVersion }}",
-      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.confluence.service.type }}{{ .Values.confluence.service.type | quote }}{{ else }}"Unknown"{{ end }},
+      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.confluence.service.type }}{{ .Values.confluence.service.type | quote }}{{ else }}"unknown"{{ end }},
 {{- if eq .Values.database.type nil }}
       "dbType": "unknown"
 {{- else }}
