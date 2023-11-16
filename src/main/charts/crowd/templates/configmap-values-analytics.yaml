@@ -17,21 +17,15 @@ data:
       "replicas": {{ .Values.replicaCount }},
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
-      "k8sVersion": "{{ .Capabilities.KubeVersion }}",
-      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | quote }}{{ else }}"unknown"{{ end }},
-{{- if eq .Values.database.type nil }}
-      "dbType": "unknown"
-{{- else }}
-{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "oracle" "oracle" "mysql" "mysql" }}
-{{- $dbTypeInValues := .Values.database.type }}
-  {{- $dbType := "unknown" | quote }}
-  {{- range $key, $value := $databaseTypeMap }}
-    {{- if regexMatch $key $dbTypeInValues }}
-      {{- $dbType = $value | quote }}
-    {{- end }}
-  {{- end }}
-      "dbType": {{ $dbType }}
+{{- if .Values.ingress.create }}
+      "isIngressNginx": {{ .Values.ingress.nginx }},
 {{- end }}
+      "k8sVersion": {{ .Capabilities.KubeVersion.Version | quote }},
+      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | quote }}{{ else }}"unknown"{{ end }},
+      "dbType": "unknown",
+      "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+      "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+      "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
     }
 {{- end }}
 {{- end }}

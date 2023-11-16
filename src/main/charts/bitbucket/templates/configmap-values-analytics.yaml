@@ -17,21 +17,29 @@ data:
       "replicas": {{ .Values.replicaCount }},
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
-      "k8sVersion": "{{ .Capabilities.KubeVersion }}",
+{{- if .Values.ingress.create }}
+      "isIngressNginx": {{ .Values.ingress.nginx }},
+{{- end }}
+      "k8sVersion": {{ .Capabilities.KubeVersion.Version | quote }},
       "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bitbucket.service.type }}{{ .Values.bitbucket.service.type | quote }}{{ else }}"unknown"{{ end }},
-{{- if eq .Values.database.type nil }}
-      "dbType": "unknown"
+{{- if eq .Values.database.driver nil }}
+      "dbType": "unknown",
 {{- else }}
-{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "oracle" "oracle" "mysql" "mysql" }}
-{{- $dbTypeInValues := .Values.database.type }}
+{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "sqlserver" "sqlserver" "oracle" "oracle" "mysql" "mysql" }}
+{{- $dbTypeInValues := .Values.database.driver }}
   {{- $dbType := "unknown" | quote }}
   {{- range $key, $value := $databaseTypeMap }}
-    {{- if regexMatch $key $dbTypeInValues }}
+    {{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
       {{- $dbType = $value | quote }}
     {{- end }}
   {{- end }}
-      "dbType": {{ $dbType }}
+      "dbType": {{ $dbType }},
 {{- end }}
+      "isClusteringEnabled": {{ .Values.bitbucket.clustering.enabled }},
+      "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+      "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+      "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }},
+      "isBitbucketMeshEnabled": {{ .Values.bitbucket.mesh.enabled }}
     }
 {{- end }}
 {{- end }}

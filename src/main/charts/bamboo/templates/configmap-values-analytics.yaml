@@ -17,21 +17,27 @@ data:
       "replicas": {{ .Values.replicaCount }},
       "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
       "isIngressEnabled": {{ .Values.ingress.create }},
-      "k8sVersion": "{{ .Capabilities.KubeVersion }}"
+{{- if .Values.ingress.create }}
+      "isIngressNginx": {{ .Values.ingress.nginx }},
+{{- end }}
+      "k8sVersion": {{ .Capabilities.KubeVersion.Version | quote }},
       "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | quote }}{{ else }}"unknown"{{ end }},
 {{- if eq .Values.database.type nil }}
-      "dbType": "unknown"
+      "dbType": "unknown",
 {{- else }}
-{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "oracle" "oracle" "mysql" "mysql" }}
+{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "sqlserver" "sqlserver" "oracle" "oracle" "mysql" "mysql" }}
 {{- $dbTypeInValues := .Values.database.type }}
   {{- $dbType := "unknown" | quote }}
   {{- range $key, $value := $databaseTypeMap }}
-    {{- if regexMatch $key $dbTypeInValues }}
+    {{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
       {{- $dbType = $value | quote }}
     {{- end }}
   {{- end }}
-      "dbType": {{ $dbType }}
+      "dbType": {{ $dbType }},
 {{- end }}
+      "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+      "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+      "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
     }
 {{- end }}
 {{- end }}
