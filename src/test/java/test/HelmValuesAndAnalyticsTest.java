@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static test.jackson.JsonNodeAssert.assertThat;
 
 public class HelmValuesAndAnalyticsTest {
-    
+
     private Helm helm;
 
     @BeforeEach
