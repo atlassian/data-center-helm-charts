@@ -469,8 +469,9 @@ ingress:
   # 'company.k8s.com/confluence'. Default value is 'confluence.service.contextPath'
   path:
 
-  # -- The custom annotations that should be applied to the Ingress Resource
-  # when NOT using the K8s ingress-nginx controller.
+  # -- The custom annotations that should be applied to the Ingress Resource.
+  # If using an ingress-nginx controller be sure that the annotations you add
+  # here are compatible with those already defined in the 'ingess.yaml' template
   #
   annotations: {}
 
