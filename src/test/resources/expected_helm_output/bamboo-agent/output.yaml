@@ -95,9 +95,5 @@ spec:
               cpu: "1"
               memory: 2G
           volumeMounts:
-          lifecycle:
-            preStop:
-              exec:
-                command: ["sh", "-c", "/shutdown-wait.sh"]
       priorityClassName: high
       volumes:
