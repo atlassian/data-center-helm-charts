@@ -167,15 +167,10 @@ agent:
     #
     terminationGracePeriodSeconds: 30
 
-    # -- By default pods will be stopped via a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/),
-    # using a script supplied by the Docker image. If any other
-    # shutdown behaviour is needed it can be achieved by overriding
-    # this value. Note that the shutdown command needs to wait for the
-    # application shutdown completely before exiting; see [the default
-    # command](https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/src/master/shutdown-wait.sh)
-    # for details.
+    # -- Custom command for a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).
+    # Undefined by default which means no pre-stop hook is being executed when an agent container needs to be stopped and deleted
     #
-    command: "/shutdown-wait.sh"
+    command:
 
   # Pod resource requests
   #
