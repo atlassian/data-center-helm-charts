@@ -30,6 +30,8 @@ Kubernetes: `>=1.21.x-0`
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Crowd pods  |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources  |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Crowd pods  |
+| atlassianAnalyticsAndSupport.analytics.enabled | bool | `true` | Mount ConfigMap with selected Helm chart values as a JSON which DC products will read and send analytics events to Atlassian data pipelines  |
+| atlassianAnalyticsAndSupport.helmValues.enabled | bool | `true` | Mount ConfigMap with selected Helm chart values as a YAML file which can be optionally including to support.zip  |
 | crowd.accessLog.enabled | bool | `true` | Set to 'true' if access logging should be enabled.  |
 | crowd.accessLog.localHomeSubPath | string | `"logs"` | The subdirectory within the local-home volume where access logs should be stored.  |
 | crowd.accessLog.mountPath | string | `"/opt/atlassian/crowd/apache-tomcat/logs"` | The path within the Crowd container where the local-home volume should be mounted in order to capture access logs.  |

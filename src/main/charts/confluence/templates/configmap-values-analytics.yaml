@@ -1,0 +1,17 @@
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-helm-values
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+  values.yaml: |
+  {{- include "confluence.sanitizedValues" . }}
+{{- end }}
+{{- if .Values.atlassianAnalyticsAndSupport.analytics.enabled }}
+  analytics.json: |
+  {{- include "confluence.analyticsJson" . | nindent 4 }}
+{{- end }}
+{{- end }}

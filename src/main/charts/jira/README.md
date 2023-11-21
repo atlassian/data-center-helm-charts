@@ -30,6 +30,8 @@ Kubernetes: `>=1.21.x-0`
 | additionalInitContainers | list | `[]` | Additional initContainer definitions that will be added to all Jira pods  |
 | additionalLabels | object | `{}` | Additional labels that should be applied to all resources  |
 | affinity | object | `{}` | Standard K8s affinities that will be applied to all Jira pods  |
+| atlassianAnalyticsAndSupport.analytics.enabled | bool | `true` | Mount ConfigMap with selected Helm chart values as a JSON which DC products will read and send analytics events to Atlassian data pipelines  |
+| atlassianAnalyticsAndSupport.helmValues.enabled | bool | `true` | Mount ConfigMap with selected Helm chart values as a YAML file which can be optionally including to support.zip  |
 | database.credentials.passwordSecretKey | string | `"password"` | The key ('password') in the Secret used to store the database login password  |
 | database.credentials.secretName | string | `nil` | from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | database.credentials.usernameSecretKey | string | `"username"` | The key ('username') in the Secret used to store the database login username  |

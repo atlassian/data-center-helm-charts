@@ -1,4 +1,39 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/* Define a sanitized list of additionalEnvironmentVariables */}}
+{{- define "crowd.sanitizedAdditionalEnvVars" -}}
+{{- range .Values.crowd.additionalEnvironmentVariables }}
+- name: {{ .name }}
+  value: {{ if regexMatch "(?i)(secret|token|password)" .name }}"Sanitized by Support Utility"{{ else}}{{ .value }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define sanitized Helm values */}}
+{{- define "crowd.sanitizedValues" -}}
+{{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "crowd.sanitizedAdditionalEnvVars" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" |  nindent 4 }}
+{{- end }}
+
+{{- define "crowd.analyticsJson" }}
+{
+  "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
+  "replicas": {{ .Values.replicaCount }},
+  "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+  "isIngressEnabled": {{ .Values.ingress.create }},
+{{- if .Values.ingress.create }}
+  "isIngressNginx": {{ .Values.ingress.nginx }},
+{{- end }}
+{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
+  "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
+  "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | quote }}{{ else }}"unknown"{{ end }},
+  "dbType": "unknown",
+  "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+  "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
+}
+{{- end }}
+
 {{/*
 Create default value for ingress port
 */}}
@@ -100,6 +135,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Crowd logs get captured in 
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  mountPath: /opt/atlassian/helm
+{{- end }}
 {{ end }}
 
 {{/*
@@ -200,6 +239,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: certs
   secret:
     secretName: {{ .Values.crowd.additionalCertificates.secretName }}
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  configMap:
+    name: {{ include "common.names.fullname" . }}-helm-values
 {{- end }}
 {{- end }}
 

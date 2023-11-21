@@ -57,6 +57,328 @@ data:
       name: java_lang_G1_$1_Generation_$2
     - pattern: '.*'
 ---
+# Source: confluence/templates/configmap-values-analytics.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-confluence-helm-values
+  labels:
+    helm.sh/chart: confluence-1.16.6
+    app.kubernetes.io/name: confluence
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.3"
+    app.kubernetes.io/managed-by: Helm
+data:
+  values.yaml: |
+    additionalConfigMaps: []
+    additionalContainers: []
+    additionalFiles: []
+    additionalHosts:
+    - hostnames:
+      - test.example.com
+      ip: 192.168.1.1
+    additionalInitContainers: []
+    additionalLabels: {}
+    affinity: {}
+    atlassianAnalyticsAndSupport:
+      analytics:
+        enabled: true
+      helmValues:
+        enabled: true
+    common:
+      global: {}
+    confluence:
+      accessLog:
+        enabled: true
+        localHomeSubPath: logs
+        mountPath: /opt/atlassian/confluence/logs
+      additionalBundledPlugins: []
+      additionalCertificates:
+        customCmd: null
+        secretName: null
+      additionalEnvironmentVariables: []
+      additionalJvmArgs: []
+      additionalLibraries: []
+      additionalPorts: []
+      additionalVolumeClaimTemplates: []
+      additionalVolumeMounts: []
+      clustering:
+        enabled: false
+        usePodNameAsClusterNodeName: true
+      containerSecurityContext: {}
+      forceConfigUpdate: false
+      hazelcastService:
+        annotations: {}
+        enabled: false
+        port: 5701
+        type: ClusterIP
+      jvmDebug:
+        enabled: false
+      license:
+        secretKey: license-key
+        secretName: null
+      livenessProbe:
+        enabled: false
+        failureThreshold: 12
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 1
+      ports:
+        hazelcast: 5701
+        http: 8090
+      readinessProbe:
+        customProbe: {}
+        enabled: true
+        failureThreshold: 6
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        timeoutSeconds: 1
+      resources:
+        container:
+          requests:
+            cpu: "2"
+            memory: 2G
+        jvm:
+          maxHeap: 1g
+          minHeap: 1g
+          reservedCodeCache: 256m
+      s3AttachmentsStorage:
+        bucketName: null
+        bucketRegion: null
+        endpointOverride: null
+      securityContext:
+        fsGroup: 2002
+      securityContextEnabled: true
+      seraphConfig:
+        autoLoginCookieAge: "1209600"
+        generateByHelm: false
+      service:
+        annotations: {}
+        contextPath: null
+        loadBalancerIP: null
+        port: 80
+        sessionAffinity: None
+        sessionAffinityConfig:
+          clientIP:
+            timeoutSeconds: null
+        type: ClusterIP
+      setPermissions: true
+      shutdown:
+        command: /shutdown-wait.sh
+        terminationGracePeriodSeconds: 25
+      startupProbe:
+        enabled: false
+        failureThreshold: 120
+        initialDelaySeconds: 60
+        periodSeconds: 5
+      tomcatConfig:
+        acceptCount: "10"
+        connectionTimeout: "20000"
+        customServerXml: ""
+        debug: "0"
+        enableLookups: "false"
+        generateByHelm: false
+        maxHttpHeaderSize: "8192"
+        maxThreads: "100"
+        mgmtPort: "8000"
+        minSpareThreads: "10"
+        port: "8090"
+        protocol: org.apache.coyote.http11.Http11NioProtocol
+        proxyInternalIps: null
+        proxyName: null
+        proxyPort: null
+        redirectPort: "8443"
+        scheme: null
+        secure: null
+        uriEncoding: UTF-8
+      topologySpreadConstraints: []
+      umask: "0022"
+      useHelmReleaseNameAsContainerName: false
+    database:
+      credentials:
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      type: null
+      url: null
+    fluentd:
+      command: null
+      customConfigFile: false
+      elasticsearch:
+        enabled: true
+        hostname: elasticsearch
+        indexNamePrefix: confluence
+      enabled: false
+      extraVolumes: []
+      fluentdCustomConfig: {}
+      httpPort: 9880
+      imageRepo: fluent/fluentd-kubernetes-daemonset
+      imageTag: v1.11.5-debian-elasticsearch7-1.2
+      resources: {}
+    image:
+      pullPolicy: IfNotPresent
+      repository: atlassian/confluence
+      tag: ""
+    ingress:
+      annotations: {}
+      className: nginx
+      create: false
+      host: null
+      https: true
+      maxBodySize: 250m
+      nginx: true
+      path: null
+      proxyConnectTimeout: 60
+      proxyReadTimeout: 60
+      proxySendTimeout: 60
+      tlsSecretName: null
+    monitoring:
+      exposeJmxMetrics: true
+      fetchJmxExporterJar: true
+      grafana:
+        createDashboards: false
+        dashboardAnnotations: {}
+        dashboardLabels: {}
+      jmxExporterCustomConfig: {}
+      jmxExporterCustomJarLocation: null
+      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageTag: 0.18.0
+      jmxExporterInitContainer:
+        customSecurityContext: {}
+        resources: {}
+        runAsRoot: true
+      jmxExporterPort: 9999
+      jmxExporterPortType: ClusterIP
+      jmxServiceAnnotations: {}
+      serviceMonitor:
+        create: false
+        prometheusLabelSelector: {}
+        scrapeIntervalSeconds: 30
+    nodeSelector: {}
+    podAnnotations: {}
+    podDisruptionBudget:
+      annotations: {}
+      enabled: false
+      labels: {}
+      maxUnavailable: null
+      minAvailable: null
+    podLabels: {}
+    priorityClassName: high
+    replicaCount: 1
+    serviceAccount:
+      annotations: {}
+      clusterRole:
+        create: false
+        name: null
+      clusterRoleBinding:
+        create: false
+        name: null
+      create: true
+      eksIrsa:
+        roleArn: null
+      imagePullSecrets: []
+      name: null
+      role:
+        create: true
+      roleBinding:
+        create: true
+    synchrony:
+      additionalCertificates:
+        customCmd: null
+        secretName: null
+      additionalJvmArgs: []
+      additionalLibraries: []
+      additionalPorts: []
+      additionalVolumeMounts: []
+      containerSecurityContext: {}
+      enabled: true
+      podAnnotations: {}
+      ports:
+        hazelcast: 5701
+        http: 8091
+      readinessProbe:
+        failureThreshold: 10
+        healthcheckPath: /synchrony/heartbeat
+        initialDelaySeconds: 5
+        periodSeconds: 1
+      replicaCount: 1
+      resources:
+        container:
+          requests:
+            cpu: "2"
+            memory: 2.5G
+        jvm:
+          maxHeap: 2g
+          minHeap: 1g
+          stackSize: 2048k
+      securityContext:
+        fsGroup: 2002
+      securityContextEnabled: true
+      service:
+        annotations: {}
+        loadBalancerIP: null
+        port: 80
+        type: ClusterIP
+      setPermissions: true
+      shutdown:
+        terminationGracePeriodSeconds: 25
+      topologySpreadConstraints: []
+    tolerations: []
+    volumes:
+      additional: []
+      additionalSynchrony: []
+      defaultPermissionsMode: 484
+      localHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/confluence
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+      sharedHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/shared-home
+        nfsPermissionFixer:
+          command: null
+          enabled: true
+          imageRepo: alpine
+          imageTag: latest
+          mountPath: /shared-home
+          resources: {}
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+        subPath: null
+      synchronyHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/confluence
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+  analytics.json: |
+    {
+      "imageTag": "8.5.3",
+      "replicas": 1,
+      "isJmxEnabled": true,
+      "isIngressEnabled": false,
+      "k8sVersion": "1.24",
+      "svcType": "ClusterIP",
+      "dbType": "unknown",
+      "isS3AttachmentsStorageEnabled":false,
+      "isClusteringEnabled": false,
+      "isSharedHomePVCCreated": false,
+      "isServiceMonitorCreated": false,
+      "isGrafanaDashboardsCreated": false
+    }
+---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -259,7 +581,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 7a866c1fee184e9212dc795695fec4821f082f3b7d5f2fc3a52d7269c8be06a7
+        checksum/config-jvm: bb3be4203b052588513ff3a759fe5eabb404e391407d5c7c19473423c38aec89
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -325,6 +647,8 @@ spec:
               subPath: "logs"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - name: helm-values
+              mountPath: /opt/atlassian/helm
             - name: jmx-config
               mountPath: /opt/atlassian/jmx
           env:
@@ -372,6 +696,9 @@ spec:
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: helm-values
+          configMap:
+            name: unittest-confluence-helm-values
         - name: jmx-config
           configMap:
             name: unittest-confluence-jmx-config
