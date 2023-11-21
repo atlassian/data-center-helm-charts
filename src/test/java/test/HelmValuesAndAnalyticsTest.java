@@ -50,6 +50,22 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo"})
+    void support_configmap_created_with_sanitized_jvm_args(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".additionalJvmArgs[0]", "-DsomeToken=abcde",
+                product.name() + ".additionalJvmArgs[1]", "-Dpassword=123",
+                product.name() + ".additionalJvmArgs[2]", "-DsomeArg=qwerty123"
+        ));
+        KubeResource additionalConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextContaining("-DsomeToken=Sanitized by Support Utility");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextContaining("-Dpassword=Sanitized by Support Utility");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextNotContaining("-DsomeToken=abcde");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextNotContaining("-Dpassword=123");
+        assertThat(additionalConfigMap.getConfigMapData().get("values.yaml")).hasTextContaining("-DsomeArg=qwerty123");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_created_with_values_only(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
