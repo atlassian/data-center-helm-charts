@@ -8,11 +8,23 @@
 {{- end }}
 {{- end }}
 
+{{/* Define a sanitized list of additionalJvmArgs */}}
+{{- define "confluence.sanitizedAdditionalJvmArgs" -}}
+{{- range .Values.confluence.additionalJvmArgs }}
+ {{- $jvmArgs := regexSplit "=" . -1 }}
+   {{- if regexMatch "(?i)(secret|token|password).*$" (first $jvmArgs) }}
+-  {{ first $jvmArgs }}=Sanitized by Support Utility{{ else}}
+-  {{ . }}
+{{ end }}
+{{- end }}
+{{- end }}
+
 {{/* Define sanitized Helm values */}}
 {{- define "confluence.sanitizedValues" -}}
 {{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "confluence.sanitizedAdditionalEnvVars" .)) }}
-{{- $mergedValues := merge $sanitizedAdditionalEnvs .Values }}
-{{- toYaml $mergedValues | replace " |2-" "" |  nindent 4 }}
+{{- $sanitizedAdditionalJvmArgs := dict .Chart.Name (dict "additionalJvmArgs" (include "confluence.sanitizedAdditionalJvmArgs" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs $sanitizedAdditionalJvmArgs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
 {{- end }}
 
 {{/*

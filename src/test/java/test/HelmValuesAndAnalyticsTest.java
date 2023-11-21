@@ -50,7 +50,7 @@ public class HelmValuesAndAnalyticsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo"})
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void support_configmap_created_with_sanitized_jvm_args(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product.name() + ".additionalJvmArgs[0]", "-DsomeToken=abcde",
