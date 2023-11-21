@@ -12,7 +12,7 @@
 {{- define "bamboo.sanitizedAdditionalJvmArgs" -}}
 {{- range .Values.bamboo.additionalJvmArgs }}
  {{- $jvmArgs := regexSplit "=" . -1 }}
-   {{- if regexMatch "^.*(secret|token|password).*$" (first $jvmArgs) }}
+   {{- if regexMatch "(?i)(secret|token|password).*$" (first $jvmArgs) }}
 -  {{ first $jvmArgs }}=Sanitized by Support Utility{{ else}}
 -  {{ . }}
 {{ end }}
@@ -24,7 +24,7 @@
 {{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "bamboo.sanitizedAdditionalEnvVars" .)) }}
 {{- $sanitizedAdditionalJvmArgs := dict .Chart.Name (dict "additionalJvmArgs" (include "bamboo.sanitizedAdditionalJvmArgs" .)) }}
 {{- $mergedValues := merge $sanitizedAdditionalEnvs $sanitizedAdditionalJvmArgs .Values }}
-{{- toYaml $mergedValues | replace " |2-" "" | replace " |-" ""|  nindent 4 }}
+{{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
 {{- end }}
 
 {{/*
