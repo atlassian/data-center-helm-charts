@@ -26,13 +26,13 @@
 {{- end }}
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-  "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.confluence.service.type }}{{ .Values.confluence.service.type | quote }}{{ else }}"unknown"{{ end }},
+  "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.confluence.service.type }}{{ .Values.confluence.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
 {{- if eq .Values.database.type nil }}
-  "dbType": "unknown",
+  "dbType": "UNKNOWN",
 {{- else }}
-{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "sqlserver" "sqlserver" "oracle" "oracle" "mysql" "mysql" }}
+{{- $databaseTypeMap := dict "postgres" "POSTGRES" "mssql" "MSSQL" "sqlserver" "SQLSERVER" "oracle" "ORACLE" "mysql" "MYSQL" }}
 {{- $dbTypeInValues := .Values.database.type }}
-{{- $dbType := "unknown" | quote }}
+{{- $dbType := "UNKNOWN" | quote }}
 {{- range $key, $value := $databaseTypeMap }}
 {{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
   {{- $dbType = $value | quote }}

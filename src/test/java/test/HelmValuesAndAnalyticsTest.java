@@ -138,8 +138,8 @@ public class HelmValuesAndAnalyticsTest {
         assertNotNull(analyticsData.getImageTag());
         assertEquals(1, analyticsData.getReplicas());
         assertFalse(analyticsData.isIngressEnabled());
-        assertEquals("unknown", analyticsData.getDbType());
-        assertEquals("ClusterIP", analyticsData.getSvcType());
+        assertEquals("UNKNOWN", analyticsData.getDbType());
+        assertEquals("CLUSTERIP", analyticsData.getSvcType());
         assertFalse(analyticsData.isGrafanaDashboardsCreated());
         assertFalse(analyticsData.isServiceMonitorCreated());
         assertFalse(analyticsData.isJmxEnabled());
@@ -177,7 +177,7 @@ public class HelmValuesAndAnalyticsTest {
                 "oracle10", "oracle.jdbc.driver.OracleDriver",
                 "mysql7", "com.mysql.cj.jdbc.Driver"
         );
-        List<String> normalizedDatabaseTypes = List.of("postgres", "mssql", "sqlserver", "oracle", "mysql");
+        List<String> normalizedDatabaseTypes = List.of("POSTGRES", "MSSQL", "SQLSERVER", "ORACLE", "MYSQL");
         for (Map.Entry<String, String> entry : databaseConfigurations.entrySet()) {
             String databaseType = entry.getKey();
             String databaseDriver = entry.getValue();
@@ -189,7 +189,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertTrue(normalizedDatabaseTypes.contains(analyticsData.getDbType().toLowerCase()));
+            assertTrue(normalizedDatabaseTypes.contains(analyticsData.getDbType().toUpperCase()));
         }
     }
 
@@ -205,7 +205,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals("unknown", analyticsData.getDbType());
+            assertEquals("UNKNOWN", analyticsData.getDbType());
         }
     }
 
@@ -220,7 +220,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals(svc, analyticsData.getSvcType());
+            assertEquals(svc.toUpperCase(), analyticsData.getSvcType());
         }
     }
 
@@ -235,7 +235,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals("unknown", analyticsData.getSvcType());
+            assertEquals("UNKNOWN", analyticsData.getSvcType());
         }
     }
 
