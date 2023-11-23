@@ -259,8 +259,8 @@ data:
       "isJmxEnabled": true,
       "isIngressEnabled": false,
       "k8sVersion": "1.24",
-      "svcType": "ClusterIP",
-      "dbType": "unknown",
+      "svcType": "CLUSTERIP",
+      "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
       "isServiceMonitorCreated": false,
       "isGrafanaDashboardsCreated": false
