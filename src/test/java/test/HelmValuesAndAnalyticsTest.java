@@ -170,14 +170,23 @@ public class HelmValuesAndAnalyticsTest {
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent", "crowd"}, mode = EnumSource.Mode.EXCLUDE)
     void analytics_json_db_type(Product product) throws Exception {
-        Map<String, String> databaseConfigurations = Map.of(
-                "postgres72", "org.postgresql.Driver",
-                "mssql01", "com.microsoft.mssql.jdbc.mssql",
-                "sqlserver11", "com.microsoft.sqlserver.jdbc.SQLSDriver",
-                "oracle10", "oracle.jdbc.driver.OracleDriver",
-                "mysql7", "com.mysql.cj.jdbc.Driver"
-        );
-        List<String> normalizedDatabaseTypes = List.of("POSTGRES", "MSSQL", "SQLSERVER", "ORACLE", "MYSQL");
+        Map<String, String> databaseConfigurations;
+        if (product == Product.bitbucket) {
+            databaseConfigurations = Map.of(
+                    "postgres72", "org.postgresql.Driver",
+                    "sqlserver11", "com.microsoft.sqlserver.jdbc.SQLSDriver",
+                    "oracle10", "oracle.jdbc.driver.OracleDriver",
+                    "mysql7", "com.mysql.cj.jdbc.Driver"
+            );
+        } else {
+            databaseConfigurations = Map.of(
+                    "postgres72", "org.postgresql.Driver",
+                    "mssql01", "com.microsoft.mssql.jdbc.mssql",
+                    "oracle10", "oracle.jdbc.driver.OracleDriver",
+                    "mysql7", "com.mysql.cj.jdbc.Driver"
+            );
+        }
+        List<String> normalizedDatabaseTypes = List.of("POSTGRES", "MSSQL", "ORACLE", "MYSQL");
         for (Map.Entry<String, String> entry : databaseConfigurations.entrySet()) {
             String databaseType = entry.getKey();
             String databaseDriver = entry.getValue();
@@ -189,7 +198,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertTrue(normalizedDatabaseTypes.contains(analyticsData.getDbType().toUpperCase()));
+            assertTrue(normalizedDatabaseTypes.contains(analyticsData.getDbType()));
         }
     }
 

@@ -33,7 +33,7 @@
 {{- if eq .Values.database.driver nil }}
   "dbType": "UNKNOWN",
 {{- else }}
-{{- $databaseTypeMap := dict "postgres" "POSTGRES" "mssql" "MSSQL" "sqlserver" "SQLSERVER" "oracle" "ORACLE" "mysql" "MYSQL" }}
+{{- $databaseTypeMap := dict "postgres" "POSTGRES" "sqlserver" "MSSQL" "oracle" "ORACLE" "mysql" "MYSQL" }}
 {{- $dbTypeInValues := .Values.database.driver }}
 {{- $dbType := "UNKNOWN" | quote }}
 {{- range $key, $value := $databaseTypeMap }}
