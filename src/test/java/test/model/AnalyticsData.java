@@ -11,12 +11,6 @@ public class AnalyticsData {
     @JsonProperty("isJmxEnabled")
     private boolean isJmxEnabled;
 
-    @JsonProperty("isIngressEnabled")
-    private boolean isIngressEnabled;
-
-    @JsonProperty("isIngressNginx")
-    private boolean isIngressNginx;
-
     @JsonProperty("k8sVersion")
     private String k8sVersion;
 
@@ -25,6 +19,9 @@ public class AnalyticsData {
 
     @JsonProperty("dbType")
     private String dbType;
+
+    @JsonProperty("ingressType")
+    private String ingressType;
 
     @JsonProperty("isS3AttachmentsStorageEnabled")
     private boolean isS3AttachmentsStorageEnabled;
@@ -55,6 +52,14 @@ public class AnalyticsData {
         this.imageTag = imageTag;
     }
 
+    public String getIngressType() {
+        return ingressType;
+    }
+
+    public void setIngressType(String ingressType) {
+        this.ingressType = ingressType;
+    }
+
     public int getReplicas() {
         return replicas;
     }
@@ -69,22 +74,6 @@ public class AnalyticsData {
 
     public void setJmxEnabled(boolean jmxEnabled) {
         isJmxEnabled = jmxEnabled;
-    }
-
-    public boolean isIngressEnabled() {
-        return isIngressEnabled;
-    }
-
-    public void setIngressEnabled(boolean ingressEnabled) {
-        isIngressEnabled = ingressEnabled;
-    }
-
-    public boolean isIngressNginx() {
-        return isIngressNginx;
-    }
-
-    public void setIngressNginx(boolean ingressNginx) {
-        isIngressNginx = ingressNginx;
     }
 
     public String getK8sVersion() {
@@ -169,12 +158,11 @@ public class AnalyticsData {
     public AnalyticsData() {
     }
 
-    public AnalyticsData(String imageTag, int replicas, boolean isJmxEnabled, boolean isIngressEnabled, boolean isIngressNginx, String k8sVersion, String serviceType, String dbType, boolean isS3AttachmentsStorageEnabled, boolean isS3AvatarsEnabled, boolean isClusteringEnabled, boolean isSharedHomePVCCreated, boolean isBitbucketMeshEnabled, boolean isServiceMonitorCreated, boolean isGrafanaDashboardsCreated) {
+    public AnalyticsData(String imageTag, int replicas, boolean isJmxEnabled, String ingressType, String k8sVersion, String serviceType, String dbType, boolean isS3AttachmentsStorageEnabled, boolean isS3AvatarsEnabled, boolean isClusteringEnabled, boolean isSharedHomePVCCreated, boolean isBitbucketMeshEnabled, boolean isServiceMonitorCreated, boolean isGrafanaDashboardsCreated) {
         this.imageTag = imageTag;
         this.replicas = replicas;
         this.isJmxEnabled = isJmxEnabled;
-        this.isIngressEnabled = isIngressEnabled;
-        this.isIngressNginx = isIngressNginx;
+        this.ingressType = ingressType;
         this.k8sVersion = k8sVersion;
         this.serviceType = serviceType;
         this.dbType = dbType;

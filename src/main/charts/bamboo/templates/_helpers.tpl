@@ -20,10 +20,7 @@
   "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
   "replicas": {{ .Values.replicaCount }},
   "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
-  "isIngressEnabled": {{ .Values.ingress.create }},
-{{- if .Values.ingress.create }}
-  "isIngressNginx": {{ .Values.ingress.nginx }},
-{{- end }}
+"ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
   "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},

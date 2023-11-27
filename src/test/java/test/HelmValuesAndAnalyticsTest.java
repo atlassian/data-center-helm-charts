@@ -137,7 +137,7 @@ public class HelmValuesAndAnalyticsTest {
         AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
         assertNotNull(analyticsData.getImageTag());
         assertEquals(1, analyticsData.getReplicas());
-        assertFalse(analyticsData.isIngressEnabled());
+        assertEquals("NONE", analyticsData.getIngressType());
         assertEquals("UNKNOWN", analyticsData.getDbType());
         assertEquals("CLUSTERIP", analyticsData.getServiceType());
         assertFalse(analyticsData.isGrafanaDashboardsCreated());
@@ -150,7 +150,6 @@ public class HelmValuesAndAnalyticsTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void analytics_json_booleans(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.create", "true",
                 "monitoring.serviceMonitor.create", "true",
                 "monitoring.grafana.createDashboards", "true",
                 "monitoring.exposeJmxMetrics", "true",
@@ -159,8 +158,6 @@ public class HelmValuesAndAnalyticsTest {
         String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
         ObjectMapper objectMapper = new ObjectMapper();
         AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-        assertTrue(analyticsData.isIngressEnabled());
-        assertTrue(analyticsData.isIngressNginx());
         assertTrue(analyticsData.isGrafanaDashboardsCreated());
         assertTrue(analyticsData.isServiceMonitorCreated());
         assertTrue(analyticsData.isJmxEnabled());
@@ -246,6 +243,31 @@ public class HelmValuesAndAnalyticsTest {
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
             assertEquals("UNKNOWN", analyticsData.getServiceType());
         }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void analytics_json_nginx_ingress_type(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true"
+        ));
+        String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
+        ObjectMapper objectMapper = new ObjectMapper();
+        AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
+        assertEquals("NGINX", analyticsData.getIngressType());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void analytics_json_non_nginx_ingress_type(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.nginx", "false"
+        ));
+        String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
+        ObjectMapper objectMapper = new ObjectMapper();
+        AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
+        assertEquals("OTHER", analyticsData.getIngressType());
     }
 
     @ParameterizedTest
