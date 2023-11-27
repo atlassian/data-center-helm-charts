@@ -30,7 +30,7 @@ data:
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2    
-    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml    
+    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 256m
@@ -368,7 +368,7 @@ data:
       "imageTag": "8.5.3",
       "replicas": 1,
       "isJmxEnabled": true,
-      "ingressType": "NONE", 
+      "ingressType": "NONE",
       "k8sVersion": "1.24",
       "serviceType": "CLUSTERIP",
       "dbType": "UNKNOWN",
