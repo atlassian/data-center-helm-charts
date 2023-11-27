@@ -297,7 +297,7 @@ data:
       "isIngressEnabled": false,
       "k8sVersion": "1.24",
       "isS3AvatarsEnabled": false,
-      "svcType": "CLUSTERIP",
+      "serviceType": "CLUSTERIP",
       "dbType": "UNKNOWN",
       "isClusteringEnabled": false,
       "isSharedHomePVCCreated": false,

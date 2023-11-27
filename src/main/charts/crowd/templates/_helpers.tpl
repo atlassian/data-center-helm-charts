@@ -26,7 +26,7 @@
 {{- end }}
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-  "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
   "dbType": "UNKNOWN",
   "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
   "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},

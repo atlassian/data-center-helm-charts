@@ -259,7 +259,7 @@ data:
       "isJmxEnabled": true,
       "isIngressEnabled": false,
       "k8sVersion": "1.24",
-      "svcType": "CLUSTERIP",
+      "serviceType": "CLUSTERIP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
       "isServiceMonitorCreated": false,

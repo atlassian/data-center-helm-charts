@@ -29,7 +29,7 @@
 {{- end }}
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-  "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bitbucket.service.type }}{{ .Values.bitbucket.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bitbucket.service.type }}{{ .Values.bitbucket.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
 {{- if eq .Values.database.driver nil }}
   "dbType": "UNKNOWN",
 {{- else }}

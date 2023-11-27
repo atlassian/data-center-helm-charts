@@ -26,7 +26,7 @@
 {{- end }}
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-  "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
 {{- if eq .Values.database.type nil }}
   "dbType": "UNKNOWN",
 {{- else }}

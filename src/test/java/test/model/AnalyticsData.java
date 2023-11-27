@@ -20,8 +20,8 @@ public class AnalyticsData {
     @JsonProperty("k8sVersion")
     private String k8sVersion;
 
-    @JsonProperty("svcType")
-    private String svcType;
+    @JsonProperty("serviceType")
+    private String serviceType;
 
     @JsonProperty("dbType")
     private String dbType;
@@ -95,12 +95,12 @@ public class AnalyticsData {
         this.k8sVersion = k8sVersion;
     }
 
-    public String getSvcType() {
-        return svcType;
+    public String getServiceType() {
+        return serviceType;
     }
 
-    public void setSvcType(String svcType) {
-        this.svcType = svcType;
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public String getDbType() {
@@ -169,14 +169,14 @@ public class AnalyticsData {
     public AnalyticsData() {
     }
 
-    public AnalyticsData(String imageTag, int replicas, boolean isJmxEnabled, boolean isIngressEnabled, boolean isIngressNginx, String k8sVersion, String svcType, String dbType, boolean isS3AttachmentsStorageEnabled, boolean isS3AvatarsEnabled, boolean isClusteringEnabled, boolean isSharedHomePVCCreated, boolean isBitbucketMeshEnabled, boolean isServiceMonitorCreated, boolean isGrafanaDashboardsCreated) {
+    public AnalyticsData(String imageTag, int replicas, boolean isJmxEnabled, boolean isIngressEnabled, boolean isIngressNginx, String k8sVersion, String serviceType, String dbType, boolean isS3AttachmentsStorageEnabled, boolean isS3AvatarsEnabled, boolean isClusteringEnabled, boolean isSharedHomePVCCreated, boolean isBitbucketMeshEnabled, boolean isServiceMonitorCreated, boolean isGrafanaDashboardsCreated) {
         this.imageTag = imageTag;
         this.replicas = replicas;
         this.isJmxEnabled = isJmxEnabled;
         this.isIngressEnabled = isIngressEnabled;
         this.isIngressNginx = isIngressNginx;
         this.k8sVersion = k8sVersion;
-        this.svcType = svcType;
+        this.serviceType = serviceType;
         this.dbType = dbType;
         this.isS3AttachmentsStorageEnabled = isS3AttachmentsStorageEnabled;
         this.isS3AvatarsEnabled = isS3AvatarsEnabled;

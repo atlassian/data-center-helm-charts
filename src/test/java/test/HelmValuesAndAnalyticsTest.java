@@ -139,7 +139,7 @@ public class HelmValuesAndAnalyticsTest {
         assertEquals(1, analyticsData.getReplicas());
         assertFalse(analyticsData.isIngressEnabled());
         assertEquals("UNKNOWN", analyticsData.getDbType());
-        assertEquals("CLUSTERIP", analyticsData.getSvcType());
+        assertEquals("CLUSTERIP", analyticsData.getServiceType());
         assertFalse(analyticsData.isGrafanaDashboardsCreated());
         assertFalse(analyticsData.isServiceMonitorCreated());
         assertFalse(analyticsData.isJmxEnabled());
@@ -229,7 +229,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals(svc.toUpperCase(), analyticsData.getSvcType());
+            assertEquals(svc.toUpperCase(), analyticsData.getServiceType());
         }
     }
 
@@ -244,7 +244,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals("UNKNOWN", analyticsData.getSvcType());
+            assertEquals("UNKNOWN", analyticsData.getServiceType());
         }
     }
 
