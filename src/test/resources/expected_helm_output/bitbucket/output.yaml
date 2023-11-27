@@ -375,7 +375,8 @@ data:
     {
       "imageTag": "8.9.7",
       "replicas": 1,
-      "ingressType": "NONE",
+      "isJmxEnabled": true,
+      "ingressType": "NONE", 
       "k8sVersion": "1.24",
       "serviceType": "CLUSTERIP",
       "dbType": "UNKNOWN",

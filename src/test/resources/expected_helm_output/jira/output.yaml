@@ -293,7 +293,8 @@ data:
     {
       "imageTag": "9.4.12",
       "replicas": 1,
-      "ingressType": "NONE",
+      "isJmxEnabled": true,
+      "ingressType": "NONE", 
       "k8sVersion": "1.24",
       "isS3AvatarsEnabled": false,
       "serviceType": "CLUSTERIP",
