@@ -30,6 +30,36 @@
 {{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
 {{- end }}
 
+{{- define "bitbucket.analyticsJson" }}
+{
+  "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
+  "replicas": {{ .Values.replicaCount }},
+  "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+"ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
+{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
+  "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bitbucket.service.type }}{{ .Values.bitbucket.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+{{- if eq .Values.database.driver nil }}
+  "dbType": "UNKNOWN",
+{{- else }}
+{{- $databaseTypeMap := dict "postgres" "POSTGRES" "sqlserver" "MSSQL" "oracle" "ORACLE" "mysql" "MYSQL" }}
+{{- $dbTypeInValues := .Values.database.driver }}
+{{- $dbType := "UNKNOWN" | quote }}
+{{- range $key, $value := $databaseTypeMap }}
+{{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
+  {{- $dbType = $value | quote }}
+{{- end }}
+{{- end }}
+  "dbType": {{ $dbType }},
+{{- end }}
+  "isClusteringEnabled": {{ .Values.bitbucket.clustering.enabled }},
+  "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+  "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }},
+  "isBitbucketMeshEnabled": {{ .Values.bitbucket.mesh.enabled }}
+}
+{{- end }}
+
 {{/*
 The name of the service account to be used.
 If the name is defined in the chart values, then use that,

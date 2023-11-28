@@ -12,33 +12,6 @@ data:
 {{- end }}
 {{- if .Values.atlassianAnalyticsAndSupport.analytics.enabled }}
   analytics.json: |
-    {
-      "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ .Values.image.tag | quote }}{{ end }},
-      "replicas": {{ .Values.replicaCount }},
-      "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
-      "isIngressEnabled": {{ .Values.ingress.create }},
-{{- if .Values.ingress.create }}
-      "isIngressNginx": {{ .Values.ingress.nginx }},
-{{- end }}
-{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
-      "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | quote }}{{ else }}"unknown"{{ end }},
-{{- if eq .Values.database.type nil }}
-      "dbType": "unknown",
-{{- else }}
-{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "sqlserver" "sqlserver" "oracle" "oracle" "mysql" "mysql" }}
-{{- $dbTypeInValues := .Values.database.type }}
-  {{- $dbType := "unknown" | quote }}
-  {{- range $key, $value := $databaseTypeMap }}
-    {{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
-      {{- $dbType = $value | quote }}
-    {{- end }}
-  {{- end }}
-      "dbType": {{ $dbType }},
-{{- end }}
-      "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
-      "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
-      "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
-    }
+  {{- include "bamboo.analyticsJson" . | nindent 4 }}
 {{- end }}
 {{- end }}

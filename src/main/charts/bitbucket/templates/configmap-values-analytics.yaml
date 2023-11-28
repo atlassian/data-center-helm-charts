@@ -12,35 +12,6 @@ data:
 {{- end }}
 {{- if .Values.atlassianAnalyticsAndSupport.analytics.enabled }}
   analytics.json: |
-    {
-      "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ .Values.image.tag | quote }}{{ end }},
-      "replicas": {{ .Values.replicaCount }},
-      "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
-      "isIngressEnabled": {{ .Values.ingress.create }},
-{{- if .Values.ingress.create }}
-      "isIngressNginx": {{ .Values.ingress.nginx }},
-{{- end }}
-{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
-      "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-      "svcType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bitbucket.service.type }}{{ .Values.bitbucket.service.type | quote }}{{ else }}"unknown"{{ end }},
-{{- if eq .Values.database.driver nil }}
-      "dbType": "unknown",
-{{- else }}
-{{- $databaseTypeMap := dict "postgres" "postgres" "mssql" "mssql" "sqlserver" "sqlserver" "oracle" "oracle" "mysql" "mysql" }}
-{{- $dbTypeInValues := .Values.database.driver }}
-  {{- $dbType := "unknown" | quote }}
-  {{- range $key, $value := $databaseTypeMap }}
-    {{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
-      {{- $dbType = $value | quote }}
-    {{- end }}
-  {{- end }}
-      "dbType": {{ $dbType }},
-{{- end }}
-      "isClusteringEnabled": {{ .Values.bitbucket.clustering.enabled }},
-      "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
-      "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
-      "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }},
-      "isBitbucketMeshEnabled": {{ .Values.bitbucket.mesh.enabled }}
-    }
+  {{- include "bitbucket.analyticsJson" . | nindent 4 }}
 {{- end }}
 {{- end }}

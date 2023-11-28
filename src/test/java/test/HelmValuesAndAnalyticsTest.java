@@ -153,9 +153,9 @@ public class HelmValuesAndAnalyticsTest {
         AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
         assertNotNull(analyticsData.getImageTag());
         assertEquals(1, analyticsData.getReplicas());
-        assertFalse(analyticsData.isIngressEnabled());
-        assertEquals("unknown", analyticsData.getDbType());
-        assertEquals("ClusterIP", analyticsData.getSvcType());
+        assertEquals("NONE", analyticsData.getIngressType());
+        assertEquals("UNKNOWN", analyticsData.getDbType());
+        assertEquals("CLUSTERIP", analyticsData.getServiceType());
         assertFalse(analyticsData.isGrafanaDashboardsCreated());
         assertFalse(analyticsData.isServiceMonitorCreated());
         assertFalse(analyticsData.isJmxEnabled());
@@ -166,7 +166,6 @@ public class HelmValuesAndAnalyticsTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void analytics_json_booleans(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "ingress.create", "true",
                 "monitoring.serviceMonitor.create", "true",
                 "monitoring.grafana.createDashboards", "true",
                 "monitoring.exposeJmxMetrics", "true",
@@ -175,8 +174,6 @@ public class HelmValuesAndAnalyticsTest {
         String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
         ObjectMapper objectMapper = new ObjectMapper();
         AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-        assertTrue(analyticsData.isIngressEnabled());
-        assertTrue(analyticsData.isIngressNginx());
         assertTrue(analyticsData.isGrafanaDashboardsCreated());
         assertTrue(analyticsData.isServiceMonitorCreated());
         assertTrue(analyticsData.isJmxEnabled());
@@ -186,14 +183,23 @@ public class HelmValuesAndAnalyticsTest {
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent", "crowd"}, mode = EnumSource.Mode.EXCLUDE)
     void analytics_json_db_type(Product product) throws Exception {
-        Map<String, String> databaseConfigurations = Map.of(
-                "postgres72", "org.postgresql.Driver",
-                "mssql01", "com.microsoft.mssql.jdbc.mssql",
-                "sqlserver11", "com.microsoft.sqlserver.jdbc.SQLSDriver",
-                "oracle10", "oracle.jdbc.driver.OracleDriver",
-                "mysql7", "com.mysql.cj.jdbc.Driver"
-        );
-        List<String> normalizedDatabaseTypes = List.of("postgres", "mssql", "sqlserver", "oracle", "mysql");
+        Map<String, String> databaseConfigurations;
+        if (product == Product.bitbucket) {
+            databaseConfigurations = Map.of(
+                    "postgres72", "org.postgresql.Driver",
+                    "sqlserver11", "com.microsoft.sqlserver.jdbc.SQLSDriver",
+                    "oracle10", "oracle.jdbc.driver.OracleDriver",
+                    "mysql7", "com.mysql.cj.jdbc.Driver"
+            );
+        } else {
+            databaseConfigurations = Map.of(
+                    "postgres72", "org.postgresql.Driver",
+                    "mssql01", "com.microsoft.mssql.jdbc.mssql",
+                    "oracle10", "oracle.jdbc.driver.OracleDriver",
+                    "mysql7", "com.mysql.cj.jdbc.Driver"
+            );
+        }
+        List<String> normalizedDatabaseTypes = List.of("POSTGRES", "MSSQL", "ORACLE", "MYSQL");
         for (Map.Entry<String, String> entry : databaseConfigurations.entrySet()) {
             String databaseType = entry.getKey();
             String databaseDriver = entry.getValue();
@@ -205,7 +211,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertTrue(normalizedDatabaseTypes.contains(analyticsData.getDbType().toLowerCase()));
+            assertTrue(normalizedDatabaseTypes.contains(analyticsData.getDbType()));
         }
     }
 
@@ -221,7 +227,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals("unknown", analyticsData.getDbType());
+            assertEquals("UNKNOWN", analyticsData.getDbType());
         }
     }
 
@@ -236,7 +242,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals(svc, analyticsData.getSvcType());
+            assertEquals(svc.toUpperCase(), analyticsData.getServiceType());
         }
     }
 
@@ -251,8 +257,33 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals("unknown", analyticsData.getSvcType());
+            assertEquals("UNKNOWN", analyticsData.getServiceType());
         }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void analytics_json_nginx_ingress_type(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true"
+        ));
+        String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
+        ObjectMapper objectMapper = new ObjectMapper();
+        AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
+        assertEquals("NGINX", analyticsData.getIngressType());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void analytics_json_non_nginx_ingress_type(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.nginx", "false"
+        ));
+        String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
+        ObjectMapper objectMapper = new ObjectMapper();
+        AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
+        assertEquals("OTHER", analyticsData.getIngressType());
     }
 
     @ParameterizedTest
@@ -265,6 +296,18 @@ public class HelmValuesAndAnalyticsTest {
         ObjectMapper objectMapper = new ObjectMapper();
         AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
         assertEquals("007", analyticsData.getImageTag());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void analytics_json_assert_sanitized_image_tag(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "image.tag", "9.1.3-ubuntu"
+        ));
+        String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
+        ObjectMapper objectMapper = new ObjectMapper();
+        AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
+        assertEquals("9.1.3", analyticsData.getImageTag());
     }
 
     @ParameterizedTest

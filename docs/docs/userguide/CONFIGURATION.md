@@ -565,3 +565,21 @@ jira:
      secretName: dev-certificates
      customCmd: keytool -import ...
 ```
+
+## :material-home-analytics: Atlassian Support and Analytics
+
+Starting from 1.16.7 Helm chart version, an additional optional ConfigMap is created and mounted into `/opt/atlassian/helm` in the containers. This ConfigMap has 2 keys: `values.yaml` and `analytics.json` that are picked up by the [Atlassian Troubleshooting and Support Tools (ATST)](https://confluence.atlassian.com/support/troubleshooting-and-support-tools-790796813.html){.external} plugin. To disable either of the keys or the entire ConfigMap, set enabled to `false` in the following Helm values stanza:
+
+```yaml
+atlassianAnalyticsAndSupport:
+  analytics:
+    enabled: true
+  helmValues:
+    enabled: true
+```
+
+Helm values are mounted to be included to the [support.zip](https://confluence.atlassian.com/support/create-a-support-zip-790796819.html){.external}. The values file is sanitized both on the Helm chart side (any `additionalEnvironmentVariables` and `additionalJvmArgs` that can potentially contain sensitive information are redacted) and ATST plugin that will redact hostnames, URLs, AWS ARNs and senssitive environment vartiables and JVM flags, if any. If the file is found at `/opt/atlassian/helm/values.yaml` you will see an option to include it to the support.zip when generating one in admin UI.
+
+Analytics json is a subset of `values.yaml` and contains selected Helm values that are sent as an analytics event and written to analytics logs, if analytics is enabled in the product. Analytics values are purely informational and contain information on how Helm charts are used.
+
+You can find the complete list of analytics values in `_helpers.tpl`, `<product>.analyticsJson`.

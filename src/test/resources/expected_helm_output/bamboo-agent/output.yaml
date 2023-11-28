@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bamboo-agent-1.16.6
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "9.4.0"
+    app.kubernetes.io/version: "9.4.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo-agent/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bamboo-agent-1.16.6
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "9.4.0"
+    app.kubernetes.io/version: "9.4.1"
     app.kubernetes.io/managed-by: Helm
 data:
   max_heap: 512m
@@ -35,7 +35,7 @@ metadata:
     helm.sh/chart: bamboo-agent-1.16.6
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "9.4.0"
+    app.kubernetes.io/version: "9.4.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -46,7 +46,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 75e9d7f567f72cd0edfa35ced820e061ca73a2cc4d365e31a8380aeb51132034
+        checksum/config-jvm: 71e1317f2015f6192f7a43c6e3c21c93c72739255fc31462661c64aab894e286
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent
@@ -63,7 +63,7 @@ spec:
       initContainers:
       containers:
         - name: bamboo-agent
-          image: "atlassian/bamboo-agent-base:9.4.0"
+          image: "atlassian/bamboo-agent-base:9.4.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: BAMBOO_SERVER
@@ -95,9 +95,5 @@ spec:
               cpu: "1"
               memory: 2G
           volumeMounts:
-          lifecycle:
-            preStop:
-              exec:
-                command: ["sh", "-c", "/shutdown-wait.sh"]
       priorityClassName: high
       volumes:

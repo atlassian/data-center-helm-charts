@@ -27,6 +27,22 @@
 {{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
 {{- end }}
 
+{{- define "crowd.analyticsJson" }}
+{
+  "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
+  "replicas": {{ .Values.replicaCount }},
+  "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+"ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
+{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
+  "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.crowd.service.type }}{{ .Values.crowd.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+  "dbType": "UNKNOWN",
+  "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+  "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
+}
+{{- end }}
+
 {{/*
 Create default value for ingress port
 */}}

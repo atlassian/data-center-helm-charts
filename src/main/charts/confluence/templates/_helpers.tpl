@@ -27,6 +27,36 @@
 {{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
 {{- end }}
 
+{{- define "confluence.analyticsJson" }}
+{
+  "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
+  "replicas": {{ .Values.replicaCount }},
+  "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+"ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
+{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
+  "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.confluence.service.type }}{{ .Values.confluence.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+{{- if eq .Values.database.type nil }}
+  "dbType": "UNKNOWN",
+{{- else }}
+{{- $databaseTypeMap := dict "postgres" "POSTGRES" "mssql" "MSSQL" "sqlserver" "SQLSERVER" "oracle" "ORACLE" "mysql" "MYSQL" }}
+{{- $dbTypeInValues := .Values.database.type }}
+{{- $dbType := "UNKNOWN" | quote }}
+{{- range $key, $value := $databaseTypeMap }}
+{{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
+  {{- $dbType = $value | quote }}
+{{- end }}
+{{- end }}
+  "dbType": {{ $dbType }},
+{{- end }}
+  "isS3AttachmentsStorageEnabled": {{- if and .Values.confluence.s3AttachmentsStorage.bucketName .Values.confluence.s3AttachmentsStorage.bucketRegion }}true{{ else }}false{{ end }},
+  "isClusteringEnabled": {{ .Values.confluence.clustering.enabled }},
+  "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+  "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
+}
+{{- end }}
+
 {{/*
 Create default value for ingress port
 */}}

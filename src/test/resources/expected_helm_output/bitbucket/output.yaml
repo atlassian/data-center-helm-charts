@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm-mesh.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -38,7 +38,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -57,7 +57,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -70,6 +70,323 @@ data:
       name: java_lang_G1_$1_Generation_$2
     - pattern: '.*'
 ---
+# Source: bitbucket/templates/configmap-values-analytics.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-bitbucket-helm-values
+  labels:
+    helm.sh/chart: bitbucket-1.16.6
+    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "8.9.7"
+    app.kubernetes.io/managed-by: Helm
+data:
+  values.yaml: |
+    additionalConfigMaps: []
+    additionalContainers: []
+    additionalFiles: []
+    additionalHosts:
+    - hostnames:
+      - foo.local
+      - bar.local
+      ip: 127.0.0.1
+    additionalInitContainers: []
+    additionalLabels: {}
+    affinity: {}
+    atlassianAnalyticsAndSupport:
+      analytics:
+        enabled: true
+      helmValues:
+        enabled: true
+    bitbucket:
+      additionalBundledPlugins: []
+      additionalCertificates:
+        customCmd: null
+        secretName: null
+      additionalEnvironmentVariables: []
+      additionalJvmArgs: []
+      additionalLibraries: []
+      additionalPorts: []
+      additionalVolumeClaimTemplates: []
+      additionalVolumeMounts: []
+      applicationMode: default
+      clustering:
+        enabled: false
+        group:
+          nameSecretKey: name
+          passwordSecretKey: password
+          secretName: null
+      containerSecurityContext: {}
+      elasticSearch:
+        baseUrl: null
+        credentials:
+          passwordSecretKey: password
+          secretName: null
+          usernameSecretKey: username
+      hazelcastService:
+        annotations: {}
+        enabled: false
+        port: 5701
+        type: ClusterIP
+      license:
+        secretKey: license-key
+        secretName: null
+      livenessProbe:
+        enabled: false
+        failureThreshold: 12
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 1
+      mesh:
+        additionalCertificates:
+          customCmd: null
+          secretName: null
+        additionalEnvironmentVariables: {}
+        additionalFiles: null
+        additionalInitContainers: {}
+        additionalJvmArgs: []
+        affinity: {}
+        enabled: true
+        image:
+          pullPolicy: IfNotPresent
+          repository: atlassian/bitbucket-mesh
+          tag: 2.0.1
+        nodeAutoRegistration: false
+        nodeSelector: {}
+        podAnnotations: {}
+        podLabels: {}
+        podManagementPolicy: OrderedReady
+        priorityClassName: high
+        replicaCount: 3
+        resources:
+          container:
+            limits:
+              cpu: "2"
+              memory: 2G
+            requests:
+              cpu: "1"
+              memory: 2G
+          jvm:
+            maxHeap: 1g
+            minHeap: 512m
+        schedulerName: null
+        service:
+          annotations: {}
+          loadBalancerIP: null
+          port: 7777
+          type: ClusterIP
+        setByDefault: false
+        shutdown:
+          terminationGracePeriodSeconds: 35
+        tolerations: {}
+        topologySpreadConstraints: {}
+        volume:
+          create: true
+          mountPath: /var/atlassian/application-data/mesh
+          resources:
+            requests:
+              storage: 1Gi
+          storageClass: null
+      mirror:
+        upstreamUrl: null
+      podManagementStrategy: OrderedReady
+      ports:
+        hazelcast: 5701
+        http: 7990
+        ssh: 7999
+      readinessProbe:
+        customProbe: {}
+        enabled: true
+        failureThreshold: 60
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        timeoutSeconds: 1
+      resources:
+        container:
+          requests:
+            cpu: "2"
+            memory: 2G
+        jvm:
+          maxHeap: 1g
+          minHeap: 512m
+      securityContext:
+        fsGroup: 2003
+      securityContextEnabled: true
+      service:
+        annotations: {}
+        contextPath: null
+        loadBalancerIP: null
+        port: 80
+        sessionAffinity: None
+        sessionAffinityConfig:
+          clientIP:
+            timeoutSeconds: null
+        sshPort: 7999
+        type: ClusterIP
+      setPermissions: true
+      shutdown:
+        command: /shutdown-wait.sh
+        terminationGracePeriodSeconds: 35
+      sshService:
+        annotations: {}
+        enabled: false
+        host: null
+        loadBalancerIP: null
+        port: 22
+        type: LoadBalancer
+      startupProbe:
+        enabled: false
+        failureThreshold: 120
+        initialDelaySeconds: 60
+        periodSeconds: 5
+      sysadminCredentials:
+        displayNameSecretKey: displayName
+        emailAddressSecretKey: emailAddress
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      topologySpreadConstraints: []
+      useHelmReleaseNameAsContainerName: false
+    common:
+      global: {}
+    database:
+      credentials:
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      driver: null
+      url: null
+    fluentd:
+      command: null
+      customConfigFile: false
+      elasticsearch:
+        enabled: true
+        hostname: elasticsearch
+      enabled: false
+      extraVolumes: []
+      fluentdCustomConfig: {}
+      imageRepo: fluent/fluentd-kubernetes-daemonset
+      imageTag: v1.11.5-debian-elasticsearch7-1.2
+      resources: {}
+    image:
+      pullPolicy: IfNotPresent
+      repository: atlassian/bitbucket
+      tag: ""
+    ingress:
+      annotations: {}
+      className: nginx
+      create: false
+      host: null
+      https: true
+      maxBodySize: 250m
+      nginx: true
+      path: null
+      proxyConnectTimeout: 60
+      proxyReadTimeout: 60
+      proxySendTimeout: 60
+      tlsSecretName: null
+    monitoring:
+      exposeJmxMetrics: true
+      fetchJmxExporterJar: true
+      grafana:
+        createDashboards: false
+        dashboardAnnotations: {}
+        dashboardLabels: {}
+      jmxExporterCustomConfig: {}
+      jmxExporterCustomJarLocation: null
+      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageTag: 0.18.0
+      jmxExporterInitContainer:
+        customSecurityContext: {}
+        resources: {}
+        runAsRoot: true
+      jmxExporterPort: 9999
+      jmxExporterPortType: ClusterIP
+      jmxServiceAnnotations: {}
+      serviceMonitor:
+        create: false
+        prometheusLabelSelector: {}
+        scrapeIntervalSeconds: 30
+    nodeSelector: {}
+    podAnnotations: {}
+    podDisruptionBudget:
+      annotations: {}
+      enabled: false
+      labels: {}
+      maxUnavailable: null
+      minAvailable: null
+    podLabels: {}
+    priorityClassName: high
+    replicaCount: 1
+    serviceAccount:
+      annotations: {}
+      clusterRole:
+        create: false
+        name: null
+      clusterRoleBinding:
+        create: false
+        name: null
+      create: true
+      imagePullSecrets: []
+      name: null
+      role:
+        create: true
+      roleBinding:
+        create: true
+    tolerations: []
+    volumes:
+      additional: []
+      localHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/bitbucket
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+      sharedHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/shared-home
+        nfsPermissionFixer:
+          command: null
+          enabled: true
+          imageRepo: alpine
+          imageTag: latest
+          mountPath: /shared-home
+          resources: {}
+        persistentVolume:
+          create: false
+          mountOptions: []
+          nfs:
+            path: ""
+            server: ""
+        persistentVolumeClaim:
+          accessMode: ReadWriteMany
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+          volumeName: null
+        subPath: null
+  analytics.json: |
+    {
+      "imageTag": "8.9.7",
+      "replicas": 1,
+      "isJmxEnabled": true,
+    "ingressType": "NONE",
+      "k8sVersion": "1.24",
+      "serviceType": "CLUSTERIP",
+      "dbType": "UNKNOWN",
+      "isClusteringEnabled": false,
+      "isSharedHomePVCCreated": false,
+      "isServiceMonitorCreated": false,
+      "isGrafanaDashboardsCreated": false,
+      "isBitbucketMeshEnabled": true
+    }
+---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
 kind: Service
@@ -79,7 +396,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -104,7 +421,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -129,7 +446,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -154,7 +471,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -179,7 +496,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -211,7 +528,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 3
@@ -228,7 +545,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 490b92b465e61f7996bc4864ed329948f36d7a2a859ad0bf2dfd7f9e467ad50c
+        checksum/config-jvm: aed68fcf426d2cc41b7fc491665468da978bced1d29c96c2ee6c2e6dc9064250
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -334,7 +651,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -351,7 +668,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 39cc41614a568928a84fc8decee1855331d38764d8f9dba4aceded9040cda9ea
+        checksum/config-jvm: c81ba94e8e89fca1eb988f8bc863b561ad914819034a569bcb1c72e1ff9ba001
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -377,7 +694,7 @@ spec:
               name: shared-home
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket:8.9.6"
+          image: "atlassian/bitbucket:8.9.7"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -403,6 +720,8 @@ spec:
           volumeMounts:
             - name: local-home
               mountPath: "/var/atlassian/application-data/bitbucket"
+            - name: helm-values
+              mountPath: /opt/atlassian/helm
             - name: jmx-config
               mountPath: /opt/atlassian/jmx
           resources:
@@ -455,6 +774,9 @@ spec:
       volumes:
         - name: local-home
           emptyDir: {}
+        - name: helm-values
+          configMap:
+            name: unittest-bitbucket-helm-values
         - name: jmx-config
           configMap:
             name: unittest-bitbucket-jmx-config
@@ -471,7 +793,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -503,7 +825,7 @@ metadata:
     helm.sh/chart: bitbucket-1.16.6
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.6"
+    app.kubernetes.io/version: "8.9.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
