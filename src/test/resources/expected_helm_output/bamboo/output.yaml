@@ -289,7 +289,7 @@ data:
       "isJmxEnabled": true,
     "ingressType": "NONE",
       "k8sVersion": "1.24",
-      "serviceType": "CLUSTERIP",
+      "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
       "isServiceMonitorCreated": false,

@@ -297,7 +297,7 @@ data:
       "ingressType": "NONE",
       "k8sVersion": "1.24",
       "isS3AvatarsEnabled": false,
-      "serviceType": "CLUSTERIP",
+      "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isClusteringEnabled": false,
       "isSharedHomePVCCreated": false,

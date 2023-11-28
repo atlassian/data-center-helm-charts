@@ -23,7 +23,7 @@
 "ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
-  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ .Values.bamboo.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ snakecase .Values.bamboo.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
 {{- if eq .Values.database.type nil }}
   "dbType": "UNKNOWN",
 {{- else }}

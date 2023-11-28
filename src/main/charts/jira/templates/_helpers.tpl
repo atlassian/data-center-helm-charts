@@ -24,7 +24,7 @@
 {{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
   "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
   "isS3AvatarsEnabled": {{ if and .Values.jira.s3Storage.avatars.bucketName .Values.jira.s3Storage.avatars.bucketRegion }}true{{ else }}false{{ end }},
-  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.jira.service.type }}{{ .Values.jira.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.jira.service.type }}{{ snakecase .Values.jira.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
 {{- if eq .Values.database.type nil }}
   "dbType": "UNKNOWN",
 {{- else }}

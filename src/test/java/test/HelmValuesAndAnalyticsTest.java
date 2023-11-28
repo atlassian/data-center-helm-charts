@@ -139,7 +139,7 @@ public class HelmValuesAndAnalyticsTest {
         assertEquals(1, analyticsData.getReplicas());
         assertEquals("NONE", analyticsData.getIngressType());
         assertEquals("UNKNOWN", analyticsData.getDbType());
-        assertEquals("CLUSTERIP", analyticsData.getServiceType());
+        assertEquals("CLUSTER_IP", analyticsData.getServiceType());
         assertFalse(analyticsData.isGrafanaDashboardsCreated());
         assertFalse(analyticsData.isServiceMonitorCreated());
         assertFalse(analyticsData.isJmxEnabled());
@@ -226,7 +226,7 @@ public class HelmValuesAndAnalyticsTest {
             String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
             ObjectMapper objectMapper = new ObjectMapper();
             AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-            assertEquals(svc.toUpperCase(), analyticsData.getServiceType());
+            assertEquals(svc.replaceAll("([a-z])([A-Z]+)", "$1_$2").toUpperCase(), analyticsData.getServiceType());
         }
     }
 
