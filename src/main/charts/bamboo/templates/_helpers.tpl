@@ -8,11 +8,23 @@
 {{- end }}
 {{- end }}
 
+{{/* Define a sanitized list of additionalJvmArgs */}}
+{{- define "bamboo.sanitizedAdditionalJvmArgs" -}}
+{{- range .Values.bamboo.additionalJvmArgs }}
+ {{- $jvmArgs := regexSplit "=" . -1 }}
+   {{- if regexMatch "(?i)(secret|token|password).*$" (first $jvmArgs) }}
+-  {{ first $jvmArgs }}=Sanitized by Support Utility{{ else}}
+-  {{ . }}
+{{ end }}
+{{- end }}
+{{- end }}
+
 {{/* Define sanitized Helm values */}}
 {{- define "bamboo.sanitizedValues" -}}
 {{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "bamboo.sanitizedAdditionalEnvVars" .)) }}
-{{- $mergedValues := merge $sanitizedAdditionalEnvs .Values }}
-{{- toYaml $mergedValues | replace " |2-" "" |  nindent 4 }}
+{{- $sanitizedAdditionalJvmArgs := dict .Chart.Name (dict "additionalJvmArgs" (include "bamboo.sanitizedAdditionalJvmArgs" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs $sanitizedAdditionalJvmArgs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
 {{- end }}
 
 {{- define "bamboo.analyticsJson" }}
