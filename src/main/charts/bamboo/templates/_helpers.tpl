@@ -1,4 +1,60 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/* Define a sanitized list of additionalEnvironmentVariables */}}
+{{- define "bamboo.sanitizedAdditionalEnvVars" -}}
+{{- range .Values.bamboo.additionalEnvironmentVariables }}
+- name: {{ .name }}
+  value: {{ if regexMatch "(?i)(secret|token|password)" .name }}"Sanitized by Support Utility"{{ else}}{{ .value }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define a sanitized list of additionalJvmArgs */}}
+{{- define "bamboo.sanitizedAdditionalJvmArgs" -}}
+{{- range .Values.bamboo.additionalJvmArgs }}
+ {{- $jvmArgs := regexSplit "=" . -1 }}
+   {{- if regexMatch "(?i)(secret|token|password).*$" (first $jvmArgs) }}
+-  {{ first $jvmArgs }}=Sanitized by Support Utility{{ else}}
+-  {{ . }}
+{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define sanitized Helm values */}}
+{{- define "bamboo.sanitizedValues" -}}
+{{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "bamboo.sanitizedAdditionalEnvVars" .)) }}
+{{- $sanitizedAdditionalJvmArgs := dict .Chart.Name (dict "additionalJvmArgs" (include "bamboo.sanitizedAdditionalJvmArgs" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs $sanitizedAdditionalJvmArgs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
+{{- end }}
+
+{{- define "bamboo.analyticsJson" }}
+{
+  "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
+  "replicas": {{ .Values.replicaCount }},
+  "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+  "ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
+{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
+  "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.bamboo.service.type }}{{ snakecase .Values.bamboo.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+{{- if eq .Values.database.type nil }}
+  "dbType": "UNKNOWN",
+{{- else }}
+{{- $databaseTypeMap := dict "postgres" "POSTGRES" "mssql" "MSSQL" "sqlserver" "SQLSERVER" "oracle" "ORACLE" "mysql" "MYSQL" }}
+{{- $dbTypeInValues := .Values.database.type }}
+{{- $dbType := "UNKNOWN" | quote }}
+{{- range $key, $value := $databaseTypeMap }}
+{{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
+  {{- $dbType = $value | quote }}
+{{- end }}
+{{- end }}
+  "dbType": {{ $dbType }},
+{{- end }}
+  "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+  "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
+}
+{{- end }}
+
 {{/*
 Deduce the base URL for bamboo.
 */}}
@@ -115,6 +171,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  mountPath: /opt/atlassian/helm
+{{- end }}
 {{- end }}
 
 {{/*
@@ -215,6 +275,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: certs
   secret:
     secretName: {{ .Values.bamboo.additionalCertificates.secretName }}
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  configMap:
+    name: {{ include "common.names.fullname" . }}-helm-values
 {{- end }}
 {{- end }}
 

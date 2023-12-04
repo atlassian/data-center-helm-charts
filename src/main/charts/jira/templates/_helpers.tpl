@@ -1,4 +1,62 @@
 {{/* vim: set filetype=mustache: */}}
+
+{{/* Define a sanitized list of additionalEnvironmentVariables */}}
+{{- define "jira.sanitizedAdditionalEnvVars" -}}
+{{- range .Values.jira.additionalEnvironmentVariables }}
+- name: {{ .name }}
+  value: {{ if regexMatch "(?i)(secret|token|password)" .name }}"Sanitized by Support Utility"{{ else}}{{ .value }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define a sanitized list of additionalJvmArgs */}}
+{{- define "jira.sanitizedAdditionalJvmArgs" -}}
+{{- range .Values.jira.additionalJvmArgs }}
+ {{- $jvmArgs := regexSplit "=" . -1 }}
+   {{- if regexMatch "(?i)(secret|token|password).*$" (first $jvmArgs) }}
+-  {{ first $jvmArgs }}=Sanitized by Support Utility{{ else}}
+-  {{ . }}
+{{ end }}
+{{- end }}
+{{- end }}
+
+{{/* Define sanitized Helm values */}}
+{{- define "jira.sanitizedValues" -}}
+{{- $sanitizedAdditionalEnvs := dict .Chart.Name (dict "additionalEnvironmentVariables" (include "jira.sanitizedAdditionalEnvVars" .)) }}
+{{- $sanitizedAdditionalJvmArgs := dict .Chart.Name (dict "additionalJvmArgs" (include "jira.sanitizedAdditionalJvmArgs" .)) }}
+{{- $mergedValues := merge $sanitizedAdditionalEnvs $sanitizedAdditionalJvmArgs .Values }}
+{{- toYaml $mergedValues | replace " |2-" "" | replace " |-" "" |  replace "|2" "" | nindent 4 }}
+{{- end }}
+
+{{- define "jira.analyticsJson" -}}
+{
+  "imageTag": {{ if or (eq .Values.image.tag "") (eq .Values.image.tag nil) }}{{ .Chart.AppVersion | quote }}{{ else }}{{ regexSplit "-" .Values.image.tag -1 | first |  quote }}{{ end }},
+  "replicas": {{ .Values.replicaCount }},
+  "isJmxEnabled": {{ .Values.monitoring.exposeJmxMetrics }},
+  "ingressType": {{ if not .Values.ingress.create }}"NONE"{{ else }}{{ if .Values.ingress.nginx }}"NGINX"{{ else }}"OTHER"{{ end }}{{ end }},
+{{- $sanitizedMinorVersion := regexReplaceAll "[^0-9]" .Capabilities.KubeVersion.Minor "" }}
+  "k8sVersion": "{{ .Capabilities.KubeVersion.Major }}.{{ $sanitizedMinorVersion }}",
+  "isS3AvatarsEnabled": {{ if and .Values.jira.s3Storage.avatars.bucketName .Values.jira.s3Storage.avatars.bucketRegion }}true{{ else }}false{{ end }},
+  "serviceType": {{ if regexMatch "^(ClusterIP|NodePort|LoadBalancer|ExternalName)$" .Values.jira.service.type }}{{ snakecase .Values.jira.service.type | upper | quote }}{{ else }}"UNKNOWN"{{ end }},
+{{- if eq .Values.database.type nil }}
+  "dbType": "UNKNOWN",
+{{- else }}
+{{- $databaseTypeMap := dict "postgres" "POSTGRES" "mssql" "MSSQL" "sqlserver" "SQLSERVER" "oracle" "ORACLE" "mysql" "MYSQL" }}
+{{- $dbTypeInValues := .Values.database.type }}
+{{- $dbType := "UNKNOWN" | quote }}
+{{- range $key, $value := $databaseTypeMap }}
+{{- if regexMatch (printf "(?i)%s" $key) $dbTypeInValues }}
+  {{- $dbType = $value | quote }}
+{{- end }}
+{{- end }}
+  "dbType": {{ $dbType }},
+{{- end }}
+  "isClusteringEnabled": {{ .Values.jira.clustering.enabled }},
+  "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
+  "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
+}
+{{- end }}
+
 {{/*
 Create default value for ingress port
 */}}
@@ -114,6 +172,10 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 {{- if .Values.jira.additionalCertificates.secretName }}
 - name: keystore
   mountPath: /var/ssl
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  mountPath: /opt/atlassian/helm
 {{- end }}
 {{- end }}
 
@@ -233,6 +295,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: certs
   secret:
     secretName: {{ .Values.jira.additionalCertificates.secretName }}
+{{- end }}
+{{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
+- name: helm-values
+  configMap:
+    name: {{ include "common.names.fullname" . }}-helm-values
 {{- end }}
 {{- end }}
 

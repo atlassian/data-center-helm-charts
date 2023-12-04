@@ -57,6 +57,254 @@ data:
     blacklistObjectNames:
       - 'com.atlassian.jira:connectionpool=connections,connection=*,name=BasicDataSource'
 ---
+# Source: jira/templates/configmap-values-analytics.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-jira-helm-values
+  labels:
+    helm.sh/chart: jira-1.16.6
+    app.kubernetes.io/name: jira
+    app.kubernetes.io/instance: unittest-jira
+    app.kubernetes.io/version: "9.4.12"
+    app.kubernetes.io/managed-by: Helm
+data:
+  values.yaml: |
+    additionalConfigMaps: []
+    additionalContainers: []
+    additionalFiles: []
+    additionalHosts:
+    - hostnames:
+      - foo.local
+      - bar.local
+      ip: 127.0.0.1
+    additionalInitContainers: []
+    additionalLabels: {}
+    affinity: {}
+    atlassianAnalyticsAndSupport:
+      analytics:
+        enabled: true
+      helmValues:
+        enabled: true
+    common:
+      global: {}
+    database:
+      credentials:
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      driver: null
+      type: null
+      url: null
+    fluentd:
+      command: null
+      customConfigFile: false
+      elasticsearch:
+        enabled: true
+        hostname: elasticsearch
+        indexNamePrefix: jira
+      enabled: false
+      extraVolumes: []
+      fluentdCustomConfig: {}
+      httpPort: 9880
+      imageRepo: fluent/fluentd-kubernetes-daemonset
+      imageTag: v1.11.5-debian-elasticsearch7-1.2
+      resources: {}
+    image:
+      pullPolicy: IfNotPresent
+      repository: atlassian/jira-software
+      tag: ""
+    ingress:
+      annotations: {}
+      className: nginx
+      create: false
+      host: null
+      https: true
+      maxBodySize: 250m
+      nginx: true
+      path: null
+      proxyConnectTimeout: 60
+      proxyReadTimeout: 60
+      proxySendTimeout: 60
+      tlsSecretName: null
+    jira:
+      accessLog:
+        localHomeSubPath: log
+        mountPath: /opt/atlassian/jira/logs
+      additionalBundledPlugins: []
+      additionalCertificates:
+        customCmd: null
+        secretName: null
+      additionalEnvironmentVariables: []
+      additionalJvmArgs: []
+      additionalLibraries: []
+      additionalPorts: []
+      additionalVolumeClaimTemplates: []
+      additionalVolumeMounts: []
+      clustering:
+        enabled: false
+      containerSecurityContext: {}
+      forceConfigUpdate: false
+      livenessProbe:
+        enabled: false
+        failureThreshold: 12
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 1
+      ports:
+        ehcache: 40001
+        ehcacheobject: 40011
+        http: 8080
+      readinessProbe:
+        customProbe: {}
+        enabled: true
+        failureThreshold: 10
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        timeoutSeconds: 1
+      resources:
+        container:
+          requests:
+            cpu: "2"
+            memory: 2G
+        jvm:
+          maxHeap: 768m
+          minHeap: 384m
+          reservedCodeCache: 512m
+      s3Storage:
+        avatars:
+          bucketName: null
+          bucketRegion: null
+          endpointOverride: null
+      securityContext:
+        fsGroup: 2001
+      securityContextEnabled: true
+      seraphConfig:
+        autoLoginCookieAge: "1209600"
+        generateByHelm: false
+      service:
+        annotations: {}
+        contextPath: null
+        loadBalancerIP: null
+        port: 80
+        sessionAffinity: None
+        sessionAffinityConfig:
+          clientIP:
+            timeoutSeconds: null
+        type: ClusterIP
+      setPermissions: true
+      shutdown:
+        command: /shutdown-wait.sh
+        terminationGracePeriodSeconds: 30
+      startupProbe:
+        enabled: false
+        failureThreshold: 120
+        initialDelaySeconds: 60
+        periodSeconds: 5
+      tomcatConfig:
+        acceptCount: "10"
+        connectionTimeout: "20000"
+        customServerXml: ""
+        enableLookups: "false"
+        generateByHelm: false
+        maxHttpHeaderSize: "8192"
+        maxThreads: "100"
+        mgmtPort: "8005"
+        minSpareThreads: "10"
+        port: "8080"
+        protocol: HTTP/1.1
+        proxyName: null
+        proxyPort: null
+        redirectPort: "8443"
+        scheme: null
+        secure: null
+      topologySpreadConstraints: []
+      useHelmReleaseNameAsContainerName: false
+    monitoring:
+      exposeJmxMetrics: true
+      fetchJmxExporterJar: true
+      grafana:
+        createDashboards: false
+        dashboardAnnotations: {}
+        dashboardLabels: {}
+      jmxExporterCustomConfig: {}
+      jmxExporterCustomJarLocation: null
+      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageTag: 0.18.0
+      jmxExporterInitContainer:
+        customSecurityContext: {}
+        resources: {}
+        runAsRoot: true
+      jmxExporterPort: 9999
+      jmxExporterPortType: ClusterIP
+      jmxServiceAnnotations: {}
+      serviceMonitor:
+        create: false
+        prometheusLabelSelector: {}
+        scrapeIntervalSeconds: 30
+    nodeSelector: {}
+    podAnnotations: {}
+    podDisruptionBudget:
+      annotations: {}
+      enabled: false
+      labels: {}
+      maxUnavailable: null
+      minAvailable: null
+    podLabels: {}
+    priorityClassName: high
+    replicaCount: 1
+    serviceAccount:
+      annotations: {}
+      create: true
+      eksIrsa:
+        roleArn: null
+      imagePullSecrets: []
+      name: null
+    tolerations: []
+    volumes:
+      additional: []
+      localHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/jira
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+      sharedHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/shared-home
+        nfsPermissionFixer:
+          command: null
+          enabled: true
+          imageRepo: alpine
+          imageTag: latest
+          mountPath: /shared-home
+          resources: {}
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+        subPath: null
+  analytics.json: |
+    {
+      "imageTag": "9.4.12",
+      "replicas": 1,
+      "isJmxEnabled": true,
+      "ingressType": "NONE",
+      "k8sVersion": "1.24",
+      "isS3AvatarsEnabled": false,
+      "serviceType": "CLUSTER_IP",
+      "dbType": "UNKNOWN",
+      "isClusteringEnabled": false,
+      "isSharedHomePVCCreated": false,
+      "isServiceMonitorCreated": false,
+      "isGrafanaDashboardsCreated": false
+    }
+---
 # Source: jira/templates/service-jmx.yaml
 apiVersion: v1
 kind: Service
@@ -124,7 +372,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: b7b2a7ce3241d00958886d73e9c8035369e39d2a82281f6ef53fc3316f80aef8
+        checksum/config-jvm: 038a3a91b3487448a0cce3531daf9f40fb5db9662f85bf3a386cf48d265b997c
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -225,6 +473,8 @@ spec:
               subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - name: helm-values
+              mountPath: /opt/atlassian/helm
             - name: jmx-config
               mountPath: /opt/atlassian/jmx
           lifecycle:
@@ -237,6 +487,9 @@ spec:
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: helm-values
+          configMap:
+            name: unittest-jira-helm-values
         - name: jmx-config
           configMap:
             name: unittest-jira-jmx-config

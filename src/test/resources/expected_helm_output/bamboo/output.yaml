@@ -57,6 +57,245 @@ data:
           product: "bamboo"
       - pattern: '.*'
 ---
+# Source: bamboo/templates/configmap-values-analytics.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unittest-bamboo-helm-values
+  labels:
+    helm.sh/chart: bamboo-1.16.6
+    app.kubernetes.io/name: bamboo
+    app.kubernetes.io/instance: unittest-bamboo
+    app.kubernetes.io/version: "9.4.1"
+    app.kubernetes.io/managed-by: Helm
+data:
+  values.yaml: |
+    additionalConfigMaps: []
+    additionalContainers: []
+    additionalFiles: []
+    additionalHosts:
+    - hostnames:
+      - foo.local
+      - bar.local
+      ip: 127.0.0.1
+    additionalInitContainers: []
+    additionalLabels: {}
+    affinity: {}
+    atlassianAnalyticsAndSupport:
+      analytics:
+        enabled: true
+      helmValues:
+        enabled: true
+    bamboo:
+      accessLog:
+        localHomeSubPath: log
+        mountPath: /opt/atlassian/bamboo/logs
+      additionalBundledPlugins: []
+      additionalCertificates:
+        customCmd: null
+        secretName: null
+      additionalEnvironmentVariables: []
+      additionalJvmArgs: []
+      additionalLibraries: []
+      additionalPorts: []
+      additionalVolumeClaimTemplates: []
+      additionalVolumeMounts: []
+      baseUrl: https://testUrl/
+      brokerUrl: tcp://testBroker:1234
+      containerSecurityContext: {}
+      disableAgentAuth: false
+      forceConfigUpdate: false
+      import:
+        path: null
+        type: clean
+      jmsService:
+        annotations: {}
+        enabled: true
+        loadBalancerIP: null
+        port: 54663
+        type: ClusterIP
+      license:
+        secretKey: licenseTestKey
+        secretName: licenseTestSecret
+      livenessProbe:
+        enabled: false
+        failureThreshold: 12
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 1
+      ports:
+        http: 8085
+        jms: 54663
+      readinessProbe:
+        customProbe: {}
+        enabled: true
+        failureThreshold: 30
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 1
+      resources:
+        container:
+          requests:
+            cpu: "2"
+            memory: 2G
+        jvm:
+          maxHeap: 1024m
+          minHeap: 512m
+      securityContext:
+        fsGroup: 2005
+      securityContextEnabled: true
+      securityToken:
+        secretKey: agentTestKey
+        secretName: agentTestSecret
+      service:
+        annotations: {}
+        contextPath: null
+        loadBalancerIP: null
+        port: 80
+        sessionAffinity: None
+        sessionAffinityConfig:
+          clientIP:
+            timeoutSeconds: null
+        type: ClusterIP
+      setPermissions: true
+      shutdown:
+        command: /shutdown-wait.sh
+        terminationGracePeriodSeconds: 30
+      startupProbe:
+        enabled: false
+        failureThreshold: 120
+        initialDelaySeconds: 60
+        periodSeconds: 5
+      sysadminCredentials:
+        displayNameSecretKey: adminFullnameTestKey
+        emailAddressSecretKey: adminEmailTestKey
+        passwordSecretKey: adminPasswordTestKey
+        secretName: adminTestSecret
+        usernameSecretKey: adminTestUsernameKey
+      topologySpreadConstraints: []
+      unattendedSetup: true
+      useHelmReleaseNameAsContainerName: false
+    common:
+      global: {}
+    database:
+      credentials:
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      type: null
+      url: null
+    fluentd:
+      command: null
+      customConfigFile: false
+      elasticsearch:
+        enabled: true
+        hostname: elasticsearch
+        indexNamePrefix: bamboo
+      enabled: false
+      extraVolumes: []
+      fluentdCustomConfig: {}
+      httpPort: 9880
+      imageRepo: fluent/fluentd-kubernetes-daemonset
+      imageTag: v1.11.5-debian-elasticsearch7-1.2
+      resources: {}
+    image:
+      pullPolicy: IfNotPresent
+      repository: atlassian/bamboo
+      tag: ""
+    ingress:
+      annotations: {}
+      className: nginx
+      create: false
+      host: null
+      https: true
+      maxBodySize: 250m
+      nginx: true
+      path: null
+      proxyConnectTimeout: 60
+      proxyReadTimeout: 60
+      proxySendTimeout: 60
+      tlsSecretName: null
+    monitoring:
+      exposeJmxMetrics: true
+      fetchJmxExporterJar: true
+      grafana:
+        createDashboards: false
+        dashboardAnnotations: {}
+        dashboardLabels: {}
+      jmxExporterCustomConfig: {}
+      jmxExporterCustomJarLocation: null
+      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageTag: 0.18.0
+      jmxExporterInitContainer:
+        customSecurityContext: {}
+        resources: {}
+        runAsRoot: true
+      jmxExporterPort: 9999
+      jmxExporterPortType: ClusterIP
+      jmxServiceAnnotations: {}
+      serviceMonitor:
+        create: false
+        prometheusLabelSelector: {}
+        scrapeIntervalSeconds: 30
+    nodeSelector: {}
+    podAnnotations: {}
+    podDisruptionBudget:
+      annotations: {}
+      enabled: false
+      labels: {}
+      maxUnavailable: null
+      minAvailable: null
+    podLabels: {}
+    priorityClassName: high
+    replicaCount: 1
+    serviceAccount:
+      annotations: {}
+      create: true
+      imagePullSecrets: []
+      name: null
+    tolerations: []
+    volumes:
+      additional: []
+      localHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/bamboo
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+      sharedHome:
+        customVolume: {}
+        mountPath: /var/atlassian/application-data/shared-home
+        nfsPermissionFixer:
+          command: null
+          enabled: true
+          imageRepo: alpine
+          imageTag: latest
+          mountPath: /shared-home
+          resources: {}
+        persistentVolumeClaim:
+          create: false
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: null
+        subPath: null
+  analytics.json: |
+    {
+      "imageTag": "9.4.1",
+      "replicas": 1,
+      "isJmxEnabled": true,
+      "ingressType": "NONE",
+      "k8sVersion": "1.24",
+      "serviceType": "CLUSTER_IP",
+      "dbType": "UNKNOWN",
+      "isSharedHomePVCCreated": false,
+      "isServiceMonitorCreated": false,
+      "isGrafanaDashboardsCreated": false
+    }
+---
 # Source: bamboo/templates/service-jms.yaml
 apiVersion: v1
 kind: Service
@@ -147,7 +386,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 202333c4befa8cbb5597ef0ada97cda78d937a39891080ed98aa9bbeb186af31
+        checksum/config-jvm: 87b697c0ecf75445766b13f8c1aedeefbb0f656c5365a43e418d166380e67b0e
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
@@ -280,6 +519,8 @@ spec:
               subPath: "log"
             - name: shared-home
               mountPath: "/var/atlassian/application-data/shared-home"
+            - name: helm-values
+              mountPath: /opt/atlassian/helm
             - name: jmx-config
               mountPath: /opt/atlassian/jmx
           lifecycle:
@@ -292,6 +533,9 @@ spec:
           emptyDir: {}
         - name: shared-home
           emptyDir: {}
+        - name: helm-values
+          configMap:
+            name: unittest-bamboo-helm-values
         - name: jmx-config
           configMap:
             name: unittest-bamboo-jmx-config
