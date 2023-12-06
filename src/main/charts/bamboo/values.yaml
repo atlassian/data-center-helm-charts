@@ -1146,7 +1146,7 @@ additionalConfigMaps: []
 atlassianAnalyticsAndSupport:
 
   analytics:
-    
+
     # -- Mount ConfigMap with selected Helm chart values as a JSON
     # which DC products will read and send analytics events to Atlassian data pipelines
     #
@@ -1158,3 +1158,16 @@ atlassianAnalyticsAndSupport:
     # which can be optionally including to support.zip
     #
     enabled: true
+
+# -- Metadata and pod spec for pods started in Helm tests
+#
+testPods:
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  schedulerName:
+  image:
+    permissionsTestContainer: debian:stable-slim
+    statusTestContainer: alpine:latest

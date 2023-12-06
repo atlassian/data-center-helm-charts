@@ -61,6 +61,8 @@ public class KubeResource {
                 return new Deployment(node);
             case ConfigMap:
                 return new ConfigMap(node);
+            case Pod:
+                return new Pod(node);
             default:
                 return new KubeResource(kind, node);
         }

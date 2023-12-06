@@ -223,6 +223,16 @@ data:
       imagePullSecrets: []
       name: null
     terminationGracePeriodSeconds: 30
+    testPods:
+      affinity: {}
+      annotations: {}
+      image:
+        permissionsTestContainer: debian:stable-slim
+        statusTestContainer: alpine:latest
+      labels: {}
+      nodeSelector: {}
+      schedulerName: null
+      tolerations: []
     tolerations: []
     volumes:
       additional: []
@@ -333,6 +343,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: e1870daf2ca6d4446b45f03537917a2a11c8af2143d335b94971600655474ee3
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd

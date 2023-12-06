@@ -253,6 +253,16 @@ data:
       create: true
       imagePullSecrets: []
       name: null
+    testPods:
+      affinity: {}
+      annotations: {}
+      image:
+        permissionsTestContainer: debian:stable-slim
+        statusTestContainer: alpine:latest
+      labels: {}
+      nodeSelector: {}
+      schedulerName: null
+      tolerations: []
     tolerations: []
     volumes:
       additional: []
@@ -386,6 +396,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 87b697c0ecf75445766b13f8c1aedeefbb0f656c5365a43e418d166380e67b0e
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
