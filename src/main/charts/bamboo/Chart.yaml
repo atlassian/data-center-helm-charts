@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: 1.16.6
+version: 1.17.0
 appVersion: 9.4.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,9 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "JMX container resources (#707)"
+    - "Make test pod metadata and spec configurable (#727)"
+    - "Optional analytics/support ConfigMap (#721)"
+    - "Fix ingress annotations comment (#720)"
 dependencies:
 - name: common
   version: 1.2.5
