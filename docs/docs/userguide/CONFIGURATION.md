@@ -568,7 +568,7 @@ jira:
 
 ## :material-home-analytics: Atlassian Support and Analytics
 
-Starting from 1.16.7 Helm chart version, an additional optional ConfigMap is created and mounted into `/opt/atlassian/helm` in the containers. This ConfigMap has 2 keys: `values.yaml` and `analytics.json` that are picked up by the [Atlassian Troubleshooting and Support Tools (ATST)](https://confluence.atlassian.com/support/troubleshooting-and-support-tools-790796813.html){.external} plugin. To disable either of the keys or the entire ConfigMap, set enabled to `false` in the following Helm values stanza:
+Starting from `1.17.0` Helm chart version, by default, an additional `ConfigMap` is created and mounted into `/opt/atlassian/helm` in the containers. This `ConfigMap` has 2 keys: `values.yaml` and `analytics.json` that are picked up by the [Atlassian Troubleshooting and Support Tools (ATST)](https://confluence.atlassian.com/support/troubleshooting-and-support-tools-790796813.html){.external} plugin. To disable either of the keys or the entire `ConfigMap`, set enabled to `false` in the following Helm values stanza:
 
 ```yaml
 atlassianAnalyticsAndSupport:
