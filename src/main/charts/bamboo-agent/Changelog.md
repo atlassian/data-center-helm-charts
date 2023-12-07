@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.17.0
+
+**Release date:** 2023-12-7
+
+![AppVersion: 9.4.1](https://img.shields.io/static/v1?label=AppVersion&message=9.4.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Make test pod metadata and spec configurable (#727)
+* Optional analytics/support ConfigMap (#721)
+* BAM-25528: Unset pre-stop hook for bamboo-agent (#719)
+
 ## 1.16.6
 
 **Release date:** 2023-10-30
