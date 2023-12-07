@@ -1133,3 +1133,16 @@ atlassianAnalyticsAndSupport:
     # which can be optionally including to support.zip
     #
     enabled: true
+
+# -- Metadata and pod spec for pods started in Helm tests
+#
+testPods:
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  schedulerName:
+  image:
+    permissionsTestContainer: debian:stable-slim
+    statusTestContainer: alpine:latest

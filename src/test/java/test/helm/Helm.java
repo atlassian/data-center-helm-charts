@@ -1,11 +1,16 @@
 package test.helm;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.vavr.collection.HashMap;
 import org.junit.jupiter.api.TestInfo;
 import test.model.KubeResources;
 import test.model.Product;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,6 +91,36 @@ public final class Helm {
                         return e.getMessage();
                     }
                 }).isEqualTo(0);
+    }
+
+    public static String getHelmChartVersion(Product product)  {
+
+        Path chartPath = getHelmChartPath(product);
+        String chartYamlPath = chartPath.resolve("Chart.yaml").toString();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+            JsonNode yamlData = objectMapper.readTree(Paths.get(chartYamlPath).toFile());
+            return yamlData.get("version").asText();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getAppVersion(Product product)  {
+
+        Path chartPath = getHelmChartPath(product);
+        String chartYamlPath = chartPath.resolve("Chart.yaml").toString();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+            JsonNode yamlData = objectMapper.readTree(Paths.get(chartYamlPath).toFile());
+            return yamlData.get("appVersion").asText();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String getHelmReleaseName(Product product) {

@@ -260,6 +260,16 @@ data:
         roleArn: null
       imagePullSecrets: []
       name: null
+    testPods:
+      affinity: {}
+      annotations: {}
+      image:
+        permissionsTestContainer: debian:stable-slim
+        statusTestContainer: alpine:latest
+      labels: {}
+      nodeSelector: {}
+      schedulerName: null
+      tolerations: []
     tolerations: []
     volumes:
       additional: []
@@ -372,6 +382,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: f057f4d464bde2e94ec75c95fb61f1d9d2febf7f3551ca83a69591ade0aaba63
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -510,7 +521,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: alpine:latest
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL

@@ -3,7 +3,7 @@ package test.model;
 import test.helm.Helm;
 
 /*
- * When adding additional products charts, products names comprising more than 
+ * When adding additional products charts, products names comprising more than
  * one word should be separated by an underscore(s) "_". Hyphens "-" are not valid
  * when declaring enum names. See "bamboo_agent" below as an example of this
  */
@@ -76,15 +76,23 @@ public enum Product {
     public String getHelmReleaseName() {
         return Helm.getHelmReleaseName(this);
     }
-    
+
+    public String getHelmChartVersion() {
+        return Helm.getHelmChartVersion(this);
+    }
+
+    public String getAppVersion() {
+        return Helm.getAppVersion(this);
+    }
+
     /*
-     * So that we can create Chart directories of the form: 
-     * 
+     * So that we can create Chart directories of the form:
+     *
      * "src/main/charts/bamboo-agent"
-     * 
+     *
      * but also ensure our tests still work, we override this method
      * to replace underscores with hyphens.
-     * 
+     *
      */
     @Override
     public String toString() {

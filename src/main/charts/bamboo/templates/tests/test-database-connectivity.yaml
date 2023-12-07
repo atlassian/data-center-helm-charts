@@ -6,9 +6,21 @@ metadata:
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+    {{- if not .Values.testPods.annotations }}
     {{- include "bamboo.podAnnotations" . | nindent 4 }}
+    {{- else }}
+    {{- range $key, $value := .Values.testPods.annotations }}
+    {{ $key | quote }}: {{ tpl $value $ | quote }}
+    {{- end }}
+    {{- end }}
   labels:
+    {{- if not .Values.testPods.labels }}
     {{- include "common.labels.commonLabels" . | nindent 4 }}
+    {{- else }}
+    {{- range $key, $value := .Values.testPods.labels }}
+    {{ $key | quote }}: {{ tpl $value $ | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   serviceAccountName: {{ include "bamboo.serviceAccountName" . }}
   containers:
@@ -49,4 +61,19 @@ spec:
           cat output.txt
           grep -q "Connection established OK" output.txt
   restartPolicy: Never
+  {{- with .Values.testPods.nodeSelector }}
+  nodeSelector:
+  {{- toYaml . | nindent 8 }}
+  {{- end }}
+  {{- with .Values.testPods.affinity }}
+  affinity:
+  {{- toYaml . | nindent 8 }}
+  {{- end }}
+  {{- with .Values.testPods.tolerations }}
+  tolerations:
+  {{- toYaml . | nindent 8 }}
+  {{- end }}
+  {{- if .Values.testPods.schedulerName }}
+  schedulerName: {{ .Values.testPods.schedulerName  | quote }}
+  {{- end }}
 {{ end }}
