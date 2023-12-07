@@ -2,6 +2,38 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Make test pod metadata and spec configurable (#727)"
+        - "Optional analytics/support ConfigMap (#721)"
+        - "Fix ingress annotations comment (#720)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.1
+    created: "2023-12-07T00:11:47.270314945Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 1e45f28822df6be594e972c8a44dd476e30a776c2ea4a4238a570e048b43c652
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.17.0/bamboo-1.17.0.tgz
+    version: 1.17.0
+  - annotations:
       artifacthub.io/changes: '- "JMX container resources (#707)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -1076,6 +1108,38 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Make test pod metadata and spec configurable (#727)"
+        - "Optional analytics/support ConfigMap (#721)"
+        - "BAM-25528: Unset pre-stop hook for bamboo-agent (#719)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.1
+    created: "2023-12-07T00:11:47.472273095Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: c054dce820b8a86808e5b37188a4ba9db0ea3ea5281ead1a7c68b545a9c851c5
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.17.0/bamboo-agent-1.17.0.tgz
+    version: 1.17.0
+  - annotations:
       artifacthub.io/changes: '- "JMX container resources (#707)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -2100,6 +2164,38 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Make test pod metadata and spec configurable (#727)"
+        - "Optional analytics/support ConfigMap (#721)"
+        - "Fix ingress annotations comment (#720)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.7
+    created: "2023-12-07T00:11:47.653317853Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: ea86ccb9ed12ffd1fb8bb139bc1c98cbff10a83fdea2b72947cccbe5d80c1e53
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.17.0/bitbucket-1.17.0.tgz
+    version: 1.17.0
   - annotations:
       artifacthub.io/changes: '- "JMX container resources (#707)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -3713,6 +3809,40 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Make test pod metadata and spec configurable (#727)"
+        - "Update default Confluence version (#729)"
+        - "Optional analytics/support ConfigMap (#721)"
+        - "Fix ingress annotations comment (#720)"
+        - "Apply securityContext only if it is explicitly enabled (#717)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.4
+    created: "2023-12-07T00:11:48.053500798Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 248ae1f58cae44d21dce283def6f9bd9a238cb050f2a31c0c64b01249027c567
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.17.0/confluence-1.17.0.tgz
+    version: 1.17.0
+  - annotations:
       artifacthub.io/changes: '- "JMX container resources (#707)"'
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
@@ -5268,6 +5398,38 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Make test pod metadata and spec configurable (#727)"
+        - "Optional analytics/support ConfigMap (#721)"
+        - "Fix ingress annotations comment (#720)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.2.1
+    created: "2023-12-07T00:11:48.257623185Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 05f53af42e86b13db6e04bf542c76923f9dc19ad798193a855d6b574a9fce192
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.17.0/crowd-1.17.0.tgz
+    version: 1.17.0
+  - annotations:
       artifacthub.io/changes: '- "JMX container resources (#707)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -6647,6 +6809,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Make test pod metadata and spec configurable (#727)"
+        - "Optional analytics/support ConfigMap (#721)"
+        - "Fix ingress annotations comment (#720)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.0
+    created: "2023-12-07T00:11:48.455053806Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: c64f57048984456c677a22a4c7e7e9c02a4054529912843cee8d70d3d6636748
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.17.0/jira-1.17.0.tgz
+    version: 1.17.0
   - annotations:
       artifacthub.io/changes: '- "JMX container resources (#707)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -8158,4 +8353,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-10-30T20:13:53.33844085Z"
+generated: "2023-12-07T00:11:48.456591011Z"
