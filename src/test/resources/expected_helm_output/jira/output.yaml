@@ -146,6 +146,7 @@ data:
       containerSecurityContext: {}
       forceConfigUpdate: false
       livenessProbe:
+        customProbe: {}
         enabled: false
         failureThreshold: 12
         initialDelaySeconds: 60

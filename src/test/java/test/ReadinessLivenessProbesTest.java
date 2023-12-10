@@ -76,6 +76,28 @@ public class ReadinessLivenessProbesTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_liveness_probe_custom_probe(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".livenessProbe.enabled", "true",
+                product + ".livenessProbe.customProbe.tcpSocket.port", "9999",
+                product + ".livenessProbe.customProbe.periodSeconds", "3333",
+                product + ".livenessProbe.customProbe.failureThreshold", "3333",
+                product + ".livenessProbe.customProbe.timeoutSeconds", "4444",
+                product + ".livenessProbe.customProbe.foo", "bar"));
+
+        assertEquals("9999", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("tcpSocket").get("port").asText());
+        assertEquals("3333", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("periodSeconds").asText());
+        assertEquals("3333", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("failureThreshold").asText());
+        assertEquals("4444", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("timeoutSeconds").asText());
+        assertEquals("bar", resources.getStatefulSet(
+                product.getHelmReleaseName()).getContainer().get("livenessProbe").get("foo").asText());
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void test_readiness_probe_overrides(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".readinessProbe.initialDelaySeconds", "2222",

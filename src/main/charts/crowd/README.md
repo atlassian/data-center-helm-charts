@@ -44,6 +44,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.additionalVolumeClaimTemplates | list | `[]` | Defines additional volumeClaimTemplates that should be applied to the Crowd pod. Note that this will not create any corresponding volume mounts; those needs to be defined in crowd.additionalVolumeMounts  |
 | crowd.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Crowd container. These can refer to existing volumes, or new volumes can be defined in volumes.additional. |
 | crowd.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
+| crowd.livenessProbe.customProbe | object | `{}` | Custom livenessProbe to override the default tcpSocket probe  |
 | crowd.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | crowd.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Crowd container liveness probe before the pod fails liveness checks.  |
 | crowd.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |

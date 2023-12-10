@@ -57,6 +57,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.hazelcastService.type | string | `"ClusterIP"` | The type of the Hazelcast K8s service to use for Bitbucket  |
 | bitbucket.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Bitbucket license key  |
 | bitbucket.license.secretName | string | `nil` | The name of the K8s Secret that contains the Bitbucket license key. If specified, then the license will be automatically populated during Bitbucket setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
+| bitbucket.livenessProbe.customProbe | object | `{}` | Custom livenessProbe to override the default tcpSocket probe  |
 | bitbucket.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | bitbucket.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Bitbucket container liveness probe before the pod fails liveness checks.  |
 | bitbucket.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |

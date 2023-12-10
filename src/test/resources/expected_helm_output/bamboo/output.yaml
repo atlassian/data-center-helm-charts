@@ -118,6 +118,7 @@ data:
         secretKey: licenseTestKey
         secretName: licenseTestSecret
       livenessProbe:
+        customProbe: {}
         enabled: false
         failureThreshold: 12
         initialDelaySeconds: 60

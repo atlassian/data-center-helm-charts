@@ -128,13 +128,19 @@ spec:
           {{- end }}
           {{- if .Values.bitbucket.livenessProbe.enabled }}
           livenessProbe:
+          {{- if .Values.bitbucket.livenessProbe.customProbe}}
+          {{- with .Values.bitbucket.livenessProbe.customProbe }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- else }}
             tcpSocket:
               port: {{ .Values.bitbucket.ports.http }}
             initialDelaySeconds: {{ .Values.bitbucket.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bitbucket.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.bitbucket.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.bitbucket.livenessProbe.failureThreshold }}
-          {{ end }}
+          {{- end }}
+          {{- end }}
           {{- with .Values.bitbucket.containerSecurityContext}}
           securityContext:
             {{- toYaml . | nindent 12}}

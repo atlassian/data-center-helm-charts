@@ -206,13 +206,19 @@ spec:
           {{- end }}
           {{- if .Values.bamboo.livenessProbe.enabled }}
           livenessProbe:
+          {{- if .Values.bamboo.livenessProbe.customProbe}}
+          {{- with .Values.bamboo.livenessProbe.customProbe }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- else }}
             tcpSocket:
               port: {{ .Values.bamboo.ports.http }}
             initialDelaySeconds: {{ .Values.bamboo.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bamboo.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.bamboo.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.bamboo.livenessProbe.failureThreshold }}
-          {{ end }}
+          {{- end }}
+          {{- end }}
           {{- with .Values.bamboo.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}

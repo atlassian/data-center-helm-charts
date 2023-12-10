@@ -54,6 +54,7 @@ Kubernetes: `>=1.21.x-0`
 | confluence.jvmDebug.enabled | bool | `false` | Set to 'true' for remote debugging. Confluence JVM will be started with debugging port 5005 open. |
 | confluence.license.secretKey | string | `"license-key"` | The key in the K8s Secret that contains the Confluence license key  |
 | confluence.license.secretName | string | `nil` | The name of the K8s Secret that contains the Confluence license key. If specified, then the license will be automatically populated during Confluence setup. Otherwise, it will need to be provided via the browser after initial startup. An Example of creating a K8s secret for the license below: 'kubectl create secret generic <secret-name> --from-literal=license-key=<license> https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
+| confluence.livenessProbe.customProbe | object | `{}` | Custom livenessProbe to override the default tcpSocket probe  |
 | confluence.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | confluence.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Confluence container liveness probe before the pod fails liveness checks.  |
 | confluence.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
