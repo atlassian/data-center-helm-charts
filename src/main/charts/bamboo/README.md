@@ -56,6 +56,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.license | object | `{"secretKey":"license","secretName":null}` | The Bamboo DC license that should be used. If supplied here the license configuration will be skipped in the setup wizard.  |
 | bamboo.license.secretKey | string | `"license"` | The key (default 'licenseKey') in the Secret used to store the license information  |
 | bamboo.license.secretName | string | `nil` | The secret that contains the license information  |
+| bamboo.livenessProbe.customProbe | object | `{}` | Custom livenessProbe to override the default tcpSocket probe  |
 | bamboo.livenessProbe.enabled | bool | `false` | Whether to apply the livenessProbe check to pod.  |
 | bamboo.livenessProbe.failureThreshold | int | `12` | The number of consecutive failures of the Bamboo container liveness probe before the pod fails liveness checks.  |
 | bamboo.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |

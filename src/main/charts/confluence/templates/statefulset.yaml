@@ -117,13 +117,19 @@ spec:
           {{- end }}
           {{- if .Values.confluence.livenessProbe.enabled }}
           livenessProbe:
+          {{- if .Values.confluence.livenessProbe.customProbe}}
+          {{- with .Values.confluence.livenessProbe.customProbe }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- else }}
             tcpSocket:
               port: {{ .Values.confluence.ports.http }}
             initialDelaySeconds: {{ .Values.confluence.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.confluence.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.confluence.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.confluence.livenessProbe.failureThreshold }}
-          {{ end }}
+          {{- end }}
+          {{- end }}
           {{- with .Values.confluence.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}

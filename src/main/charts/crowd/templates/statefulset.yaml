@@ -114,13 +114,19 @@ spec:
           {{- end }}
           {{- if .Values.crowd.livenessProbe.enabled }}
           livenessProbe:
+          {{- if .Values.crowd.livenessProbe.customProbe}}
+          {{- with .Values.crowd.livenessProbe.customProbe }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- else }}
             tcpSocket:
               port: {{ .Values.crowd.ports.http }}
             initialDelaySeconds: {{ .Values.crowd.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.crowd.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.crowd.livenessProbe.failureThreshold }}
-          {{ end }}
+          {{- end }}
+          {{- end }}
           {{- with .Values.crowd.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}

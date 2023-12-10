@@ -167,13 +167,19 @@ spec:
           {{- end }}
           {{- if .Values.jira.livenessProbe.enabled }}
           livenessProbe:
+            {{- if .Values.jira.livenessProbe.customProbe}}
+            {{- with .Values.jira.livenessProbe.customProbe }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else }}
             tcpSocket:
               port: {{ .Values.jira.ports.http }}
             initialDelaySeconds: {{ .Values.jira.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jira.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.jira.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.jira.livenessProbe.failureThreshold }}
-          {{ end }}
+          {{- end }}
+          {{- end }}
           {{- with .Values.jira.containerSecurityContext}}
           securityContext:
           {{- toYaml . | nindent 12}}

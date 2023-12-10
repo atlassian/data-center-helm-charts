@@ -690,6 +690,10 @@ bamboo:
     #
     failureThreshold: 12
 
+    # -- Custom livenessProbe to override the default tcpSocket probe
+    #
+    customProbe: {}
+
   # Bamboo log configuration
   #
   accessLog:

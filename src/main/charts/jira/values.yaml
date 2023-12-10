@@ -576,6 +576,10 @@ jira:
     #
     failureThreshold: 12
 
+    # -- Custom livenessProbe to override the default tcpSocket probe
+    #
+    customProbe: {}
+
   # Jira log configuration
   #
   accessLog:

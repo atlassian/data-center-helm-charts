@@ -706,6 +706,10 @@ confluence:
     #
     failureThreshold: 12
 
+    # -- Custom livenessProbe to override the default tcpSocket probe
+    #
+    customProbe: {}
+
   # Confluence log configuration
   #
   accessLog:
