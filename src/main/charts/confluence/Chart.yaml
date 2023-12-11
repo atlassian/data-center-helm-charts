@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.17.0
+version: 1.17.1
 appVersion: 8.5.4
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,11 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Make test pod metadata and spec configurable (#727)"
-    - "Update default Confluence version (#729)"
-    - "Optional analytics/support ConfigMap (#721)"
-    - "Fix ingress annotations comment (#720)"
-    - "Apply securityContext only if it is explicitly enabled (#717)"
+    - "Make liveness probe configurable (#732)"
 
 dependencies:
 - name: common
