@@ -2,6 +2,35 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.1
+    created: "2023-12-11T00:31:04.303733389Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: a446c7f49742a46d72fa7021a8594d3b93602ea8bea8d92e29e3b88904a6d7ee
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.17.1/bamboo-1.17.1.tgz
+    version: 1.17.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Make test pod metadata and spec configurable (#727)"
         - "Optional analytics/support ConfigMap (#721)"
@@ -1108,6 +1137,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.1
+    created: "2023-12-11T00:31:04.536874796Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 1b1cad626a49b32693613b5f240a2cc5c26ba43373e45d3f0d91e92f00d0990e
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.17.1/bamboo-agent-1.17.1.tgz
+    version: 1.17.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Make test pod metadata and spec configurable (#727)"
         - "Optional analytics/support ConfigMap (#721)"
@@ -2164,6 +2222,35 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.7
+    created: "2023-12-11T00:31:04.773410767Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 99c9ba0a242a44d676c21521b6e926ffe09d4536bd49536d23f9e8178e3fe0bb
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.17.1/bitbucket-1.17.1.tgz
+    version: 1.17.1
   - annotations:
       artifacthub.io/changes: |-
         - "Make test pod metadata and spec configurable (#727)"
@@ -3809,6 +3896,35 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.4
+    created: "2023-12-11T00:31:05.18677466Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 79eeae96a59a3486bfc60a0d362fae816665f09779b2f347251332154df27005
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.17.1/confluence-1.17.1.tgz
+    version: 1.17.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Make test pod metadata and spec configurable (#727)"
         - "Update default Confluence version (#729)"
@@ -5398,6 +5514,35 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.2.1
+    created: "2023-12-11T00:31:05.709210505Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 7567264a5ca47a93d367893b8a6f86e83ed89a2b85b99281f1ae41bd3d5216bc
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.17.1/crowd-1.17.1.tgz
+    version: 1.17.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Make test pod metadata and spec configurable (#727)"
         - "Optional analytics/support ConfigMap (#721)"
@@ -6809,6 +6954,36 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.0
+    created: "2023-12-11T00:31:05.91757052Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 1926d8b8bbe4d55c8a9f949398ae929fdf126c3b0dc350a39231cc2391669a9a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.17.1/jira-1.17.1.tgz
+    version: 1.17.1
   - annotations:
       artifacthub.io/changes: |-
         - "Make test pod metadata and spec configurable (#727)"
@@ -8353,4 +8528,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-12-07T00:11:48.456591011Z"
+generated: "2023-12-11T00:31:05.919221883Z"
