@@ -21,7 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Make leveness probe configurable (#732)"
+    - "Make liveness probe configurable (#732)"
 
 dependencies:
 - name: common
