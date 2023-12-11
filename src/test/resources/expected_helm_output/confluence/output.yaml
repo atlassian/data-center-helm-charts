@@ -127,6 +127,8 @@ data:
       ports:
         hazelcast: 5701
         http: 8090
+      postStart:
+        command: null
       readinessProbe:
         customProbe: {}
         enabled: true

@@ -99,6 +99,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.ports.hazelcast | int | `5701` | The port on which the Hazelcast listens for client traffic  |
 | bitbucket.ports.http | int | `7990` | The port on which the Bitbucket container listens for HTTP traffic  |
 | bitbucket.ports.ssh | int | `7999` | The port on which the Bitbucket SSH service will listen on. Must be within 1024-65535 range  |
+| bitbucket.postStart | object | `{"command":null}` | PostStart is executed immediately after a container is created. However, there is no guarantee that the hook will execute before the container ENTRYPOINT. See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks  |
 | bitbucket.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
 | bitbucket.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | bitbucket.readinessProbe.failureThreshold | int | `60` | The number of consecutive failures of the Bitbucket container readiness probe before the pod fails readiness checks.  |

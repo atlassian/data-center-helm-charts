@@ -197,6 +197,11 @@ spec:
                   name: {{ include "common.names.fullname" . }}-jvm-config
             {{- include "crowd.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
+          {{- if .Values.crowd.postStart.command }}
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", {{- .Values.crowd.postStart.command | quote }}]
+          {{- end }}
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.crowd.shutdown.command | quote }}]

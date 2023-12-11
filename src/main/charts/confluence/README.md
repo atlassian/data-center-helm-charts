@@ -62,6 +62,7 @@ Kubernetes: `>=1.21.x-0`
 | confluence.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | confluence.ports.hazelcast | int | `5701` | The port on which the Confluence container listens for Hazelcast traffic  |
 | confluence.ports.http | int | `8090` | The port on which the Confluence container listens for HTTP traffic  |
+| confluence.postStart | object | `{"command":null}` | PostStart is executed immediately after a container is created. However, there is no guarantee that the hook will execute before the container ENTRYPOINT. See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks  |
 | confluence.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
 | confluence.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | confluence.readinessProbe.failureThreshold | int | `6` | The number of consecutive failures of the Confluence container readiness probe before the pod fails readiness checks.  |

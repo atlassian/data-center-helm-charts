@@ -87,6 +87,7 @@ Kubernetes: `>=1.21.x-0`
 | jira.ports.ehcache | int | `40001` | Ehcache port  |
 | jira.ports.ehcacheobject | int | `40011` | Ehcache object port  |
 | jira.ports.http | int | `8080` | The port on which the Jira container listens for HTTP traffic  |
+| jira.postStart | object | `{"command":null}` | PostStart is executed immediately after a container is created. However, there is no guarantee that the hook will execute before the container ENTRYPOINT. See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks  |
 | jira.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
 | jira.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | jira.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Jira container readiness probe before the pod fails readiness checks.  |

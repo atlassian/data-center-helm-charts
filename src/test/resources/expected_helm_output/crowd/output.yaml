@@ -115,6 +115,8 @@ data:
         timeoutSeconds: 1
       ports:
         http: 8095
+      postStart:
+        command: null
       readinessProbe:
         customProbe: {}
         enabled: true

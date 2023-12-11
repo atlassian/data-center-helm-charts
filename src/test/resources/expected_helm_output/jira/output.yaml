@@ -156,6 +156,8 @@ data:
         ehcache: 40001
         ehcacheobject: 40011
         http: 8080
+      postStart:
+        command: null
       readinessProbe:
         customProbe: {}
         enabled: true
