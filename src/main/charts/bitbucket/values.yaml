@@ -831,6 +831,13 @@ bitbucket:
     #
     command: "/shutdown-wait.sh"
 
+  # -- PostStart is executed immediately after a container is created.
+  # However, there is no guarantee that the hook will execute before the container ENTRYPOINT.
+  # See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+  #
+  postStart:
+    command:
+
   # -- Pod management strategy. Bitbucket Data Center requires the "OrderedReady" value but for Bitbucket Mirrors you
   # can use the "Parallel" option.
   # To learn more, visit https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies

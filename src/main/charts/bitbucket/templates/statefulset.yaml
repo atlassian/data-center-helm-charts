@@ -266,6 +266,11 @@ spec:
             {{ end }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
+          {{- if .Values.bitbucket.postStart.command }}
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", {{- .Values.bitbucket.postStart.command | quote }}]
+          {{- end }}
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.bitbucket.shutdown.command | quote }}]

@@ -246,6 +246,11 @@ spec:
             {{ end }}
             {{- end }}
           lifecycle:
+          {{- if .Values.bamboo.postStart.command }}
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", {{- .Values.bamboo.postStart.command | quote }}]
+          {{- end }}
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.bamboo.shutdown.command | quote }}]

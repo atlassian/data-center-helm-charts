@@ -127,6 +127,8 @@ data:
       ports:
         http: 8085
         jms: 54663
+      postStart:
+        command: null
       readinessProbe:
         customProbe: {}
         enabled: true

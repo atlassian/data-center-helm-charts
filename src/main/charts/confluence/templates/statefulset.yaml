@@ -214,6 +214,11 @@ spec:
                   name: {{ include "common.names.fullname" . }}-jvm-config
             {{- include "confluence.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
+          {{- if .Values.confluence.postStart.command }}
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", {{- .Values.confluence.postStart.command | quote }}]
+          {{- end }}
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.confluence.shutdown.command | quote }}]

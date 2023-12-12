@@ -726,6 +726,13 @@ bamboo:
     #
     command: "/shutdown-wait.sh"
 
+  # -- PostStart is executed immediately after a container is created.
+  # However, there is no guarantee that the hook will execute before the container ENTRYPOINT.
+  # See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
+  #
+  postStart:
+    command:
+
   # Pod resource requests
   #
   resources:

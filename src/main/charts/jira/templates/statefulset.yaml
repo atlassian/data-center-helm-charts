@@ -207,6 +207,11 @@ spec:
             {{ end }}
             {{- end }}
           lifecycle:
+          {{- if .Values.jira.postStart.command }}
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", {{- .Values.jira.postStart.command | quote }}]
+          {{- end }}
             preStop:
               exec:
                 command: ["sh", "-c", {{ .Values.jira.shutdown.command | quote }}]

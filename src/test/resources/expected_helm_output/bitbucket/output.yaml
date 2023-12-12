@@ -196,6 +196,8 @@ data:
         hazelcast: 5701
         http: 7990
         ssh: 7999
+      postStart:
+        command: null
       readinessProbe:
         customProbe: {}
         enabled: true

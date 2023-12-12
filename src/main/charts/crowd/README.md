@@ -51,6 +51,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container liveness probe will run  |
 | crowd.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | crowd.ports.http | int | `8095` | The port on which the Crowd container listens for HTTP traffic  |
+| crowd.postStart | object | `{"command":null}` | PostStart is executed immediately after a container is created. However, there is no guarantee that the hook will execute before the container ENTRYPOINT. See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks  |
 | crowd.readinessProbe.customProbe | object | `{}` | Custom readinessProbe to override the default /status httpGet  |
 | crowd.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | crowd.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Crowd container readiness probe before the pod fails readiness checks.  |

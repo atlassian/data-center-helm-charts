@@ -64,6 +64,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
 | bamboo.ports.http | int | `8085` | The port on which the Bamboo container listens for HTTP traffic  |
 | bamboo.ports.jms | int | `54663` | JMS port  |
+| bamboo.postStart | object | `{"command":null}` | PostStart is executed immediately after a container is created. However, there is no guarantee that the hook will execute before the container ENTRYPOINT. See: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks  |
 | bamboo.readinessProbe.customProbe | object | `{}` | Custom ReadinessProbe to override the default /status httpGet  |
 | bamboo.readinessProbe.enabled | bool | `true` | Whether to apply the readinessProbe check to pod.  |
 | bamboo.readinessProbe.failureThreshold | int | `30` | The number of consecutive failures of the Bamboo container readiness probe before the pod fails readiness checks.  |
