@@ -220,6 +220,24 @@ volumes:
         requests:
           storage: 1Gi
 
+    # This field controls if and how PVCs are deleted during the lifecycle of a StatefulSet.
+    # Only configure the below two attributes when your Kubernetes version is 1.27+, and
+    # feature gate StatefulSetAutoDeletePVC is enabled.
+    #
+    # For each policy that you can configure, you can set the value to either Delete or Retain.
+    #
+    # https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+    #
+    persistentVolumeClaimRetentionPolicy:
+
+      # -- Configures the volume retention behavior that applies when the StatefulSet is deleted.
+      #
+      whenDeleted:
+
+      # -- Configures the volume retention behavior that applies when the replica count of the StatefulSet is reduced.
+      #
+      whenScaled:
+
     # -- Static provisioning of local-home using K8s PVs and PVCs
     #
     # NOTE: Due to the ephemeral nature of pods this approach to provisioning volumes for
