@@ -571,6 +571,11 @@ volumeClaimTemplates:
 
 {{- define "synchrony.volumeClaimTemplates" -}}
 {{ if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
+{{- if or .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
+    whenScaled: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
+{{- end}}
 volumeClaimTemplates:
 - metadata:
     name: synchrony-home

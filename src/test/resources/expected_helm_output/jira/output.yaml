@@ -285,6 +285,9 @@ data:
             requests:
               storage: 1Gi
           storageClassName: null
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: null
+          whenScaled: null
       sharedHome:
         customVolume: {}
         mountPath: /var/atlassian/application-data/shared-home
@@ -308,7 +311,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.24",
+      "k8sVersion": "1.28",
       "isS3AvatarsEnabled": false,
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
@@ -385,7 +388,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 80833ac72d7e4f89e07f3a24892afd4951bdd0836538aba613f7ad0bfa7e8438
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira

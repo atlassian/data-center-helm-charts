@@ -248,6 +248,9 @@ data:
             requests:
               storage: 1Gi
           storageClassName: null
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: null
+          whenScaled: null
       sharedHome:
         customVolume: {}
         mountPath: /var/atlassian/application-data/crowd/shared
@@ -271,7 +274,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.24",
+      "k8sVersion": "1.28",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
@@ -346,7 +349,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: c61f350d607740e114686158e6a18992266a5d80f9b295542a3e0d57f849b909
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd

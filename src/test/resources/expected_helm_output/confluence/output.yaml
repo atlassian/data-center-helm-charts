@@ -350,6 +350,9 @@ data:
             requests:
               storage: 1Gi
           storageClassName: null
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: null
+          whenScaled: null
       sharedHome:
         customVolume: {}
         mountPath: /var/atlassian/application-data/shared-home
@@ -376,13 +379,16 @@ data:
             requests:
               storage: 1Gi
           storageClassName: null
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: null
+          whenScaled: null
   analytics.json: |
     {
       "imageTag": "8.5.4",
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.24",
+      "k8sVersion": "1.28",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isS3AttachmentsStorageEnabled":false,
@@ -512,7 +518,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -594,7 +599,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 3f0778aacaf95e5e90d8b5f17e6a446ae152806759127d462f52e174b648a981
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

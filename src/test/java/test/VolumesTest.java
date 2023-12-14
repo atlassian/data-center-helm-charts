@@ -107,6 +107,35 @@ class VolumesTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void localHome_pvc_custom_with_retention_policy(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.localHome.persistentVolumeClaim.create", "true",
+                "volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted", "Delete",
+                "volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled", "Retain"));
+
+        final var pvcRetentionPolicy = resources.getStatefulSet(product.getHelmReleaseName()).
+                getSpec().get("persistentVolumeClaimRetentionPolicy");
+
+        assertThat(pvcRetentionPolicy.get("whenDeleted")).hasTextEqualTo("Delete");
+        assertThat(pvcRetentionPolicy.get("whenScaled")).hasTextEqualTo("Retain");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void localHome_pvc_custom_without_retention_policy(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.localHome.persistentVolumeClaim.create", "true",
+                "volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted", "",
+                "volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled", ""));
+
+        final var pvcRetentionPolicy = resources.getStatefulSet(product.getHelmReleaseName()).
+                getSpec().get("persistentVolumeClaimRetentionPolicy");
+
+        assertThat(pvcRetentionPolicy).isNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void sharedHome_custom_volume(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "volumes.sharedHome.customVolume.hostPath", "/foo/bar" // not actually a valid hostPath definition, but it works for the test
@@ -275,6 +304,37 @@ class VolumesTest {
         final var mount = statefulSet.getContainer("synchrony").getVolumeMount("synchrony-home");
         assertThat(mount.get("name")).hasTextEqualTo("synchrony-home");
         assertThat(mount.get("mountPath")).hasTextEqualTo("/foo/bar");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchronyHome_pvc_custom_with_retention_policy(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.synchronyHome.persistentVolumeClaim.create", "true",
+                "volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted", "Delete",
+                "volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled", "Retain"));
+
+        final var pvcRetentionPolicy = resources.getStatefulSet(synchronyStatefulSetName()).
+                getSpec().get("persistentVolumeClaimRetentionPolicy");
+
+        assertThat(pvcRetentionPolicy.get("whenDeleted")).hasTextEqualTo("Delete");
+        assertThat(pvcRetentionPolicy.get("whenScaled")).hasTextEqualTo("Retain");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchronyHome_pvc_custom_without_retention_policy(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "volumes.synchronyHome.persistentVolumeClaim.create", "true",
+                "volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted", "",
+                "volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled", ""));
+
+        final var pvcRetentionPolicy = resources.getStatefulSet(synchronyStatefulSetName()).
+                getSpec().get("persistentVolumeClaimRetentionPolicy");
+
+        assertThat(pvcRetentionPolicy).isNull();
     }
 
     @ParameterizedTest
