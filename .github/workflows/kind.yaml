@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # See: https://github.com/kubernetes-sigs/kind/tags
-      KIND_VERSION: "v0.17.0"
+      KIND_VERSION: "v0.20.0"
       # See: https://hub.docker.com/r/kindest/node/tags
-      K8S_VERSION: "v1.25.3"
+      K8S_VERSION: "v1.28.0"
       DC_APP: ${{inputs.dc_app}}
       LICENSE: ${{ secrets[format('{0}_LICENSE', inputs.dc_app)] }}
 
@@ -43,7 +43,7 @@ jobs:
       - name: Pin Helm version
         uses: azure/setup-helm@v3
         with:
-          version: v3.9.2
+          version: v3.13.3
 
       - name: Create KinD cluster
         run: |

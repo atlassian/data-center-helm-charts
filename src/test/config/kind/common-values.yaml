@@ -38,6 +38,9 @@ volumes:
   localHome:
     persistentVolumeClaim:
       create: true
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Delete
+      whenScaled: Retain
   sharedHome:
     persistentVolumeClaim:
       create: true
