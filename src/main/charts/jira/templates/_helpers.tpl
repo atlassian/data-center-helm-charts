@@ -340,7 +340,7 @@ Define additional hosts here to allow template overrides when used as a sub char
 
 {{- define "jira.volumeClaimTemplates" -}}
 {{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.jira.additionalVolumeClaimTemplates }}
-{{- if or .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+{{- if and .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
 persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
     whenScaled: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled}}

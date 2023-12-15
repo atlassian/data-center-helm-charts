@@ -534,7 +534,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 
 {{- define "confluence.volumeClaimTemplates" -}}
 {{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.confluence.additionalVolumeClaimTemplates }}
-{{- if or .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+{{- if and .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
 persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
     whenScaled: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
@@ -571,7 +571,7 @@ volumeClaimTemplates:
 
 {{- define "synchrony.volumeClaimTemplates" -}}
 {{ if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
-{{- if or .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+{{- if and .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
 persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
     whenScaled: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
