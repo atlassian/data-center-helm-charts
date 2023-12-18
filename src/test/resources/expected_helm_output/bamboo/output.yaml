@@ -278,6 +278,9 @@ data:
             requests:
               storage: 1Gi
           storageClassName: null
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: null
+          whenScaled: null
       sharedHome:
         customVolume: {}
         mountPath: /var/atlassian/application-data/shared-home
@@ -301,7 +304,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.24",
+      "k8sVersion": "1.28",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
@@ -399,7 +402,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: ceff98bd5fa017c5f3c6ad1888c423d74408959cd01bb8f7fff8ad86ef9777ab
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo

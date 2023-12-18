@@ -359,6 +359,9 @@ data:
             requests:
               storage: 1Gi
           storageClassName: null
+        persistentVolumeClaimRetentionPolicy:
+          whenDeleted: null
+          whenScaled: null
       sharedHome:
         customVolume: {}
         mountPath: /var/atlassian/application-data/shared-home
@@ -390,7 +393,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.24",
+      "k8sVersion": "1.28",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isClusteringEnabled": false,
@@ -558,7 +561,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: d1269b9589f3ee97805a6d9a39908c111078c61be8dd8e938e99aab622299ba6
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -681,7 +683,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: ad52a0a328d6729758ab23a94de65fbe9911dd56e45489b2423f19ff5a01a815
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket

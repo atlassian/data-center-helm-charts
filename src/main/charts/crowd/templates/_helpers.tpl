@@ -283,6 +283,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 
 {{- define "crowd.volumeClaimTemplates" -}}
 {{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.crowd.additionalVolumeClaimTemplates }}
+{{- if and .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
+    whenScaled: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
+{{- end}}
 volumeClaimTemplates:
 {{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:

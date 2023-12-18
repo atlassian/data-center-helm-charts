@@ -534,6 +534,11 @@ For each additional plugin declared, generate a volume mount that injects that l
 
 {{- define "confluence.volumeClaimTemplates" -}}
 {{- if or .Values.volumes.localHome.persistentVolumeClaim.create .Values.confluence.additionalVolumeClaimTemplates }}
+{{- if and .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
+    whenScaled: {{.Values.volumes.localHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
+{{- end}}
 volumeClaimTemplates:
 {{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
 - metadata:
@@ -566,6 +571,11 @@ volumeClaimTemplates:
 
 {{- define "synchrony.volumeClaimTemplates" -}}
 {{ if .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
+{{- if and .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled }}
+persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenDeleted}}
+    whenScaled: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
+{{- end}}
 volumeClaimTemplates:
 - metadata:
     name: synchrony-home
