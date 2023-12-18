@@ -311,7 +311,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.24",
+      "k8sVersion": "1.28",
       "isS3AvatarsEnabled": false,
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
