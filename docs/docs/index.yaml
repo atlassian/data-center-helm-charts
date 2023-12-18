@@ -2,6 +2,38 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "StatefulSet PVC auto deletion (#736)"
+        - "Update appVersions for DC apps (#738)"
+        - "Add optional postStart hook (#735)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.2
+    created: "2023-12-18T05:54:09.815829184Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 212ddc6938c8e6117c5db3ff5f9aa86eee03d7b86575de69a555c52bdbf4a2b1
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.17.2/bamboo-1.17.2.tgz
+    version: 1.17.2
+  - annotations:
       artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -1137,6 +1169,37 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: |-
+        - "StatefulSet PVC auto deletion (#736)"
+        - "Update appVersions for DC apps (#738)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.2
+    created: "2023-12-18T05:54:09.935557633Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 23e4f9b0d27758e536a8cb6c37e64d0541eaad1999d75ba9d812c66331d0d163
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.17.2/bamboo-agent-1.17.2.tgz
+    version: 1.17.2
+  - annotations:
       artifacthub.io/changes: '- "Update Helm chart version"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -2222,6 +2285,38 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "StatefulSet PVC auto deletion (#736)"
+        - "Update appVersions for DC apps (#738)"
+        - "Add optional postStart hook (#735)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.8
+    created: "2023-12-18T05:54:10.091163477Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 320952d414fd96a37f892e7bcc64926c61d4d05514bf7ee68639030322b18440
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.17.2/bitbucket-1.17.2.tgz
+    version: 1.17.2
   - annotations:
       artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -3896,6 +3991,37 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: |-
+        - "StatefulSet PVC auto deletion (#736)"
+        - "Add optional postStart hook (#735)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.4
+    created: "2023-12-18T05:54:10.359886927Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 73a75ce535ba7a627221a92c33f7db92ee9fa478a0e92c4cc7c0c91028a65972
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.17.2/confluence-1.17.2.tgz
+    version: 1.17.2
+  - annotations:
       artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
@@ -5514,6 +5640,38 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "StatefulSet PVC auto deletion (#736)"
+        - "Update appVersions for DC apps (#738)"
+        - "Add optional postStart hook (#735)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.2.2
+    created: "2023-12-18T05:54:10.49362091Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 6d2811511482a7696a34cbda0fe0676504d4ab34dacd78642335b51837cf5306
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.17.2/crowd-1.17.2.tgz
+    version: 1.17.2
+  - annotations:
       artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -6954,6 +7112,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "StatefulSet PVC auto deletion (#736)"
+        - "Update appVersions for DC apps (#738)"
+        - "Add optional postStart hook (#735)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.1
+    created: "2023-12-18T05:54:10.64721791Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.5
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: b231b52b45539609c6aa42b1ac52f4ee2c6c505b7da2e02605b6918de821c9ec
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.17.2/jira-1.17.2.tgz
+    version: 1.17.2
   - annotations:
       artifacthub.io/changes: '- "Make liveness probe configurable (#732)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -8528,4 +8719,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2023-12-11T00:31:05.919221883Z"
+generated: "2023-12-18T05:54:10.648652704Z"
