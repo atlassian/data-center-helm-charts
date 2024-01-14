@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 1.17.2](https://img.shields.io/badge/Version-1.17.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.9.8](https://img.shields.io/badge/AppVersion-8.9.8-informational?style=flat-square)
+![Version: 1.17.2](https://img.shields.io/badge/Version-1.17.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.9.9](https://img.shields.io/badge/AppVersion-8.9.9-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
