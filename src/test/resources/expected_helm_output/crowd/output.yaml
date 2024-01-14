@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: crowd/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -40,7 +40,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -68,7 +68,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -270,7 +270,7 @@ data:
         subPath: null
   analytics.json: |
     {
-      "imageTag": "5.2.2",
+      "imageTag": "5.2.3",
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
@@ -291,7 +291,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -313,7 +313,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -337,7 +337,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -384,7 +384,7 @@ spec:
               name: shared-home
       containers:
         - name: crowd
-          image: "atlassian/crowd:5.2.2"
+          image: "atlassian/crowd:5.2.3"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -480,7 +480,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -511,7 +511,7 @@ metadata:
     helm.sh/chart: crowd-1.17.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "5.2.2"
+    app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
