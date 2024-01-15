@@ -94,22 +94,22 @@ database:
   # -- The database type that should be used. If not specified, then it will need to be
   # provided via the browser during manual configuration post deployment. Valid values
   # include:
-   # - 'postgres72'
-   # - 'mysql57'
-   # - 'mysql8'
-   # - 'oracle10g'
-   # - 'mssql'
-   # - 'postgresaurora96'
+   # * 'postgres72'
+   # * 'mysql57'
+   # * 'mysql8'
+   # * 'oracle10g'
+   # * 'mssql'
+   # * 'postgresaurora96'
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasetype
   #
   type:
 
   # -- The jdbc URL of the database. If not specified, then it will need to be provided
   # via the browser during manual configuration post deployment. Example URLs include:
-   # - 'jdbc:postgresql://<dbhost>:5432/<dbname>'
-   # - 'jdbc:mysql://<dbhost>/<dbname>'
-   # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
-   # - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
+   # * 'jdbc:postgresql://<dbhost>:5432/<dbname>'
+   # * 'jdbc:mysql://<dbhost>/<dbname>'
+   # * 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
+   # * 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databaseurl
   #
   url:
@@ -117,10 +117,10 @@ database:
   # -- The Java class name of the JDBC driver to be used. If not specified, then it will
   # need to be provided via the browser during manual configuration post deployment.
   # Valid drivers are:
-   # - 'org.postgresql.Driver'
-   # - 'com.mysql.jdbc.Driver'
-   # - 'oracle.jdbc.OracleDriver'
-   # - 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
+   # * 'org.postgresql.Driver'
+   # * 'com.mysql.jdbc.Driver'
+   # * 'oracle.jdbc.OracleDriver'
+   # * 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasedriver:
   #
   driver:

@@ -96,20 +96,20 @@ database:
   # -- The database type that should be used. If not specified, then it will need to be
   # provided via the browser during manual configuration post deployment. Valid values
   # include:
-   # - 'postgresql'
-   # - 'mysql'
-   # - 'oracle12c'
-   # - 'mssql'
+   # * 'postgresql'
+   # * 'mysql'
+   # * 'oracle12c'
+   # * 'mssql'
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databasetype
   #
   type:
 
   # -- The jdbc URL of the database. If not specified, then it will need to be provided
   # via the browser during manual configuration post deployment. Example URLs include:
-   # - 'jdbc:postgresql://<dbhost>:5432/<dbname>'
-   # - 'jdbc:mysql://<dbhost>/<dbname>'
-   # - 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
-   # - 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
+   # * 'jdbc:postgresql://<dbhost>:5432/<dbname>'
+   # * 'jdbc:mysql://<dbhost>/<dbname>'
+   # * 'jdbc:sqlserver://<dbhost>:1433;databaseName=<dbname>'
+   # * 'jdbc:oracle:thin:@<dbhost>:1521:<SID>'
   # https://atlassian.github.io/data-center-helm-charts/userguide/CONFIGURATION/#databaseurl
   #
   url:
