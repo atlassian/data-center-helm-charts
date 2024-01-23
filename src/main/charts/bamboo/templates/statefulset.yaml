@@ -5,6 +5,10 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
+  {{ if .Values.ordinals.enabled }}
+  ordinals:
+    start: {{ .Values.ordinals.start }}
+  {{ end }}
   replicas: {{ .Values.replicaCount }}
   serviceName: {{ include "common.names.fullname" . }}
   selector:
