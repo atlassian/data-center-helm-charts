@@ -246,6 +246,9 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    ordinals:
+      enabled: false
+      start: 0
     podAnnotations: {}
     podDisruptionBudget:
       annotations: {}
@@ -388,7 +391,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 71f45694cd6c269a552ddc55cf6d698f17e77464f607aba800b908c501bc0d0c
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira

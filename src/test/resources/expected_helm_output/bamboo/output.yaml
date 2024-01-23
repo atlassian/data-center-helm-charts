@@ -241,6 +241,9 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    ordinals:
+      enabled: false
+      start: 0
     podAnnotations: {}
     podDisruptionBudget:
       annotations: {}
@@ -402,7 +405,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 173499a93a0bba58596806cb16b777f1c7b4fa0427578f1237b612608ccb22cd
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo

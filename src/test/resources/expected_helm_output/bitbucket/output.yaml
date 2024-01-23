@@ -312,6 +312,9 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    ordinals:
+      enabled: false
+      start: 0
     podAnnotations: {}
     podDisruptionBudget:
       annotations: {}
@@ -561,7 +564,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 411a1dfa086b093587c121f8f90e46c8013ecb3368d7cf314767ca5cd41d0d6e
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -684,7 +686,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 54c4cd5794e6de59ce3c0023c2dd8b34701c2e0759fbdf8a76511825ad0fc84f
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
