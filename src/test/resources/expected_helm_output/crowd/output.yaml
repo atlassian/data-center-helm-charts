@@ -210,6 +210,9 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    ordinals:
+      enabled: false
+      start: 0
     podAnnotations: {}
     podDisruptionBudget:
       annotations: {}
@@ -349,7 +352,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: d32f7983e5805d1b32887cbfb8aca2c9fe4c38c8ed4ccc6fea2105f21ec14ffa
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd

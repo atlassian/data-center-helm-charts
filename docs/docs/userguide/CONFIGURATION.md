@@ -474,6 +474,7 @@ The Helm charts also allow you to specify:
 * [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/){.external},
 * [`nodeSelectors`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector){.external}  
 * [`affinities`](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity){.external}.
+* [`ordinals`](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#start-ordinal){.external}.
 
 These are standard Kubernetes structures that will be included in the pods.
 
