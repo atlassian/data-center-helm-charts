@@ -36,6 +36,8 @@ Jmx init container
   {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- if .Values.openshift.runWithRestrictedSCC }}
+  {{- else}}
   {{- if .Values.monitoring.jmxExporterInitContainer.runAsRoot }}
   securityContext:
     runAsUser: 0
@@ -43,6 +45,7 @@ Jmx init container
   securityContext:
   {{- with .Values.monitoring.jmxExporterInitContainer.customSecurityContext }}
   {{- toYaml .  | nindent 4 }}
+  {{- end }}
   {{- end }}
   {{- end }}
   volumeMounts:
