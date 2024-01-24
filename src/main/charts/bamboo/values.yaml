@@ -40,6 +40,20 @@
 #
 replicaCount: 1
 
+# -- Set a custom start ordinal number for the K8s stateful set.
+# Note that this depends on the StatefulSetStartOrdinal K8s feature gate,
+# which has entered beta state with K8s version 1.27.
+#
+ordinals:
+
+  # -- Enable only if StatefulSetStartOrdinal K8s feature gate is available.
+  #
+  enabled: false
+
+  # -- Set start ordinal to a positive integer, defaulting to 0.
+  #
+  start: 0
+
 # Image configuration
 #
 image:
