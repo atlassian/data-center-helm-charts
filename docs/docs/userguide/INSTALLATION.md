@@ -27,7 +27,7 @@ helm show values atlassian-data-center/<product> > values.yaml
 
 !!!warning "Bamboo deployments"
 
-    If deploying Bamboo, be sure to read about the current limitations relating to [Bamboo deployments and values.yaml](../../troubleshooting/LIMITATIONS/#deployment)
+    If deploying Bamboo, be sure to read about the current limitations relating to [Bamboo deployments and values.yaml](../troubleshooting/LIMITATIONS.md#deployment)
 
 ## 3. Configure database
 

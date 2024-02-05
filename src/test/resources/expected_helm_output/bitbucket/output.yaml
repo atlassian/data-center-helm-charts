@@ -185,6 +185,9 @@ data:
         volume:
           create: true
           mountPath: /var/atlassian/application-data/mesh
+          persistentVolumeClaimRetentionPolicy:
+            whenDeleted: null
+            whenScaled: null
           resources:
             requests:
               storage: 1Gi
