@@ -416,7 +416,7 @@ metadata:
   name: unittest-bitbucket-jmx
   labels:
     helm.sh/chart: bitbucket-1.17.2
-    app.kubernetes.io/name: bitbucket
+    app.kubernetes.io/name: jmx
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.9.9"
     app.kubernetes.io/managed-by: Helm

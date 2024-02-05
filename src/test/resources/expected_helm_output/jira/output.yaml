@@ -331,7 +331,7 @@ metadata:
   name: unittest-jira-jmx
   labels:
     helm.sh/chart: jira-1.17.2
-    app.kubernetes.io/name: jira
+    app.kubernetes.io/name: jmx
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.2"
     app.kubernetes.io/managed-by: Helm

@@ -292,7 +292,7 @@ metadata:
   name: unittest-crowd-jmx
   labels:
     helm.sh/chart: crowd-1.17.2
-    app.kubernetes.io/name: crowd
+    app.kubernetes.io/name: jmx
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "5.2.3"
     app.kubernetes.io/managed-by: Helm
