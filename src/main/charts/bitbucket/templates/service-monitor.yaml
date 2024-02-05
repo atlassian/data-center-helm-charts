@@ -14,10 +14,21 @@ spec:
     path: /metrics
     port: jmx
     scheme: http
+    relabelings:
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_pod_name
+        targetLabel: instance
+
   - interval: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds }}
     path: /metrics
     port: jmx-mesh-sidecar
     scheme: http
+    relabelings:
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_pod_name
+        targetLabel: instance
   selector:
     matchLabels:
     {{- include "common.labels.selectorLabels" . | nindent 6 }}

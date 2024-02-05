@@ -13,6 +13,11 @@ spec:
     path: /metrics
     port: jmx
     scheme: http
+    relabelings:
+      - action: replace
+        sourceLabels:
+          - __meta_kubernetes_pod_name
+        targetLabel: instance
   selector:
     matchLabels:
     {{- include "common.labels.selectorLabels" . | nindent 6 }}
