@@ -32,8 +32,8 @@ plugins:
         remove_comments: true
 markdown_extensions:
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight
   - pymdownx.inlinehilite
   - pymdownx.superfences
@@ -55,4 +55,4 @@ extra:
   social:
     - icon: fontawesome/brands/atlassian
       link: https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes
-copyright: Copyright &copy; [2020] to [2021] Atlassian and others.
+copyright: Copyright &copy; [2024] Atlassian and others.
