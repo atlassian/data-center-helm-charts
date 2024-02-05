@@ -71,7 +71,7 @@ Go to `http://localhost:9999/metrics` in your local browser to verify metrics av
 
 ### Scrape Metrics With Prometheus
 
-See: [Prometheus Monitoring](../examples/monitoring/PROMETHEUS.md)
+See: [Prometheus Monitoring](monitoring/PROMETHEUS.md)
 
 
 ## Managing resources

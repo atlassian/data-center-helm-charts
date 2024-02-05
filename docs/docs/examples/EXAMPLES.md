@@ -56,7 +56,7 @@ See examples of provisioning Kubernetes clusters on cloud-based providers:
 * See an example of [how to deploy an EFK stack to Kubernetes](logging/efk/EFK.md)
 
 ### :simple-prometheus: Prometheus Monitoring
-* See an example of [how to monitor DC products with Prometheus](monitoring/PROMETHEUS.md)
+* See an example of [how to monitor DC products with Prometheus](../userguide/monitoring/PROMETHEUS.md)
 
 ### :material-checkbox-multiple-marked-outline: Customization
 * See an example of [External libraries and plugins](external_libraries/EXTERNAL_LIBS.md)

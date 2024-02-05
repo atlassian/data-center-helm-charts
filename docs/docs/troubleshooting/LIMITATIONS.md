@@ -17,7 +17,7 @@ At present there are issues relating to index replication with Jira when immedia
   
     Please note that Jira is actively being worked on to address these issues in the coming releases.
       
-Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../../userguide/resource_management/RESOURCE_SCALING/#scaling-jira-safely).
+Although these issues are Jira specific, they are exasperated on account of the significantly reduced startup times for Jira when running in a Kubernetes cluster. As such these issues can have an impact on horizontal scaling if [you don't take the correct approach](../userguide/resource_management/RESOURCE_SCALING.md#scaling-jira-safely).
 
 ## Bamboo
 There are a number of known limitations relating to Bamboo Data Center, these are documented below.
