@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout Helm charts
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
@@ -91,7 +91,7 @@ jobs:
           go-version: '1.18'
 
       - name: Setup Python environment
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9.14'
       - run: |
