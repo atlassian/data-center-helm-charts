@@ -394,6 +394,11 @@ volumeClaimTemplates:
 
 {{- define "bitbucket.mesh.volumeClaimTemplates" -}}
 {{- if .Values.bitbucket.mesh.volume.create }}
+{{- if and .Values.bitbucket.mesh.volume.persistentVolumeClaimRetentionPolicy.whenDeleted .Values.bitbucket.mesh.volume.persistentVolumeClaimRetentionPolicy.whenScaled }}
+persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{.Values.bitbucket.mesh.volume.persistentVolumeClaimRetentionPolicy.whenDeleted}}
+    whenScaled: {{.Values.bitbucket.mesh.volume.persistentVolumeClaimRetentionPolicy.whenScaled}}
+{{- end}}
 volumeClaimTemplates:
 - metadata:
     name: mesh-home
