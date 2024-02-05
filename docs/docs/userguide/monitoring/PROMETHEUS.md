@@ -55,7 +55,7 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack
 
 ## 2. Expose JMX metrics
 
-Follow [these instructions](../../../userguide/OPERATION/#expose-jmx-metrics) for details on how to enable and expose `JMX` for your product via a dedicated `Service`. 
+Follow [these instructions](../OPERATION.md#expose-jmx-metrics) for details on how to enable and expose `JMX` for your product via a dedicated `Service`. 
 
 
 ## 3. Create a ServiceMonitor
