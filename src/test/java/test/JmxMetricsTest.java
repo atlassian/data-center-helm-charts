@@ -221,6 +221,8 @@ class JmxMetricsTest {
         assertThat(service.getAnnotations()).isObject(Map.of(
                 "foo", "bar"
         ));
+        // assert we correctly replace name label to distinguish jmx svc from the main server svc
+        assertThat(service.getMetadata().path("labels").path("app.kubernetes.io/name")).hasTextEqualTo("jmx");
     }
 
     @ParameterizedTest

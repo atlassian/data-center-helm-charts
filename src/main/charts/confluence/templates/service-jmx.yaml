@@ -4,7 +4,8 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-jmx
   labels:
-  {{- include "common.labels.commonLabels" . | nindent 4 }}
+  {{- $name := .Chart.Name }}
+  {{- include "common.labels.commonLabels" . | replace (print "name: " $name) "name: jmx" | nindent 4 }}
   annotations:
   {{- with .Values.monitoring.jmxServiceAnnotations }}
   {{- toYaml . | nindent 4 }}
