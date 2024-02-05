@@ -1032,6 +1032,9 @@ bitbucket:
           storage: 1Gi
       storageClass:
       mountPath: "/var/atlassian/application-data/mesh"
+      persistentVolumeClaimRetentionPolicy:
+        whenDeleted:
+        whenScaled:
 
     # -- Defines any additional environment variables to be passed to the Bitbucket mesh containers.
     #
