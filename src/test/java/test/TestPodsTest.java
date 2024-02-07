@@ -141,9 +141,20 @@ class TestPodsTest {
         for (String testPod : testPods) {
             final var pod = resources.get(Kind.Pod, Pod.class, product.getHelmReleaseName() + "-" + testPod);
             assertEquals("my-scheduler", pod.getSpec().path("schedulerName").asText());
-
         }
+    }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_pods_custom_images(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "testPods.image.statusTestContainer", "centos",
+                "testPods.image.permissionsTestContainer", "centos"));
+        List<String> testPods = List.of("application-status-test", "shared-home-permissions-test");
+        for (String testPod : testPods) {
+            final var pod = resources.get(Kind.Pod, Pod.class, product.getHelmReleaseName() + "-" + testPod);
+            assertEquals("centos", pod.getSpec().path("containers").path(0).path("image").asText());
+        }
     }
 
     @ParameterizedTest
