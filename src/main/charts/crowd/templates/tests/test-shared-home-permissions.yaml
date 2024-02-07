@@ -54,6 +54,10 @@ spec:
           touch /shared-home/permissions-test
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
+      {{- with .Values.testPods.resources }}
+      resources:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   volumes:
     {{ include "crowd.volumes.sharedHome" . | nindent 4 }}
   restartPolicy: Never

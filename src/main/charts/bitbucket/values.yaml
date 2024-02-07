@@ -1526,6 +1526,7 @@ atlassianAnalyticsAndSupport:
 # -- Metadata and pod spec for pods started in Helm tests
 #
 testPods:
+  resources: {}
   labels: {}
   annotations: {}
   nodeSelector: {}

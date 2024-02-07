@@ -60,6 +60,10 @@ spec:
           touch /shared-home/permissions-test
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
+      {{- with .Values.testPods.resources }}
+      resources:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   volumes:
     {{- if or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume }}
     {{ include "bitbucket.volumes.sharedHome" . | nindent 4 }}
