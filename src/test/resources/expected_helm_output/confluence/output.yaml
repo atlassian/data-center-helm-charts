@@ -82,7 +82,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     common:
@@ -386,21 +386,6 @@ data:
         persistentVolumeClaimRetentionPolicy:
           whenDeleted: null
           whenScaled: null
-  analytics.json: |
-    {
-      "imageTag": "8.5.5",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.24",
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isS3AttachmentsStorageEnabled":false,
-      "isClusteringEnabled": false,
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false
-    }
 ---
 # Source: confluence/templates/synchrony-start-script.yaml
 apiVersion: v1

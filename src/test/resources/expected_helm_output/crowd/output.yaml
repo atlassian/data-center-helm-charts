@@ -85,7 +85,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     common:
@@ -272,19 +272,6 @@ data:
               storage: 1Gi
           storageClassName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "5.2.3",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.24",
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false
-    }
 ---
 # Source: crowd/templates/service-jmx.yaml
 apiVersion: v1

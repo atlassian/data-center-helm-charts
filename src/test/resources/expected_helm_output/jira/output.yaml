@@ -83,7 +83,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     common:
@@ -309,21 +309,6 @@ data:
               storage: 1Gi
           storageClassName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "9.12.2",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.24",
-      "isS3AvatarsEnabled": false,
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isClusteringEnabled": false,
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false
-    }
 ---
 # Source: jira/templates/service-jmx.yaml
 apiVersion: v1

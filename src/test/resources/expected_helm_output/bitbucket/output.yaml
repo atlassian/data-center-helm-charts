@@ -96,7 +96,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     bitbucket:
@@ -394,21 +394,6 @@ data:
           storageClassName: null
           volumeName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "8.9.9",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.24",
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isClusteringEnabled": false,
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false,
-      "isBitbucketMeshEnabled": true
-    }
 ---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
