@@ -23,7 +23,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: {{ .Values.testPods.image.statusTestContainer }}
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL

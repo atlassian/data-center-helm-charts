@@ -23,7 +23,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: {{ .Values.testPods.image.statusTestContainer }}
       env:
         - name: STATUS_URL
           value: "http://{{ include "common.names.fullname" . }}:{{ .Values.crowd.service.port }}/crowd/status"
