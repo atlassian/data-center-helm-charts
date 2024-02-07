@@ -237,6 +237,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -277,7 +278,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.28",
+      "k8sVersion": "1.24",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
@@ -352,6 +353,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 383d0385319b80eef29acd67ca2c538f526b1ebcb262ca25a55dc12f9ce050bf
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd

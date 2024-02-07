@@ -267,6 +267,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -307,7 +308,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.28",
+      "k8sVersion": "1.24",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
@@ -405,6 +406,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: b0e868ad4eccc4b092ab7d9be2637d757867cbd2056854035dcc80abbb074661
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo

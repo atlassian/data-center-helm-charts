@@ -351,6 +351,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -399,7 +400,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.28",
+      "k8sVersion": "1.24",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isClusteringEnabled": false,
@@ -567,6 +568,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 04c6f2e14c3173eebf4f36995e26af5b8284651df7639d23f38d328e9f5d7f79
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -689,6 +691,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 8987619eb9baf51a3d289a3d058631f004e8ec059a6dc7a629a5b5bae197dc07
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
