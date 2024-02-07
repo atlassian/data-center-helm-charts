@@ -818,7 +818,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: alpine:latest
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL

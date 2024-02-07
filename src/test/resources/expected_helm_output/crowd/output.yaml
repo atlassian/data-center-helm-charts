@@ -487,7 +487,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: alpine:latest
       env:
         - name: STATUS_URL
           value: "http://unittest-crowd:80/crowd/status"
