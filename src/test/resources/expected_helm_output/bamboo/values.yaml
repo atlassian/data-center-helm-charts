@@ -40,3 +40,7 @@ additionalHosts:
 
 monitoring:
   exposeJmxMetrics: true
+
+atlassianAnalyticsAndSupport:
+  analytics:
+    enabled: false
