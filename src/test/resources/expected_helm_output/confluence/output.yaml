@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -44,7 +44,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -66,7 +66,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -387,7 +387,7 @@ data:
           whenScaled: null
   analytics.json: |
     {
-      "imageTag": "8.5.5",
+      "imageTag": "8.5.6",
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
@@ -432,7 +432,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -454,7 +454,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -481,7 +481,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -509,7 +509,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -535,7 +535,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:8.5.5"
+          image: "atlassian/confluence:8.5.6"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -590,7 +590,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -635,7 +635,7 @@ spec:
               name: shared-home
       containers:
         - name: confluence
-          image: "atlassian/confluence:8.5.5"
+          image: "atlassian/confluence:8.5.6"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -735,7 +735,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -766,7 +766,7 @@ metadata:
     helm.sh/chart: confluence-1.17.2
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.5"
+    app.kubernetes.io/version: "8.5.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
