@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bitbucket/templates/config-jvm-mesh.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -38,7 +38,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -57,7 +57,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -79,7 +79,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -96,7 +96,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: false
+        enabled: true
       helmValues:
         enabled: true
     bitbucket:
@@ -351,7 +351,6 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
-      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -394,6 +393,21 @@ data:
           storageClassName: null
           volumeName: null
         subPath: null
+  analytics.json: |
+    {
+      "imageTag": "8.9.10",
+      "replicas": 1,
+      "isJmxEnabled": true,
+      "ingressType": "NONE",
+      "k8sVersion": "1.28",
+      "serviceType": "CLUSTER_IP",
+      "dbType": "UNKNOWN",
+      "isClusteringEnabled": false,
+      "isSharedHomePVCCreated": false,
+      "isServiceMonitorCreated": false,
+      "isGrafanaDashboardsCreated": false,
+      "isBitbucketMeshEnabled": true
+    }
 ---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
@@ -404,7 +418,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -429,7 +443,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -454,7 +468,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -479,7 +493,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -504,7 +518,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -536,7 +550,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 3
@@ -553,7 +567,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 04c6f2e14c3173eebf4f36995e26af5b8284651df7639d23f38d328e9f5d7f79
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -659,7 +672,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -676,7 +689,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8987619eb9baf51a3d289a3d058631f004e8ec059a6dc7a629a5b5bae197dc07
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -702,7 +714,7 @@ spec:
               name: shared-home
       containers:
         - name: bitbucket
-          image: "atlassian/bitbucket:8.9.9"
+          image: "atlassian/bitbucket:8.9.10"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -801,12 +813,12 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
     - name: test
-      image: alpine:latest
+      image: alpine
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL
@@ -833,7 +845,7 @@ metadata:
     helm.sh/chart: bitbucket-1.17.2
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
-    app.kubernetes.io/version: "8.9.9"
+    app.kubernetes.io/version: "8.9.10"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -40,7 +40,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -66,7 +66,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -83,7 +83,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: false
+        enabled: true
       helmValues:
         enabled: true
     common:
@@ -274,7 +274,6 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
-      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -309,6 +308,21 @@ data:
               storage: 1Gi
           storageClassName: null
         subPath: null
+  analytics.json: |
+    {
+      "imageTag": "9.12.3",
+      "replicas": 1,
+      "isJmxEnabled": true,
+      "ingressType": "NONE",
+      "k8sVersion": "1.28",
+      "isS3AvatarsEnabled": false,
+      "serviceType": "CLUSTER_IP",
+      "dbType": "UNKNOWN",
+      "isClusteringEnabled": false,
+      "isSharedHomePVCCreated": false,
+      "isServiceMonitorCreated": false,
+      "isGrafanaDashboardsCreated": false
+    }
 ---
 # Source: jira/templates/service-jmx.yaml
 apiVersion: v1
@@ -319,7 +333,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -341,7 +355,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -365,7 +379,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -377,7 +391,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: a022c7633de9c509e53082e05e2fceddb84cdf43328196f6ee6843d1efda9fa1
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -412,7 +425,7 @@ spec:
               name: shared-home
       containers:
         - name: jira
-          image: "atlassian/jira-software:9.12.2"
+          image: "atlassian/jira-software:9.12.3"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -511,7 +524,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -543,7 +556,7 @@ metadata:
     helm.sh/chart: jira-1.17.2
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "9.12.2"
+    app.kubernetes.io/version: "9.12.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
