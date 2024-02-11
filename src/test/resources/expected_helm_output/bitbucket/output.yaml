@@ -96,7 +96,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     bitbucket:
@@ -351,6 +351,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -393,21 +394,6 @@ data:
           storageClassName: null
           volumeName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "8.9.10",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.28",
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isClusteringEnabled": false,
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false,
-      "isBitbucketMeshEnabled": true
-    }
 ---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
@@ -567,6 +553,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 00c520ede640b3befa36e128275315222fdc74665fdfeb29d5a87a74cff3549c
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -689,6 +676,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: dc3c40202986b19d8c8108c0fe3b467e8277fb8b1be897185b5cff3725550d12
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -818,7 +806,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: alpine:latest
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL

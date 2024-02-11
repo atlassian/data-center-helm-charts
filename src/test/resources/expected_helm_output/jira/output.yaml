@@ -83,7 +83,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     common:
@@ -274,6 +274,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -308,21 +309,6 @@ data:
               storage: 1Gi
           storageClassName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "9.12.3",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.28",
-      "isS3AvatarsEnabled": false,
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isClusteringEnabled": false,
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false
-    }
 ---
 # Source: jira/templates/service-jmx.yaml
 apiVersion: v1
@@ -391,6 +377,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: d293aeef116388ad949f4391230a6dcf1e10dde3d92cc7ba0560b2f1f1f7bcc2
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
