@@ -1,0 +1,136 @@
+name: MicroShift Tests
+
+on:
+  workflow_call:
+    inputs:
+      dc_app:
+        required: true
+        type: string
+    secrets:
+      BITBUCKET_LICENSE:
+        description: 'Bitbucket license'
+      CONFLUENCE_LICENSE:
+        description: 'Confluence license'
+      JIRA_LICENSE:
+        description: 'Jira license'
+      BAMBOO_LICENSE:
+        description: 'Bamboo license'
+      OPENSHIFT_PULL_SECRET:
+        description: 'OpenShift Pull Secret'
+
+jobs:
+  microshift:
+    runs-on: ubuntu-latest
+    env:
+      DC_APP: ${{inputs.dc_app}}
+      LICENSE: ${{ secrets[format('{0}_LICENSE', inputs.dc_app)] }}
+      OPENSHIFT_PULL_SECRET: ${{ secrets.OPENSHIFT_PULL_SECRET }}
+      KUBECONFIG: /home/runner/.crc/machines/crc/kubeconfig
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Write pull secret file
+        run: |
+          echo "${OPENSHIFT_PULL_SECRET}" | base64 -d > pull-secret.txt
+
+      - name: Fetch crc binary
+        run: |
+          CRC_VERSION="2.31.0"
+          wget -q https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/${CRC_VERSION}/crc-linux-amd64.tar.xz
+          tar -xvf crc-linux-amd64.tar.xz
+          sudo cp crc-linux-${CRC_VERSION}-amd64/crc /usr/bin/crc
+          sudo chmod a+x /usr/bin/crc
+
+      - name: Fetch oc binary
+        run: |
+          wget -q https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.14/openshift-client-linux.tar.gz
+          tar -xvf openshift-client-linux.tar.gz
+          sudo cp oc /usr/bin/oc
+          sudo chmod a+x /usr/bin/oc
+
+      - name: Install required virtualization software
+        run: |
+          sudo apt-get update
+          sudo apt install qemu-kvm libvirt-daemon libvirt-daemon-system
+          sudo usermod -a -G libvirt $USER
+
+      - name: Free up disk
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo swapoff -a
+          sudo rm -f /mnt/swapfile
+
+      - name: Set crc config and microshift profile
+        run: |
+          crc config set consent-telemetry no
+          crc config set network-mode user
+          crc config set preset microshift
+
+      - name: Setup the crc
+        run: sudo -su $USER crc setup
+
+      - name: Start MicroShift
+        run: sudo -su $USER crc start -p pull-secret.txt --log-level debug
+
+      - name: Create atlassian namespace
+        run: |
+          oc create namespace atlassian
+
+      - name: Grant anyuid SCC for the default service account
+        run: |
+          SCC=("anyuid")
+          for i in ${SCC[@]} ; do
+            oc adm policy add-scc-to-user ${i} system:serviceaccount:atlassian:default
+          done
+
+      - name: Create shared home pvc
+        run: |
+           oc apply -f src/test/config/openshift/shared-home-pvc.yaml
+
+      - name: Deploy postgres database
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          deploy_postgres
+
+      - name: Create db, admin and license secrets
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          create_secrets
+
+      - name: Deploy ${{inputs.dc_app}}
+        run: |
+          export OPENSHIFT_VALUES="-f ../../../test/config/openshift/openshift.yaml --set ${DC_APP}.resources.container.requests.cpu=20m --set ${DC_APP}.resources.container.requests.memory=5Mi --set synchrony.resources.container.requests.cpu=20m --set synchrony.resources.container.requests.memory=5Mi"
+          source src/test/scripts/kind/deploy_app.sh
+          deploy_app
+
+      - name: Verify ${{inputs.dc_app}} status
+        run: |
+          export OPENSHIFT_VALUES="1"
+          source src/test/scripts/kind/deploy_app.sh
+          verify_ingress
+
+      - name: Verify ${{inputs.dc_app}} metrics availability
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_metrics
+
+      - name: Get debug info
+        if: always()
+        run: |
+          curl -s https://raw.githubusercontent.com/atlassian-labs/data-center-terraform/main/scripts/collect_k8s_logs.sh | bash -s -- dummy dummy logs/${{inputs.dc_app}}
+
+      - name: Upload test log files
+        if: always()
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: kind-artifacts
+          path: logs/

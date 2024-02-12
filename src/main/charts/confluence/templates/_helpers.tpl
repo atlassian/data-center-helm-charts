@@ -270,14 +270,12 @@ on Tomcat's logs directory. THis ensures that Tomcat+Confluence logs get capture
   {{- if .Values.volumes.sharedHome.subPath }}
   subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
   {{- end }}
-{{- if .Values.confluence.tomcatConfig.generateByHelm }}
+{{- if or .Values.confluence.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: server-xml
   mountPath: /opt/atlassian/confluence/conf/server.xml
   subPath: server.xml
-- name: temp
-  mountPath: /opt/atlassian/confluence/temp
 {{- end }}
-{{- if .Values.confluence.seraphConfig.generateByHelm }}
+{{- if or .Values.confluence.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: seraph-config-xml
   mountPath: /opt/atlassian/confluence/confluence/WEB-INF/classes/seraph-config.xml
   subPath: seraph-config.xml
@@ -447,17 +445,15 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
-{{- if .Values.confluence.tomcatConfig.generateByHelm }}
+{{- if or .Values.confluence.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: server-xml
   configMap:
     name: {{ include "common.names.fullname" . }}-server-config
     items:
       - key: server.xml
         path: server.xml
-- name: temp
-  emptyDir: {}
 {{- end }}
-{{- if .Values.confluence.seraphConfig.generateByHelm }}
+{{- if or .Values.confluence.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: seraph-config-xml
   configMap:
     name: {{ include "common.names.fullname" . }}-server-config

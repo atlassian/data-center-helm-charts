@@ -193,6 +193,7 @@ data:
         redirectPort: "8443"
         scheme: null
         secure: null
+        trustedProxies: null
         uriEncoding: UTF-8
       topologySpreadConstraints: []
       umask: "0022"
@@ -230,10 +231,12 @@ data:
       https: true
       maxBodySize: 250m
       nginx: true
+      openShiftRoute: false
       path: null
       proxyConnectTimeout: 60
       proxyReadTimeout: 60
       proxySendTimeout: 60
+      routeHttpHeaders: {}
       tlsSecretName: null
     monitoring:
       exposeJmxMetrics: true
@@ -258,6 +261,8 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    openshift:
+      runWithRestrictedSCC: false
     ordinals:
       enabled: false
       start: 0
@@ -391,7 +396,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.28",
+      "k8sVersion": "1.24",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isS3AttachmentsStorageEnabled":false,
@@ -521,6 +526,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -602,6 +608,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 42ee4051926037deb7903180f86089e0be2b186d976dc3f47411c8962d8beb40
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

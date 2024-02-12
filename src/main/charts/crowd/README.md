@@ -17,7 +17,7 @@ Kubernetes: `>=1.21.x-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://atlassian.github.io/data-center-helm-charts | common | 1.2.5 |
+| https://atlassian.github.io/data-center-helm-charts | common | 1.2.6 |
 
 ## Values
 
@@ -78,6 +78,23 @@ Kubernetes: `>=1.21.x-0`
 | crowd.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Crowd container startup probe before the pod fails startup checks.  |
 | crowd.startupProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | crowd.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container startup probe will run  |
+| crowd.tomcatConfig.acceptCount | string | `"100"` |  |
+| crowd.tomcatConfig.accessLogsMaxDays | string | `nil` |  |
+| crowd.tomcatConfig.connectionTimeout | string | `"20000"` |  |
+| crowd.tomcatConfig.enableLookups | string | `"false"` |  |
+| crowd.tomcatConfig.generateByHelm | bool | `false` | Mount server.xml as a ConfigMap. Override configuration elements if necessary  |
+| crowd.tomcatConfig.maxHttpHeaderSize | string | `"8192"` |  |
+| crowd.tomcatConfig.maxThreads | string | `"150"` |  |
+| crowd.tomcatConfig.mgmtPort | string | `"8020"` |  |
+| crowd.tomcatConfig.minSpareThreads | string | `"25"` |  |
+| crowd.tomcatConfig.port | string | `"8095"` |  |
+| crowd.tomcatConfig.protocol | string | `"HTTP/1.1"` |  |
+| crowd.tomcatConfig.proxyInternalIps | string | `nil` |  |
+| crowd.tomcatConfig.proxyName | string | `nil` |  |
+| crowd.tomcatConfig.proxyPort | string | `nil` |  |
+| crowd.tomcatConfig.redirectPort | string | `"8443"` |  |
+| crowd.tomcatConfig.scheme | string | `nil` |  |
+| crowd.tomcatConfig.secure | string | `nil` |  |
 | crowd.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Crowd pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
 | crowd.umask | string | `"0022"` | The umask used by the Crowd process when it creates new files. The default is 0022. This gives the new files:  - read/write permissions for the Crowd user  - read permissions for everyone else.  |
 | crowd.useHelmReleaseNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. By default the container name is `crowd` which corresponds to the name of the Helm Chart.  |
@@ -104,10 +121,12 @@ Kubernetes: `>=1.21.x-0`
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced.  |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client.  |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/  This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'.  |
+| ingress.openShiftRoute | bool | `false` | Set to true if you want to create an OpenShift Route instead of an Ingress  |
 | ingress.path | string | `"/"` | The base path for the Ingress Resource. For example '/crowd'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context on the application level, only "/" and "/crowd" paths are supported.  |
 | ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds.  |
 | ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed.  |
 | ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed.  |
+| ingress.routeHttpHeaders | object | `{}` | routeHttpHeaders defines policy for HTTP headers. Applicable to OpenShift Routes only  |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service, and it's Pods is in plaintext.  Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls  |
 | monitoring.exposeJmxMetrics | bool | `false` | Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter  |
 | monitoring.fetchJmxExporterJar | bool | `true` | Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar to shared home and provide an absolute path in jmxExporterCustomJarLocation  |
@@ -129,6 +148,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Crowd pods  |
+| openshift.runWithRestrictedSCC | bool | `false` | When set to true, the containers will run with a restricted Security Context Constraint (SCC). See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server configuration files as ConfigMaps.  |
 | ordinals | object | `{"enabled":false,"start":0}` | Set a custom start ordinal number for the K8s stateful set. Note that this depends on the StatefulSetStartOrdinal K8s feature gate, which has entered beta state with K8s version 1.27.  |
 | ordinals.enabled | bool | `false` | Enable only if StatefulSetStartOrdinal K8s feature gate is available.  |
 | ordinals.start | int | `0` | Set start ordinal to a positive integer, defaulting to 0.  |

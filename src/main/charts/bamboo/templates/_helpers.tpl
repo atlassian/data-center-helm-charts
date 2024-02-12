@@ -175,6 +175,19 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
 - name: helm-values
   mountPath: /opt/atlassian/helm
 {{- end }}
+{{- if or .Values.bamboo.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+- name: server-xml
+  mountPath: /opt/atlassian/bamboo/conf/server.xml
+  subPath: server.xml
+- name: init-properties
+  mountPath: /opt/atlassian/bamboo/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties
+  subPath: bamboo-init.properties
+{{- end }}
+{{- if or .Values.bamboo.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+- name: seraph-config-xml
+  mountPath: /opt/atlassian/bamboo/atlassian-bamboo/WEB-INF/classes/seraph-config.xml
+  subPath: seraph-config.xml
+{{- end }}
 {{- end }}
 
 {{/*
@@ -280,6 +293,28 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: helm-values
   configMap:
     name: {{ include "common.names.fullname" . }}-helm-values
+{{- end }}
+{{- if or .Values.bamboo.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+- name: server-xml
+  configMap:
+    name: {{ include "common.names.fullname" . }}-server-config
+    items:
+      - key: server.xml
+        path: server.xml
+- name: init-properties
+  configMap:
+    name: {{ include "common.names.fullname" . }}-init-properties
+    items:
+      - key: bamboo-init.properties
+        path: bamboo-init.properties
+{{- end }}
+{{- if or .Values.bamboo.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+- name: seraph-config-xml
+  configMap:
+    name: {{ include "common.names.fullname" . }}-server-config
+    items:
+      - key: seraph-config.xml
+        path: seraph-config.xml
 {{- end }}
 {{- end }}
 

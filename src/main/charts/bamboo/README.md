@@ -17,7 +17,7 @@ Kubernetes: `>=1.21.x-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://atlassian.github.io/data-center-helm-charts | common | 1.2.5 |
+| https://atlassian.github.io/data-center-helm-charts | common | 1.2.6 |
 
 ## Values
 
@@ -79,6 +79,8 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | bamboo.securityToken.secretKey | string | `"security-token"` | The key (default `secretKey`) in the Secret used to store the Bamboo shared key.  |
 | bamboo.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token will overrided the generated one. This secret should also be shared with the agent deployment. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
+| bamboo.seraphConfig | object | `{"autoLoginCookieAge":"1209600","generateByHelm":false}` | By default seraph-config.xml is generated in the container entrypoint from a template shipped with an official Bamboo image. However, seraph-config.xml generation may fail if container is not run as root, which is a common case if Bamboo is deployed to OpenShift.  |
+| bamboo.seraphConfig.generateByHelm | bool | `false` | Mount seraph-config.xml as a ConfigMap. Override configuration elements if necessary  |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | bamboo.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
@@ -100,6 +102,9 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.sysadminCredentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the sysadmin password  |
 | bamboo.sysadminCredentials.secretName | string | `nil` | The secret that contains the admin user information  |
 | bamboo.sysadminCredentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the sysadmin username  |
+| bamboo.tomcatConfig | object | `{"acceptCount":"10","address":null,"bambooEncryptionKey":null,"clientAuth":null,"compressibleMimeType":null,"compression":null,"compressionMinSize":null,"connectionTimeout":"20000","customServerXml":"","enableLookups":"false","generateByHelm":false,"keyPass":null,"keystoreFile":null,"keystorePass":null,"maxHttpHeaderSize":"8192","maxThreads":"100","mgmtPort":"8005","minSpareThreads":"10","port":"8085","protocol":"HTTP/1.1","proxyInternalIps":null,"proxyName":null,"proxyPort":null,"redirectPort":"8443","requestAttributesEnabled":null,"scheme":null,"secret":null,"secretRequired":null,"secure":null,"sslCertificateFile":null,"sslCertificateKeyFile":null,"sslEnabled":null,"sslPass":null,"sslProtocol":null,"trustedProxies":null,"truststoreFile":null,"truststorePass":null}` | By default Tomcat's server.xml is generated in the container entrypoint from a template shipped with an official Bamboo image. However, server.xml generation may fail if container is not run as root, which is a common case if Bamboo is deployed to OpenShift. See: https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/README.md for a complete list of xml elements. |
+| bamboo.tomcatConfig.customServerXml | string | `""` | Custom server.xml to be mounted into /opt/atlassian/bamboo/conf  |
+| bamboo.tomcatConfig.generateByHelm | bool | `false` | Mount server.xml as a ConfigMap. Override configuration elements if necessary  |
 | bamboo.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Bamboo pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
 | bamboo.unattendedSetup | bool | `true` | To skip the setup wizard post deployment set this property to 'true' and ensure values for all 'REQUIRED' and 'UNATTENDED-SETUP' stanzas (see banner of this file) have been supplied.  For release 1.0.0 this value is by default set to 'true' and should not be changed.  |
 | bamboo.useHelmReleaseNameAsContainerName | bool | `false` | Whether the main container should acquire helm release name. By default the container name is `bamboo` which corresponds to the name of the Helm Chart.  |
@@ -130,10 +135,12 @@ Kubernetes: `>=1.21.x-0`
 | ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced. If not using an ingress and you want to reach the service on localhost using port-forwarding then this value should be set to 'false'  |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client.  |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/  This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'.  |
+| ingress.openShiftRoute | bool | `false` | Set to true if you want to create an OpenShift Route instead of an Ingress  |
 | ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/bamboo'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/bamboo'. Default value is 'bamboo.service.contextPath'  |
 | ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds.  |
 | ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed.  |
 | ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed.  |
+| ingress.routeHttpHeaders | object | `{}` | routeHttpHeaders defines policy for HTTP headers. Applicable to OpenShift Routes only  |
 | ingress.tlsSecretName | string | `nil` | The name of the K8s Secret that contains the TLS private key and corresponding certificate. When utilised, TLS termination occurs at the ingress point where traffic to the Service and it's Pods is in plaintext.  Usage is optional and depends on your use case. The Ingress Controller itself can also be configured with a TLS secret for all Ingress Resources. https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets https://kubernetes.io/docs/concepts/services-networking/ingress/#tls  |
 | monitoring.exposeJmxMetrics | bool | `false` | Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter  |
 | monitoring.fetchJmxExporterJar | bool | `true` | Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar to shared home and provide an absolute path in jmxExporterCustomJarLocation  |
@@ -155,6 +162,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo pods  |
+| openshift.runWithRestrictedSCC | bool | `false` | When set to true, the containers will run with a restricted Security Context Constraint (SCC). See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server configuration files as ConfigMaps.  |
 | ordinals | object | `{"enabled":false,"start":0}` | Set a custom start ordinal number for the K8s stateful set. Note that this depends on the StatefulSetStartOrdinal K8s feature gate, which has entered beta state with K8s version 1.27.  |
 | ordinals.enabled | bool | `false` | Enable only if StatefulSetStartOrdinal K8s feature gate is available.  |
 | ordinals.start | int | `0` | Set start ordinal to a positive integer, defaulting to 0.  |

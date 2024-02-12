@@ -30,10 +30,13 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.synchrony.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.openshift.runWithRestrictedSCC }}
+      {{- else }}
       {{- if .Values.synchrony.securityContextEnabled }}
       {{- with .Values.synchrony.securityContext }}
       securityContext:
         {{ toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- end }}
       hostAliases:
@@ -123,7 +126,7 @@ spec:
         - name: entrypoint-script
           configMap:
             name: {{ include "synchrony.fullname" . }}-entrypoint
-            defaultMode: {{ .Values.volumes.defaultPermissionsMode | default "484" }}
+            defaultMode: {{ if .Values.openshift.runWithRestrictedSCC}}360{{ else }}{{ .Values.volumes.defaultPermissionsMode | default "484" }}{{ end }}
         {{ include "synchrony.volumes" . | nindent 8 }}
   {{ include "synchrony.volumeClaimTemplates" . | nindent 2 }}
 {{ end }}

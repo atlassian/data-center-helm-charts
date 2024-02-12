@@ -1,4 +1,4 @@
-{{ if or .Values.jira.tomcatConfig.generateByHelm .Values.jira.seraphConfig.generateByHelm }}
+{{ if or .Values.jira.tomcatConfig.generateByHelm .Values.jira.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
-{{- if .Values.jira.tomcatConfig.generateByHelm }}
+{{- if or .Values.jira.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
   server.xml: |
 {{- if .Values.jira.tomcatConfig.customServerXml }}
 {{- .Values.jira.tomcatConfig.customServerXml | nindent 6 }}
@@ -76,7 +76,7 @@ data:
     </Server>
 {{- end }}
 {{- end }}
-{{- if .Values.jira.seraphConfig.generateByHelm }}
+{{- if or .Values.jira.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
   seraph-config.xml: |
     <security-config>
         <parameters>

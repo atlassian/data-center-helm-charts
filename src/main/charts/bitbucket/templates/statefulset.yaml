@@ -41,6 +41,8 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.bitbucket.shutdown.terminationGracePeriodSeconds }}
       hostAliases:
         {{- include "bitbucket.additionalHosts" . | nindent 8 }}
+      {{- if .Values.openshift.runWithRestrictedSCC }}
+      {{- else }}
       {{- if .Values.bitbucket.securityContextEnabled }}
       {{- with .Values.bitbucket.securityContext }}
       securityContext:
@@ -53,10 +55,13 @@ spec:
         fsGroup: 2003
         {{- end }}
         {{- end }}
+        {{- end }}
       {{- end }}
       {{- end }}
       initContainers:
         {{- include "bitbucket.additionalInitContainers" . | nindent 8 }}
+        {{- if .Values.openshift.runWithRestrictedSCC }}
+        {{- else}}
         {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (or .Values.volumes.sharedHome.persistentVolumeClaim.create .Values.volumes.sharedHome.customVolume) }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
@@ -76,6 +81,7 @@ spec:
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
           command: ["sh", "-c", {{ include "bitbucket.sharedHome.permissionFix.command" . | quote }}]
+        {{- end }}
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
         {{- if .Values.bitbucket.additionalCertificates.secretName }}

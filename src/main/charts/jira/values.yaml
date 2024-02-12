@@ -354,6 +354,14 @@ ingress:
   #
   create: false
 
+  # -- Set to true if you want to create an OpenShift Route instead of an Ingress
+  #
+  openShiftRoute: false
+
+  # -- routeHttpHeaders defines policy for HTTP headers. Applicable to OpenShift Routes only
+  #
+  routeHttpHeaders: {}
+
   # -- The class name used by the ingress controller if it's being used.
   #
   # Please follow documentation of your ingress controller. If the cluster
@@ -1189,3 +1197,12 @@ testPods:
   image:
     permissionsTestContainer: debian:stable-slim
     statusTestContainer: alpine:latest
+
+openshift:
+
+  # -- When set to true, the containers will run with a restricted Security Context Constraint (SCC).
+  # See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html
+  # This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server
+  # configuration files as ConfigMaps.
+  #
+  runWithRestrictedSCC: false

@@ -1,4 +1,4 @@
-{{- if .Values.ingress.create }}
+{{- if and .Values.ingress.create (not .Values.ingress.openShiftRoute) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -148,7 +148,12 @@ on Tomcat's logs directory. THis ensures that Tomcat+Crowd logs get captured in 
 - name: helm-values
   mountPath: /opt/atlassian/helm
 {{- end }}
-{{ end }}
+{{- if or .Values.crowd.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+- name: server-xml
+  mountPath: /opt/atlassian/crowd/apache-tomcat/conf/server.xml
+  subPath: server.xml
+{{- end }}
+{{- end }}
 
 {{/*
 For each additional library declared, generate a volume mount that injects that library into the Crowd lib directory
@@ -253,6 +258,14 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: helm-values
   configMap:
     name: {{ include "common.names.fullname" . }}-helm-values
+{{- end }}
+{{- if or .Values.crowd.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+- name: server-xml
+  configMap:
+    name: {{ include "common.names.fullname" . }}-server-config
+    items:
+      - key: server.xml
+        path: server.xml
 {{- end }}
 {{- end }}
 

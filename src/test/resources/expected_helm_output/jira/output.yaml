@@ -122,10 +122,12 @@ data:
       https: true
       maxBodySize: 250m
       nginx: true
+      openShiftRoute: false
       path: null
       proxyConnectTimeout: 60
       proxyReadTimeout: 60
       proxySendTimeout: 60
+      routeHttpHeaders: {}
       tlsSecretName: null
     jira:
       accessLog:
@@ -246,6 +248,8 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    openshift:
+      runWithRestrictedSCC: false
     ordinals:
       enabled: false
       start: 0
@@ -314,7 +318,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.28",
+      "k8sVersion": "1.24",
       "isS3AvatarsEnabled": false,
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
@@ -391,6 +395,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: d293aeef116388ad949f4391230a6dcf1e10dde3d92cc7ba0560b2f1f1f7bcc2
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira

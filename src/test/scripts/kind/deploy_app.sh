@@ -48,22 +48,31 @@ deploy_app() {
   sed -i "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ../../../test/config/kind/common-values.yaml
 
   helm upgrade --install ${DC_APP} ./ \
-               -f ../../../test/config/kind/common-values.yaml \
+               -f ../../../test/config/kind/common-values.yaml ${OPENSHIFT_VALUES} \
                -n atlassian \
                --wait --timeout=360s \
                --debug ${IMAGE_OVERRIDE}
 
   if [ ${DC_APP} == "bamboo" ]; then
+    if [[ -n "${OPENSHIFT_VALUES}" ]]; then
+      OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
+    fi
     echo "[INFO]: Deploying Bamboo agent..."
     cd ../bamboo-agent
     helm dependency build
     helm upgrade --install bamboo-agent ./ -n atlassian \
                  --set agent.server=bamboo.atlassian.svc.cluster.local \
                  --set agent.resources.container.requests.cpu=20m \
-                 --wait --timeout=360s --debug
+                 --set agent.resources.container.requests.memory=10Mi \
+                ${OPENSHIFT_VALUES} \
+                 --wait --timeout=180s --debug
   fi
 
   if [ "${DC_APP}" == "bitbucket" ]; then
+
+    if [[ -n "${OPENSHIFT_VALUES}" ]]; then
+      OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
+    fi
     echo "[INFO]: Deploying Bitbucket Mirror..."
     helm upgrade --install bitbucket-mirror ./ \
                  --set bitbucket.applicationMode="mirror" \
@@ -73,7 +82,8 @@ deploy_app() {
                  --set monitoring.exposeJmxMetrics="true" \
                  --set bitbucket.readinessProbe.enabled="false" \
                  --set bitbucket.resources.container.requests.cpu="20m" \
-                 --set bitbucket.resources.container.requests.memory="1G" \
+                 --set bitbucket.resources.container.requests.memory="10Mi" \
+                 ${OPENSHIFT_VALUES} \
                  --wait --timeout=360s --debug \
                  -n atlassian
   fi
@@ -89,20 +99,25 @@ verify_ingress() {
   echo "[INFO]: Checking ${DC_APP} status"
   # give ingress controller a few seconds before polling
   sleep 5
+  if [ -n "${OPENSHIFT_VALUES}" ]; then
+    HOSTNAME="atlassian.apps.crc.testing"
+  else
+    HOSTNAME="localhost"
+  fi
   for i in {1..10}; do
-    STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/${STATUS_ENDPOINT_PATH})
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://${HOSTNAME}/${STATUS_ENDPOINT_PATH})
     if [ $STATUS -ne 200 ]; then
       echo "[ERROR]: Status code is not 200. Waiting 10 seconds"
       sleep 10
     else
       echo "[INFO]: Received status ${STATUS}"
-      curl -s http://localhost/${STATUS_ENDPOINT_PATH}
+      curl -s http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}
       echo -e "\n"
       break
     fi
   done
   if [ $STATUS -ne 200 ]; then
-  curl -v http://localhost/${STATUS_ENDPOINT_PATH}
+  curl -v http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}
    exit 1
   fi
 }
@@ -114,14 +129,14 @@ verify_metrics() {
   DC_PODS=($(kubectl get pods -n atlassian -l=app.kubernetes.io/name=${DC_APP} --no-headers -o custom-columns=":metadata.name"))
   for POD in "${DC_PODS[@]}"; do
     echo "[INFO]: Checking metrics in pod: atlassian/${POD}"
-    STATUS=$(kubectl exec "${POD}" -c ${DC_APP} -n atlassian -- curl -s -o /dev/null -w '%{http_code}' http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH})
+    STATUS=$(kubectl --request-timeout=30s exec "${POD}" -c ${DC_APP} -n atlassian -- curl -s -o /dev/null -w '%{http_code}' http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH})
     if [ $STATUS -ne 200 ]; then
       echo "[ERROR]: Status code is ${STATUS}"
       exit 1
     fi
   done
 
-  kubectl exec ${DC_APP}-0 -c ${DC_APP} -n atlassian -- curl -s http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH} | grep jvm_classes_currently_loaded
+  kubectl --request-timeout=30s exec ${DC_APP}-0 -c ${DC_APP} -n atlassian -- curl -s http://localhost:${METRICS_DEFAULT_PORT}${METRICS_DEFAULT_PATH} | grep jvm_classes_currently_loaded
   if [ $? -ne 0 ]; then
     echo "[ERROR]: Failed to find jvm_classes_currently_loaded metric"
     exit 1

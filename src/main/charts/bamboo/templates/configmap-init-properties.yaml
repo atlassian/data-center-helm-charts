@@ -1,0 +1,11 @@
+{{ if or .Values.bamboo.tomcatConfig.generateByHelm .Values.bamboo.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-init-properties
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+  bamboo-init.properties: |
+      bamboo.home = {{ .Values.volumes.localHome.mountPath }}
+{{- end }}

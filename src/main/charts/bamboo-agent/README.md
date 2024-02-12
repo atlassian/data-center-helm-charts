@@ -17,7 +17,7 @@ Kubernetes: `>=1.21.x-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://atlassian.github.io/data-center-helm-charts | common | 1.2.5 |
+| https://atlassian.github.io/data-center-helm-charts | common | 1.2.6 |
 
 ## Values
 
@@ -57,6 +57,7 @@ Kubernetes: `>=1.21.x-0`
 | image.repository | string | `"atlassian/bamboo-agent-base"` | The Bamboo agent Docker image to use https://hub.docker.com/r/atlassian/bamboo-agent-base  |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bamboo agent pods  |
+| openshift.runWithRestrictedSCC | bool | `false` | When set to true, the containers will run with a restricted Security Context Constraint (SCC). See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server configuration files as ConfigMaps.  |
 | podAnnotations | object | `{}` | Custom annotations that will be applied to all Bamboo agent pods  |
 | podLabels | object | `{}` | Custom labels that will be applied to all Bamboo agent pods  |
 | priorityClassName | string | `nil` | Priority class for the application pods. The PriorityClass with this name needs to be available in the cluster. For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |

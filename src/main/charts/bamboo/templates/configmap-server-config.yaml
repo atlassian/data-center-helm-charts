@@ -1,0 +1,236 @@
+{{ if or .Values.bamboo.tomcatConfig.generateByHelm .Values.bamboo.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-server-config
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if or .Values.bamboo.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+  server.xml: |
+{{- if .Values.bamboo.tomcatConfig.customServerXml }}
+{{- .Values.bamboo.tomcatConfig.customServerXml | nindent 6 }}
+{{- else }}
+    <?xml version="1.0" encoding="utf-8"?>
+    <Server port="{{ .Values.bamboo.tomcatConfig.mgmtPort | default "8005" }}"
+            shutdown="SHUTDOWN">
+
+      <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+      <Listener className="org.apache.catalina.core.AprLifecycleListener"
+                SSLEngine="on"/>
+      <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+      <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+      <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+      <Service name="Catalina">
+
+        <Connector port="{{ .Values.bamboo.tomcatConfig.port | default "8080" }}"
+                   maxThreads="{{ .Values.bamboo.tomcatConfig.maxThreads | default "100" }}"
+                   minSpareThreads="{{ .Values.bamboo.tomcatConfig.minSpareThreads | default "10" }}"
+                   connectionTimeout="{{ .Values.bamboo.tomcatConfig.connectionTimeout | default "20000" }}"
+                   enableLookups="{{ .Values.bamboo.tomcatConfig.enableLookups | default "false" }}"
+                   protocol="{{ .Values.bamboo.tomcatConfig.protocol | default "HTTP/1.1" }}"
+                   redirectPort="{{ .Values.bamboo.tomcatConfig.redirectPort | default "8443" }}"
+                   acceptCount="{{ .Values.bamboo.tomcatConfig.acceptCount | default "10" }}"
+                   secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.bamboo.tomcatConfig.secure }}"
+                   scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.bamboo.tomcatConfig.scheme }}"
+                   proxyName="{{ .Values.ingress.host | default .Values.bamboo.tomcatConfig.proxyName }}"
+                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.bamboo.tomcatConfig.proxyPort }}"
+
+                   {{- if .Values.bamboo.tomcatConfig.address }}
+                   address="{{ .Values.bamboo.tomcatConfig.address }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.secret }}
+                   secret="{{ .Values.bamboo.tomcatConfig.secret }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.secretRequired }}
+                   secretRequired="{{ .Values.bamboo.tomcatConfig.secretRequired }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.bambooEncryptionKey }}
+                   {{- if or (semverCompare "<9.5.0" .Chart.AppVersion) (semverCompare "<9.5.0" (.Values.image.tag | default .Chart.AppVersion )) }}
+                   bambooEncryptionKey="{{ .Values.bamboo.tomcatConfig.bambooEncryptionKey }}"
+                   {{- else }}
+                   productEncryptionKey="{{ .Values.bamboo.tomcatConfig.bambooEncryptionKey }}"
+                   {{- end }}
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.sslEnabled }}
+                   SSLEnabled="{{ .Values.bamboo.tomcatConfig.sslEnabled }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.sslProtocol }}
+                   sslProtocol="{{ .Values.bamboo.tomcatConfig.sslProtocol }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.sslCertificateFile }}
+                   SSLCertificateFile="{{ .Values.bamboo.tomcatConfig.sslCertificateFile }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.sslCertificateKeyFile }}
+                   SSLCertificateKeyFile="{{ .Values.bamboo.tomcatConfig.sslCertificateKeyFile }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.sslPass }}
+                   SSLPassword="{{ .Values.bamboo.tomcatConfig.sslPass }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.keystoreFile }}
+                   keystoreFile="{{ .Values.bamboo.tomcatConfig.keystoreFile }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.keystorePass }}
+                   keystorePass="{{ .Values.bamboo.tomcatConfig.keystorePass }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.keyPass }}
+                   keyPass="{{ .Values.bamboo.tomcatConfig.keyPass }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.clientAuth }}
+                   clientAuth="{{ .Values.bamboo.tomcatConfig.clientAuth }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.truststoreFile }}
+                   truststoreFile="{{ .Values.bamboo.tomcatConfig.truststoreFile }}"
+                   {{- end }}
+                   {{- if .Values.bamboo.tomcatConfig.truststorePass }}
+                   truststorePass="{{ .Values.bamboo.tomcatConfig.truststorePass }}"
+                   {{- end }}
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^\`&quot;&lt;&gt;"
+                   bindOnInit="false"
+                   maxHttpHeaderSize="{{ .Values.bamboo.tomcatConfig.maxHttpHeaderSize | default "8192" }}"
+                   useBodyEncodingForURI="true"
+                   {{- if and .Values.bamboo.tomcatConfig.compression (ne .Values.bamboo.tomcatConfig.compression "") }}
+                   compression={{ .Values.bamboo.tomcatConfig.compression | quote }}
+                   compressibleMimeType={{ .Values.bamboo.tomcatConfig.compressibleMimeType | default "text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,application/xml" | quote }}
+                   compressionMinSize="{{ .Values.bamboo.tomcatConfig.compressionMinSize | default "2048" | quote }}"
+                   {{- else }}
+                   compression="off"
+                   {{- end }}
+                   disableUploadTimeout="true">
+          <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        </Connector>
+
+        <Engine name="Catalina"
+                defaultHost="localhost">
+
+          <Host name="localhost"
+                appBase="webapps"
+                unpackWARs="true"
+                autoDeploy="true">
+
+
+        {{- if or .Values.bamboo.tomcatConfig.proxyInternalIps .Values.bamboo.tomcatConfig.trustedProxies }}
+          <Valve className="org.apache.catalina.valves.RemoteIpValve"
+               {{- if .Values.bamboo.tomcatConfig.trustedProxies }}
+                 trustedProxies="{{ .Values.bamboo.tomcatConfig.trustedProxies | replace "." "\\." }}"
+               {{- end }}
+               {{- if .Values.bamboo.tomcatConfig.trustedProxies }}
+                 internalProxies="{{ .Values.bamboo.tomcatConfig.proxyInternalIps | replace "." "\\." }}"
+               {{- end }}
+                 remoteIpHeader="x-forwarded-for"
+                 proxiesHeader="x-forwarded-by"
+                 protocolHeader="x-forwarded-proto"/>
+        {{- end }}
+
+            <Context path="{{ .Values.bamboo.service.contextPath | default "" }}"
+                     docBase="${catalina.home}/atlassian-bamboo"
+                     reloadable="false"
+                     useHttpOnly="true">
+              <Resource name="UserTransaction"
+                        auth="Container"
+                        type="javax.transaction.UserTransaction"
+                        factory="org.objectweb.jotm.UserTransactionFactory"
+                        jotm.timeout="60"/>
+              <Manager pathname=""/>
+              <JarScanner scanManifest="false"/>
+              <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve"
+                     threshold="120" />
+            </Context>
+
+          </Host>
+          <Valve className="org.apache.catalina.valves.AccessLogValve"
+                 requestAttributesEnabled="{{ .Values.bamboo.tomcatConfig.requestAttributesEnabled | default "false" }}"
+                 pattern="%a %{bamboo.request.id}r %{bamboo.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{bamboo.request.assession.id}r&quot;"/>
+        </Engine>
+
+      </Service>
+    </Server>
+{{- end }}
+{{- end }}
+    {{- if or .Values.bamboo.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+  seraph-config.xml: |
+    <security-config>
+        <parameters>
+            <init-param>
+                <param-name>login.url</param-name>
+                <param-value>/userlogin!doDefault.action?os_destination=${originalurl}</param-value>
+            </init-param>
+
+            <init-param>
+            <!--
+              the URL to redirect to when the user explicitly clicks on a login link (rather than being redirected after
+              trying to access a protected resource). Most of the time, this will be the same value as 'login.url'.
+                - same properties as login.url above
+            -->
+              <param-name>link.login.url</param-name>
+              <param-value>/userlogin!doDefault.action?os_destination=${originalurl}</param-value>
+              <!--<param-value>/secure/Dashboard.jspa?os_destination=${originalurl}</param-value>-->
+              <!--<param-value>http://sso.mycompany.com/login?redirectTo=${originalurl}</param-value>-->
+            </init-param>
+
+            <init-param>
+                <!-- called by the logout servlet -->
+                <param-name>logout.url</param-name>
+                <param-value>/userLogout.action?os_destination=${originalurl}</param-value>
+            </init-param>
+
+            <!-- The key that the original URL is stored with in the session -->
+            <init-param>
+                <param-name>original.url.key</param-name>
+                <param-value>os_security_originalurl</param-value>
+            </init-param>
+
+            <init-param>
+                <param-name>login.cookie.key</param-name>
+                <param-value>seraph.bamboo</param-value>
+            </init-param>
+
+            <!-- Specify 3 characters to make cookie encoding unique for your application, to prevent collisions if more than one Seraph-based app is used.-->
+            <init-param>
+                <param-name>cookie.encoding</param-name>
+                <param-value>BAM</param-value>
+            </init-param>
+            
+            <init-param>
+                <param-name>autologin.cookie.age</param-name>
+                <param-value>{{ .Values.bamboo.seraphConfig.autoLoginCookieAge | default "1209600" }}</param-value>
+            </init-param>
+
+            <!--only basic authentication available-->
+            <init-param>
+              <param-name>authentication.type</param-name>
+              <param-value>os_authType</param-value>
+            </init-param>
+        </parameters>
+
+        <!-- Determines what roles (permissions) a user has. -->
+        <rolemapper class="com.atlassian.bamboo.user.authentication.BambooRoleMapper"/>
+        <authenticator class="com.atlassian.bamboo.user.authentication.BambooAuthenticator"/>
+        <controller class="com.atlassian.bamboo.user.authentication.BambooSecurityController"/>
+        <elevatedsecurityguard class="com.atlassian.bamboo.user.authentication.BambooElevatedSecurityGuard"/>
+
+        <!-- If you're authenticating against a Crowd server you can use this authenticator for single sign-on.
+             Enable it after configuring your Crowd properties through user management and restart Bamboo. It does not support
+             Crowd property changes at runtime. If you need to switch back to local users, revert the change and
+             restart Bamboo again.
+         -->
+         <!--<authenticator class="com.atlassian.crowd.integration.seraph.v25.BambooAuthenticator"/>-->
+
+        <services>
+            <!-- Specifies role requirements for accessing specified URL paths -->
+            <service class="com.atlassian.seraph.service.PathService">
+                <init-param>
+                    <param-name>config.file</param-name>
+                    <param-value>/seraph-paths.xml</param-value>
+                </init-param>
+            </service>
+        </services>
+
+        <interceptors>
+            <interceptor class="com.atlassian.bamboo.user.authentication.InvalidateSessionDuringLogin"/>
+        </interceptors>
+    </security-config>
+{{- end }}
+{{ end }}

@@ -1,0 +1,17 @@
+volumes:
+  localHome:
+    persistentVolumeClaim:
+      storageClassName: topolvm-provisioner
+  sharedHome:
+    persistentVolumeClaim:
+      create: false
+    customVolume:
+      persistentVolumeClaim:
+        claimName: shared-home-pvc
+
+openshift:
+  runWithRestrictedSCC: true
+
+ingress:
+  openShiftRoute: true
+  host: atlassian.apps.crc.testing

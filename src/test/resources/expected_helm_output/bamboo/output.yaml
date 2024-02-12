@@ -150,6 +150,9 @@ data:
       securityToken:
         secretKey: agentTestKey
         secretName: agentTestSecret
+      seraphConfig:
+        autoLoginCookieAge: "1209600"
+        generateByHelm: false
       service:
         annotations: {}
         contextPath: null
@@ -175,6 +178,44 @@ data:
         passwordSecretKey: adminPasswordTestKey
         secretName: adminTestSecret
         usernameSecretKey: adminTestUsernameKey
+      tomcatConfig:
+        acceptCount: "10"
+        address: null
+        bambooEncryptionKey: null
+        clientAuth: null
+        compressibleMimeType: null
+        compression: null
+        compressionMinSize: null
+        connectionTimeout: "20000"
+        customServerXml: ""
+        enableLookups: "false"
+        generateByHelm: false
+        keyPass: null
+        keystoreFile: null
+        keystorePass: null
+        maxHttpHeaderSize: "8192"
+        maxThreads: "100"
+        mgmtPort: "8005"
+        minSpareThreads: "10"
+        port: "8085"
+        protocol: HTTP/1.1
+        proxyInternalIps: null
+        proxyName: null
+        proxyPort: null
+        redirectPort: "8443"
+        requestAttributesEnabled: null
+        scheme: null
+        secret: null
+        secretRequired: null
+        secure: null
+        sslCertificateFile: null
+        sslCertificateKeyFile: null
+        sslEnabled: null
+        sslPass: null
+        sslProtocol: null
+        trustedProxies: null
+        truststoreFile: null
+        truststorePass: null
       topologySpreadConstraints: []
       unattendedSetup: true
       useHelmReleaseNameAsContainerName: false
@@ -213,10 +254,12 @@ data:
       https: true
       maxBodySize: 250m
       nginx: true
+      openShiftRoute: false
       path: null
       proxyConnectTimeout: 60
       proxyReadTimeout: 60
       proxySendTimeout: 60
+      routeHttpHeaders: {}
       tlsSecretName: null
     monitoring:
       exposeJmxMetrics: true
@@ -241,6 +284,8 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    openshift:
+      runWithRestrictedSCC: false
     ordinals:
       enabled: false
       start: 0
@@ -307,7 +352,7 @@ data:
       "replicas": 1,
       "isJmxEnabled": true,
       "ingressType": "NONE",
-      "k8sVersion": "1.28",
+      "k8sVersion": "1.24",
       "serviceType": "CLUSTER_IP",
       "dbType": "UNKNOWN",
       "isSharedHomePVCCreated": false,
@@ -405,6 +450,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: d0d822938d8d28725b077e578cd2dda282aee43dab7100c16aed24e2e8b620a6
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
