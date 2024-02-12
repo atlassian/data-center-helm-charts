@@ -70,10 +70,15 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 ### :material-folder-network: Configure a shared-home volume
 * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
-* Some cloud based options for a shared filesystem include [AWS EFS](https://aws.amazon.com/efs/){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}. You can also stand up your own NFS. In the case of Bitbucket, the following three nested points must be taken into account. 
+* Some cloud based options for a shared filesystem include [AWS EFS](https://aws.amazon.com/efs/){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}. You can also stand up your own NFS.
+
+!!! info "Bitbucket shared storage"
+    In the case of Bitbucket, the following must be taken into account. 
+    
     * Due to the high-performance requirements on IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. 
-    * Bitbucket doesn't support cloud-managed storage service such as [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}.
-    * Before choosing [AWS EFS](https://aws.amazon.com/efs/){.external} as the File system, review the prerequisite mentioned on [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudplatforms)
+    * Before choosing [AWS EFS](https://aws.amazon.com/efs/){.external} as the File system, review the prerequisite mentioned on [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudplatforms). We include example for [Bitbucket Mesh](../examples/bitbucket/BITBUCKET_MESH.md).
+    * Bitbucket doesn't support other cloud-managed storage service such as [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}.
+    
 * The logical representation of the chosen storage type within Kubernetes can be defined as `PersistentVolumes` with an associated `PersistentVolumeClaims` in a `ReadWriteMany (RWX)` access mode.
 * For more information about volumes see the [Volumes section of the configuration guide](CONFIGURATION.md#volumes).
 
