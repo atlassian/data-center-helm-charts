@@ -122,10 +122,12 @@ data:
       https: true
       maxBodySize: 250m
       nginx: true
+      openShiftRoute: false
       path: null
       proxyConnectTimeout: 60
       proxyReadTimeout: 60
       proxySendTimeout: 60
+      routeHttpHeaders: {}
       tlsSecretName: null
     jira:
       accessLog:
@@ -246,6 +248,8 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    openshift:
+      runWithRestrictedSCC: false
     ordinals:
       enabled: false
       start: 0

@@ -31,6 +31,8 @@ spec:
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.confluence.shutdown.terminationGracePeriodSeconds }}
+      {{- if .Values.openshift.runWithRestrictedSCC }}
+      {{- else }}
       {{- if .Values.confluence.securityContextEnabled }}
       {{- with .Values.confluence.securityContext }}
       securityContext:
@@ -45,11 +47,12 @@ spec:
         {{- end }}
       {{- end }}
       {{- end }}
+      {{- end }}
       hostAliases:
         {{- include "confluence.additionalHosts" . | nindent 8 }}
       initContainers:
         {{- include "confluence.additionalInitContainers" . | nindent 8 }}
-        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+        {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (not .Values.openshift.runWithRestrictedSCC) }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
           imagePullPolicy: IfNotPresent

@@ -1,0 +1,101 @@
+{{- if and .Values.ingress.create .Values.ingress.openShiftRoute }}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.ingress.annotations }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.ingress.routeHttpHeaders }}
+  httpHeaders:
+{{- with .Values.ingress.routeHttpHeaders }}
+{{- toYaml . | nindent 4 }}
+{{- end }}
+{{- end }}
+  host: {{ .Values.ingress.host }}
+  path: {{ include "confluence.ingressPath" . }}
+  to:
+    kind: Service
+    name: {{ include "common.names.fullname" . }}
+    weight: 100
+  port:
+    targetPort: http
+{{- if and (.Values.ingress.https) (.Values.ingress.host) }}
+  tls:
+{{- if .Values.ingress.tlsSecretName }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace .Values.ingress.tlsSecretName) }}
+{{- if $secretData }}
+{{- if hasKey $secretData.data "tls.crt" }}
+    certificate: |
+      {{- index $secretData.data "tls.crt" | b64dec | nindent 6 }}
+{{- end }}
+{{- if hasKey $secretData.data "tls.key" }}
+    key: |
+      {{- index $secretData.data "tls.key" | b64dec | nindent 6 }}
+{{- end }}
+{{- if hasKey $secretData.data "ca.crt" }}
+    caCertificate: |
+      {{- index $secretData.data "ca.crt" | b64dec | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+{{- end }}
+{{- if .Values.synchrony.enabled }}
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "common.names.fullname" . }}-synchrony
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.ingress.annotations }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.ingress.routeHttpHeaders }}
+  httpHeaders:
+{{- with .Values.ingress.routeHttpHeaders }}
+{{- toYaml . | nindent 4 }}
+{{- end }}
+{{- end }}
+  host: {{ .Values.ingress.host }}
+  path: /synchrony
+  to:
+    kind: Service
+    name: {{ include "synchrony.fullname" . }}
+    weight: 100
+  port:
+    targetPort: http
+{{- if and (.Values.ingress.https) (.Values.ingress.host) }}
+  tls:
+{{- if .Values.ingress.tlsSecretName }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace .Values.ingress.tlsSecretName) }}
+{{- if $secretData }}
+{{- if hasKey $secretData.data "tls.crt" }}
+    certificate: |
+      {{- index $secretData.data "tls.crt" | b64dec | nindent 6 }}
+{{- end }}
+{{- if hasKey $secretData.data "tls.key" }}
+    key: |
+      {{- index $secretData.data "tls.key" | b64dec | nindent 6 }}
+{{- end }}
+{{- if hasKey $secretData.data "ca.crt" }}
+    caCertificate: |
+      {{- index $secretData.data "ca.crt" | b64dec | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+{{- end }}
+{{- end }}
+{{- end }}

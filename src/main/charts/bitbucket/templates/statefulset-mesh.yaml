@@ -48,8 +48,18 @@ spec:
           volumeMounts:
             - mountPath: {{ .Values.bitbucket.mesh.volume.mountPath | quote }}
               name: mesh-home
+          {{- if .Values.openshift.runWithRestrictedSCC }}
+          {{- else}}
+          {{- if .Values.monitoring.jmxExporterInitContainer.runAsRoot }}
           securityContext:
-            runAsUser: 0 # make sure we run as root to avoid permission denied
+            runAsUser: 0
+          {{- else if .Values.monitoring.jmxExporterInitContainer.customSecurityContext }}
+          securityContext:
+          {{- with .Values.monitoring.jmxExporterInitContainer.customSecurityContext }}
+          {{- toYaml .  | nindent 4 }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
         {{- end }}
         {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
         - name: import-certs

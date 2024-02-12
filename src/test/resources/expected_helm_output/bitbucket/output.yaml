@@ -287,10 +287,12 @@ data:
       https: true
       maxBodySize: 250m
       nginx: true
+      openShiftRoute: false
       path: null
       proxyConnectTimeout: 60
       proxyReadTimeout: 60
       proxySendTimeout: 60
+      routeHttpHeaders: {}
       tlsSecretName: null
     monitoring:
       exposeJmxMetrics: true
@@ -315,6 +317,8 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    openshift:
+      runWithRestrictedSCC: false
     ordinals:
       enabled: false
       start: 0
@@ -574,7 +578,7 @@ spec:
             - mountPath: "/var/atlassian/application-data/mesh"
               name: mesh-home
           securityContext:
-            runAsUser: 0 # make sure we run as root to avoid permission denied
+            runAsUser: 0
       containers:
         - name: bitbucket-mesh
           image: atlassian/bitbucket-mesh:2.0.1

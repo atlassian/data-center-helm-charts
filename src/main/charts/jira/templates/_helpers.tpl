@@ -157,14 +157,16 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
   {{- if .Values.volumes.sharedHome.subPath }}
   subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
   {{- end }}
-{{- if .Values.jira.tomcatConfig.generateByHelm }}
+{{- if or .Values.jira.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: server-xml
   mountPath: /opt/atlassian/jira/conf/server.xml
   subPath: server.xml
 - name: temp
   mountPath: /opt/atlassian/jira/temp
+- name: work
+  mountPath: /opt/atlassian/jira/work
 {{- end }}
-{{- if .Values.jira.seraphConfig.generateByHelm }}
+{{- if or .Values.jira.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: seraph-config-xml
   mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/seraph-config.xml
   subPath: seraph-config.xml
@@ -271,7 +273,7 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
-{{- if .Values.jira.tomcatConfig.generateByHelm }}
+{{- if or .Values.jira.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: server-xml
   configMap:
     name: {{ include "common.names.fullname" . }}-server-config
@@ -280,8 +282,10 @@ For each additional plugin declared, generate a volume mount that injects that l
         path: server.xml
 - name: temp
   emptyDir: {}
+- name: work
+  emptyDir: {}
 {{- end }}
-{{- if .Values.jira.seraphConfig.generateByHelm }}
+{{- if or .Values.jira.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 - name: seraph-config-xml
   configMap:
     name: {{ include "common.names.fullname" . }}-server-config

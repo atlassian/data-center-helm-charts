@@ -33,6 +33,8 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.bamboo.shutdown.terminationGracePeriodSeconds }}
       hostAliases:
         {{- include "bamboo.additionalHosts" . | nindent 8 }}
+      {{- if .Values.openshift.runWithRestrictedSCC }}
+      {{- else }}
       {{- if .Values.bamboo.securityContextEnabled }}
       {{- with .Values.bamboo.securityContext }}
       securityContext:
@@ -42,9 +44,10 @@ spec:
         {{- end }}
       {{- end }}
       {{- end }}
+      {{- end }}
       initContainers:
         {{- include "bamboo.additionalInitContainers" . | nindent 8 }}
-        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+        {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (not .Values.openshift.runWithRestrictedSCC) }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
           imagePullPolicy: IfNotPresent

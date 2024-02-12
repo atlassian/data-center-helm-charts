@@ -1,0 +1,56 @@
+# This workflow is for testing Helm charts in MicroShift
+
+name: DC Tests in MicroShift
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/main/charts/bamboo/**'
+      - 'src/main/charts/bamboo-agent/**'
+      - 'src/main/charts/bitbucket/**'
+      - 'src/main/charts/confluence/**'
+      - 'src/main/charts/jira/**'
+      - 'src/main/charts/crowd/**'
+
+jobs:
+  jira:
+    uses: ./.github/workflows/openshift.yaml
+    with:
+      dc_app: jira
+    secrets:
+      JIRA_LICENSE: "${{ secrets.JIRA_LICENSE }}"
+      OPENSHIFT_PULL_SECRET: "${{ secrets.OPENSHIFT_PULL_SECRET }}"
+
+  confluence:
+    uses: ./.github/workflows/openshift.yaml
+    with:
+      dc_app: confluence
+    secrets:
+      CONFLUENCE_LICENSE: "${{ secrets.TF_VAR_CONFLUENCE_LICENSE }}"
+      OPENSHIFT_PULL_SECRET: "${{ secrets.OPENSHIFT_PULL_SECRET }}"
+
+  bitbucket:
+    uses: ./.github/workflows/openshift.yaml
+    with:
+      dc_app: bitbucket
+    secrets:
+      BITBUCKET_LICENSE: "${{ secrets.TF_VAR_BITBUCKET_LICENSE }}"
+      OPENSHIFT_PULL_SECRET: "${{ secrets.OPENSHIFT_PULL_SECRET }}"
+
+  bamboo:
+    uses: ./.github/workflows/openshift.yaml
+    with:
+      dc_app: bamboo
+    secrets:
+      BAMBOO_LICENSE: "${{ secrets.TF_VAR_BAMBOO_LICENSE }}"
+      OPENSHIFT_PULL_SECRET: "${{ secrets.OPENSHIFT_PULL_SECRET }}"
+
+  crowd:
+    uses: ./.github/workflows/openshift.yaml
+    with:
+      dc_app: crowd
+    secrets:
+      OPENSHIFT_PULL_SECRET: "${{ secrets.OPENSHIFT_PULL_SECRET }}"

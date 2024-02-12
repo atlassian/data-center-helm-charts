@@ -333,3 +333,12 @@ additionalHosts: []
 #    hostnames:
 #    - "foo.local"
 #    - "bar.local"
+
+openshift:
+
+  # -- When set to true, the containers will run with a restricted Security Context Constraint (SCC).
+  # See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html
+  # This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server
+  # configuration files as ConfigMaps.
+  #
+  runWithRestrictedSCC: false

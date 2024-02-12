@@ -1,0 +1,83 @@
+{{ if or .Values.crowd.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-server-config
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+data:
+{{- if or .Values.crowd.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
+  server.xml: |
+{{- if .Values.crowd.tomcatConfig.customServerXml }}
+{{- .Values.crowd.tomcatConfig.customServerXml | nindent 6 }}
+{{- else }}
+    <?xml version="1.0" encoding="utf-8"?>
+    <Server port="{{ .Values.crowd.tomcatConfig.mgmtPort | default "8020" }}"
+            shutdown="SHUTDOWN">
+
+      <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+      <Listener className="org.apache.catalina.core.AprLifecycleListener"
+                SSLEngine="on"/>
+      <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+      <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+      <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+      <Service name="Catalina">
+
+        <Connector port="{{ .Values.crowd.tomcatConfig.port | default "8095" }}"
+                   maxThreads="{{ .Values.crowd.tomcatConfig.maxThreads | default "150" }}"
+                   minSpareThreads="{{ .Values.crowd.tomcatConfig.minSpareThreads | default "25" }}"
+                   connectionTimeout="{{ .Values.crowd.tomcatConfig.connectionTimeout | default "20000" }}"
+                   enableLookups="{{ .Values.crowd.tomcatConfig.enableLookups | default "false" }}"
+                   protocol="{{ .Values.crowd.tomcatConfig.protocol | default "HTTP/1.1" }}"
+                   redirectPort="{{ .Values.crowd.tomcatConfig.redirectPort | default "8443" }}"
+                   acceptCount="{{ .Values.crowd.tomcatConfig.acceptCount | default "100" }}"
+                   secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.crowd.tomcatConfig.secure }}"
+                   scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.crowd.tomcatConfig.scheme }}"
+                   proxyName="{{ .Values.ingress.host | default .Values.crowd.tomcatConfig.proxyName }}"
+                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.crowd.tomcatConfig.proxyPort }}"
+                   maxHttpHeaderSize="{{ .Values.crowd.tomcatConfig.maxHttpHeaderSize | default "8192" }}"
+                   useBodyEncodingForURI="true"
+                   URIEncoding="UTF-8"
+                   compression="on"
+                   sendReasonPhrase="true"
+                   compressableMimeType="text/html,text/xml,application/xml,text/plain,text/css,application/json,application/javascript,application/x-javascript" />
+
+        <Engine name="Catalina"
+                defaultHost="localhost">
+
+          <Host name="localhost"
+                appBase="webapps"
+                unpackWARs="true"
+                autoDeploy="true"/>
+        {{- if .Values.crowd.accessLog.enabled }}
+            <Valve className="org.apache.catalina.valves.AccessLogValve"
+                   requestAttributesEnabled="true"
+                   directory="logs"
+                   prefix="crowd_access"
+                   suffix=".log"
+                   rotatable="true"
+                   pattern="%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;"
+                   maxDays="{{ .Values.crowd.tomcatConfig.accessLogsMaxDays | default "-1" }}"/>
+            <Valve className="org.apache.catalina.valves.RemoteIpValve"
+                   proxiesHeader="x-forwarded-by"
+                   {{- if .Values.crowd.tomcatConfig.proxyInternalIps }}
+                   internalProxies="{{ .Values.crowd.tomcatConfig.proxyInternalIps | replace "." "\\." }}"
+                   {{- end }}
+                   remoteIpHeader="x-forwarded-for"
+                   protocolHeader="x-forwarded-proto"
+                   requestAttributesEnabled="true"
+                   resolveHosts="false" />
+        {{- end }}
+        </Engine>
+
+      </Service>
+        <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+        <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+        <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+        <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+        <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+    </Server>
+{{- end }}
+{{- end }}
+{{ end }}

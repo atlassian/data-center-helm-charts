@@ -32,7 +32,9 @@ spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
       hostAliases:
-        {{- include "jira.additionalHosts" . | nindent 8 }}
+      {{- include "jira.additionalHosts" . | nindent 8 }}
+      {{- if .Values.openshift.runWithRestrictedSCC }}
+      {{- else }}
       {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
@@ -47,9 +49,10 @@ spec:
         {{- end }}
       {{- end }}
       {{- end }}
+      {{- end }}
       initContainers:
         {{- include "jira.additionalInitContainers" . | nindent 8 }}
-        {{- if .Values.volumes.sharedHome.nfsPermissionFixer.enabled }}
+        {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (not .Values.openshift.runWithRestrictedSCC) }}
         - name: nfs-permission-fixer
           image: {{ .Values.volumes.sharedHome.nfsPermissionFixer.imageRepo }}:{{ .Values.volumes.sharedHome.nfsPermissionFixer.imageTag }}
           imagePullPolicy: IfNotPresent

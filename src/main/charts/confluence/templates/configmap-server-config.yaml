@@ -1,4 +1,4 @@
-{{ if or .Values.confluence.tomcatConfig.generateByHelm .Values.confluence.seraphConfig.generateByHelm }}
+{{ if or .Values.confluence.tomcatConfig.generateByHelm .Values.confluence.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 data:
-{{- if .Values.confluence.tomcatConfig.generateByHelm }}
+{{- if or .Values.confluence.tomcatConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
   server.xml: |
 {{- if .Values.confluence.tomcatConfig.customServerXml }}
 {{- .Values.confluence.tomcatConfig.customServerXml | nindent 6 }}
@@ -59,7 +59,12 @@ data:
                      pattern="%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;" />
               <Valve className="org.apache.catalina.valves.RemoteIpValve"
                      proxiesHeader="x-forwarded-by"
-                     internalProxies="{{ .Values.confluence.tomcatConfig.proxyInternalIps | default "" }}"
+                     {{- if .Values.confluence.tomcatConfig.proxyInternalIps }}
+                     internalProxies="{{ .Values.confluence.tomcatConfig.proxyInternalIps | replace "." "\\." }}"
+                     {{- end }}
+                     {{- if .Values.confluence.tomcatConfig.trustedProxies }}
+                     trustedProxies="{{ .Values.confluence.tomcatConfig.trustedProxies | replace "." "\\." }}"
+                     {{- end }}
                      remoteIpHeader="x-forwarded-for"
                      protocolHeader="x-forwarded-proto"
                      requestAttributesEnabled="true"
@@ -80,7 +85,7 @@ data:
     </Server>
 {{- end }}
 {{- end }}
-{{- if .Values.confluence.seraphConfig.generateByHelm }}
+    {{- if or .Values.confluence.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
   seraph-config.xml: |
     <security-config>
         <parameters>
