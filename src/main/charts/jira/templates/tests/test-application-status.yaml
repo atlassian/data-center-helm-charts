@@ -36,6 +36,10 @@ spec:
           STATUS=$(curl -s "$STATUS_URL")
           echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
           echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+      {{- with .Values.testPods.resources }}
+      resources:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   restartPolicy: Never
   {{- with .Values.testPods.nodeSelector }}
   nodeSelector:

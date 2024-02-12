@@ -23,7 +23,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: debian:stable-slim
+      image: {{ .Values.testPods.image.permissionsTestContainer }}
       imagePullPolicy: IfNotPresent
       securityContext:
         # We assume that the UID and GID used by the product images are the same, which in practice they are
@@ -51,6 +51,10 @@ spec:
           touch /shared-home/permissions-test
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
+      {{- with .Values.testPods.resources }}
+      resources:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   volumes:
     {{ include "bamboo.volumes.sharedHome" . | nindent 4 }}
   restartPolicy: Never

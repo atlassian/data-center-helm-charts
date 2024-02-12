@@ -141,9 +141,42 @@ class TestPodsTest {
         for (String testPod : testPods) {
             final var pod = resources.get(Kind.Pod, Pod.class, product.getHelmReleaseName() + "-" + testPod);
             assertEquals("my-scheduler", pod.getSpec().path("schedulerName").asText());
-
         }
+    }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_pods_custom_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.credentials.secretName", "db-secret",
+                "testPods.resources.requests.cpu", "1",
+                "testPods.resources.limits.cpu", "2",
+                "testPods.resources.requests.memory", "2Mi",
+                "testPods.resources.limits.memory", "3Mi"));
+        List<String> testPods = List.of("application-status-test", "shared-home-permissions-test", "db-connectivity-test");
+        if (product.name().equals("crowd")) {
+            testPods = List.of("application-status-test", "shared-home-permissions-test");
+        }
+        for (String testPod : testPods) {
+            final var pod = resources.get(Kind.Pod, Pod.class, product.getHelmReleaseName() + "-" + testPod);
+            assertEquals("1", pod.getSpec().path("containers").path(0).path("resources").path("requests").path("cpu").asText());
+            assertEquals("2", pod.getSpec().path("containers").path(0).path("resources").path("limits").path("cpu").asText());
+            assertEquals("2Mi", pod.getSpec().path("containers").path(0).path("resources").path("requests").path("memory").asText());
+            assertEquals("3Mi", pod.getSpec().path("containers").path(0).path("resources").path("limits").path("memory").asText());
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_pods_custom_images(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "testPods.image.statusTestContainer", "centos",
+                "testPods.image.permissionsTestContainer", "centos"));
+        List<String> testPods = List.of("application-status-test", "shared-home-permissions-test");
+        for (String testPod : testPods) {
+            final var pod = resources.get(Kind.Pod, Pod.class, product.getHelmReleaseName() + "-" + testPod);
+            assertEquals("centos", pod.getSpec().path("containers").path(0).path("image").asText());
+        }
     }
 
     @ParameterizedTest

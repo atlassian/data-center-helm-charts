@@ -14,3 +14,7 @@ priorityClassName: "high"
 
 monitoring:
   exposeJmxMetrics: true
+
+atlassianAnalyticsAndSupport:
+  analytics:
+    enabled: false

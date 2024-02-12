@@ -83,7 +83,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     bamboo:
@@ -267,6 +267,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -301,19 +302,6 @@ data:
               storage: 1Gi
           storageClassName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "9.5.1",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.28",
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false
-    }
 ---
 # Source: bamboo/templates/service-jms.yaml
 apiVersion: v1
@@ -405,6 +393,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: d0d822938d8d28725b077e578cd2dda282aee43dab7100c16aed24e2e8b620a6
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
@@ -575,7 +564,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: alpine:latest
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL

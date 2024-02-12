@@ -23,7 +23,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: {{ .Values.testPods.image.statusTestContainer }}
       imagePullPolicy: IfNotPresent
       env:
         - name: STATUS_URL
@@ -48,6 +48,10 @@ spec:
             sleep 10
             count=$(( $count + 1 ))
           done
+      {{- with .Values.testPods.resources }}
+      resources:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   restartPolicy: Never
   {{- with .Values.testPods.nodeSelector }}
   nodeSelector:

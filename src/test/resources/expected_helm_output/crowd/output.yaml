@@ -85,7 +85,7 @@ data:
     affinity: {}
     atlassianAnalyticsAndSupport:
       analytics:
-        enabled: true
+        enabled: false
       helmValues:
         enabled: true
     common:
@@ -237,6 +237,7 @@ data:
         statusTestContainer: alpine:latest
       labels: {}
       nodeSelector: {}
+      resources: {}
       schedulerName: null
       tolerations: []
     tolerations: []
@@ -271,19 +272,6 @@ data:
               storage: 1Gi
           storageClassName: null
         subPath: null
-  analytics.json: |
-    {
-      "imageTag": "5.2.3",
-      "replicas": 1,
-      "isJmxEnabled": true,
-      "ingressType": "NONE",
-      "k8sVersion": "1.28",
-      "serviceType": "CLUSTER_IP",
-      "dbType": "UNKNOWN",
-      "isSharedHomePVCCreated": false,
-      "isServiceMonitorCreated": false,
-      "isGrafanaDashboardsCreated": false
-    }
 ---
 # Source: crowd/templates/service-jmx.yaml
 apiVersion: v1
@@ -352,6 +340,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 383d0385319b80eef29acd67ca2c538f526b1ebcb262ca25a55dc12f9ce050bf
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
@@ -487,7 +476,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: alpine
+      image: alpine:latest
       env:
         - name: STATUS_URL
           value: "http://unittest-crowd:80/crowd/status"

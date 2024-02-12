@@ -60,6 +60,10 @@ spec:
           EOF
           cat output.txt
           grep -q "Connection established OK" output.txt
+      {{- with .Values.testPods.resources }}
+      resources:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   restartPolicy: Never
   {{- with .Values.testPods.nodeSelector }}
   nodeSelector:
