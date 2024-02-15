@@ -44,6 +44,15 @@ public class AnalyticsData {
     @JsonProperty("isBitbucketMeshEnabled")
     private boolean isBitbucketMeshEnabled;
 
+    @JsonProperty("isRunOnOpenshift")
+    private boolean isRunOnOpenshift;
+
+    @JsonProperty("isRunWithRestrictedSCC")
+    private boolean isRunWithRestrictedSCC;
+
+    @JsonProperty("isOpenshiftRouteCreated")
+    private boolean isOpenshiftRouteCreated;
+
     public String getImageTag() {
         return imageTag;
     }
@@ -155,10 +164,34 @@ public class AnalyticsData {
         isGrafanaDashboardsCreated = grafanaDashboardsCreated;
     }
 
+    public boolean isRunOnOpenshift() {
+        return isRunOnOpenshift;
+    }
+
+    public void setRunOnOpenshift(boolean runOnOpenshift) {
+        isRunOnOpenshift = runOnOpenshift;
+    }
+
+    public boolean isRunWithRestrictedSCC() {
+        return isRunWithRestrictedSCC;
+    }
+
+    public void setRunWithRestrictedSCC(boolean runWithRestrictedSCC) {
+        isRunWithRestrictedSCC = runWithRestrictedSCC;
+    }
+
+    public boolean isOpenshiftRouteCreated() {
+        return isOpenshiftRouteCreated;
+    }
+
+    public void setOpenshiftRouteCreated(boolean openshiftRouteCreated) {
+        isOpenshiftRouteCreated = openshiftRouteCreated;
+    }
+
     public AnalyticsData() {
     }
 
-    public AnalyticsData(String imageTag, int replicas, boolean isJmxEnabled, String ingressType, String k8sVersion, String serviceType, String dbType, boolean isS3AttachmentsStorageEnabled, boolean isS3AvatarsEnabled, boolean isClusteringEnabled, boolean isSharedHomePVCCreated, boolean isBitbucketMeshEnabled, boolean isServiceMonitorCreated, boolean isGrafanaDashboardsCreated) {
+    public AnalyticsData(String imageTag, int replicas, boolean isJmxEnabled, String ingressType, String k8sVersion, String serviceType, String dbType, boolean isS3AttachmentsStorageEnabled, boolean isS3AvatarsEnabled, boolean isClusteringEnabled, boolean isSharedHomePVCCreated, boolean isBitbucketMeshEnabled, boolean isServiceMonitorCreated, boolean isGrafanaDashboardsCreated, boolean isRunOnOpenshift, boolean isRunWithRestrictedSCC, boolean isOpenshiftRouteCreated) {
         this.imageTag = imageTag;
         this.replicas = replicas;
         this.isJmxEnabled = isJmxEnabled;
@@ -173,5 +206,8 @@ public class AnalyticsData {
         this.isBitbucketMeshEnabled = isBitbucketMeshEnabled;
         this.isServiceMonitorCreated = isServiceMonitorCreated;
         this.isGrafanaDashboardsCreated = isGrafanaDashboardsCreated;
+        this.isRunOnOpenshift = isRunOnOpenshift;
+        this.isRunWithRestrictedSCC = isRunWithRestrictedSCC;
+        this.isOpenshiftRouteCreated = isOpenshiftRouteCreated;
     }
 }
