@@ -56,7 +56,10 @@
   "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
   "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
   "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }},
-  "isBitbucketMeshEnabled": {{ .Values.bitbucket.mesh.enabled }}
+  "isBitbucketMeshEnabled": {{ .Values.bitbucket.mesh.enabled }},
+  "isRunOnOpenshift": {{ .Capabilities.APIVersions.Has "route.openshift.io/v1/Route" }}
+  "isRunWithRestrictedSCC": {{ .Values.openshift.runWithRestrictedSCC }},
+  "isOpenshiftRouteCreated": {{ .Values.ingress.openShiftRoute}}
 }
 {{- end }}
 
