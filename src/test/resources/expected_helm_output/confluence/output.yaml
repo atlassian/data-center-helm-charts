@@ -570,8 +570,6 @@ spec:
             defaultMode: 484
         - name: synchrony-home
           emptyDir: {}
-        - name: shared-home
-          emptyDir: {}
 ---
 # Source: confluence/templates/statefulset.yaml
 apiVersion: apps/v1
