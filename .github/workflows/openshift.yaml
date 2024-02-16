@@ -123,6 +123,11 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_metrics
 
+      - name: Verify ${{inputs.dc_app}} analytics value
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_openshift_analytics
+
       - name: Get debug info
         if: always()
         run: |
