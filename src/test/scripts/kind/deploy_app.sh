@@ -175,9 +175,9 @@ verify_dashboards() {
 
 verify_openshift_analytics() {
   echo "[INFO]: Verifying analytics.json with Openshift on"
-  run_on_openshift_entry=$(kubectl describe cm ${DC_APP}-helm-values -n atlassian | grep isRunOnOpenshift)
+  run_on_openshift_entry=$(kubectl get cm ${DC_APP}-helm-values -n atlassian -o jsonpath='{.data.analytics\.json}' | jq -r '.isRunOnOpenshift')
   echo $run_on_openshift_entry
-  if [[ $run_on_openshift_entry != *"true"* ]]; then
+  if [[ $run_on_openshift_entry != "true" ]]; then
     echo "[ERROR]: Analytics.json does not have isRunOnOpenshift as true."
     exit 1
   fi

@@ -364,7 +364,6 @@ public class HelmValuesAndAnalyticsTest {
         String analyticsJson = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-helm-values").getConfigMapData().get("analytics.json").asText();
         ObjectMapper objectMapper = new ObjectMapper();
         AnalyticsData analyticsData = objectMapper.readValue(analyticsJson, AnalyticsData.class);
-//        assertTrue(analyticsData.isRunOnOpenshift());
         assertTrue(analyticsData.isRunWithRestrictedSCC());
         assertTrue(analyticsData.isOpenshiftRouteCreated());
     }
