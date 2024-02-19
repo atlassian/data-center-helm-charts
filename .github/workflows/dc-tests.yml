@@ -3,6 +3,18 @@
 name: DC apps tests in KinD
 
 on:
+  schedule:
+    - cron: '0 3 */2 * *' # schedule the test to run every second day at 3:00am
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/main/charts/bamboo/**'
+      - 'src/main/charts/bamboo-agent/**'
+      - 'src/main/charts/bitbucket/**'
+      - 'src/main/charts/confluence/**'
+      - 'src/main/charts/jira/**'
+      - 'src/main/charts/crowd/**'
   workflow_dispatch:
   pull_request_target:
     types: [ labeled ]

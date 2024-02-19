@@ -20,6 +20,7 @@ on:
 
 jobs:
   microshift:
+    if: ${{ github.event.label.name == 'e2e' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
     runs-on: ubuntu-latest
     env:
       DC_APP: ${{inputs.dc_app}}
