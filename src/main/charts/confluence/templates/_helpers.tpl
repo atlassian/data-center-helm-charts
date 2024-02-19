@@ -53,7 +53,10 @@
   "isClusteringEnabled": {{ .Values.confluence.clustering.enabled }},
   "isSharedHomePVCCreated": {{ .Values.volumes.sharedHome.persistentVolumeClaim.create }},
   "isServiceMonitorCreated": {{ .Values.monitoring.serviceMonitor.create }},
-  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }}
+  "isGrafanaDashboardsCreated": {{ .Values.monitoring.grafana.createDashboards }},
+  "isRunOnOpenshift": {{ .Capabilities.APIVersions.Has "route.openshift.io/v1/Route" }},
+  "isRunWithRestrictedSCC": {{ .Values.openshift.runWithRestrictedSCC }},
+  "isOpenshiftRouteCreated": {{ .Values.ingress.openShiftRoute}}
 }
 {{- end }}
 
@@ -479,7 +482,6 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{ if not .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
 {{ include "synchrony.volumes.synchronyHome" . }}
 {{- end }}
-{{ include "confluence.volumes.sharedHome" . }}
 {{- with .Values.volumes.additionalSynchrony }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
