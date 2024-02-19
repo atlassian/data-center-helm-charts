@@ -20,6 +20,7 @@ on:
 
 jobs:
   microshift:
+    if: ${{ github.event.label.name == 'e2e' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
     runs-on: ubuntu-latest
     env:
       DC_APP: ${{inputs.dc_app}}
@@ -122,6 +123,11 @@ jobs:
         run: |
           source src/test/scripts/kind/deploy_app.sh
           verify_metrics
+
+      - name: Verify ${{inputs.dc_app}} analytics value
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_openshift_analytics
 
       - name: Get debug info
         if: always()

@@ -3,6 +3,8 @@
 name: DC Tests in MicroShift
 
 on:
+  schedule:
+    - cron: '0 3 */2 * *' # schedule the test to run every second day at 3:00am
   workflow_dispatch:
   push:
     branches:
@@ -14,6 +16,8 @@ on:
       - 'src/main/charts/confluence/**'
       - 'src/main/charts/jira/**'
       - 'src/main/charts/crowd/**'
+  pull_request_target:
+    types: [ labeled ]
 
 jobs:
   jira:
