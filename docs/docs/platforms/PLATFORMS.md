@@ -9,4 +9,4 @@
 
 Using our Helm charts on different platforms:
 
-* [OpenShift](OPENSHIFT.md)
+* [OpenShift](../openshift/OPENSHIFT)
