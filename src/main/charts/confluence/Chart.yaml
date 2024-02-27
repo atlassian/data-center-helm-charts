@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: 1.17.2
+version: '1.18'
 appVersion: 8.5.6
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,8 +20,13 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "StatefulSet PVC auto deletion (#736)"
-    - "Add optional postStart hook (#735)"
+    - "Add Openshift analytics (#763)"
+    - "Update appVersions for DC apps (#765)"
+    - "Removed unused Confluence shared home volume from Synchrony volume. (#764)"
+    - "OpenShift Support (#752)"
+    - "Use testPods values for test images and container resources (#761)"
+    - "Relabel instance name on jmx service monitor (#757)"
+    - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
 
 dependencies:
 - name: common
