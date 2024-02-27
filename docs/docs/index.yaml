@@ -3,6 +3,41 @@ entries:
   bamboo:
   - annotations:
       artifacthub.io/changes: |-
+        - "Add Openshift analytics (#763)"
+        - "Update appVersions for DC apps (#765)"
+        - "OpenShift Support (#752)"
+        - "Use testPods values for test images and container resources (#761)"
+        - "Relabel instance name on jmx service monitor (#757)"
+        - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.5.1
+    created: "2024-02-27T22:52:07.245849848Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 45dc96c670b330ca06dd629fd3f89ef0c84e331c8b54371ca156bd06a922d0ee
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.18/bamboo-1.18.tgz
+    version: "1.18"
+  - annotations:
+      artifacthub.io/changes: |-
         - "StatefulSet PVC auto deletion (#736)"
         - "Update appVersions for DC apps (#738)"
         - "Add optional postStart hook (#735)"
@@ -1170,6 +1205,38 @@ entries:
   bamboo-agent:
   - annotations:
       artifacthub.io/changes: |-
+        - "OpenShift Support (#752)"
+        - "Update appVersions for DC apps (#762)"
+        - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.5.1
+    created: "2024-02-27T22:52:07.367489426Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 0af111da2ce500e3014fe10527dfed0350a6f73c8bbcdc66b3931daea2a2c877
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.18/bamboo-agent-1.18.tgz
+    version: "1.18"
+  - annotations:
+      artifacthub.io/changes: |-
         - "StatefulSet PVC auto deletion (#736)"
         - "Update appVersions for DC apps (#738)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -2285,6 +2352,41 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add Openshift analytics (#763)"
+        - "Update appVersions for DC apps (#765)"
+        - "OpenShift Support (#752)"
+        - "Use testPods values for test images and container resources (#761)"
+        - "Relabel instance name on jmx service monitor (#757)"
+        - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.9.10
+    created: "2024-02-27T22:52:07.504719398Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 88761c10f6d9db31a4074f0206890b8e05f6d734981a7d524bdcd0b99dd8911a
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.18/bitbucket-1.18.tgz
+    version: "1.18"
   - annotations:
       artifacthub.io/changes: |-
         - "StatefulSet PVC auto deletion (#736)"
@@ -4013,6 +4115,42 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Add Openshift analytics (#763)"
+        - "Update appVersions for DC apps (#765)"
+        - "Removed unused Confluence shared home volume from Synchrony volume. (#764)"
+        - "OpenShift Support (#752)"
+        - "Use testPods values for test images and container resources (#761)"
+        - "Relabel instance name on jmx service monitor (#757)"
+        - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.6
+    created: "2024-02-27T22:52:07.786040804Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 04429fafe006f2444b7418b2f89c5050ab0105735cb5feb9e9c8a7a63a714eaf
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.18/confluence-1.18.tgz
+    version: "1.18"
+  - annotations:
+      artifacthub.io/changes: |-
         - "StatefulSet PVC auto deletion (#736)"
         - "Add optional postStart hook (#735)"
       artifacthub.io/containsSecurityUpdates: "true"
@@ -5662,6 +5800,41 @@ entries:
   crowd:
   - annotations:
       artifacthub.io/changes: |-
+        - "Add Openshift analytics (#763)"
+        - "Update appVersions for DC apps (#765)"
+        - "OpenShift Support (#752)"
+        - "Use testPods values for test images and container resources (#761)"
+        - "Relabel instance name on jmx service monitor (#757)"
+        - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.2.3
+    created: "2024-02-27T22:52:07.973260174Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 82dff6d3a98d5682b650cd4c3adb861b4adf3408bbb2de1cdd6eaad229b2aab0
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.18/crowd-1.18.tgz
+    version: "1.18"
+  - annotations:
+      artifacthub.io/changes: |-
         - "StatefulSet PVC auto deletion (#736)"
         - "Update appVersions for DC apps (#738)"
         - "Add optional postStart hook (#735)"
@@ -7133,6 +7306,42 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add Openshift analytics (#763)"
+        - "Update appVersions for DC apps (#765)"
+        - "OpenShift Support (#752)"
+        - "Use testPods values for test images and container resources (#761)"
+        - "Relabel instance name on jmx service monitor (#757)"
+        - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.4
+    created: "2024-02-27T22:52:08.102292979Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 99098f0035f2b8355addb0dc074b7ff2ca095c89600d34d25a2a57a4c1e9682d
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.18/jira-1.18.tgz
+    version: "1.18"
   - annotations:
       artifacthub.io/changes: |-
         - "StatefulSet PVC auto deletion (#736)"
@@ -8740,4 +8949,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2024-01-29T19:13:41.496186459Z"
+generated: "2024-02-27T22:52:08.104686634Z"
