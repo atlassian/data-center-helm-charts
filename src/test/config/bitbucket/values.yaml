@@ -26,6 +26,7 @@ bitbucket:
     secretName: bitbucket-sysadmin-credentials
   additionalJvmArgs:
     - -Dfeature.getting.started.page=false
+    - -Dupm.plugin.upload.enabled=true
     - -XX:ActiveProcessorCount=2
   resources:
     container:
