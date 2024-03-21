@@ -1,6 +1,5 @@
 # ![Atlassian Jira Software](https://wac-cdn.atlassian.com/dam/jcr:826c97dc-1f5c-4955-bfcc-ea17d6b0c095/jira%20software-icon-gradient-blue.svg?cdnVersion=492){: style="height:35px;width:35px"}![Atlassian Jira Service Management](https://wac-cdn.atlassian.com/dam/jcr:8e0905be-0ee7-4652-ba3a-4e3db1143969/jira%20service%20desk-icon-gradient-blue.svg?cdnVersion=492){: style="height:35px;width:35px"}![Atlassian Jira Core](https://wac-cdn.atlassian.com/dam/jcr:f89f1ce5-60f1-47c2-b9f5-657de4940d31/jira%20core-icon-gradient-blue.svg?cdnVersion=492){: style="height:35px;width:35px"} Jira
 
-
 ## Overview
 
 Jira Software Data Center helps the world’s best agile teams plan, track, and release great software at scale.
@@ -32,26 +31,27 @@ volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes),
 or via a named volume.
 
 Additionally, if running Jira in Data Center mode it is required that a shared
-filesystem is mounted. The mountpoint (inside the container) can be configured
+filesystem is mounted. The mount point (inside the container) can be configured
 with `JIRA_SHARED_HOME`.
 
 To get started you can use a data volume, or named volumes. In this example
 we'll use named volumes.
 
-    docker volume create --name jiraVolume
-    docker run -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+```shell
+docker volume create --name jiraVolume
+docker run -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+```
 
-
-**Success**. Jira is now available on [http://localhost:8080](http://localhost:8080)*
+!!! success
+    Jira is now available on [http://localhost:8080](http://localhost:8080).
 
 Please ensure your container has the necessary resources allocated to it. We
 recommend 2GiB of memory allocated to accommodate the application server. See
 [System Requirements](https://confluence.atlassian.com/adminjiraserver071/jira-applications-installation-requirements-802592164.html)
 for further information.
 
-
-_* Note: If you are using `docker-machine` on Mac OS X, please use `open
-http://$(docker-machine ip default):8080` instead._
+???+ tip
+    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8080` instead.
 
 ## Configuring Jira
 
@@ -62,7 +62,7 @@ on-the-fly, as required in advanced cluster configurations. Most aspects of the
 deployment can be configured in this manner; the necessary environment variables
 are documented below. However, if your particular deployment scenario is not
 covered by these settings, it is possible to override the provided templates
-with your own; see the section _Advanced Configuration_ below.
+with your own; see the section [Advanced Configuration](#advanced-configuration) below.
 
 ### Memory / Heap Size
 
@@ -145,9 +145,8 @@ If you need to pass additional JVM arguments to Jira, such as specifying a custo
 
    Additional JVM arguments for Jira
 
-Example:
-
-    docker run -e JVM_SUPPORT_RECOMMENDED_ARGS=-Djavax.net.ssl.trustStore=/var/atlassian/application-data/jira/cacerts -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
+??? example 
+    `docker run -e JVM_SUPPORT_RECOMMENDED_ARGS=-Djavax.net.ssl.trustStore=/var/atlassian/application-data/jira/cacerts -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software`
 
 ### Jira-specific settings
 
@@ -214,9 +213,10 @@ The following variables are all must all be supplied if using this feature:
    * `oracle10g`
    * `postgres72`
 
-   Note that `mysql` is only supported for versions prior to 8.13, and `mysql57`
-   and `mysql8` are only supported after. See [the 8.13.x upgrade instructions](https://confluence.atlassian.com/jirasoftware/jira-software-8-13-x-upgrade-notes-1018783378.html)
-   for details.
+???+ note 
+    `mysql` is only supported for versions prior to 8.13, and `mysql57` and `mysql8` are only supported after. 
+    See [the 8.13.x upgrade instructions](https://confluence.atlassian.com/jirasoftware/jira-software-8-13-x-upgrade-notes-1018783378.html)
+    for details.
 
 The following variables may be optionally supplied when configuring the
 database from the environment:
@@ -233,13 +233,14 @@ database from the environment:
    * `oracle10g`: NONE
    * `postgres72`: `public`
 
-Note: Due to licensing restrictions Jira does not ship with MySQL or
-Oracle JDBC drivers. To use these databases you will need to copy a suitable
-driver into the container and restart it. For example, to copy the MySQL driver
-into a container named "jira", you would do the following:
+???+ note
+    Due to licensing restrictions Jira does not ship with MySQL or Oracle JDBC drivers. 
+    To use these databases you will need to copy a suitable driver into the container and restart it. 
+    For example, to copy the MySQL driver into a container named "jira", you would do the following:
 
-    docker cp mysql-connector-java.x.y.z.jar jira:/opt/atlassian/jira/lib
-    docker restart jira
+    `docker cp mysql-connector-java.x.y.z.jar jira:/opt/atlassian/jira/lib`
+
+    `docker restart jira`
 
 For more information see the page
 [Startup check: JIRA database driver missing](https://confluence.atlassian.com/jirakb/startup-check-jira-database-driver-missing-873872169.html).
@@ -255,13 +256,15 @@ For more information see the page
 **IMPORTANT:** to start using password encryption for Jira instances that have already been set up, make sure `ATL_FORCE_CFG_UPDATE` is set to true
 which will force the image entrypoint to regenerate `dbconfig.xml` with the new properties. Other database environment variables must be also set in the container:
 
-    docker run -v jiraVolume:/var/atlassian/application-data/jira --name='jira' -d -p 8080:8080 \
-      -e ATL_JDBC_URL=jdbc:postgresql://172.17.0.1:5432/jira \
-      -e ATL_JDBC_USER='jira' -e ATL_DB_DRIVER='org.postgresql.Driver' \
-      -e ATL_DB_TYPE='postgres72' \
-      -e ATL_JDBC_SECRET_CLASS='com.atlassian.secrets.store.aws.AwsSecretsManagerStore' \
-      -e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "password"}' \
-      -e ATL_FORCE_CFG_UPDATE='true' atlassian/jira-software
+```shell
+docker run -v jiraVolume:/var/atlassian/application-data/jira --name='jira' -d -p 8080:8080 \
+  -e ATL_JDBC_URL=jdbc:postgresql://172.17.0.1:5432/jira \
+  -e ATL_JDBC_USER='jira' -e ATL_DB_DRIVER='org.postgresql.Driver' \
+  -e ATL_DB_TYPE='postgres72' \
+  -e ATL_JDBC_SECRET_CLASS='com.atlassian.secrets.store.aws.AwsSecretsManagerStore' \
+  -e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "password"}' \
+  -e ATL_FORCE_CFG_UPDATE='true' atlassian/jira-software
+```
 
 The following variables are for the Tomcat JDBC connection pool, and are
 optional. For more information on these see: https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html
@@ -367,8 +370,8 @@ for more information on each property and its possible configuration.
 
 #### Shared directory and user IDs
 
-By default the Jira application runs as the user `jira`, with a UID and GID
-of 2001. Consequently this UID must have write access to the shared
+By default, the Jira application runs as the user `jira`, with a UID and GID
+of 2001. Consequently, this UID must have write access to the shared
 filesystem. If for some reason a different UID must be used, there are a number
 of options available:
 
@@ -405,9 +408,11 @@ as a non-root user.
 
 *  `ATL_ALLOWLIST_SENSITIVE_ENV_VARS`
 
-  **WARNING:** When using this property, the values to sensitive environment variables will be available in clear text on the host OS. As such, this data may be exposed to users or processes running on the host OS.
+   Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
 
-  Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
+???+ warning
+    When using this property, the values to sensitive environment variables will be available in clear text on the 
+    host OS. As such, this data may be exposed to users or processes running on the host OS.
 
 * `SET_PERMISSIONS` (default: true)
 
@@ -416,24 +421,24 @@ as a non-root user.
 
 * `ATL_UNSET_SENSITIVE_ENV_VARS` (default: true)
 
-  **WARNING:** When using this property, the values to sensitive environment variables (see below) will
-  be available in clear text on the host OS. As such, this data may be exposed to users or processes
-  running on the host OS.
-
   Define whether to unset environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN'.
   The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
   sensitive environment variables to Jira container.
 
+???+ warning
+    When using this property, the values to sensitive environment variables will be available in clear text on the 
+    host OS. As such, this data may be exposed to users or processes running on the host OS.
+
 ### Advanced Configuration
 
 As mentioned at the top of this section, the settings from the environment are
-used to populate the application configuration on the container startup. However
+used to populate the application configuration on the container startup. However,
 in some cases you may wish to customise the settings in ways that are not
 supported by the environment variables above. In this case, it is possible to
 modify the base templates to add your own configuration. There are three main
 ways of doing this; modify our repository to your own image, build a new image
 from the existing one, or provide new templates at startup. We will briefly
-outline this methods here, but in practice how you do this will depend on your
+outline these methods here, but in practice how you do this will depend on your
 needs.
 
 ##### Building your own image
@@ -474,13 +479,16 @@ mount. Additionally, Tomcat-specific logs are written to
 
 To upgrade to a more recent version of Jira you can simply stop the `jira` container and start a new one based on a more recent image:
 
-    docker stop jira
-    docker rm jira
-    docker run ... (See above)
+```shell
+docker stop jira
+docker rm jira
+docker run ... (See above)
+```
 
 As your data is stored in the data volume directory on the host it will still  be available after the upgrade.
 
-_Note: Please make sure that you **don't** accidentally remove the `jira` container and its volumes using the `-v` option._
+!!! note
+    Please make sure that you **don't** accidentally remove the `jira` container and its volumes using the `-v` option._
 
 ## Backup
 
@@ -521,7 +529,9 @@ Alternatively you can use a specific major, major.minor, or major.minor.patch ve
 
 All Jira versions from 7.13+ (Software/Core) / 3.16+ (Service Management) are available.
 
-Note: All Jira Service Management 4.x versions are also available as `atlassian/jira-servicedesk`. This namespace has been deprecated and versions from 5+ onwards will only be available as `atlassian/jira-servicemanagement`.
+???+ warning
+    All Jira Service Management 4.x versions are also available as `atlassian/jira-servicedesk`. 
+    This namespace has been deprecated and versions from 5+ onwards will only be available as `atlassian/jira-servicemanagement`.
 
 ## Supported JDK versions and base images
 
@@ -540,34 +550,33 @@ JDK8, Alpine, and 'slim' versions of the JDK. These legacy images still exist in
 Docker Hub, however they should be considered deprecated, and do not receive
 updates or fixes.
 
-If for some reason you need a different version, see "Building your own image"
-above.
+If for some reason you need a different version, see [Building your own image](#building-your-own-image) above.
 
 ## Migration to UBI
 
 If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, `JAVA_HOME` in UBI JDK17 container is set to `/usr/lib/jvm/java-17`.
 
-Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see "Building your own image".
+Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see [Building your own image](#building-your-own-image).
 
 ## Supported architectures
 
-Currently the Atlassian Docker images are built for the `linux/amd64` target
+Currently, the Atlassian Docker images are built for the `linux/amd64` target
 platform; we do not have other architectures on our roadmap at this
-point. However the Dockerfiles and support tooling have now had all
+point. However, the Dockerfiles and support tooling have now had all
 architecture-specific components removed, so if necessary it is possible to
 build images for any platform supported by Docker.
 
 ### Building on the target architecture
 
 Note: This method is known to work on Mac M1 and AWS ARM64 machines, but has not
-be extensively tested.
+been extensively tested.
 
 The simplest method of getting a platform image is to build it on a target
 machine. The following assumes you have git and Docker installed. You will also
 need to know which version of Jira you want to build; substitute
 `JIRA_VERSION=x.x.x` with your required version:
 
-```
+```shell
 git clone --recurse-submodule https://bitbucket.org/atlassian-docker/docker-atlassian-jira.git
 cd docker-atlassian-jira
 docker build --tag my-image --build-arg JIRA_VERSION=x.x.x .
@@ -583,25 +592,32 @@ These images include built-in scripts to assist in performing common JVM diagnos
 `/opt/atlassian/support/thread-dumps.sh` can be run via `docker exec` to easily trigger the collection of thread
 dumps from the containerized application. For example:
 
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh
+```
 
-By default this script will collect 10 thread dumps at 5 second intervals. This can
+By default, this script will collect 10 thread dumps at 5 second intervals. This can
 be overridden by passing a custom value for the count and interval, by using `-c` / `--count`
 and `-i` / `--interval` respectively. For example, to collect 20 thread dumps at 3 second intervals:
 
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-Note: By default this script will also capture output from top run in 'Thread-mode'. This can
-be disabled by passing `-n` / `--no-top`
+???+ note
+    By default this script will also capture output from top run in 'Thread-mode'. This can
+    be disabled by passing `-n` / `--no-top`
 
 ### Heap dump
 
 `/opt/atlassian/support/heap-dump.sh` can be run via `docker exec` to easily trigger the collection of a heap
 dump from the containerized application. For example:
 
-    docker exec my_container /opt/atlassian/support/heap-dump.sh
+```shell
+docker exec my_container /opt/atlassian/support/heap-dump.sh
+```
 
 A heap dump will be written to `$APP_HOME/heap.bin`. If a file already exists at this
 location, use `-f` / `--force` to overwrite the existing heap dump file.
@@ -611,7 +627,9 @@ location, use `-f` / `--force` to overwrite the existing heap dump file.
 The `jcmd` utility is also included in these images and can be used by starting a `bash` shell
 in the running container:
 
-    docker exec -it my_container /bin/bash
+```shell
+docker exec -it my_container /bin/bash
+```
 
 ## Support
 

@@ -1,12 +1,11 @@
 # ![Atlassian Confluence Server](https://wac-cdn.atlassian.com/dam/jcr:5d1374c2-276f-4bca-9ce4-813aba614b7a/confluence-icon-gradient-blue.svg?cdnVersion=696){: style="height:35px;width:35px"} Confluence
 
-???+ info "Server image deprecation"
+!!! warning "Server image deprecation"
     This Docker image has been published as both `atlassian/confluence` and `atlassian/confluence-server` up until 
     February 15, 2024. Both names refer to the same image. However, post-February 15, 2024, the 
     `atlassian/confluence-server` version ceased receiving updates, including both existing and new tags. If you have 
     been using `atlassian/confluence-server`, switch to the `atlassian/confluence` image to ensure access to the 
     latest updates and new tags.
-
 
 ## Overview
 
@@ -34,17 +33,18 @@ shared filesystem is mounted. The mountpoint (inside the container) can be
 configured with `CONFLUENCE_SHARED_HOME`.
 
 Start Atlassian Confluence Server:
-
-    docker run -v /data/your-confluence-home:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence
-
-
-**Success**. Confluence is now available on <http://localhost:8090>.
+```shell
+docker run -v /data/your-confluence-home:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence
+```
+!!! success
+    Confluence is now available on <http://localhost:8090>.
 
 Please ensure your container has the necessary resources allocated to it.  We
 recommend 2GiB of memory allocated to accommodate the application server.  See
 [Supported Platforms][3] for further information.
 
-_* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8090` instead._
+???+ tip
+    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8090` instead.
 
 ## Configuring Confluence
 
@@ -55,7 +55,7 @@ on-the-fly, as required in advanced cluster configurations. Most aspects of the
 deployment can be configured in this manner; the necessary environment variables
 are documented below. However, if your particular deployment scenario is not
 covered by these settings, it is possible to override the provided templates
-with your own; see the section _Advanced Configuration_ below.
+with your own; see the section [Advanced Configuration](#advanced-configuration) below.
 
 ### Memory / Heap Size
 
@@ -150,11 +150,10 @@ custom trust store, you can add them via the below environment variable
 
 * `JVM_SUPPORT_RECOMMENDED_ARGS`
 
-   Additional JVM arguments for Confluence
+   Additional JVM arguments for Confluence.
 
-Example:
-
-    docker run -e JVM_SUPPORT_RECOMMENDED_ARGS=-Djavax.net.ssl.trustStore=/var/atlassian/application-data/confluence/cacerts -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence
+??? example
+    `docker run -e JVM_SUPPORT_RECOMMENDED_ARGS=-Djavax.net.ssl.trustStore=/var/atlassian/application-data/confluence/cacerts -v confluenceVolume:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence`
 
 For additional settings that can be supplied, see: [Recognized System Properties](https://confluence.atlassian.com/doc/recognized-system-properties-190430.html)
 
@@ -216,13 +215,14 @@ The following variables are all must all be supplied if using this feature:
    * `oracle` (Confluence 7.3.1 or later only. Compatible with Oracle 12c and Oracle 19c)
    * `postgresql`
 
-Note: Due to licensing restrictions Confluence does not ship with a MySQL or
-Oracle JDBC drivers. To use these databases you will need to copy a suitable
-driver into the container and restart it. For example, to copy the MySQL driver
-into a container named "confluence", you would do the following:
+???+ note 
+    Due to licensing restrictions Confluence does not ship with a MySQL or Oracle JDBC drivers. 
+    To use these databases you will need to copy a suitable driver into the container and restart it. 
+    For example, to copy the MySQL driver into a container named "confluence", you would do the following:
 
-    docker cp mysql-connector-java.x.y.z.jar confluence:/opt/atlassian/confluence/confluence/WEB-INF/lib
-    docker restart confluence
+    `docker cp mysql-connector-java.x.y.z.jar confluence:/opt/atlassian/confluence/confluence/WEB-INF/lib`
+
+    `docker restart confluence`
 
 For more information see the [Database JDBC Drivers](https://confluence.atlassian.com/doc/database-jdbc-drivers-171742.html)
 page.
@@ -234,7 +234,8 @@ page.
 [Encryption class](https://confluence.atlassian.com/doc/encrypt-database-password-1115674739.html) for the database password.
 Depending on the secret class, the value of `ATL_JDBC_PASSWORD` will differ. Defaults to plaintext. 
 
-**WARNING:** JDBC encryption can only be used with Confluence instances that have already been set up.
+!!! warning
+    JDBC encryption can only be used with Confluence instances that have already been set up.
 
 Starting from 8.6 [AWS SecretsManager](https://confluence.atlassian.com/doc/configuring-confluence-with-aws-secrets-manager-1299911239.html) is supported.
 
@@ -242,14 +243,14 @@ For non-clustered Confluence, manually edit `jdbc.password.decrypter.classname` 
 
 For clustered Confluence, set this property while making sure environment variables in [cluster configuration](#cluster-configuration) are kept intact as well. 
 Example:
-
-    docker run -v /data/your-confluence-home:/var/atlassian/application-data/confluence \
-    --name="confluence" -d -p 8090:8090 -p 8091:8091 \
-    -e ATL_JDBC_SECRET_CLASS='com.atlassian.secrets.store.aws.AwsSecretsManagerStore' \
-    -e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "password"}' \
-    -e ATL_CLUSTER_RELATED_VARIABLES='variable-value' \
-    atlassian/confluence
-
+```shell
+docker run -v /data/your-confluence-home:/var/atlassian/application-data/confluence \
+--name="confluence" -d -p 8090:8090 -p 8091:8091 \
+-e ATL_JDBC_SECRET_CLASS='com.atlassian.secrets.store.aws.AwsSecretsManagerStore' \
+-e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "password"}' \
+-e ATL_CLUSTER_RELATED_VARIABLES='variable-value' \
+atlassian/confluence
+```
 
 The following variables are for the database connection pool, and are
 optional.
@@ -347,31 +348,33 @@ management technology, and is beyond the scope of this documentation.
    this behaviour.
 
 * `ATL_UNSET_SENSITIVE_ENV_VARS` (default: true)
-   
-   **WARNING:** When using this property, the values to sensitive environment variables (see below) will 
-   be available in clear text on the host OS. As such, this data may be exposed to users or processes 
-   running on the host OS. 
 
    Define whether to unset environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN'.
    The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
    sensitive environment variables to Confluence container.
 
-*  `ATL_ALLOWLIST_SENSITIVE_ENV_VARS`
+???+ warning
+    When using this property, the values to sensitive environment variables will be available in clear text on the 
+    host OS. As such, this data may be exposed to users or processes running on the host OS.
 
-    **WARNING:** When using this property, the values to sensitive environment variables will be available in clear text on the host OS. As such, this data may be exposed to users or processes running on the host OS.
+* `ATL_ALLOWLIST_SENSITIVE_ENV_VARS`
 
-    Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
+   Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
+
+???+ warning
+    When using this property, the values to sensitive environment variables will be available in clear text on the 
+    host OS. As such, this data may be exposed to users or processes running on the host OS.
 
 ### Advanced Configuration
 
 As mentioned at the top of this section, the settings from the environment are
-used to populate the application configuration on the container startup. However
+used to populate the application configuration on the container startup. However,
 in some cases you may wish to customise the settings in ways that are not
 supported by the environment variables above. In this case, it is possible to
 modify the base templates to add your own configuration. There are three main
 ways of doing this; modify our repository to your own image, build a new image
 from the existing one, or provide new templates at startup. We will briefly
-outline this methods here, but in practice how you do this will depend on your
+outline these methods here, but in practice how you do this will depend on your
 needs.
 
 ##### Building your own image
@@ -426,16 +429,17 @@ as a non-root user.
 
 To upgrade to a more recent version of Confluence Server you can simply stop the
 `Confluence` container and start a new one based on a more recent image:
-
-    docker stop confluence
-    docker rm confluence
-    docker run ... (see above)
-
+```shell
+docker stop confluence
+docker rm confluence
+docker run ... (see above)
+```
 As your data is stored in the data volume directory on the host, it will still
 be available after the upgrade.
 
-_Note: Please make sure that you **don't** accidentally remove the `confluence`
-container and its volumes using the `-v` option._
+!!! note
+    Please make sure that you **don't** accidentally remove the `confluence`
+    container and its volumes using the `-v` option._
 
 ## Backup
 
@@ -506,28 +510,28 @@ above.
 
 If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, `JAVA_HOME` in UBI JDK17 container is set to `/usr/lib/jvm/java-17`.
 
-Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see "Building your own image".
+Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see [Building your own image](#building-your-own-image).
 
 
 ## Supported architectures
 
-Currently the Atlassian Docker images are built for the `linux/amd64` target
+Currently, the Atlassian Docker images are built for the `linux/amd64` target
 platform; we do not have other architectures on our roadmap at this
-point. However the Dockerfiles and support tooling have now had all
+point. However, the Dockerfiles and support tooling have now had all
 architecture-specific components removed, so if necessary it is possible to
 build images for any platform supported by Docker.
 
 ### Building on the target architecture
 
 Note: This method is known to work on Mac M1 and AWS ARM64 machines, but has not
-be extensively tested.
+been extensively tested.
 
 The simplest method of getting a platform image is to build it on a target
 machine. The following assumes you have git and Docker installed. You will also
 need to know which version of Confluence you want to build; substitute
 `CONFLUENCE_VERSION=x.x.x` with your required version:
 
-```
+```shell
 git clone --recurse-submodule https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server.git
 cd docker-atlassian-confluence-server
 docker build --tag my-image --build-arg CONFLUENCE_VERSION=x.x.x .
@@ -543,25 +547,32 @@ These images include built-in scripts to assist in performing common JVM diagnos
 `/opt/atlassian/support/thread-dumps.sh` can be run via `docker exec` to easily trigger the collection of thread
 dumps from the containerized application. For example:
 
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh
+```
 
-By default this script will collect 10 thread dumps at 5 second intervals. This can
+By default, this script will collect 10 thread dumps at 5 second intervals. This can
 be overridden by passing a custom value for the count and interval, by using `-c` / `--count`
 and `-i` / `--interval` respectively. For example, to collect 20 thread dumps at 3 second intervals:
 
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-Note: By default this script will also capture output from top run in 'Thread-mode'. This can
-be disabled by passing `-n` / `--no-top`
+???+ note
+    By default this script will also capture output from top run in 'Thread-mode'. This can
+    be disabled by passing `-n` / `--no-top`
 
 ### Heap dump
 
 `/opt/atlassian/support/heap-dump.sh` can be run via `docker exec` to easily trigger the collection of a heap
 dump from the containerized application. For example:
 
-    docker exec my_container /opt/atlassian/support/heap-dump.sh
+```shell
+docker exec my_container /opt/atlassian/support/heap-dump.sh
+```
 
 A heap dump will be written to `$APP_HOME/heap.bin`. If a file already exists at this
 location, use `-f` / `--force` to overwrite the existing heap dump file.
@@ -571,7 +582,9 @@ location, use `-f` / `--force` to overwrite the existing heap dump file.
 The `jcmd` utility is also included in these images and can be used by starting a `bash` shell
 in the running container:
 
-    docker exec -it my_container /bin/bash
+```shell
+docker exec -it my_container /bin/bash
+```
 
 ## Support
 

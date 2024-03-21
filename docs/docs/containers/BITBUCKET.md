@@ -1,6 +1,6 @@
 # ![Atlassian Bitbucket Server](https://wac-cdn.atlassian.com/dam/jcr:bf39fc40-3871-491f-98e3-fb2293f57a00/bitbucket-icon-gradient-blue.svg?cdnVersion=696){: style="height:35px;width:35px"} Bitbucket
 
-???+ info "Server image deprecation"
+!!! warning "Server image deprecation"
     This Docker image has been published as both `atlassian/bitbucket` and `atlassian/bitbucket-server` up until February 15, 2024.
     Both names refer to the same image. However, post-February 15, 2024, the `atlassian/bitbucket-server` version ceased 
     receiving updates, including both existing and new tags. If you have been using `atlassian/bitbucket-server`, 
@@ -19,12 +19,11 @@ Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket
 This Docker container makes it easy to get an instance of Bitbucket up and
 running.
 
-_* NOTE: For backwards-compatibility, by default the image will start both
-Bitbucket and an embedded OpenSearch. However, this is not a recommended
-configuration, especially in a clustered environment, and has known issues with
-shutdown. instead, we recommend running a separate OpenSearch instance
-(possibly in another Docker container); see below for instructions on connecting
-to an external OpenSearch cluster. *_
+???+ note
+    For backwards-compatibility, by default the image will start both Bitbucket and an embedded OpenSearch. 
+    However, this is not a recommended configuration, especially in a clustered environment, and has known issues with
+    shutdown. Instead, we recommend running a separate OpenSearch instance (possibly in another Docker container); 
+    see below for instructions on connecting to an external OpenSearch cluster.
 
 _* If running this image in a production environment, we strongly recommend you
 run this image using a specific version tag instead of latest. This is because
@@ -40,30 +39,28 @@ For the `BITBUCKET_HOME` directory that is used to store the repository data
 [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes),
 or via a named volume.
 
-Additionally, if running Bitbucket in Data Center mode it is required that a
-shared filesystem is mounted.
+Additionally, if running Bitbucket in Data Center mode it is required that a shared filesystem is mounted.
 
 Volume permission is managed by entry scripts. To get started you can use a data
 volume, or named volumes. In this example we'll use named volumes.
-
-    $> docker volume create --name bitbucketVolume
-    $> docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket
-
-Note that this command can substitute folder paths with named volumes.
-
-Start Atlassian Bitbucket Server:
-
-    $> docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket
-
-**Success**. Bitbucket is now available on <http://localhost:7990>.
+```shell
+docker volume create --name bitbucketVolume
+docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket
+```
+Note that this command can substitute folder paths with named volumes. Start Atlassian Bitbucket Server:
+```shell
+docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket
+```
+!!! success
+    Bitbucket is now available on <http://localhost:7990>.
 
 Please ensure your container has the necessary resources allocated to it.
 We recommend 2GiB of memory allocated to accommodate both the application server
 and the git processes.
 See [Supported Platforms](https://confluence.atlassian.com/display/BitbucketServer/Supported+platforms) for further information.
 
-
-_* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead._
+???+ tip
+    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead.
 
 ## Common settings
 
@@ -154,8 +151,10 @@ Oracle JDBC drivers. To use these databases you will need to copy a suitable
 driver into the container and restart it. For example, to copy the MySQL driver
 into a container named "bitbucket", you would do the following:
 
-    docker cp mysql-connector-java.x.y.z.jar bitbucket:/var/atlassian/application-data/bitbucket/lib
-    docker restart bitbucket
+```shell
+docker cp mysql-connector-java.x.y.z.jar bitbucket:/var/atlassian/application-data/bitbucket/lib
+docker restart bitbucket
+```
 
 For more information see [Connecting Bitbucket Server to an external database](https://confluence.atlassian.com/bitbucketserver/connecting-bitbucket-server-to-an-external-database-776640378.html).
 
@@ -163,16 +162,18 @@ For more information see [Connecting Bitbucket Server to an external database](h
 
 Starting from Bitbucket `8.13` the `JDBC` password can now be managed via [AWS Secrets Manager](https://confluence.atlassian.com/bitbucketserver/configuring-bitbucket-with-aws-secrets-manager-1279066293.html). For example, a Bitbucket node with a PostgreSQL database and `JDBC` password management via AWS Secrets Manager might look like:
 
-    $> docker run \
-        -e JDBC_DRIVER=org.postgresql.Driver \
-        -e JDBC_USER=atlbitbucket \
-        -e JDBC_PASSWORD="{\"region\":\"us-east-1\",\"secretId\":\"mysecret\",\"secretPointer\":\"password\"}" \
-        -e JDBC_PASSWORD_DECRYPTER_CLASSNAME="com.atlassian.secrets.store.aws.AwsSecretsManagerStore" \
-        -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
-        -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
-        --name="bitbucket" \
-        -d -p 7990:7990 -p 7999:7999 \
-        atlassian/bitbucket
+```shell
+docker run \
+    -e JDBC_DRIVER=org.postgresql.Driver \
+    -e JDBC_USER=atlbitbucket \
+    -e JDBC_PASSWORD="{\"region\":\"us-east-1\",\"secretId\":\"mysecret\",\"secretPointer\":\"password\"}" \
+    -e JDBC_PASSWORD_DECRYPTER_CLASSNAME="com.atlassian.secrets.store.aws.AwsSecretsManagerStore" \
+    -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
+    -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
+    --name="bitbucket" \
+    -d -p 7990:7990 -p 7999:7999 \
+    atlassian/bitbucket
+```
 
 Of note here are the two properties; `JDBC_PASSWORD` and `JDBC_PASSWORD_DECRYPTER_CLASSNAME` and their corresponding values, where the Secrets Manager coordinates and decryption class name are supplied respectively. 
 
@@ -187,18 +188,20 @@ variables see
 For example, a full command-line for a Bitbucket node with a PostgreSQL
 database, and an external OpenSearch instance might look like:
 
-    $> docker network create --driver bridge --subnet=172.18.0.0/16 myBitbucketNetwork
-    $> docker run --network=myBitbucketNetwork --ip=172.18.1.1 \
-        -e SEARCH_ENABLED=false \
-        -e JDBC_DRIVER=org.postgresql.Driver \
-        -e JDBC_USER=atlbitbucket \
-        -e JDBC_PASSWORD=MYPASSWORDSECRET \
-        -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
-        -e PLUGIN_SEARCH_CONFIG_BASEURL=http://my.opensearch.host \
-        -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
-        --name="bitbucket" \
-        -d -p 7990:7990 -p 7999:7999 \
-        atlassian/bitbucket
+```shell
+docker network create --driver bridge --subnet=172.18.0.0/16 myBitbucketNetwork
+docker run --network=myBitbucketNetwork --ip=172.18.1.1 \
+    -e SEARCH_ENABLED=false \
+    -e JDBC_DRIVER=org.postgresql.Driver \
+    -e JDBC_USER=atlbitbucket \
+    -e JDBC_PASSWORD=MYPASSWORDSECRET \
+    -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
+    -e PLUGIN_SEARCH_CONFIG_BASEURL=http://my.opensearch.host \
+    -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
+    --name="bitbucket" \
+    -d -p 7990:7990 -p 7999:7999 \
+    atlassian/bitbucket
+```
 
 ### Cluster settings
 
@@ -214,9 +217,9 @@ more information on clustering Bitbucket, and other properties see
 [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/clustering-with-bitbucket-data-center-776640164.html)
 and [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html).
 
-**NOTE:** The underlying network should be configured to support the clustering
-type you are using. How to do this depends on the container management
-technology, and is beyond the scope of this documentation.
+???+ note
+    The underlying network should be configured to support the clustering type you are using. How to do this depends on
+    the container management technology, and is beyond the scope of this documentation.
 
 ### JMX Monitoring
 
@@ -247,16 +250,19 @@ of options available:
 To upgrade to a more recent version of Bitbucket Server you can simply stop the `bitbucket`
 container and start a new one based on a more recent image:
 
-    $> docker stop bitbucket
-    $> docker rm bitbucket
-    $> docker pull atlassian/bitbucket:<desired_version>
-    $> docker run ... (See above)
+```shell
+docker stop bitbucket
+docker rm bitbucket
+docker pull atlassian/bitbucket:<desired_version>
+docker run ... (See above)
+```
 
 As your data is stored in the data volume directory on the host it will still
 be available after the upgrade.
 
-_Note: Please make sure that you **don't** accidentally remove the `bitbucket`
-container and its volumes using the `-v` option._
+!!! note
+    Please make sure that you **don't** accidentally remove the `bitbucket` 
+    container and its volumes using the `-v` option.
 
 ## Backup
 
@@ -318,22 +324,22 @@ If for some reason you need a different version, see "Building your own image"
 
 If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, JAVA_HOME in UBI JDK17 container is set to `/usr/lib/jvm/java-17`.
 
-Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in `eclipse-temurin` tags. If that's the case, see "Building your own image".
+Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in `eclipse-temurin` tags. If that's the case, see [Building your own image](#building-your-own-image).
 
 ## Building your own image
 
 * Clone the Atlassian repository at https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
 * Modify or replace the [Jinja](https://jinja.palletsprojects.com/) templates
-  under `config`; _NOTE_: The files must have the `.j2` extensions. However you
+  under `config`; _NOTE_: The files must have the `.j2` extensions. However, you
   don't have to use template variables if you don't wish.
 * Build the new image with e.g: `docker build --tag my-bitbucket-image --build-arg BITBUCKET_VERSION=8.x.x .`
 * Optionally push to a registry, and deploy.
 
 ## Supported architectures
 
-Currently the Atlassian Docker images are built for the `linux/amd64` target
+Currently, the Atlassian Docker images are built for the `linux/amd64` target
 platform; we do not have other architectures on our roadmap at this
-point. However the Dockerfiles and support tooling have now had all
+point. However, the Dockerfiles and support tooling have now had all
 architecture-specific components removed, so if necessary it is possible to
 build images for any platform supported by Docker.
 
@@ -343,7 +349,7 @@ The simplest method of getting a platform image is to build it on a target
 machine; see "Building your own image" above.
 
 Note: This method is known to work on Mac M1 and AWS ARM64 machines, but has not
-be extensively tested.
+been extensively tested.
 
 ## Troubleshooting
 
@@ -353,26 +359,30 @@ These images include built-in scripts to assist in performing common JVM diagnos
 
 `/opt/atlassian/support/thread-dumps.sh` can be run via `docker exec` to easily trigger the collection of thread
 dumps from the containerized application. For example:
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh
+```
 
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh
-
-By default this script will collect 10 thread dumps at 5 second intervals. This can
+By default, this script will collect 10 thread dumps at 5 second intervals. This can
 be overridden by passing a custom value for the count and interval, by using `-c` / `--count`
 and `-i` / `--interval` respectively. For example, to collect 20 thread dumps at 3 second intervals:
-
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-Note: By default this script will also capture output from top run in 'Thread-mode'. This can
-be disabled by passing `-n` / `--no-top`
+???+ note
+    By default this script will also capture output from top run in 'Thread-mode'. This can
+    be disabled by passing `-n` / `--no-top`
 
 ### Heap dump
 
 `/opt/atlassian/support/heap-dump.sh` can be run via `docker exec` to easily trigger the collection of a heap
 dump from the containerized application. For example:
-
-    docker exec my_container /opt/atlassian/support/heap-dump.sh
+```shell
+docker exec my_container /opt/atlassian/support/heap-dump.sh
+```
 
 A heap dump will be written to `$APP_HOME/heap.bin`. If a file already exists at this
 location, use `-f` / `--force` to overwrite the existing heap dump file.
@@ -381,9 +391,9 @@ location, use `-f` / `--force` to overwrite the existing heap dump file.
 
 The `jcmd` utility is also included in these images and can be used by starting a `bash` shell
 in the running container:
-
-    docker exec -it my_container /bin/bash
-
+```shell
+docker exec -it my_container /bin/bash
+```
 
 ## Support
 

@@ -15,17 +15,17 @@ This Docker container makes it easy to get an instance of Crowd up and running.
 For the `CROWD_HOME` directory that is used to store application data (amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume.
 
 To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
-
-    docker volume create --name crowdVolume
-    docker run -v crowdVolume:/var/atlassian/application-data/crowd --name="crowd" -d -p 8095:8095 atlassian/crowd
-
-
-**Success**. Crowd is now available on [http://localhost:8095](http://localhost:8095)*
+```shell
+docker volume create --name crowdVolume
+docker run -v crowdVolume:/var/atlassian/application-data/crowd --name="crowd" -d -p 8095:8095 atlassian/crowd
+```
+!!! success
+    Crowd is now available on [http://localhost:8095](http://localhost:8095).
 
 Please ensure your container has the necessary resources allocated to it. See [Supported Platforms][2] for further information.
 
-
-_* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8095` instead._
+???+ tip
+    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8095` instead.
 
 ## Common settings
 
@@ -98,9 +98,8 @@ If you need to pass additional JVM arguments to Crowd, such as specifying a cust
 
    Additional JVM arguments for Crowd
 
-Example:
-
-    docker run -e JVM_SUPPORT_RECOMMENDED_ARGS=-Djavax.net.ssl.trustStore=/var/atlassian/application-data/crowd/cacerts -v crowdVolume:/var/atlassian/application-data/crowd --name="crowd" -d -p 8095:8095 atlassian/crowd
+??? example 
+    `docker run -e JVM_SUPPORT_RECOMMENDED_ARGS=-Djavax.net.ssl.trustStore=/var/atlassian/application-data/crowd/cacerts -v crowdVolume:/var/atlassian/application-data/crowd --name="crowd" -d -p 8095:8095 atlassian/crowd` 
 
 ### Data Center configuration
 
@@ -119,13 +118,13 @@ Center][5] for more information.
 ### Advanced Configuration
 
 As mentioned at the top of this section, the settings from the environment are
-used to populate the application configuration on the container startup. However
+used to populate the application configuration on the container startup. However,
 in some cases you may wish to customise the settings in ways that are not
 supported by the environment variables above. In this case, it is possible to
 modify the base templates to add your own configuration. There are three main
 ways of doing this; modify our repository to your own image, build a new image
 from the existing one, or provide new templates at startup. We will briefly
-outline this methods here, but in practice how you do this will depend on your
+outline these methods here, but in practice how you do this will depend on your
 needs.
 
 ##### Building your own image
@@ -176,13 +175,16 @@ by mounting your own server.xml file directly to
 
 To upgrade to a more recent version of Crowd you can simply stop the `crowd` container and start a new one based on a more recent image:
 
-    docker stop crowd
-    docker rm crowd
-    docker run ... (See above)
+```shell
+docker stop crowd
+docker rm crowd
+docker run ... (See above)
+```
 
 As your data is stored in the data volume directory on the host it will still  be available after the upgrade.
 
-_Note: Please make sure that you **don't** accidentally remove the `crowd` container and its volumes using the `-v` option._
+!!! note
+    Please make sure that you **don't** accidentally remove the `crowd` container and its volumes using the `-v` option._
 
 ## Backup
 
@@ -229,27 +231,27 @@ above.
 
 If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, `JAVA_HOME` in UBI JDK11 container is set to `/usr/lib/jvm/java-11`.
 
-Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in `eclipse-temurin` tags. If that's the case, see "Building your own image".
+Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in `eclipse-temurin` tags. If that's the case, see [Building your own image](#building-your-own-image).
 
 ## Supported architectures
 
-Currently the Atlassian Docker images are built for the `linux/amd64` target
+Currently, the Atlassian Docker images are built for the `linux/amd64` target
 platform; we do not have other architectures on our roadmap at this
-point. However the Dockerfiles and support tooling have now had all
+point. However, the Dockerfiles and support tooling have now had all
 architecture-specific components removed, so if necessary it is possible to
 build images for any platform supported by Docker.
 
 ### Building on the target architecture
 
 Note: This method is known to work on Mac M1 and AWS ARM64 machines, but has not
-be extensively tested.
+been extensively tested.
 
 The simplest method of getting a platform image is to build it on a target
 machine. The following assumes you have git and Docker installed. You will also
 need to know which version of Crowd you want to build; substitute
 `CROWD_VERSION=x.x.x` with your required version:
 
-```
+```shell
 git clone --recurse-submodule https://bitbucket.org/atlassian-docker/docker-atlassian-crowd.git
 cd docker-atlassian-crowd
 docker build --tag my-image --build-arg CROWD_VERSION=x.x.x .
@@ -265,25 +267,32 @@ These images include built-in scripts to assist in performing common JVM diagnos
 `/opt/atlassian/support/thread-dumps.sh` can be run via `docker exec` to easily trigger the collection of thread
 dumps from the containerized application. For example:
 
-    docker exec my_crowd /opt/atlassian/support/thread-dumps.sh
+```shell
+docker exec my_crowd /opt/atlassian/support/thread-dumps.sh
+```
 
 By default this script will collect 10 thread dumps at 5 second intervals. This can
 be overridden by passing a custom value for the count and interval, by using `-c` / `--count`
 and `-i` / `--interval` respectively. For example, to collect 20 thread dumps at 3 second intervals:
 
-    docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```shell
+docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+```
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-Note: By default this script will also capture output from top run in 'Thread-mode'. This can
-be disabled by passing `-n` / `--no-top`
+???+ note
+    By default this script will also capture output from top run in 'Thread-mode'. This can
+    be disabled by passing `-n` / `--no-top`
 
 ### Heap dump
 
 `/opt/atlassian/support/heap-dump.sh` can be run via `docker exec` to easily trigger the collection of a heap
 dump from the containerized application. For example:
 
-    docker exec my_container /opt/atlassian/support/heap-dump.sh
+```shell
+docker exec my_container /opt/atlassian/support/heap-dump.sh
+```
 
 A heap dump will be written to `$APP_HOME/heap.bin`. If a file already exists at this
 location, use `-f` / `--force` to overwrite the existing heap dump file.
@@ -293,7 +302,9 @@ location, use `-f` / `--force` to overwrite the existing heap dump file.
 The `jcmd` utility is also included in these images and can be used by starting a `bash` shell
 in the running container:
 
-    docker exec -it my_container /bin/bash
+```shell
+docker exec -it my_container /bin/bash
+```
 
 ## Support
 

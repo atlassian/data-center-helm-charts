@@ -30,12 +30,12 @@ For the `BAMBOO_HOME` directory that is used to store the repository data (among
 To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
 
 Run an Agent:
-
-    $> docker volume create --name bambooAgentVolume
-    $> docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooVolume:/var/atlassian/application-data/bamboo --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
-
-**Success**. The Bamboo remote agent is now available to be approved in your Bamboo administration.
-
+```shell
+docker volume create --name bambooAgentVolume
+docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooVolume:/var/atlassian/application-data/bamboo --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
+```
+!!! success
+    The Bamboo remote agent is now available to be approved in your Bamboo administration.
 
 ## Configuration
 
@@ -106,16 +106,17 @@ Run an Agent:
 This Docker image contains only minimal setup to run a Bamboo agent which might not be sufficient to run your builds. If you need additional capabilities you can extend the image to suit your needs.
 
 Example of extending the agent base image by Maven and Git:
+```Dockerfile
+FROM atlassian/bamboo-agent-base:8.2.1
+USER root
+RUN apt-get update && \
+    apt-get install maven -y && \
+    apt-get install git -y
 
-    FROM atlassian/bamboo-agent-base:8.2.1
-    USER root
-    RUN apt-get update && \
-        apt-get install maven -y && \
-        apt-get install git -y
-        
-    USER ${BAMBOO_USER}
-    RUN /bamboo-update-capability.sh "system.builder.mvn3.Maven 3.3" /usr/share/maven
-    RUN /bamboo-update-capability.sh "system.git.executable" /usr/bin/git
+USER ${BAMBOO_USER}
+RUN /bamboo-update-capability.sh "system.builder.mvn3.Maven 3.3" /usr/share/maven
+RUN /bamboo-update-capability.sh "system.git.executable" /usr/bin/git
+```
 
 ## Building your own image
 
@@ -161,7 +162,7 @@ If for some reason you need a different version, see "Building your own image".
 
 If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, `JAVA_HOME` in UBI JDK17 container is set to `/usr/lib/jvm/java-17`.
 
-Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see "Building your own image".
+Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see [Building your own image](#building-your-own-image).
 
 ## Support
 
