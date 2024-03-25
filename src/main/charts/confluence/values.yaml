@@ -47,7 +47,7 @@ ordinals:
 image:
 
   # -- The Confluence Docker image to use
-  # https://hub.docker.com/r/atlassian/confluence-server
+  # https://hub.docker.com/r/atlassian/confluence
   #
   repository: atlassian/confluence
 
@@ -992,7 +992,7 @@ confluence:
   additionalVolumeMounts: []
 
   # -- Defines any additional environment variables to be passed to the Confluence
-  # container. See https://hub.docker.com/r/atlassian/confluence-server for
+  # container. See https://hub.docker.com/r/atlassian/confluence for
   # supported variables.
   #
   additionalEnvironmentVariables: []

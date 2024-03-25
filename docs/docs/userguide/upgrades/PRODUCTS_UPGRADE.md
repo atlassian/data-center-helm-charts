@@ -11,8 +11,8 @@ Go to the Atlassian Docker Hub page of the relevant product to pick a tag that m
 
 !!! note "Atlassian Docker Hub page for supported products:"
     * Jira: [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software/tags){.external}
-    * Confluence: [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/tags){.external}
-    * Bitbucket: [atlassian/bitbucket-server](https://hub.docker.com/r/atlassian/bitbucket-server/tags){.external}
+    * Confluence: [atlassian/confluence](https://hub.docker.com/r/atlassian/confluence/tags){.external}
+    * Bitbucket: [atlassian/bitbucket](https://hub.docker.com/r/atlassian/bitbucket/tags){.external}
     * Bamboo: [atlassian/bamboo](https://hub.docker.com/r/atlassian/bamboo/tags){.external}
     * Bamboo agent: [atlassian/bamboo-agent-base](https://hub.docker.com/r/atlassian/bamboo-agent-base/tags){.external}
     * Crowd: [atlassian/crowd](https://hub.docker.com/r/atlassian/crowd){.external}
@@ -145,7 +145,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
     
         #### 1. Find the tag of the target image.
         
-        Go to [atlassian/confluence-server](https://hub.docker.com/r/atlassian/confluence-server/tags){.external}
+        Go to [atlassian/confluence](https://hub.docker.com/r/atlassian/confluence/tags){.external}
         Docker Hub page to pick a tag that matches your target version.
         
         In the example we're running Confluence using the `7.12.0-jdk11` tag, and we'll be upgrading to `7.12.1-jdk11` - our *target*.
@@ -194,7 +194,7 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
                 [Upgrading Bitbucket with zero downtime](https://confluence.atlassian.com/bitbucketserver/upgrade-bitbucket-without-downtime-1038780379.html){.external}
         #### 1. Find tag of the target image.
         
-        Go to [atlassian/bitbucket-server](https://hub.docker.com/r/atlassian/bitbucket-server/tags){.external}
+        Go to [atlassian/bitbucket](https://hub.docker.com/r/atlassian/bitbucket/tags){.external}
         Docker Hub page to pick a tag that matches your target version.
         
         In the example we're running Bitbucket using the `7.12.0-jdk11` tag, and we'll be upgrading to `7.12.1-jdk11` - our *target*.

@@ -55,7 +55,7 @@ ordinals:
 image:
 
   # -- The Bitbucket Docker image to use
-  # https://hub.docker.com/r/atlassian/bitbucket-server
+  # https://hub.docker.com/r/atlassian/bitbucket
   #
   repository: atlassian/bitbucket
 
@@ -1165,7 +1165,7 @@ bitbucket:
   additionalVolumeMounts: []
 
   # -- Defines any additional environment variables to be passed to the Bitbucket
-  # container. See https://hub.docker.com/r/atlassian/bitbucket-server for
+  # container. See https://hub.docker.com/r/atlassian/bitbucket for
   # supported variables.
   #
   additionalEnvironmentVariables: []
