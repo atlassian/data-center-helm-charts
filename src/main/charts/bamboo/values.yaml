@@ -59,7 +59,7 @@ ordinals:
 image:
 
   # -- The Bamboo Docker image to use
-  # https://hub.docker.com/r/atlassian/bamboo-server
+  # https://hub.docker.com/r/atlassian/bamboo
   #
   repository: atlassian/bamboo
 
@@ -929,7 +929,7 @@ bamboo:
   additionalVolumeMounts: []
 
   # -- Defines any additional environment variables to be passed to the Bamboo
-  # container. See https://hub.docker.com/r/atlassian/bamboo-server for
+  # container. See https://hub.docker.com/r/atlassian/bamboo for
   # supported variables.
   #
   additionalEnvironmentVariables: []
