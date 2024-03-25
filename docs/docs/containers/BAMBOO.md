@@ -33,16 +33,15 @@ we'll use named volumes.
 docker volume create --name bambooVolume
 docker run -v bambooVolume:/var/atlassian/application-data/bamboo --name="bamboo" -d -p 8085:8085 -p 54663:54663 atlassian/bamboo
 ```
-!!! success
-    Bamboo is now available on <http://localhost:8085>.
+!!! success "Bamboo is now available on <http://localhost:8085>."
 
 Please ensure your container has the necessary resources allocated to it. We
 recommend 2GiB of memory allocated to accommodate the application server. See
 [System Requirements](https://confluence.atlassian.com/display/BAMBOO/Bamboo+Best+Practice+-+System+Requirements)
 for further information.
 
-???+ tip
-    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8085` instead.
+!!! tip "If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8085` instead."
+
 
 ## Common settings
 
@@ -372,7 +371,7 @@ The following variables are all must all be supplied if using this feature:
    * `oracle12c`
    * `postgresql`
 
-???+ note 
+???+ note "MySQL or Oracle JDBC drivers" 
     Due to licensing restrictions Bamboo does not ship with a MySQL or Oracle JDBC drivers (since Bamboo 7.0). 
     To use these databases you will need to copy a suitable driver into the container and restart it. 
     For example, to copy the MySQL driver into a container named "bamboo", you would do the following:
@@ -413,7 +412,7 @@ optional.
 
    Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
 
-???+ warning
+???+ warning "Value exposure on host OS"
     When using this property, the values to sensitive environment variables will be available in clear text on the host
     OS. As such, this data may be exposed to users or processes running on the host OS.
 
@@ -444,8 +443,7 @@ docker run ... (See above)
 
 As your data is stored in the data volume directory on the host it will still be available after the upgrade.
 
-!!! note
-    Please make sure that you **don't** accidentally remove the `bamboo` container and its volumes using the `-v` option.
+!!! note "Please make sure that you **don't** accidentally remove the `bamboo` container and its volumes using the `-v` option."
 
 ## Backup
 
@@ -562,7 +560,7 @@ docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --int
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-???+ note 
+???+ note "Disable capturing output from top run"
     By default this script will also capture output from top run in 'Thread-mode'. 
     This can be disabled by passing `-n` / `--no-top`
 

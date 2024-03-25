@@ -19,13 +19,11 @@ To get started you can use a data volume, or named volumes. In this example we'l
 docker volume create --name crowdVolume
 docker run -v crowdVolume:/var/atlassian/application-data/crowd --name="crowd" -d -p 8095:8095 atlassian/crowd
 ```
-!!! success
-    Crowd is now available on [http://localhost:8095](http://localhost:8095).
+!!! success "Crowd is now available on [http://localhost:8095](http://localhost:8095)."
 
 Please ensure your container has the necessary resources allocated to it. See [Supported Platforms][2] for further information.
 
-???+ tip
-    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8095` instead.
+???+ tip "If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8095` instead."
 
 ## Common settings
 
@@ -183,8 +181,7 @@ docker run ... (See above)
 
 As your data is stored in the data volume directory on the host it will still  be available after the upgrade.
 
-!!! note
-    Please make sure that you **don't** accidentally remove the `crowd` container and its volumes using the `-v` option._
+!!! note "Please make sure that you **don't** accidentally remove the `crowd` container and its volumes using the `-v` option."
 
 ## Backup
 
@@ -281,7 +278,7 @@ docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --int
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-???+ note
+???+ note "Disable capturing output from top run"
     By default this script will also capture output from top run in 'Thread-mode'. This can
     be disabled by passing `-n` / `--no-top`
 

@@ -36,15 +36,13 @@ Start Atlassian Confluence Server:
 ```shell
 docker run -v /data/your-confluence-home:/var/atlassian/application-data/confluence --name="confluence" -d -p 8090:8090 -p 8091:8091 atlassian/confluence
 ```
-!!! success
-    Confluence is now available on <http://localhost:8090>.
+!!! success "Confluence is now available on <http://localhost:8090>."
 
 Please ensure your container has the necessary resources allocated to it.  We
 recommend 2GiB of memory allocated to accommodate the application server.  See
 [Supported Platforms][3] for further information.
 
-???+ tip
-    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8090` instead.
+???+ tip "If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8090` instead."
 
 ## Configuring Confluence
 
@@ -215,7 +213,7 @@ The following variables are all must all be supplied if using this feature:
    * `oracle` (Confluence 7.3.1 or later only. Compatible with Oracle 12c and Oracle 19c)
    * `postgresql`
 
-???+ note 
+???+ note "MySQL or Oracle JDBC drivers"
     Due to licensing restrictions Confluence does not ship with a MySQL or Oracle JDBC drivers. 
     To use these databases you will need to copy a suitable driver into the container and restart it. 
     For example, to copy the MySQL driver into a container named "confluence", you would do the following:
@@ -234,8 +232,7 @@ page.
 [Encryption class](https://confluence.atlassian.com/doc/encrypt-database-password-1115674739.html) for the database password.
 Depending on the secret class, the value of `ATL_JDBC_PASSWORD` will differ. Defaults to plaintext. 
 
-!!! warning
-    JDBC encryption can only be used with Confluence instances that have already been set up.
+!!! warning "JDBC encryption can only be used with Confluence instances that have already been set up."
 
 Starting from 8.6 [AWS SecretsManager](https://confluence.atlassian.com/doc/configuring-confluence-with-aws-secrets-manager-1299911239.html) is supported.
 
@@ -353,7 +350,7 @@ management technology, and is beyond the scope of this documentation.
    The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
    sensitive environment variables to Confluence container.
 
-???+ warning
+???+ warning "Value exposure on host OS"
     When using this property, the values to sensitive environment variables will be available in clear text on the 
     host OS. As such, this data may be exposed to users or processes running on the host OS.
 
@@ -361,7 +358,7 @@ management technology, and is beyond the scope of this documentation.
 
    Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
 
-???+ warning
+???+ warning "Value exposure on host OS"
     When using this property, the values to sensitive environment variables will be available in clear text on the 
     host OS. As such, this data may be exposed to users or processes running on the host OS.
 
@@ -437,9 +434,7 @@ docker run ... (see above)
 As your data is stored in the data volume directory on the host, it will still
 be available after the upgrade.
 
-!!! note
-    Please make sure that you **don't** accidentally remove the `confluence`
-    container and its volumes using the `-v` option._
+!!! note "Please make sure that you **don't** accidentally remove the `confluence` container and its volumes using the `-v` option."
 
 ## Backup
 
@@ -561,7 +556,7 @@ docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --int
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-???+ note
+???+ note "Disable capturing output from top run"
     By default this script will also capture output from top run in 'Thread-mode'. This can
     be disabled by passing `-n` / `--no-top`
 

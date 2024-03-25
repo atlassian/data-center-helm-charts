@@ -34,8 +34,7 @@ Run an Agent:
 docker volume create --name bambooAgentVolume
 docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooVolume:/var/atlassian/application-data/bamboo --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
 ```
-!!! success
-    The Bamboo remote agent is now available to be approved in your Bamboo administration.
+!!! success "The Bamboo remote agent is now available to be approved in your Bamboo administration."
 
 ## Configuration
 

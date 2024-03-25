@@ -19,7 +19,7 @@ Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket
 This Docker container makes it easy to get an instance of Bitbucket up and
 running.
 
-???+ note
+???+ note "Embedded OpenSearch"
     For backwards-compatibility, by default the image will start both Bitbucket and an embedded OpenSearch. 
     However, this is not a recommended configuration, especially in a clustered environment, and has known issues with
     shutdown. Instead, we recommend running a separate OpenSearch instance (possibly in another Docker container); 
@@ -51,16 +51,14 @@ Note that this command can substitute folder paths with named volumes. Start Atl
 ```shell
 docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket
 ```
-!!! success
-    Bitbucket is now available on <http://localhost:7990>.
+!!! success "Bitbucket is now available on <http://localhost:7990>."
 
 Please ensure your container has the necessary resources allocated to it.
 We recommend 2GiB of memory allocated to accommodate both the application server
 and the git processes.
 See [Supported Platforms](https://confluence.atlassian.com/display/BitbucketServer/Supported+platforms) for further information.
 
-???+ tip
-    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead.
+???+ tip "If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead."
 
 ## Common settings
 
@@ -217,7 +215,7 @@ more information on clustering Bitbucket, and other properties see
 [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/clustering-with-bitbucket-data-center-776640164.html)
 and [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html).
 
-???+ note
+???+ note "Out-of-scope network configuration"
     The underlying network should be configured to support the clustering type you are using. How to do this depends on
     the container management technology, and is beyond the scope of this documentation.
 
@@ -260,9 +258,7 @@ docker run ... (See above)
 As your data is stored in the data volume directory on the host it will still
 be available after the upgrade.
 
-!!! note
-    Please make sure that you **don't** accidentally remove the `bitbucket` 
-    container and its volumes using the `-v` option.
+!!! note "Please make sure that you **don't** accidentally remove the `bitbucket` container and its volumes using the `-v` option."
 
 ## Backup
 
@@ -372,7 +368,7 @@ docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --int
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-???+ note
+???+ note "Disable capturing output from top run"
     By default this script will also capture output from top run in 'Thread-mode'. This can
     be disabled by passing `-n` / `--no-top`
 

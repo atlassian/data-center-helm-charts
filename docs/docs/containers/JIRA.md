@@ -42,16 +42,14 @@ docker volume create --name jiraVolume
 docker run -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 8080:8080 atlassian/jira-software
 ```
 
-!!! success
-    Jira is now available on [http://localhost:8080](http://localhost:8080).
+!!! success "Jira is now available on [http://localhost:8080](http://localhost:8080)."
 
 Please ensure your container has the necessary resources allocated to it. We
 recommend 2GiB of memory allocated to accommodate the application server. See
 [System Requirements](https://confluence.atlassian.com/adminjiraserver071/jira-applications-installation-requirements-802592164.html)
 for further information.
 
-???+ tip
-    If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8080` instead.
+???+ tip "If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):8080` instead."
 
 ## Configuring Jira
 
@@ -213,7 +211,7 @@ The following variables are all must all be supplied if using this feature:
    * `oracle10g`
    * `postgres72`
 
-???+ note 
+???+ note "MySQL supportability"
     `mysql` is only supported for versions prior to 8.13, and `mysql57` and `mysql8` are only supported after. 
     See [the 8.13.x upgrade instructions](https://confluence.atlassian.com/jirasoftware/jira-software-8-13-x-upgrade-notes-1018783378.html)
     for details.
@@ -233,7 +231,7 @@ database from the environment:
    * `oracle10g`: NONE
    * `postgres72`: `public`
 
-???+ note
+???+ note "MySQL or Oracle JDBC drivers"
     Due to licensing restrictions Jira does not ship with MySQL or Oracle JDBC drivers. 
     To use these databases you will need to copy a suitable driver into the container and restart it. 
     For example, to copy the MySQL driver into a container named "jira", you would do the following:
@@ -410,7 +408,7 @@ as a non-root user.
 
    Define a comma separated list of environment variables containing keywords 'PASS', 'SECRET' or 'TOKEN' to be ignored by the unset function which is executed in the entrypoint. The function uses `^` regex. For example, if you set `ATL_ALLOWLIST_SENSITIVE_ENV_VARS="PATH_TO_SECRET_FILE"`, all variables starting with `PATH_TO_SECRET_FILE` will not be unset.
 
-???+ warning
+???+ warning "Value exposure on host OS"
     When using this property, the values to sensitive environment variables will be available in clear text on the 
     host OS. As such, this data may be exposed to users or processes running on the host OS.
 
@@ -425,7 +423,7 @@ as a non-root user.
   The unset function is executed in the entrypoint. Set to `false` if you want to allow passing
   sensitive environment variables to Jira container.
 
-???+ warning
+???+ warning "Value exposure on host OS"
     When using this property, the values to sensitive environment variables will be available in clear text on the 
     host OS. As such, this data may be exposed to users or processes running on the host OS.
 
@@ -487,8 +485,7 @@ docker run ... (See above)
 
 As your data is stored in the data volume directory on the host it will still  be available after the upgrade.
 
-!!! note
-    Please make sure that you **don't** accidentally remove the `jira` container and its volumes using the `-v` option._
+!!! note "Please make sure that you **don't** accidentally remove the `jira` container and its volumes using the `-v` option."
 
 ## Backup
 
@@ -529,7 +526,7 @@ Alternatively you can use a specific major, major.minor, or major.minor.patch ve
 
 All Jira versions from 7.13+ (Software/Core) / 3.16+ (Service Management) are available.
 
-???+ warning
+???+ warning "`atlassian/jira-servicedesk` deprecation"
     All Jira Service Management 4.x versions are also available as `atlassian/jira-servicedesk`. 
     This namespace has been deprecated and versions from 5+ onwards will only be available as `atlassian/jira-servicemanagement`.
 
@@ -606,7 +603,7 @@ docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --int
 
 Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
 
-???+ note
+???+ note "Disable capturing output from top run"
     By default this script will also capture output from top run in 'Thread-mode'. This can
     be disabled by passing `-n` / `--no-top`
 
