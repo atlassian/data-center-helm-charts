@@ -2,6 +2,35 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: '- "Get rid of server repo references (#777)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.0
+    created: "2024-03-26T03:31:04.339865107Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 3751617567e7c17e2090f23b98634f0ab9f2ec06571b78500133186f48291a45
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.18.1/bamboo-1.18.1.tgz
+    version: 1.18.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Add Openshift analytics (#763)"
         - "Update appVersions for DC apps (#765)"
@@ -1204,6 +1233,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#773)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.0
+    created: "2024-03-26T03:31:04.520133649Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 1bf8ce2661cc1adb9267f72e708345a7e16c813e8e9c8ccef0b8f0324876897f
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.18.1/bamboo-agent-1.18.1.tgz
+    version: 1.18.1
+  - annotations:
       artifacthub.io/changes: |-
         - "OpenShift Support (#752)"
         - "Update appVersions for DC apps (#762)"
@@ -2352,6 +2410,35 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Get rid of server repo references (#777)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.19.0
+    created: "2024-03-26T03:31:04.761599326Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 8007b3c6fc859149ba855ee0a0559bedaa218f2344020a9be30752c03660ebf4
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.18.1/bitbucket-1.18.1.tgz
+    version: 1.18.1
   - annotations:
       artifacthub.io/changes: |-
         - "Add Openshift analytics (#763)"
@@ -4115,6 +4202,37 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Include shared home for synchrony when additional libs are defined (#779)"
+        - "Get rid of server repo references (#777)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.7
+    created: "2024-03-26T03:31:05.111117569Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 56011bd4973838b6b9e7f447f46dd647e3a1f6440354dd59876b9c5850a885e9
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.18.1/confluence-1.18.1.tgz
+    version: 1.18.1
+  - annotations:
+      artifacthub.io/changes: |-
         - "Add Openshift analytics (#763)"
         - "Update appVersions for DC apps (#765)"
         - "Removed unused Confluence shared home volume from Synchrony volume. (#764)"
@@ -5799,6 +5917,35 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#769)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.2.3
+    created: "2024-03-26T03:31:05.293280776Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: c5aaaaa7b4d0644acd05c7dd2b723db9de8fa5dd902fbf0d1c65f98c7d791916
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.18.1/crowd-1.18.1.tgz
+    version: 1.18.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Add Openshift analytics (#763)"
         - "Update appVersions for DC apps (#765)"
@@ -7306,6 +7453,36 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#770)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.5
+    created: "2024-03-26T03:31:05.497965495Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 5299104f8e1f682e43d9a19c3b9431595028e080bd0a4ca2a89093240c2f929e
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.18.1/jira-1.18.1.tgz
+    version: 1.18.1
   - annotations:
       artifacthub.io/changes: |-
         - "Add Openshift analytics (#763)"
@@ -8949,4 +9126,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2024-02-27T22:52:08.104686634Z"
+generated: "2024-03-26T03:31:05.50054092Z"
