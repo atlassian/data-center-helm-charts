@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '1.18'
+version: '1.18.1'
 appVersion: 9.12.5
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,12 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Add Openshift analytics (#763)"
-    - "Update appVersions for DC apps (#765)"
-    - "OpenShift Support (#752)"
-    - "Use testPods values for test images and container resources (#761)"
-    - "Relabel instance name on jmx service monitor (#757)"
-    - "Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)"
+    - "Update appVersions for DC apps (#770)"
 
 dependencies:
 - name: common
