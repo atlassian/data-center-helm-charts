@@ -482,6 +482,9 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{ if not .Values.volumes.synchronyHome.persistentVolumeClaim.create }}
 {{ include "synchrony.volumes.synchronyHome" . }}
 {{- end }}
+{{- if .Values.synchrony.additionalLibraries }}
+{{ include "confluence.volumes.sharedHome" . }}
+{{- end }}
 {{- with .Values.volumes.additionalSynchrony }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
