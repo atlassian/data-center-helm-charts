@@ -36,6 +36,9 @@ jobs:
       TF_VAR_kinesis_log_producers_role_arns: ${{ secrets.TF_VAR_KINESIS_LOG_PRODUCERS_ROLE_ARNS }}
       TF_VAR_osquery_fleet_enrollment_secret_name: ${{ secrets.TF_VAR_OSQUERY_FLEET_ENROLLMENT_SECRET_NAME }}
       TF_VAR_osquery_fleet_entrollment_host: ${{ secrets.TF_VAR_OSQUERY_FLEET_ENROLLMENT_HOST }}
+      TF_VAR_crowdstrike_secret_name: ${{ secrets.TF_VAR_CROWDSTRIKE_SECRET_NAME }}
+      TF_VAR_crowdstrike_kms_key_name: ${{ secrets.TF_VAR_CROWDSTRIKE_KMS_KEY_NAME }}
+      TF_VAR_crowdstrike_aws_account_id: ${{ secrets.TF_VAR_CROWDSTRIKE_AWS_ACCOUNT_ID }}
       USE_DOMAIN: "true"
 
     steps:
