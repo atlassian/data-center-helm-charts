@@ -203,7 +203,7 @@ Alternatively you can use a specific major, major.minor, or major.minor.patch ve
 
 All versions from 3.0+ are available
 
-## Supported JDK versions
+## Supported JDK versions and base images
 
 All Atlassian Crowd Docker images are now JDK11 only, and generated from the
 [official Eclipse Temurin OpenJDK Docker images](https://hub.docker.com/_/eclipse-temurin).
