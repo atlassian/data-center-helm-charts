@@ -296,7 +296,7 @@ Alternatively, you can use a specific minor version of Bitbucket Server by
 using a version number tag: `atlassian/bitbucket:6`. This will
 install the latest `6.x.x` version that is available.
 
-## Supported JDK versions
+## Supported JDK versions and base images
 
 All the Atlassian Docker images are now JDK11 and JDK17 (starting from 8.8 version), and generated from the
 [official Eclipse Temurin OpenJDK Docker images](https://hub.docker.com/_/eclipse-temurin).
