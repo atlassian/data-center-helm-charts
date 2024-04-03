@@ -45,6 +45,17 @@ for further information.
 
 ## Common settings
 
+### Verbose container entrypoint logging
+
+During the startup process of the container, various operations and checks are performed to ensure that the application
+is configured correctly and ready to run. To help in troubleshooting and to provide transparency into this process, you
+can enable verbose logging. The `VERBOSE_LOGS` environment variable enables detailed debug messages to the container's
+log, offering insights into the actions performed by the entrypoint script.
+
+* `VERBOSE_LOGS` (default: false)
+
+  Set to `true` to enable detailed debug messages during the container initialization.
+
 ### Memory / Heap Size
 
 If you need to override Bamboo's default memory allocation, you can control the minimum heap (Xms) and maximum heap (Xmx) via the below environment variables.
@@ -67,13 +78,13 @@ can be controlled via the below environment variables.
 * `ATL_PROXY_NAME` (default: NONE)
 
    The reverse proxy's fully qualified hostname. `CATALINA_CONNECTOR_PROXYNAME`
-   is also supported for backwards compatability.
+   is also supported for backwards compatibility.
 
 * `ATL_PROXY_PORT` (default: NONE)
 
    The reverse proxy's port number via which Bamboo is
    accessed. `CATALINA_CONNECTOR_PROXYPORT` is also supported for backwards
-   compatability.
+   compatibility.
 
 * `ATL_TOMCAT_PORT` (default: 8085)
 
@@ -84,17 +95,17 @@ can be controlled via the below environment variables.
 * `ATL_TOMCAT_SCHEME` (default: http)
 
    The protocol via which the application is accessed. `CATALINA_CONNECTOR_SCHEME` is also
-   supported for backwards compatability.
+   supported for backwards compatibility.
 
 * `ATL_TOMCAT_SECURE` (default: false)
 
    Set 'true' if `ATL_TOMCAT_SCHEME` is 'https'. `CATALINA_CONNECTOR_SECURE` is
-   also supported for backwards compatability.
+   also supported for backwards compatibility.
 
 * `ATL_TOMCAT_CONTEXTPATH` (default: NONE)
 
    The context path the application is served over. `CATALINA_CONTEXT_PATH` is
-   also supported for backwards compatability.
+   also supported for backwards compatibility.
 
 The following Tomcat/Catalina options are also supported. For more information,
 see https://tomcat.apache.org/tomcat-9.0-doc/config/index.html.

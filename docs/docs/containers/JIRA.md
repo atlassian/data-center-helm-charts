@@ -62,6 +62,17 @@ are documented below. However, if your particular deployment scenario is not
 covered by these settings, it is possible to override the provided templates
 with your own; see the section [Advanced Configuration](#advanced-configuration) below.
 
+### Verbose container entrypoint logging
+
+During the startup process of the container, various operations and checks are performed to ensure that the application
+is configured correctly and ready to run. To help in troubleshooting and to provide transparency into this process, you
+can enable verbose logging. The `VERBOSE_LOGS` environment variable enables detailed debug messages to the container's
+log, offering insights into the actions performed by the entrypoint script.
+
+* `VERBOSE_LOGS` (default: false)
+
+  Set to `true` to enable detailed debug messages during the container initialization.
+
 ### Memory / Heap Size
 
 If you need to override Jira's default memory allocation, you can control the minimum heap (Xms) and maximum heap (Xmx) via the below environment variables.
