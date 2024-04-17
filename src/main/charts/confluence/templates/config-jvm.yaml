@@ -24,6 +24,12 @@ data:
     {{- end }}
     {{- include "common.jmx.javaagent" . | indent 4 -}}
     {{- include "confluence.sysprop.s3Config" . | indent 4 }}
+    {{- if .Values.opensearch.enabled }}
+    -Dsearch.platform=opensearch
+    -Dopensearch.http.url=http://opensearch-cluster-master:9200
+    -Dopensearch.username=admin
+    -Dopensearch.password={{ include "opensearch.initial.admin.password" . | b64dec -}}
+    {{- end }}
   max_heap: {{ .Values.confluence.resources.jvm.maxHeap }}
   min_heap: {{ .Values.confluence.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.confluence.resources.jvm.reservedCodeCache }}

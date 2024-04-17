@@ -693,3 +693,14 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; for crt in /tmp/crt
 set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
 {{- end }}
 {{- end }}
+
+{{- define "opensearch.initial.admin.password" }}
+{{- $defaultSecretName := "opensearch-initial-password" }}
+{{- $secretName := default $defaultSecretName .Values.opensearch.credentials.existingSecretRef.name }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace $secretName) }}
+{{- if $secretData.data }}
+{{- index $secretData.data "OPENSEARCH_INITIAL_ADMIN_PASSWORD" }}
+{{- else }}
+{{ randAlphaNum 64 | b64enc }}
+{{- end }}
+{{- end }}

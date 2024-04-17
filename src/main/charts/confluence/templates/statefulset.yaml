@@ -51,6 +51,25 @@ spec:
       hostAliases:
         {{- include "confluence.additionalHosts" . | nindent 8 }}
       initContainers:
+        {{- if .Values.opensearch.enabled }}
+        - name: opensearch-check
+          image: {{ include "confluence.image" . | quote }}
+          command: ['sh', '-c']
+          args:
+          - |
+            timeout=300
+            end=$(($(date +%s) + timeout))
+            while [ $(date +%s) -lt $end ]; do
+              if curl -s -o /dev/null -w "%{http_code}" http://opensearch-cluster-master:9200 | grep -qE '^(200|401|403)$'; then
+                echo "OpenSearch is ready"
+                exit 0
+              fi
+              echo "OpenSearch server not ready or not reachable. Waiting..."
+              sleep 5
+            done
+            echo "OpenSearch did not become ready in ${timeout} seconds. Exiting"
+            exit 1
+        {{- end }}
         {{- include "confluence.additionalInitContainers" . | nindent 8 }}
         {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (not .Values.openshift.runWithRestrictedSCC) }}
         - name: nfs-permission-fixer

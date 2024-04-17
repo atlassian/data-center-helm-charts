@@ -261,6 +261,25 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    opensearch:
+      credentials:
+        createSecret: true
+        existingSecretRef:
+          name: null
+      enabled: false
+      envFrom:
+      - secretRef:
+          name: opensearch-initial-password
+      extraEnvs:
+      - name: plugins.security.ssl.http.enabled
+        value: "false"
+      persistence:
+        size: 10Gi
+      resources:
+        requests:
+          cpu: 1
+          memory: 1Gi
+      singleNode: true
     openshift:
       runWithRestrictedSCC: false
     ordinals:
@@ -512,7 +531,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -592,7 +610,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8ae1d966a426da8cd5567ff0b430ffacc028ba6d9243c6322ddda09af84bab46
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
