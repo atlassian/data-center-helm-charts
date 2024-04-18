@@ -1,0 +1,4 @@
+collapse_single_pages: false
+nav:
+    - CONFLUENCE_OPENSEARCH.md
+    - ...

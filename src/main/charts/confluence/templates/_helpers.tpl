@@ -694,6 +694,18 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; for crt in /tmp/crt
 {{- end }}
 {{- end }}
 
+
+{{- define "generate_static_password_b64enc" -}}
+{{- if not (index .Release "temp_vars") -}}
+{{-   $_ := set .Release "temp_vars" dict -}}
+{{- end -}}
+{{- $key := printf "%s_%s" .Release.Name "password" -}}
+{{- if not (index .Release.temp_vars $key) -}}
+{{-   $_ := set .Release.temp_vars $key (randAlphaNum 40 | b64enc ) -}}
+{{- end -}}
+{{- index .Release.temp_vars $key -}}
+{{- end -}}
+
 {{- define "opensearch.initial.admin.password" }}
 {{- $defaultSecretName := "opensearch-initial-password" }}
 {{- $secretName := default $defaultSecretName .Values.opensearch.credentials.existingSecretRef.name }}
@@ -701,6 +713,6 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; for crt in /tmp/crt
 {{- if $secretData.data }}
 {{- index $secretData.data "OPENSEARCH_INITIAL_ADMIN_PASSWORD" }}
 {{- else }}
-{{ randAlphaNum 64 | b64enc }}
+{{ include "generate_static_password_b64enc" . }}
 {{- end }}
 {{- end }}

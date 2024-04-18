@@ -1588,11 +1588,11 @@ opensearch:
   enabled: false
 
   credentials:
-    # -- Let the Helm chart create a secret with an auto generated password
+    # -- Let the Helm chart create a secret with an auto generated initial admin password
     #
     createSecret: true
 
-    # -- Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    # -- Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD holding the initial admin password
     #
     existingSecretRef:
       name:

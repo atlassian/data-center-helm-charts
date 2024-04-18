@@ -157,8 +157,8 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Confluence pods  |
-| opensearch.credentials.createSecret | bool | `true` | Let the Helm chart create a secret with an auto generated password  |
-| opensearch.credentials.existingSecretRef | object | `{"name":null}` | Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD  |
+| opensearch.credentials.createSecret | bool | `true` | Let the Helm chart create a secret with an auto generated initial admin password  |
+| opensearch.credentials.existingSecretRef | object | `{"name":null}` | Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD holding the initial admin password  |
 | opensearch.enabled | bool | `false` | Deploy OpenSearch Helm chart and Configure Confluence to use it as a search platform  |
 | opensearch.envFrom[0].secretRef.name | string | `"opensearch-initial-password"` | If using a pre-created secret, make sure to change secret name to match opensearch.credentials.existingSecretRef.name  |
 | opensearch.extraEnvs[0].name | string | `"plugins.security.ssl.http.enabled"` |  |
