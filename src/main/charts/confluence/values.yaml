@@ -1579,3 +1579,39 @@ openshift:
   # configuration files as ConfigMaps.
   #
   runWithRestrictedSCC: false
+
+
+opensearch:
+
+  # -- Deploy OpenSearch Helm chart and Configure Confluence to use it as a search platform
+  #
+  enabled: false
+
+  credentials:
+    # -- Let the Helm chart create a secret with an auto generated initial admin password
+    #
+    createSecret: true
+
+    # -- Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD holding the initial admin password
+    #
+    existingSecretRef:
+      name:
+
+  # -- OpenSearch helm specific values, see: https://github.com/opensearch-project/helm-charts/blob/main/charts/opensearch/values.yaml
+  #
+  singleNode: true
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+  persistence:
+    size: 10Gi
+  extraEnvs:
+    - name: plugins.security.ssl.http.enabled
+      value: "false"
+  envFrom:
+    - secretRef:
+         # -- If using a pre-created secret, make sure to change secret name to match opensearch.credentials.existingSecretRef.name
+         #
+         name: opensearch-initial-password
+
