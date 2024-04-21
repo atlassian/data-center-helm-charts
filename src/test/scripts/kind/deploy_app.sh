@@ -38,6 +38,7 @@ create_secrets() {
 deploy_app() {
   cd src/main/charts/${DC_APP}
   helm repo add atlassian-data-center https://atlassian.github.io/data-center-helm-charts
+  helm repo add opensearch https://opensearch-project.github.io/helm-charts/
   helm repo update
   helm dependency build
   DB_TYPE="postgresql"
