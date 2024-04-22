@@ -15,6 +15,16 @@
 * Relabel instance name on jmx service monitor (#757)
 * Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)
 
+## 1.19.0
+
+**Release date:** 2024-4-22
+
+![AppVersion: 9.12.7](https://img.shields.io/static/v1?label=AppVersion&message=9.12.7&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Make cacerts writable for user and group (#790)
+
 ## 1.18.1
 
 **Release date:** 2024-3-26

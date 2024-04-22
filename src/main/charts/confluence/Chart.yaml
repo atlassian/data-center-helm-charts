@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '1.18.1'
+version: '1.19.0'
 appVersion: 8.5.8
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,8 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Include shared home for synchrony when additional libs are defined (#779)"
-    - "Get rid of server repo references (#777)"
+    - "Make cacerts writable for user and group (#790)"
+    - "Optionally deploy OpenSearch Helm Chart With Confluence (#788)"
 
 dependencies:
 - name: common
