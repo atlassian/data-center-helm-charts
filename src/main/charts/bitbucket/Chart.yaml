@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: '1.18.1'
+version: '1.19.0'
 appVersion: 8.19.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Get rid of server repo references (#777)"
+    - "Make cacerts writable for user and group (#790)"
 
 dependencies:
 - name: common
