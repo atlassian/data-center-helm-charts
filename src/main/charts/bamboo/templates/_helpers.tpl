@@ -431,6 +431,6 @@ Define additional hosts here to allow template overrides when used as a sub char
 {{- if .Values.bamboo.additionalCertificates.customCmd}}
 {{ .Values.bamboo.additionalCertificates.customCmd}}
 {{- else }}
-set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
+set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
 {{- end }}
 {{- end }}
