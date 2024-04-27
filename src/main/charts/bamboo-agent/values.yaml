@@ -88,6 +88,11 @@ agent:
   #
   server:
 
+  # -- The network protocol used for accessing the Bamboo server. Valid values are "http" for unencrypted connections
+  # or "https" for encrypted connections using TLS/SSL.
+  #
+  serverProtocol: http
+
   # Standard K8s field that holds pod-level security attributes and common container settings.
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   # Do not populate when deploying to OpenShift, unless anyuid policy is attached to a service account.

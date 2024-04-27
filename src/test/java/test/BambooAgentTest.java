@@ -36,6 +36,19 @@ class BambooAgentTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "bamboo_agent")
+    void serverProtocol(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "agent.server", "example.com",
+                "agent.serverProtocol", "https"
+        ));
+
+        final var deployment = resources.getDeployment(product.getHelmReleaseName());
+        final var env = deployment.getContainer().getEnv();
+        env.assertHasValue("BAMBOO_SERVER", "https://example.com");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "bamboo_agent")
     void bamboo_agent_security_token_secret_name(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "agent.securityToken.secretName", "security_token_secret",

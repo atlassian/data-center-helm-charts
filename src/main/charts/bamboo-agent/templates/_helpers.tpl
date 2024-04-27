@@ -4,7 +4,7 @@ The K8s DNS record for the Bamboo server service
 */}}
 {{- define "agent.bambooServerServiceDns" -}}
 {{- if .Values.agent.server }}
-{{- printf "http://%s" .Values.agent.server }}
+{{- printf "%s://%s" .Values.agent.serverProtocol .Values.agent.server }}
 {{- end }}
 {{- end }}
 
