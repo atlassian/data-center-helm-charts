@@ -46,6 +46,7 @@ Kubernetes: `>=1.21.x-0`
 | agent.securityToken.secretKey | string | `"security-token"` |  |
 | agent.securityToken.secretName | string | `nil` | The name of the K8s Secret that contains the security token. When specified the token will be automatically utilised on agent boot. An Example of creating a K8s secret for the secret below: 'kubectl create secret generic <secret-name> --from-literal=security-token=<security token>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets  |
 | agent.server | string | `nil` |  |
+| agent.serverProtocol | string | `"http"` | The network protocol used for accessing the Bamboo server. Valid values are "http" for unencrypted connections or "https" for encrypted connections using TLS/SSL.  |
 | agent.shutdown.command | string | `nil` | Custom command for a [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Undefined by default which means no pre-stop hook is being executed when an agent container needs to be stopped and deleted  |
 | agent.shutdown.terminationGracePeriodSeconds | int | `30` | The termination grace period for pods during shutdown. This should be set to the internal grace period, plus a small buffer to allow the JVM to fully terminate.  |
 | agent.startupProbe.command | string | `"/probe-startup.sh"` | Command to use to check the startup status. This is provided by the agent image.  |
