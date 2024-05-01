@@ -5,6 +5,7 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
+import test.jackson.JsonNodeAssert;
 import test.model.Product;
 
 import java.util.Map;
@@ -124,5 +125,23 @@ class FluentdTest {
         assertThat(fluentdContainerResources.path("requests").path("memory").toString()).contains("2Gi");
         assertThat(fluentdContainerResources.path("limits").path("cpu").toString()).contains("2");
         assertThat(fluentdContainerResources.path("limits").path("memory").toString()).contains("3Gi");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "jira", "crowd"}, mode = EnumSource.Mode.INCLUDE)
+    void fluentd_cloud_logging_property_false(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true",
+                "fluentd.customConfigFile", "custom\nconfig"));
+        final var jvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config");
+        JsonNodeAssert.assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Datlassian.logging.cloud.enabled=false");
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "jira", "crowd"}, mode = EnumSource.Mode.INCLUDE)
+    void fluentd_cloud_logging_property_true(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true"));
+        final var jvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config");
+        JsonNodeAssert.assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Datlassian.logging.cloud.enabled=true");
     }
 }

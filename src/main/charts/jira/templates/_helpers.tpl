@@ -446,7 +446,7 @@ volumeClaimTemplates:
 {{ end }}
 
 {{- define "jira.sysprop.fluentdAppender" -}}
--Datlassian.logging.cloud.enabled={{.Values.fluentd.enabled}}
+-Datlassian.logging.cloud.enabled={{ if and .Values.fluentd.enabled (not .Values.fluentd.customConfigFile ) }}{{.Values.fluentd.enabled }}{{ else }}false{{ end }}
 {{- end }}
 
 {{- define "flooredCPU" -}}
