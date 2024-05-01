@@ -1006,7 +1006,7 @@ fluentd:
 
   # -- Set to 'true' if a custom config (see 'configmap-fluentd.yaml' for default)
   # should be used for Fluentd. If enabled this config must be supplied via the
-  # 'fluentdCustomConfig' property below. If in your custom config forces fluentd to run in a server mode,
+  # 'fluentdCustomConfig' property below. If your custom config forces fluentd to run in a server mode,
   # add `-Datlassian.logging.cloud.enabled=true` to `jira.AdditionalJvmArgs` stanza in values file
   #
   customConfigFile: false
