@@ -131,6 +131,34 @@ of the setup. They can be controlled via the below environment variables.
    that you map the directory to a volume and perform log ingestion/cleanup with
    external tools.
 
+* `ATL_TOMCAT_REQUESTATTRIBUTESENABLED`
+
+  Checks for the existence of request attributes (typically set by the RemoteIpValve and similar)
+  that should be used to override the values returned by the request for remote address,
+  remote host, server port and protocol. This property is usually combined with `ATL_TOMCAT_TRUSTEDPROXIES`
+  and `ATL_TOMCAT_INTERNALPROXIES` to show IP address of the remote host instead of the load balancer's.
+  If not declared, the default value of `false` will be used.
+
+* `ATL_TOMCAT_TRUSTEDPROXIES`
+
+  A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
+  Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will appear*
+  in the `proxiesHeader` value. By adding a list of Trusted Proxies, Bamboo will remove the
+  load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
+  in a clustered load balancer architecture where the load balancer address changes depending on
+  which node proxies the connection, requiring re-approval of Agents.
+  If not specified, no trusted proxies will be trusted.
+
+* `ATL_TOMCAT_INTERNALPROXIES`
+
+  A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
+  Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will not appear*
+  in the `proxiesHeader` value. By adding a list of Internal Proxies, Bamboo will remove the
+  load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
+  in a clustered load balancer architecture where the load balancer address changes depending on
+  which node proxies the connection, requiring re-approval of Agents.
+  If not specified, no internal proxies will be trusted.
+
 The following Tomcat/Catalina options are also supported. For more information,
 see <https://tomcat.apache.org/tomcat-7.0-doc/config/index.html>. 
 
