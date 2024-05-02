@@ -153,7 +153,7 @@ be controlled via the below environment variables.
   in the `proxiesHeader` value. By adding a list of Internal Proxies, Confluence will remove the
   load balancers' IP addresses from Confluence's view of the incoming connection. This could be desired
   in a clustered load balancer architecture where the load balancer address changes depending on
-  which node proxies the connection, requiring re-approval of Agents.
+  which node proxies the connection.
   If not specified, no internal proxies will be trusted.
 
 The following Tomcat/Catalina options are also supported. For more information,
