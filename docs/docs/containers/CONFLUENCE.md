@@ -143,8 +143,8 @@ of the setup. They can be controlled via the below environment variables.
 
   A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
   Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will appear*
-  in the `proxiesHeader` value. By adding a list of Trusted Proxies, Bamboo will remove the
-  load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
+  in the `proxiesHeader` value. By adding a list of Trusted Proxies, Confluence will remove the
+  load balancers' IP addresses from Confluence's view of the incoming connection. This could be desired
   in a clustered load balancer architecture where the load balancer address changes depending on
   which node proxies the connection, requiring re-approval of Agents.
   If not specified, no trusted proxies will be trusted.
@@ -153,11 +153,10 @@ of the setup. They can be controlled via the below environment variables.
 
   A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
   Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will not appear*
-  in the `proxiesHeader` value. By adding a list of Internal Proxies, Bamboo will remove the
-  load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
+  in the `proxiesHeader` value. By adding a list of Internal Proxies, Confluence will remove the
+  load balancers' IP addresses from Confluence's view of the incoming connection. This could be desired
   in a clustered load balancer architecture where the load balancer address changes depending on
-  which node proxies the connection, requiring re-approval of Agents.
-  If not specified, no internal proxies will be trusted.
+  which node proxies the connection. If not specified, no internal proxies will be trusted.
 
 The following Tomcat/Catalina options are also supported. For more information,
 see <https://tomcat.apache.org/tomcat-7.0-doc/config/index.html>. 
