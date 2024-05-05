@@ -175,7 +175,7 @@ Starting from Bitbucket `8.13` the `JDBC` password can now be managed via [AWS S
 docker run \
     -e JDBC_DRIVER=org.postgresql.Driver \
     -e JDBC_USER=atlbitbucket \
-    -e JDBC_PASSWORD="{\"region\":\"us-east-1\",\"secretId\":\"mysecret\",\"secretPointer\":\"password\"}" \
+    -e JDBC_PASSWORD="{\"region\":\"us-east-1\",\"secretId\":\"mysecret\",\"secretPointer\":\"/password\"}" \
     -e JDBC_PASSWORD_DECRYPTER_CLASSNAME="com.atlassian.secrets.store.aws.AwsSecretsManagerStore" \
     -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
     -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
