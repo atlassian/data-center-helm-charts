@@ -299,7 +299,7 @@ docker run -v jiraVolume:/var/atlassian/application-data/jira --name='jira' -d -
   -e ATL_JDBC_USER='jira' -e ATL_DB_DRIVER='org.postgresql.Driver' \
   -e ATL_DB_TYPE='postgres72' \
   -e ATL_JDBC_SECRET_CLASS='com.atlassian.secrets.store.aws.AwsSecretsManagerStore' \
-  -e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "password"}' \
+  -e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "/password"}' \
   -e ATL_FORCE_CFG_UPDATE='true' atlassian/jira-software
 ```
 

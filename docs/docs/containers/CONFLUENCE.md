@@ -282,7 +282,7 @@ Example:
 docker run -v /data/your-confluence-home:/var/atlassian/application-data/confluence \
 --name="confluence" -d -p 8090:8090 -p 8091:8091 \
 -e ATL_JDBC_SECRET_CLASS='com.atlassian.secrets.store.aws.AwsSecretsManagerStore' \
--e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "password"}' \
+-e ATL_JDBC_PASSWORD='{"region": "us-east-1", "secretId": "mysecret", "secretPointer": "/password"}' \
 -e ATL_CLUSTER_RELATED_VARIABLES='variable-value' \
 atlassian/confluence
 ```
