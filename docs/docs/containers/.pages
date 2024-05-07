@@ -1,9 +1,9 @@
 nav:
-    - BAMBOO-AGENT.md
-    - BAMBOO.md
-    - BITBUCKET.md
-    - BITBUCKET-MESH.md
-    - CONFLUENCE.md
-    - CROWD.md
-    - JIRA.md
+    - Jira: JIRA.md
+    - Confluence: CONFLUENCE.md
+    - Bitbucket: BITBUCKET.md
+    - Bitbucket Mesh: BITBUCKET-MESH.md
+    - Bamboo Agent: BAMBOO-AGENT.md
+    - Bamboo: BAMBOO.md
+    - Crowd: CROWD.md
     - ...
