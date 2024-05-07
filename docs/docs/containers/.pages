@@ -1,2 +1,9 @@
 nav:
+    - BAMBOO-AGENT.md
+    - BAMBOO.md
+    - BITBUCKET.md
+    - BITBUCKET-MESH.md
+    - CONFLUENCE.md
+    - CROWD.md
+    - JIRA.md
     - ...
