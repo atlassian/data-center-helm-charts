@@ -2,5 +2,8 @@ dependencies:
 - name: common
   repository: https://atlassian.github.io/data-center-helm-charts
   version: 1.2.6
-digest: sha256:d5d71e640fd11f06ce6a7f380063611619b8ccfc678ed90093c096f3a63dd5db
-generated: "2024-01-30T06:19:50.968673+11:00"
+- name: opensearch
+  repository: https://opensearch-project.github.io/helm-charts
+  version: 2.19.0
+digest: sha256:7821fd7658048f4fffb0bb4c1b5bc4050e70e2782d6186ac4f1b8eaf459584b5
+generated: "2024-05-11T10:34:27.159625+10:00"

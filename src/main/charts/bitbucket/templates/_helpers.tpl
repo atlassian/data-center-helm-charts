@@ -524,6 +524,57 @@ volumeClaimTemplates:
 {{ end }}
 {{ end }}
 
+{{- define "bitbucket.openSearchEnvVars" -}}
+{{- if and .Values.bitbucket.clustering.enabled (or .Values.opensearch.enabled .Values.opensearch.baseUrl) }}
+- name: SEARCH_ENABLED
+  value: "false"
+- name: PLUGIN_SEARCH_CONFIG_BASEURL
+  value: {{ if .Values.opensearch.baseUrl }}{{ .Values.opensearch.baseUrl }}{{ else if .Values.opensearch.enabled }}http://opensearch-cluster-master:9200{{ else }}{{ .Values.opensearch.baseUrl }}{{ end }}
+- name: PLUGIN_SEARCH_CONFIG_USERNAME
+{{- if .Values.opensearch.credentials.secretName }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.opensearch.credentials.secretName | quote }}
+      key: {{ .Values.opensearch.credentials.usernameSecretKey | quote }}
+{{- else }}
+  value: "admin"
+{{- end }}
+- name: PLUGIN_SEARCH_CONFIG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+{{- if .Values.opensearch.credentials.secretName }}
+      name: {{ .Values.opensearch.credentials.secretName | quote }}
+      key: {{ .Values.opensearch.credentials.passwordSecretKey | quote }}
+{{- else }}
+      name: opensearch-initial-password
+      key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "bitbucket.generate.static.password.b64enc" -}}
+{{- if not (index .Release "temp_vars") -}}
+{{-   $_ := set .Release "temp_vars" dict -}}
+{{- end -}}
+{{- $key := printf "%s_%s" .Release.Name "password" -}}
+{{- if not (index .Release.temp_vars $key) -}}
+{{-   $_ := set .Release.temp_vars $key (randAlphaNum 40 | b64enc ) -}}
+{{- end -}}
+{{- index .Release.temp_vars $key -}}
+{{- end -}}
+
+{{- define "bitbucket.opensearch.initial.admin.password" }}
+{{- $defaultSecretName := "opensearch-initial-password" }}
+{{- $secretName := default $defaultSecretName .Values.opensearch.credentials.secretName }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace $secretName) }}
+{{- if $secretData.data }}
+{{- index $secretData.data "OPENSEARCH_INITIAL_ADMIN_PASSWORD" }}
+{{- else }}
+{{ include "bitbucket.generate.static.password.b64enc" . }}
+{{- end }}
+{{- end }}
+
+
 {{- define "flooredCPU" -}}
     {{- if hasSuffix "m" (. | toString) }}
     {{- div (trimSuffix "m" .) 1000 | default 1 }}

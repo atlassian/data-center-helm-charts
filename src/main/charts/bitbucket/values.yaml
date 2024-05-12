@@ -823,7 +823,7 @@ bitbucket:
     #
     customProbe: {}
 
-  # Elasticsearch config
+  # Elasticsearch config. Unsupported from 9.0 onwards. Use OpenSearch instead
   #
   elasticSearch:
 
@@ -1553,3 +1553,59 @@ openshift:
   # configuration files as ConfigMaps.
   #
   runWithRestrictedSCC: false
+
+# OpenSearch config
+#
+opensearch:
+
+  # -- Deploy OpenSearch Helm chart and automatically
+  # configure Bitbucket to use it as a search platform
+  #
+  enabled: false
+
+  # -- The base URL of the external OpenSearch instance to be used, for example:
+  # http://opensearch-master.<namespace>.svc.cluster.local:9200
+  # If this is defined and bitbucket.opensearch.enabled is set to false,
+  # then Bitbucket will disable its internal OpenSearch instance.
+  #
+  baseUrl:
+
+  # OpenSearch connection details
+  #
+  credentials:
+
+    # -- The name of the Kubernetes Secret that contains the OpenSearch credentials.
+    # Example of creating a credentials K8s secret below:
+    # 'kubectl create secret generic <secret-name> --from-literal=username=<username> \
+    # --from-literal=password=<password>'
+    # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
+    # When undefined and bitbucket.opensearch.enabled is set to true, a random password
+    # for admin user will be generated and saved to 'opensearch-initial-password' secret.
+    secretName: # opensearch-internal-users
+
+    # -- The key in the Kubernetes Secret that contains the OpenSearch username.
+    #
+    usernameSecretKey: username
+
+    # -- The key in the Kubernetes Secret that contains the OpenSearch password.
+    # The password must be hashed
+    #
+    passwordSecretKey: password
+
+  singleNode: true
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+  persistence:
+    size: 10Gi
+  extraEnvs:
+    - name: plugins.security.ssl.http.enabled
+      value: "false"
+  envFrom:
+    - secretRef:
+         name: opensearch-initial-password
+  securityConfig:
+    # -- Secret with pre-defined internal_users.yml. When undefined, Bitbucket will use initial admin user credentials
+    # to create indexes in OpenSearch. See: https://atlassian.github.io/data-center-helm-charts/examples/bitbucket/BITBUCKET_OPENSEARCH/
+    internalUsersSecret: # opensearch-internal-users

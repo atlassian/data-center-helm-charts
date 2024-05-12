@@ -1,5 +1,6 @@
 nav:
-    - Elasticsearch : BITBUCKET_ELASTICSEARCH.md
+    - OpenSearch    : BITBUCKET_OPENSEARCH.md
+    - Elasticsearch (Deprecated) : BITBUCKET_ELASTICSEARCH.md
     - Smart Mirrors : BITBUCKET_MIRRORS.md
     - SSH : BITBUCKET_SSH.md
     - Mesh : BITBUCKET_MESH.md

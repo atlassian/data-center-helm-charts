@@ -18,6 +18,7 @@ Kubernetes: `>=1.21.x-0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://atlassian.github.io/data-center-helm-charts | common | 1.2.6 |
+| https://opensearch-project.github.io/helm-charts | opensearch | 2.19.0 |
 
 ## Values
 
@@ -195,6 +196,19 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods  |
+| opensearch.baseUrl | string | `nil` | The base URL of the external OpenSearch instance to be used, for example: http://opensearch-master.<namespace>.svc.cluster.local:9200 If this is defined and bitbucket.opensearch.enabled is set to false, then Bitbucket will disable its internal OpenSearch instance.  |
+| opensearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the OpenSearch password. The password must be hashed  |
+| opensearch.credentials.secretName | string | `nil` | from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets When undefined and bitbucket.opensearch.enabled is set to true, a random password for admin user will be generated and saved to 'opensearch-initial-password' secret. |
+| opensearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the OpenSearch username.  |
+| opensearch.enabled | bool | `false` | Deploy OpenSearch Helm chart and automatically configure Bitbucket to use it as a search platform  |
+| opensearch.envFrom[0].secretRef.name | string | `"opensearch-initial-password"` |  |
+| opensearch.extraEnvs[0].name | string | `"plugins.security.ssl.http.enabled"` |  |
+| opensearch.extraEnvs[0].value | string | `"false"` |  |
+| opensearch.persistence.size | string | `"10Gi"` |  |
+| opensearch.resources.requests.cpu | int | `1` |  |
+| opensearch.resources.requests.memory | string | `"1Gi"` |  |
+| opensearch.securityConfig.internalUsersSecret | string | `nil` | Secret with pre-defined internal_users.yml. When undefined, Bitbucket will use initial admin user credentials to create indexes in OpenSearch. See: https://atlassian.github.io/data-center-helm-charts/examples/bitbucket/BITBUCKET_OPENSEARCH/ |
+| opensearch.singleNode | bool | `true` |  |
 | openshift.runWithRestrictedSCC | bool | `false` | When set to true, the containers will run with a restricted Security Context Constraint (SCC). See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server configuration files as ConfigMaps.  |
 | ordinals | object | `{"enabled":false,"start":0}` | Set a custom start ordinal number for the K8s stateful set. Note that this depends on the StatefulSetStartOrdinal K8s feature gate, which has entered beta state with K8s version 1.27.  |
 | ordinals.enabled | bool | `false` | Enable only if StatefulSetStartOrdinal K8s feature gate is available.  |
