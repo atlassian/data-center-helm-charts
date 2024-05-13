@@ -29,4 +29,4 @@ dependencies:
 - name: opensearch
   version: 2.19.0
   repository: https://opensearch-project.github.io/helm-charts
-  condition: bitbucket.opensearch.enabled
+  condition: opensearch.enabled
