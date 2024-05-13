@@ -1560,7 +1560,8 @@ openshift:
 opensearch:
 
   # -- Deploy OpenSearch Helm chart and automatically
-  # configure Bitbucket to use it as a search platform
+  # configure Bitbucket to use it as a search platform.
+  # When set to true, Bitbucket will disable its internal OpenSearch instance
   #
   install: false
 
