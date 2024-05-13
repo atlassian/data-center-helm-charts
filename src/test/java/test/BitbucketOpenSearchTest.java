@@ -30,7 +30,7 @@ class BitbucketOpenSearchTest {
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void opensearch_statefulset_exists(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "opensearch.enabled", "true"
+                "opensearch.install", "true"
         ));
         final var statefulSet = resources.getStatefulSet("opensearch-cluster-master");
         assertThat(statefulSet.getSpec()).isNotNull();
@@ -38,9 +38,20 @@ class BitbucketOpenSearchTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void opensearch_existing_external(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "opensearch.baseUrl", "https://opensearchinstance.info",
+                "bitbucket.clustering.enabled", "true"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        statefulSet.getContainer("bitbucket").getEnv().assertHasValue("PLUGIN_SEARCH_CONFIG_BASEURL", "https://opensearchinstance.info");
+    }
+    
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void opensearch_container_env_vars_defaults(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "opensearch.enabled", "true",
+                "opensearch.install", "true",
                 "bitbucket.clustering.enabled", "true"
         ));
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
@@ -54,7 +65,7 @@ class BitbucketOpenSearchTest {
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void opensearch_container_env_vars_custom_secret(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "opensearch.enabled", "true",
+                "opensearch.install", "true",
                 "opensearch.credentials.secretName", "custom-secret",
                 "opensearch.credentials.usernameSecretKey", "user",
                 "opensearch.credentials.passwordSecretKey", "pass",
@@ -69,7 +80,7 @@ class BitbucketOpenSearchTest {
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void opensearch_container_env_vars_custom_url(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "opensearch.enabled", "true",
+                "opensearch.install", "true",
                 "opensearch.baseUrl", "https://opensearch-cluster-master:9200",
                 "bitbucket.clustering.enabled", "true"
         ));
@@ -82,7 +93,7 @@ class BitbucketOpenSearchTest {
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void opensearch_secret_has_password(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "opensearch.enabled", "true"
+                "opensearch.install", "true"
         ));
         final var secret = resources.get(Secret, "opensearch-initial-password");
         JsonNode password = secret.getConfigMapData().path("OPENSEARCH_INITIAL_ADMIN_PASSWORD");

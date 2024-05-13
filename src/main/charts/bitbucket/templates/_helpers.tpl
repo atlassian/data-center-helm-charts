@@ -525,11 +525,11 @@ volumeClaimTemplates:
 {{ end }}
 
 {{- define "bitbucket.openSearchEnvVars" -}}
-{{- if and .Values.bitbucket.clustering.enabled (or .Values.opensearch.enabled .Values.opensearch.baseUrl) }}
+{{- if and .Values.bitbucket.clustering.enabled (or .Values.opensearch.install .Values.opensearch.baseUrl) }}
 - name: SEARCH_ENABLED
   value: "false"
 - name: PLUGIN_SEARCH_CONFIG_BASEURL
-  value: {{ if .Values.opensearch.baseUrl }}{{ .Values.opensearch.baseUrl }}{{ else if .Values.opensearch.enabled }}http://opensearch-cluster-master:9200{{ else }}{{ .Values.opensearch.baseUrl }}{{ end }}
+  value: {{ if .Values.opensearch.baseUrl }}{{ .Values.opensearch.baseUrl }}{{ else if .Values.opensearch.install }}http://opensearch-cluster-master:9200{{ else }}{{ .Values.opensearch.baseUrl }}{{ end }}
 - name: PLUGIN_SEARCH_CONFIG_USERNAME
 {{- if .Values.opensearch.credentials.secretName }}
   valueFrom:

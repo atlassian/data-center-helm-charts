@@ -197,7 +197,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Bitbucket pods  |
 | opensearch.baseUrl | string | `nil` | The base URL of the external OpenSearch instance to be used, for example: http://opensearch-master.<namespace>.svc.cluster.local:9200 If this is defined and bitbucket.opensearch.enabled is set to false, then Bitbucket will disable its internal OpenSearch instance.  |
-| opensearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the OpenSearch password. The password must be hashed  |
+| opensearch.credentials.passwordSecretKey | string | `"password"` | The key in the Kubernetes Secret that contains the OpenSearch password.  |
 | opensearch.credentials.secretName | string | `nil` | from-literal=password=<password>' https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets When undefined and bitbucket.opensearch.enabled is set to true, a random password for admin user will be generated and saved to 'opensearch-initial-password' secret. |
 | opensearch.credentials.usernameSecretKey | string | `"username"` | The key in the Kubernetes Secret that contains the OpenSearch username.  |
 | opensearch.enabled | bool | `false` | Deploy OpenSearch Helm chart and automatically configure Bitbucket to use it as a search platform  |

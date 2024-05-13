@@ -1561,7 +1561,7 @@ opensearch:
   # -- Deploy OpenSearch Helm chart and automatically
   # configure Bitbucket to use it as a search platform
   #
-  enabled: false
+  install: false
 
   # -- The base URL of the external OpenSearch instance to be used, for example:
   # http://opensearch-master.<namespace>.svc.cluster.local:9200
@@ -1588,7 +1588,6 @@ opensearch:
     usernameSecretKey: username
 
     # -- The key in the Kubernetes Secret that contains the OpenSearch password.
-    # The password must be hashed
     #
     passwordSecretKey: password
 

@@ -11,7 +11,7 @@ To deploy OpenSearch Helm chart and automatically configure Bitbucket to use it 
 
 ```yaml
 opensearch:
-  enabled: true
+  install: true
 ```
 This will:
 
@@ -87,7 +87,7 @@ Now that the secret has been created, update your Helm values to point OpenSearc
 
 ```yaml
 opensearch:
-  enabled: true
+  install: true
   credentials:
     secretName: opensearch-internal-users
     usernameSecretKey: username
@@ -120,7 +120,7 @@ To enable SSL in OpenSearch and start the service on a secure port, you need to:
 * Create Kubernetes secrets with `ca`, `certificate` and `key`, and pass them to OpenSearch.
 * Add `ca.crt` to Java trust store in Bitbucket containers if the custom certificate is not signed by a public authority.
 
-Below is an example of how to generate a CA certificate, a server certificate, and a corresponding private key for securing communications with OpenSearch:
+Below is an **example** (not the recommended way) of how to generate a CA certificate, a server certificate, and a corresponding private key for securing communications with OpenSearch:
 
 ```shell
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj "/C=US/ST=CA/L=LA/O=MyCompany Name/CN=opensearch-cluster-master" -keyout ca.key -out ca.crt
@@ -138,7 +138,7 @@ kubectl create secret generic opensearch-ssl-key -n atlassian --from-file=esnode
 kubectl create secret generic opensearch-ssl-cert -n atlassian --from-file=esnode.pem=opensearch-cluster-master.crt
 ```
 
-Enable ssl http plugin, override the default ca, certificate and key, as well as provide additional volume mounts:
+Enable ssl http plugin, override the default ca, certificate and key, as well as provide additional volume mounts in Bitbucket Helm values file:
 
 ```yaml
 opensearch:
@@ -192,7 +192,7 @@ To communicate with the OpenSearch cluster through a fully qualified domain name
 opensearch:
   baseUrl: https://myopensearch.com
   ingress:
-    enabled: true
+    install: true
 ```
 Important considerations:
 

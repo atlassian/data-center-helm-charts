@@ -1,3 +1,6 @@
+!!!warning "Elasticsearch deprecation notice"
+    Elasticsearch has been deprecated as a search platform for Bitbucket. Use [OpenSearch](../BITBUCKET_OPENSEARCH) instead.
+
 # Bitbucket Elasticsearch recommendations
 While Bitbucket has its own internal Elasticsearch instance, we highly recommend you use an external Elasticsearch installation, either within the Kubernetes cluster or, if available, an instance managed by your hosting provider.
 
