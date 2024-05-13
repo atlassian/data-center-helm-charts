@@ -1554,7 +1554,8 @@ openshift:
   #
   runWithRestrictedSCC: false
 
-# OpenSearch config
+# -- OpenSearch config. See: https://github.com/opensearch-project/helm-charts/tree/main/charts/opensearch for all available Helm values.
+# Example OpenSearch configurations can be found at https://confluence.atlassian.com/bitbucketserver/install-and-configure-a-remote-opensearch-server-1115664379.html
 #
 opensearch:
 

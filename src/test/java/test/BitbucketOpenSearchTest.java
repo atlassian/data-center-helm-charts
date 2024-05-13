@@ -46,7 +46,7 @@ class BitbucketOpenSearchTest {
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         statefulSet.getContainer("bitbucket").getEnv().assertHasValue("PLUGIN_SEARCH_CONFIG_BASEURL", "https://opensearchinstance.info");
     }
-    
+
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void opensearch_container_env_vars_defaults(Product product) throws Exception {
