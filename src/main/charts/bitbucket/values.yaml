@@ -1566,7 +1566,7 @@ opensearch:
 
   # -- The base URL of the external OpenSearch instance to be used, for example:
   # http://opensearch-master.<namespace>.svc.cluster.local:9200
-  # If this is defined and bitbucket.opensearch.install is set to false,
+  # If this is defined and opensearch.install is set to false,
   # then Bitbucket will disable its internal OpenSearch instance.
   #
   baseUrl:
@@ -1580,7 +1580,7 @@ opensearch:
     # 'kubectl create secret generic <secret-name> --from-literal=username=<username> \
     # --from-literal=password=<password>'
     # https://kubernetes.io/docs/concepts/configuration/secret/#opaque-secrets
-    # When undefined and bitbucket.opensearch.install is set to true, a random password
+    # When undefined and opensearch.install is set to true, a random password
     # for admin user will be generated and saved to 'opensearch-initial-password' secret.
     secretName: # opensearch-internal-users
 
