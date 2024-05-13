@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '1.19.0'
+version: '1.20.0'
 appVersion: 8.5.9
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,8 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Make cacerts writable for user and group (#790)"
-    - "Optionally deploy OpenSearch Helm Chart With Confluence (#788)"
+    - "Update appVersions for DC apps (#803)"
+    - "Set atlassian.logging.cloud.enabled system property to false if a custom FluentD config is used (#796)"
 
 dependencies:
 - name: common
