@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: '1.19.0'
+version: '1.20.0'
 appVersion: 5.3.0
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Make cacerts writable for user and group (#790)"
+    - "Set atlassian.logging.cloud.enabled system property to false if a custom FluentD config is used (#796)"
 
 dependencies:
 - name: common
