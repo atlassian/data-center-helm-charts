@@ -2,6 +2,35 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#798)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.2
+    created: "2024-05-13T22:07:16.36163058Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: f1df68c7772bafb5d8ab3512b1717c67b108bfbc6740bbd29daf22f89241b20a
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.20.0/bamboo-1.20.0.tgz
+    version: 1.20.0
+  - annotations:
       artifacthub.io/changes: '- "Make cacerts writable for user and group (#790)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -1262,6 +1291,37 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#798)"
+        - "Make server protocol configurable (#794)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.2
+    created: "2024-05-13T22:07:16.59407515Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: bea3d236d2bb05503402a264c5ee9b816288c3fbf48e7225a52c86a6c1758303
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.20.0/bamboo-agent-1.20.0.tgz
+    version: 1.20.0
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#787)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -2468,6 +2528,40 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Optionally install OpenSearch helm chart with Bitbucket
+        (#804)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.19.3
+    created: "2024-05-13T22:07:16.858720085Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 0bc764c505317aeb106f739e8a3578e10b1bc79c91cf16f56e19ce5f695e149c
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.20.0/bitbucket-1.20.0.tgz
+    version: 1.20.0
   - annotations:
       artifacthub.io/changes: '- "Make cacerts writable for user and group (#790)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -4289,6 +4383,41 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#803)"
+        - "Set atlassian.logging.cloud.enabled system property to false if a custom FluentD config is used (#796)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.9
+    created: "2024-05-13T22:07:17.140005662Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: e9b81d1cee173ba3db6d83fa16389feadb387db668954180c06d90aa7a467580
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.20.0/confluence-1.20.0.tgz
+    version: 1.20.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Make cacerts writable for user and group (#790)"
         - "Optionally deploy OpenSearch Helm Chart With Confluence (#788)"
       artifacthub.io/containsSecurityUpdates: "true"
@@ -6039,6 +6168,36 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: '- "Set atlassian.logging.cloud.enabled system property
+        to false if a custom FluentD config is used (#796)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 5.3.0
+    created: "2024-05-13T22:07:17.287692299Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: a00f67ccddb6bdb50ecadf9c0756a97e7e60e4ca40fc3c2613fccb9594b00cec
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.20.0/crowd-1.20.0.tgz
+    version: 1.20.0
+  - annotations:
       artifacthub.io/changes: '- "Make cacerts writable for user and group (#790)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -7604,6 +7763,38 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#803)"
+        - "Set atlassian.logging.cloud.enabled system property to false if a custom FluentD config is used (#796)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.8
+    created: "2024-05-13T22:07:17.422740455Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 8f6bad40bf8035fc715c6e090fd9012e1ebe338e4445223040bb2f62cdbb2496
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.20.0/jira-1.20.0.tgz
+    version: 1.20.0
   - annotations:
       artifacthub.io/changes: '- "Make cacerts writable for user and group (#790)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -9307,4 +9498,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2024-04-22T06:38:06.390537319Z"
+generated: "2024-05-13T22:07:17.424024083Z"
