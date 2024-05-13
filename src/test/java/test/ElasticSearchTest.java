@@ -34,7 +34,8 @@ class ElasticSearchTest {
     @EnumSource(value = Product.class, names = "bitbucket")
     void elastic_search_credentials(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                product + ".elasticSearch.credentials.secretName", "mysecret"));
+                product + ".elasticSearch.credentials.secretName", "mysecret",
+                product + ".elasticSearch.baseUrl", "https://foo/"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()

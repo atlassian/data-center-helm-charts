@@ -205,7 +205,11 @@ spec:
             {{- include "bitbucket.clusteringEnvVars" . | nindent 12 }}
             {{- include "bitbucket.databaseEnvVars" . | nindent 12 }}
             {{- include "bitbucket.sysadminEnvVars" . | nindent 12 }}
+            {{- if .Values.bitbucket.elasticSearch.baseUrl }}
             {{- include "bitbucket.elasticSearchEnvVars" . | nindent 12 }}
+            {{- else }}
+            {{- include "bitbucket.openSearchEnvVars" . | nindent 12 }}
+            {{- end }}
             - name: PLUGIN_SSH_PORT
               value: {{ .Values.bitbucket.ports.ssh | quote }}
             {{ if .Values.ingress.host }}

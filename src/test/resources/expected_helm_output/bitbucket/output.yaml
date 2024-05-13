@@ -317,6 +317,28 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    opensearch:
+      baseUrl: null
+      credentials:
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      envFrom:
+      - secretRef:
+          name: opensearch-initial-password
+      extraEnvs:
+      - name: plugins.security.ssl.http.enabled
+        value: "false"
+      install: false
+      persistence:
+        size: 10Gi
+      resources:
+        requests:
+          cpu: 1
+          memory: 1Gi
+      securityConfig:
+        internalUsersSecret: null
+      singleNode: true
     openshift:
       runWithRestrictedSCC: false
     ordinals:
@@ -557,7 +579,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 04f7b61a2d2a711b87cbe33e19395c7b7fcf8601aaa25d1aa1d6d774147ca9b2
+        checksum/config-jvm: 248cbe28a81a1b191a30497da39f62c8bde309693ab3d71791ffbaf20297ca25
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -680,7 +702,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: e6c57dfdc0f8ca8074541aecd331a70d7b6fc3bfbdc706ecab8addc51fba5e50
+        checksum/config-jvm: 058360f31a3c7207a47a46e8f9a1c39ab23beaed0bef4d05810f68290e708971
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
