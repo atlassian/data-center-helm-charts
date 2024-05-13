@@ -116,9 +116,9 @@ opensearch:
 By default, OpenSearch starts with the SSL http plugin disabled, meaning the cluster is accessible via HTTP at http://opensearch-cluster-master:9200. The OpenSearch service is not exposed through a LoadBalancer or Ingress unless the default configurations are explicitly overridden. Bitbucket communicates with the OpenSearch cluster using the service name within the internal Kubernetes network. This setup uses the Kubernetes DNS to resolve the service name to the appropriate cluster IP address.
 
 To enable SSL in OpenSearch and start the service on a secure port, you need to:
-* enable ssl http in Helm values
-* create Kubernetes secrets with ca, certificate and key, and pass them to OpenSearch
-* add ca.crt to Java trust store in Bitbucket containers if the custom certificate is not signed by a public authority
+* Enable SSL HTTPS in Helm values.
+* Create Kubernetes secrets with `ca`, `certificate` and `key`, and pass them to OpenSearch.
+* Add `ca.crt` to Java trust store in Bitbucket containers if the custom certificate is not signed by a public authority.
 
 Below is an example of how to generate a CA certificate, a server certificate, and a corresponding private key for securing communications with OpenSearch:
 
