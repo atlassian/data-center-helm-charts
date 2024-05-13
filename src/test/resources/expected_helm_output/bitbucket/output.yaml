@@ -1,4 +1,23 @@
 ---
+# Source: bitbucket/charts/opensearch/templates/poddisruptionbudget.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "opensearch-cluster-master-pdb"
+  labels:
+    helm.sh/chart: opensearch-2.19.0
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "2.13.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: opensearch-cluster-master
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opensearch
+      app.kubernetes.io/instance: unittest-bitbucket
+---
 # Source: bitbucket/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -10,6 +29,68 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.2"
     app.kubernetes.io/managed-by: Helm
+---
+# Source: bitbucket/charts/opensearch/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opensearch-cluster-master-config
+  labels:
+    helm.sh/chart: opensearch-2.19.0
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "2.13.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: opensearch-cluster-master
+data:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    # Bind to all interfaces because we don't know what IP address Docker will assign to us.
+    network.host: 0.0.0.0
+    # Setting network.host to a non-loopback address enables the annoying bootstrap checks. "Single-node" mode disables them again.
+    # Implicitly done if ".singleNode" is set to "true".
+    # discovery.type: single-node
+    # Start OpenSearch Security Demo Configuration
+    # WARNING: revise all the lines below before you go into production
+    plugins:
+      security:
+        ssl:
+          transport:
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+            enforce_hostname_verification: false
+          http:
+            enabled: true
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+        allow_unsafe_democertificates: true
+        allow_default_init_securityindex: true
+        authcz:
+          admin_dn:
+            - CN=kirk,OU=client,O=client,L=test,C=de
+        audit.type: internal_opensearch
+        enable_snapshot_restore_privilege: true
+        check_snapshot_restore_write_privileges: true
+        restapi:
+          roles_enabled: ["all_access", "security_rest_api_access"]
+        system_indices:
+          enabled: true
+          indices:
+            [
+              ".opendistro-alerting-config",
+              ".opendistro-alerting-alert*",
+              ".opendistro-anomaly-results*",
+              ".opendistro-anomaly-detector*",
+              ".opendistro-anomaly-checkpoints",
+              ".opendistro-anomaly-detection-state",
+              ".opendistro-reports-*",
+              ".opendistro-notifications-*",
+              ".opendistro-notebooks",
+              ".opendistro-asynchronous-search-response*",
+            ]
+    ######## End OpenSearch Security Demo Configuration ########
 ---
 # Source: bitbucket/templates/config-jvm-mesh.yaml
 apiVersion: v1
@@ -317,6 +398,229 @@ data:
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
     nodeSelector: {}
+    opensearch:
+      antiAffinity: soft
+      antiAffinityTopologyKey: kubernetes.io/hostname
+      baseUrl: null
+      clusterName: opensearch-cluster
+      config:
+        opensearch.yml: |
+          cluster.name: opensearch-cluster
+          # Bind to all interfaces because we don't know what IP address Docker will assign to us.
+          network.host: 0.0.0.0
+          # Setting network.host to a non-loopback address enables the annoying bootstrap checks. "Single-node" mode disables them again.
+          # Implicitly done if ".singleNode" is set to "true".
+          # discovery.type: single-node
+          # Start OpenSearch Security Demo Configuration
+          # WARNING: revise all the lines below before you go into production
+          plugins:
+            security:
+              ssl:
+                transport:
+                  pemcert_filepath: esnode.pem
+                  pemkey_filepath: esnode-key.pem
+                  pemtrustedcas_filepath: root-ca.pem
+                  enforce_hostname_verification: false
+                http:
+                  enabled: true
+                  pemcert_filepath: esnode.pem
+                  pemkey_filepath: esnode-key.pem
+                  pemtrustedcas_filepath: root-ca.pem
+              allow_unsafe_democertificates: true
+              allow_default_init_securityindex: true
+              authcz:
+                admin_dn:
+                  - CN=kirk,OU=client,O=client,L=test,C=de
+              audit.type: internal_opensearch
+              enable_snapshot_restore_privilege: true
+              check_snapshot_restore_write_privileges: true
+              restapi:
+                roles_enabled: ["all_access", "security_rest_api_access"]
+              system_indices:
+                enabled: true
+                indices:
+                  [
+                    ".opendistro-alerting-config",
+                    ".opendistro-alerting-alert*",
+                    ".opendistro-anomaly-results*",
+                    ".opendistro-anomaly-detector*",
+                    ".opendistro-anomaly-checkpoints",
+                    ".opendistro-anomaly-detection-state",
+                    ".opendistro-reports-*",
+                    ".opendistro-notifications-*",
+                    ".opendistro-notebooks",
+                    ".opendistro-asynchronous-search-response*",
+                  ]
+          ######## End OpenSearch Security Demo Configuration ########
+      credentials:
+        passwordSecretKey: password
+        secretName: null
+        usernameSecretKey: username
+      customAntiAffinity: {}
+      enableServiceLinks: true
+      enabled: false
+      envFrom:
+      - secretRef:
+          name: opensearch-initial-password
+      extraContainers: []
+      extraEnvs:
+      - name: plugins.security.ssl.http.enabled
+        value: "false"
+      extraInitContainers: []
+      extraObjects: []
+      extraVolumeMounts: []
+      extraVolumes: []
+      fsGroup: ""
+      fullnameOverride: ""
+      global:
+        dockerRegistry: ""
+      hostAliases: []
+      httpHostPort: ""
+      httpPort: 9200
+      image:
+        pullPolicy: IfNotPresent
+        repository: opensearchproject/opensearch
+        tag: ""
+      imagePullSecrets: []
+      ingress:
+        annotations: {}
+        enabled: false
+        hosts:
+        - chart-example.local
+        ingressLabels: {}
+        path: /
+        tls: []
+      initResources: {}
+      keystore: []
+      labels: {}
+      lifecycle: {}
+      livenessProbe: {}
+      majorVersion: ""
+      masterService: opensearch-cluster-master
+      masterTerminationFix: false
+      maxUnavailable: 1
+      metricsPort: 9600
+      nameOverride: ""
+      networkHost: 0.0.0.0
+      networkPolicy:
+        create: false
+        http:
+          enabled: false
+      nodeAffinity: {}
+      nodeGroup: master
+      nodeSelector: {}
+      openSearchAnnotations: {}
+      opensearchHome: /usr/share/opensearch
+      opensearchJavaOpts: -Xmx512M -Xms512M
+      opensearchLifecycle: {}
+      persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        enableInitChown: true
+        enabled: true
+        labels:
+          enabled: false
+        size: 10Gi
+      plugins:
+        enabled: false
+        installList: []
+      podAffinity: {}
+      podAnnotations: {}
+      podManagementPolicy: Parallel
+      podSecurityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      podSecurityPolicy:
+        create: false
+        name: ""
+        spec:
+          fsGroup:
+            rule: RunAsAny
+          privileged: true
+          runAsUser:
+            rule: RunAsAny
+          seLinux:
+            rule: RunAsAny
+          supplementalGroups:
+            rule: RunAsAny
+          volumes:
+          - secret
+          - configMap
+          - persistentVolumeClaim
+          - emptyDir
+      priorityClassName: ""
+      protocol: https
+      rbac:
+        automountServiceAccountToken: false
+        create: false
+        serviceAccountAnnotations: {}
+        serviceAccountName: ""
+      readinessProbe:
+        failureThreshold: 3
+        periodSeconds: 5
+        tcpSocket:
+          port: 9200
+        timeoutSeconds: 3
+      replicas: 3
+      resources:
+        requests:
+          cpu: 1
+          memory: 1Gi
+      roles:
+      - master
+      - ingest
+      - data
+      - remote_cluster_client
+      schedulerName: ""
+      secretMounts: []
+      securityConfig:
+        config:
+          data: {}
+          dataComplete: true
+          securityConfigSecret: ""
+        enabled: true
+        path: /usr/share/opensearch/config/opensearch-security
+      securityContext:
+        capabilities:
+          drop:
+          - ALL
+        runAsNonRoot: true
+        runAsUser: 1000
+      service:
+        annotations: {}
+        externalTrafficPolicy: ""
+        headless:
+          annotations: {}
+        httpPortName: http
+        labels: {}
+        labelsHeadless: {}
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        metricsPortName: metrics
+        nodePort: ""
+        transportPortName: transport
+        type: ClusterIP
+      sidecarResources: {}
+      singleNode: true
+      startupProbe:
+        failureThreshold: 30
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        tcpSocket:
+          port: 9200
+        timeoutSeconds: 3
+      sysctl:
+        enabled: false
+      sysctlInit:
+        enabled: false
+      sysctlVmMaxMapCount: 262144
+      terminationGracePeriod: 120
+      tolerations: []
+      topologySpreadConstraints: []
+      transportHostPort: ""
+      transportPort: 9300
+      updateStrategy: RollingUpdate
     openshift:
       runWithRestrictedSCC: false
     ordinals:
@@ -398,6 +702,62 @@ data:
           storageClassName: null
           volumeName: null
         subPath: null
+---
+# Source: bitbucket/charts/opensearch/templates/service.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: opensearch-cluster-master
+  labels:
+    helm.sh/chart: opensearch-2.19.0
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "2.13.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: opensearch-cluster-master
+  annotations:
+    {}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9200
+  - name: transport
+    protocol: TCP
+    port: 9300
+---
+# Source: bitbucket/charts/opensearch/templates/service.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: opensearch-cluster-master-headless
+  labels:
+    helm.sh/chart: opensearch-2.19.0
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "2.13.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: opensearch-cluster-master
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None # This is needed for statefulset hostnames like opensearch-0 to resolve
+  # Create endpoints also if the related pod isn't ready
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+  ports:
+  - name: http
+    port: 9200
+  - name: transport
+    port: 9300
+  - name: metrics
+    port: 9600
 ---
 # Source: bitbucket/templates/service-jmx.yaml
 apiVersion: v1
@@ -531,6 +891,174 @@ spec:
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
 ---
+# Source: bitbucket/charts/opensearch/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: opensearch-cluster-master
+  labels:
+    helm.sh/chart: opensearch-2.19.0
+    app.kubernetes.io/name: opensearch
+    app.kubernetes.io/instance: unittest-bitbucket
+    app.kubernetes.io/version: "2.13.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: opensearch-cluster-master
+  annotations:
+    majorVersion: "2"
+spec:
+  serviceName: opensearch-cluster-master-headless
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opensearch
+      app.kubernetes.io/instance: unittest-bitbucket
+  replicas: 1
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      name: opensearch-cluster-master
+    spec:
+      accessModes:
+      - "ReadWriteOnce"
+      resources:
+        requests:
+          storage: "10Gi"
+  template:
+    metadata:
+      name: "opensearch-cluster-master"
+      labels:
+        helm.sh/chart: opensearch-2.19.0
+        app.kubernetes.io/name: opensearch
+        app.kubernetes.io/instance: unittest-bitbucket
+        app.kubernetes.io/version: "2.13.0"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: opensearch-cluster-master
+      annotations:
+        configchecksum: fdd3f2fba51315033ec4774942812a7d6cab02199bfa4fa398e06727c4e8867
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      automountServiceAccountToken: false
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                  - unittest-bitbucket
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - opensearch
+      terminationGracePeriodSeconds: 120
+      volumes:
+      - name: config
+        configMap:
+          name: opensearch-cluster-master-config
+      - emptyDir: {}
+        name: config-emptydir
+      enableServiceLinks: true
+      initContainers:
+      - name: fsgroup-volume
+        image: "busybox:latest"
+        imagePullPolicy: "IfNotPresent"
+        command: ['sh', '-c']
+        args:
+          - 'chown -R 1000:1000 /usr/share/opensearch/data'
+        securityContext:
+          runAsUser: 0
+        resources:
+          {}
+        volumeMounts:
+          - name: "opensearch-cluster-master"
+            mountPath: /usr/share/opensearch/data
+      - name: configfile
+        image: "opensearchproject/opensearch:2.13.0"
+        imagePullPolicy: "IfNotPresent"
+        command:
+        - sh
+        - -c
+        - |
+          #!/usr/bin/env bash
+          cp -r /tmp/configfolder/*  /tmp/config/
+        resources:
+          {}
+        volumeMounts:
+          - mountPath: /tmp/config/
+            name: config-emptydir
+          - name: config
+            mountPath: /tmp/configfolder/opensearch.yml
+            subPath: opensearch.yml
+      containers:
+      - name: "opensearch"
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1000
+        image: "opensearchproject/opensearch:2.13.0"
+        imagePullPolicy: "IfNotPresent"
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 5
+          tcpSocket:
+            port: 9200
+          timeoutSeconds: 3
+        startupProbe:
+          failureThreshold: 30
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: 9200
+          timeoutSeconds: 3
+        ports:
+        - name: http
+          containerPort: 9200
+        - name: transport
+          containerPort: 9300
+        - name: metrics
+          containerPort: 9600
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+        env:
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.seed_hosts
+          value: "opensearch-cluster-master-headless"
+        - name: cluster.name
+          value: "opensearch-cluster"
+        - name: network.host
+          value: "0.0.0.0"
+        - name: OPENSEARCH_JAVA_OPTS
+          value: "-Xmx512M -Xms512M"
+        - name: node.roles
+          value: "master,ingest,data,remote_cluster_client,"
+        - name: discovery.type
+          value: "single-node"
+        - name: plugins.security.ssl.http.enabled
+          value: "false"
+        envFrom:
+        - secretRef:
+            name: opensearch-initial-password
+        volumeMounts:
+        - name: "opensearch-cluster-master"
+          mountPath: /usr/share/opensearch/data
+        - name: config-emptydir
+          mountPath: /usr/share/opensearch/config/opensearch.yml
+          subPath: opensearch.yml
+---
 # Source: bitbucket/templates/statefulset-mesh.yaml
 apiVersion: apps/v1
 kind: StatefulSet
@@ -557,7 +1085,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 04f7b61a2d2a711b87cbe33e19395c7b7fcf8601aaa25d1aa1d6d774147ca9b2
+        checksum/config-jvm: 248cbe28a81a1b191a30497da39f62c8bde309693ab3d71791ffbaf20297ca25
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -680,7 +1208,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: e6c57dfdc0f8ca8074541aecd331a70d7b6fc3bfbdc706ecab8addc51fba5e50
+        checksum/config-jvm: 058360f31a3c7207a47a46e8f9a1c39ab23beaed0bef4d05810f68290e708971
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
