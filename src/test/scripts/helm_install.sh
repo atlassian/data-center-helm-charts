@@ -304,7 +304,6 @@ check_for_jq
 setup
 bootstrap_nfs
 bootstrap_database
-# bootstrap_elasticsearch
 download_dependencies
 package_product_helm_chart
 package_functest_helm_chart
