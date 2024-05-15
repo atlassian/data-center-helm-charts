@@ -33,7 +33,7 @@ class OpenSearchInstallTest {
     }
 
     private static KubeClient client;
-    private static String esIngressBase;
+    private static String osIngressBase;
 
     @BeforeAll
     static void initKubeClient() {
@@ -41,7 +41,7 @@ class OpenSearchInstallTest {
 
         // See helm_install.sh for where this host is generated.
         final var ingressDomain = getIngressDomain(client.getClusterType());
-        esIngressBase = "https://" + getRelease() + "-opensearch-cluster-master-0."+ingressDomain;
+        osIngressBase = "https://" + getRelease() + "-opensearch-cluster-master-0."+ingressDomain;
     }
 
     @Test
@@ -56,14 +56,14 @@ class OpenSearchInstallTest {
     }
 
     @Test
-    void elasticSearchBeingUsed() {
+    void openSearchBeingUsed() {
         int retries = 120; // It might take a little while to propagate.
         while (retries > 0) {
             try {
                 // Relies on the backdoor ingress controller installed by helm_install.sh.
                 // If this changes an alternative would be to use the fabric8 client ExecWatch/ExecListener to
                 // invoke curl from a pod.
-                final var indexURL = esIngressBase + "/_cat/indices?format=json";
+                final var indexURL = osIngressBase + "/_cat/indices?format=json";
                 when().get(indexURL).then()
                         .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
             } catch (Exception e) {
