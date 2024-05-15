@@ -26,14 +26,14 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.hamcrest.Matchers.*;
 import static test.postinstall.Utils.*;
 
-@EnabledIf("isESDeployed")
-class ElasticSearchInstallTest {
-    static boolean isESDeployed() {
-        return productIs(Product.bitbucket) && esInstalled();
+@EnabledIf("isOSDeployed")
+class OpenSearchInstallTest {
+    static boolean isOSDeployed() {
+        return productIs(Product.bitbucket);
     }
 
     private static KubeClient client;
-    private static String esIngressBase;
+    private static String osIngressBase;
 
     @BeforeAll
     static void initKubeClient() {
@@ -41,13 +41,13 @@ class ElasticSearchInstallTest {
 
         // See helm_install.sh for where this host is generated.
         final var ingressDomain = getIngressDomain(client.getClusterType());
-        esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0."+ingressDomain;
+        osIngressBase = "https://" + getRelease() + "-opensearch-cluster-master-0."+ingressDomain;
     }
 
     @Test
-    void elasticSearchIsRunning() {
-        var esSetName = getRelease() + "-" + "elasticsearch-master";
-        client.forEachPodOfStatefulSet(esSetName, pod -> {
+    void openSearchIsRunning() {
+        var osSetName = "opensearch-cluster-master";
+        client.forEachPodOfStatefulSet(osSetName, pod -> {
             final var podPhase = pod.getStatus().getPhase();
             assertThat(podPhase)
                     .describedAs("Pod %s should be running", pod.getMetadata().getName())
@@ -56,14 +56,14 @@ class ElasticSearchInstallTest {
     }
 
     @Test
-    void elasticSearchBeingUsed() {
+    void openSearchBeingUsed() {
         int retries = 120; // It might take a little while to propagate.
         while (retries > 0) {
             try {
                 // Relies on the backdoor ingress controller installed by helm_install.sh.
                 // If this changes an alternative would be to use the fabric8 client ExecWatch/ExecListener to
                 // invoke curl from a pod.
-                final var indexURL = esIngressBase + "/_cat/indices?format=json";
+                final var indexURL = osIngressBase + "/_cat/indices?format=json";
                 when().get(indexURL).then()
                         .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
             } catch (Exception e) {

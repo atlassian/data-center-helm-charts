@@ -33,8 +33,11 @@ bitbucket:
       requests:
         memory: 3G
 
-  elasticSearch:
-    baseUrl: http://${helm.release.prefix}-bitbucket-elasticsearch-master:9200
+opensearch:
+  install: true
+  extraEnvs:
+    - name: plugins.security.disabled
+      value: "true"
 
 monitoring:
   exposeJmxMetrics: true
