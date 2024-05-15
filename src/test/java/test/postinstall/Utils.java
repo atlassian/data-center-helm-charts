@@ -82,14 +82,12 @@ final class Utils {
                 var prefix = fileParameters.get("RELEASE_PREFIX").get();
                 var ns = fileParameters.get("TARGET_NAMESPACE").get();
                 var helmReleaseName = Array.of(prefix, productName).mkString("-");
-                var esInstalled = fileParameters.getOrElse("ELASTICSEARCH_DEPLOY", "false");
 
                 return HashMap.of(
                         "product", productName,
                         "prefix", prefix,
                         "release", helmReleaseName,
-                        "ns", ns,
-                        "es", esInstalled
+                        "ns", ns
                 );
 
             } else {
@@ -97,8 +95,7 @@ final class Utils {
                         "product", System.getProperty("helmProduct"),
                         "prefix", System.getProperty("helmProduct"),
                         "release", System.getProperty("helmRelease"),
-                        "ns", System.getProperty("namespace"),
-                        "es", "false"
+                        "ns", System.getProperty("namespace")
                 );
             }
         } catch (IOException e) {
@@ -125,10 +122,6 @@ final class Utils {
         } catch(Exception _e) {
             return false;
         }
-    }
-
-    static boolean esInstalled() {
-        return Boolean.valueOf(helmParameters.getOrElse("es", "false"));
     }
 
     static String getIngressDomain(ClusterType cluster) {

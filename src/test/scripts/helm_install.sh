@@ -142,26 +142,6 @@ bootstrap_database() {
   fi
 }
 
-bootstrap_elasticsearch() {
-  echo "Task $((tasknum+=1)) - Bootstrapping Elasticsearch cluster." >&2
-  if grep -qi elasticsearch: ${chartValueFiles} /dev/null || grep -qi 'elasticsearch[.]' <<<"$EXTRA_PARAMETERS"; then
-      HAS_ES_CONFIG=1
-  fi
-  if [[ "$ELASTICSEARCH_DEPLOY" != "true" || -z "$HAS_ES_CONFIG"  ]]; then
-      echo "No Elasticsearch chart or config defined, skipping provisioning"
-      return
-  fi
-  ES_CHART_VALUES="$THISDIR/../infrastructure/elasticsearch/elasticsearch-values.yaml"
-
-  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
-     "$ELASTICSEARCH_RELEASE_NAME" \
-     --set nameOverride=${PRODUCT_RELEASE_NAME}-elasticsearch \
-     --values $ES_CHART_VALUES \
-     --version "$ELASTICSEARCH_CHART_VERSION" \
-     $HELM_DEBUG_OPTION \
-     elastic/elasticsearch >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
-}
-
 # Download required dependencies for the product chart
 download_dependencies() {
   echo "Task $((tasknum+=1)) - Downloading dependencies for the helm chart ${CHART_SRC_PATH}." >&2
@@ -222,9 +202,9 @@ package_functest_helm_chart() {
   for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1)); do
     backdoor_services+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
   done
-  if [[ ! -z "$ES_CHART_VALUES" ]]; then
-    echo "Elasticsearch is being deployed, adding a backdoor"
-    backdoor_services+="- ${PRODUCT_RELEASE_NAME}-elasticsearch-master-0${NEWLINE}"
+  if [[ "$PRODUCT_NAME" == "bitbucket" ]]; then
+    echo "OpenSearch is being deployed, adding a backdoor"
+    backdoor_services+="- opensearch-cluster-master-0${NEWLINE}"
   fi
   EXPOSE_NODES_FILE="${LOG_DOWNLOAD_DIR}/${PRODUCT_RELEASE_NAME}-service-expose.yaml"
 
@@ -324,7 +304,7 @@ check_for_jq
 setup
 bootstrap_nfs
 bootstrap_database
-bootstrap_elasticsearch
+# bootstrap_elasticsearch
 download_dependencies
 package_product_helm_chart
 package_functest_helm_chart

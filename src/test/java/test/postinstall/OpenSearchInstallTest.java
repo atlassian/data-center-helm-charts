@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.hamcrest.Matchers.*;
 import static test.postinstall.Utils.*;
 
-@EnabledIf("isESDeployed")
-class ElasticSearchInstallTest {
-    static boolean isESDeployed() {
-        return productIs(Product.bitbucket) && esInstalled();
+@EnabledIf("isOSDeployed")
+class OpenSearchInstallTest {
+    static boolean isOSDeployed() {
+        return productIs(Product.bitbucket);
     }
 
     private static KubeClient client;
@@ -41,13 +41,13 @@ class ElasticSearchInstallTest {
 
         // See helm_install.sh for where this host is generated.
         final var ingressDomain = getIngressDomain(client.getClusterType());
-        esIngressBase = "https://" + getRelease() + "-elasticsearch-master-0."+ingressDomain;
+        esIngressBase = "https://" + getRelease() + "-opensearch-cluster-master-0."+ingressDomain;
     }
 
     @Test
-    void elasticSearchIsRunning() {
-        var esSetName = getRelease() + "-" + "elasticsearch-master";
-        client.forEachPodOfStatefulSet(esSetName, pod -> {
+    void openSearchIsRunning() {
+        var osSetName = "opensearch-cluster-master";
+        client.forEachPodOfStatefulSet(osSetName, pod -> {
             final var podPhase = pod.getStatus().getPhase();
             assertThat(podPhase)
                     .describedAs("Pod %s should be running", pod.getMetadata().getName())
