@@ -55,7 +55,7 @@ jobs:
           # download the latest
           URL=$(curl -fsSL https://api.releases.hashicorp.com/v1/releases/terraform/latest | jq -r '.builds[] | select((.arch=="amd64") and (.os=="linux")).url')
           curl -s -o /tmp/terraform.zip ${URL}
-          echo yes | unzip /tmp/terraform.zip -d /usr/local/bin/
+          echo A | unzip /tmp/terraform.zip -d /usr/local/bin/
           rm /tmp/terraform.zip          
           # check the latest version
           terraform -version
