@@ -48,11 +48,25 @@ deploy_app() {
   sed -i "s/DC_APP_REPLACEME/${DC_APP}/g" ../../../test/config/kind/common-values.yaml
   sed -i "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ../../../test/config/kind/common-values.yaml
 
+  # OpenSearch does not runs well in a tiny MicroShift instance freezing the API,
+  # so we're disabling internal OpenSearch for Bitbucket when tested in MicroShift
+  if [ "${DC_APP}" == "bitbucket" ] && [ -n "${OPENSHIFT_VALUES}" ]; then
+    echo "[INFO]: Disabling internal OpenSearch for Bitbucket"
+    DISABLE_BITBUCKET_SEARCH="--set bitbucket.additionalEnvironmentVariables[0].name=SEARCH_ENABLED --set bitbucket.additionalEnvironmentVariables[0].value=\"false\""
+  fi
+
+  if [ -z "${OPENSHIFT_VALUES}" ]; then
+    ENABLE_OPENSEARCH="--set opensearch.enabled=true --set opensearch.install=true  --set opensearch.resources.cpu=10m --set opensearch.resources.memory=10Mi --set opensearch.persistence.size=1Gi"
+  fi
+   
   helm upgrade --install ${DC_APP} ./ \
                -f ../../../test/config/kind/common-values.yaml ${OPENSHIFT_VALUES} \
                -n atlassian \
                --wait --timeout=360s \
-               --debug ${IMAGE_OVERRIDE}
+               --debug \
+               ${IMAGE_OVERRIDE} \
+               ${DISABLE_BITBUCKET_SEARCH} \
+               ${ENABLE_OPENSEARCH}
 
   if [ ${DC_APP} == "bamboo" ]; then
     if [[ -n "${OPENSHIFT_VALUES}" ]]; then
@@ -69,11 +83,8 @@ deploy_app() {
                  --wait --timeout=180s --debug
   fi
 
-  if [ "${DC_APP}" == "bitbucket" ]; then
-
-    if [[ -n "${OPENSHIFT_VALUES}" ]]; then
-      OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
-    fi
+  # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
+  if [ "${DC_APP}" == "bitbucket" ] && [ -z "${OPENSHIFT_VALUES}" ]; then
     echo "[INFO]: Deploying Bitbucket Mirror..."
     helm upgrade --install bitbucket-mirror ./ \
                  --set bitbucket.applicationMode="mirror" \
