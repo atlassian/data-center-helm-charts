@@ -22,3 +22,27 @@ nodes:
   - containerPort: 443
     hostPort: 443
     protocol: TCP
+  # map registry NodePort to host port to be able to
+  # build and push images to an internal registry
+  - containerPort: 32767
+    hostPort: 5001
+    protocol: TCP
+  # this is required for Bitbucket tests to map ssh NodePort to 2222 hostPort
+  - containerPort: 30007
+    hostPort: 2222
+    protocol: TCP
+  # these are so called backdoor services that are used
+  # in dc functional tests when nodes have to be directly accessed
+  - containerPort: 30008
+    hostPort: 81
+    protocol: TCP
+  - containerPort: 30009
+    hostPort: 82
+    protocol: TCP
+containerdConfigPatches:
+# configure container runtime to trust an insecure registry
+- |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."172.17.0.1:5001"]
+      endpoint = ["http://172.17.0.1:5001"]
+    [plugins."io.containerd.grpc.v1.cri".registry.configs."172.17.0.1:5001".tls]
+      insecure_skip_verify = true
