@@ -50,7 +50,7 @@ DC_APP_REPLACEME:
   # Jira func tests will setup Jira, and during this time status will report 500
   # to avoid marking container as non-ready, let's bump failureThreshold for a readinessProbe
   readinessProbe:
-    failureThreshold: 50
+    failureThreshold: 100
 
   # Bitbucket functional tests expect 3 Mesh nodes,
   # we're enabling auto-registration jobs to make sure Mesh nodes register with the server
