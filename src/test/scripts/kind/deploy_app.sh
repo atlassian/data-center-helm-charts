@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# deploy non ephemeral Postgres, delete PVC and PV when the StatefulSet is deleted
+# See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
 deploy_postgres() {
   echo "[INFO]: Installing Postgres Helm chart"
   helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
@@ -8,14 +10,26 @@ deploy_postgres() {
        --set auth.username="${DC_APP}" \
        --set auth.password="${DC_APP}pwd" \
        --set fullnameOverride="postgres" \
-       --set persistence.enabled=false \
-       --version="11.6.2" \
+       --set primary.persistentVolumeClaimRetentionPolicy.enabled="true" \
+       --set primary.persistentVolumeClaimRetentionPolicy.whenDeleted="Delete" \
+       --set image.tag="14.3.0-debian-10-r20" \
+       --version="15.5.1" \
        --wait --timeout=120s \
        -n atlassian
+  
+  # db-init file is used in Jira HA tests only
+  if [ -f "${DB_INIT_SCRIPT_FILE}" ]; then
+    echo "[INFO]: DB init file '${DB_INIT_SCRIPT_FILE}' found. Initializing the database"
+    kubectl cp ${DB_INIT_SCRIPT_FILE} postgres-0:/tmp/db-init-script.sql -n atlassian
+    kubectl exec postgres-0 -n atlassian -- /bin/bash -c "psql postgresql://${DC_APP}:${DC_APP}pwd@localhost:5432/${DC_APP} -f /tmp/db-init-script.sql"
+  fi
 }
 
+# not all of the secrets are used by all products
+# Jira won't use license secret and only Bitbucket will use admin secret
 create_secrets() {
   echo "[INFO]: Creating db, admin and license secrets"
+  DC_APP_CAPITALIZED="$(echo ${DC_APP} | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')"
 
   kubectl create secret generic ${DC_APP}-db-creds \
           --from-literal=username="${DC_APP}" \
@@ -23,32 +37,51 @@ create_secrets() {
           -n atlassian
   kubectl create secret generic ${DC_APP}-admin \
           --from-literal=username="admin" \
-          --from-literal=password="${DC_APP}pwd" \
-          --from-literal=displayName="${DC_APP}" \
+          --from-literal=password="admin" \
+          --from-literal=displayName="${DC_APP_CAPITALIZED}" \
           --from-literal=emailAddress="${DC_APP}@example.com" \
           -n atlassian
   kubectl create secret generic ${DC_APP}-app-license \
           --from-literal=license=${LICENSE} \
           -n atlassian
-
-  openssl req -x509 -newkey rsa:4096 -keyout key.pem -out mycert.crt -days 365 -nodes -subj '/CN=localhost'
-  kubectl create secret generic certificate --from-file=mycert.crt=mycert.crt -n atlassian
+  
+  # this is to test additionalCertificates init container
+  openssl req -x509 -newkey rsa:4096 -keyout /tmp/key.pem -out /tmp/mycert.crt -days 365 -nodes -subj '/CN=localhost'
+  kubectl create secret generic certificate --from-file=mycert.crt=/tmp/mycert.crt -n atlassian
 }
 
 deploy_app() {
-  cd src/main/charts/${DC_APP}
   helm repo add atlassian-data-center https://atlassian.github.io/data-center-helm-charts
   helm repo add opensearch https://opensearch-project.github.io/helm-charts/
   helm repo update
-  helm dependency build
+  helm dependency build ./src/main/charts/${DC_APP}
+  
+  # All apps except Jira have postgresql DB type
   DB_TYPE="postgresql"
   if [ ${DC_APP} == "jira" ]; then
     DB_TYPE="postgres72"
   fi
-  sed -i "s/DC_APP_REPLACEME/${DC_APP}/g" ../../../test/config/kind/common-values.yaml
-  sed -i "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ../../../test/config/kind/common-values.yaml
+  
+  TMP_DIR=$(mktemp -d)
+  echo "Copying values file to ${TMP_DIR}"
 
-  # OpenSearch does not runs well in a tiny MicroShift instance freezing the API,
+  # copy commmon values template to a tmp location and replace placeholders
+  cp src/test/config/kind/common-values.yaml ${TMP_DIR}/common-values.yaml
+  
+  # sed works differently on different platforms
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    SED_COMMAND="sed -i ''"
+  else
+    SED_COMMAND="sed -i"
+  fi
+  
+  # replace application name, database type and display name (important for Bitbucket functional tests)
+  DC_APP_CAPITALIZED="$(echo ${DC_APP} | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')"
+  ${SED_COMMAND} "s/DC_APP_REPLACEME/${DC_APP}/g" ${TMP_DIR}/common-values.yaml
+  ${SED_COMMAND} "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ${TMP_DIR}/common-values.yaml
+  ${SED_COMMAND} "s/DISPLAY_NAME/${DC_APP_CAPITALIZED}/g" ${TMP_DIR}/common-values.yaml
+  
+  # OpenSearch does not run well in a tiny MicroShift instance, freezing the API,
   # so we're disabling internal OpenSearch for Bitbucket when tested in MicroShift
   if [ "${DC_APP}" == "bitbucket" ] && [ -n "${OPENSHIFT_VALUES}" ]; then
     echo "[INFO]: Disabling internal OpenSearch for Bitbucket"
@@ -56,26 +89,34 @@ deploy_app() {
   fi
 
   if [ -z "${OPENSHIFT_VALUES}" ]; then
-    ENABLE_OPENSEARCH="--set opensearch.enabled=true --set opensearch.install=true  --set opensearch.resources.cpu=10m --set opensearch.resources.memory=10Mi --set opensearch.persistence.size=1Gi"
+    ENABLE_OPENSEARCH="--set opensearch.enabled=true,opensearch.install=true,opensearch.resources.requests.cpu=10m,opensearch.resources.requests.memory=10Mi,opensearch.persistence.size=1Gi"
   fi
-   
-  helm upgrade --install ${DC_APP} ./ \
-               -f ../../../test/config/kind/common-values.yaml ${OPENSHIFT_VALUES} \
+  
+  # use a pre-created PVC and hostPath PV instead of NFS volume when running on arm64 machines
+  # it is safe to do so because KinD is a single node k8s cluster
+  if [ -n "${HOSTPATH_PV}" ]; then
+    SHARED_HOME_HOSTPATH="--set volumes.sharedHome.persistentVolumeClaim.create=false,volumes.sharedHome.customVolume.persistentVolumeClaim.claimName=hostpath-shared-home-pvc"
+  fi
+
+  # deploy helm chart and set overrides if any
+  helm upgrade --install ${DC_APP} ./src/main/charts/${DC_APP} \
+               -f ${TMP_DIR}/common-values.yaml ${OPENSHIFT_VALUES} \
                -n atlassian \
                --wait --timeout=360s \
                --debug \
                ${IMAGE_OVERRIDE} \
+               ${SHARED_HOME_HOSTPATH} \
                ${DISABLE_BITBUCKET_SEARCH} \
-               ${ENABLE_OPENSEARCH}
+               ${ENABLE_OPENSEARCH} \
+               ${MISC_OVERRIDES}
 
   if [ ${DC_APP} == "bamboo" ]; then
     if [[ -n "${OPENSHIFT_VALUES}" ]]; then
       OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
     fi
     echo "[INFO]: Deploying Bamboo agent..."
-    cd ../bamboo-agent
-    helm dependency build
-    helm upgrade --install bamboo-agent ./ -n atlassian \
+    helm dependency build ./src/main/charts/bamboo-agent
+    helm upgrade --install bamboo-agent ./src/main/charts/bamboo-agent -n atlassian \
                  --set agent.server=bamboo.atlassian.svc.cluster.local \
                  --set agent.resources.container.requests.cpu=20m \
                  --set agent.resources.container.requests.memory=10Mi \
@@ -86,7 +127,7 @@ deploy_app() {
   # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
   if [ "${DC_APP}" == "bitbucket" ] && [ -z "${OPENSHIFT_VALUES}" ]; then
     echo "[INFO]: Deploying Bitbucket Mirror..."
-    helm upgrade --install bitbucket-mirror ./ \
+    helm upgrade --install bitbucket-mirror ./src/main/charts/${DC_APP} \
                  --set bitbucket.applicationMode="mirror" \
                  --set bitbucket.mirror.upstreamUrl="http://bitbucket" \
                  --set ingress.host="bitbucket-mirror" \
@@ -157,7 +198,10 @@ verify_metrics() {
 
 verify_dashboards() {
   echo "[INFO]: Verifying ConfigMaps with Grafana dashboards"
-  DASHBOARDS_COUNT=$(find src/main/charts/"${DC_APP}"/grafana-dashboards -name 'bitbucket-mesh' -prune -o -type f -print | wc -l)
+  if [ ${DC_APP} != "bitbucket" ]; then
+    PRUNE_MESH_DASHBOARDS="-name 'bitbucket-mesh' -prune -o"
+  fi
+  DASHBOARDS_COUNT=$(find src/main/charts/"${DC_APP}"/grafana-dashboards ${PRUNE_MESH_DASHBOARDS} -type f -print | wc -l)
   CONFIGMAPS_COUNT=$(kubectl get cm -l=grafana_dashboard=dc_monitoring -n atlassian --no-headers -o custom-columns=":metadata.name" | wc -l)
   if [ "${DASHBOARDS_COUNT}" -ne "${CONFIGMAPS_COUNT}" ]; then
     echo "[ERROR]: Count does not match! Dashboards count is ${DASHBOARDS_COUNT}, configmaps count is ${CONFIGMAPS_COUNT}"
@@ -193,4 +237,20 @@ verify_openshift_analytics() {
     echo "[ERROR]: Analytics.json does not have isRunOnOpenshift as true."
     exit 1
   fi
+}
+
+# create 2 NodePort services to expose each DC pod, required for functional tests
+# where communication between nodes and cache replication is tested
+create_backdoor_services() {
+  TMP_DIR=$(mktemp -d)
+  echo "Copying svc template file to ${TMP_DIR}"
+  cp src/test/config/kind/backdoor-svc.yaml ${TMP_DIR}/backdoor-svc.yaml  
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    SED_COMMAND="sed -i ''"
+  else
+    SED_COMMAND="sed -i"
+  fi
+  ${SED_COMMAND} "s/DC_APP_REPLACEME/${DC_APP}/g" ${TMP_DIR}/backdoor-svc.yaml
+  echo "[INFO]: Creating NodePort (30008 and 30009) services for each ${DC_APP} dc node"
+  kubectl apply -f ${TMP_DIR}/backdoor-svc.yaml
 }

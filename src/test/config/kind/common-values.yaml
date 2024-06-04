@@ -1,19 +1,22 @@
 DC_APP_REPLACEME:
   # claim little resources as there are limitations in GitHub actions
+  # we're not setting any limits, so containers will use as much resources as necessary
   resources:
     container:
       requests:
         cpu: 20m
         memory: 1G
   # we want to test scaling to 2 and making sure nodes have joined the cluster
+  # this is also required for DC functional tests
   clustering:
     enabled: true
 
   # this works for Bitbucket and Bamboo only which support unattended setup
   sysadminCredentials:
     secretName: DC_APP_REPLACEME-admin
-  displayName: DC_APP_REPLACEME
+  displayName: DISPLAY_NAME
 
+  # license secret will be ignored in Jira
   license:
     secretName: DC_APP_REPLACEME-app-license
     secretKey: license
@@ -24,6 +27,44 @@ DC_APP_REPLACEME:
   # check if init container not failing when importing a custom crt into the default Java keystore
   additionalCertificates:
     secretName: certificate
+
+  # Bitbucket Only
+  sshService:
+    enabled: true
+    type: NodePort
+
+  # 2222 is a mapped Bitbucket SSH port
+  additionalEnvironmentVariables:
+    - name: PLUGIN_SSH_BASEURL
+      value: ssh://bitbucket.172.17.0.1.nip.io:2222
+  
+  # non existing props will be ignored, so it's safe to set them for all products
+  # these extra sys properties are mostly for the functional tests
+  additionalJvmArgs:
+    - -Dupm.plugin.upload.enabled=true
+    - -Dfeature.getting.started.page=false
+    - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
+    - -Djira.websudo.is.disabled=true
+    - -Datlassian.allow.insecure.url.parameter.login=true
+
+  # Jira func tests will setup Jira, and during this time status will report 500
+  # to avoid marking container as non-ready, let's bump failureThreshold for a readinessProbe
+  readinessProbe:
+    failureThreshold: 100
+
+  # Bitbucket functional tests expect 3 Mesh nodes,
+  # we're enabling auto-registration jobs to make sure Mesh nodes register with the server
+  mesh:
+    enabled: true
+    nodeAutoRegistration: true
+    setByDefault: true
+    resources:
+      container:
+        requests:
+          cpu: "10m"
+          memory: "1G"
+    image:
+      tag: "latest"
 
 database:
   type: DB_TYPE_REPLACEME
@@ -47,6 +88,7 @@ volumes:
       # this is the default storageclass name created when deploying the provisioner
       storageClassName: nfs-client
 
+# just testing templating annotations
 podAnnotations:
   annotation: "{{ \"podOfTucuxis\" | upper }}"
   quote: "true"
@@ -58,6 +100,9 @@ ingress:
   create: true
   host: localhost
   https: false
+  proxyConnectTimeout: 300
+  proxyReadTimeout: 300
+  proxySendTimeout: 300
 
 monitoring:
   exposeJmxMetrics: true
@@ -75,3 +120,6 @@ synchrony:
         memory: 1G
   additionalCertificates:
     secretName: certificate
+
+opensearch:
+  install: true
