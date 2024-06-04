@@ -27,6 +27,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  selector:
-    matchLabels:
-      app: hostpath-shared-home
+
