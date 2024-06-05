@@ -120,6 +120,3 @@ synchrony:
         memory: 1G
   additionalCertificates:
     secretName: certificate
-
-opensearch:
-  install: true
