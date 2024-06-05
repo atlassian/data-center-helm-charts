@@ -85,7 +85,7 @@ deploy_app() {
   # so we're disabling internal OpenSearch for Bitbucket when tested in MicroShift
   if [ "${DC_APP}" == "bitbucket" ] && [ -n "${OPENSHIFT_VALUES}" ]; then
     echo "[INFO]: Disabling internal OpenSearch and Bitbucket Mesh for Bitbucket"
-    DISABLE_BITBUCKET_SEARCH_MESH="--set bitbucket.additionalEnvironmentVariables[0].name=SEARCH_ENABLED --set bitbucket.additionalEnvironmentVariables[0].value=\"false\" --set bitbucket.mesh.enabled=\"false\""
+    DISABLE_BITBUCKET_SEARCH_MESH="--set bitbucket.additionalEnvironmentVariables[0].name=SEARCH_ENABLED --set bitbucket.additionalEnvironmentVariables[0].value=\"false\" --set bitbucket.mesh.enabled=false"
   fi
 
   if [ -z "${OPENSHIFT_VALUES}" ]; then
