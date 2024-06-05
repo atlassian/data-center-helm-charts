@@ -84,8 +84,8 @@ deploy_app() {
   # OpenSearch does not run well in a tiny MicroShift instance, freezing the API,
   # so we're disabling internal OpenSearch for Bitbucket when tested in MicroShift
   if [ "${DC_APP}" == "bitbucket" ] && [ -n "${OPENSHIFT_VALUES}" ]; then
-    echo "[INFO]: Disabling internal OpenSearch for Bitbucket"
-    DISABLE_BITBUCKET_SEARCH="--set bitbucket.additionalEnvironmentVariables[0].name=SEARCH_ENABLED --set bitbucket.additionalEnvironmentVariables[0].value=\"false\""
+    echo "[INFO]: Disabling internal OpenSearch and Bitbucket Mesh for Bitbucket"
+    DISABLE_BITBUCKET_SEARCH_MESH="--set bitbucket.additionalEnvironmentVariables[0].name=SEARCH_ENABLED --set bitbucket.additionalEnvironmentVariables[0].value=\"false\" --set bitbucket.mesh.enabled=\"false\""
   fi
 
   if [ -z "${OPENSHIFT_VALUES}" ]; then
@@ -107,7 +107,7 @@ deploy_app() {
                --debug \
                ${IMAGE_OVERRIDE} \
                ${SHARED_HOME_HOSTPATH} \
-               ${DISABLE_BITBUCKET_SEARCH} \
+               ${DISABLE_BITBUCKET_SEARCH_MESH} \
                ${ENABLE_OPENSEARCH} \
                ${MISC_OVERRIDES}
 
