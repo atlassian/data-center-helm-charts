@@ -89,6 +89,7 @@ deploy_app() {
   fi
 
   if [ -z "${OPENSHIFT_VALUES}" ]; then
+    echo "[INFO]: Setting external OpenSearch values"
     ENABLE_OPENSEARCH="--set opensearch.enabled=true,opensearch.install=true,opensearch.resources.requests.cpu=10m,opensearch.resources.requests.memory=10Mi,opensearch.persistence.size=1Gi"
   fi
   
