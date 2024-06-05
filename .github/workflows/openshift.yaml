@@ -109,7 +109,7 @@ jobs:
 
       - name: Deploy ${{inputs.dc_app}}
         run: |
-          export OPENSHIFT_VALUES="-f ../../../test/config/openshift/openshift.yaml --set ${DC_APP}.resources.container.requests.cpu=20m --set ${DC_APP}.resources.container.requests.memory=5Mi --set synchrony.resources.container.requests.cpu=20m --set synchrony.resources.container.requests.memory=5Mi"
+          export OPENSHIFT_VALUES="-f ./src/test/config/kind/openshift/openshift.yaml --set ${DC_APP}.resources.container.requests.cpu=20m --set ${DC_APP}.resources.container.requests.memory=5Mi --set synchrony.resources.container.requests.cpu=20m --set synchrony.resources.container.requests.memory=5Mi"
           source src/test/scripts/kind/deploy_app.sh
           deploy_app
 
