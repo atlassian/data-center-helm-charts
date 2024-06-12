@@ -416,7 +416,7 @@ needs.
 
 ##### Building your own image
 
-* Clone the Atlassian repository at<https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/>
+* Clone the Atlassian repository at <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/>
 * Modify or replace the [Jinja](https://jinja.palletsprojects.com/) templates
   under `config`; _NOTE_: The files must have the `.j2` extensions. However you
   don't have to use template variables if you don't wish.
