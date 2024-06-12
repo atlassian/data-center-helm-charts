@@ -20,6 +20,8 @@ Learn more about Confluence Server: <https://www.atlassian.com/software/confluen
 
 You can find the repository with the Dockerfile at <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server>
 
+DockerHub repository: <https://hub.docker.com/r/atlassian/confluence>
+
 **Use docker version >= 20.10.10**
 
 ## Quick Start
