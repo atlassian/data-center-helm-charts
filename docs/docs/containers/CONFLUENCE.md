@@ -18,7 +18,9 @@ This Docker container makes it easy to get an instance of Confluence up and runn
 
 Learn more about Confluence Server: <https://www.atlassian.com/software/confluence>
 
-You can find the repository for this Dockerfile at <https://hub.docker.com/r/atlassian/confluence-server>
+You can find the repository with the Dockerfile at <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server>
+
+DockerHub repository: <https://hub.docker.com/r/atlassian/confluence>
 
 **Use docker version >= 20.10.10**
 
@@ -414,7 +416,7 @@ needs.
 
 ##### Building your own image
 
-* Clone the Atlassian repository at https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+* Clone the Atlassian repository at <https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/>
 * Modify or replace the [Jinja](https://jinja.palletsprojects.com/) templates
   under `config`; _NOTE_: The files must have the `.j2` extensions. However you
   don't have to use template variables if you don't wish.
