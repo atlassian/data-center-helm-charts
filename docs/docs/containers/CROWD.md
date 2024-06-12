@@ -241,13 +241,13 @@ If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temu
 
 Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in `eclipse-temurin` tags. If that's the case, see [Building your own image](#building-your-own-image).
 
+
 ## Supported architectures
 
-Currently, the Atlassian Docker images are built for the `linux/amd64` target
-platform; we do not have other architectures on our roadmap at this
-point. However, the Dockerfiles and support tooling have now had all
+Currently, Crowd container images are built for the `linux/amd64` and `linux/arm64` target platforms.
+The Dockerfiles and support tooling have now had all
 architecture-specific components removed, so if necessary it is possible to
-build images for any platform supported by Docker.
+build images for any platform supported by OCI-compliant container runtimes.
 
 ### Building on the target architecture
 
