@@ -379,7 +379,7 @@ The following variables are all must all be supplied if using this feature:
    * `h2` - for evaluation needs only
    * `mssql`
    * `mysql`
-   * `oracle12c`
+   * `oracle`
    * `postgresql`
 
 ???+ note "MySQL or Oracle JDBC drivers" 
