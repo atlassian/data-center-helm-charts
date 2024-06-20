@@ -34,8 +34,8 @@ data:
                    acceptCount="{{ .Values.jira.tomcatConfig.acceptCount | default "10" }}"
                    secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.jira.tomcatConfig.secure }}"
                    scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.jira.tomcatConfig.scheme }}"
-                   proxyName="{{ .Values.ingress.host | default .Values.jira.tomcatConfig.proxyName }}"
-                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.jira.tomcatConfig.proxyPort }}"
+                   proxyName="{{ .Values.jira.tomcatConfig.proxyName | default .Values.ingress.host  }}"
+                   proxyPort="{{ .Values.jira.tomcatConfig.proxyPort | default (ternary "443" "80" .Values.ingress.https)  }}"
 
                    relaxedPathChars="[]|"
                    relaxedQueryChars="[]|{}^\`&quot;&lt;&gt;"
