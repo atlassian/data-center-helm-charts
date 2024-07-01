@@ -34,8 +34,8 @@ data:
                    acceptCount="{{ .Values.bamboo.tomcatConfig.acceptCount | default "10" }}"
                    secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.bamboo.tomcatConfig.secure }}"
                    scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.bamboo.tomcatConfig.scheme }}"
-                   proxyName="{{ .Values.ingress.host | default .Values.bamboo.tomcatConfig.proxyName }}"
-                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.bamboo.tomcatConfig.proxyPort }}"
+                   proxyName="{{ .Values.bamboo.tomcatConfig.proxyName | default .Values.ingress.host  }}"
+                   proxyPort="{{ .Values.bamboo.tomcatConfig.proxyPort | default (ternary "443" "80" .Values.ingress.https)  }}"
 
                    {{- if .Values.bamboo.tomcatConfig.address }}
                    address="{{ .Values.bamboo.tomcatConfig.address }}"
@@ -192,7 +192,7 @@ data:
                 <param-name>cookie.encoding</param-name>
                 <param-value>BAM</param-value>
             </init-param>
-            
+
             <init-param>
                 <param-name>autologin.cookie.age</param-name>
                 <param-value>{{ .Values.bamboo.seraphConfig.autoLoginCookieAge | default "1209600" }}</param-value>

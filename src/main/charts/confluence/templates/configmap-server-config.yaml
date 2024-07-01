@@ -27,8 +27,8 @@ data:
                    URIEncoding="{{ .Values.confluence.tomcatConfig.uriEncoding | default "UTF-8" }}"
                    secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.confluence.tomcatConfig.secure }}"
                    scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.confluence.tomcatConfig.scheme }}"
-                   proxyName="{{ .Values.ingress.host | default .Values.confluence.tomcatConfig.proxyName }}"
-                   proxyPort="{{ default (ternary "443" "80" .Values.ingress.https) .Values.confluence.tomcatConfig.proxyPort }}"
+                   proxyName="{{ .Values.confluence.tomcatConfig.proxyName | default .Values.ingress.host  }}"
+                   proxyPort="{{ .Values.confluence.tomcatConfig.proxyPort | default (ternary "443" "80" .Values.ingress.https)  }}"
                    maxHttpHeaderSize="{{ .Values.confluence.tomcatConfig.maxHttpHeaderSize | default "8192" }}" />
 
         <Engine name="Standalone"
