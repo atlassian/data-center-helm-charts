@@ -1127,8 +1127,7 @@ bitbucket:
   # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.
   #
-  additionalJvmArgs:
-    - -Xlog:gc*:file=${BITBUCKET_HOME}/log/gc-$(date '+%m%d%H%M%Y.%S').log:time,uptime:filecount=5,filesize=20M
+  additionalJvmArgs: []
 
   # -- Specifies a list of additional Java libraries that should be added to the
   # Bitbucket container. Each item in the list should specify the name of the volume
