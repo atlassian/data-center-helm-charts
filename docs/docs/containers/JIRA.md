@@ -466,6 +466,14 @@ as a non-root user.
     When using this property, the values to sensitive environment variables will be available in clear text on the 
     host OS. As such, this data may be exposed to users or processes running on the host OS.
 
+* `ATL_JIRA_CLEAR_PLUGIN_CACHE`
+  
+  When set to true, plugin cache at `${JIRA_HOME}/plugins/.bundled-plugins` and `${JIRA_HOME}/plugins/.osgi-plugins`
+  will be deleted before Jira starts. Once set, make sure to unset this environment variable if you don't want Jira plugin cache to be flushed
+  every time the container starts.
+  
+  See: [How to clear Jira's plugin cache](https://confluence.atlassian.com/jirakb/how-to-clear-jira-s-plugin-cache-1157468195.html).
+
 ### Advanced Configuration
 
 As mentioned at the top of this section, the settings from the environment are
