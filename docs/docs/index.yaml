@@ -2,6 +2,37 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Make it possible to override proxy settings (#822)"
+        - "Update appVersions for DC apps (#823)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.3
+    created: "2024-07-07T21:51:05.885533471Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 60346e33d6a29cd5eb2f879a38f517eba95a35d71a730152eacffcd53b232e9e
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.20.1/bamboo-1.20.1.tgz
+    version: 1.20.1
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#798)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -1291,6 +1322,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#823)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.3
+    created: "2024-07-07T21:51:06.16349741Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: b8fade050e819c0508dc1c77bbb31324b958ecc9f72f55455765ecb8e20110ff
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.20.1/bamboo-agent-1.20.1.tgz
+    version: 1.20.1
+  - annotations:
       artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#798)"
         - "Make server protocol configurable (#794)"
@@ -2528,6 +2588,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#823)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.19.5
+    created: "2024-07-07T21:51:06.344744987Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: e54fec2c00eed31b5ea1c0ddffbcacbe622b69f511197dadadc1277cd9ff3922
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.20.1/bitbucket-1.20.1.tgz
+    version: 1.20.1
   - annotations:
       artifacthub.io/changes: '- "Optionally install OpenSearch helm chart with Bitbucket
         (#804)"'
@@ -4383,6 +4476,41 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#825)"
+        - "Make it possible to override proxy settings (#822)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.12
+    created: "2024-07-07T21:51:06.715370286Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: f502837b11c78b3ff4f8d368ca8df898b3cc6219684a65d0c18c8b767d37aadc
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.20.1/confluence-1.20.1.tgz
+    version: 1.20.1
+  - annotations:
+      artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#803)"
         - "Set atlassian.logging.cloud.enabled system property to false if a custom FluentD config is used (#796)"
       artifacthub.io/containsSecurityUpdates: "true"
@@ -6168,6 +6296,37 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#825)"
+        - "Make it possible to override proxy settings (#822)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 6.0.0
+    created: "2024-07-07T21:51:06.915857443Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 9738c2f96e825898295a56b3fc678fa166cd56d0563b4a2a8c7a4d087c8c36b1
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.20.1/crowd-1.20.1.tgz
+    version: 1.20.1
+  - annotations:
       artifacthub.io/changes: '- "Set atlassian.logging.cloud.enabled system property
         to false if a custom FluentD config is used (#796)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -7763,6 +7922,38 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#825)"
+        - "Make it possible to override proxy settings (#822)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.11
+    created: "2024-07-07T21:51:07.108706779Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: ee5790a3086605d0ee0f316107731a17fb2efc85a4912696cb9706a9a8e47f99
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.20.1/jira-1.20.1.tgz
+    version: 1.20.1
   - annotations:
       artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#803)"
@@ -9498,4 +9689,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2024-05-13T22:07:17.424024083Z"
+generated: "2024-07-07T21:51:07.109853134Z"
