@@ -12,6 +12,8 @@ deploy_postgres() {
        --set fullnameOverride="postgres" \
        --set primary.persistentVolumeClaimRetentionPolicy.enabled="true" \
        --set primary.persistentVolumeClaimRetentionPolicy.whenDeleted="Delete" \
+       --set primary.resources.requests.memory=256Mi \
+       --set primary.resources.limits.memory=1024Mi \
        --set image.tag="14.3.0-debian-10-r20" \
        --version="15.5.1" \
        --wait --timeout=120s \
