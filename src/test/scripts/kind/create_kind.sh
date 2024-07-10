@@ -8,7 +8,7 @@ export KIND_VERSION="${KIND_VERSION:-v0.23.0}"
 
 if [ -z "${SKIP_DOWNLOAD_KIND}" ]; then
   echo "[INFO]: Downloading KinD ${KIND_VERSION}"
-  curl -Lo ./kind "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-$(uname)-amd64"
+  curl -sLo ./kind "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-$(uname)-amd64"
   chmod +x ./kind
   if [ "$(id -u)" -ne 0 ]; then
     echo "[INFO]: User is not root. Attempting to move kind to PATH with sudo"
