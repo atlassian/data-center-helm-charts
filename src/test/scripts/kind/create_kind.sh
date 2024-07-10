@@ -10,8 +10,14 @@ if [ -z "${SKIP_DOWNLOAD_KIND}" ]; then
   echo "[INFO]: Downloading KinD ${KIND_VERSION}"
   curl -Lo ./kind "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-$(uname)-amd64"
   chmod +x ./kind
-  SUDO=$(which sudo)
-  ${SUDO} mv ./kind /usr/local/bin/kind
+  if [ "$(id -u)" -ne 0 ]; then
+    echo "[INFO]: User is not root. Attempting to move kind to PATH with sudo"
+    SUDO=$(which sudo)
+    ${SUDO} mv ./kind /usr/local/bin/kind 
+  else
+    echo "[INFO]: User is root. Copying kind to PATH"
+    mv ./kind /usr/local/bin/kind
+  fi
 fi
 
 echo "[INFO]: Using config file src/test/config/kind/kind-config.yml"
