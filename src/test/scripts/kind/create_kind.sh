@@ -20,9 +20,17 @@ if [ -z "${SKIP_DOWNLOAD_KIND}" ]; then
   fi
 fi
 
-echo "[INFO]: Using config file src/test/config/kind/kind-config.yml"
+if command -v kind >/dev/null 2>&1; then
+  echo "[INFO]: Installed KinD: $(kind version)"
+  echo "[INFO]: Kubernetes version: ${K8S_VERSION}"
+  echo "[INFO]: Creating 'atl-kind' cluster using config file src/test/config/kind/kind-config.yml"
+  kind create cluster --name=atl-kind \
+                      --image=kindest/node:${K8S_VERSION} \
+                      --config=src/test/config/kind/kind-config.yml \
+                      --wait=5m
+else
+  echo "[ERROR]: Failed to successfully install KinD. Exiting"
+  exit 1
+fi
 
-kind create cluster --name=atl-kind \
-                    --image=kindest/node:${K8S_VERSION} \
-                    --config=src/test/config/kind/kind-config.yml \
-                    --wait=5m
+
