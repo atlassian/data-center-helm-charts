@@ -922,7 +922,7 @@ confluence:
     enableLookups: "false"
     protocol: "org.apache.coyote.http11.Http11NioProtocol"
     redirectPort: "8443"
-    acceptCount: "10"
+    acceptCount: "100"
     debug: "0"
     uriEncoding: "UTF-8"
     # secure is retrieved from ingress.https value

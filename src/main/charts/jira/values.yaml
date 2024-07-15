@@ -760,7 +760,7 @@ jira:
     enableLookups: "false"
     protocol: "HTTP/1.1"
     redirectPort: "8443"
-    acceptCount: "10"
+    acceptCount: "100"
     # secure is retrieved from ingress.https value
     secure:
     # scheme is set depending on ingress.https value (http if false, https if true)
