@@ -179,7 +179,7 @@ data:
         secretName: adminTestSecret
         usernameSecretKey: adminTestUsernameKey
       tomcatConfig:
-        acceptCount: "10"
+        acceptCount: "100"
         address: null
         bambooEncryptionKey: null
         clientAuth: null

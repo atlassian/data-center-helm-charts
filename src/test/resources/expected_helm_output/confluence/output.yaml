@@ -175,7 +175,7 @@ data:
         initialDelaySeconds: 60
         periodSeconds: 5
       tomcatConfig:
-        acceptCount: "10"
+        acceptCount: "100"
         connectionTimeout: "20000"
         customServerXml: ""
         debug: "0"

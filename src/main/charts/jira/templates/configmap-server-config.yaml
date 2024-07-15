@@ -31,7 +31,7 @@ data:
                    enableLookups="{{ .Values.jira.tomcatConfig.enableLookups | default "false" }}"
                    protocol="{{ .Values.jira.tomcatConfig.protocol | default "HTTP/1.1" }}"
                    redirectPort="{{ .Values.jira.tomcatConfig.redirectPort | default "8443" }}"
-                   acceptCount="{{ .Values.jira.tomcatConfig.acceptCount | default "10" }}"
+                   acceptCount="{{ .Values.jira.tomcatConfig.acceptCount | default "100" }}"
                    secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.jira.tomcatConfig.secure }}"
                    scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.jira.tomcatConfig.scheme }}"
                    proxyName="{{ .Values.jira.tomcatConfig.proxyName | default .Values.ingress.host  }}"
