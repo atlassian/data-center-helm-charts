@@ -22,7 +22,7 @@ data:
                    enableLookups="{{ .Values.confluence.tomcatConfig.enableLookups | default "false" }}"
                    protocol="{{ .Values.confluence.tomcatConfig.protocol | default "org.apache.coyote.http11.Http11NioProtocol" }}"
                    redirectPort="{{ .Values.confluence.tomcatConfig.redirectPort | default "8443" }}"
-                   acceptCount="{{ .Values.confluence.tomcatConfig.acceptCount | default "10" }}"
+                   acceptCount="{{ .Values.confluence.tomcatConfig.acceptCount | default "100" }}"
                    debug="{{ .Values.confluence.tomcatConfig.debug | default "0" }}"
                    URIEncoding="{{ .Values.confluence.tomcatConfig.uriEncoding | default "UTF-8" }}"
                    secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.confluence.tomcatConfig.secure }}"

@@ -31,7 +31,7 @@ data:
                    enableLookups="{{ .Values.bamboo.tomcatConfig.enableLookups | default "false" }}"
                    protocol="{{ .Values.bamboo.tomcatConfig.protocol | default "HTTP/1.1" }}"
                    redirectPort="{{ .Values.bamboo.tomcatConfig.redirectPort | default "8443" }}"
-                   acceptCount="{{ .Values.bamboo.tomcatConfig.acceptCount | default "10" }}"
+                   acceptCount="{{ .Values.bamboo.tomcatConfig.acceptCount | default "100" }}"
                    secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.bamboo.tomcatConfig.secure }}"
                    scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.bamboo.tomcatConfig.scheme }}"
                    proxyName="{{ .Values.bamboo.tomcatConfig.proxyName | default .Values.ingress.host  }}"
