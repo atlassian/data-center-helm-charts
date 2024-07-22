@@ -17,7 +17,7 @@ echo "[INFO]: Deploy Nginx ingress controller"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 kubectl wait --for=condition=ready pod \
         --selector=app.kubernetes.io/component=controller \
-        --timeout=180s \
+        --timeout=300s \
         -n ingress-nginx
 
 # this is for local runs, because existing nfs server images does not run on arm64 platforms
