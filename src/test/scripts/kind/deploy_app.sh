@@ -124,7 +124,9 @@ deploy_app() {
                  --set agent.resources.container.requests.cpu=20m \
                  --set agent.resources.container.requests.memory=10Mi \
                 ${OPENSHIFT_VALUES} \
-                 --wait --timeout=180s --debug
+                ${AGENT_OVERRIDES} \
+                --wait --timeout=180s \
+                --debug
   fi
 
   # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
