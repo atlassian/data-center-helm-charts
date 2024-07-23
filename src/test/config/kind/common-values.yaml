@@ -37,9 +37,6 @@ DC_APP_REPLACEME:
   additionalEnvironmentVariables:
     - name: PLUGIN_SSH_BASEURL
       value: ssh://bitbucket.172.17.0.1.nip.io:2222
-      # this is for Bamboo to use the right login url
-    - name: BUILD_NUMBER
-      value: "100100"
   
   # non existing props will be ignored, so it's safe to set them for all products
   # these extra sys properties are mostly for the functional tests
