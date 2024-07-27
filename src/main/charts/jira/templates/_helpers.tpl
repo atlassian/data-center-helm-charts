@@ -152,7 +152,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 {{ define "jira.volumeMounts" }}
 - name: local-home
   mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
-- name: local-home
+- name: local-home-logs
   mountPath: {{ .Values.jira.accessLog.mountPath | quote }}
   subPath: {{ .Values.jira.accessLog.localHomeSubPath | quote }}
 - name: shared-home
