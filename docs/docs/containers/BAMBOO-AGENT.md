@@ -25,14 +25,14 @@ include a Bamboo server.
 
 ## Quick Start
 
-For the `BAMBOO_HOME` directory that is used to store the repository data (amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume.
+For the `BAMBOO_AGENT_HOME` directory that is used to store the repository data (amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume.
 
 To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
 
 Run an Agent:
 ```shell
 docker volume create --name bambooAgentVolume
-docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooAgentVolume:/var/atlassian/application-data/bamboo --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
+docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooAgentVolume:/var/atlassian/application-data/bamboo-agent --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
 ```
 !!! success "The Bamboo remote agent is now available to be approved in your Bamboo administration."
 
@@ -130,7 +130,7 @@ RUN /bamboo-update-capability.sh "system.git.executable" /usr/bin/git
 
 ## Building your own image
 
-* Clone the Atlassian repository at https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/
+* Clone the Atlassian repository at <https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base>
 * Modify or replace the [Jinja](https://jinja.palletsprojects.com/) templates
   under `config`; _NOTE_: The files must have the `.j2` extensions. However you
   don't have to use template variables if you don't wish.
@@ -176,7 +176,7 @@ Also, if you have been mounting and running any custom scripts in the container,
 
 ## Support
 
-For product support, go to [support.atlassian.com](https://support.atlassian.com/)
+For product support, go to <https://support.atlassian.com>
 
 You can also visit the [Atlassian Data Center](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes)
 forum for discussion on running Atlassian Data Center products in containers.

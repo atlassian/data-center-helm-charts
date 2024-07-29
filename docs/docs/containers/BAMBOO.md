@@ -11,7 +11,7 @@
 
 Bamboo is a continuous integration and deployment tool that ties automated builds, tests and releases together in a single workflow.
 
-Learn more about Bamboo: [https://www.atlassian.com/software/bamboo](https://www.atlassian.com/software/bamboo)
+Learn more about Bamboo: <https://www.atlassian.com/software/bamboo>
 
 This Docker container makes it easy to get an instance of Bamboo up and running.
 
@@ -108,7 +108,7 @@ can be controlled via the below environment variables.
    also supported for backwards compatibility.
 
 The following Tomcat/Catalina options are also supported. For more information,
-see https://tomcat.apache.org/tomcat-9.0-doc/config/index.html.
+see <https://tomcat.apache.org/tomcat-9.0-doc/config/index.html>.
 
 * `ATL_TOMCAT_MGMT_PORT` (default: 8007)
 * `ATL_TOMCAT_MAXTHREADS` (default: 150)
@@ -331,7 +331,7 @@ required values via the environment. NOTE: This only work with Bamboo versions >
 
 * `ATL_LICENSE`
 
-   The licence to supply. Licenses can be generated at https://my.atlassian.com/
+   The licence to supply. Licenses can be generated at <https://my.atlassian.com>.
 
 * `ATL_BASE_URL`
 
@@ -462,7 +462,7 @@ For evaluations you can use the built-in database that will store its files in t
 
 If you're using an external database, you can configure Bamboo to make a backup automatically each night. This will back up the current state, including the database to the `bambooVolume` docker volume, which can then be archived. Alternatively you can backup the database separately, and continue to create a backup archive of the docker volume to back up the Bamboo Home directory.
 
-Read more about data recovery and backups: [https://confluence.atlassian.com/display/BAMBOO/Data+and+backups](https://confluence.atlassian.com/display/BAMBOO/Data+and+backups)
+Read more about data recovery and backups: <https://confluence.atlassian.com/display/BAMBOO/Data+and+backups>
 
 ## Shutdown
 
@@ -519,7 +519,7 @@ If for some reason you need a different version, see "Building your own image".
 
 ## Building your own image
 
-* Clone the Atlassian repository at https://bitbucket.org/atlassian-docker/docker-bamboo-server/
+* Clone the Atlassian repository at <https://bitbucket.org/atlassian-docker/docker-bamboo-server>
 * Modify or replace the [Jinja](https://jinja.palletsprojects.com/) templates
   under `config`; _NOTE_: The files must have the `.j2` extensions. However, you
   don't have to use template variables if you don't wish.
@@ -598,7 +598,7 @@ docker exec -it my_container /bin/bash
 
 ## Support
 
-For product support, go to [support.atlassian.com](https://support.atlassian.com/)
+For product support, go to <https://support.atlassian.com>
 
 You can also visit the [Atlassian Data Center](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes)
 forum for discussion on running Atlassian Data Center products in containers.
