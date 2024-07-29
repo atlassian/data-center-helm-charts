@@ -32,7 +32,7 @@ To get started you can use a data volume, or named volumes. In this example we'l
 Run an Agent:
 ```shell
 docker volume create --name bambooAgentVolume
-docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooAgentVolume:/var/atlassian/application-data/bambo-agent --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
+docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooAgentVolume:/var/atlassian/application-data/bamboo-agent --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
 ```
 !!! success "The Bamboo remote agent is now available to be approved in your Bamboo administration."
 
