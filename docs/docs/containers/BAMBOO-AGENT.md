@@ -25,14 +25,14 @@ include a Bamboo server.
 
 ## Quick Start
 
-For the `BAMBOO_HOME` directory that is used to store the repository data (amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume.
+For the `BAMBOO_AGENT_HOME` directory that is used to store the repository data (amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume.
 
 To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
 
 Run an Agent:
 ```shell
 docker volume create --name bambooAgentVolume
-docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooAgentVolume:/var/atlassian/application-data/bamboo --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
+docker run -e BAMBOO_SERVER=http://bamboo.mycompany.com/agentServer/ -v bambooAgentVolume:/var/atlassian/application-data/bambo-agent --name="bambooAgent" --hostname="bambooAgent" -d atlassian/bamboo-agent-base
 ```
 !!! success "The Bamboo remote agent is now available to be approved in your Bamboo administration."
 
