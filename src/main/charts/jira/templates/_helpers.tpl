@@ -152,7 +152,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
 {{ define "jira.volumeMounts" }}
 - name: local-home
   mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
-- name: local-home-logs
+- name: logs
   mountPath: {{ .Values.jira.accessLog.mountPath | quote }}
   subPath: {{ .Values.jira.accessLog.localHomeSubPath | quote }}
 - name: shared-home
@@ -286,6 +286,8 @@ For each additional plugin declared, generate a volume mount that injects that l
 - name: temp
   emptyDir: {}
 - name: work
+  emptyDir: {}
+- name: logs
   emptyDir: {}
 {{- end }}
 {{- if or .Values.jira.seraphConfig.generateByHelm .Values.openshift.runWithRestrictedSCC }}
