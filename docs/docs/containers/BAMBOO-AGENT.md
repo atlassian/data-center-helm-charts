@@ -130,7 +130,7 @@ RUN /bamboo-update-capability.sh "system.git.executable" /usr/bin/git
 
 ## Building your own image
 
-* Clone the Atlassian repository at https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base/
+* Clone the Atlassian repository at <https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base>
 * Modify or replace the [Jinja](https://jinja.palletsprojects.com/) templates
   under `config`; _NOTE_: The files must have the `.j2` extensions. However you
   don't have to use template variables if you don't wish.
@@ -176,7 +176,7 @@ Also, if you have been mounting and running any custom scripts in the container,
 
 ## Support
 
-For product support, go to [support.atlassian.com](https://support.atlassian.com/)
+For product support, go to <https://support.atlassian.com>
 
 You can also visit the [Atlassian Data Center](https://community.atlassian.com/t5/Atlassian-Data-Center-on/gh-p/DC_Kubernetes)
 forum for discussion on running Atlassian Data Center products in containers.
