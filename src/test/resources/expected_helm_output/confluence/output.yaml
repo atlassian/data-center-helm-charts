@@ -312,6 +312,8 @@ data:
         create: true
       roleBinding:
         create: true
+    statefulSet:
+      updateStrategy: {}
     synchrony:
       additionalCertificates:
         customCmd: null
@@ -531,6 +533,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
@@ -610,6 +613,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: f3e06517d2f5a9ad3f17140e443aeec6e7cef638abd89a4718bd90923eb9a37c
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

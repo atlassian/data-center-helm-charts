@@ -369,6 +369,8 @@ data:
         create: true
       roleBinding:
         create: true
+    statefulSet:
+      updateStrategy: {}
     testPods:
       affinity: {}
       annotations: {}
@@ -566,10 +568,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 3
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      partition: 0
   podManagementPolicy: OrderedReady
   serviceName: unittest-bitbucket-mesh
   selector:
@@ -579,6 +577,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 181b3e6cefd7ac8f0db885749fc9ff0807fac4112d79b112676977cdac8a8970
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -688,10 +687,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      partition: 0
   podManagementPolicy: OrderedReady
   serviceName: unittest-bitbucket
   selector:
@@ -701,6 +696,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: 5afa854bf2e6923ea0fdd790b78f94f108f6bd8352de4bd53bae0ef176b4f6ec
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
