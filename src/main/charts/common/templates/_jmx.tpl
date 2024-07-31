@@ -29,7 +29,7 @@ Jmx init container
 - name: fetch-jmx-exporter
   image: {{ .Values.monitoring.jmxExporterImageRepo}}:{{ .Values.monitoring.jmxExporterImageTag}}
   command: ["cp"]
-  args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "{{ .Values.volumes.sharedHome.mountPath }}"]
+  args: ["{{ .Values.monitoring.jmxExporterInitContainer.jmxJarLocation | default "/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar" }}", "{{ .Values.volumes.sharedHome.mountPath }}"]
   {{- if .Values.monitoring.jmxExporterInitContainer.resources }}
   resources:
   {{- with .Values.monitoring.jmxExporterInitContainer.resources }}
