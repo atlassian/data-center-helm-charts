@@ -6,6 +6,12 @@ metadata:
   labels:
     {{- include "synchrony.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.statefulSet.updateStrategy }}
+  {{- with .Values.statefulSet.updateStrategy }}
+  updateStrategy:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
   {{ if .Values.ordinals.enabled }}
   ordinals:
     start: {{ .Values.ordinals.start }}

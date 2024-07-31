@@ -304,6 +304,8 @@ data:
       create: true
       imagePullSecrets: []
       name: null
+    statefulSet:
+      updateStrategy: {}
     testPods:
       affinity: {}
       annotations: {}
@@ -438,6 +440,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config-jvm: e742d2253278aa23591596b959247bb63f0b8c32a3bb9a411cd0f5d2946fe5ab
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
