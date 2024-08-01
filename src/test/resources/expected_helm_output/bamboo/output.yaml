@@ -390,6 +390,7 @@ spec:
   ports:
     - port: 9999
       targetPort: jmx
+      appProtocol: http
       name: jmx
   selector:
     app.kubernetes.io/name: bamboo

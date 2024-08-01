@@ -440,6 +440,7 @@ spec:
   ports:
     - port: 9999
       targetPort: jmx
+      appProtocol: http
       name: jmx
     - port: 9998
       targetPort: 9998
@@ -469,6 +470,7 @@ spec:
       name: mesh
     - port: 9999
       targetPort: jmx
+      appProtocol: http
       name: jmx
   selector:
     statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-0
@@ -494,6 +496,7 @@ spec:
       name: mesh
     - port: 9999
       targetPort: jmx
+      appProtocol: http
       name: jmx
   selector:
     statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-1
@@ -519,6 +522,7 @@ spec:
       name: mesh
     - port: 9999
       targetPort: jmx
+      appProtocol: http
       name: jmx
   selector:
     statefulset.kubernetes.io/pod-name: unittest-bitbucket-mesh-2
