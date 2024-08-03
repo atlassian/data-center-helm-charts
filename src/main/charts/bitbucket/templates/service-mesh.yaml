@@ -21,6 +21,7 @@ spec:
     {{- if .Values.monitoring.exposeJmxMetrics}}
     - port: {{ .Values.monitoring.jmxExporterPort}}
       targetPort: jmx
+      appProtocol: http
       name: jmx
     {{- end }}
   selector:
