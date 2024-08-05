@@ -14,6 +14,7 @@ spec:
   ports:
     - port: {{ .Values.monitoring.jmxExporterPort}}
       targetPort: jmx
+      appProtocol: http
       name: jmx
   selector:
   {{- include "common.labels.selectorLabels" . | nindent 4 }}

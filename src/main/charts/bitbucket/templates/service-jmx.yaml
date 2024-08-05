@@ -14,6 +14,7 @@ spec:
   ports:
     - port: {{ .Values.monitoring.jmxExporterPort}}
       targetPort: jmx
+      appProtocol: http
       name: jmx
     - port: 9998
       targetPort: 9998
