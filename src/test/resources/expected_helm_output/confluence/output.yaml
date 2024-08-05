@@ -312,8 +312,6 @@ data:
         create: true
       roleBinding:
         create: true
-    statefulSet:
-      updateStrategy: {}
     synchrony:
       additionalCertificates:
         customCmd: null
@@ -367,6 +365,7 @@ data:
       schedulerName: null
       tolerations: []
     tolerations: []
+    updateStrategy: {}
     volumes:
       additional: []
       additionalSynchrony: []

@@ -42,6 +42,12 @@ ordinals:
   #
   start: 0
 
+# -- StatefulSet update strategy. When unset defaults to Rolling update.
+# See: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+#
+updateStrategy: {}
+  # type: OnDelete
+
 # Image configuration
 #
 image:
@@ -1615,9 +1621,3 @@ opensearch:
          # -- If using a pre-created secret, make sure to change secret name to match opensearch.credentials.existingSecretRef.name
          #
          name: opensearch-initial-password
-
-# -- StatefulSet update strategy. When unset defaults to Rolling update. See: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
-#
-statefulSet:
-  updateStrategy: {}
-    # type: OnDelete
