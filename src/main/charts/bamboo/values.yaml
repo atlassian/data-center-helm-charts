@@ -986,6 +986,12 @@ monitoring:
   #
   jmxExporterInitContainer:
 
+    # -- The location of the JMX exporter jarfile in the JMX exporter image
+    # Leave blank for default bitnami image
+    #
+    jmxJarLocation:
+
+
     # -- Whether to run JMX exporter init container as root to copy JMX exporter binary to shared home volume.
     # Set to false if running containers as root is not allowed in the cluster.
     #

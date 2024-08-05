@@ -274,6 +274,7 @@ data:
       jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
+        jmxJarLocation: null
         resources: {}
         runAsRoot: true
       jmxExporterPort: 9999
