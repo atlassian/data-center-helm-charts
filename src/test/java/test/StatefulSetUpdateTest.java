@@ -27,7 +27,7 @@ public class StatefulSetUpdateTest {
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void sts_on_delete_update(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "statefulSet.updateStrategy.type", "OnDelete"
+                "updateStrategy.type", "OnDelete"
         ));
         StatefulSet sts = resources.getStatefulSet(product.getHelmReleaseName());
         JsonNode updateStrategy = sts.getSpec().path("updateStrategy").path("type");
@@ -47,7 +47,7 @@ public class StatefulSetUpdateTest {
     @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
     void sts_on_delete_update_synchrony(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "statefulSet.updateStrategy.type", "OnDelete",
+                "updateStrategy.type", "OnDelete",
                 "synchrony.enabled", "true"
         ));
         StatefulSet sts = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
@@ -70,7 +70,7 @@ public class StatefulSetUpdateTest {
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void sts_on_delete_update_mesh(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "statefulSet.updateStrategy.type", "OnDelete",
+                "updateStrategy.type", "OnDelete",
                 "bitbucket.mesh.enabled", "true"
         ));
         StatefulSet sts = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");

@@ -271,8 +271,6 @@ data:
         roleArn: null
       imagePullSecrets: []
       name: null
-    statefulSet:
-      updateStrategy: {}
     testPods:
       affinity: {}
       annotations: {}
@@ -285,6 +283,7 @@ data:
       schedulerName: null
       tolerations: []
     tolerations: []
+    updateStrategy: {}
     volumes:
       additional: []
       localHome:

@@ -370,8 +370,6 @@ data:
         create: true
       roleBinding:
         create: true
-    statefulSet:
-      updateStrategy: {}
     testPods:
       affinity: {}
       annotations: {}
@@ -384,6 +382,7 @@ data:
       schedulerName: null
       tolerations: []
     tolerations: []
+    updateStrategy: {}
     volumes:
       additional: []
       localHome:

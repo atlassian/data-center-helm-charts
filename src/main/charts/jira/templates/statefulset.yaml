@@ -5,8 +5,8 @@ metadata:
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
-  {{- if .Values.statefulSet.updateStrategy }}
-  {{- with .Values.statefulSet.updateStrategy }}
+  {{- if .Values.updateStrategy }}
+  {{- with .Values.updateStrategy }}
   updateStrategy:
   {{- toYaml . | nindent 4 }}
   {{- end }}

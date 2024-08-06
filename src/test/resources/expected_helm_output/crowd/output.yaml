@@ -251,8 +251,6 @@ data:
       create: true
       imagePullSecrets: []
       name: null
-    statefulSet:
-      updateStrategy: {}
     terminationGracePeriodSeconds: 30
     testPods:
       affinity: {}
@@ -266,6 +264,7 @@ data:
       schedulerName: null
       tolerations: []
     tolerations: []
+    updateStrategy: {}
     volumes:
       additional: []
       localHome:
