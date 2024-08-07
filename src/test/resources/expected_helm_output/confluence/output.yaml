@@ -95,6 +95,8 @@ data:
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
+        initContainer:
+          resources: {}
         secretName: null
       additionalEnvironmentVariables: []
       additionalJvmArgs: []
@@ -316,6 +318,8 @@ data:
     synchrony:
       additionalCertificates:
         customCmd: null
+        initContainer:
+          resources: {}
         secretName: null
       additionalJvmArgs: []
       additionalLibraries: []

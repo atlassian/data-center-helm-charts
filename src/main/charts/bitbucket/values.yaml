@@ -1129,7 +1129,8 @@ bitbucket:
     additionalCertificates:
       secretName:
       customCmd:
-
+      initContainer:
+        resources: {}
   # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.
   #
@@ -1209,6 +1210,8 @@ bitbucket:
   additionalCertificates:
     secretName:
     customCmd:
+    initContainer:
+      resources: {}
 
 # Monitoring
 #

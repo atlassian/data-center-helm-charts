@@ -59,6 +59,10 @@ spec:
             mountPath: /tmp/crt
         command: ["/bin/bash"]
         args: ["-c", {{ include "synchrony.addCrtToKeystoreCmd" . }}]
+        resources:
+        {{- with .Values.synchrony.additionalCertificates.initContainer.resources }}
+        {{- toYaml . | nindent 12 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: synchrony

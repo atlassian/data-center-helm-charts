@@ -1045,6 +1045,8 @@ confluence:
   additionalCertificates:
     secretName:
     customCmd:
+    initContainer:
+      resources: {}
 
 # Monitoring
 #
@@ -1346,6 +1348,8 @@ synchrony:
   additionalCertificates:
     secretName:
     customCmd:
+    initContainer:
+      resources: {}
 
 # Fluentd configuration
 #

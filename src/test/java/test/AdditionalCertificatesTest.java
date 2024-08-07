@@ -203,4 +203,58 @@ public class AdditionalCertificatesTest {
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()+"-synchrony");
         assertThat(statefulSet.getInitContainers().get(0).path("args").path(1)).hasTextEqualTo("echo \"My custom command\"");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_certificates_init_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                product.name() + ".additionalCertificates.secretName", "mycrt",
+                product.name() + ".additionalCertificates.initContainer.resources.requests.memory", "1Gi",
+                product.name() + ".additionalCertificates.initContainer.resources.requests.cpu", "20m",
+                product.name() + ".additionalCertificates.initContainer.resources.limits.memory", "1Gi",
+                product.name() + ".additionalCertificates.initContainer.resources.limits.cpu", "20m"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getInitContainers().get(1).path("resources").path("requests").path("memory")).hasTextEqualTo("1Gi");
+        assertThat(statefulSet.getInitContainers().get(1).path("resources").path("requests").path("cpu")).hasTextEqualTo("20m");
+        assertThat(statefulSet.getInitContainers().get(1).path("resources").path("limits").path("memory")).hasTextEqualTo("1Gi");
+        assertThat(statefulSet.getInitContainers().get(1).path("resources").path("limits").path("cpu")).hasTextEqualTo("20m");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificates_synchrony_init_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalCertificates.secretName", "mycrt",
+                "synchrony.additionalCertificates.initContainer.resources.requests.memory", "1Gi",
+                "synchrony.additionalCertificates.initContainer.resources.requests.cpu", "20m",
+                "synchrony.additionalCertificates.initContainer.resources.limits.memory", "1Gi",
+                "synchrony.additionalCertificates.initContainer.resources.limits.cpu", "20m"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()+"-synchrony");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("requests").path("memory")).hasTextEqualTo("1Gi");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("requests").path("cpu")).hasTextEqualTo("20m");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("limits").path("memory")).hasTextEqualTo("1Gi");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("limits").path("cpu")).hasTextEqualTo("20m");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificates_bitbucket_mesh_init_resources(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".mesh.enabled", "true",
+                product.name() + ".mesh.additionalCertificates.secretName", "mycrt",
+                product.name() + ".mesh.additionalCertificates.initContainer.resources.requests.memory", "1Gi",
+                product.name() + ".mesh.additionalCertificates.initContainer.resources.requests.cpu", "20m",
+                product.name() + ".mesh.additionalCertificates.initContainer.resources.limits.memory", "1Gi",
+                product.name() + ".mesh.additionalCertificates.initContainer.resources.limits.cpu", "20m"        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()+"-mesh");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("requests").path("memory")).hasTextEqualTo("1Gi");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("requests").path("cpu")).hasTextEqualTo("20m");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("limits").path("memory")).hasTextEqualTo("1Gi");
+        assertThat(statefulSet.getInitContainers().get(0).path("resources").path("limits").path("cpu")).hasTextEqualTo("20m");
+    }
 }

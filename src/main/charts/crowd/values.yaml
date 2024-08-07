@@ -451,6 +451,8 @@ crowd:
   additionalCertificates:
     secretName:
     customCmd:
+    initContainer:
+      resources: {}
 
 # Ingress configuration
 #

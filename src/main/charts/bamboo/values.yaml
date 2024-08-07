@@ -973,6 +973,8 @@ bamboo:
   additionalCertificates:
     secretName:
     customCmd:
+    initContainer:
+      resources: {}
 
 # Monitoring
 #

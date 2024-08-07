@@ -27,7 +27,14 @@ DC_APP_REPLACEME:
   # check if init container not failing when importing a custom crt into the default Java keystore
   additionalCertificates:
     secretName: certificate
-
+    initContainer:
+      resources:
+        requests:
+          memory: 1Mi
+          cpu: 1m
+        limits:
+          memory: 100Mi
+          cpu: 1
   # Bitbucket Only
   sshService:
     enabled: true
@@ -37,7 +44,7 @@ DC_APP_REPLACEME:
   additionalEnvironmentVariables:
     - name: PLUGIN_SSH_BASEURL
       value: ssh://bitbucket.172.17.0.1.nip.io:2222
-  
+
   # non existing props will be ignored, so it's safe to set them for all products
   # these extra sys properties are mostly for the functional tests
   additionalJvmArgs:

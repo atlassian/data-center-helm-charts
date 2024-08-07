@@ -870,6 +870,8 @@ jira:
   additionalCertificates:
     secretName:
     customCmd:
+    initContainer:
+      resources: {}
 
 # Monitoring
 #
