@@ -98,6 +98,8 @@ data:
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
+        initContainer:
+          resources: {}
         secretName: null
       additionalEnvironmentVariables: []
       additionalJvmArgs: []

@@ -103,6 +103,8 @@ data:
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
+        initContainer:
+          resources: {}
         secretName: null
       additionalEnvironmentVariables: []
       additionalJvmArgs: []
@@ -142,6 +144,8 @@ data:
       mesh:
         additionalCertificates:
           customCmd: null
+          initContainer:
+            resources: {}
           secretName: null
         additionalEnvironmentVariables: {}
         additionalFiles: null
