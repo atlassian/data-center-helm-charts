@@ -285,12 +285,20 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
-{{- if .Values.bamboo.additionalCertificates.secretName }}
+{{- if or .Values.bamboo.additionalCertificates.secretName .Values.bamboo.additionalCertificates.secretList }}
 - name: keystore
   emptyDir: {}
+{{- if .Values.bamboo.additionalCertificates.secretName }}
 - name: certs
   secret:
     secretName: {{ .Values.bamboo.additionalCertificates.secretName }}
+{{- else }}
+{{- range .Values.bamboo.additionalCertificates.secretList }}
+- name: {{ .name }}
+  secret:
+    secretName: {{ .name }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 - name: helm-values

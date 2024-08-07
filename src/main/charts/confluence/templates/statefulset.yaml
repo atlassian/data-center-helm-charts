@@ -98,15 +98,26 @@ spec:
           command: ["sh", "-c", {{ include "confluence.sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
-        {{- if .Values.confluence.additionalCertificates.secretName }}
+        {{- if or .Values.confluence.additionalCertificates.secretName .Values.confluence.additionalCertificates.secretList }}
         - name: import-certs
           image: {{ include "confluence.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: keystore
               mountPath: /var/ssl
+          {{- if.Values.confluence.additionalCertificates.secretName }}
             - name: certs
               mountPath: /tmp/crt
+          {{- else }}
+          {{- range .Values.confluence.additionalCertificates.secretList }}
+            {{- $secretName := .name }}
+            {{- range .keys }}
+            - name: {{ $secretName }}
+              mountPath: /tmp/crt/{{$secretName}}-{{ . }}
+              subPath: {{ . }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           command: ["/bin/bash"]
           args: ["-c", {{ include "confluence.addCrtToKeystoreCmd" . }}]
           resources:

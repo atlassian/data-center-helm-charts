@@ -86,15 +86,26 @@ spec:
         {{- end }}
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
-        {{- if .Values.bitbucket.additionalCertificates.secretName }}
+        {{- if or .Values.bitbucket.additionalCertificates.secretName .Values.bitbucket.additionalCertificates.secretList }}
         - name: import-certs
           image: {{ include "bitbucket.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: keystore
               mountPath: /var/ssl
+          {{- if.Values.bitbucket.additionalCertificates.secretName }}
             - name: certs
               mountPath: /tmp/crt
+          {{- else }}
+          {{- range .Values.bitbucket.additionalCertificates.secretList }}
+            {{- $secretName := .name }}
+            {{- range .keys }}
+            - name: {{ $secretName }}
+              mountPath: /tmp/crt/{{$secretName}}-{{ . }}
+              subPath: {{ . }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           command: ["/bin/bash"]
           args: ["-c", {{ include "bitbucket.addCrtToKeystoreCmd" . }}]
           resources:
