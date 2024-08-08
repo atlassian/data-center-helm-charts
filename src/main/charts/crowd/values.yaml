@@ -736,6 +736,11 @@ volumes:
       #
       create: false
 
+      # -- Specify the access modes that should be used for the 'shared-home' volume claim.
+      #
+      accessModes:
+        - ReadWriteMany
+
       # -- Specify the name of the 'StorageClass' that should be used for the 'shared-home'
       # volume claim.
       #
