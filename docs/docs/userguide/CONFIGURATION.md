@@ -523,7 +523,7 @@ readinessProbe:
 
 ## :material-certificate: Self Signed Certificates
 
-There are 2 ways to add self-signed certificates to the default Java truststore: from a single or multiple secrets.
+There are 2 ways to add self-signed certificates to Java truststore: from a single secret or multiple secrets.
 
 === "From a single secret"
     * Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external} containing base64-encoded certificate(s). Here's an example [kubectl command](https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#use-source-files){.external} to create a secret from 2 local files:
@@ -544,7 +544,7 @@ There are 2 ways to add self-signed certificates to the default Java truststore:
     
     !!!info "You can have as many keys (certificates) in the secret as required. All keys will be mounted as files to `/tmp/crt` in the container and imported into Java truststore. In the example above, certificates will be mounted as `/tmp/crt/stg.crt` and `/tmp/crt/dev.crt`. File extension in the secret keys does not matter as long as the file is a valid certificate."
     
-    * Provide the secret name in Helm values:
+    * Provide the secret name in Helm values (unlike the case with multiple secrets you don't need to provide secret keys):
     
     ```yaml
     jira:
@@ -586,8 +586,7 @@ The product Helm chart will add additional `volumeMounts` and `volumes` to the p
 
 * copy the default Java cacerts to a runtime volume shared between the init container and the main container at `/var/ssl`
 * run [keytool -import](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html){.external} to import all certificates in `/tmp/crt` mounted from secret(s) to `/var/ssl/cacerts`
-
-`-Djavax.net.ssl.trustStore=/var/ssl/cacerts` system property will be automatically added to `JVM_SUPPORT_RECOMMENDED_ARGS` environment variable.
+* `-Djavax.net.ssl.trustStore=/var/ssl/cacerts` system property will be automatically added to `JVM_SUPPORT_RECOMMENDED_ARGS` environment variable.
 
 If necessary, it is possible to override the default `keytool -import` command:
 

@@ -450,11 +450,11 @@ crowd:
   #
   additionalCertificates:
     # -- Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data
-    # will be treated as certificates to be added to Java truststore. When defined takes precedence over secretList.
+    # will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.
     #
     secretName:
-    # -- A list of secrets with a list of keys holding certificates to be added to Java truststore. It is mandatory to define which keys
-    # from secret data need to be mounted as files to the init container
+    # -- A list of secrets with their respective keys holding certificates to be added to the Java truststore.
+    # It is mandatory to specify which keys from secret data need to be mounted as files to the init container
     #
     secretList:
     #- name: self-signed-ca
