@@ -208,6 +208,24 @@ information, please refer to
 
   Override the default AWS API endpoint with a custom one (optional).
 
+### S3 Attachments storage configuration
+Starting with Jira 9.9, you can configure Jira to [store attachment files in Amazon S3](https://confluence.atlassian.com/adminjiraserver/storing-attachments-in-amazon-s3-1282250191.html). For requirements and additional
+information, please refer to [Configuring Amazon S3 Object Storage](https://confluence.atlassian.com/pages/viewpage.action?spaceKey=JSERVERM&title=.Configuring+Amazon+S3+object+storage+vJira_admin_9.9).
+
+* `ATL_S3ATTACHMENTS_BUCKET_NAME`
+
+  Bucket name to store avatars.
+
+* `ATL_S3ATTACHMENTS_REGION`
+
+  AWS region where the S3 bucket is located.
+
+* `ATL_S3ATTACHMENTS_ENDPOINT_OVERRIDE`
+
+  Override the default AWS API endpoint with a custom one (optional).
+
+Avatars and attachments can be stored in the same bucket. If bucket names are identical, `ATL_S3AVATARS_*` env vars are used to generate a common filestore configuration.
+
 
 ### Database configuration
 
