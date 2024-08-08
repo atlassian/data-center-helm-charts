@@ -179,6 +179,10 @@ data:
           minHeap: 384m
           reservedCodeCache: 512m
       s3Storage:
+        attachments:
+          bucketName: null
+          bucketRegion: null
+          endpointOverride: null
         avatars:
           bucketName: null
           bucketRegion: null
