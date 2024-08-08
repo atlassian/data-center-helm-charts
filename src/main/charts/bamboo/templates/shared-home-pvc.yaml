@@ -7,7 +7,9 @@ metadata:
   {{- include "common.labels.commonLabels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteMany
+  {{ range .Values.volumes.sharedHome.persistentVolumeClaim.accessModes }}
+    - {{ . }}
+  {{ end }}
   {{- if .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName }}
   storageClassName: {{ .Values.volumes.sharedHome.persistentVolumeClaim.storageClassName | quote }}
   {{- end }}

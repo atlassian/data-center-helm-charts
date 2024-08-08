@@ -263,7 +263,12 @@ volumes:
       # -- If 'true', then a 'PersistentVolumeClaim' and 'PersistentVolume' will be dynamically
       # created for shared-home based on the 'StorageClassName' supplied below.
       #
+
       create: false
+      # -- Specify the access modes that should be used for the 'shared-home' volume claim.
+      #
+      accessModes:
+        - ReadWriteMany
 
       # -- Specify the name of the 'StorageClass' that should be used for the 'shared-home'
       #volume claim.
