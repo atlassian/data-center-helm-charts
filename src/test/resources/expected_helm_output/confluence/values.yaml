@@ -7,6 +7,9 @@ volumes:
 synchrony:
   enabled: true
 
+  additionalAnnotations:
+    argocd.argoproj.io/sync-wave: "10"
+
 additionalHosts:
 - ip: "192.168.1.1"
   hostnames:
@@ -20,3 +23,7 @@ monitoring:
 atlassianAnalyticsAndSupport:
   analytics:
     enabled: false
+
+confluence:
+  additionalAnnotations:
+    argocd.argoproj.io/sync-wave: "10"

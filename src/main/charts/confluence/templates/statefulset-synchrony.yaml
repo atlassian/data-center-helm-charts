@@ -5,6 +5,10 @@ metadata:
   name: {{ include "synchrony.fullname" . }}
   labels:
     {{- include "synchrony.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.synchrony.additionalAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if .Values.updateStrategy }}
   {{- with .Values.updateStrategy }}

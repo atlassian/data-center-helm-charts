@@ -30,6 +30,8 @@ bamboo:
   jmsService:
     enabled: true
 
+  additionalAnnotations:
+    argocd.argoproj.io/sync-wave: "10"
 
 priorityClassName: "high"
 additionalHosts:

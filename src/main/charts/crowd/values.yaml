@@ -436,6 +436,10 @@ crowd:
   #      requests:
   #        storage: 1Gi
 
+  # -- Defines additional annotations to the Bamboo StateFulSet. This might be required when deploying using a GitOps approach
+  additionalAnnotations: {}
+  #  argocd.argoproj.io/sync-wave: "10"
+
   # -- Defines topology spread constraints for Crowd pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #

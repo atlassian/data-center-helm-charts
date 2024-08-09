@@ -845,6 +845,10 @@ jira:
   #
   additionalEnvironmentVariables: []
 
+  # -- Defines additional annotations to the Jira StateFulSet. This might be required when deploying using a GitOps approach
+  additionalAnnotations: {}
+  #  argocd.argoproj.io/sync-wave: "10"
+
   # -- Defines any additional ports for the Jira container.
   #
   additionalPorts: []

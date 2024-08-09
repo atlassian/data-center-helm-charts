@@ -1075,6 +1075,10 @@ bitbucket:
     #   key: keystore.jks
     #   mountPath: /var/ssl
 
+    # -- Defines additional annotations to the Bitbucket Mesh StateFulSet. This might be required when deploying using a GitOps approach
+    additionalAnnotations: {}
+    #  argocd.argoproj.io/sync-wave: "10"
+
     # -- Standard K8s node-selectors that will be applied to all Bitbucket Mesh pods
     #
     nodeSelector: {}
@@ -1208,6 +1212,10 @@ bitbucket:
   #    resources:
   #      requests:
   #        storage: 1Gi
+
+  # -- Defines additional annotations to the Bitbucket StateFulSet. This might be required when deploying using a GitOps approach
+  additionalAnnotations: {}
+  #  argocd.argoproj.io/sync-wave: "10"
 
   # -- Defines topology spread constraints for Bitbucket pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
