@@ -71,6 +71,30 @@ class VolumesTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent", "bitbucket"}, mode = EnumSource.Mode.EXCLUDE)
+    void sharedHome_pvc_create_access_modes(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                "volumes.sharedHome.persistentVolumeClaim.accessModes[0]", "ReadWriteOnce"
+        ));
+
+        final var accessModes = resources.get(PersistentVolumeClaim).getSpec().get("accessModes");
+        assertThat(accessModes).isArrayWithChildren("ReadWriteOnce");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"})
+    void sharedHome_pvc_create_access_mode(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                "volumes.sharedHome.persistentVolumeClaim.accessMode", "ReadWriteOnce"
+        ));
+
+        final var accessModes = resources.get(PersistentVolumeClaim).getSpec().get("accessModes");
+        assertThat(accessModes).isArrayWithChildren("ReadWriteOnce");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void localHome_custom_volume(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(

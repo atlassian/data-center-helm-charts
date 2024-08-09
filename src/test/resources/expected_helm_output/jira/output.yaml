@@ -312,6 +312,8 @@ data:
           mountPath: /shared-home
           resources: {}
         persistentVolumeClaim:
+          accessModes:
+          - ReadWriteMany
           create: false
           resources:
             requests:
