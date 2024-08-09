@@ -945,7 +945,7 @@ bamboo:
   # -- Defines additional annotations to the Bamboo StateFulSet. This might be required when deploying using a GitOps approach
   additionalAnnotations: {}
   #  argocd.argoproj.io/sync-wave: "10"
-  
+
   # -- Defines any additional environment variables to be passed to the Bamboo
   # container. See https://hub.docker.com/r/atlassian/bamboo for
   # supported variables.
