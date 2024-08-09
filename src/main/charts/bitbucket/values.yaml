@@ -1134,7 +1134,7 @@ bitbucket:
       # -- A list of secrets with their respective keys holding certificates to be added to the Java truststore.
       # It is mandatory to specify which keys from secret data need to be mounted as files to the init container.
       #
-      secretList:
+      secretList: []
       #- name: self-signed-ca
       #  keys:
       #    - ca.crt
@@ -1229,7 +1229,7 @@ bitbucket:
     # -- A list of secrets with their respective keys holding certificates to be added to the Java truststore.
     # It is mandatory to specify which keys from secret data need to be mounted as files to the init container.
     #
-    secretList:
+    secretList: []
     #- name: self-signed-ca
     #  keys:
     #    - ca.crt
