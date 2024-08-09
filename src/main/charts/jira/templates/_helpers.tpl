@@ -174,7 +174,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Jira logs get captured in t
   mountPath: /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/seraph-config.xml
   subPath: seraph-config.xml
 {{- end }}
-{{- if .Values.jira.additionalCertificates.secretName }}
+{{- if or .Values.jira.additionalCertificates.secretName .Values.jira.additionalCertificates.secretList }}
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
@@ -296,12 +296,20 @@ For each additional plugin declared, generate a volume mount that injects that l
       - key: seraph-config.xml
         path: seraph-config.xml
 {{- end }}
-{{- if .Values.jira.additionalCertificates.secretName }}
+{{- if or .Values.jira.additionalCertificates.secretName .Values.jira.additionalCertificates.secretList }}
 - name: keystore
   emptyDir: {}
+{{- if .Values.jira.additionalCertificates.secretName }}
 - name: certs
   secret:
     secretName: {{ .Values.jira.additionalCertificates.secretName }}
+{{- else }}
+{{- range .Values.jira.additionalCertificates.secretList }}
+- name: {{ .name }}
+  secret:
+    secretName: {{ .name }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 - name: helm-values

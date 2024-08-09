@@ -79,15 +79,26 @@ spec:
           command: ["sh", "-c", {{ include "crowd.sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
-        {{- if .Values.crowd.additionalCertificates.secretName }}
+        {{- if or .Values.crowd.additionalCertificates.secretName .Values.crowd.additionalCertificates.secretList }}
         - name: import-certs
           image: {{ include "crowd.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: keystore
               mountPath: /var/ssl
+          {{- if.Values.crowd.additionalCertificates.secretName }}
             - name: certs
               mountPath: /tmp/crt
+          {{- else }}
+          {{- range .Values.crowd.additionalCertificates.secretList }}
+            {{- $secretName := .name }}
+            {{- range .keys }}
+            - name: {{ $secretName }}
+              mountPath: /tmp/crt/{{$secretName}}-{{ . }}
+              subPath: {{ . }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           command: ["/bin/bash"]
           args: ["-c", {{ include "crowd.addCrtToKeystoreCmd" . }}]
           resources:

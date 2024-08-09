@@ -63,15 +63,26 @@ spec:
           {{- end }}
           {{- end }}
         {{- end }}
-        {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
+        {{- if or .Values.bitbucket.mesh.additionalCertificates.secretName .Values.bitbucket.mesh.additionalCertificates.secretList }}
         - name: import-certs
           image: {{ .Values.bitbucket.mesh.image.repository }}:{{ .Values.bitbucket.mesh.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: keystore
               mountPath: /var/ssl
+          {{- if.Values.bitbucket.mesh.additionalCertificates.secretName }}
             - name: certs
               mountPath: /tmp/crt
+          {{- else }}
+          {{- range .Values.bitbucket.mesh.additionalCertificates.secretList }}
+            {{- $secretName := .name }}
+            {{- range .keys }}
+            - name: {{ $secretName }}
+              mountPath: /tmp/crt/{{$secretName}}-{{ . }}
+              subPath: {{ . }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           command: ["/bin/bash"]
           args: ["-c", {{ include "bitbucketMesh.addCrtToKeystoreCmd" . }}]
           resources:
@@ -183,12 +194,20 @@ spec:
               - key: {{ .key }}
                 path: {{ .key }}
         {{ end }}
-        {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
+        {{- if or .Values.bitbucket.mesh.additionalCertificates.secretName .Values.bitbucket.mesh.additionalCertificates.secretList }}
         - name: keystore
           emptyDir: {}
+        {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
         - name: certs
           secret:
             secretName: {{ .Values.bitbucket.mesh.additionalCertificates.secretName }}
+        {{- else }}
+        {{- range .Values.bitbucket.mesh.additionalCertificates.secretList }}
+        - name: {{ .name }}
+          secret:
+            secretName: {{ .name }}
+        {{- end }}
+        {{- end }}
         {{- end }}
         {{ include "common.jmx.config.volume" . | nindent 8 }}
   {{ include "bitbucket.mesh.volumeClaimTemplates" . | nindent 2 }}

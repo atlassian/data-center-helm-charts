@@ -74,15 +74,26 @@ spec:
           command: ["sh", "-c", {{ include "bamboo.sharedHome.permissionFix.command" . | quote }}]
         {{- end }}
         {{- include "common.jmx.initContainer" . | nindent 8 }}
-        {{- if .Values.bamboo.additionalCertificates.secretName }}
+        {{- if or .Values.bamboo.additionalCertificates.secretName .Values.bamboo.additionalCertificates.secretList }}
         - name: import-certs
           image: {{ include "bamboo.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: keystore
               mountPath: /var/ssl
+          {{- if.Values.bamboo.additionalCertificates.secretName }}
             - name: certs
               mountPath: /tmp/crt
+          {{- else }}
+          {{- range .Values.bamboo.additionalCertificates.secretList }}
+            {{- $secretName := .name }}
+            {{- range .keys }}
+            - name: {{ $secretName }}
+              mountPath: /tmp/crt/{{$secretName}}-{{ . }}
+              subPath: {{ . }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           command: ["/bin/bash"]
           args: ["-c", {{ include "bamboo.addCrtToKeystoreCmd" . }}]
           resources:

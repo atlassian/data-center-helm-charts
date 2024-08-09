@@ -250,12 +250,20 @@ For each additional plugin declared, generate a volume mount that injects that l
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
-{{- if .Values.crowd.additionalCertificates.secretName }}
+{{- if or .Values.crowd.additionalCertificates.secretName .Values.crowd.additionalCertificates.secretList }}
 - name: keystore
   emptyDir: {}
+{{- if .Values.crowd.additionalCertificates.secretName }}
 - name: certs
   secret:
     secretName: {{ .Values.crowd.additionalCertificates.secretName }}
+{{- else }}
+{{- range .Values.crowd.additionalCertificates.secretList }}
+- name: {{ .name }}
+  secret:
+    secretName: {{ .name }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 - name: helm-values

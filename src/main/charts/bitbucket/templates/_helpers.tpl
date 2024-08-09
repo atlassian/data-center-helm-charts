@@ -315,12 +315,20 @@ Define additional hosts here to allow template overrides when used as a sub char
 {{- with .Values.volumes.additional }}
 {{- toYaml . | nindent 0 }}
 {{- end }}
-{{- if .Values.bitbucket.additionalCertificates.secretName }}
+{{- if or .Values.bitbucket.additionalCertificates.secretName .Values.bitbucket.additionalCertificates.secretList }}
 - name: keystore
   emptyDir: {}
+{{- if .Values.bitbucket.additionalCertificates.secretName }}
 - name: certs
   secret:
     secretName: {{ .Values.bitbucket.additionalCertificates.secretName }}
+{{- else }}
+{{- range .Values.bitbucket.additionalCertificates.secretList }}
+- name: {{ .name }}
+  secret:
+    secretName: {{ .name }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- if or .Values.atlassianAnalyticsAndSupport.analytics.enabled .Values.atlassianAnalyticsAndSupport.helmValues.enabled }}
 - name: helm-values

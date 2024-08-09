@@ -257,4 +257,124 @@ public class AdditionalCertificatesTest {
         assertThat(statefulSet.getInitContainers().get(0).path("resources").path("limits").path("memory")).hasTextEqualTo("1Gi");
         assertThat(statefulSet.getInitContainers().get(0).path("resources").path("limits").path("cpu")).hasTextEqualTo("20m");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_certificates_multi_volumes(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                product.name() + ".additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".additionalCertificates.secretList[0].keys[1]", "stg.crt"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getVolume("keystore").get().path("emptyDir")).isEmpty();
+        assertThat(statefulSet.getVolume("self-signed-ca").get().path("secret").path("secretName")).hasTextEqualTo("self-signed-ca");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_certificates_multi_volume_mounts(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.sharedHome.persistentVolumeClaim.create", "true",
+                product.name() + ".additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                product.name() + ".additionalCertificates.secretList[1].name", "custom-ca",
+                product.name() + ".additionalCertificates.secretList[1].keys[0]", "custom.crt"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getInitContainers().get(1).path("name")).hasTextEqualTo("import-certs");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(1).get("name")).hasTextEqualTo("self-signed-ca");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(1).get("mountPath")).hasTextEqualTo("/tmp/crt/self-signed-ca-ca.crt");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(1).get("subPath")).hasTextEqualTo("ca.crt");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(2).get("name")).hasTextEqualTo("self-signed-ca");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(2).get("mountPath")).hasTextEqualTo("/tmp/crt/self-signed-ca-stg.crt");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(2).get("subPath")).hasTextEqualTo("stg.crt");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(3).get("name")).hasTextEqualTo("custom-ca");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(3).get("mountPath")).hasTextEqualTo("/tmp/crt/custom-ca-custom.crt");
+        assertThat(statefulSet.getInitContainers().get(1).path("volumeMounts").path(3).get("subPath")).hasTextEqualTo("custom.crt");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificates_multi_volume_mounts_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalCertificates.secretList[0].name", "self-signed-ca",
+                "synchrony.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                "synchrony.additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                "synchrony.additionalCertificates.secretList[1].name", "custom-ca",
+                "synchrony.additionalCertificates.secretList[1].keys[0]", "custom.crt"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+        assertThat(statefulSet.getInitContainers().get(0).path("name")).hasTextEqualTo("import-certs");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(1).get("name")).hasTextEqualTo("self-signed-ca");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(1).get("mountPath")).hasTextEqualTo("/tmp/crt/self-signed-ca-ca.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(1).get("subPath")).hasTextEqualTo("ca.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(2).get("name")).hasTextEqualTo("self-signed-ca");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(2).get("mountPath")).hasTextEqualTo("/tmp/crt/self-signed-ca-stg.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(2).get("subPath")).hasTextEqualTo("stg.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("name")).hasTextEqualTo("custom-ca");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("mountPath")).hasTextEqualTo("/tmp/crt/custom-ca-custom.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("subPath")).hasTextEqualTo("custom.crt");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificates_multi_volumes_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalCertificates.secretList[0].name", "self-signed-ca",
+                "synchrony.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                "synchrony.additionalCertificates.secretList[0].keys[1]", "stg.crt"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+        assertThat(statefulSet.getVolume("keystore").get().path("emptyDir")).isEmpty();
+        assertThat(statefulSet.getVolume("self-signed-ca").get().path("secret").path("secretName")).hasTextEqualTo("self-signed-ca");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificates_multi_volumes_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "bitbucket.mesh.enabled", "true",
+                product.name() + ".mesh.additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[1]", "stg.crt"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
+        assertThat(statefulSet.getVolume("keystore").get().path("emptyDir")).isEmpty();
+        assertThat(statefulSet.getVolume("self-signed-ca").get().path("secret").path("secretName")).hasTextEqualTo("self-signed-ca");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificates_multi_volume_mounts_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "bitbucket.mesh.enabled", "true",
+                product.name() + ".mesh.additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[1].name", "custom-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[1].keys[0]", "custom.crt"
+
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
+        assertThat(statefulSet.getInitContainers().get(0).path("name")).hasTextEqualTo("import-certs");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(1).get("name")).hasTextEqualTo("self-signed-ca");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(1).get("mountPath")).hasTextEqualTo("/tmp/crt/self-signed-ca-ca.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(1).get("subPath")).hasTextEqualTo("ca.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(2).get("name")).hasTextEqualTo("self-signed-ca");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(2).get("mountPath")).hasTextEqualTo("/tmp/crt/self-signed-ca-stg.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(2).get("subPath")).hasTextEqualTo("stg.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("name")).hasTextEqualTo("custom-ca");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("mountPath")).hasTextEqualTo("/tmp/crt/custom-ca-custom.crt");
+        assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("subPath")).hasTextEqualTo("custom.crt");
+    }
 }

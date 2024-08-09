@@ -1127,7 +1127,21 @@ bitbucket:
     # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
     #
     additionalCertificates:
+      # -- Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data
+      # will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.
+      #
       secretName:
+      # -- A list of secrets with their respective keys holding certificates to be added to the Java truststore.
+      # It is mandatory to specify which keys from secret data need to be mounted as files to the init container.
+      #
+      secretList: []
+      #- name: self-signed-ca
+      #  keys:
+      #    - ca.crt
+      #    - intermediate.crt
+      #- name: stg-intermediate
+      #  keys:
+      #    - stg.crt
       customCmd:
       initContainer:
         resources: {}
@@ -1208,7 +1222,21 @@ bitbucket:
   # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
   #
   additionalCertificates:
+    # -- Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data
+    # will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.
+    #
     secretName:
+    # -- A list of secrets with their respective keys holding certificates to be added to the Java truststore.
+    # It is mandatory to specify which keys from secret data need to be mounted as files to the init container.
+    #
+    secretList: []
+    #- name: self-signed-ca
+    #  keys:
+    #    - ca.crt
+    #    - intermediate.crt
+    #- name: stg-intermediate
+    #  keys:
+    #    - stg.crt
     customCmd:
     initContainer:
       resources: {}

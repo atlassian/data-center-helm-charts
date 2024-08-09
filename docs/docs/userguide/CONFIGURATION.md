@@ -523,40 +523,70 @@ readinessProbe:
 
 ## :material-certificate: Self Signed Certificates
 
-To add self signed certificates to the default Java truststore, follow the below steps.
+There are 2 ways to add self-signed certificates to Java truststore: from a single secret or multiple secrets.
 
-* Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external} containing base64-encoded certificate(s). Here's an example [kubectl command](https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#use-source-files){.external} to create a secret from 2 local files:
+=== "From a single secret"
+    * Create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/){.external} containing base64-encoded certificate(s). Here's an example [kubectl command](https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#use-source-files){.external} to create a secret from 2 local files:
+    
+    ```shell
+    kubectl create secret generic dev-certificates \
+        --from-file=stg.crt=./stg.crt \
+        --from-file=dev.crt=./dev.crt -n $namespace
+    ```
+    
+    The resulting secret will have the following data:
+    
+    ```yaml
+    data:
+      stg.crt: base64encodedstgcrt
+      dev.crt: base64encodeddevcrt
+    ```
+    
+    !!!info "You can have as many keys (certificates) in the secret as required. All keys will be mounted as files to `/tmp/crt` in the container and imported into Java truststore. In the example above, certificates will be mounted as `/tmp/crt/stg.crt` and `/tmp/crt/dev.crt`. File extension in the secret keys does not matter as long as the file is a valid certificate."
+    
+    * Provide the secret name in Helm values (unlike the case with multiple secrets you don't need to provide secret keys):
+    
+    ```yaml
+    jira:
+      additionalCertificates:
+         secretName: dev-certificates
+    ```
+=== "From multiple secrets"
+    * Create 2 [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external} containing base64-encoded certificate(s). Here's an example [kubectl command](https://kubernetes.io/docs/tasks/configmap-secret/managing-secret-using-kubectl/#use-source-files){.external} to create 2 secrets from local files (the first one with 2 certificates/keys and the second one with just one):
+    
+    ```shell
+    kubectl create secret generic dev-certificates \
+        --from-file=stg.crt=./stg.crt \
+        --from-file=dev.crt=./dev.crt -n $namespace
 
-```shell
-kubectl create secret generic dev-certificates \
-    --from-file=stg.crt=./stg.crt \
-    --from-file=dev.crt=./dev.crt -n $namespace
-```
-
-The resulting secret will have the following data:
-
-```yaml
-data:
-  stg.crt: base64encodedstgcrt
-  dev.crt: base64encodeddevcrt
-```
-
-!!!info "You can have as many keys (certificates) in the secret as required. All keys will be mounted as files to `/tmp/crt` in the container and imported into Java truststore. In the example above, certificates will be mounted as `/tmp/crt/stg.crt` and `/tmp/crt/dev.crt`. File extension in the secret keys does not matter as long as the file is a valid certificate."
-
-* Provide the secret name in Helm values:
-
-```yaml
-jira:
-  additionalCertificates:
-     secretName: dev-certificates
-```
+    kubectl create secret generic root-ca \
+        --from-file=ca.crt=./ca.crt -n $namespace
+    ```
+    !!!info "You can have as many keys (certificates) in the secrets, however, you will need to list the keys you'd like to get mounted. All keys will be mounted as files to `/tmp/crt` in the container and imported into Java truststore."
+    
+    * Provide the list of secrets and their keys in Helm values:
+    
+    ```yaml
+    jira:
+      additionalCertificates:
+        secretList:
+          - name: dev-certificates
+            keys:
+              - stg.crt
+              - dev.crt
+          - name: root-ca
+            keys:
+              - ca.crt
+    ```
+    To allow having identical keys in different secrets, filenames will have the following format: `<secret-name>-<key>`, so
+    files will get mounted as `/tmp/crt/dev-certificates-stg.crt`, `/tmp/crt/dev-certificates-dev.crt` and `/tmp/crt/root-ca-ca.crt`
+    and imported to Java truststore with the same aliases.
 
 The product Helm chart will add additional `volumeMounts` and `volumes` to the pod(s), as well as an extra init container that will:
 
 * copy the default Java cacerts to a runtime volume shared between the init container and the main container at `/var/ssl`
-* run [keytool -import](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html){.external} to import all certificates in `/tmp/crt` mounted from `dev-certificates` secret to `/var/ssl/cacerts`
-
-`-Djavax.net.ssl.trustStore=/var/ssl/cacerts` system property will be automatically added to `JVM_SUPPORT_RECOMMENDED_ARGS` environment variable.
+* run [keytool -import](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html){.external} to import all certificates in `/tmp/crt` mounted from secret(s) to `/var/ssl/cacerts`
+* `-Djavax.net.ssl.trustStore=/var/ssl/cacerts` system property will be automatically added to `JVM_SUPPORT_RECOMMENDED_ARGS` environment variable.
 
 If necessary, it is possible to override the default `keytool -import` command:
 

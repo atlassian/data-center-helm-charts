@@ -95,6 +95,7 @@ data:
         customCmd: null
         initContainer:
           resources: {}
+        secretList: []
         secretName: null
       additionalEnvironmentVariables: []
       additionalJvmArgs: []

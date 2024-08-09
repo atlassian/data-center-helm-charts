@@ -105,6 +105,7 @@ data:
         customCmd: null
         initContainer:
           resources: {}
+        secretList: []
         secretName: null
       additionalEnvironmentVariables: []
       additionalJvmArgs: []
@@ -146,6 +147,7 @@ data:
           customCmd: null
           initContainer:
             resources: {}
+          secretList: []
           secretName: null
         additionalEnvironmentVariables: {}
         additionalFiles: null
