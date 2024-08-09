@@ -106,9 +106,12 @@ Kubernetes: `>=1.21.x-0`
 | jira.resources.jvm.maxHeap | string | `"768m"` | The maximum amount of heap memory that will be used by the Jira JVM  |
 | jira.resources.jvm.minHeap | string | `"384m"` | The minimum amount of heap memory that will be used by the Jira JVM  |
 | jira.resources.jvm.reservedCodeCache | string | `"512m"` | The memory reserved for the Jira JVM code cache  |
-| jira.s3Storage.avatars.bucketName | string | `nil` |  |
-| jira.s3Storage.avatars.bucketRegion | string | `nil` |  |
-| jira.s3Storage.avatars.endpointOverride | string | `nil` |  |
+| jira.s3Storage.attachments.bucketName | string | `nil` | Bucket name to store attachments. If a bucket name and region (see below) are defined, Jira will automatically use AWS S3 to store attachments. Only bucket name is required, not the full arn. If you provide the same bucket name for both avatars and attachments, they will be stored in the same bucket  |
+| jira.s3Storage.attachments.bucketRegion | string | `nil` | AWS region where the S3 bucket is located.  |
+| jira.s3Storage.attachments.endpointOverride | string | `nil` | Override the default AWS API endpoint with a custom one  |
+| jira.s3Storage.avatars.bucketName | string | `nil` | Bucket name to store avatars. If a bucket name and region (see below) are defined, Jira will automatically use AWS S3 to store avatars. Only bucket name is required, not the full arn.  |
+| jira.s3Storage.avatars.bucketRegion | string | `nil` | AWS region where the S3 bucket is located.  |
+| jira.s3Storage.avatars.endpointOverride | string | `nil` | Override the default AWS API endpoint with a custom one  |
 | jira.securityContext.fsGroup | int | `2001` | The GID used by the Jira docker image GID will default to 2001 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Jira container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260  |
 | jira.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | jira.seraphConfig | object | `{"autoLoginCookieAge":"1209600","generateByHelm":false}` | By default seraph-config.xml is generated in the container entrypoint from a template shipped with an official Jira image. However, seraph-config.xml generation may fail if container is not run as root, which is a common case if Jira is deployed to OpenShift.  |
