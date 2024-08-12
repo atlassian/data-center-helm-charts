@@ -22,7 +22,6 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
 data:
   additional_jvm_args: >-
     -Dcluster.node.name=${KUBE_POD_NAME}
@@ -43,7 +42,6 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
 data:
   jmx-config.yaml: |
     rules:
@@ -72,7 +70,6 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
 data:
   values.yaml: |
     additionalConfigMaps: []
@@ -318,7 +315,6 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
   annotations:
 spec:
   type: ClusterIP
@@ -342,7 +338,6 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
   annotations:
 spec:
   type: ClusterIP
@@ -367,11 +362,9 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 spec:
-  
   replicas: 1
   serviceName: unittest-crowd
   selector:
@@ -381,12 +374,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: a4a4b599d87b9564bf85bc48a2f1e0c3bacdbeba7fd62436bb85ca63b27df266
-        
+        checksum/config-jvm: 1e200c10a1739dfe1fe0f298124d0a7337946a7f7e85ec04b7ca69f56ff470c5
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
-        
     spec:
       serviceAccountName: unittest-crowd
       terminationGracePeriodSeconds: 30
@@ -396,11 +387,8 @@ spec:
           - bar.local
           ip: 127.0.0.1
       securityContext:
-        
-        
         fsGroup: 2004
       initContainers:
-        
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -410,7 +398,6 @@ spec:
             - name: shared-home
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
-        
         - name: fetch-jmx-exporter
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
@@ -428,8 +415,6 @@ spec:
             - name: http
               containerPort: 8095
               protocol: TCP
-            
-            
             - name: jmx
               containerPort: 9999
               protocol: TCP
@@ -446,7 +431,6 @@ spec:
               cpu: "2"
               memory: 1G
           volumeMounts:
-            
             - name: local-home
               mountPath: "/var/atlassian/application-data/crowd"
             - name: local-home
@@ -456,26 +440,19 @@ spec:
               mountPath: "/var/atlassian/application-data/crowd/shared"
             - name: helm-values
               mountPath: /opt/atlassian/helm
-            
             - name: jmx-config
               mountPath: /opt/atlassian/jmx
-            
-            
-            
           env:
             - name: KUBE_POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
-            
             - name: ATL_TOMCAT_PORT
               value: "8095"
-            
             - name: ATL_TOMCAT_ACCESS_LOG
               value: "true"
             - name: UMASK
@@ -499,34 +476,19 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-crowd-jvm-config
-            
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
-        
-        
-        
       priorityClassName: high
       volumes:
-        
-        
-        
         - name: local-home
-        
           emptyDir: {}
         - name: shared-home
-        
           emptyDir: {}
         - name: helm-values
           configMap:
             name: unittest-crowd-helm-values
-        
-        
-        
-        
-        
-        
         - name: jmx-config
           configMap:
             name: unittest-crowd-jmx-config
@@ -539,14 +501,12 @@ metadata:
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-    
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
 spec:
   containers:
     - name: test
@@ -572,14 +532,12 @@ metadata:
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-    
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
-    
 spec:
   containers:
     - name: test
@@ -602,8 +560,6 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
-    
     - name: shared-home
-    
       emptyDir: {}
   restartPolicy: Never

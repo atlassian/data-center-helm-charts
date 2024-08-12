@@ -22,7 +22,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
 data:
   additional_jvm_args: >-
     -Datlassian.logging.cloud.enabled=false
@@ -43,12 +42,10 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
 data:
   jmx-config.yaml: |
     ---
     startDelaySeconds: 0
-
     rules:
       - pattern: '(java.lang)<type=(\w+)><>(\w+):'
         name: java_lang_$2_$3
@@ -57,7 +54,6 @@ data:
       - pattern: 'java.lang<name=G1 (\w+) Generation, type=GarbageCollector><>(\w+)'
         name: java_lang_G1_$1_Generation_$2
       - pattern: '.*'
-
     blacklistObjectNames:
       - 'com.atlassian.jira:connectionpool=connections,connection=*,name=BasicDataSource'
 ---
@@ -72,7 +68,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
 data:
   values.yaml: |
     additionalConfigMaps: []
@@ -343,7 +338,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
   annotations:
 spec:
   type: ClusterIP
@@ -367,7 +361,6 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
   annotations:
 spec:
   type: ClusterIP
@@ -392,11 +385,9 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 spec:
-  
   replicas: 1
   serviceName: unittest-jira
   selector:
@@ -406,12 +397,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 710c74e821cdf980c68ac01666e46d501fc0168d45c8a6d637b22e7f044e732d
-        
+        checksum/config-jvm: 38f23038a49bdac882b3e9130fa64b85f26fc2128687538bf138b714b4b5da07
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
-        
     spec:
       serviceAccountName: unittest-jira
       terminationGracePeriodSeconds: 30
@@ -421,11 +410,8 @@ spec:
           - bar.local
           ip: 127.0.0.1
       securityContext:
-        
-        
         fsGroup: 2001
       initContainers:
-        
         - name: nfs-permission-fixer
           image: alpine:latest
           imagePullPolicy: IfNotPresent
@@ -435,7 +421,6 @@ spec:
             - name: shared-home
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
-        
         - name: fetch-jmx-exporter
           image: bitnami/jmx-exporter:0.18.0
           command: ["cp"]
@@ -450,25 +435,12 @@ spec:
           image: "atlassian/jira-software:9.12.12"
           imagePullPolicy: IfNotPresent
           env:
-            
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
-            
-            
             - name: ATL_TOMCAT_PORT
               value: "8080"
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             - name: SET_PERMISSIONS
               value: "true"
             - name: JIRA_SHARED_HOME
@@ -493,7 +465,6 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-jira-jvm-config
-            
           ports:
             - name: http
               containerPort: 8080
@@ -504,8 +475,6 @@ spec:
             - name: ehcacheobject
               containerPort: 40011
               protocol: TCP
-            
-            
             - name: jmx
               containerPort: 9999
               protocol: TCP
@@ -522,7 +491,6 @@ spec:
               cpu: "2"
               memory: 2G
           volumeMounts:
-            
             - name: local-home
               mountPath: "/var/atlassian/application-data/jira"
             - name: local-home
@@ -532,39 +500,21 @@ spec:
               mountPath: "/var/atlassian/application-data/shared-home"
             - name: helm-values
               mountPath: /opt/atlassian/helm
-            
             - name: jmx-config
               mountPath: /opt/atlassian/jmx
-            
-            
-            
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "/shutdown-wait.sh"]
-        
-        
-        
       priorityClassName: high
       volumes:
-        
-        
-        
         - name: local-home
-        
           emptyDir: {}
         - name: shared-home
-        
           emptyDir: {}
         - name: helm-values
           configMap:
             name: unittest-jira-helm-values
-        
-        
-        
-        
-        
-        
         - name: jmx-config
           configMap:
             name: unittest-jira-jmx-config
@@ -577,14 +527,12 @@ metadata:
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-    
   labels:
     helm.sh/chart: jira-1.20.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
 spec:
   containers:
     - name: test
@@ -611,14 +559,12 @@ metadata:
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
-    
   labels:
     helm.sh/chart: jira-1.20.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
-    
 spec:
   containers:
     - name: test
@@ -641,8 +587,6 @@ spec:
           ls -l /shared-home/permissions-test
           rm /shared-home/permissions-test
   volumes:
-    
     - name: shared-home
-    
       emptyDir: {}
   restartPolicy: Never
