@@ -7,8 +7,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -19,8 +19,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
 data:
@@ -44,8 +44,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
 data:
@@ -67,8 +67,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
 data:
@@ -671,8 +671,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
   annotations:
@@ -695,8 +695,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence-synchrony
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
   annotations:
@@ -724,8 +724,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
   annotations:
@@ -753,8 +753,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence-synchrony
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
   annotations:
@@ -788,7 +788,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:8.5.12"
+          image: "atlassian/confluence:8.5.14"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -856,8 +856,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
   annotations:
@@ -913,7 +913,7 @@ spec:
               name: shared-home
       containers:
         - name: confluence
-          image: "atlassian/confluence:8.5.12"
+          image: "atlassian/confluence:8.5.14"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -1048,8 +1048,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
 spec:
@@ -1081,8 +1081,8 @@ metadata:
   labels:
     helm.sh/chart: confluence-1.20.1
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/instance: unittest
-    app.kubernetes.io/version: "8.5.12"
+    app.kubernetes.io/instance: unittest-confluence
+    app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
     
 spec:
