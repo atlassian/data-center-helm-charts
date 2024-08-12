@@ -7,7 +7,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
 ---
@@ -19,7 +19,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -40,7 +40,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -69,7 +69,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -315,7 +315,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -329,7 +329,7 @@ spec:
       name: jmx
   selector:
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
 ---
 # Source: crowd/templates/service.yaml
 apiVersion: v1
@@ -339,7 +339,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -354,7 +354,7 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
 ---
 # Source: crowd/templates/statefulset.yaml
 apiVersion: apps/v1
@@ -364,7 +364,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -377,7 +377,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: crowd
-      app.kubernetes.io/instance: unittest
+      app.kubernetes.io/instance: unittest-crowd
   template:
     metadata:
       annotations:
@@ -385,7 +385,7 @@ spec:
         
       labels:
         app.kubernetes.io/name: crowd
-        app.kubernetes.io/instance: unittest
+        app.kubernetes.io/instance: unittest-crowd
         
     spec:
       serviceAccountName: unittest-crowd
@@ -543,7 +543,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     
@@ -576,7 +576,7 @@ metadata:
   labels:
     helm.sh/chart: crowd-1.20.1
     app.kubernetes.io/name: crowd
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
     

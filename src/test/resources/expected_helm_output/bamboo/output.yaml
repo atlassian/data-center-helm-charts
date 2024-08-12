@@ -7,7 +7,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
 ---
@@ -19,7 +19,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -38,7 +38,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -67,7 +67,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -368,7 +368,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -382,7 +382,7 @@ spec:
       name: jms
   selector:
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
 ---
 # Source: bamboo/templates/service-jmx.yaml
 apiVersion: v1
@@ -392,7 +392,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -406,7 +406,7 @@ spec:
       name: jmx
   selector:
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
 ---
 # Source: bamboo/templates/service.yaml
 apiVersion: v1
@@ -416,7 +416,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -431,7 +431,7 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
 ---
 # Source: bamboo/templates/statefulset.yaml
 apiVersion: apps/v1
@@ -441,7 +441,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -454,7 +454,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: bamboo
-      app.kubernetes.io/instance: unittest
+      app.kubernetes.io/instance: unittest-bamboo
   template:
     metadata:
       annotations:
@@ -462,7 +462,7 @@ spec:
         
       labels:
         app.kubernetes.io/name: bamboo
-        app.kubernetes.io/instance: unittest
+        app.kubernetes.io/instance: unittest-bamboo
         
     spec:
       serviceAccountName: unittest-bamboo
@@ -671,7 +671,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
@@ -717,7 +717,7 @@ metadata:
   labels:
     helm.sh/chart: bamboo-1.20.1
     app.kubernetes.io/name: bamboo
-    app.kubernetes.io/instance: unittest
+    app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
     
