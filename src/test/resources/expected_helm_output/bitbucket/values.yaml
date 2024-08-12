@@ -9,6 +9,12 @@ bitbucket:
     enabled: true
     priorityClassName: "high"
 
+    additionalAnnotations:
+      argocd.argoproj.io/sync-wave: "10"
+
+  additionalAnnotations:
+    argocd.argoproj.io/sync-wave: "10"
+
 priorityClassName: "high"
 additionalHosts:
   - ip: "127.0.0.1"

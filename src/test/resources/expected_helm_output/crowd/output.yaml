@@ -95,6 +95,8 @@ data:
         enabled: true
         localHomeSubPath: logs
         mountPath: /opt/atlassian/crowd/apache-tomcat/logs
+      additionalAnnotations:
+        argocd.argoproj.io/sync-wave: "10"
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
@@ -360,6 +362,8 @@ metadata:
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 1
   serviceName: unittest-crowd

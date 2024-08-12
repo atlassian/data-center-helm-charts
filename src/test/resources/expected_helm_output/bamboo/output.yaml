@@ -90,6 +90,8 @@ data:
       accessLog:
         localHomeSubPath: log
         mountPath: /opt/atlassian/bamboo/logs
+      additionalAnnotations:
+        argocd.argoproj.io/sync-wave: "10"
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
@@ -436,6 +438,8 @@ metadata:
     app.kubernetes.io/instance: unittest-bamboo
     app.kubernetes.io/version: "9.6.4"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 1
   serviceName: unittest-bamboo

@@ -92,6 +92,8 @@ data:
         enabled: true
         localHomeSubPath: logs
         mountPath: /opt/atlassian/confluence/logs
+      additionalAnnotations:
+        argocd.argoproj.io/sync-wave: "10"
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
@@ -317,6 +319,8 @@ data:
       roleBinding:
         create: true
     synchrony:
+      additionalAnnotations:
+        argocd.argoproj.io/sync-wave: "10"
       additionalCertificates:
         customCmd: null
         initContainer:
@@ -532,6 +536,8 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 1
   serviceName: unittest-confluence-synchrony
@@ -612,6 +618,8 @@ metadata:
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "8.5.14"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 1
   serviceName: unittest-confluence
@@ -622,7 +630,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: f3e06517d2f5a9ad3f17140e443aeec6e7cef638abd89a4718bd90923eb9a37c
+        checksum/config-jvm: a47976a0429405564e76ef046691a3da0b15cee3d9b45d523f1cfa6def699df6
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence

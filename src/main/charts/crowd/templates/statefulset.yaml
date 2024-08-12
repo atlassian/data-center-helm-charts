@@ -4,6 +4,10 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.crowd.additionalAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if .Values.updateStrategy }}
   {{- with .Values.updateStrategy }}

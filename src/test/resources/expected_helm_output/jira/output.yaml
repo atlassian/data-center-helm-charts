@@ -133,6 +133,8 @@ data:
       accessLog:
         localHomeSubPath: log
         mountPath: /opt/atlassian/jira/logs
+      additionalAnnotations:
+        argocd.argoproj.io/sync-wave: "10"
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
@@ -383,6 +385,8 @@ metadata:
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "9.12.12"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 1
   serviceName: unittest-jira

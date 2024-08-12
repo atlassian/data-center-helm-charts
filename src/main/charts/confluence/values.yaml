@@ -1029,6 +1029,10 @@ confluence:
   #      requests:
   #        storage: 1Gi
 
+  # -- Defines additional annotations to the Confluence StateFulSet. This might be required when deploying using a GitOps approach
+  additionalAnnotations: {}
+  #  argocd.argoproj.io/sync-wave: "10"
+
   # -- Defines topology spread constraints for Confluence pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
@@ -1346,6 +1350,10 @@ synchrony:
   # 'volumes.additionalSynchrony'.
   #
   additionalVolumeMounts: []
+
+  # -- Defines additional annotations to the Synchrony StateFulSet. This might be required when deploying using a GitOps approach
+  additionalAnnotations: 
+  #  argocd.argoproj.io/sync-wave: "10"
 
   # -- Defines any additional ports for the Synchrony container.
   #

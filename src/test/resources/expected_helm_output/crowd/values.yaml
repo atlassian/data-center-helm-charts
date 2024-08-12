@@ -19,3 +19,7 @@ monitoring:
 atlassianAnalyticsAndSupport:
   analytics:
     enabled: false
+
+crowd:
+  additionalAnnotations:
+    argocd.argoproj.io/sync-wave: "10"

@@ -7,6 +7,10 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.bitbucket.additionalAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if .Values.updateStrategy }}
   {{- with .Values.updateStrategy }}

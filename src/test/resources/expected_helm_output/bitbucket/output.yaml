@@ -100,6 +100,8 @@ data:
       helmValues:
         enabled: true
     bitbucket:
+      additionalAnnotations:
+        argocd.argoproj.io/sync-wave: "10"
       additionalBundledPlugins: []
       additionalCertificates:
         customCmd: null
@@ -143,6 +145,8 @@ data:
         periodSeconds: 5
         timeoutSeconds: 1
       mesh:
+        additionalAnnotations:
+          argocd.argoproj.io/sync-wave: "10"
         additionalCertificates:
           customCmd: null
           initContainer:
@@ -576,6 +580,8 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 3
   podManagementPolicy: OrderedReady
@@ -695,6 +701,8 @@ metadata:
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   replicas: 1
   podManagementPolicy: OrderedReady
