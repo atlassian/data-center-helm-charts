@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '1.20.1'
+version: '1.21.0'
 appVersion: 9.12.12
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,8 +21,17 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#825)"
-    - "Make it possible to override proxy settings (#822)"
+    - "Added annotations to the StatefulSets (#857)"
+    - "Update appVersions for DC apps (#858)"
+    - "Add a dedicated helm values stanza for s3 attachments (#854)"
+    - "Make shared home pvc access mode configurable (#855)"
+    - "Allow referencing multiple secrets in additionalCertificates (#852)"
+    - "Make it possible to define resources for import-certs init container (#851)"
+    - "Move update strategy to root level (#849)"
+    - "Add helm value for custom jmx jar location when using other jmx init container images (#846)"
+    - "feat: add appProtocol for service meshes (#847)"
+    - "Make StatefulSet updateStrategy configurable (#845)"
+    - "Fix default for acceptCount (#832)"
 
 dependencies:
 - name: common
