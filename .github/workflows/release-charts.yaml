@@ -28,7 +28,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v3
         with:
-          version: v3.9.4
+          version: v3.15.3
 
       - name: Setup Python environment
         uses: actions/setup-python@v5
@@ -79,7 +79,7 @@ jobs:
           gpg --export > ~/.gnupg/pubring.gpg
           gpg --export-secret-keys > ~/.gnupg/secring.gpg
           gpg --output src/main/scripts/helm_key.pub --export ${{ secrets.HELM_SIGNING_KEY_EMAIL }}
-          
+
       - name: Release Helm Charts
         run: |
           src/main/scripts/generate_chart_repo.sh ${GH_TOKEN}
@@ -90,13 +90,13 @@ jobs:
           git commit -m "Update index.yaml post release"
           git push origin update-index-yaml-${GITHUB_RUN_ID}
           gh pr create --title "Update index.yaml" --body "Update index.yaml after release" --base main --head update-index-yaml-${GITHUB_RUN_ID}
-      
+
       - name: Upload Public Key To Release Assets
         run: |
           cd src/main/scripts
           export RELEASE_VERSION=$(python3 -W ignore -c "import prepare_release; print (prepare_release.get_chart_versions(\"${GITHUB_WORKSPACE}/src/main/charts\"))" | sed "s/'/\"/g" | python -c 'import sys, json; print (json.load(sys.stdin)["bamboo"]["version"])')
           ./github_asset_uploader.sh ${RELEASE_VERSION}
-          
+
       - name: Cleanup
         if: always()
         run: |
