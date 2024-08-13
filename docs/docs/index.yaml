@@ -3,6 +3,45 @@ entries:
   bamboo:
   - annotations:
       artifacthub.io/changes: |-
+        - "Added annotations to the StatefulSets (#857)"
+        - "Update appVersions for DC apps (#858)"
+        - "Make shared home pvc access mode configurable (#855)"
+        - "Allow referencing multiple secrets in additionalCertificates (#852)"
+        - "Make it possible to define resources for import-certs init container (#851)"
+        - "Move update strategy to root level (#849)"
+        - "Add helm value for custom jmx jar location when using other jmx init container images (#846)"
+        - "feat: add appProtocol for service meshes (#847)"
+        - "Make StatefulSet updateStrategy configurable (#845)"
+        - "Fix default for acceptCount (#832)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.4
+    created: "2024-08-13T02:16:42.860076514Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 9457f0102049aded49c69325e31546d6b343e2989d3f475df502a1eaf471c437
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.21.0/bamboo-1.21.0.tgz
+    version: 1.21.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Make it possible to override proxy settings (#822)"
         - "Update appVersions for DC apps (#823)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -1322,6 +1361,37 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#858)"
+        - "Make shared home pvc access mode configurable (#855)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.6.4
+    created: "2024-08-13T02:16:43.000929965Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 6a4180b511df08f07a873fce0246ccbc2513f1beae5111028069b6734811cf94
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.21.0/bamboo-agent-1.21.0.tgz
+    version: 1.21.0
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#823)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -2588,6 +2658,48 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Added annotations to the StatefulSets (#857)"
+        - "Update appVersions for DC apps (#858)"
+        - "Make shared home pvc access mode configurable (#855)"
+        - "Allow referencing multiple secrets in additionalCertificates (#852)"
+        - "Make it possible to define resources for import-certs init container (#851)"
+        - "Move update strategy to root level (#849)"
+        - "Add helm value for custom jmx jar location when using other jmx init container images (#846)"
+        - "feat: add appProtocol for service meshes (#847)"
+        - "Make StatefulSet updateStrategy configurable (#845)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.19.6
+    created: "2024-08-13T02:16:43.156601357Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: eb0941f719ae1341bde0179c12b98a8f81f5e7fe4eec0863615d88b590367ce3
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.21.0/bitbucket-1.21.0.tgz
+    version: 1.21.0
   - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#823)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -4476,6 +4588,49 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Added annotations to the StatefulSets (#857)"
+        - "Update appVersions for DC apps (#858)"
+        - "Make shared home pvc access mode configurable (#855)"
+        - "Allow referencing multiple secrets in additionalCertificates (#852)"
+        - "Make it possible to define resources for import-certs init container (#851)"
+        - "Move update strategy to root level (#849)"
+        - "Add helm value for custom jmx jar location when using other jmx init container images (#846)"
+        - "feat: add appProtocol for service meshes (#847)"
+        - "Make StatefulSet updateStrategy configurable (#845)"
+        - "Fix default for acceptCount (#832)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.14
+    created: "2024-08-13T02:16:43.443010606Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: d7b7e67263d8d3c0c54af82ed1ee7da517ba1938f7d843349cb69ca74a49b2b1
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.21.0/confluence-1.21.0.tgz
+    version: 1.21.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#825)"
         - "Make it possible to override proxy settings (#822)"
       artifacthub.io/containsSecurityUpdates: "true"
@@ -6297,6 +6452,44 @@ entries:
   crowd:
   - annotations:
       artifacthub.io/changes: |-
+        - "Added annotations to the StatefulSets (#857)"
+        - "Update appVersions for DC apps (#858)"
+        - "Make shared home pvc access mode configurable (#855)"
+        - "Allow referencing multiple secrets in additionalCertificates (#852)"
+        - "Make it possible to define resources for import-certs init container (#851)"
+        - "Move update strategy to root level (#849)"
+        - "Add helm value for custom jmx jar location when using other jmx init container images (#846)"
+        - "feat: add appProtocol for service meshes (#847)"
+        - "Make StatefulSet updateStrategy configurable (#845)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 6.0.0
+    created: "2024-08-13T02:16:43.57162046Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: b0cd00d839171ef3e357b14a709e93457bde95064ccddb46db697b6a21715937
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.21.0/crowd-1.21.0.tgz
+    version: 1.21.0
+  - annotations:
+      artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#825)"
         - "Make it possible to override proxy settings (#822)"
       artifacthub.io/containsSecurityUpdates: "false"
@@ -7922,6 +8115,47 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Added annotations to the StatefulSets (#857)"
+        - "Update appVersions for DC apps (#858)"
+        - "Add a dedicated helm values stanza for s3 attachments (#854)"
+        - "Make shared home pvc access mode configurable (#855)"
+        - "Allow referencing multiple secrets in additionalCertificates (#852)"
+        - "Make it possible to define resources for import-certs init container (#851)"
+        - "Move update strategy to root level (#849)"
+        - "Add helm value for custom jmx jar location when using other jmx init container images (#846)"
+        - "feat: add appProtocol for service meshes (#847)"
+        - "Make StatefulSet updateStrategy configurable (#845)"
+        - "Fix default for acceptCount (#832)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.12
+    created: "2024-08-13T02:16:43.723174578Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.6
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: ae3aa0b9c585c68feaa501fb37f183b7f41b564e32879e36902c97ba3adecf34
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.21.0/jira-1.21.0.tgz
+    version: 1.21.0
   - annotations:
       artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#825)"
@@ -9689,4 +9923,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2024-07-07T21:51:07.109853134Z"
+generated: "2024-08-13T02:16:43.724242932Z"
