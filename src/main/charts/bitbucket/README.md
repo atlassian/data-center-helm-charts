@@ -1,6 +1,6 @@
 # bitbucket
 
-![Version: 1.20.1](https://img.shields.io/badge/Version-1.20.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.19.6](https://img.shields.io/badge/AppVersion-8.19.6-informational?style=flat-square)
+![Version: 1.21.0](https://img.shields.io/badge/Version-1.21.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.19.6](https://img.shields.io/badge/AppVersion-8.19.6-informational?style=flat-square)
 
 A chart for installing Bitbucket Data Center on Kubernetes
 
@@ -33,6 +33,7 @@ Kubernetes: `>=1.21.x-0`
 | affinity | object | `{}` | Standard Kubernetes affinities that will be applied to all Bitbucket pods Due to the performance requirements it is highly recommended running all Bitbucket pods in the same availability zone as your dedicated NFS server. To achieve this, you can define `affinity` and `podAffinity` rules that will place all pods into the same zone, and therefore minimise the real distance between the application pods and the shared storage. More specific documentation can be found in the official Affinity and Anti-affinity documentation:  https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity  This is an example on how to ensure the pods are in the same zone as NFS server that is labeled with `role=nfs-server`:    podAffinity:    requiredDuringSchedulingIgnoredDuringExecution:      - labelSelector:          matchExpressions:            - key: role              operator: In              values:                - nfs-server # needs to be the same value as NFS server deployment        topologyKey: topology.kubernetes.io/zone |
 | atlassianAnalyticsAndSupport.analytics.enabled | bool | `true` | Mount ConfigMap with selected Helm chart values as a JSON which DC products will read and send analytics events to Atlassian data pipelines  |
 | atlassianAnalyticsAndSupport.helmValues.enabled | bool | `true` | Mount ConfigMap with selected Helm chart values as a YAML file which can be optionally including to support.zip  |
+| bitbucket.additionalAnnotations | object | `{}` | Defines additional annotations to the Bitbucket StateFulSet. This might be required when deploying using a GitOps approach |
 | bitbucket.additionalBundledPlugins | list | `[]` | Specifies a list of additional Bitbucket plugins that should be added to the Bitbucket container. Note plugins installed via this method will appear as bundled plugins rather than user plugins. These should be specified in the same manner as the 'additionalLibraries' property. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/  NOTE: only .jar files can be loaded using this approach. OBR's can be extracted (unzipped) to access the associated .jar  An alternative to this method is to install the plugins via "Manage Apps" in the product system administration UI.  |
 | bitbucket.additionalCertificates | object | `{"customCmd":null,"initContainer":{"resources":{}},"secretList":[],"secretName":null}` | Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates  |
 | bitbucket.additionalCertificates.secretList | list | `[]` | A list of secrets with their respective keys holding certificates to be added to the Java truststore. It is mandatory to specify which keys from secret data need to be mounted as files to the init container.  |
@@ -66,6 +67,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.livenessProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | bitbucket.livenessProbe.periodSeconds | int | `5` | How often (in seconds) the Bitbucket container liveness probe will run  |
 | bitbucket.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out  |
+| bitbucket.mesh.additionalAnnotations | object | `{}` | Defines additional annotations to the Bitbucket Mesh StateFulSet. This might be required when deploying using a GitOps approach |
 | bitbucket.mesh.additionalCertificates | object | `{"customCmd":null,"initContainer":{"resources":{}},"secretList":[],"secretName":null}` | Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates  |
 | bitbucket.mesh.additionalCertificates.secretList | list | `[]` | A list of secrets with their respective keys holding certificates to be added to the Java truststore. It is mandatory to specify which keys from secret data need to be mounted as files to the init container.  |
 | bitbucket.mesh.additionalCertificates.secretName | string | `nil` | Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.  |
@@ -259,4 +261,4 @@ Kubernetes: `>=1.21.x-0`
 | volumes.sharedHome.subPath | string | `nil` | Specifies the sub-directory of the shared-home volume that will be mounted in to the Bitbucket container.  |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.12.0](https://github.com/norwoodj/helm-docs/releases/v1.12.0)
+Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)

@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-jvm-config-mesh
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -35,7 +35,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-jvm-config
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -54,7 +54,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-jmx-config
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -76,7 +76,7 @@ kind: ConfigMap
 metadata:
   name: unittest-bitbucket-helm-values
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -329,27 +329,233 @@ data:
         scrapeIntervalSeconds: 30
     nodeSelector: {}
     opensearch:
+      antiAffinity: soft
+      antiAffinityTopologyKey: kubernetes.io/hostname
       baseUrl: null
+      clusterName: opensearch-cluster
+      config:
+        opensearch.yml: |
+          cluster.name: opensearch-cluster
+          # Bind to all interfaces because we don't know what IP address Docker will assign to us.
+          network.host: 0.0.0.0
+          # Setting network.host to a non-loopback address enables the annoying bootstrap checks. "Single-node" mode disables them again.
+          # Implicitly done if ".singleNode" is set to "true".
+          # discovery.type: single-node
+          # Start OpenSearch Security Demo Configuration
+          # WARNING: revise all the lines below before you go into production
+          plugins:
+            security:
+              ssl:
+                transport:
+                  pemcert_filepath: esnode.pem
+                  pemkey_filepath: esnode-key.pem
+                  pemtrustedcas_filepath: root-ca.pem
+                  enforce_hostname_verification: false
+                http:
+                  enabled: true
+                  pemcert_filepath: esnode.pem
+                  pemkey_filepath: esnode-key.pem
+                  pemtrustedcas_filepath: root-ca.pem
+              allow_unsafe_democertificates: true
+              allow_default_init_securityindex: true
+              authcz:
+                admin_dn:
+                  - CN=kirk,OU=client,O=client,L=test,C=de
+              audit.type: internal_opensearch
+              enable_snapshot_restore_privilege: true
+              check_snapshot_restore_write_privileges: true
+              restapi:
+                roles_enabled: ["all_access", "security_rest_api_access"]
+              system_indices:
+                enabled: true
+                indices:
+                  [
+                    ".opendistro-alerting-config",
+                    ".opendistro-alerting-alert*",
+                    ".opendistro-anomaly-results*",
+                    ".opendistro-anomaly-detector*",
+                    ".opendistro-anomaly-checkpoints",
+                    ".opendistro-anomaly-detection-state",
+                    ".opendistro-reports-*",
+                    ".opendistro-notifications-*",
+                    ".opendistro-notebooks",
+                    ".opendistro-asynchronous-search-response*",
+                  ]
+          ######## End OpenSearch Security Demo Configuration ########
       credentials:
         passwordSecretKey: password
         secretName: null
         usernameSecretKey: username
+      customAntiAffinity: {}
+      enableServiceLinks: true
       envFrom:
       - secretRef:
           name: opensearch-initial-password
+      extraContainers: []
       extraEnvs:
       - name: plugins.security.ssl.http.enabled
         value: "false"
+      extraInitContainers: []
+      extraObjects: []
+      extraVolumeMounts: []
+      extraVolumes: []
+      fsGroup: ""
+      fullnameOverride: ""
+      global:
+        dockerRegistry: ""
+      hostAliases: []
+      httpHostPort: ""
+      httpPort: 9200
+      image:
+        pullPolicy: IfNotPresent
+        repository: opensearchproject/opensearch
+        tag: ""
+      imagePullSecrets: []
+      ingress:
+        annotations: {}
+        enabled: false
+        hosts:
+        - chart-example.local
+        ingressLabels: {}
+        path: /
+        tls: []
+      initResources: {}
       install: false
+      keystore: []
+      labels: {}
+      lifecycle: {}
+      livenessProbe: {}
+      majorVersion: ""
+      masterService: opensearch-cluster-master
+      masterTerminationFix: false
+      maxUnavailable: 1
+      metricsPort: 9600
+      nameOverride: ""
+      networkHost: 0.0.0.0
+      networkPolicy:
+        create: false
+        http:
+          enabled: false
+      nodeAffinity: {}
+      nodeGroup: master
+      nodeSelector: {}
+      openSearchAnnotations: {}
+      opensearchHome: /usr/share/opensearch
+      opensearchJavaOpts: -Xmx512M -Xms512M
+      opensearchLifecycle: {}
       persistence:
+        accessModes:
+        - ReadWriteOnce
+        annotations: {}
+        enableInitChown: true
+        enabled: true
+        labels:
+          enabled: false
         size: 10Gi
+      plugins:
+        enabled: false
+        installList: []
+      podAffinity: {}
+      podAnnotations: {}
+      podManagementPolicy: Parallel
+      podSecurityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      podSecurityPolicy:
+        create: false
+        name: ""
+        spec:
+          fsGroup:
+            rule: RunAsAny
+          privileged: true
+          runAsUser:
+            rule: RunAsAny
+          seLinux:
+            rule: RunAsAny
+          supplementalGroups:
+            rule: RunAsAny
+          volumes:
+          - secret
+          - configMap
+          - persistentVolumeClaim
+          - emptyDir
+      priorityClassName: ""
+      protocol: https
+      rbac:
+        automountServiceAccountToken: false
+        create: false
+        serviceAccountAnnotations: {}
+        serviceAccountName: ""
+      readinessProbe:
+        failureThreshold: 3
+        periodSeconds: 5
+        tcpSocket:
+          port: 9200
+        timeoutSeconds: 3
+      replicas: 3
       resources:
         requests:
           cpu: 1
           memory: 1Gi
+      roles:
+      - master
+      - ingest
+      - data
+      - remote_cluster_client
+      schedulerName: ""
+      secretMounts: []
       securityConfig:
-        internalUsersSecret: null
+        actionGroupsSecret: null
+        config:
+          data: {}
+          dataComplete: true
+          securityConfigSecret: ""
+        configSecret: null
+        enabled: true
+        path: /usr/share/opensearch/config/opensearch-security
+        rolesMappingSecret: null
+        rolesSecret: null
+        tenantsSecret: null
+      securityContext:
+        capabilities:
+          drop:
+          - ALL
+        runAsNonRoot: true
+        runAsUser: 1000
+      service:
+        annotations: {}
+        externalTrafficPolicy: ""
+        headless:
+          annotations: {}
+        httpPortName: http
+        labels: {}
+        labelsHeadless: {}
+        loadBalancerIP: ""
+        loadBalancerSourceRanges: []
+        metricsPortName: metrics
+        nodePort: ""
+        transportPortName: transport
+        type: ClusterIP
+      sidecarResources: {}
       singleNode: true
+      startupProbe:
+        failureThreshold: 30
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        tcpSocket:
+          port: 9200
+        timeoutSeconds: 3
+      sysctl:
+        enabled: false
+      sysctlInit:
+        enabled: false
+      sysctlVmMaxMapCount: 262144
+      terminationGracePeriod: 120
+      tolerations: []
+      topologySpreadConstraints: []
+      transportHostPort: ""
+      transportPort: 9300
+      updateStrategy: RollingUpdate
     openshift:
       runWithRestrictedSCC: false
     ordinals:
@@ -439,7 +645,7 @@ kind: Service
 metadata:
   name: unittest-bitbucket-jmx
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -465,7 +671,7 @@ kind: Service
 metadata:
   name: unittest-bitbucket-mesh-0
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -491,7 +697,7 @@ kind: Service
 metadata:
   name: unittest-bitbucket-mesh-1
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -517,7 +723,7 @@ kind: Service
 metadata:
   name: unittest-bitbucket-mesh-2
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -543,7 +749,7 @@ kind: Service
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -575,7 +781,7 @@ kind: StatefulSet
 metadata:
   name: unittest-bitbucket-mesh
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -593,7 +799,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 181b3e6cefd7ac8f0db885749fc9ff0807fac4112d79b112676977cdac8a8970
+        checksum/config-jvm: 4f41693928ba5caf9d811b89392133af8e5ffda821e6c6ef5670fd70c2ef4f66
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -696,7 +902,7 @@ kind: StatefulSet
 metadata:
   name: unittest-bitbucket
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -714,7 +920,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5afa854bf2e6923ea0fdd790b78f94f108f6bd8352de4bd53bae0ef176b4f6ec
+        checksum/config-jvm: 3f753a675c928a7ac84e43eacbbeef095d787eced1cbf2b8c315c7e8a6a7794f
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -836,7 +1042,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
@@ -868,7 +1074,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bitbucket-1.20.1
+    helm.sh/chart: bitbucket-1.21.0
     app.kubernetes.io/name: bitbucket
     app.kubernetes.io/instance: unittest-bitbucket
     app.kubernetes.io/version: "8.19.6"
