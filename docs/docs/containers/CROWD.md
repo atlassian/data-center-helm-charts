@@ -54,6 +54,10 @@ If you need to override Crowd's default memory allocation, you can control the m
 
 If Crowd is run behind a reverse proxy server as [described here][3], then you need to specify extra options to make Crowd aware of the setup. They can be controlled via the below environment variables.
 
+* `ATL_TOMCAT_CONTEXTPATH` (default: /crowd)
+
+  The context path the application is served over.
+
 * `ATL_PROXY_NAME` (default: NONE)
 
    The reverse proxy's fully qualified hostname. `CATALINA_CONNECTOR_PROXYNAME`

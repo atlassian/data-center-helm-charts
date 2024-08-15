@@ -129,7 +129,7 @@ spec:
             {{- else }}
             httpGet:
               port: {{ .Values.crowd.ports.http }}
-              path: /crowd/status
+              path: {{ .Values.crowd.service.contextPath}}/status
             initialDelaySeconds: {{ .Values.crowd.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.crowd.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.crowd.readinessProbe.timeoutSeconds }}
@@ -195,6 +195,10 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            {{ end }}
+            {{ if .Values.crowd.service.contextPath }}
+            - name: ATL_TOMCAT_CONTEXTPATH
+              value: {{ .Values.crowd.service.contextPath | quote }}
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.crowd.ports.http | quote }}
