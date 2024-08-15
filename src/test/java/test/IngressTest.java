@@ -553,4 +553,37 @@ class IngressTest {
                 .map(path -> path.path("path").asText())
                 .collect(Collectors.toList());
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"crowd"})
+    void crowd_ingress_path_contextPath(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                product + ".service.contextPath", "/my-path"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/");
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"crowd"})
+    void crowd_ingress_path_value(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.path", "/mypath",
+                product + ".service.contextPath", "/my-path"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(1, ingresses.size());
+
+        assertThat(ingresses.head().getNode("spec", "rules").required(0).path("http").path("paths").required(0).path("path"))
+                .hasTextEqualTo("/mypath");
+
+    }
 }
