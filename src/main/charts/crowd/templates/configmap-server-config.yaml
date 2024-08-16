@@ -46,10 +46,11 @@ data:
         <Engine name="Catalina"
                 defaultHost="localhost">
 
-          <Host name="localhost"
-                appBase="webapps"
-                unpackWARs="true"
-                autoDeploy="true"/>
+        <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
+           <Context path="{{ .Values.crowd.service.contextPath | default "/crowd" }}" docBase="../../crowd-webapp" debug="0">
+             <Manager pathname="" />
+           </Context>
+        </Host>
         {{- if .Values.crowd.accessLog.enabled }}
             <Valve className="org.apache.catalina.valves.AccessLogValve"
                    requestAttributesEnabled="true"

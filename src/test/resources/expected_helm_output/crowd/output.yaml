@@ -142,6 +142,7 @@ data:
       securityContextEnabled: true
       service:
         annotations: {}
+        contextPath: /crowd
         loadBalancerIP: null
         port: 80
         sessionAffinity: None
@@ -451,6 +452,8 @@ spec:
               value: "https"
             - name: ATL_TOMCAT_SECURE
               value: "true"
+            - name: ATL_TOMCAT_CONTEXTPATH
+              value: "/crowd"
             - name: ATL_TOMCAT_PORT
               value: "8095"
             - name: ATL_TOMCAT_ACCESS_LOG

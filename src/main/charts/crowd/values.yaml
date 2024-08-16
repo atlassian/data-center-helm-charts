@@ -137,6 +137,11 @@ crowd:
     #
     loadBalancerIP:
 
+    # -- The Tomcat context path that Crowd will use. The ATL_TOMCAT_CONTEXTPATH
+    # will be set automatically.
+    #
+    contextPath: "/crowd"
+
     # -- Additional annotations to apply to the Service
     #
     annotations: {}
@@ -543,10 +548,9 @@ ingress:
   #
   host:
 
-  # -- The base path for the Ingress Resource. For example '/crowd'. Based on a
+  # -- The base path for the Ingress Resource. For example '/crowd'. Based on
   # 'ingress.host' value of 'company.k8s.com' this would result in a URL of
-  # 'company.k8s.com/crowd'. Due to temporary limitations with changing Crowd context
-  # on the application level, only "/" and "/crowd" paths are supported.
+  # 'company.k8s.com/crowd'.
   #
   path: "/"
 
