@@ -68,7 +68,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.securityContext.fsGroup | int | `2004` | The GID used by the Crowd docker image GID will default to 2004 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Crowd container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260  |
 | crowd.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
-| crowd.service.contextPath | string | `"/crowd"` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
+| crowd.service.contextPath | string | `"/crowd"` | The Tomcat context path that Crowd will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen  |
 | crowd.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
