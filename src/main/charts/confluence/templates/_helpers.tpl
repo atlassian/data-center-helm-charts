@@ -619,7 +619,7 @@ volumeClaimTemplates:
 {{ end }}
 {{ with .Values.database.url }}
 - name: ATL_JDBC_URL
-  value: {{ . | quote }}
+  value: {{ . | replace "&" "&amp;" | quote }}
 {{ end }}
 {{ with .Values.database.credentials.secretName }}
 - name: ATL_JDBC_USER
@@ -638,7 +638,7 @@ volumeClaimTemplates:
 {{- define "synchrony.databaseEnvVars" -}}
 {{ with .Values.database.url }}
 - name: SYNCHRONY_DATABASE_URL
-  value: {{ . | quote }}
+  value: {{ . | replace "&amp;" "&" | quote }}
 {{ end }}
 {{ with .Values.database.credentials.secretName }}
 - name: SYNCHRONY_DATABASE_USERNAME
