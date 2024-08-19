@@ -619,7 +619,7 @@ volumeClaimTemplates:
 {{ end }}
 {{ with .Values.database.url }}
 - name: ATL_JDBC_URL
-  value: {{ . | replace "&" "&amp;" | quote }}
+  value: {{ if contains "&amp;" . }}{{ . | quote }}{{ else }}{{ . | replace "&" "&amp;" | quote }}{{ end }}
 {{ end }}
 {{ with .Values.database.credentials.secretName }}
 - name: ATL_JDBC_USER

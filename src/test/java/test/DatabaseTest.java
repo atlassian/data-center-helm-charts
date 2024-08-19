@@ -113,6 +113,17 @@ class DatabaseTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
+    void confluence_database_ampersand_escaped(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.url", "jdbc://mydatabase?ssl=true&amp;param1=1"));
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_JDBC_URL", "jdbc://mydatabase?ssl=true&amp;param1=1");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
     void synchrony_database_ampersand(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "database.url", "jdbc://mydatabase?ssl=true&amp;param1=1",
