@@ -99,4 +99,38 @@ class DatabaseTest {
                 .assertHasSecretRef("ATL_JDBC_USER", "mysecret", "myusername")
                 .assertHasSecretRef("ATL_JDBC_PASSWORD", "mysecret", "mypassword");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_database_ampersand(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.url", "jdbc://mydatabase?ssl=true&param1=1"));
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_JDBC_URL", "jdbc://mydatabase?ssl=true&amp;param1=1");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_database_ampersand_escaped(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.url", "jdbc://mydatabase?ssl=true&amp;param1=1"));
+        resources.getStatefulSet(product.getHelmReleaseName())
+                .getContainer()
+                .getEnv()
+                .assertHasValue("ATL_JDBC_URL", "jdbc://mydatabase?ssl=true&amp;param1=1");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_database_ampersand(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "database.url", "jdbc://mydatabase?ssl=true&amp;param1=1",
+                "synchrony.enabled", "true"));
+        resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony")
+                .getContainer()
+                .getEnv()
+                .assertHasValue("SYNCHRONY_DATABASE_URL", "jdbc://mydatabase?ssl=true&param1=1");
+    }
 }

@@ -233,7 +233,7 @@ The following variables are all must all be supplied if using this feature:
 
 * `ATL_JDBC_URL`
 
-   The database URL; this is database-specific.
+   The database URL; this is database-specific. It is allowed to use `&` in the URL which will be automatically converted to `&amp;`.
 
 * `ATL_JDBC_USER`
 
