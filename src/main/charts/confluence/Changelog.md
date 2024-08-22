@@ -17,6 +17,16 @@
 * Relabel instance name on jmx service monitor (#757)
 * Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)
 
+## 1.21.1
+
+**Release date:** 2024-8-22
+
+![AppVersion: 8.5.14](https://img.shields.io/static/v1?label=AppVersion&message=8.5.14&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Sanitize jdbc url for Confluence and Synchrony (#866)
+
 ## 1.21.0
 
 **Release date:** 2024-8-13
