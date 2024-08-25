@@ -15,7 +15,7 @@
   volumeMounts:
     - name: local-home
       mountPath: /application-data/logs
-      subPath: log
+      subPath: logs
       readOnly: true
     - name: fluentd-config
       mountPath: /fluentd/etc
