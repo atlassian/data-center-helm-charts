@@ -1,5 +1,7 @@
 package test;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -143,5 +145,36 @@ class FluentdTest {
                 "fluentd.enabled", "true"));
         final var jvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config");
         JsonNodeAssert.assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Datlassian.logging.cloud.enabled=true");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent", "jira", "confluence"}, mode = EnumSource.Mode.EXCLUDE)
+    void fluentd_local_volumes(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true"));
+
+        final var sts = resources.getStatefulSet(product.getHelmReleaseName());
+        JsonNode volumeMount = sts.getContainer("fluentd").getVolumeMount("local-home");
+
+        JsonNodeAssert.assertThat(volumeMount.path("name")).hasTextEqualTo("local-home");
+        JsonNodeAssert.assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/application-data/logs");
+        Assertions.assertThat(volumeMount.path("readOnly").booleanValue()).isEqualTo(true);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void fluentd_extra_volumes(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "fluentd.enabled", "true",
+                "fluentd.extraVolumes[0].name", "custom",
+                "fluentd.extraVolumes[0].mountPath", "/var/atlassian/product/logs",
+                "fluentd.extraVolumes[0].readOnly", "true"));
+
+        final var sts = resources.getStatefulSet(product.getHelmReleaseName());
+        JsonNode volumeMount = sts.getContainer("fluentd").getVolumeMount("custom");
+
+        JsonNodeAssert.assertThat(volumeMount.path("name")).hasTextEqualTo("custom");
+        JsonNodeAssert.assertThat(volumeMount.path("mountPath")).hasTextEqualTo("/var/atlassian/product/logs");
+        Assertions.assertThat(volumeMount.path("readOnly").booleanValue()).isEqualTo(true);
     }
 }
