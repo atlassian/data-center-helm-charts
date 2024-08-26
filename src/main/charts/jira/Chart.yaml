@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '1.21.1'
+version: '1.21.2'
 appVersion: 9.12.12
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,7 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#865)"
+    - "Update appVersions for DC apps (#869)"
 
 dependencies:
 - name: common
