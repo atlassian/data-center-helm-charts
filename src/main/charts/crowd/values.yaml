@@ -659,13 +659,13 @@ fluentd:
     #
     indexNamePrefix: crowd
 
-    # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
-    #
-    extraVolumes: [ ]
-    # - name: local-home
-    #   mountPath: /opt/atlassian/crowd/logs
-    #   subPath: log
-    #   readOnly: true
+  # -- Specify custom volumes to be added to Fluentd container (e.g. more log sources)
+  #
+  extraVolumes: [ ]
+  # - name: local-home
+  #   mountPath: /opt/atlassian/crowd/logs
+  #   subPath: log
+  #   readOnly: true
 
 
 # REQUIRED - Volume configuration

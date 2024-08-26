@@ -185,10 +185,10 @@ data:
       customConfigFile: false
       elasticsearch:
         enabled: true
-        extraVolumes: []
         hostname: elasticsearch
         indexNamePrefix: crowd
       enabled: false
+      extraVolumes: []
       fluentdCustomConfig: {}
       httpPort: 9880
       imageRepo: fluent/fluentd-kubernetes-daemonset

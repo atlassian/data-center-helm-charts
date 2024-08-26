@@ -13,9 +13,16 @@
     - containerPort: {{ .Values.fluentd.httpPort }}
       protocol: TCP
   volumeMounts:
+    - name: local-home
+      mountPath: /application-data/logs
+      subPath: logs
+      readOnly: true
     - name: fluentd-config
       mountPath: /fluentd/etc
       readOnly: true
+{{- if .Values.fluentd.extraVolumes }}
+  {{ toYaml .Values.fluentd.extraVolumes | nindent 4}}
+{{- end }}
   env:
     - name: POD_NAME
       valueFrom:
