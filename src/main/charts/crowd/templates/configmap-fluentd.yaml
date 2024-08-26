@@ -14,9 +14,34 @@ data:
   {{ else }}
   fluent.conf: |
     <source>
-      @type http
-      port {{ .Values.fluentd.httpPort }}
-      bind 0.0.0.0
+      @type tail
+      path /application-data/logs/catalina.*.log
+      pos_file /fluentd/pos/catalina.pos
+      refresh_interval 5
+      <parse>
+        @type none
+      </parse>
+      tag crowd-catalina-logs
+    </source>
+    <source>
+      @type tail
+      path /application-data/logs/crowd_access.*.log
+      pos_file /fluentd/pos/access.pos
+      refresh_interval 5
+      <parse>
+        @type none
+      </parse>
+      tag crowd-access-logs
+    </source>
+    <source>
+      @type tail
+      path /application-data/logs/atlassian-crowd.log
+      pos_file /fluentd/pos/application.pos
+      refresh_interval 5
+      <parse>
+        @type none
+      </parse>
+      tag crowd-application-logs
     </source>
     <filter **>
       @type record_transformer
@@ -27,11 +52,9 @@ data:
         helmrelease "#{ENV['HELM_RELEASE_NAME']}"
       </record>
     </filter>
-
     <filter **>
       @type stdout
     </filter>
-
     {{ if .Values.fluentd.elasticsearch.enabled }}
     <match **>
       @type elasticsearch
