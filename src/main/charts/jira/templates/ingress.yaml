@@ -38,4 +38,13 @@ spec:
                 name: {{ include "common.names.fullname" $ }}
                 port:
                   number: {{ $.Values.jira.service.port }}
+        {{- range .Values.additionalStatefulSets }}
+          - path: {{ .ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ printf "%s-%s" (include "common.names.fullname" $) .name }}
+                port:
+                  number: {{ $.Values.jira.service.port }}
+        {{- end}}
 {{ end }}

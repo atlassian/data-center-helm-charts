@@ -1264,3 +1264,43 @@ openshift:
   # configuration files as ConfigMaps.
   #
   runWithRestrictedSCC: false
+
+
+
+additionalStatefulSets:
+  - name: activity-stream
+    replicas: 1
+    resources: {}
+    additionalLabels:
+      statefulSet: {}
+#      pod: {}
+#    additionalAnnotations:
+#      statefulSet: {}
+#      pod: {}
+#    jvmArgs: []
+#
+#    # -- Standard K8s node-selectors that will be applied to all Jira pods
+#    #
+#    nodeSelector: {}
+#    #  name: <value>
+#
+#    # -- Standard K8s tolerations that will be applied to all Jira pods
+#    #
+#    tolerations: []
+#
+#    # -- Standard K8s affinities that will be applied to all Jira pods
+#    #
+#    affinity: {}
+#
+#    # -- Defines topology spread constraints for Jira pods. See details:
+#    # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+#    #
+#    topologySpreadConstraints: []
+#
+#    service:
+#      type: {}
+#      additionalLabels: {}
+#      additionalAnnotations: {}
+#    ingress:
+#      path: /plugins/servlet/streams
+#      annotations: {}
