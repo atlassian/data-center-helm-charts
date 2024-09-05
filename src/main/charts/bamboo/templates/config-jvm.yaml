@@ -10,7 +10,7 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bamboo.resources.container.requests.cpu }}
-    {{- if .Values.bamboo.additionalCertificates.secretName }}
+    {{- if or .Values.bamboo.additionalCertificates.secretName .Values.bamboo.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}
     {{ include "common.jmx.javaagent" . | indent 4 | trim }}

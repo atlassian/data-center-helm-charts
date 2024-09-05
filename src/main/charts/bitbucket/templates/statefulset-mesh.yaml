@@ -121,7 +121,7 @@ spec:
               mountPath: {{ .mountPath }}/{{ .key }}
               subPath: {{ .key }}
             {{ end }}
-            {{- if .Values.bitbucket.mesh.additionalCertificates.secretName }}
+            {{- if or .Values.bitbucket.mesh.additionalCertificates.secretName .Values.bitbucket.mesh.additionalCertificates.secretList }}
             - name: keystore
               mountPath: /var/ssl
             {{- end }}

@@ -188,7 +188,7 @@ spec:
               subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
               {{- end }}
             {{- end }}
-            {{- if .Values.bitbucket.additionalCertificates.secretName }}
+            {{- if or .Values.bitbucket.additionalCertificates.secretName .Values.bitbucket.additionalCertificates.secretList }}
             - name: keystore
               mountPath: /var/ssl
             {{- end }}

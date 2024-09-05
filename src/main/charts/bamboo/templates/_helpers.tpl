@@ -170,7 +170,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
   {{- if .Values.volumes.sharedHome.subPath }}
   subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
   {{- end }}
-{{- if .Values.bamboo.additionalCertificates.secretName }}
+{{- if or .Values.bamboo.additionalCertificates.secretName .Values.bamboo.additionalCertificates.secretList }}
 - name: keystore
   mountPath: /var/ssl
 {{- end }}

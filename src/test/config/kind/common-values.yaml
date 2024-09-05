@@ -26,7 +26,14 @@ DC_APP_REPLACEME:
 
   # check if init container not failing when importing a custom crt into the default Java keystore
   additionalCertificates:
-    secretName: certificate
+    secretList:
+      - name: dev-certificates
+        keys:
+          - stg.crt
+          - dev.crt
+      - name: certificate-internal
+        keys:
+          - internal.crt
     initContainer:
       resources:
         requests:

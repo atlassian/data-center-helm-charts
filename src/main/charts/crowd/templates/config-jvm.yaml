@@ -12,7 +12,7 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.crowd.resources.container.requests.cpu }}
-    {{- if .Values.crowd.additionalCertificates.secretName }}
+    {{- if or .Values.crowd.additionalCertificates.secretName .Values.crowd.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}
     {{ include "common.jmx.javaagent" . | indent 4 | trim }}
