@@ -299,7 +299,7 @@ Defines the volume mounts used by the Synchrony container.
 {{ define "synchrony.volumeMounts" }}
 - name: synchrony-home
   mountPath: {{ .Values.volumes.synchronyHome.mountPath | quote }}
-{{- if or .Values.synchrony.additionalCertificates.secretName .Values.synchrony.additionalCertificates }}
+{{- if or .Values.synchrony.additionalCertificates.secretName .Values.synchrony.additionalCertificates.secretList }}
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
