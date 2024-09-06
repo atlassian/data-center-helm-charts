@@ -569,8 +569,6 @@ spec:
           volumeMounts:
             - name: synchrony-home
               mountPath: "/var/atlassian/application-data/confluence"
-            - name: keystore
-              mountPath: /var/ssl
             - mountPath: /scripts
               name: entrypoint-script
           ports:
