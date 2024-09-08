@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: crowd/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -40,7 +40,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -68,7 +68,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -314,7 +314,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -337,7 +337,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -361,7 +361,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -410,7 +410,7 @@ spec:
               name: shared-home
       containers:
         - name: crowd
-          image: "atlassian/crowd:6.0.1"
+          image: "atlassian/crowd:6.0.2"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -508,7 +508,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -539,7 +539,7 @@ metadata:
     helm.sh/chart: crowd-1.21.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
-    app.kubernetes.io/version: "6.0.1"
+    app.kubernetes.io/version: "6.0.2"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

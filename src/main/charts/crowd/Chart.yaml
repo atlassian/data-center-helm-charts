@@ -3,7 +3,7 @@ name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
 version: '1.21.2'
-appVersion: 6.0.1
+appVersion: 6.0.2
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Crowd
