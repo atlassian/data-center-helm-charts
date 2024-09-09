@@ -21,7 +21,7 @@ data:
        -Xss{{ .Values.synchrony.resources.jvm.stackSize }} \
        -Dsynchrony.port={{ .Values.synchrony.ports.http }} \
        -Dcluster.listen.port={{ .Values.synchrony.ports.hazelcast }} \
-       {{- if .Values.synchrony.additionalCertificates.secretName }}
+       {{- if or .Values.synchrony.additionalCertificates.secretName .Values.synchrony.additionalCertificates.secretList }}
        -Djavax.net.ssl.trustStore=/var/ssl/cacerts \
        {{- end }}
        {{- range .Values.synchrony.additionalJvmArgs }}

@@ -18,7 +18,7 @@ deploy_postgres() {
        --version="15.5.1" \
        --wait --timeout=120s \
        -n atlassian
-  
+
   # db-init file is used in Jira HA tests only
   if [ -f "${DB_INIT_SCRIPT_FILE}" ]; then
     echo "[INFO]: DB init file '${DB_INIT_SCRIPT_FILE}' found. Initializing the database"
@@ -46,10 +46,16 @@ create_secrets() {
   kubectl create secret generic ${DC_APP}-app-license \
           --from-literal=license=${LICENSE} \
           -n atlassian
-  
+
   # this is to test additionalCertificates init container
   openssl req -x509 -newkey rsa:4096 -keyout /tmp/key.pem -out /tmp/mycert.crt -days 365 -nodes -subj '/CN=localhost'
-  kubectl create secret generic certificate --from-file=mycert.crt=/tmp/mycert.crt -n atlassian
+  openssl req -x509 -newkey rsa:4096 -keyout /tmp/key.pem -out /tmp/mycert1.crt -days 365 -nodes -subj '/CN=localhost'
+  openssl req -x509 -newkey rsa:4096 -keyout /tmp/key.pem -out /tmp/mycert3.crt -days 365 -nodes -subj '/CN=localhost'
+
+  # create multiple certificates to test both single secret and secretList
+  kubectl create secret generic dev-certificates --from-file=dev.crt=/tmp/mycert.crt --from-file=stg.crt=/tmp/mycert1.crt -n atlassian
+  kubectl create secret generic certificate-internal --from-file=internal.crt=/tmp/mycert3.crt -n atlassian
+  kubectl create secret generic certificate --from-file=internal.crt=/tmp/mycert3.crt -n atlassian
 }
 
 deploy_app() {
@@ -57,32 +63,32 @@ deploy_app() {
   helm repo add opensearch https://opensearch-project.github.io/helm-charts/
   helm repo update
   helm dependency build ./src/main/charts/${DC_APP}
-  
+
   # All apps except Jira have postgresql DB type
   DB_TYPE="postgresql"
   if [ ${DC_APP} == "jira" ]; then
     DB_TYPE="postgres72"
   fi
-  
+
   TMP_DIR=$(mktemp -d)
   echo "Copying values file to ${TMP_DIR}"
 
   # copy commmon values template to a tmp location and replace placeholders
   cp src/test/config/kind/common-values.yaml ${TMP_DIR}/common-values.yaml
-  
+
   # sed works differently on different platforms
   if [[ "$OSTYPE" == "darwin"* ]]; then
     SED_COMMAND="sed -i ''"
   else
     SED_COMMAND="sed -i"
   fi
-  
+
   # replace application name, database type and display name (important for Bitbucket functional tests)
   DC_APP_CAPITALIZED="$(echo ${DC_APP} | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')"
   ${SED_COMMAND} "s/DC_APP_REPLACEME/${DC_APP}/g" ${TMP_DIR}/common-values.yaml
   ${SED_COMMAND} "s/DB_TYPE_REPLACEME/${DB_TYPE}/g" ${TMP_DIR}/common-values.yaml
   ${SED_COMMAND} "s/DISPLAY_NAME/${DC_APP_CAPITALIZED}/g" ${TMP_DIR}/common-values.yaml
-  
+
   # OpenSearch does not run well in a tiny MicroShift instance, freezing the API,
   # so we're disabling internal OpenSearch for Bitbucket when tested in MicroShift
   if [ "${DC_APP}" == "bitbucket" ] && [ -n "${OPENSHIFT_VALUES}" ]; then
@@ -94,7 +100,7 @@ deploy_app() {
     echo "[INFO]: Setting external OpenSearch values"
     ENABLE_OPENSEARCH="--set opensearch.enabled=true,opensearch.install=true,opensearch.resources.requests.cpu=10m,opensearch.resources.requests.memory=10Mi,opensearch.persistence.size=1Gi"
   fi
-  
+
   # use a pre-created PVC and hostPath PV instead of NFS volume when running on arm64 machines
   # it is safe to do so because KinD is a single node k8s cluster
   if [ -n "${HOSTPATH_PV}" ]; then
@@ -249,7 +255,7 @@ verify_openshift_analytics() {
 create_backdoor_services() {
   TMP_DIR=$(mktemp -d)
   echo "Copying svc template file to ${TMP_DIR}"
-  cp src/test/config/kind/backdoor-svc.yaml ${TMP_DIR}/backdoor-svc.yaml  
+  cp src/test/config/kind/backdoor-svc.yaml ${TMP_DIR}/backdoor-svc.yaml
   if [[ "$OSTYPE" == "darwin"* ]]; then
     SED_COMMAND="sed -i ''"
   else

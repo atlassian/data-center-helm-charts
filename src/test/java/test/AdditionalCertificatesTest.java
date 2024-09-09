@@ -35,6 +35,22 @@ public class AdditionalCertificatesTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_certificate_list_jvm_prop(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                product.name() + ".additionalCertificates.secretList[1].name", "custom-ca",
+                product.name() + ".additionalCertificates.secretList[1].keys[0]", "custom.crt",
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+        ));
+        final var jvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config");
+        assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Djavax.net.ssl.trustStore=/var/ssl/cacerts");
+    }
+
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
     void additional_certificates_jvm_prop_synchrony(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -46,11 +62,41 @@ public class AdditionalCertificatesTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificate_list_jvm_prop_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalCertificates.secretList[0].name", "self-signed-ca",
+                "synchrony.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                "synchrony.additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                "synchrony.additionalCertificates.secretList[1].name", "custom-ca",
+                "synchrony.additionalCertificates.secretList[1].keys[0]", "custom.crt"
+        ));
+        final var jvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-synchrony-entrypoint");
+        assertThat(jvmConfigMap.getConfigMapData().path("start-synchrony.sh")).hasTextContaining("-Djavax.net.ssl.trustStore=/var/ssl/cacerts");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void additional_certificates_jvm_prop_mesh(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product.name() + ".mesh.enabled", "true",
                 product.name() + ".mesh.additionalCertificates.secretName", "mycrt"
+        ));
+        final var bitbucketMeshJvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config-mesh");
+        assertThat(bitbucketMeshJvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Djavax.net.ssl.trustStore=/var/ssl/cacerts");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificate_list_jvm_prop_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".mesh.enabled", "true",
+                product.name() + ".mesh.additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[1].name", "custom-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[1].keys[0]", "custom.crt"
         ));
         final var bitbucketMeshJvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config-mesh");
         assertThat(bitbucketMeshJvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Djavax.net.ssl.trustStore=/var/ssl/cacerts");
@@ -110,6 +156,21 @@ public class AdditionalCertificatesTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_certificate_list_volumeMounts(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                product.name() + ".additionalCertificates.secretList[1].name", "custom-ca",
+                product.name() + ".additionalCertificates.secretList[1].keys[0]", "custom.crt"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        JsonNode keystoreVolumeMount = statefulSet.getContainer(product.name()).getVolumeMount("keystore");
+        assertThat(keystoreVolumeMount.path("mountPath")).hasTextEqualTo("/var/ssl");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
     void additional_certificates_volumeMounts_bitbucket_mesh(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
@@ -122,11 +183,43 @@ public class AdditionalCertificatesTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificate_list_volumeMounts_bitbucket_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".mesh.enabled", "true",
+                product.name() + ".mesh.additionalCertificates.secretList[0].name", "self-signed-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                product.name() + ".mesh.additionalCertificates.secretList[1].name", "custom-ca",
+                product.name() + ".mesh.additionalCertificates.secretList[1].keys[0]", "custom.crt"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()+"-mesh");
+        JsonNode keystoreVolumeMount = statefulSet.getContainer(product.name()+"-mesh").getVolumeMount("keystore");
+        assertThat(keystoreVolumeMount.path("mountPath")).hasTextEqualTo("/var/ssl");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
     void additional_certificates_volumeMounts_synchrony(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "synchrony.enabled", "true",
                 "synchrony.additionalCertificates.secretName", "mycrt"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()+"-synchrony");
+        JsonNode keystoreVolumeMount = statefulSet.getContainer("synchrony").getVolumeMount("keystore");
+        assertThat(keystoreVolumeMount.path("mountPath")).hasTextEqualTo("/var/ssl");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_certificate_list_volumeMounts_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalCertificates.secretList[0].name", "self-signed-ca",
+                "synchrony.additionalCertificates.secretList[0].keys[0]", "ca.crt",
+                "synchrony.additionalCertificates.secretList[0].keys[1]", "stg.crt",
+                "synchrony.additionalCertificates.secretList[1].name", "custom-ca",
+                "synchrony.additionalCertificates.secretList[1].keys[0]", "custom.crt"
         ));
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()+"-synchrony");
         JsonNode keystoreVolumeMount = statefulSet.getContainer("synchrony").getVolumeMount("keystore");

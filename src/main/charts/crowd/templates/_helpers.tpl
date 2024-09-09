@@ -143,7 +143,7 @@ on Tomcat's logs directory. THis ensures that Tomcat+Crowd logs get captured in 
   {{- if .Values.volumes.sharedHome.subPath }}
   subPath: {{ .Values.volumes.sharedHome.subPath | quote }}
   {{- end }}
-{{- if .Values.crowd.additionalCertificates.secretName }}
+{{- if or .Values.crowd.additionalCertificates.secretName .Values.crowd.additionalCertificates.secretList }}
 - name: keystore
   mountPath: /var/ssl
 {{- end }}
