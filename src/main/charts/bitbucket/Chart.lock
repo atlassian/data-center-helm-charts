@@ -1,7 +1,7 @@
 dependencies:
 - name: common
   repository: https://atlassian.github.io/data-center-helm-charts
-  version: 1.2.6
+  version: 1.2.7
 - name: opensearch
   repository: https://opensearch-project.github.io/helm-charts
   version: 2.19.0
