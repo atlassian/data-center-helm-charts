@@ -1,8 +1,8 @@
-{{- if and .Values.ingress.create (not .Values.ingress.openShiftRoute) }}
+{{- if and .Values.ingress.create (not .Values.ingress.openShiftRoute) .Values.synchrony.ingress.path }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}-synchrony
   labels:
     {{- include "common.labels.commonLabels" . | nindent 4 }}
   annotations:
@@ -14,7 +14,7 @@ metadata:
     "nginx.ingress.kubernetes.io/proxy-read-timeout": {{ .Values.ingress.proxyReadTimeout|quote }}
     "nginx.ingress.kubernetes.io/proxy-send-timeout": {{ .Values.ingress.proxySendTimeout|quote }}
     {{- end }}
-    {{- with .Values.ingress.annotations }}
+    {{- with .Values.synchrony.ingress.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -31,20 +31,11 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          {{ if and .Values.synchrony.enabled (not .Values.synchrony.ingress.path) }}
-          - path: /synchrony
-            pathType: Prefix
+          - path: {{ .Values.synchrony.ingress.path }}
+            pathType: {{ .Values.synchrony.ingress.pathType | default "Prefix" }}
             backend:
               service:
                 name: {{ include "synchrony.fullname" . }}
                 port:
                   number: {{ $.Values.synchrony.service.port }}
-          {{ end }}
-          - path: {{ include "confluence.ingressPath" . }}
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ include "common.names.fullname" . }}
-                port:
-                  number: {{ $.Values.confluence.service.port }}
 {{ end }}

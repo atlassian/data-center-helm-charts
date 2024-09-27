@@ -1215,6 +1215,25 @@ synchrony:
     #
     annotations: {}
 
+  # -- If 'synchrony.ingress.path' is defined, a dedicated Synchrony ingress object is created.
+  # This is useful if you need to deploy multiple instances of Confluence with Synchrony enabled
+  # using the same Ingress hostname and different synchrony paths
+  #
+  ingress:
+
+    # -- Ingress path applied to Synchrony ingress
+    #
+    path:
+
+    # -- Defaults to Prefix, but can be ImplementationSpecific if rewrite target is applied
+    #
+    pathType:
+
+    # -- Custom annotations applied to Synchrony ingress
+    #
+    annotations:
+
+
   securityContextEnabled: true
 
   securityContext:
