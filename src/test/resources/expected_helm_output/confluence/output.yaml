@@ -333,6 +333,10 @@ data:
       additionalVolumeMounts: []
       containerSecurityContext: {}
       enabled: true
+      ingress:
+        annotations: null
+        path: null
+        pathType: null
       podAnnotations: {}
       ports:
         hazelcast: 5701
