@@ -198,9 +198,14 @@ Pod labels
 {{- end -}}
 
 {{- define "confluence.sysprop.synchronyServiceUrl" -}}
+{{- $synchronyIngressPath := "synchrony" }}
+{{- if .Values.synchrony.ingress.path }}
+{{- $sanitizePathRegex := "^/|\\(.*" }}
+{{- $synchronyIngressPath = regexReplaceAll $sanitizePathRegex .Values.synchrony.ingress.path "" }}
+{{- end }}
 {{- if .Values.synchrony.enabled -}}
-    {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/synchrony/v1
-    {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/synchrony/v1
+    {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
+    {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
     {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true

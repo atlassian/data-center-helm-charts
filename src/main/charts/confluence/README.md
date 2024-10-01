@@ -202,6 +202,10 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Synchrony container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additionalSynchrony'.  |
 | synchrony.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
 | synchrony.enabled | bool | `false` | Set to 'true' if Synchrony (i.e. collaborative editing) should be enabled. This will result in a separate StatefulSet and Service to be created for Synchrony. If disabled, then collaborative editing will be disabled in Confluence. |
+| synchrony.ingress | object | `{"annotations":null,"path":null,"pathType":null}` | If 'synchrony.ingress.path' is defined, a dedicated Synchrony ingress object is created. This is useful if you need to deploy multiple instances of Confluence with Synchrony enabled using the same Ingress hostname and different synchrony paths  |
+| synchrony.ingress.annotations | string | `nil` | Custom annotations applied to Synchrony ingress  |
+| synchrony.ingress.path | string | `nil` | Ingress path applied to Synchrony ingress  |
+| synchrony.ingress.pathType | string | `nil` | Defaults to Prefix, but can be ImplementationSpecific if rewrite target is applied  |
 | synchrony.podAnnotations | object | `{}` | Custom annotations that will be applied to all Synchrony pods. When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined) |
 | synchrony.ports.hazelcast | int | `5701` | The port on which the Synchrony container listens for Hazelcast traffic  |
 | synchrony.ports.http | int | `8091` | The port on which the Synchrony container listens for HTTP traffic  |
