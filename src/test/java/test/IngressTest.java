@@ -522,6 +522,61 @@ class IngressTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_synchrony_dedicated_ingress(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.ingress.path", "/custom-synchrony(/|$)(.*)",
+                "synchrony.ingress.pathType", "ImplementationSpecific",
+                "synchrony.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target", "/$2",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var ingresses = resources.getAll(Kind.Ingress);
+        Assertions.assertEquals(3, ingresses.size());
+        final List<String> ingressPaths = extractAllPaths(ingresses);
+        org.assertj.core.api.Assertions.assertThat(ingressPaths).containsExactlyInAnyOrder(
+                "/",
+                "/setup",
+                "/bootstrap",
+                "/custom-synchrony(/|$)(.*)");
+
+        final var synchronyIngress = resources.get(Kind.Ingress, product.getHelmReleaseName() + "-synchrony");
+        final var pathType = synchronyIngress.getSpec().get("rules").get(0).get("http").get("paths").get(0).get("pathType");
+        final var annotations = synchronyIngress.getAnnotations().get("nginx.ingress.kubernetes.io/rewrite-target");
+        assertThat(pathType).hasTextEqualTo("ImplementationSpecific");
+        assertThat(annotations).hasTextContaining("/$2");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_no_synchrony_path_confluence_ingress(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.ingress.path", "/custom-synchrony(/|$)(.*)",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var confluenceIngress = resources.get(Kind.Ingress, product.getHelmReleaseName());
+        final var paths = confluenceIngress.getSpec().get("rules").get(0).get("http").get("paths");
+        assert paths.size() == 1;
+        assertThat(paths.get(0).get("path")).hasTextEqualTo("/");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void confluence_custom_synchrony_context_system_property(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.ingress.path", "/custom-synchrony(/|$)(.*)",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain"));
+
+        final var jvmConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config");
+        assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("https://myhost.mydomain/custom-synchrony/v1");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo", "bitbucket", "confluence", "crowd", "jira"})
     void ingress_proxy_settings(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
