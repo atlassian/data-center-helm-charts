@@ -98,7 +98,7 @@
         <jackson.version>2.13.3</jackson.version>
         <kubernetes-client.version>6.0.0</kubernetes-client.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <commons-io.version>2.14.0</commons-io.version>
 
         <dockerImage.registry />
         <dockerImage.repository />
