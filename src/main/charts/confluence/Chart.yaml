@@ -3,7 +3,7 @@ name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
 version: '1.21.4'
-appVersion: 8.5.15
+appVersion: 8.5.16
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Confluence
