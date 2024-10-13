@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bamboo-agent-1.21.4
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "10.0.1"
+    app.kubernetes.io/version: "10.0.2"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo-agent/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bamboo-agent-1.21.4
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "10.0.1"
+    app.kubernetes.io/version: "10.0.2"
     app.kubernetes.io/managed-by: Helm
 data:
   max_heap: 512m
@@ -35,7 +35,7 @@ metadata:
     helm.sh/chart: bamboo-agent-1.21.4
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "10.0.1"
+    app.kubernetes.io/version: "10.0.2"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -63,7 +63,7 @@ spec:
       initContainers:
       containers:
         - name: bamboo-agent
-          image: "atlassian/bamboo-agent-base:10.0.1"
+          image: "atlassian/bamboo-agent-base:10.0.2"
           imagePullPolicy: IfNotPresent
           env:
             - name: BAMBOO_SERVER
