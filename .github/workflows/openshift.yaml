@@ -56,7 +56,7 @@ jobs:
       - name: Install required virtualization software
         run: |
           sudo apt-get update
-          sudo apt install qemu-kvm libvirt-daemon libvirt-daemon-system
+          sudo apt install qemu-kvm libvirt-daemon libvirt-daemon-system virtiofsd
           sudo usermod -a -G libvirt $USER
 
       - name: Free up disk
