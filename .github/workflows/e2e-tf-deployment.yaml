@@ -51,7 +51,7 @@ jobs:
       - name: Install the latest Terraform
         run: |
           # check existing version
-          terraform -version
+          terraform -version || true
           # download the latest
           URL=$(curl -fsSL https://api.releases.hashicorp.com/v1/releases/terraform/latest | jq -r '.builds[] | select((.arch=="amd64") and (.os=="linux")).url')
           curl -s -o /tmp/terraform.zip ${URL}
