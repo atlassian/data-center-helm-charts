@@ -339,6 +339,11 @@ management technology, and is beyond the scope of this documentation.
 
    The time-to-live for cluster packets. Primarily of use in multicast clusters.
 
+* `ATL_CLUSTER_INTERFACE`
+   
+   The network interface Confluence will use to communicate between nodes. Auto-detected by default.
+  
+
 ##### AWS cluster settings
 
    The following should be populated from the AWS environment.
