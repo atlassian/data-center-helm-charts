@@ -19,7 +19,7 @@ on:
 jobs:
   kind-testing:
     if: ${{ github.event.label.name == 'e2e' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # See: https://github.com/kubernetes-sigs/kind/tags
       KIND_VERSION: "v0.23.0"

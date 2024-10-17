@@ -20,7 +20,7 @@ jobs:
   test:
     if: ${{ github.event.label.name == 'e2e' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
     name: Deploy Infrastructure and Run E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       id-token: write
       contents: read
