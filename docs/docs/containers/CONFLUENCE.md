@@ -342,6 +342,7 @@ management technology, and is beyond the scope of this documentation.
 * `ATL_CLUSTER_INTERFACE`
    
    The network interface Confluence will use to communicate between nodes. Auto-detected by default.
+   [Override interface](https://confluence.atlassian.com/doc/data-center-troubleshooting-203618.html#DataCenterTroubleshooting-Changemulticastinterface) if Confluence has selected the wrong one.
   
 
 ##### AWS cluster settings
