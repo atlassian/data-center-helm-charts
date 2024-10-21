@@ -301,6 +301,10 @@ optional.
 * `ATL_DB_ACQUIREINCREMENT` (default: 1)
 * `ATL_DB_VALIDATIONQUERY` (default: "select 1")
 * `ATL_DB_PROVIDER_CLASS` (default: `com.atlassian.confluence.impl.hibernate.DelegatingHikariConnectionProvider`)
+* `ATL_DB_CONNECTION_AUTOCOMMIT` (default false)
+* `ATL_DB_CONNECTION_ISOLATION` (default 2)
+* `ATL_DB_DATASOURCE_HIKARI_REGISTER_MBEANS` (default true)
+
 
 ### Data Center configuration
 
