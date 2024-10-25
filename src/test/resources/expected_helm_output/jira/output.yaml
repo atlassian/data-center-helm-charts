@@ -26,7 +26,6 @@ data:
   additional_jvm_args: >-
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
-    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 768m
   min_heap: 384m
   reserved_code_cache: 512m
@@ -397,7 +396,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: f7d87b05e5529a36d388bb9183253cbe5948fe8708847c71fb0d6e5853280c61
+        checksum/config-jvm: 579c934bbac667c917645262df123ff5afe749a2e250e1dbac74789f83e45e1f
       labels:
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
@@ -465,6 +464,8 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-jira-jvm-config
+            - name: CATALINA_OPTS
+              value: "-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml"
           ports:
             - name: http
               containerPort: 8080

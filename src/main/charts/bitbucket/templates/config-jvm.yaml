@@ -10,7 +10,6 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bitbucket.resources.container.requests.cpu }}
-    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
     {{- if .Values.monitoring.exposeJmxMetrics }}
     -Dplugin.bitbucket-git.mesh.sidecar.jvmArgs=-javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar"  .Values.volumes.sharedHome.mountPath) }}=9998:/opt/atlassian/jmx/jmx-config.yaml
     {{- end }}

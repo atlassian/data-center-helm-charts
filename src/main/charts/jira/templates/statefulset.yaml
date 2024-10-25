@@ -160,6 +160,10 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: {{ include "common.names.fullname" . }}-jvm-config
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: CATALINA_OPTS
+              value: {{ include "common.jmx.javaagent" . | replace "\n" "" | quote }}
+            {{- end }}
             {{- include "jira.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http

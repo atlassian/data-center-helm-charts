@@ -25,7 +25,6 @@ metadata:
 data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=1
-    -javaagent:/var/atlassian/application-data/mesh/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 512m
 ---
@@ -43,7 +42,6 @@ metadata:
 data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=2
-    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
     -Dplugin.bitbucket-git.mesh.sidecar.jvmArgs=-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9998:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1g
   min_heap: 512m
@@ -593,7 +591,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8c3b2f44bad635bf70048f215c5a5144c8e922ef38df8388a5891b62a78f6b75
+        checksum/config-jvm: 78bcae732f8cf993f9658b4b2928c6b90fbf19b8b4b935b3ee58913532fb1f21
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -672,6 +670,8 @@ spec:
                   name: unittest-bitbucket-jvm-config-mesh
             - name: JMX_ENABLED
               value: "true"
+            - name: CATALINA_OPTS
+              value: "-javaagent:/var/atlassian/application-data/mesh/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml"
           lifecycle:
             preStop:
               exec:
@@ -714,7 +714,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: b0b5f87a88780ab1acc1c714670dcabacc9f6d7984c744c3dca412915c9dfae6
+        checksum/config-jvm: 10f147072cc51829242111f10bfae05f59bf90f2997c88e1e8c2be4eafa4473d
       labels:
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
@@ -812,6 +812,8 @@ spec:
               value: "default"
             - name: JMX_ENABLED
               value: "true"
+            - name: CATALINA_OPTS
+              value: "-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml"
           lifecycle:
             preStop:
               exec:

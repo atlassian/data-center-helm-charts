@@ -25,7 +25,6 @@ metadata:
 data:
   additional_jvm_args: >-
     -XX:ActiveProcessorCount=2
-    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 1024m
   min_heap: 512m
 ---
@@ -450,7 +449,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 793e38b045381183098c1c2418e59554e2573e0e260a348f539fa37641f6d4a8
+        checksum/config-jvm: 7517342dd38443e26c4ad7d7e72c11d1dbab53a2e833032e46b71df455691778
       labels:
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
@@ -553,6 +552,8 @@ spec:
               value: 
             - name: ATL_BAMBOO_ENABLE_UNATTENDED_SETUP
               value: "true"
+            - name: CATALINA_OPTS
+              value: "-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml"
           ports:
             - name: http
               containerPort: 8085

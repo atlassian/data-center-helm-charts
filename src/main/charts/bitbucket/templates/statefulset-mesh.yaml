@@ -160,6 +160,10 @@ spec:
             - name: JMX_ENABLED
               value: "true"
             {{ end }}
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: CATALINA_OPTS
+              value: "-javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar" ( .Values.bitbucket.mesh.volume.mountPath)) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml"
+            {{- end }}
             {{- include "bitbucket.mesh.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
             preStop:

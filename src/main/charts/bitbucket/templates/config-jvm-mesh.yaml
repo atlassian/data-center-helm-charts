@@ -10,9 +10,6 @@ data:
     {{ . }}
     {{- end }}
     -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bitbucket.mesh.resources.container.requests.cpu }}
-    {{- if .Values.monitoring.exposeJmxMetrics }}
-    -javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar" ( .Values.bitbucket.mesh.volume.mountPath)) }}={{ .Values.monitoring.jmxExporterPort}}:/opt/atlassian/jmx/jmx-config.yaml
-    {{- end }}
     {{- if or .Values.bitbucket.mesh.additionalCertificates.secretName .Values.bitbucket.mesh.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}

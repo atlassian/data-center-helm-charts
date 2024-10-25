@@ -15,6 +15,5 @@ data:
     {{- if or .Values.crowd.additionalCertificates.secretName .Values.crowd.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}
-    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.crowd.resources.jvm.maxHeap }}
   min_heap: {{ .Values.crowd.resources.jvm.minHeap }}

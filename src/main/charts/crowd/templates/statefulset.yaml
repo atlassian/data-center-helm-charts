@@ -231,6 +231,10 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: {{ include "common.names.fullname" . }}-jvm-config
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: CATALINA_OPTS
+              value: {{ include "common.jmx.javaagent" . | replace "\n" "" | quote }}
+            {{- end }}
             {{- include "crowd.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
           {{- if .Values.crowd.postStart.command }}

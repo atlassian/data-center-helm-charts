@@ -22,7 +22,6 @@ data:
     {{- if or .Values.confluence.additionalCertificates.secretName .Values.confluence.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}
-    {{- include "common.jmx.javaagent" . | indent 4 -}}
     {{- include "confluence.sysprop.s3Config" . | indent 4 }}
     {{- if .Values.opensearch.enabled }}
     -Dsearch.platform=opensearch
