@@ -299,10 +299,6 @@ spec:
             - name: JMX_ENABLED
               value: "true"
             {{ end }}
-            {{- if .Values.monitoring.exposeJmxMetrics }}
-            - name: CATALINA_OPTS
-              value: {{ include "common.jmx.javaagent" . | replace "\n" "" | quote }}
-            {{- end }}
             {{- include "bitbucket.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
           {{- if .Values.bitbucket.postStart.command }}
