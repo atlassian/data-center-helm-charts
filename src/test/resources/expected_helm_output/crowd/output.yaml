@@ -27,7 +27,6 @@ data:
     -Dcluster.node.name=${KUBE_POD_NAME}
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2
-    -javaagent:/var/atlassian/application-data/crowd/shared/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml
   max_heap: 768m
   min_heap: 384m
 ---
@@ -375,7 +374,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: fdf627893296baca9c1f8932080860cf429a4b34682274892d2cee0e00396fe4
+        checksum/config-jvm: 9dc9c943d7c40b8c7c70c066dec0ff512e2cff63f8d54f0518bffdb2da6c6c09
       labels:
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
@@ -479,6 +478,8 @@ spec:
                 configMapKeyRef:
                   key: max_heap
                   name: unittest-crowd-jvm-config
+            - name: CATALINA_OPTS
+              value: "-javaagent:/var/atlassian/application-data/crowd/shared/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml"
           lifecycle:
             preStop:
               exec:

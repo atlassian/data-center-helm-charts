@@ -30,7 +30,6 @@ data:
     -Dconfluence.clusterNodeName.useHostname=true
     -Datlassian.logging.cloud.enabled=false
     -XX:ActiveProcessorCount=2    
-    -javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml    
   max_heap: 1g
   min_heap: 1g
   reserved_code_cache: 256m
@@ -634,7 +633,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: f429d69f3f4349a8244614ce43bb7966bf3bea49ae917572f67fbe7a7bce9bd7
+        checksum/config-jvm: 5ecf6d102ac01540d0b521813ca75d6cdc919f86262d79e1e7bfcd92b3fd488a
       labels:
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
@@ -739,6 +738,8 @@ spec:
                 configMapKeyRef:
                   key: reserved_code_cache
                   name: unittest-confluence-jvm-config
+            - name: CATALINA_OPTS
+              value: "-javaagent:/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml"
           lifecycle:
             preStop:
               exec:

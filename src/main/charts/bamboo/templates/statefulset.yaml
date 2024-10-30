@@ -202,6 +202,10 @@ spec:
             {{ end }}
             - name: ATL_BAMBOO_ENABLE_UNATTENDED_SETUP
               value: {{ .Values.bamboo.unattendedSetup | quote }}
+            {{- if .Values.monitoring.exposeJmxMetrics }}
+            - name: CATALINA_OPTS
+              value: {{ include "common.jmx.javaagent" . | replace "\n" "" | quote }}
+            {{- end }}
             {{- include "bamboo.additionalEnvironmentVariables" . | nindent 12 }}
           ports:
             - name: http

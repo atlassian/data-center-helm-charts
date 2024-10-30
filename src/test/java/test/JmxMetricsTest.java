@@ -55,9 +55,13 @@ class JmxMetricsTest {
         // assert no resources are set
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("resources")).isEmpty();
 
-        // assert jvm configmap has javaagent
-        final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
-        assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+sharedHomePath+"/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+        if (product.name().equals("bitbucket")) {
+            final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+            assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+sharedHomePath+"/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+        } else {
+            // assert CATALINA_OPTS env var has javaagent
+            statefulSet.getContainer().getEnv().assertHasValue("CATALINA_OPTS", "-javaagent:"+sharedHomePath+"/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+        }
 
         // assert jmx configmap created and has expected config
         final var jmxConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jmx-config").getDataByKey("jmx-config.yaml");
@@ -144,9 +148,15 @@ class JmxMetricsTest {
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("subPath")).hasTextEqualTo(product.name());
-        // assert jvm configmap has javaagent
-        final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
-        assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+ sharedHomePath + "/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+
+        if (product.name().equals("bitbucket")) {
+            // assert jvm configmap has javaagent
+            final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+            assertThat(jmvConfigMap).hasTextContaining("-javaagent:"+ sharedHomePath + "/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+        } else {
+            // assert CATALINA_OPTS env var has javaagent
+            statefulSet.getContainer().getEnv().assertHasValue("CATALINA_OPTS", "-javaagent:"+ sharedHomePath + "/jmx_prometheus_javaagent.jar=9999:/opt/atlassian/jmx/jmx-config.yaml");
+        }
     }
 
     @ParameterizedTest
@@ -181,9 +191,14 @@ class JmxMetricsTest {
         // assert jmx_exporter init container does not exist
         assertThat(statefulSet.getInitContainers().path(0).path("name")).hasTextNotContaining("fetch-jmx-exporter");
 
-        // assert jvm configmap has custom javaagent path and port
-        final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
-        assertThat(jmvConfigMap).hasTextContaining("-javaagent:/tmp/custom.jar=9000:/opt/atlassian/jmx/jmx-config.yaml");
+        if (product.name().equals("bitbucket")) {
+            // assert jvm configmap has custom javaagent path and port
+            final var jmvConfigMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
+            assertThat(jmvConfigMap).hasTextContaining("-javaagent:/tmp/custom.jar=9000:/opt/atlassian/jmx/jmx-config.yaml");
+        } else {
+            // assert CATALINA_OPTS has custom javaagent path and port
+            statefulSet.getContainer().getEnv().assertHasValue("CATALINA_OPTS", "-javaagent:/tmp/custom.jar=9000:/opt/atlassian/jmx/jmx-config.yaml");
+        }
     }
 
     @ParameterizedTest
@@ -246,7 +261,7 @@ class JmxMetricsTest {
         assertThat(statefulSet.getContainer(product.name()+"-mesh").getPort("jmx").path("containerPort")).hasValueEqualTo(9999);
         assertThat(statefulSet.getContainer(product.name()+"-mesh").getPort("jmx").path("protocol")).hasTextEqualTo("TCP");
 
-        // assert jmx env var
+        // assert jmx env vars
         statefulSet.getContainer().getEnv().assertHasValue("JMX_ENABLED", "true");
 
         // assert jvm configmap has javaagent

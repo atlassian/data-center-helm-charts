@@ -13,6 +13,5 @@ data:
     {{- if or .Values.bamboo.additionalCertificates.secretName .Values.bamboo.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}
-    {{ include "common.jmx.javaagent" . | indent 4 | trim }}
   max_heap: {{ .Values.bamboo.resources.jvm.maxHeap }}
   min_heap: {{ .Values.bamboo.resources.jvm.minHeap }}
