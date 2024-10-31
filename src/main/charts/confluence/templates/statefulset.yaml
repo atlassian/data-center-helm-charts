@@ -36,7 +36,7 @@ spec:
         {{- end }}
         {{- include "confluence.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "common.labels.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.commonLabels" . | nindent 8 }}
         {{- include "confluence.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}

@@ -36,7 +36,7 @@ spec:
         {{- end }}
         {{- include "jira.podAnnotations" . | nindent 8 }}
       labels:
-        {{- include "common.labels.selectorLabels" . | nindent 8 }}
+        {{- include "common.labels.commonLabels" . | nindent 8 }}
         {{- include "jira.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
