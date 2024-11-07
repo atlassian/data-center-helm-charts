@@ -226,6 +226,22 @@ information, please refer to [Configuring Amazon S3 Object Storage](https://conf
 
 Avatars and attachments can be stored in the same bucket. If bucket names are identical, `ATL_S3AVATARS_*` env vars are used to generate a common filestore configuration.
 
+### S3 Backups storage configuration
+
+Starting with 9.16, you can configure Jira to [store backups in Amazon S3](https://confluence.atlassian.com/adminjiraserver/storing-backups-in-amazon-s3-1402409182.html).
+
+* `ATL_S3BACKUPS_BUCKET_NAME`
+
+  Bucket name to store avatars.
+
+* `ATL_S3BACKUPS_REGION`
+
+  AWS region where the S3 bucket is located.
+
+* `ATL_S3BACKUPS_ENDPOINT_OVERRIDE`
+
+  Override the default AWS API endpoint with a custom one (optional).
+
 
 ### Database configuration
 
