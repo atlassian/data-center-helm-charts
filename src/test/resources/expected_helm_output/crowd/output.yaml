@@ -376,8 +376,11 @@ spec:
       annotations:
         checksum/config-jvm: 9dc9c943d7c40b8c7c70c066dec0ff512e2cff63f8d54f0518bffdb2da6c6c09
       labels:
+        helm.sh/chart: crowd-1.21.4
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
+        app.kubernetes.io/version: "6.1.1"
+        app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-crowd
       terminationGracePeriodSeconds: 30

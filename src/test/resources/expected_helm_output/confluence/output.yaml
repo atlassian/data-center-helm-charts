@@ -553,8 +553,11 @@ spec:
       annotations:
         checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
+        helm.sh/chart: confluence-1.21.4
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
+        app.kubernetes.io/version: "8.5.16"
+        app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 25
@@ -635,8 +638,11 @@ spec:
       annotations:
         checksum/config-jvm: 5ecf6d102ac01540d0b521813ca75d6cdc919f86262d79e1e7bfcd92b3fd488a
       labels:
+        helm.sh/chart: confluence-1.21.4
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
+        app.kubernetes.io/version: "8.5.16"
+        app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
       terminationGracePeriodSeconds: 25

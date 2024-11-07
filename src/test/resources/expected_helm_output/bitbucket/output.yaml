@@ -716,8 +716,11 @@ spec:
       annotations:
         checksum/config-jvm: 0047b616a0397cd0eff2856e33ee7ac5ca93c44e860d3912445c6a8f76b83dd8
       labels:
+        helm.sh/chart: bitbucket-1.21.4
         app.kubernetes.io/name: bitbucket
         app.kubernetes.io/instance: unittest-bitbucket
+        app.kubernetes.io/version: "8.19.10"
+        app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-bitbucket
       terminationGracePeriodSeconds: 35

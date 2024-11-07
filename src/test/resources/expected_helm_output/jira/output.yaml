@@ -398,8 +398,11 @@ spec:
       annotations:
         checksum/config-jvm: 579c934bbac667c917645262df123ff5afe749a2e250e1dbac74789f83e45e1f
       labels:
+        helm.sh/chart: jira-1.21.4
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
+        app.kubernetes.io/version: "9.12.14"
+        app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-jira
       terminationGracePeriodSeconds: 30
