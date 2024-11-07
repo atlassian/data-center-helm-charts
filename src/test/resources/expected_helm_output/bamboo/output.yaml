@@ -451,8 +451,11 @@ spec:
       annotations:
         checksum/config-jvm: 7517342dd38443e26c4ad7d7e72c11d1dbab53a2e833032e46b71df455691778
       labels:
+        helm.sh/chart: bamboo-1.21.4
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
+        app.kubernetes.io/version: "10.0.2"
+        app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-bamboo
       terminationGracePeriodSeconds: 30
