@@ -411,6 +411,16 @@ volumeClaimTemplates:
   value: {{ .Values.jira.s3Storage.attachments.endpointOverride | quote }}
 {{- end }}
 {{- end }}
+{{- if and .Values.jira.s3Storage.backups.bucketName .Values.jira.s3Storage.backups.bucketRegion }}
+- name: ATL_S3BACKUPS_BUCKET_NAME
+  value: {{ .Values.jira.s3Storage.backups.bucketName | quote }}
+- name: ATL_S3BACKUPS_REGION
+  value: {{ .Values.jira.s3Storage.backups.bucketRegion | quote }}
+{{- if .Values.jira.s3Storage.backups.endpointOverride }}
+- name: ATL_S3BACKUPS_ENDPOINT_OVERRIDE
+  value: {{ .Values.jira.s3Storage.backups.endpointOverride | quote }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "jira.databaseEnvVars" -}}

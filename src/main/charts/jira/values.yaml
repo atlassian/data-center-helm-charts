@@ -682,6 +682,21 @@ jira:
       #
       endpointOverride:
 
+    backups:
+      # -- Bucket name to store backups. If a bucket name and region (see below) are defined, Jira will automatically
+      # use AWS S3 to store backups. Only bucket name is required, not the full arn.
+      # If you provide the same bucket name for both avatars and backups, they will be stored in the same bucket
+      #
+      bucketName:
+
+      # -- AWS region where the S3 bucket is located.
+      #
+      bucketRegion:
+
+      # -- Override the default AWS API endpoint with a custom one
+      #
+      endpointOverride:
+
   # Data Center clustering
   #
   clustering:
