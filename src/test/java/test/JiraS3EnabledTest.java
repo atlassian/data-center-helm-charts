@@ -3,15 +3,12 @@ package test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
 import test.helm.Helm;
 import test.model.Product;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 class JiraS3EnabledTest {
     private Helm helm;
