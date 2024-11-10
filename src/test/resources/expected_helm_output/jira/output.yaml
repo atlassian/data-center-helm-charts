@@ -189,6 +189,10 @@ data:
           bucketName: null
           bucketRegion: null
           endpointOverride: null
+        backups:
+          bucketName: null
+          bucketRegion: null
+          endpointOverride: null
       securityContext:
         fsGroup: 2001
       securityContextEnabled: true
