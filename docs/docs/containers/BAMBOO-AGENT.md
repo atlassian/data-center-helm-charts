@@ -147,7 +147,7 @@ RUN /bamboo-update-capability.sh "system.git.executable" /usr/bin/git
 Bamboo Docker images are based on JDK 11, JDK 17 (from Bamboo 9.4), and JDK 21 (from Bamboo 10.1) and generated from the
 [official Eclipse Temurin OpenJDK Docker images](https://hub.docker.com/_/eclipse-temurin) and
 [Red Hat Universal Base Images](https://catalog.redhat.com/software/containers/ubi9/openjdk-17/61ee7c26ed74b2ffb22b07f6?architecture=amd64).
-Starting in Bamboo 9.4, UBI tags are available in 2 formats: `<version>-ubi9`, `<version>-ubi9-jdk17`, `<version>-ubi9-jdk21`
+Starting in Bamboo 9.4, UBI tags are available in 2 formats: `<version>-ubi9`, `<version>-ubi9-jdk17`, or `<version>-ubi9-jdk21>`
 
 The Docker images follow the [Atlassian Support end-of-life
 policy](https://confluence.atlassian.com/support/atlassian-support-end-of-life-policy-201851003.html);
