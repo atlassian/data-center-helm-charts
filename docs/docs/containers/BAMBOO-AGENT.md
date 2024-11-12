@@ -117,7 +117,7 @@ This Docker image contains only minimal setup to run a Bamboo agent which might 
 
 Example of extending the agent base image by Maven and Git:
 ```Dockerfile
-FROM atlassian/bamboo-agent-base:9.2.1
+FROM atlassian/bamboo-agent-base:9.6.8
 USER root
 RUN apt-get update && \
     apt-get install maven -y && \

@@ -110,14 +110,14 @@ can be controlled via the below environment variables.
 The following Tomcat/Catalina options are also supported. For more information,
 see <https://tomcat.apache.org/tomcat-9.0-doc/config/index.html>.
 
-* `ATL_TOMCAT_MGMT_PORT` (default: 8007)
-* `ATL_TOMCAT_MAXTHREADS` (default: 150)
-* `ATL_TOMCAT_MAXHTTPHEADERSIZE` (default: 8192)
-* `ATL_TOMCAT_MINSPARETHREADS` (default: 25)
+* `ATL_TOMCAT_ACCEPTCOUNT` (default: 100)
 * `ATL_TOMCAT_CONNECTIONTIMEOUT` (default: 20000)
 * `ATL_TOMCAT_ENABLELOOKUPS` (default: false)
+* `ATL_TOMCAT_MAXHTTPHEADERSIZE` (default: 8192)
+* `ATL_TOMCAT_MAXTHREADS` (default: 150)
+* `ATL_TOMCAT_MGMT_PORT` (default: 8007)
+* `ATL_TOMCAT_MINSPARETHREADS` (default: 25)
 * `ATL_TOMCAT_PROTOCOL` (default: HTTP/1.1)
-* `ATL_TOMCAT_ACCEPTCOUNT` (default: 100)
 * `ATL_TOMCAT_URIENCODING` (default: UTF-8)
 
 The standard HTTP connectors (NIO, NIO2 and APR/native) settings
@@ -486,8 +486,8 @@ Alternatively you can use a specific major, major.minor, or major.minor.patch
 version of Bamboo by using a version number tag:
 
 * `atlassian/bamboo:9`
-* `atlassian/bamboo:9.0`
-* `atlassian/bamboo:9.0.1`
+* `atlassian/bamboo:9.6`
+* `atlassian/bamboo:9.6.8`
 
 All versions from 8.0+ are available. Legacy builds for older versions are
 available but are no longer supported.
