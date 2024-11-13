@@ -12,7 +12,7 @@ To learn more about Bamboo, see: <https://www.atlassian.com/software/bamboo>
 This Docker container makes it easy to get a Bamboo Remote Agent up and running. It is intended to be used as a base to 
 build from, and as such contains limited built-in capabilities:
 
-* JDK 11, JDK 17 (from v9.4.0)
+* JDK 11, JDK 17 (from v9.4.0), JDK 21 (from v10.1.0)
 * Git & Git LFS
 * Maven 3
 * Python 3
@@ -144,10 +144,10 @@ RUN /bamboo-update-capability.sh "system.git.executable" /usr/bin/git
 
 ## Supported JDK versions and base images
 
-Bamboo Docker images are based on JDK 11, JDK 17 (from Bamboo 9.4) and generated from the
+Bamboo Docker images are based on JDK 11, JDK 17 (from Bamboo 9.4), and JDK 21 (from Bamboo 10.1) and generated from the
 [official Eclipse Temurin OpenJDK Docker images](https://hub.docker.com/_/eclipse-temurin) and
 [Red Hat Universal Base Images](https://catalog.redhat.com/software/containers/ubi9/openjdk-17/61ee7c26ed74b2ffb22b07f6?architecture=amd64).
-Starting in Bamboo 9.4, UBI tags are available in 2 formats: `<version>-ubi9`, `<version>-ubi9-jdk17`, `<version>-ubi9-jdk21`
+Starting in Bamboo 9.4, UBI tags are available in 2 formats: `<version>-ubi9`, `<version>-ubi9-jdk17`, or `<version>-ubi9-jdk21>`
 
 The Docker images follow the [Atlassian Support end-of-life
 policy](https://confluence.atlassian.com/support/atlassian-support-end-of-life-policy-201851003.html);
@@ -168,7 +168,7 @@ If for some reason you need a different version, see "Building your own image".
 
 ## Migration to UBI
 
-If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, `JAVA_HOME` in UBI container is set to `/usr/lib/jvm/java-17` (JDK17).
+If you have been mounting any files to `${JAVA_HOME}` directory in `eclipse-temurin` based container, `JAVA_HOME` in UBI container is set to `/usr/lib/jvm/java-17` (JDK17) and `/usr/lib/jvm/java-21` (JDK21).
 
 Also, if you have been mounting and running any custom scripts in the container, UBI-based images may lack some tools and utilities that are available out of the box in eclipse-temurin tags. If that's the case, see [Building your own image](#building-your-own-image).
 
