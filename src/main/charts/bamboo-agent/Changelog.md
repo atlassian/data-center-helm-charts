@@ -12,6 +12,16 @@
 * Update appVersions for DC apps (#762)
 * Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)
 
+## 1.22.0
+
+**Release date:** 2024-11-15
+
+![AppVersion: 10.0.3](https://img.shields.io/static/v1?label=AppVersion&message=10.0.3&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update appVersions for DC apps (#905)
+
 ## 1.21.4
 
 **Release date:** 2024-10-1
