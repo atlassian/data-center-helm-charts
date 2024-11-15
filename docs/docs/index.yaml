@@ -2,6 +2,39 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#905)"
+        - "Updated pod labels for all products (#901)"
+        - "Fix shutdown with jmx javaagent enabled (#899)"
+        - "Unset IDs for all the Grafana dashboards (#889)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.0.3
+    created: "2024-11-15T03:00:27.29689239Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 0cb68e62f57e8c35cd7cf438b8a4d83a813fea20ff42621a9305570c5367bd13
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.22.0/bamboo-1.22.0.tgz
+    version: 1.22.0
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#881)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -1477,6 +1510,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#905)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.0.3
+    created: "2024-11-15T03:00:27.441228478Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 250931ee505cbc020fc6aaac3e65473b4161f768a78be68daf99225bc56eed19
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.22.0/bamboo-agent-1.22.0.tgz
+    version: 1.22.0
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#881)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -2890,6 +2952,42 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#905)"
+        - "Updated pod labels for all products (#901)"
+        - "Unset IDs for all the Grafana dashboards (#889)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 8.19.11
+    created: "2024-11-15T03:00:27.556556823Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: e0d9765a6f1663ca1b443b4e6cc5b3b914ccbf51d1440fd26726dc428777e226
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.22.0/bitbucket-1.22.0.tgz
+    version: 1.22.0
   - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#881)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -4972,6 +5070,43 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#905)"
+        - "Updated pod labels for all products (#901)"
+        - "Fix shutdown with jmx javaagent enabled (#899)"
+        - "Unset IDs for all the Grafana dashboards (#889)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 8.5.17
+    created: "2024-11-15T03:00:27.839132718Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: b70eb9bec7917b77f12166f02375d89327dfb4b0859dee2f2cac160f71817888
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.22.0/confluence-1.22.0.tgz
+    version: 1.22.0
+  - annotations:
       artifacthub.io/changes: '- "Create a dedicated Synchrony ingress (#883)"'
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
@@ -6968,6 +7103,38 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Updated pod labels for all products (#901)"
+        - "Fix shutdown with jmx javaagent enabled (#899)"
+        - "Unset IDs for all the Grafana dashboards (#889)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 6.1.1
+    created: "2024-11-15T03:00:27.975444893Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 451dec0cc61cac8d4ee8d3b0a2747492f3fb27094fe07e7a62c0609e7a8d569f
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.22.0/crowd-1.22.0.tgz
+    version: 1.22.0
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#884)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -8750,6 +8917,40 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Add s3 backups to Helm values (#907)"
+        - "Updated pod labels for all products (#901)"
+        - "Fix shutdown with jmx javaagent enabled (#899)"
+        - "Unset IDs for all the Grafana dashboards (#889)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.12.15
+    created: "2024-11-15T03:00:28.113118232Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: d404b422a095e9115741810d03ac8620afe8076e090e82d6f735a1049f535603
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.22.0/jira-1.22.0.tgz
+    version: 1.22.0
   - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#881)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -10678,4 +10879,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2024-10-01T04:09:20.35403641Z"
+generated: "2024-11-15T03:00:28.114372934Z"
