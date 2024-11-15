@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: '1.21.4'
+version: '1.22.0'
 appVersion: 10.0.3
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,10 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#881)"
+    - "Update appVersions for DC apps (#905)"
+    - "Updated pod labels for all products (#901)"
+    - "Fix shutdown with jmx javaagent enabled (#899)"
+    - "Unset IDs for all the Grafana dashboards (#889)"
 dependencies:
 - name: common
   version: 1.2.7
