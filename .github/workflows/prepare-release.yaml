@@ -40,7 +40,7 @@ jobs:
       - name: Install Helm Docs
         uses: envoy/install-helm-docs@v1.0.0
         with:
-          version: 1.11.0
+          version: 1.12.0
 
       - name: Generate changelog and Chart annotations
         run: |
