@@ -235,6 +235,7 @@ data:
         redirectPort: "8443"
         scheme: null
         secure: null
+        stuckThreadDetectionValveThreshold: "120"
       topologySpreadConstraints: []
       useHelmReleaseNameAsContainerName: false
     monitoring:

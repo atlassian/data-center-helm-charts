@@ -48,7 +48,7 @@ data:
               <!-- Logging configuration for Confluence is specified in confluence/WEB-INF/classes/log4j.properties -->
               <Manager pathname=""/>
               <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve"
-                     threshold="60"/>
+                     threshold="{{ .Values.confluence.tomcatConfig.stuckThreadDetectionValveThreshold | default "60" }}" />
             {{ if .Values.confluence.accessLog.enabled }}
               <Valve className="org.apache.catalina.valves.AccessLogValve"
                      requestAttributesEnabled="true"

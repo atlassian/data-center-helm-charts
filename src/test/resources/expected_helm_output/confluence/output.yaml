@@ -197,6 +197,7 @@ data:
         redirectPort: "8443"
         scheme: null
         secure: null
+        stuckThreadDetectionValveThreshold: "60"
         trustedProxies: null
         uriEncoding: UTF-8
       topologySpreadConstraints: []

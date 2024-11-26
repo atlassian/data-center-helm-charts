@@ -167,6 +167,7 @@ see https://tomcat.apache.org/tomcat-7.0-doc/config/index.html.
 * `ATL_TOMCAT_PROTOCOL` (default: HTTP/1.1)
 * `ATL_TOMCAT_ACCEPTCOUNT` (default: 10)
 * `ATL_TOMCAT_MAXHTTPHEADERSIZE` (default: 8192)
+* `ATL_TOMCAT_STUCKTHREADDETECTIONVALVE_THRESHOLD` (default: 120)
 
 ### Access Log Settings
 

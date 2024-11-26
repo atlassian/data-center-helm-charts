@@ -119,6 +119,7 @@ see <https://tomcat.apache.org/tomcat-9.0-doc/config/index.html>.
 * `ATL_TOMCAT_MINSPARETHREADS` (default: 25)
 * `ATL_TOMCAT_PROTOCOL` (default: HTTP/1.1)
 * `ATL_TOMCAT_URIENCODING` (default: UTF-8)
+* `ATL_TOMCAT_STUCKTHREADDETECTIONVALVE_THRESHOLD` (default: 60)
 
 The standard HTTP connectors (NIO, NIO2 and APR/native) settings
 

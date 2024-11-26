@@ -117,6 +117,7 @@ class ServerConfigTest {
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("maxHttpHeaderSize=\"9876\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("proxyPort=\"443\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("proxyName=\"" + String.format("%s.com", product.name()));
+
     }
     void use_custom_server_xml(Product product, String generatedByHelm, String restrictedSCC) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
