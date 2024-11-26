@@ -217,6 +217,7 @@ data:
         sslEnabled: null
         sslPass: null
         sslProtocol: null
+        stuckThreadDetectionValveThreshold: "120"
         trustedProxies: null
         truststoreFile: null
         truststorePass: null
@@ -449,7 +450,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 98059bbd35cde5327af60086608c41b3273f26540cb6d109abc8df2260af5125
+        checksum/config-jvm: 7460e3943ee4989d91e6a16da3c1c7936d89e71ca30ac590b34cb96523e181b5
       labels:
         helm.sh/chart: bamboo-1.22.0
         app.kubernetes.io/name: bamboo

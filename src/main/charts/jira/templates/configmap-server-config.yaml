@@ -64,7 +64,7 @@ data:
               <Manager pathname=""/>
               <JarScanner scanManifest="false"/>
               <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve"
-                     threshold="120" />
+                     threshold="{{ .Values.jira.tomcatConfig.stuckThreadDetectionValveThreshold | default "120" }}" />
             </Context>
 
           </Host>

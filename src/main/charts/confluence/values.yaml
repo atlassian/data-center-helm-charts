@@ -950,6 +950,8 @@ confluence:
     maxHttpHeaderSize: "8192"
     proxyInternalIps:
     trustedProxies:
+    stuckThreadDetectionValveThreshold: "60"
+
 
     # -- Custom server.xml to be mounted into /opt/atlassian/confluence/conf
     #

@@ -174,6 +174,7 @@ see <https://tomcat.apache.org/tomcat-7.0-doc/config/index.html>.
 * `ATL_TOMCAT_DEBUG` (default: 0)
 * `ATL_TOMCAT_URIENCODING` (default: UTF-8)
 * `ATL_TOMCAT_MAXHTTPHEADERSIZE` (default: 8192)
+* `ATL_TOMCAT_STUCKTHREADDETECTIONVALVE_THRESHOLD` (default: 60)
 
 ### Access Log Settings
 

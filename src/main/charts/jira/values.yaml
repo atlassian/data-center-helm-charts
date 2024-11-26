@@ -814,6 +814,7 @@ jira:
     # proxyPort is set depending on ingress.https value (80 if http, 443 if https)
     proxyPort:
     maxHttpHeaderSize: "8192"
+    stuckThreadDetectionValveThreshold: "120"
 
     # -- Custom server.xml to be mounted into /opt/atlassian/jira/conf
     #
