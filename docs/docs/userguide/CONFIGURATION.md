@@ -252,6 +252,8 @@ database engine to be used. The acceptable values for this include:
 | MySQL         | `mysql57` / `mysql8`  | `mysql`       | `mysql`       |
 | SQL Server    | `mssql`               | `mssql`       | `mssql`       |
 | Oracle        | `oracle10g`           | `oracle`      | `oracle12c`   |
+| Aurora PostgreSQL        | `postgresaurora96`    | | |
+
 
 ### `database.credentials`
 
