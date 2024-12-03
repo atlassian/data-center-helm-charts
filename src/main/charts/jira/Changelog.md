@@ -15,6 +15,18 @@
 * Relabel instance name on jmx service monitor (#757)
 * Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)
 
+## 1.22.1
+
+**Release date:** 2024-12-3
+
+![AppVersion: 9.12.15](https://img.shields.io/static/v1?label=AppVersion&message=9.12.15&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update appVersions for DC apps (#922)
+* Make make stuckthreaddetectionvalve configurable (#921)
+* Update Grafana dashboards for DC apps (#915)
+
 ## 1.22.0
 
 **Release date:** 2024-11-15
