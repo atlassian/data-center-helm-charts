@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -43,7 +43,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -65,7 +65,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -460,7 +460,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -483,7 +483,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -510,7 +510,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -538,7 +538,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -557,7 +557,7 @@ spec:
         helm.sh/chart: confluence-1.22.0
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
-        app.kubernetes.io/version: "8.5.17"
+        app.kubernetes.io/version: "8.5.18"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
@@ -570,7 +570,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:8.5.17"
+          image: "atlassian/confluence:8.5.18"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -623,7 +623,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -637,12 +637,12 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 7bfc7d2515d63b68deb9827915f4a52f6ad5c0c621475dd37d812a664f993cd0
+        checksum/config-jvm: e46d88aed9fa256bd65396d93dc449adaf26ff510853d92f66b1354133b2ab02
       labels:
         helm.sh/chart: confluence-1.22.0
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
-        app.kubernetes.io/version: "8.5.17"
+        app.kubernetes.io/version: "8.5.18"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
@@ -674,7 +674,7 @@ spec:
               name: shared-home
       containers:
         - name: confluence
-          image: "atlassian/confluence:8.5.17"
+          image: "atlassian/confluence:8.5.18"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -776,7 +776,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -807,7 +807,7 @@ metadata:
     helm.sh/chart: confluence-1.22.0
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "8.5.17"
+    app.kubernetes.io/version: "8.5.18"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
