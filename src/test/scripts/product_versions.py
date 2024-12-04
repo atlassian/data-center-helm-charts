@@ -1,7 +1,9 @@
 import json
+import os
 import re
 import sys
 import urllib.request
+from base64 import b64encode
 
 known_supported_version = {
 	'bitbucket': '7.21.0',
@@ -22,6 +24,37 @@ def get_lts_version(argv):
 		product = 'jira-software'
 	elif product == 'bitbucket':
 		product = 'stash'
+	if product == 'mesh':
+		argv[0] = 'stash'
+		stash_version = get_lts_version(argv)
+		pom_url = (f"https://packages.atlassian.com/artifactory/maven-closedsource-private-local/"
+				   f"com/atlassian/bitbucket/server/bitbucket-parent/{stash_version}/"
+				   f"bitbucket-parent-{stash_version}.pom")
+		username = os.getenv("ARTIFACTORY_BOT_USERNAME")
+		password = os.getenv("ARTIFACTORY_BOT_PASSWORD")
+		credentials = f"{username}:{password}"
+		encoded_credentials = b64encode(credentials.encode('utf-8')).decode('utf-8')
+		headers = {"Authorization": f"Basic {encoded_credentials}"}
+
+		try:
+			req = urllib.request.Request(pom_url, headers=headers)
+			response = urllib.request.urlopen(req)
+			redirect_url = response.url
+			response = urllib.request.urlopen(redirect_url)
+			pom_content = response.read().decode('utf-8')
+			root = et.fromstring(pom_content)
+			namespace = {'maven': 'http://maven.apache.org/POM/4.0.0'}
+			mesh_version = root.find('.//maven:atl.mesh.libversion', namespace)
+
+			if mesh_version is not None:
+				return mesh_version.text
+			else:
+				print("Failed to get mesh version")
+				return None
+		except Exception as e:
+			print(f"Error fetching or parsing POM: {e}")
+			sys.exit(1)
+
 	if product in known_supported_version:
 		url_archived = f"https://my.atlassian.com/download/feeds/archived/{product}.json"
 		url_current = f"https://my.atlassian.com/download/feeds/current/{product}.json"

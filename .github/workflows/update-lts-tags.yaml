@@ -1,6 +1,7 @@
 name: Update LTS Tags
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * SUN' # At 00:00 on every Sunday
 
@@ -8,6 +9,8 @@ jobs:
   lts_check:
     runs-on: ubuntu-24.04
     env:
+      ARTIFACTORY_BOT_USERNAME: "${{ secrets.ARTIFACTORY_BOT_USERNAME }}"
+      ARTIFACTORY_BOT_PASSWORD: "${{ secrets.ARTIFACTORY_BOT_PASSWORD }}"
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
@@ -44,7 +47,7 @@ jobs:
         run: |
           cd src/main/charts
           helm-docs
-          
+
       - name: Commit changes and raise a PR
         run: |
           CHANGES=$(git status --porcelain=v1 2>/dev/null | wc -l)
