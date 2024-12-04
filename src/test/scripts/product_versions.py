@@ -4,6 +4,7 @@ import re
 import sys
 import urllib.request
 from base64 import b64encode
+import xml.etree.ElementTree as et
 
 known_supported_version = {
 	'bitbucket': '7.21.0',
