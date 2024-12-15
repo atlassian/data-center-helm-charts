@@ -3,7 +3,7 @@ name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
 version: '1.22.1'
-appVersion: 9.4.0
+appVersion: 9.4.1
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Bitbucket
