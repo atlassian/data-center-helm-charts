@@ -88,6 +88,7 @@ Kubernetes: `>=1.21.x-0`
 | confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | confluence.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
+| confluence.service.nodePort | string | `nil` | NodePort for Confluence service  |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen  |
 | confluence.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
 | confluence.service.sessionAffinityConfig | object | `{"clientIP":{"timeoutSeconds":null}}` | Session affinity configuration  |

@@ -116,6 +116,10 @@ crowd:
     #
     type: ClusterIP
 
+    # -- NodePort for Crowd service
+    #
+    nodePort:
+
     # -- Session affinity type. If you want to make sure that connections from a particular client
     # are passed to the same pod each time, set sessionAffinity to ClientIP.
     # See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity

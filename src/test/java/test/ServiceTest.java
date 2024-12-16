@@ -30,7 +30,10 @@ class ServiceTest {
     void service_port_type(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 product + ".service.port", "1234",
-                product + ".service.type", "NodePort"
+                product + ".service.type", "NodePort",
+                product + ".service.nodePort", "30001",
+                product + ".service.sshNodePort", "30002"
+
         ));
 
         final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
@@ -39,6 +42,12 @@ class ServiceTest {
                 .hasTextEqualTo("NodePort");
         assertThat(service.getPort("http"))
                 .hasValueSatisfying(node -> assertThat(node.path("port")).hasValueEqualTo(1234));
+        assertThat(service.getPort("http"))
+                .hasValueSatisfying(node -> assertThat(node.path("nodePort")).hasValueEqualTo(30001));
+        if (product.name().equals("bitbucket")) {
+            assertThat(service.getPort("ssh"))
+                    .hasValueSatisfying(node -> assertThat(node.path("nodePort")).hasValueEqualTo(30002));
+        }
     }
 
     @ParameterizedTest

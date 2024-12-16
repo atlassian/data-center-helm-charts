@@ -24,5 +24,8 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      {{- if and (eq .Values.jira.service.type "NodePort") .Values.jira.service.nodePort}}
+      nodePort: {{ .Values.jira.service.nodePort }}
+      {{- end }}
   selector:
     {{- include "common.labels.selectorLabels" . | nindent 4 }}
