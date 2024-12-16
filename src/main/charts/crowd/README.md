@@ -83,7 +83,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.startupProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | crowd.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Crowd container startup probe will run  |
 | crowd.tomcatConfig.acceptCount | string | `"100"` |  |
-| crowd.tomcatConfig.accessLogsMaxDays | string | `nil` |  |
+| crowd.tomcatConfig.accessLogsMaxDays | string | `"-1"` |  |
 | crowd.tomcatConfig.connectionTimeout | string | `"20000"` |  |
 | crowd.tomcatConfig.enableLookups | string | `"false"` |  |
 | crowd.tomcatConfig.generateByHelm | bool | `false` | Mount server.xml as a ConfigMap. Override configuration elements if necessary  |
@@ -97,6 +97,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.tomcatConfig.proxyName | string | `nil` |  |
 | crowd.tomcatConfig.proxyPort | string | `nil` |  |
 | crowd.tomcatConfig.redirectPort | string | `"8443"` |  |
+| crowd.tomcatConfig.requestAttributesEnabled | string | `"false"` |  |
 | crowd.tomcatConfig.scheme | string | `nil` |  |
 | crowd.tomcatConfig.secure | string | `nil` |  |
 | crowd.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Crowd pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
