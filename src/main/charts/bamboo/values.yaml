@@ -568,7 +568,7 @@ bamboo:
     #
     type: ClusterIP
 
-    # -- NodePort for Bitbucket service
+    # -- NodePort for Bamboo service
     #
     nodePort:
 
