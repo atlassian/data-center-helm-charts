@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jvm-config
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -36,7 +36,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jmx-config
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -64,7 +64,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-helm-values
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -312,7 +312,7 @@ kind: Service
 metadata:
   name: unittest-crowd-jmx
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -335,7 +335,7 @@ kind: Service
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -359,7 +359,7 @@ kind: StatefulSet
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -376,9 +376,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 959bd1ffef2f05dc8025f24a6c7e5af1d8c91b90d88d64f7b9e22b80d3553ec3
+        checksum/config-jvm: 9a0cd1e03d511a6c9e8c016d5da0b9fe6fc2efcbb010ab8df13001c2d0a3e365
       labels:
-        helm.sh/chart: crowd-1.22.1
+        helm.sh/chart: crowd-1.22.2
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
         app.kubernetes.io/version: "6.1.3"
@@ -511,7 +511,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
@@ -542,7 +542,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-1.22.1
+    helm.sh/chart: crowd-1.22.2
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.1.3"
