@@ -383,7 +383,8 @@ crowd:
     # proxyPort is set depending on ingress.https value (80 if http, 443 if https)
     proxyPort:
     maxHttpHeaderSize: "8192"
-    accessLogsMaxDays:
+    accessLogsMaxDays: "-1"
+    requestAttributesEnabled: "false"
     proxyInternalIps:
 
   # -- Specifies a list of additional Java libraries that should be added to the

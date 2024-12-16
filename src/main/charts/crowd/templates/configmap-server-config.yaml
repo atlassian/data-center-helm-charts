@@ -53,7 +53,7 @@ data:
         </Host>
         {{- if .Values.crowd.accessLog.enabled }}
             <Valve className="org.apache.catalina.valves.AccessLogValve"
-                   requestAttributesEnabled="true"
+                   requestAttributesEnabled="{{ .Values.crowd.tomcatConfig.requestAttributesEnabled | default "false" }}"
                    directory="logs"
                    prefix="crowd_access"
                    suffix=".log"

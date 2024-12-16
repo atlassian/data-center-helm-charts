@@ -886,8 +886,8 @@ bamboo:
     compressionMinSize:
     proxyInternalIps:
     trustedProxies:
-    requestAttributesEnabled:
-    accessLogMaxDays:
+    requestAttributesEnabled: "false"
+    accessLogMaxDays: "-1"
     stuckThreadDetectionValveThreshold: "120"
 
     # -- Custom server.xml to be mounted into /opt/atlassian/bamboo/conf

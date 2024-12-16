@@ -114,6 +114,7 @@ class ServerConfigTest {
         KubeResource serverConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-server-config");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("Connector port=\"1234\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("maxDays=\"-1\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("requestAttributesEnabled=\"false\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("acceptCount=\"5678\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("maxHttpHeaderSize=\"9876\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("proxyPort=\"443\"");

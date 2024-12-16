@@ -184,7 +184,7 @@ data:
         usernameSecretKey: adminTestUsernameKey
       tomcatConfig:
         acceptCount: "100"
-        accessLogMaxDays: null
+        accessLogMaxDays: "-1"
         address: null
         bambooEncryptionKey: null
         clientAuth: null
@@ -208,7 +208,7 @@ data:
         proxyName: null
         proxyPort: null
         redirectPort: "8443"
-        requestAttributesEnabled: null
+        requestAttributesEnabled: "false"
         scheme: null
         secret: null
         secretRequired: null

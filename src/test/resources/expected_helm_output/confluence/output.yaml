@@ -196,7 +196,7 @@ data:
         proxyName: null
         proxyPort: null
         redirectPort: "8443"
-        requestAttributesEnabled: "true"
+        requestAttributesEnabled: "false"
         scheme: null
         secure: null
         stuckThreadDetectionValveThreshold: "60"
