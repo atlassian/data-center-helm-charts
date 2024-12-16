@@ -24,6 +24,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      {{- if and (eq .Values.confluence.service.type "NodePort") .Values.confluence.service.nodePort}}
+      nodePort: {{ .Values.confluence.service.nodePort }}
+      {{- end }}
   {{- if not .Values.confluence.hazelcastService.enabled }}
     - port: {{ .Values.confluence.ports.hazelcast }}
       targetPort: hazelcast

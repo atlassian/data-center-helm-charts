@@ -25,10 +25,16 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      {{- if and (eq .Values.bitbucket.service.type "NodePort") .Values.bitbucket.service.nodePort}}
+      nodePort: {{ .Values.bitbucket.service.nodePort }}
+      {{- end }}
     - port: {{ .Values.bitbucket.service.sshPort }}
       targetPort: ssh
       protocol: TCP
       name: ssh
+      {{- if and (eq .Values.bitbucket.service.type "NodePort") .Values.bitbucket.service.sshNodePort}}
+      nodePort: {{ .Values.bitbucket.service.sshNodePort }}
+      {{- end }}
   {{- if not .Values.bitbucket.hazelcastService.enabled }}
     - port: {{ .Values.bitbucket.ports.hazelcast }}
       targetPort: hazelcast

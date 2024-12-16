@@ -583,6 +583,10 @@ confluence:
     #
     type: ClusterIP
 
+    # --  Only applicable if service.type is NodePort. NodePort for Confluence service
+    #
+    nodePort:
+
     # -- Session affinity type. If you want to make sure that connections from a particular client
     # are passed to the same pod each time, set sessionAffinity to ClientIP.
     # See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity
@@ -1209,6 +1213,10 @@ synchrony:
     # -- The type of K8s service to use for Synchrony
     #
     type: ClusterIP
+
+    # --  Only applicable if service.type is NodePort. NodePort for Synchrony service
+    #
+    nodePort:
 
     # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
     #

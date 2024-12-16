@@ -542,6 +542,14 @@ bitbucket:
     #
     type: ClusterIP
 
+    # --  Only applicable if service.type is NodePort. NodePort for Bitbucket service
+    #
+    nodePort:
+
+    # -- SSH  Only applicable if service.type is NodePort. NodePort for Bitbucket service
+    #
+    sshNodePort:
+
     # -- Session affinity type. If you want to make sure that connections from a particular client
     # are passed to the same pod each time, set sessionAffinity to ClientIP.
     # See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity
@@ -592,6 +600,10 @@ bitbucket:
     # -- SSH Service type
     #
     type: LoadBalancer
+
+    # --  Only applicable if service.type is NodePort. NodePort for Bitbucket ssh service
+    #
+    nodePort:
 
     # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
     #

@@ -203,6 +203,7 @@ data:
         annotations: {}
         contextPath: null
         loadBalancerIP: null
+        nodePort: null
         port: 80
         sessionAffinity: None
         sessionAffinityConfig:

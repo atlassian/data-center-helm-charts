@@ -233,11 +233,13 @@ data:
         annotations: {}
         contextPath: null
         loadBalancerIP: null
+        nodePort: null
         port: 80
         sessionAffinity: None
         sessionAffinityConfig:
           clientIP:
             timeoutSeconds: null
+        sshNodePort: null
         sshPort: 7999
         type: ClusterIP
       setPermissions: true
@@ -249,6 +251,7 @@ data:
         enabled: false
         host: null
         loadBalancerIP: null
+        nodePort: null
         port: 22
         type: LoadBalancer
       startupProbe:
