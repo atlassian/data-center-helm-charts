@@ -233,11 +233,13 @@ data:
         annotations: {}
         contextPath: null
         loadBalancerIP: null
+        nodePort: null
         port: 80
         sessionAffinity: None
         sessionAffinityConfig:
           clientIP:
             timeoutSeconds: null
+        sshNodePort: null
         sshPort: 7999
         type: ClusterIP
       setPermissions: true
@@ -249,6 +251,7 @@ data:
         enabled: false
         host: null
         loadBalancerIP: null
+        nodePort: null
         port: 22
         type: LoadBalancer
       startupProbe:
@@ -593,7 +596,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 325d0f8b0fb850d725ad0e9b17f9ffb5afe1e87176215d4c59afaa987034fbc4
+        checksum/config-jvm: 2749f9462255f51e691b5c20440ba6926c4e36eede24448f852a4c9b9f3293fc
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -714,7 +717,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 904ee5cdf24aa3f20010c1bd0a75de5c1755f2b4a68fb2361e1e36e8b8464eec
+        checksum/config-jvm: 769b21f2174a73dca3bd26f10a6ebcf67d6c70b9481a618d4d0808d6e40799d2
       labels:
         helm.sh/chart: bitbucket-1.22.1
         app.kubernetes.io/name: bitbucket

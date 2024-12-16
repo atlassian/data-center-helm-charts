@@ -32,7 +32,8 @@ class ServiceTest {
                 product + ".service.port", "1234",
                 product + ".service.type", "NodePort",
                 product + ".service.nodePort", "30001",
-                product + ".service.sshNodePort", "30002"
+                product + ".service.sshNodePort", "30002",
+                "synchrony.enabled", "true"
 
         ));
 
@@ -47,6 +48,11 @@ class ServiceTest {
         if (product.name().equals("bitbucket")) {
             assertThat(service.getPort("ssh"))
                     .hasValueSatisfying(node -> assertThat(node.path("nodePort")).hasValueEqualTo(30002));
+        }
+        if (product.name().equals("confluence")) {
+            final var synchronyService = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+            assertThat(synchronyService.getPort("http"))
+                    .hasValueSatisfying(node -> assertThat(node.path("nodePort")).hasValueEqualTo(30001));
         }
     }
 

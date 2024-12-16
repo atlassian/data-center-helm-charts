@@ -203,6 +203,7 @@ data:
         annotations: {}
         contextPath: null
         loadBalancerIP: null
+        nodePort: null
         port: 80
         sessionAffinity: None
         sessionAffinityConfig:
@@ -401,7 +402,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 9874e836468ba673419d9305856e7570c1c7e752338d664e62b9d32180107b9a
+        checksum/config-jvm: 3294c8cdaf5ff4579163b6eaad63d6ce37838bc0101e7b903b1d2913c5a882a9
       labels:
         helm.sh/chart: jira-1.22.1
         app.kubernetes.io/name: jira

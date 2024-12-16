@@ -26,6 +26,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      {{- if and (eq .Values.synchrony.service.type "NodePort") .Values.synchrony.service.nodePort}}
+      nodePort: {{ .Values.synchrony.service.nodePort }}
+      {{- end }}
     - port: {{ .Values.synchrony.ports.hazelcast }}
       targetPort: hazelcast
       protocol: TCP

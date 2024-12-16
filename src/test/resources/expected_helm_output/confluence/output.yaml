@@ -163,6 +163,7 @@ data:
         annotations: {}
         contextPath: null
         loadBalancerIP: null
+        nodePort: null
         port: 80
         sessionAffinity: None
         sessionAffinityConfig:
@@ -362,6 +363,7 @@ data:
       service:
         annotations: {}
         loadBalancerIP: null
+        nodePort: null
         port: 80
         type: ClusterIP
       setPermissions: true
@@ -637,7 +639,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 0be7e4380d8a71217f79c8ea3e714e9bbc003d9eb19cfe363980fe2f04087fbf
+        checksum/config-jvm: 12b2bf4a8a471b4be5acc06995810c8331609e8aa3f237e44dd62e27888f85df
       labels:
         helm.sh/chart: confluence-1.22.1
         app.kubernetes.io/name: confluence
