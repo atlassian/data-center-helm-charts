@@ -51,7 +51,7 @@ data:
                      threshold="{{ .Values.confluence.tomcatConfig.stuckThreadDetectionValveThreshold | default "60" }}" />
             {{ if .Values.confluence.accessLog.enabled }}
               <Valve className="org.apache.catalina.valves.AccessLogValve"
-                     requestAttributesEnabled="{{ .Values.confluence.tomcatConfig.requestAttributesEnabled | default "true" }}"
+                     requestAttributesEnabled="{{ .Values.confluence.tomcatConfig.requestAttributesEnabled | default "false" }}"
                      directory="logs"
                      prefix="confluence_access"
                      suffix=".log"

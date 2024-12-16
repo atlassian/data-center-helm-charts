@@ -141,6 +141,7 @@ data:
 
           </Host>
           <Valve className="org.apache.catalina.valves.AccessLogValve"
+                 maxDays="{{ .Values.bamboo.tomcatConfig.accessLogMaxDays | default "-1" }}"
                  requestAttributesEnabled="{{ .Values.bamboo.tomcatConfig.requestAttributesEnabled | default "false" }}"
                  pattern="%a %{bamboo.request.id}r %{bamboo.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{bamboo.request.assession.id}r&quot;"/>
         </Engine>

@@ -815,6 +815,8 @@ jira:
     proxyPort:
     maxHttpHeaderSize: "8192"
     stuckThreadDetectionValveThreshold: "120"
+    accessLogMaxDays: "-1"
+    requestAttributesEnabled: "true"
 
     # -- Custom server.xml to be mounted into /opt/atlassian/jira/conf
     #

@@ -184,6 +184,7 @@ data:
         usernameSecretKey: adminTestUsernameKey
       tomcatConfig:
         acceptCount: "100"
+        accessLogMaxDays: null
         address: null
         bambooEncryptionKey: null
         clientAuth: null
@@ -450,7 +451,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 3adff5bd3002b33d2f9ede62864902898e58a0ede65de2c485424c36e855f629
+        checksum/config-jvm: c41bc799b8b23af6a3170c4635ef9fa71edb855f1d47e25eaa8e8acfa9ca43e1
       labels:
         helm.sh/chart: bamboo-1.22.1
         app.kubernetes.io/name: bamboo
