@@ -951,7 +951,8 @@ confluence:
     proxyInternalIps:
     trustedProxies:
     stuckThreadDetectionValveThreshold: "60"
-
+    accessLogMaxDays: "-1"
+    requestAttributesEnabled: "true"
 
     # -- Custom server.xml to be mounted into /opt/atlassian/confluence/conf
     #
