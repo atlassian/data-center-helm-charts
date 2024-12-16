@@ -473,7 +473,7 @@ jira:
     #
     type: ClusterIP
 
-    # -- NodePort for Jira service
+    # --  Only applicable if service.type is NodePort. NodePort for Jira service
     #
     nodePort:
 

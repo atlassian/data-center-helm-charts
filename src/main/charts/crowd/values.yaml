@@ -116,7 +116,7 @@ crowd:
     #
     type: ClusterIP
 
-    # -- NodePort for Crowd service
+    # --  Only applicable if service.type is NodePort. NodePort for Crowd service
     #
     nodePort:
 

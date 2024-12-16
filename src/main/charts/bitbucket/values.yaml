@@ -542,11 +542,11 @@ bitbucket:
     #
     type: ClusterIP
 
-    # -- NodePort for Bitbucket service
+    # --  Only applicable if service.type is NodePort. NodePort for Bitbucket service
     #
     nodePort:
 
-    # -- SSH NodePort for Bitbucket service
+    # -- SSH  Only applicable if service.type is NodePort. NodePort for Bitbucket service
     #
     sshNodePort:
 
@@ -601,7 +601,7 @@ bitbucket:
     #
     type: LoadBalancer
 
-    # -- NodePort for Bitbucket ssh service
+    # --  Only applicable if service.type is NodePort. NodePort for Bitbucket ssh service
     #
     nodePort:
 

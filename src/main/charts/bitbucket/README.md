@@ -122,12 +122,12 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use.  |
 | bitbucket.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
-| bitbucket.service.nodePort | string | `nil` | NodePort for Bitbucket service  |
+| bitbucket.service.nodePort | string | `nil` |  Only applicable if service.type is NodePort. NodePort for Bitbucket service  |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s HTTP Service will listen  |
 | bitbucket.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
 | bitbucket.service.sessionAffinityConfig | object | `{"clientIP":{"timeoutSeconds":null}}` | Session affinity configuration  |
 | bitbucket.service.sessionAffinityConfig.clientIP.timeoutSeconds | string | `nil` | Specifies the seconds of ClientIP type session sticky time. The value must be > 0 && <= 86400 (for 1 day) if ServiceAffinity == "ClientIP". Default value is 10800 (for 3 hours).  |
-| bitbucket.service.sshNodePort | string | `nil` | SSH NodePort for Bitbucket service  |
+| bitbucket.service.sshNodePort | string | `nil` | SSH  Only applicable if service.type is NodePort. NodePort for Bitbucket service  |
 | bitbucket.service.sshPort | int | `7999` | The port on which the Bitbucket K8s SSH Service will listen  |
 | bitbucket.service.type | string | `"ClusterIP"` | The type of K8s service to use for Bitbucket  |
 | bitbucket.setPermissions | bool | `true` | Boolean to define whether to set local home directory permissions on startup of Bitbucket container. Set to 'false' to disable this behaviour.  |
@@ -138,7 +138,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.sshService.enabled | bool | `false` | Set to 'true' if an additional SSH Service should be created  |
 | bitbucket.sshService.host | string | `nil` | The hostname of the SSH service. If set, it'll be used to configure the SSH base URL for the application.  |
 | bitbucket.sshService.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
-| bitbucket.sshService.nodePort | string | `nil` | NodePort for Bitbucket ssh service  |
+| bitbucket.sshService.nodePort | string | `nil` |  Only applicable if service.type is NodePort. NodePort for Bitbucket ssh service  |
 | bitbucket.sshService.port | int | `22` | Port to expose the SSH service on.  |
 | bitbucket.sshService.type | string | `"LoadBalancer"` | SSH Service type  |
 | bitbucket.startupProbe.enabled | bool | `false` | Whether to apply the startupProbe check to pod.  |

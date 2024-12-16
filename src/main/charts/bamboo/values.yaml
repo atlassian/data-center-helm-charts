@@ -568,7 +568,7 @@ bamboo:
     #
     type: ClusterIP
 
-    # -- NodePort for Bamboo service
+    # --  Only applicable if service.type is NodePort. NodePort for Bamboo service
     #
     nodePort:
 

@@ -583,7 +583,7 @@ confluence:
     #
     type: ClusterIP
 
-    # -- NodePort for Confluence service
+    # --  Only applicable if service.type is NodePort. NodePort for Confluence service
     #
     nodePort:
 
@@ -1213,7 +1213,7 @@ synchrony:
     #
     type: ClusterIP
 
-    # -- NodePort for Synchrony service
+    # --  Only applicable if service.type is NodePort. NodePort for Synchrony service
     #
     nodePort:
 

@@ -70,7 +70,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | crowd.service.contextPath | string | `"/crowd"` | The Tomcat context path that Crowd will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
-| crowd.service.nodePort | string | `nil` | NodePort for Crowd service  |
+| crowd.service.nodePort | string | `nil` |  Only applicable if service.type is NodePort. NodePort for Crowd service  |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen  |
 | crowd.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
 | crowd.service.sessionAffinityConfig | object | `{"clientIP":{"timeoutSeconds":null}}` | Session affinity configuration  |
