@@ -87,7 +87,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | bamboo.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
-| bamboo.service.nodePort | string | `nil` |  Only applicable if service.type is NodePort. NodePort for Bamboo service  |
+| bamboo.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Bamboo service  |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen for http traffic  |
 | bamboo.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
 | bamboo.service.sessionAffinityConfig | object | `{"clientIP":{"timeoutSeconds":null}}` | Session affinity configuration  |
