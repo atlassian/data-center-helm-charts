@@ -121,7 +121,7 @@ Kubernetes: `>=1.21.x-0`
 | jira.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | jira.service.contextPath | string | `nil` | The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
 | jira.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
-| jira.service.nodePort | string | `nil` |  Only applicable if service.type is NodePort. NodePort for Jira service  |
+| jira.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Jira service  |
 | jira.service.port | int | `80` | The port on which the Jira K8s Service will listen  |
 | jira.service.sessionAffinity | string | `"None"` | Session affinity type. If you want to make sure that connections from a particular client are passed to the same pod each time, set sessionAffinity to ClientIP. See: https://kubernetes.io/docs/reference/networking/virtual-ips/#session-affinity  |
 | jira.service.sessionAffinityConfig | object | `{"clientIP":{"timeoutSeconds":null}}` | Session affinity configuration  |
