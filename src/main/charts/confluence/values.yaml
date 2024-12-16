@@ -1213,6 +1213,10 @@ synchrony:
     #
     type: ClusterIP
 
+    # -- NodePort for Synchrony service
+    #
+    nodePort:
+
     # -- Use specific loadBalancerIP. Only applies to service type LoadBalancer.
     #
     loadBalancerIP:

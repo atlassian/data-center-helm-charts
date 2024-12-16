@@ -224,6 +224,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.securityContextEnabled | bool | `true` |  |
 | synchrony.service.annotations | object | `{}` | Annotations to apply to Synchrony Service  |
 | synchrony.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
+| synchrony.service.nodePort | string | `nil` | NodePort for Synchrony service  |
 | synchrony.service.port | int | `80` | The port on which the Synchrony K8s Service will listen  |
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony  |
 | synchrony.setPermissions | bool | `true` | Boolean to define whether to set synchrony home directory permissions on startup of Synchrony container. Set to 'false' to disable this behaviour.  |
