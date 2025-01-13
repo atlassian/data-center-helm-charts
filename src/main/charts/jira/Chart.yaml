@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '1.22.2'
+version: '1.22.3'
 appVersion: 10.3.2
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -21,9 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#933)"
-    - "Make it possible to set nodePort in services (#931)"
-    - "Make access log attributes configurable (#932)"
+    - "Set custom securityContext for import-certs init container. Make affinity independent for Synchrony (#938)"
 
 dependencies:
 - name: common
