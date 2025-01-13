@@ -1158,9 +1158,19 @@ bitbucket:
       #- name: stg-intermediate
       #  keys:
       #    - stg.crt
+
+      # -- Custom command to be executed in the init container to import certificates
+      #
       customCmd:
+
       initContainer:
+        # -- Resources allocated to the import-certs init container
+        #
+
         resources: {}
+        # -- Custom SecurityContext for the import-certs init container
+        #
+        securityContext: {}
   # -- Specifies a list of additional arguments that can be passed to the Bitbucket JVM, e.g.
   # system properties.
   #
@@ -1257,9 +1267,19 @@ bitbucket:
     #- name: stg-intermediate
     #  keys:
     #    - stg.crt
+
+    # -- Custom command to be executed in the init container to import certificates
+    #
     customCmd:
+
     initContainer:
+      # -- Resources allocated to the import-certs init container
+      #
+
       resources: {}
+      # -- Custom SecurityContext for the import-certs init container
+      #
+      securityContext: {}
 
 # Monitoring
 #

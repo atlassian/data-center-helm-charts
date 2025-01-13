@@ -932,11 +932,19 @@ jira:
     #- name: stg-intermediate
     #  keys:
     #    - stg.crt
+
+    # -- Custom command to be executed in the init container to import certificates
+    #
     customCmd:
+
     initContainer:
-      # -- Resources requests and limits for the import-certs init container
+      # -- Resources allocated to the import-certs init container
       #
+
       resources: {}
+      # -- Custom SecurityContext for the import-certs init container
+      #
+      securityContext: {}
 
 # Monitoring
 #

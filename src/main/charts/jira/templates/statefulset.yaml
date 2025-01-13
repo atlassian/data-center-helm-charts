@@ -109,6 +109,10 @@ spec:
           {{- with .Values.jira.additionalCertificates.initContainer.resources }}
           {{- toYaml . | nindent 12 }}
           {{- end }}
+          securityContext:
+          {{- with .Values.jira.additionalCertificates.initContainer.securityContext }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
       containers:
         - name: {{ if .Values.jira.useHelmReleaseNameAsContainerName}}{{ include "common.names.fullname" . }}{{ else }}{{ .Chart.Name }}{{ end }}

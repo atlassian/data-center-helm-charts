@@ -470,4 +470,45 @@ public class AdditionalCertificatesTest {
         assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("mountPath")).hasTextEqualTo("/tmp/crt/custom-ca-custom.crt");
         assertThat(statefulSet.getInitContainers().get(0).path("volumeMounts").path(3).get("subPath")).hasTextEqualTo("custom.crt");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additional_certificates_init_container_security_context(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".additionalCertificates.secretName", "mycrt",
+                product.name() + ".additionalCertificates.initContainer.securityContext.runAsUser", "2002",
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        assertThat(statefulSet.getInitContainers().get(1).path("name")).hasTextEqualTo("import-certs");
+        assertThat(statefulSet.getInitContainers().get(1).path("securityContext").get("runAsUser")).hasValueEqualTo(2002);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_crt_init_container_security_context_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalCertificates.secretName", "mycrt",
+                "synchrony.additionalCertificates.initContainer.securityContext.runAsUser", "2002",
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+        assertThat(statefulSet.getInitContainers().get(0).path("name")).hasTextEqualTo("import-certs");
+        assertThat(statefulSet.getInitContainers().get(0).path("securityContext").get("runAsUser")).hasValueEqualTo(2002);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bitbucket"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_crt_init_container_security_context_mesh(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "bitbucket.mesh.enabled", "true",
+                "bitbucket.mesh.additionalCertificates.secretName", "mycrt",
+                "bitbucket.mesh.additionalCertificates.initContainer.securityContext.runAsUser", "2002",
+                "volumes.sharedHome.persistentVolumeClaim.create", "true"
+        ));
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
+        assertThat(statefulSet.getInitContainers().get(0).path("name")).hasTextEqualTo("import-certs");
+        assertThat(statefulSet.getInitContainers().get(0).path("securityContext").get("runAsUser")).hasValueEqualTo(2002);
+    }
 }

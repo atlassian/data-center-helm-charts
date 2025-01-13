@@ -1077,9 +1077,19 @@ confluence:
     #- name: stg-intermediate
     #  keys:
     #    - stg.crt
+
+    # -- Custom command to be executed in the init container to import certificates
+    #
     customCmd:
+
     initContainer:
+      # -- Resources allocated to the import-certs init container
+      #
+
       resources: {}
+      # -- Custom SecurityContext for the import-certs init container
+      #
+      securityContext: {}
 
 # Monitoring
 #
@@ -1392,6 +1402,23 @@ synchrony:
   #    containerPort: 5555
   #    protocol: TCP
 
+  # -- Standard K8s node-selectors that will be applied to all Synchrony pods
+  #
+  nodeSelector: {}
+  #  name: <value>
+
+  # -- Standard K8s tolerations that will be applied to all Synchrony pods
+  #
+  tolerations: []
+  # - effect: <name>
+  #   operator: <operator>
+  #   key: <key>
+
+  # -- Standard K8s affinities that will be applied to all Synchrony pods
+  #
+  affinity: {}
+  #  name: <value>
+
   # -- Defines topology spread constraints for Synchrony pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   #
@@ -1402,6 +1429,17 @@ synchrony:
   #   labelSelector:
   #     matchLabels:
   #       app.kubernetes.io/name: confluence-synchrony
+
+  # -- Standard K8s schedulerName that will be applied to all Synchrony pods. If not specified, the default schedulerName will be used.
+  # Check Kubernetes documentation on how to configure multiple schedulers:
+  # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods
+  #
+  schedulerName:
+
+  # -- Priority class for the Synchrony pods. The PriorityClass with this name needs to be available in the cluster. If not specified the default priorityClassName will be used.
+  # For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+  #
+  priorityClassName:
 
   # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
   #
@@ -1421,9 +1459,19 @@ synchrony:
     #- name: stg-intermediate
     #  keys:
     #    - stg.crt
+
+    # -- Custom command to be executed in the init container to import certificates
+    #
     customCmd:
+
     initContainer:
+      # -- Resources allocated to the import-certs init container
+      #
+
       resources: {}
+      # -- Custom SecurityContext for the import-certs init container
+      #
+      securityContext: {}
 
 # Fluentd configuration
 #
