@@ -38,7 +38,10 @@ Kubernetes: `>=1.21.x-0`
 | confluence.accessLog.mountPath | string | `"/opt/atlassian/confluence/logs"` | The path within the Confluence container where the local-home volume should be mounted in order to capture access logs.  |
 | confluence.additionalAnnotations | object | `{}` | Defines additional annotations to the Confluence StateFulSet. This might be required when deploying using a GitOps approach |
 | confluence.additionalBundledPlugins | list | `[]` | Specifies a list of additional Confluence plugins that should be added to the Confluence container. Note plugins installed via this method will appear as bundled plugins rather than user plugins. These should be specified in the same manner as the 'additionalLibraries' property. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/  NOTE: only .jar files can be loaded using this approach. OBR's can be extracted (unzipped) to access the associated .jar  An alternative to this method is to install the plugins via "Manage Apps" in the product system administration UI.  |
-| confluence.additionalCertificates | object | `{"customCmd":null,"initContainer":{"resources":{}},"secretList":[],"secretName":null}` | Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates  |
+| confluence.additionalCertificates | object | `{"customCmd":null,"initContainer":{"resources":{},"securityContext":{}},"secretList":[],"secretName":null}` | Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates  |
+| confluence.additionalCertificates.customCmd | string | `nil` | Custom command to be executed in the init container to import certificates  |
+| confluence.additionalCertificates.initContainer.resources | object | `{}` | Resources allocated to the import-certs init container  |
+| confluence.additionalCertificates.initContainer.securityContext | object | `{}` | Custom SecurityContext for the import-certs init container  |
 | confluence.additionalCertificates.secretList | list | `[]` | A list of secrets with their respective keys holding certificates to be added to the Java truststore. It is mandatory to specify which keys from secret data need to be mounted as files to the init container.  |
 | confluence.additionalCertificates.secretName | string | `nil` | Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.  |
 | confluence.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Confluence container. See https://hub.docker.com/r/atlassian/confluence for supported variables.  |
@@ -194,22 +197,28 @@ Kubernetes: `>=1.21.x-0`
 | serviceAccount.role.create | bool | `true` | Create a role for Hazelcast client with privileges to get and list pods and endpoints in the namespace. Set to false if you need to create a Role and RoleBinding manually  |
 | serviceAccount.roleBinding | object | `{"create":true}` | Grant permissions defined in Role (list and get pods and endpoints) to a service account.  |
 | synchrony.additionalAnnotations | string | `nil` | Defines additional annotations to the Synchrony StateFulSet. This might be required when deploying using a GitOps approach |
-| synchrony.additionalCertificates | object | `{"customCmd":null,"initContainer":{"resources":{}},"secretList":[],"secretName":null}` | Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates  |
+| synchrony.additionalCertificates | object | `{"customCmd":null,"initContainer":{"resources":{},"securityContext":{}},"secretList":[],"secretName":null}` | Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates  |
+| synchrony.additionalCertificates.customCmd | string | `nil` | Custom command to be executed in the init container to import certificates  |
+| synchrony.additionalCertificates.initContainer.resources | object | `{}` | Resources allocated to the import-certs init container  |
+| synchrony.additionalCertificates.initContainer.securityContext | object | `{}` | Custom SecurityContext for the import-certs init container  |
 | synchrony.additionalCertificates.secretList | list | `[]` | A list of secrets with their respective keys holding certificates to be added to the Java truststore. It is mandatory to specify which keys from secret data need to be mounted as files to the init container.  |
 | synchrony.additionalCertificates.secretName | string | `nil` | Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.  |
 | synchrony.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g. system properties.  |
 | synchrony.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Synchrony container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/  |
 | synchrony.additionalPorts | list | `[]` | Defines any additional ports for the Synchrony container.  |
 | synchrony.additionalVolumeMounts | list | `[]` | Defines any additional volumes mounts for the Synchrony container. These can refer to existing volumes, or new volumes can be defined via 'volumes.additionalSynchrony'.  |
+| synchrony.affinity | object | `{}` | Standard K8s affinities that will be applied to all Synchrony pods  |
 | synchrony.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
 | synchrony.enabled | bool | `false` | Set to 'true' if Synchrony (i.e. collaborative editing) should be enabled. This will result in a separate StatefulSet and Service to be created for Synchrony. If disabled, then collaborative editing will be disabled in Confluence. |
 | synchrony.ingress | object | `{"annotations":null,"path":null,"pathType":null}` | If 'synchrony.ingress.path' is defined, a dedicated Synchrony ingress object is created. This is useful if you need to deploy multiple instances of Confluence with Synchrony enabled using the same Ingress hostname and different synchrony paths  |
 | synchrony.ingress.annotations | string | `nil` | Custom annotations applied to Synchrony ingress  |
 | synchrony.ingress.path | string | `nil` | Ingress path applied to Synchrony ingress  |
 | synchrony.ingress.pathType | string | `nil` | Defaults to Prefix, but can be ImplementationSpecific if rewrite target is applied  |
+| synchrony.nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Synchrony pods  |
 | synchrony.podAnnotations | object | `{}` | Custom annotations that will be applied to all Synchrony pods. When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined) |
 | synchrony.ports.hazelcast | int | `5701` | The port on which the Synchrony container listens for Hazelcast traffic  |
 | synchrony.ports.http | int | `8091` | The port on which the Synchrony container listens for HTTP traffic  |
+| synchrony.priorityClassName | string | `nil` | Priority class for the Synchrony pods. The PriorityClass with this name needs to be available in the cluster. If not specified the default priorityClassName will be used. For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass  |
 | synchrony.readinessProbe.failureThreshold | int | `10` | The number of consecutive failures of the Synchrony container readiness probe before the pod fails readiness checks.  |
 | synchrony.readinessProbe.healthcheckPath | string | `"/synchrony/heartbeat"` | The healthcheck path to check against for the Synchrony container useful when configuring behind a reverse-proxy or loadbalancer https://confluence.atlassian.com/confkb/cannot-enable-collaborative-editing-on-synchrony-cluster-962962742.html  |
 | synchrony.readinessProbe.initialDelaySeconds | int | `5` | The initial delay (in seconds) for the Synchrony container readiness probe, after which the probe will start running.  |
@@ -220,6 +229,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.resources.jvm.maxHeap | string | `"2g"` | The minimum amount of heap memory that will be used by the Synchrony JVM  |
 | synchrony.resources.jvm.minHeap | string | `"1g"` | The maximum amount of heap memory that will be used by the Synchrony JVM  |
 | synchrony.resources.jvm.stackSize | string | `"2048k"` | The memory allocated for the Synchrony stack  |
+| synchrony.schedulerName | string | `nil` | Standard K8s schedulerName that will be applied to all Synchrony pods. If not specified, the default schedulerName will be used. Check Kubernetes documentation on how to configure multiple schedulers: https://kubernetes.io/docs/tasks/extend-kubernetes/configure-multiple-schedulers/#specify-schedulers-for-pods  |
 | synchrony.securityContext.fsGroup | int | `2002` | The GID used by the Confluence docker image GID will default to 2002 if not supplied and securityContextEnabled is set to true. This is intended to ensure that the shared-home volume is group-writeable by the GID used by the Confluence container. However, this doesn't appear to work for NFS volumes due to a K8s bug: https://github.com/kubernetes/examples/issues/260 |
 | synchrony.securityContextEnabled | bool | `true` |  |
 | synchrony.service.annotations | object | `{}` | Annotations to apply to Synchrony Service  |
@@ -229,6 +239,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony  |
 | synchrony.setPermissions | bool | `true` | Boolean to define whether to set synchrony home directory permissions on startup of Synchrony container. Set to 'false' to disable this behaviour.  |
 | synchrony.shutdown.terminationGracePeriodSeconds | int | `25` | The termination grace period for pods during shutdown. This should be set to the Synchrony internal grace period (default 20 seconds), plus a small buffer to allow the JVM to fully terminate. |
+| synchrony.tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Synchrony pods  |
 | synchrony.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Synchrony pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
 | testPods | object | `{"affinity":{},"annotations":{},"image":{"permissionsTestContainer":"debian:stable-slim","statusTestContainer":"alpine:latest"},"labels":{},"nodeSelector":{},"resources":{},"schedulerName":null,"tolerations":[]}` | Metadata and pod spec for pods started in Helm tests  |
 | tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Confluence pods  |

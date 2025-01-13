@@ -139,6 +139,7 @@ data:
         customCmd: null
         initContainer:
           resources: {}
+          securityContext: {}
         secretList: []
         secretName: null
       additionalEnvironmentVariables: []
@@ -404,7 +405,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 822ae668fc16c54da71b12d7cdd67f2fe51d2b33eaa537ed8fc1d96fd5ebd2a4
+        checksum/config-jvm: c2b637ada801a99d12f486d39be3ef0d78e3df99949dbaee1f7f66e41bec0461
       labels:
         helm.sh/chart: jira-1.22.2
         app.kubernetes.io/name: jira

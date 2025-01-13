@@ -96,6 +96,7 @@ data:
         customCmd: null
         initContainer:
           resources: {}
+          securityContext: {}
         secretList: []
         secretName: null
       additionalEnvironmentVariables: []
@@ -452,7 +453,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 22bd4540e0a1067774390b25347285cd6209c85b1c83c93c348738f2772e15c5
+        checksum/config-jvm: d07096f97a0ac4f30339a57f0f39240bbb7df0a8c3b36c0c98bea00930bd82f1
       labels:
         helm.sh/chart: bamboo-1.22.2
         app.kubernetes.io/name: bamboo

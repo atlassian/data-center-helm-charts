@@ -116,6 +116,10 @@ spec:
           {{- with .Values.bitbucket.additionalCertificates.initContainer.resources }}
           {{- toYaml . | nindent 12 }}
           {{- end }}
+          securityContext:
+          {{- with .Values.bitbucket.additionalCertificates.initContainer.securityContext }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
       containers:
         - name: {{ if .Values.bitbucket.useHelmReleaseNameAsContainerName}}{{ include "common.names.fullname" . }}{{ else }}{{ .Chart.Name }}{{ end }}
