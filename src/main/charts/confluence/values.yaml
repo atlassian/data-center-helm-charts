@@ -280,6 +280,11 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/confluence"
 
+    # -- Specifies the sub-directory of the local-home volume that will be mounted in to the
+    # Confluence container.
+    #
+    subPath:
+
   # A volume for 'shared-home' is required by Confluence to effectively operate in multi-node
   # environment
   # https://confluence.atlassian.com/doc/set-up-a-confluence-data-center-cluster-982322030.html#SetupaConfluenceDataCentercluster-Setupandconfigureyourcluster

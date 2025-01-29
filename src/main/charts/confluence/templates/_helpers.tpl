@@ -270,6 +270,9 @@ on Tomcat's logs directory. THis ensures that Tomcat+Confluence logs get capture
 {{ define "confluence.volumeMounts" }}
 - name: local-home
   mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+  {{- if .Values.volumes.localHome.subPath }}
+  subPath: {{ .Values.volumes.localHome.subPath | quote }}
+  {{- end }}
 - name: local-home
   mountPath: {{ .Values.confluence.accessLog.mountPath | quote }}
   subPath: {{ .Values.confluence.accessLog.localHomeSubPath | quote }}
