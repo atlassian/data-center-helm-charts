@@ -10,7 +10,7 @@ data:
     {{- range .Values.jira.additionalJvmArgs }}
     {{ . }}
     {{- end }}
-    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.jira.resources.container.requests.cpu }}
+    -XX:ActiveProcessorCount={{ max 1 (include "flooredCPU" .Values.jira.resources.container.requests.cpu | float64  | int) }}
     {{- if .Values.serviceAccount.eksIrsa.roleArn }}
     -Daws.webIdentityTokenFile=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
     {{- end }}

@@ -11,7 +11,7 @@ data:
     {{- range .Values.crowd.additionalJvmArgs }}
     {{ . }}
     {{- end }}
-    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.crowd.resources.container.requests.cpu }}
+    -XX:ActiveProcessorCount={{ max 1 (include "flooredCPU" .Values.crowd.resources.container.requests.cpu | float64  | int) }}
     {{- if or .Values.crowd.additionalCertificates.secretName .Values.crowd.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}

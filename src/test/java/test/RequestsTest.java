@@ -74,4 +74,25 @@ public class RequestsTest {
             .hasSeparatedTextContaining("-XX:ActiveProcessorCount=1");
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void fractional_cpu_active_processors(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".resources.container.requests.cpu", "3.2"
+        ));
+
+        final var additionalJvmArgs = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config")
+                .getNode("data", "additional_jvm_args");
+        assertThat(additionalJvmArgs)
+                .hasSeparatedTextContaining("-XX:ActiveProcessorCount=3");
+
+        final var resourcesFractionalCPU = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".resources.container.requests.cpu", "0.1"
+        ));
+        final var additionalJvmArgsMilliCpu = resourcesFractionalCPU
+                .get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config").getNode("data", "additional_jvm_args");
+        assertThat(additionalJvmArgsMilliCpu)
+                .hasSeparatedTextContaining("-XX:ActiveProcessorCount=1");
+    }
+
 }
