@@ -9,7 +9,7 @@ data:
     {{- range .Values.bamboo.additionalJvmArgs }}
     {{ . }}
     {{- end }}
-    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bamboo.resources.container.requests.cpu }}
+    -XX:ActiveProcessorCount={{ max 1 (include "flooredCPU" .Values.bamboo.resources.container.requests.cpu | float64  | int) }}
     {{- if or .Values.bamboo.additionalCertificates.secretName .Values.bamboo.additionalCertificates.secretList }}
     -Djavax.net.ssl.trustStore=/var/ssl/cacerts
     {{- end }}

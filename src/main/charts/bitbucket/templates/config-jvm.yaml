@@ -9,7 +9,7 @@ data:
     {{- range .Values.bitbucket.additionalJvmArgs }}
     {{ . }}
     {{- end }}
-    -XX:ActiveProcessorCount={{ include "flooredCPU" .Values.bitbucket.resources.container.requests.cpu }}
+    -XX:ActiveProcessorCount={{ max 1 (include "flooredCPU" .Values.bitbucket.resources.container.requests.cpu | float64  | int) }}
     {{ include "common.jmx.javaagent" . | indent 4 | trim }}
     {{- if .Values.monitoring.exposeJmxMetrics }}
     -Dplugin.bitbucket-git.mesh.sidecar.jvmArgs=-javaagent:{{ .Values.monitoring.jmxExporterCustomJarLocation | default (printf "%s/jmx_prometheus_javaagent.jar"  .Values.volumes.sharedHome.mountPath) }}=9998:/opt/atlassian/jmx/jmx-config.yaml
