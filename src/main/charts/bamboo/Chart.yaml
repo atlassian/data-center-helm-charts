@@ -2,7 +2,7 @@ apiVersion: v2
 name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
-version: '1.22.3'
+version: '1.22.4'
 appVersion: 10.2.0
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Set custom securityContext for import-certs init container. Make affinity independent for Synchrony (#938)"
+    - "Round up fractional cpu values for ActiveProcessorsCount (#944)"
 dependencies:
 - name: common
   version: 1.2.7
