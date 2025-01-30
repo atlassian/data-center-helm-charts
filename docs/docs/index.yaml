@@ -2,6 +2,36 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
+        (#944)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.2.0
+    created: "2025-01-30T23:57:42.423933821Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: a433fef7cf90b1f8e6ec79bf9a0d636491b294c82bf43dba2f7adcf105d59439
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.22.4/bamboo-1.22.4.tgz
+    version: 1.22.4
+  - annotations:
       artifacthub.io/changes: '- "Set custom securityContext for import-certs init
         container. Make affinity independent for Synchrony (#938)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -1604,6 +1634,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.2.0
+    created: "2025-01-30T23:57:42.531613992Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: b8bf3c7b326a2a3e3d69c8fe1a6734911abfb6cf107221fa8518c30eb5e887b3
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.22.4/bamboo-agent-1.22.4.tgz
+    version: 1.22.4
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#936)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -3133,6 +3192,40 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
+        (#944)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.2
+    created: "2025-01-30T23:57:42.621916794Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 5a3a79a63c70a1fcba0624f1a5ea1582369df6135dce92a74446caeabe8b52cf
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.22.4/bitbucket-1.22.4.tgz
+    version: 1.22.4
   - annotations:
       artifacthub.io/changes: '- "Set custom securityContext for import-certs init
         container. Make affinity independent for Synchrony (#938)"'
@@ -5355,6 +5448,40 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
+        (#944)"'
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 9.2.0
+    created: "2025-01-30T23:57:42.836337162Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 707bcad6798424718fd1c1b6de058ae718cee874ac5a893f77534b6e0d086dfa
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.22.4/confluence-1.22.4.tgz
+    version: 1.22.4
+  - annotations:
       artifacthub.io/changes: '- "Set custom securityContext for import-certs init
         container. Make affinity independent for Synchrony (#938)"'
       artifacthub.io/containsSecurityUpdates: "true"
@@ -7494,6 +7621,36 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
+        (#944)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 6.2.0
+    created: "2025-01-30T23:57:42.919732087Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: 5cad54b52aaae1c9e8368f265a243767d4f744c72d87d4bb76ac2667385263da
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.22.4/crowd-1.22.4.tgz
+    version: 1.22.4
+  - annotations:
       artifacthub.io/changes: '- "Set custom securityContext for import-certs init
         container. Make affinity independent for Synchrony (#938)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -9399,6 +9556,37 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
+        (#944)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.3.2
+    created: "2025-01-30T23:57:43.015798277Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 9f7bf1cde1c732a592843fa34447183b30b4735528a8b97dc2d0ef55a430ba42
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.22.4/jira-1.22.4.tgz
+    version: 1.22.4
   - annotations:
       artifacthub.io/changes: '- "Set custom securityContext for import-certs init
         container. Make affinity independent for Synchrony (#938)"'
@@ -11458,4 +11646,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2025-01-13T08:43:16.110883738Z"
+generated: "2025-01-30T23:57:43.016788333Z"
