@@ -138,5 +138,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: kind-artifacts
+          name: kind-artifacts-${{inputs.dc_app}}
           path: logs/
