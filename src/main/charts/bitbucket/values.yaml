@@ -279,6 +279,11 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/bitbucket"
 
+    # -- Specifies the sub-directory of the local-home volume that will be mounted in to the
+    # Bitbucket container.
+    #
+    subPath:
+
   # An NFS volume for 'shared-home' is required by Bitbucket to effectively operate in multi-node
   # environment.
   #

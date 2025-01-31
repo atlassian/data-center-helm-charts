@@ -162,6 +162,9 @@ on Tomcat's logs directory. THis ensures that Tomcat+Bamboo logs get captured in
 {{ define "bamboo.volumeMounts" }}
 - name: local-home
   mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+  {{- if .Values.volumes.localHome.subPath }}
+  subPath: {{ .Values.volumes.localHome.subPath | quote }}
+  {{- end }}
 - name: local-home
   mountPath: {{ .Values.bamboo.accessLog.mountPath | quote }}
   subPath: {{ .Values.bamboo.accessLog.localHomeSubPath | quote }}

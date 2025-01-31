@@ -135,6 +135,9 @@ on Tomcat's logs directory. THis ensures that Tomcat+Crowd logs get captured in 
 {{ define "crowd.volumeMounts" }}
 - name: local-home
   mountPath: {{ .Values.volumes.localHome.mountPath | quote }}
+  {{- if .Values.volumes.localHome.subPath }}
+  subPath: {{ .Values.volumes.localHome.subPath | quote }}
+  {{- end }}
 - name: local-home
   mountPath: {{ .Values.crowd.accessLog.mountPath | quote }}
   subPath: {{ .Values.crowd.accessLog.localHomeSubPath | quote }}

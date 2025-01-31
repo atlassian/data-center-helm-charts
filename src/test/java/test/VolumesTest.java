@@ -114,7 +114,8 @@ class VolumesTest {
                 "volumes.localHome.persistentVolumeClaim.create", "true",
                 "volumes.localHome.persistentVolumeClaim.storageClassName", "foo",
                 "volumes.localHome.persistentVolumeClaim.resources.requests.storage", "2Gi",
-                "volumes.localHome.mountPath", "/foo/bar"));
+                "volumes.localHome.mountPath", "/foo/bar",
+                "volumes.localHome.subPath", "sub"));
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
@@ -127,6 +128,7 @@ class VolumesTest {
         final var mount = statefulSet.getContainer().getVolumeMount("local-home");
         assertThat(mount.get("name")).hasTextEqualTo("local-home");
         assertThat(mount.get("mountPath")).hasTextEqualTo("/foo/bar");
+        assertThat(mount.get("subPath")).hasTextEqualTo("sub");
     }
 
     @ParameterizedTest

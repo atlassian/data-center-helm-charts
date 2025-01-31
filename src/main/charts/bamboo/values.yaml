@@ -237,6 +237,11 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/bamboo"
 
+    # -- Specifies the sub-directory of the local-home volume that will be mounted in to the
+    # Bamboo container.
+    #
+    subPath:
+
   # A volume for 'shared-home' is required by Bamboo to effectively operate in multi-node
   # environment
   # https://confluence.atlassian.com/bamboo/bamboo-data-center-requirements-1063170547.html#BambooDataCenterrequirements-Sharedfilesystem

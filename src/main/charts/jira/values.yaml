@@ -248,6 +248,11 @@ volumes:
     #
     mountPath: "/var/atlassian/application-data/jira"
 
+    # -- Specifies the sub-directory of the local-home volume that will be mounted in to the
+    # Jira container.
+    #
+    subPath:
+
   # A volume for 'shared-home' is required by Jira to effectively operate in multi-node
   # environment
   # https://confluence.atlassian.com/adminjiraserver/set-up-a-jira-data-center-cluster-993929600.html
