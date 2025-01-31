@@ -315,6 +315,7 @@ data:
         persistentVolumeClaimRetentionPolicy:
           whenDeleted: null
           whenScaled: null
+        subPath: null
       sharedHome:
         customVolume: {}
         mountPath: /var/atlassian/application-data/shared-home
