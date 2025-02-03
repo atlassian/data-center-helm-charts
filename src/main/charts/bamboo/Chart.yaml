@@ -3,7 +3,7 @@ name: bamboo
 description: A chart for installing Bamboo Data Center on Kubernetes
 type: application
 version: '1.22.4'
-appVersion: 10.2.0
+appVersion: 10.2.1
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Bamboo
