@@ -28,8 +28,7 @@ def get_lts_version(argv):
 	if product == 'mesh':
 		argv[0] = 'stash'
 		stash_version = get_lts_version(argv)
-		pom_url = (f"https://packages.atlassian.com/artifactory/maven-closedsource-private-local/"
-				   f"com/atlassian/bitbucket/server/bitbucket-parent/{stash_version}/"
+		pom_url = (f"https://maven.artifacts.atlassian.com/com/atlassian/bitbucket/server/bitbucket-parent/{stash_version}/"
 				   f"bitbucket-parent-{stash_version}.pom")
 		username = os.getenv("ARTIFACTORY_BOT_USERNAME")
 		password = os.getenv("ARTIFACTORY_BOT_PASSWORD")
@@ -94,7 +93,7 @@ def get_lts_version(argv):
 		lts_version = f"{lts_version}{tag_suffix}"
 	else:
 		lts_version = 'unknown'
-	
+
 	return lts_version
 
 
