@@ -212,6 +212,7 @@ spec:
             {{ end }}
             {{- end }}
           env:
+            {{- include "confluence.tunnelVars" . | nindent 12 }}
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"

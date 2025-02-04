@@ -29,6 +29,9 @@ data:
     -Dopensearch.username=admin
     -Dopensearch.password={{ include "opensearch.initial.admin.password" . | b64dec -}}
     {{- end }}
+    {{- if .Values.confluence.tunnel.additionalConnector.port }}
+    -Dsecure.tunnel.upstream.port={{ .Values.confluence.tunnel.additionalConnector.port }}
+    {{- end }}
   max_heap: {{ .Values.confluence.resources.jvm.maxHeap }}
   min_heap: {{ .Values.confluence.resources.jvm.minHeap }}
   reserved_code_cache: {{ .Values.confluence.resources.jvm.reservedCodeCache }}
