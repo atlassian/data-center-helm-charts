@@ -161,7 +161,7 @@ of the setup. They can be controlled via the below environment variables.
   which node proxies the connection. If not specified, no internal proxies will be trusted.
 
 
-* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_PORT` - mandatory, no default. If unset, no additional connector is defined in server.xml
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_PORT` - If unset, no additional connector is defined in server.xml. No default.
 * `ATL_TOMCAT_ADDITIONAL_CONNECTOR_CONNECTION_TIMEOUT` (default: 20000)
 * `ATL_TOMCAT_ADDITIONAL_CONNECTOR_MAX_THREADS` (default: 50)
 * `ATL_TOMCAT_ADDITIONAL_CONNECTOR_MIN_SPARE_THREADS` (default: 10)
