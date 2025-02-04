@@ -205,6 +205,16 @@ data:
         trustedProxies: null
         uriEncoding: UTF-8
       topologySpreadConstraints: []
+      tunnel:
+        additionalConnector:
+          URIEncoding: UTF-8
+          acceptCount: "10"
+          connectionTimeout: "20000"
+          enableLookups: "false"
+          maxThreads: "50"
+          minSpareThreads: "10"
+          port: null
+          secure: false
       umask: "0022"
       useHelmReleaseNameAsContainerName: false
     database:

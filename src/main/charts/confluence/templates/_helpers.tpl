@@ -616,6 +616,43 @@ volumeClaimTemplates:
 {{- end }}
 {{- end }}
 
+{{- define "confluence.tunnelVars"}}
+{{- if .Values.confluence.tunnel.additionalConnector.port }}
+{{- with .Values.confluence.tunnel.additionalConnector.port }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_PORT
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.connectionTimeout }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_CONNECTION_TIMEOUT
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.maxThreads }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_MAX_THREADS
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.minSpareThreads }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_MIN_SPARE_THREADS
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.enableLookups }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_ENABLE_LOOKUPS
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.acceptCount }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_ACCEPT_COUNT
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.secure }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_SECURE
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.confluence.tunnel.additionalConnector.URIEncoding }}
+- name: ATL_TOMCAT_ADDITIONAL_CONNECTOR_URI_ENCODING
+  value: {{ . | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
 {{- define "confluence.databaseEnvVars" -}}
 {{- if .Values.confluence.forceConfigUpdate }}
 - name: ATL_FORCE_CFG_UPDATE

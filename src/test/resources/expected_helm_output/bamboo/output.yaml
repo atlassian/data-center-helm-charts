@@ -454,7 +454,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 35703165e53abbbbe81857d7773747427392432daa0c35c29765460d8248151e
+        checksum/config-jvm: 0c1bea135edf53b1f0f9842b745d0d26a08f9012fcb1352c839fb4cc1fe4e488
       labels:
         helm.sh/chart: bamboo-1.22.4
         app.kubernetes.io/name: bamboo
