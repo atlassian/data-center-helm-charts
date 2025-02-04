@@ -160,6 +160,16 @@ of the setup. They can be controlled via the below environment variables.
   in a clustered load balancer architecture where the load balancer address changes depending on
   which node proxies the connection. If not specified, no internal proxies will be trusted.
 
+
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_PORT` - If unset, no additional connector is defined in server.xml. No default.
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_CONNECTION_TIMEOUT` (default: 20000)
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_MAX_THREADS` (default: 50)
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_MIN_SPARE_THREADS` (default: 10)
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_ENABLE_LOOKUPS` (default: false)
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_ACCEPT_COUNT` (default: 10)
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_URI_ENCODING` (default: UTF-8)
+* `ATL_TOMCAT_ADDITIONAL_CONNECTOR_SECURE` (no default, if undefined secure is not set in the connector)
+
 The following Tomcat/Catalina options are also supported. For more information,
 see <https://tomcat.apache.org/tomcat-7.0-doc/config/index.html>. 
 
