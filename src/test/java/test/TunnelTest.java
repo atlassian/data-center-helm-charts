@@ -1,19 +1,17 @@
-package test.postinstall;
+package test;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
-import test.model.KubeResource;
 import test.model.Product;
 
 import java.util.Map;
 
 import static test.jackson.JsonNodeAssert.assertThat;
 
-public class ConfluenceTunnelTest {
+public class TunnelTest {
 
     private Helm helm;
 
@@ -23,20 +21,20 @@ public class ConfluenceTunnelTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"confluence"})
+    @EnumSource(value = Product.class, names = {"confluence", "jira"})
     void confluenceTunnelJvmArg(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(Product.confluence, Map.of(
-                "confluence.tunnel.additionalConnector.port", "8093"));
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".tunnel.additionalConnector.port", "8093"));
 
         final var configMap = resources.getConfigMap(product.getHelmReleaseName() + "-jvm-config").getDataByKey("additional_jvm_args");
         assertThat(configMap).hasTextContaining("-Dsecure.tunnel.upstream.port=8093");
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"confluence"})
+    @EnumSource(value = Product.class, names = {"confluence", "jira"})
     void confluenceAdditionalConnectorVarsDefaults(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "confluence.tunnel.additionalConnector.port", "8093"));
+                product + ".tunnel.additionalConnector.port", "8093"));
 
         resources.getStatefulSet(product.getHelmReleaseName())
                 .getContainer()
@@ -51,17 +49,17 @@ public class ConfluenceTunnelTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"confluence"})
+    @EnumSource(value = Product.class, names = {"confluence", "jira"})
     void confluenceAdditionalConnectorVarsOverrides(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "confluence.tunnel.additionalConnector.port", "8093",
-                "confluence.tunnel.additionalConnector.connectionTimeout", "30000",
-                "confluence.tunnel.additionalConnector.maxThreads", "100",
-                "confluence.tunnel.additionalConnector.minSpareThreads", "20",
-                "confluence.tunnel.additionalConnector.enableLookups", "true",
-                "confluence.tunnel.additionalConnector.acceptCount", "20",
-                "confluence.tunnel.additionalConnector.URIEncoding", "ISO-8859-1",
-                "confluence.tunnel.additionalConnector.secure", "true"
+                product + ".tunnel.additionalConnector.port", "8093",
+                product + ".tunnel.additionalConnector.connectionTimeout", "30000",
+                product + ".tunnel.additionalConnector.maxThreads", "100",
+                product + ".tunnel.additionalConnector.minSpareThreads", "20",
+                product + ".tunnel.additionalConnector.enableLookups", "true",
+                product + ".tunnel.additionalConnector.acceptCount", "20",
+                product + ".tunnel.additionalConnector.URIEncoding", "ISO-8859-1",
+                product + ".tunnel.additionalConnector.secure", "true"
 
         ));
 

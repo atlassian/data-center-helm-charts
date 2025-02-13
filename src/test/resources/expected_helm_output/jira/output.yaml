@@ -109,6 +109,7 @@ data:
       imageRepo: fluent/fluentd-kubernetes-daemonset
       imageTag: v1.11.5-debian-elasticsearch7-1.2
       resources: {}
+    hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent
       repository: atlassian/jira-software
@@ -241,6 +242,16 @@ data:
         secure: null
         stuckThreadDetectionValveThreshold: "120"
       topologySpreadConstraints: []
+      tunnel:
+        additionalConnector:
+          URIEncoding: UTF-8
+          acceptCount: "10"
+          connectionTimeout: "20000"
+          enableLookups: "false"
+          maxThreads: "50"
+          minSpareThreads: "10"
+          port: null
+          secure: false
       useHelmReleaseNameAsContainerName: false
     monitoring:
       exposeJmxMetrics: true
@@ -406,7 +417,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 458977ced4424fdf43e241238c563be22bab92d9bd349cc518369c5858ca901d
+        checksum/config-jvm: 35d06f59cf804b127ce818fbe6026065ec2a1e165cc87095c291874b1e6062ae
       labels:
         helm.sh/chart: jira-1.22.4
         app.kubernetes.io/name: jira

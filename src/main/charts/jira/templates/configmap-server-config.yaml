@@ -44,6 +44,21 @@ data:
                    useBodyEncodingForURI="true"
                    disableUploadTimeout="true" />
 
+     {{- if .Values.jira.tunnel.additionalConnector.port }}
+     <Connector port="{{ .Values.jira.tunnel.additionalConnector.port }}"
+                connectionTimeout="{{ .Values.jira.tunnel.additionalConnector.connectionTimeout }}"
+                maxThreads="{{ .Values.jira.tunnel.additionalConnector.maxThreads }}"
+                minSpareThreads="{{ .Values.jira.tunnel.additionalConnector.minSpareThreads }}"
+                enableLookups="{{ .Values.jira.tunnel.additionalConnector.enableLookups }}"
+                acceptCount="{{ .Values.jira.tunnel.additionalConnector.acceptCount }}"
+                {{- if .Values.jira.tunnel.additionalConnector.secure }}
+                secure="true"
+                {{- end }}
+                URIEncoding="{{ .Values.jira.tunnel.additionalConnector.URIEncoding }}"
+                relaxedPathChars="[]|"
+                relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;" />
+     {{- end }}
+
         <Engine name="Catalina"
                 defaultHost="localhost">
 

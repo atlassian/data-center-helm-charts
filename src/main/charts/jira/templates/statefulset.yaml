@@ -39,6 +39,9 @@ spec:
         {{- include "common.labels.commonLabels" . | nindent 8 }}
         {{- include "jira.podLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.hostNamespaces }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "jira.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.jira.shutdown.terminationGracePeriodSeconds }}
       hostAliases:
@@ -119,6 +122,7 @@ spec:
           image: {{ include "jira.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- include "jira.tunnelVars" . | nindent 12 }}
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"

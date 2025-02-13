@@ -284,6 +284,10 @@ schedulerName:
 #
 priorityClassName:
 
+# -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+#
+hostNamespaces: {}
+
 # -- Defines additional volumes that should be applied to all Bamboo agent pods.
 # Note that this will not create any corresponding volume mounts
 # which need to be defined in bamboo.additionalVolumeMounts

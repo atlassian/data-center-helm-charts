@@ -38,6 +38,9 @@ spec:
         {{- include "synchrony.labels" . | nindent 8 }}
         {{- include "confluence.podLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.synchrony.hostNamespaces }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "confluence.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.synchrony.shutdown.terminationGracePeriodSeconds }}
       {{- if .Values.openshift.runWithRestrictedSCC }}

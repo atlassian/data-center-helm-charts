@@ -18,6 +18,9 @@ spec:
         {{- include "common.labels.selectorLabels" . | nindent 8 }}
         {{- include "agent.podLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.hostNamespaces }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "agent.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.agent.shutdown.terminationGracePeriodSeconds }}
       hostAliases:

@@ -40,6 +40,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         {{- include "bitbucket.mesh.podLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.bitbucket.mesh.hostNamespaces }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "bitbucket.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.bitbucket.mesh.shutdown.terminationGracePeriodSeconds }}
       hostAliases:

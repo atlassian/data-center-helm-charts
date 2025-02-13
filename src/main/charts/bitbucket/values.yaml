@@ -1133,6 +1133,10 @@ bitbucket:
     #
     priorityClassName:
 
+    # -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+    #
+    hostNamespaces: {}
+
     # See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     #
     podManagementPolicy: OrderedReady
@@ -1524,6 +1528,10 @@ schedulerName:
 # For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
 #
 priorityClassName:
+
+# -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+#
+hostNamespaces: {}
 
 # -- Additional container definitions that will be added to all Bitbucket pods
 #

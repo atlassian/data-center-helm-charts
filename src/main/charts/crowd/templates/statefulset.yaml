@@ -39,6 +39,9 @@ spec:
         {{- include "common.labels.commonLabels" . | nindent 8 }}
         {{- include "crowd.podLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.hostNamespaces }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "crowd.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.crowd.shutdown.terminationGracePeriodSeconds }}
       hostAliases:

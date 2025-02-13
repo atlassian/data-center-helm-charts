@@ -616,3 +616,14 @@ Helm values are mounted to be included to the [support.zip](https://confluence.a
 Analytics json is a subset of `values.yaml` and contains selected Helm values that are sent as an analytics event and written to analytics logs, if analytics is enabled in the product. Analytics values are purely informational and contain information on how Helm charts are used.
 
 You can find the complete list of analytics values in `_helpers.tpl`, `<product>.analyticsJson`.
+
+## :material-tunnel: Tunnels
+
+Jira and Confluence Helm charts support configuring tunnelling. To enable tunneling, set the following in your Helm values file:
+```yaml
+  tunnel:
+    additionalConnector:
+      port: 8093
+```
+
+An additional connector will be added to server.xml along with `Dsecure.tunnel.upstream.port` system property.`

@@ -219,4 +219,48 @@ class ServerConfigTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         assertThat(statefulSet.getInitContainers().path(0).path("securityContext")).isEmpty();
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "jira"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_connector_defaults(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".tomcatConfig.generateByHelm", "true",
+                product.name() + ".tunnel.additionalConnector.port", "8093"
+        ));
+
+        KubeResource serverConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-server-config");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("port=\"8093\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("connectionTimeout=\"20000\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("maxThreads=\"50\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("minSpareThreads=\"10\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("enableLookups=\"false\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("acceptCount=\"10\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("URIEncoding=\"UTF-8\"");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "jira"}, mode = EnumSource.Mode.INCLUDE)
+    void additional_connector_overrides(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".tomcatConfig.generateByHelm", "true",
+                product.name() + ".tunnel.additionalConnector.port", "8093",
+                product.name() + ".tunnel.additionalConnector.connectionTimeout", "11",
+                product.name() + ".tunnel.additionalConnector.maxThreads", "11",
+                product.name() + ".tunnel.additionalConnector.minSpareThreads", "11",
+                product.name() + ".tunnel.additionalConnector.enableLookups", "true",
+                product.name() + ".tunnel.additionalConnector.acceptCount", "11",
+                product.name() + ".tunnel.additionalConnector.secure", "true",
+                product.name() + ".tunnel.additionalConnector.URIEncoding", "UTF-9"
+        ));
+
+        KubeResource serverConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-server-config");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("port=\"8093\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("connectionTimeout=\"11\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("maxThreads=\"11\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("minSpareThreads=\"11\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("enableLookups=\"true\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("acceptCount=\"11\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("secure=\"true\"");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("URIEncoding=\"UTF-9\"");
+    }
 }

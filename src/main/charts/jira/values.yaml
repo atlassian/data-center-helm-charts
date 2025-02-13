@@ -951,6 +951,21 @@ jira:
       #
       securityContext: {}
 
+  # -- Configure additional Tomcat connector to set up tunnel. Define the connector port and optional additional attributes.
+  # When 'tunnel.additionalConnector.port' is defined, an additional connector is added to server.xml
+  # and '-Dsecure.tunnel.upstream.port=<port_number>' is added to JVM args
+  #
+  tunnel:
+    additionalConnector:
+      port:
+      connectionTimeout: "20000"
+      maxThreads: "50"
+      minSpareThreads: "10"
+      enableLookups: "false"
+      acceptCount: "10"
+      URIEncoding: "UTF-8"
+      secure: false
+
 # Monitoring
 #
 monitoring:
@@ -1183,6 +1198,10 @@ schedulerName:
 # For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
 #
 priorityClassName:
+
+# -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+#
+hostNamespaces: {}
 
 # -- Additional container definitions that will be added to all Jira pods
 #
