@@ -621,9 +621,25 @@ You can find the complete list of analytics values in `_helpers.tpl`, `<product>
 
 Jira and Confluence Helm charts support configuring tunnelling. To enable tunneling, set the following in your Helm values file:
 ```yaml
+jira:
   tunnel:
     additionalConnector:
       port: 8093
 ```
 
-An additional connector will be added to server.xml along with `Dsecure.tunnel.upstream.port` system property.`
+An additional connector will be added to server.xml along with `Dsecure.tunnel.upstream.port` system property.
+If necessary, connector configuration can be overridden by setting `additionalConnector` properties to custom values:
+
+```yaml
+jira:
+  tunnel:
+    additionalConnector:
+      port: 8093
+      connectionTimeout: "200000"
+      maxThreads: "100"
+      minSpareThreads: "20"
+      enableLookups: "true"
+      acceptCount: "100"
+      URIEncoding: "UTF-8"
+      secure: false
+```
