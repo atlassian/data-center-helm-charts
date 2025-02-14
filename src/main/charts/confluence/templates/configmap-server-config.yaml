@@ -31,6 +31,19 @@ data:
                    proxyPort="{{ .Values.confluence.tomcatConfig.proxyPort | default (ternary "443" "80" .Values.ingress.https)  }}"
                    maxHttpHeaderSize="{{ .Values.confluence.tomcatConfig.maxHttpHeaderSize | default "8192" }}" />
 
+         {{- if .Values.confluence.tunnel.additionalConnector.port }}
+         <Connector port="{{ .Values.confluence.tunnel.additionalConnector.port }}"
+                    connectionTimeout="{{ .Values.confluence.tunnel.additionalConnector.connectionTimeout }}"
+                    maxThreads="{{ .Values.confluence.tunnel.additionalConnector.maxThreads }}"
+                    minSpareThreads="{{ .Values.confluence.tunnel.additionalConnector.minSpareThreads }}"
+                    enableLookups="{{ .Values.confluence.tunnel.additionalConnector.enableLookups }}"
+                    acceptCount="{{ .Values.confluence.tunnel.additionalConnector.acceptCount }}"
+                    {{- if .Values.confluence.tunnel.additionalConnector.secure }}
+                    secure="true"
+                    {{- end }}
+                    URIEncoding="{{ .Values.confluence.tunnel.additionalConnector.URIEncoding }}" />
+         {{- end }}
+
         <Engine name="Standalone"
                 defaultHost="localhost"
                 debug="0">

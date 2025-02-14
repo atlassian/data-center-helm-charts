@@ -128,6 +128,7 @@ Kubernetes: `>=1.21.x-0`
 | fluentd.imageRepo | string | `"fluent/fluentd-kubernetes-daemonset"` | The Fluentd sidecar image repository  |
 | fluentd.imageTag | string | `"v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image tag  |
 | fluentd.resources | object | `{}` | Resources requests and limits for fluentd sidecar container See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/  |
+| hostNamespaces | object | `{}` | Share host namespaces which may include hostNetwork, hostIPC, and hostPID  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | image.repository | string | `"atlassian/confluence"` | The Confluence Docker image to use https://hub.docker.com/r/atlassian/confluence  |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion  |
@@ -211,6 +212,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.affinity | object | `{}` | Standard K8s affinities that will be applied to all Synchrony pods  |
 | synchrony.containerSecurityContext | object | `{}` | Standard K8s field that holds security configurations that will be applied to a container. https://kubernetes.io/docs/tasks/configure-pod-container/security-context/  |
 | synchrony.enabled | bool | `false` | Set to 'true' if Synchrony (i.e. collaborative editing) should be enabled. This will result in a separate StatefulSet and Service to be created for Synchrony. If disabled, then collaborative editing will be disabled in Confluence. |
+| synchrony.hostNamespaces | object | `{}` | Share host namespaces which may include hostNetwork, hostIPC, and hostPID  |
 | synchrony.ingress | object | `{"annotations":null,"path":null,"pathType":null}` | If 'synchrony.ingress.path' is defined, a dedicated Synchrony ingress object is created. This is useful if you need to deploy multiple instances of Confluence with Synchrony enabled using the same Ingress hostname and different synchrony paths  |
 | synchrony.ingress.annotations | string | `nil` | Custom annotations applied to Synchrony ingress  |
 | synchrony.ingress.path | string | `nil` | Ingress path applied to Synchrony ingress  |

@@ -238,6 +238,7 @@ data:
       imageRepo: fluent/fluentd-kubernetes-daemonset
       imageTag: v1.11.5-debian-elasticsearch7-1.2
       resources: {}
+    hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent
       repository: atlassian/confluence
@@ -349,6 +350,7 @@ data:
       affinity: {}
       containerSecurityContext: {}
       enabled: true
+      hostNamespaces: {}
       ingress:
         annotations: null
         path: null
@@ -659,7 +661,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: dcfb48c0568598055bd7f80cc156399593de80f8d902907aa56874aa566fe545
+        checksum/config-jvm: 27f81d74d906eb7b711842e0399edd970979c835cfc282bc642ab131b424014b
       labels:
         helm.sh/chart: confluence-1.22.4
         app.kubernetes.io/name: confluence

@@ -119,6 +119,7 @@ Kubernetes: `>=1.21.x-0`
 | fluentd.imageRepo | string | `"fluent/fluentd-kubernetes-daemonset"` | The Fluentd sidecar image repository  |
 | fluentd.imageTag | string | `"v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image tag  |
 | fluentd.resources | object | `{}` | Resources requests and limits for fluentd sidecar container See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/  |
+| hostNamespaces | object | `{}` | Share host namespaces which may include hostNetwork, hostIPC, and hostPID  |
 | image | object | `{"pullPolicy":"IfNotPresent","repository":"atlassian/crowd","tag":""}` | Image configuration  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | image.repository | string | `"atlassian/crowd"` | The Docker Crowd Docker image to use https://hub.docker.com/r/atlassian/crowd  |

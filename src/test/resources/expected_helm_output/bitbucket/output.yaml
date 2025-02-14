@@ -161,6 +161,7 @@ data:
         additionalJvmArgs: []
         affinity: {}
         enabled: true
+        hostNamespaces: {}
         image:
           pullPolicy: IfNotPresent
           repository: atlassian/bitbucket-mesh
@@ -290,6 +291,7 @@ data:
       imageRepo: fluent/fluentd-kubernetes-daemonset
       imageTag: v1.11.5-debian-elasticsearch7-1.2
       resources: {}
+    hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent
       repository: atlassian/bitbucket

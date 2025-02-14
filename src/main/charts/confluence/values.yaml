@@ -1461,6 +1461,10 @@ synchrony:
   #
   priorityClassName:
 
+  # -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+  #
+  hostNamespaces: {}
+
   # -- Certificates to be added to Java truststore. Provide reference to a secret that contains the certificates
   #
   additionalCertificates:
@@ -1622,6 +1626,10 @@ schedulerName:
 # For details see https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
 #
 priorityClassName:
+
+# -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+#
+hostNamespaces: {}
 
 # -- Additional container definitions that will be added to all Confluence pods
 #

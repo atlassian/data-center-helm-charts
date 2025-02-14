@@ -1256,6 +1256,10 @@ schedulerName:
 #
 priorityClassName:
 
+# -- Share host namespaces which may include hostNetwork, hostIPC, and hostPID
+#
+hostNamespaces: {}
+
 # -- Additional container definitions that will be added to all Bamboo pods
 #
 additionalContainers: []
