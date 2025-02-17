@@ -961,6 +961,7 @@ confluence:
     trustedProxies:
     stuckThreadDetectionValveThreshold: "60"
     accessLogMaxDays: "-1"
+    accessLogPattern: "%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;"
     requestAttributesEnabled: "false"
 
     # -- Custom server.xml to be mounted into /opt/atlassian/confluence/conf

@@ -263,4 +263,30 @@ class ServerConfigTest {
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("secure=\"true\"");
         assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("URIEncoding=\"UTF-9\"");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "jira"}, mode = EnumSource.Mode.INCLUDE)
+    void access_log_pattern_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".tomcatConfig.generateByHelm", "true"
+        ));
+        String expectedPattern;
+        if (product == Product.confluence) {
+            expectedPattern = "pattern=\"%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;";
+        } else expectedPattern = "pattern=\"%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;";
+
+        KubeResource serverConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-server-config");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining(expectedPattern);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence", "jira"}, mode = EnumSource.Mode.INCLUDE)
+    void access_log_pattern_overrides(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product.name() + ".tomcatConfig.generateByHelm", "true",
+                product.name() + ".tomcatConfig.accessLogPattern", "%%"
+        ));
+        KubeResource serverConfigMap = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-server-config");
+        assertThat(serverConfigMap.getConfigMapData().path("server.xml")).hasTextContaining("%%");
+    }
 }
