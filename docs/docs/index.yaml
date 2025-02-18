@@ -2,6 +2,37 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Add tunnel config for Jira, hostNamespaces in all charts (#958)"
+        - "Allow setting subPath for local-home volumes (#947)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.2.1
+    created: "2025-02-18T02:04:16.261925279Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 073b95054cc6d52ce8a42cc559f9861d43a2dd9444167a4729ffcae2288e04bb
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-1.22.5/bamboo-1.22.5.tgz
+    version: 1.22.5
+  - annotations:
       artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
         (#944)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -1634,6 +1665,36 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Add tunnel config for Jira, hostNamespaces in all
+        charts (#958)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.2.1
+    created: "2025-02-18T02:04:16.369014794Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: 89bac81d056e6838dc85ea356388ff35520b57e0e727357621056b894be38de0
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-1.22.5/bamboo-agent-1.22.5.tgz
+    version: 1.22.5
+  - annotations:
       artifacthub.io/changes: '- "Update Helm chart version"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -3192,6 +3253,42 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#959)"
+        - "Add tunnel config for Jira, hostNamespaces in all charts (#958)"
+        - "Allow setting subPath for local-home volumes (#947)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.3
+    created: "2025-02-18T02:04:16.48765166Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: 1d58bff1245672dc3325176f1b178c2dffce825feccb83b7bde9980ee83caa22
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-1.22.5/bitbucket-1.22.5.tgz
+    version: 1.22.5
   - annotations:
       artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
         (#944)"'
@@ -5448,6 +5545,43 @@ entries:
     version: 1.0.0
   confluence:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Make access log pattern configurable for Jira and Confluence when running as non root (#961)"
+        - "Add tunnel config for Jira, hostNamespaces in all charts (#958)"
+        - "Make it possible to enable tunneliing (#954)"
+        - "Allow setting subPath for local-home volumes (#947)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 9.2.1
+    created: "2025-02-18T02:04:16.732667798Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: b675777e54ad474ad07ef27f280ed0409629bb4b0c6d67bd15b0834d5c37d491
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-1.22.5/confluence-1.22.5.tgz
+    version: 1.22.5
+  - annotations:
       artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
         (#944)"'
       artifacthub.io/containsSecurityUpdates: "true"
@@ -7621,6 +7755,38 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#959)"
+        - "Add tunnel config for Jira, hostNamespaces in all charts (#958)"
+        - "Allow setting subPath for local-home volumes (#947)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 6.2.2
+    created: "2025-02-18T02:04:16.868718002Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: fb757865ef00d237b936c28162505711967ceb07d6de8b77905a47cf2cae01b3
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-1.22.5/crowd-1.22.5.tgz
+    version: 1.22.5
+  - annotations:
       artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
         (#944)"'
       artifacthub.io/containsSecurityUpdates: "false"
@@ -9556,6 +9722,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: |-
+        - "Make access log pattern configurable for Jira and Confluence when running as non root (#961)"
+        - "Add tunnel config for Jira, hostNamespaces in all charts (#958)"
+        - "Allow setting subPath for local-home volumes (#947)"
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.3.3
+    created: "2025-02-18T02:04:16.978899856Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 2eee0a7fd0412b8c7348a0a97ced9ac276ac3e526bc4401bbbafc7b98cf48812
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-1.22.5/jira-1.22.5.tgz
+    version: 1.22.5
   - annotations:
       artifacthub.io/changes: '- "Round up fractional cpu values for ActiveProcessorsCount
         (#944)"'
@@ -11646,4 +11845,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2025-01-30T23:57:43.016788333Z"
+generated: "2025-02-18T02:04:16.979845416Z"
