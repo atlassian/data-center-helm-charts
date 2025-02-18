@@ -17,6 +17,19 @@
 * Relabel instance name on jmx service monitor (#757)
 * Added pvc retention policy to Bitbucket Mesh StatefulSet (#755)
 
+## 1.22.5
+
+**Release date:** 2025-2-18
+
+![AppVersion: 9.2.1](https://img.shields.io/static/v1?label=AppVersion&message=9.2.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Make access log pattern configurable for Jira and Confluence when running as non root (#961)
+* Add tunnel config for Jira, hostNamespaces in all charts (#958)
+* Make it possible to enable tunneliing (#954)
+* Allow setting subPath for local-home volumes (#947)
+
 ## 1.22.4
 
 **Release date:** 2025-1-30
