@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '1.22.4'
+version: '1.22.5'
 appVersion: 9.2.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,10 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Round up fractional cpu values for ActiveProcessorsCount (#944)"
+    - "Make access log pattern configurable for Jira and Confluence when running as non root (#961)"
+    - "Add tunnel config for Jira, hostNamespaces in all charts (#958)"
+    - "Make it possible to enable tunneliing (#954)"
+    - "Allow setting subPath for local-home volumes (#947)"
 
 dependencies:
 - name: common
