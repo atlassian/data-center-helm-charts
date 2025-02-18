@@ -70,7 +70,7 @@ data:
                      suffix=".log"
                      rotatable="true"
                      maxDays="{{ .Values.confluence.tomcatConfig.accessLogMaxDays | default "-1" }}"
-                     pattern="%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;" />
+                     pattern="{{ .Values.confluence.tomcatConfig.accessLogPattern }}" />
               <Valve className="org.apache.catalina.valves.RemoteIpValve"
                      proxiesHeader="x-forwarded-by"
                      {{- if .Values.confluence.tomcatConfig.proxyInternalIps }}

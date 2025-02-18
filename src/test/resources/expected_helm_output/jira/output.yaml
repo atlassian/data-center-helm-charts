@@ -224,6 +224,8 @@ data:
       tomcatConfig:
         acceptCount: "100"
         accessLogMaxDays: "-1"
+        accessLogPattern: '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m
+          %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'
         connectionTimeout: "20000"
         customServerXml: ""
         enableLookups: "false"

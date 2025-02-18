@@ -183,6 +183,7 @@ data:
       tomcatConfig:
         acceptCount: "100"
         accessLogMaxDays: "-1"
+        accessLogPattern: '%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;'
         connectionTimeout: "20000"
         customServerXml: ""
         debug: "0"

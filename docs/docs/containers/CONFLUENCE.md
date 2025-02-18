@@ -191,6 +191,7 @@ see <https://tomcat.apache.org/tomcat-7.0-doc/config/index.html>.
 You can set the maximum number of days for access logs to be retained before being deleted. The default value of -1 means never delete old files.
 
 * `ATL_TOMCAT_ACCESS_LOGS_MAXDAYS` (default: -1)
+* `ATL_TOMCAT_ACCESS_LOG_PATTERN` (default: `%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;`)
 
 ### JVM configuration
 
