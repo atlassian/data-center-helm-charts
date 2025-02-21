@@ -204,8 +204,11 @@ Pod labels
 {{- $synchronyIngressPath = regexReplaceAll $sanitizePathRegex .Values.synchrony.ingress.path "" }}
 {{- end }}
 {{- if .Values.synchrony.enabled -}}
-    {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
-    {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
+    {{- if .Values.synchrony.service.url -}}-Dsynchrony.service.url={{ .Values.synchrony.service.url }}/v1
+    {{- else -}}
+        {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
+        {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
+        {{- end }}    
     {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true

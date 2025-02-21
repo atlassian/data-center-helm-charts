@@ -363,4 +363,31 @@ class SynchronyTest {
         assertThat(topologySpreadConstraints.get(0).get("whenUnsatisfiable")).hasTextContaining("ScheduleAnyway");
         assertThat(topologySpreadConstraints.get(0).get("labelSelector").get("matchLabels").get("myLabel")).hasTextContaining("mySelector");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = "confluence")
+    void synchrony_service_url(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "ingress.host", "atlassian.net",
+                "ingress.path", "confluence",
+                "ingress.https", "false",
+                "synchrony.service.url", "https://atlassian.net/synchrony",
+        ));
+
+        resources.assertContains(Kind.StatefulSet, product.getHelmReleaseName() + "-synchrony");
+        resources.assertContains(Kind.Service, product.getHelmReleaseName() + "-synchrony");
+
+        final var sysProps = resources.get(Kind.ConfigMap, product.getHelmReleaseName() + "-jvm-config")
+                .getNode("data", "additional_jvm_args");
+
+        assertThat(sysProps)
+                .hasTextContaining("-Dsynchrony.service.url=https://atlassian.net/synchrony/v1")
+                .hasTextNotContaining("-Dsynchrony.service.url=http://atlassian.net/synchrony/v1");
+
+        resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony")
+                .getContainer()
+                .getEnv()
+                .assertHasValue("SYNCHRONY_SERVICE_URL", "https://atlassian.net/synchrony/v1");
+    }
 }

@@ -127,12 +127,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: SYNCHRONY_SERVICE_URL
-            {{ if .Values.ingress.https }}
-              value: "https://{{ .Values.ingress.host }}/synchrony"
+            - name: SYNCHRONY_SERVICE_URL 
+            {{ if .Values.synchrony.service.url }}
+              value: "{{ .Values.synchrony.service.url }}"
             {{ else }}
-              value: "http://{{ .Values.ingress.host }}/synchrony"
-            {{- end }}
+              {{ if .Values.ingress.https }}
+                value: "https://{{ .Values.ingress.host }}/synchrony"
+              {{ else }}
+                value: "http://{{ .Values.ingress.host }}/synchrony"
+              {{- end }}
+            {{ end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
       {{- if .Values.synchrony.nodeSelector }}
