@@ -372,7 +372,7 @@ class SynchronyTest {
                 "ingress.host", "atlassian.net",
                 "ingress.path", "confluence",
                 "ingress.https", "false",
-                "synchrony.service.url", "https://atlassian.net/synchrony",
+                "synchrony.service.url", "https://atlassian.net/synchrony"
         ));
 
         resources.assertContains(Kind.StatefulSet, product.getHelmReleaseName() + "-synchrony");
@@ -388,6 +388,6 @@ class SynchronyTest {
         resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony")
                 .getContainer()
                 .getEnv()
-                .assertHasValue("SYNCHRONY_SERVICE_URL", "https://atlassian.net/synchrony/v1");
+                .assertHasValue("SYNCHRONY_SERVICE_URL", "https://atlassian.net/synchrony");
     }
 }
