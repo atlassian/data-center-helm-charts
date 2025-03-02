@@ -387,6 +387,7 @@ data:
         nodePort: null
         port: 80
         type: ClusterIP
+        url: null
       setPermissions: true
       shutdown:
         terminationGracePeriodSeconds: 25
