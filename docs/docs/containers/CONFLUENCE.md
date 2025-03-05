@@ -252,6 +252,10 @@ For additional settings that can be supplied, see: [Recognized System Properties
   Password for the OpenSearch cluster.
 
 
+* `ATL_CONFLUENCE_CFG_ADDITIONAL_PROPERTIES`
+
+    Additional properties to be added to `confluence.cfg.xml`. The properties should be in the format `key=value` and separated by a comma. For example, `ATL_CONFLUENCE_CFG_ADDITIONAL_PROPERTIES=confluence.cluster.node.name=node1,confluence.cluster.node.server=server1`.
+
 ### Database configuration
 
 It is optionally possible to configure the database from the environment,
