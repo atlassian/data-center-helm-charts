@@ -236,6 +236,27 @@ For additional settings that can be supplied, see: [Recognized System Properties
 
   **Beware, if enabled, the support ZIP produced by the Troubleshooting and Support plugin doesn't contain the application logs.**
 
+* `ATL_SEARCH_PLATFORM`
+    
+    The search platform to use. Set to `opensearch` if you want to use OpenSearch as the search platform. See: https://confluence.atlassian.com/doc/configuring-opensearch-for-confluence-1387594125.html
+
+* `ATL_OPENSEARCH_HTTP_URL`
+
+    HTTP(S) URL of the OpenSearch cluster, or multiple URLs separated by commas.
+
+* `ATL_OPENSEARCH_USERNAME`
+
+    Username for the OpenSearch cluster.
+
+* `ATL_OPENSEARCH_PASSWORD`
+
+  Password for the OpenSearch cluster.
+
+
+* `ATL_CONFLUENCE_CFG_ADDITIONAL_PROPERTIES`
+
+    Additional properties to be added to `confluence.cfg.xml`. The properties should be in the format `key=value` and separated by a comma. For example, `ATL_CONFLUENCE_CFG_ADDITIONAL_PROPERTIES=confluence.cluster.node.name=node1,confluence.cluster.node.server=server1`.
+
 ### Database configuration
 
 It is optionally possible to configure the database from the environment,
