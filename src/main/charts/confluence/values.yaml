@@ -961,6 +961,7 @@ confluence:
     trustedProxies:
     stuckThreadDetectionValveThreshold: "60"
     accessLogMaxDays: "-1"
+    accessLogPattern: "%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;"
     requestAttributesEnabled: "false"
 
     # -- Custom server.xml to be mounted into /opt/atlassian/confluence/conf
@@ -1255,6 +1256,9 @@ synchrony:
     # -- Annotations to apply to Synchrony Service
     #
     annotations: {}
+
+    # -- Complete URL of Synchrony Service (i.e. https://public.mydomain.com/synchrony). If left empty, it is calculated from ingress.https and ingress.host
+    url:
 
   # -- If 'synchrony.ingress.path' is defined, a dedicated Synchrony ingress object is created.
   # This is useful if you need to deploy multiple instances of Confluence with Synchrony enabled

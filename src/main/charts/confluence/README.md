@@ -1,6 +1,6 @@
 # confluence
 
-![Version: 1.22.4](https://img.shields.io/badge/Version-1.22.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.2.1](https://img.shields.io/badge/AppVersion-9.2.1-informational?style=flat-square)
+![Version: 1.22.5](https://img.shields.io/badge/Version-1.22.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.2.1](https://img.shields.io/badge/AppVersion-9.2.1-informational?style=flat-square)
 
 A chart for installing Confluence Data Center on Kubernetes
 
@@ -104,7 +104,7 @@ Kubernetes: `>=1.21.x-0`
 | confluence.startupProbe.failureThreshold | int | `120` | The number of consecutive failures of the Confluence container startup probe before the pod fails startup checks.  |
 | confluence.startupProbe.initialDelaySeconds | int | `60` | Time to wait before starting the first probe  |
 | confluence.startupProbe.periodSeconds | int | `5` | How often (in seconds) the Confluence container startup probe will run  |
-| confluence.tomcatConfig | object | `{"acceptCount":"100","accessLogMaxDays":"-1","connectionTimeout":"20000","customServerXml":"","debug":"0","enableLookups":"false","generateByHelm":false,"maxHttpHeaderSize":"8192","maxThreads":"100","mgmtPort":"8000","minSpareThreads":"10","port":"8090","protocol":"org.apache.coyote.http11.Http11NioProtocol","proxyInternalIps":null,"proxyName":null,"proxyPort":null,"redirectPort":"8443","requestAttributesEnabled":"false","scheme":null,"secure":null,"stuckThreadDetectionValveThreshold":"60","trustedProxies":null,"uriEncoding":"UTF-8"}` | By default Tomcat's server.xml is generated in the container entrypoint from a template shipped with an official Confluence image. However, server.xml generation may fail if container is not run as root, which is a common case if Confluence is deployed to OpenShift.  |
+| confluence.tomcatConfig | object | `{"acceptCount":"100","accessLogMaxDays":"-1","accessLogPattern":"%h %{X-AUSERNAME}o %t &quot;%r&quot; %s %b %D %U %I &quot;%{User-Agent}i&quot;","connectionTimeout":"20000","customServerXml":"","debug":"0","enableLookups":"false","generateByHelm":false,"maxHttpHeaderSize":"8192","maxThreads":"100","mgmtPort":"8000","minSpareThreads":"10","port":"8090","protocol":"org.apache.coyote.http11.Http11NioProtocol","proxyInternalIps":null,"proxyName":null,"proxyPort":null,"redirectPort":"8443","requestAttributesEnabled":"false","scheme":null,"secure":null,"stuckThreadDetectionValveThreshold":"60","trustedProxies":null,"uriEncoding":"UTF-8"}` | By default Tomcat's server.xml is generated in the container entrypoint from a template shipped with an official Confluence image. However, server.xml generation may fail if container is not run as root, which is a common case if Confluence is deployed to OpenShift.  |
 | confluence.tomcatConfig.customServerXml | string | `""` | Custom server.xml to be mounted into /opt/atlassian/confluence/conf  |
 | confluence.tomcatConfig.generateByHelm | bool | `false` | Mount server.xml as a ConfigMap. Override configuration elements if necessary  |
 | confluence.topologySpreadConstraints | list | `[]` | Defines topology spread constraints for Confluence pods. See details: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  |
@@ -240,6 +240,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Synchrony service  |
 | synchrony.service.port | int | `80` | The port on which the Synchrony K8s Service will listen  |
 | synchrony.service.type | string | `"ClusterIP"` | The type of K8s service to use for Synchrony  |
+| synchrony.service.url | string | `nil` | Complete URL of Synchrony Service (i.e. https://public.mydomain.com/synchrony). If left empty, it is calculated from ingress.https and ingress.host |
 | synchrony.setPermissions | bool | `true` | Boolean to define whether to set synchrony home directory permissions on startup of Synchrony container. Set to 'false' to disable this behaviour.  |
 | synchrony.shutdown.terminationGracePeriodSeconds | int | `25` | The termination grace period for pods during shutdown. This should be set to the Synchrony internal grace period (default 20 seconds), plus a small buffer to allow the JVM to fully terminate. |
 | synchrony.tolerations | list | `[]` | Standard K8s tolerations that will be applied to all Synchrony pods  |
