@@ -103,6 +103,12 @@ can also be provided via Docker environment variables. For a full explanation of
 variables see
 [the relevant Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-relaxed-binding).
 
+To translate a property name into an environment variable:
+
+* dot `.` becomes underscore `_`
+* dash `-` becomes underscore `_`
+* Example: `this.new-property` becomes `THIS_NEW_PROPERTY`
+
 ## Container Configuration
 
 * `SET_PERMISSIONS` (default: true)
