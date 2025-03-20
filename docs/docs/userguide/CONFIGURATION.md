@@ -326,9 +326,9 @@ this behaviour may be undesirable; this flag forces an update of all
 generated files.
 
 The affected files are:
-* Jira: `dbconfig.xml`
-* Confluence: `confluence.cfg.xml`
-* Bamboo: `bamboo.cfg.xml`
+- Jira: `dbconfig.xml`
+- Confluence: `confluence.cfg.xml`
+- Bamboo: `bamboo.cfg.xml`
 
 To force update of the configuration files when pods restart, set `<product_name.forceConfigUpdate>` to true.
 You can do it by passing an argument to helm install/update command:
@@ -341,6 +341,36 @@ or set it in `values.yaml`:
 jira:
   forceConfigUpdate: true
 ```
+
+!!!info "Bitbucket and Bitbucket Mesh configuration file"
+    It's not possible to generate the Bitbucket and Bitbucket Mesh configuration files.
+    Bitbucket uses `${BITBUCKET_HOME}/shared/bitbucket.properties`. The properties are from 
+    [bitbucket.properties file](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html) 
+    and can be provided as environment variables. For example:
+    ```yaml
+    bitbucket:
+      additionalEnvironmentVariables:
+      - name: SEACRH_ENABLED
+        value: false
+      - name: PLUGIN_SEARCH_CONFIG_BASEURL
+        value: http://my.opensearch.host
+    ```
+    Bitbucket Mesh uses `${BITBUCKET_HOME}/mesh.properties`. The properties are from 
+    [mesh.properties file](https://confluence.atlassian.com/bitbucketserver/mesh-configuration-properties-1128304362.html) 
+    and can be provided as environment variables. For example:
+    ```yaml
+    bitbucket:
+      mesh:
+        additionalEnvironmentVariables:
+        - name: GIT_PATH_EXECUTABLE
+          value: /usr/bin/git
+    ```
+
+    To translate property into an environment variable:
+
+    * dot `.` becomes underscore `_`
+    * dash `-` becomes underscore `_`
+    * Example: `this.new-property` becomes `THIS_NEW_PROPERTY`
 
 ## :material-book-cog: Additional libraries & plugins
 
