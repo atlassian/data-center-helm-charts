@@ -1,0 +1,16 @@
+# Artifact Hub repository metadata file
+#
+# Some settings like the verified publisher flag or the ignored packages won't
+# be applied until the next time the repository is processed. Please keep in
+# mind that the repository won't be processed if it has not changed since the
+# last time it was processed. Depending on the repository kind, this is checked
+# in a different way. For Helm http based repositories, we consider it has
+# changed if the `index.yaml` file changes. For git based repositories, it does
+# when the hash of the last commit in the branch you set up changes. This does
+# NOT apply to ownership claim operations, which are processed immediately.
+#
+# https://artifacthub.io/docs/topics/repositories/#helm-charts-repositories
+repositoryID: 46e7e8b1-a8bb-47bf-837f-63d7ff61a463
+owners:
+  - name: abrokes-atlassian
+    email: abrokes@atlassian.com
