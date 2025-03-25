@@ -75,7 +75,8 @@ Before installing the Data Center Helm charts you need to set up your environmen
 !!! info "Bitbucket shared storage"
     In the case of Bitbucket, the following must be taken into account. 
     
-    * Due to the high-performance requirements on IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home. 
+    * Consider deploying [Bitbucket Mesh](../examples/bitbucket/BITBUCKET_MESH.md) nodes to relex performance requirements on the shared home. 
+    * Due to the high-performance requirements on IO operations, Bitbucket needs a dedicated NFS server providing persistence for a shared home if not using Bitbucket Mesh nodes to store git data. 
     * Before choosing [AWS EFS](https://aws.amazon.com/efs/){.external} as the File system, review the prerequisite mentioned on [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudplatforms). We include example for [Bitbucket Mesh](../examples/bitbucket/BITBUCKET_MESH.md).
     * Bitbucket doesn't support other cloud-managed storage service such as [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}.
     
