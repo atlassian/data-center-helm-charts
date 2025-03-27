@@ -284,8 +284,8 @@ volumes:
     #
     subPath:
 
-  # An NFS volume for 'shared-home' is required by Bitbucket to effectively operate in multi-node
-  # environment.
+  # When storing git data on shared home (i.e. not using Mesh), an NFS volume for 'shared-home'
+  # is required by Bitbucket to effectively operate in multi-node environment.
   #
   # Details on how an NFS should be stood up for Bitbucket can be found here:
   # https://confluence.atlassian.com/bitbucketserver/install-bitbucket-data-center-872139817.html#InstallBitbucketDataCenter-nfs
