@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       # See: https://github.com/kubernetes-sigs/kind/tags
-      KIND_VERSION: "v0.23.0"
+      KIND_VERSION: "v0.27.0"
       # See: https://hub.docker.com/r/kindest/node/tags
-      K8S_VERSION: "v1.30.0"
+      K8S_VERSION: "v1.32.2"
       DC_APP: ${{inputs.dc_app}}
       LICENSE: ${{ secrets[format('{0}_LICENSE', inputs.dc_app)] }}
 
