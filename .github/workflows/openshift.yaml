@@ -40,7 +40,7 @@ jobs:
 
       - name: Fetch crc binary
         run: |
-          CRC_VERSION="2.31.0"
+          CRC_VERSION="2.49.0"
           wget -q https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/${CRC_VERSION}/crc-linux-amd64.tar.xz
           tar -xvf crc-linux-amd64.tar.xz
           sudo cp crc-linux-${CRC_VERSION}-amd64/crc /usr/bin/crc
@@ -48,7 +48,7 @@ jobs:
 
       - name: Fetch oc binary
         run: |
-          wget -q https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.14/openshift-client-linux.tar.gz
+          wget -q https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.18/openshift-client-linux.tar.gz
           tar -xvf openshift-client-linux.tar.gz
           sudo cp oc /usr/bin/oc
           sudo chmod a+x /usr/bin/oc

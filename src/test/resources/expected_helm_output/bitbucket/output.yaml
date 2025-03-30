@@ -165,7 +165,7 @@ data:
         image:
           pullPolicy: IfNotPresent
           repository: atlassian/bitbucket-mesh
-          tag: 3.4.1
+          tag: 3.4.2
         nodeAutoRegistration: false
         nodeSelector: {}
         podAnnotations: {}
@@ -601,7 +601,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: eb201a83772d25a372267d6538a56fdf770fe516ef5a3f7dd3a11e7eb34eb25d
+        checksum/config-jvm: 90a62167605f048375111ba61c8aea9d74e815be62628f991a6b97f674561ee4
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -722,7 +722,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: e47ce96aa48f67d82212e40d094e45174db77f2db49b8f436aa9cf62c1a0db91
+        checksum/config-jvm: 2f5d89a2564e1fb684fb4fbac3f902d1e069396f281f6a4285cf4b49527440b7
       labels:
         helm.sh/chart: bitbucket-1.22.6
         app.kubernetes.io/name: bitbucket
