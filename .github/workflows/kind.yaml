@@ -36,7 +36,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Pin Kubectl version
-        uses: azure/setup-kubectl@v3.0
+        uses: azure/setup-kubectl@v4
         with:
           version: 'v1.32.2'
 
