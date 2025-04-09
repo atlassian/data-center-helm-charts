@@ -10,9 +10,7 @@
 When deploying Bitbucket, you have two options how to store git data. You can deploy [Bitbucket Mesh nodes](../bitbucket/BITBUCKET_MESH.md)
 or you can use shared home for your Bitbucket Data Center instance.
 
-Due to the high performance requirements on IO operations, Bitbucket needs a dedicated NFS server providing persistence in case you using the shared home to store git data.
-For this reason we don't recommend that you use [cloud managed storage services](https://confluence.atlassian.com/bitbucketserver/supported-platforms-776640981.html#Supportedplatforms-cloudplatformsCloudPlatforms) such as AWS EFS if you are not using
-Bitbucket Mesh nodes.
+Due to the high performance requirements on IO operations, it is critical that you adhere to the requirements in [Bitbucket Supported platforms](https://confluence.atlassian.com/display/BitbucketServer/Supported+platforms).
  
 ## NFS provisioning
 The NFS server can be provisioned manually or by using the supplied Helm chart. Details for both approaches can be found below.
