@@ -165,7 +165,7 @@ data:
         image:
           pullPolicy: IfNotPresent
           repository: atlassian/bitbucket-mesh
-          tag: 3.4.2
+          tag: 3.4.3
         nodeAutoRegistration: false
         nodeSelector: {}
         podAnnotations: {}
