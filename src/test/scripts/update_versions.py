@@ -114,7 +114,7 @@ def update_mesh_tag():
     with open(expected_bitbucket_output_file, "r") as file:
         file_contents = file.read()
 
-    modified_contents = file_contents.replace(mesh_repo + ':' + current_version, mesh_repo + ':' + new_version)
+    modified_contents = file_contents.replace(current_version, new_version)
     logging.info('Updated expected output file: %s', expected_bitbucket_output_file)
     with open(expected_bitbucket_output_file, 'w') as file:
         file.write(modified_contents)
