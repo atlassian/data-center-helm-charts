@@ -139,6 +139,7 @@ data:
           minHeap: 384m
       securityContext:
         fsGroup: 2004
+        fsGroupChangePolicy: OnRootMismatch
       securityContextEnabled: true
       service:
         annotations: {}
@@ -379,7 +380,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: d7360ecd4ab5a236db4a4dca24e511e533a9c06fd6c94b02461381ac9dbd54c4
+        checksum/config-jvm: bfc886f0fa9a0a3ebe0de488d3639fc56569302c53da1c0149a76a25898ce276
       labels:
         helm.sh/chart: crowd-1.22.7
         app.kubernetes.io/name: crowd
@@ -396,6 +397,7 @@ spec:
           ip: 127.0.0.1
       securityContext:
         fsGroup: 2004
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: nfs-permission-fixer
           image: alpine:latest

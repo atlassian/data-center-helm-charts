@@ -231,6 +231,7 @@ data:
           minHeap: 512m
       securityContext:
         fsGroup: 2003
+        fsGroupChangePolicy: OnRootMismatch
       securityContextEnabled: true
       service:
         annotations: {}
@@ -601,7 +602,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 92e94344363cf1c8d936eeb961255975cc32c7e624f910da39f93bd48564a18f
+        checksum/config-jvm: 60d95111d9edbb3746b89e94dd590776247314947ec7404ab6287eade15250e9
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -722,7 +723,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 381c00ff6676a4dcf3ba225aa169f3f80e0812c7292b6fc369b4db9596f95720
+        checksum/config-jvm: 11b52c0456c560f59c3af47f19fd163244ee23dd0fa0236290ae96b09d7194f2
       labels:
         helm.sh/chart: bitbucket-1.22.7
         app.kubernetes.io/name: bitbucket
@@ -739,6 +740,7 @@ spec:
           ip: 127.0.0.1
       securityContext:
         fsGroup: 2003
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: fetch-jmx-exporter
           image: bitnami/jmx-exporter:0.18.0

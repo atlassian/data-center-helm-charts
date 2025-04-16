@@ -197,6 +197,7 @@ data:
           endpointOverride: null
       securityContext:
         fsGroup: 2001
+        fsGroupChangePolicy: OnRootMismatch
       securityContextEnabled: true
       seraphConfig:
         autoLoginCookieAge: "1209600"
@@ -436,6 +437,7 @@ spec:
           ip: 127.0.0.1
       securityContext:
         fsGroup: 2001
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: nfs-permission-fixer
           image: alpine:latest

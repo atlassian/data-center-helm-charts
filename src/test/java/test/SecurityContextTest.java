@@ -142,5 +142,29 @@ class SecurityContextTest {
                 .getSecurityContext();
         assertThat(containerSecurityContext.path("runAsGroup")).hasValueEqualTo(2000);
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_cfs_group_change_policy_default(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+
+        JsonNode containerSecurityContext = resources.getStatefulSet(product.getHelmReleaseName())
+                .getPodSpec().get("securityContext");
+        assertThat(containerSecurityContext.path("fsGroupChangePolicy")).hasTextEqualTo("OnRootMismatch");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void test_cfs_group_change_policy_override(Product product) throws Exception {
+
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".securityContext.fsGroupChangePolicy", "Always"
+        ));
+
+        JsonNode containerSecurityContext = resources.getStatefulSet(product.getHelmReleaseName())
+                .getPodSpec().get("securityContext");
+        assertThat(containerSecurityContext.path("fsGroupChangePolicy")).hasTextEqualTo("Always");
+    }
 }
 

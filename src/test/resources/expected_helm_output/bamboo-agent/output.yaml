@@ -60,6 +60,7 @@ spec:
           ip: 127.0.0.1
       securityContext:
         fsGroup: 2005
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
       containers:
         - name: bamboo-agent
