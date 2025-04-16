@@ -122,6 +122,10 @@ spec:
           image: {{ include "jira.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- if .Values.jira.session.timeout }}
+            - name: ATL_JIRA_SESSION_TIMEOUT
+              value: {{ .Values.jira.session.timeout | quote }}
+            {{- end }}
             {{- include "jira.tunnelVars" . | nindent 12 }}
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME

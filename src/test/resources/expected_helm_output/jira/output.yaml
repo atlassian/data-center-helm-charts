@@ -213,6 +213,8 @@ data:
           clientIP:
             timeoutSeconds: null
         type: ClusterIP
+      session:
+        timeout: null
       setPermissions: true
       shutdown:
         command: /shutdown-wait.sh
