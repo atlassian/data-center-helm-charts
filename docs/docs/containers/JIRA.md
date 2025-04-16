@@ -519,6 +519,10 @@ as a non-root user.
   
   See: [How to clear Jira's plugin cache](https://confluence.atlassian.com/jirakb/how-to-clear-jira-s-plugin-cache-1157468195.html).
 
+* `ATL_JIRA_SESSION_TIMEOUT`
+
+  The default Tomcat session timeout (in minutes) for all newly created sessions which is set in web.xml. Defaults to 30.
+
 ### Advanced Configuration
 
 As mentioned at the top of this section, the settings from the environment are

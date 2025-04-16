@@ -712,6 +712,12 @@ jira:
       #
       endpointOverride:
 
+  session:
+
+    # -- User session timeout. Set to 30 minutes in web.xml
+    #
+    timeout:
+
   # Data Center clustering
   #
   clustering:
