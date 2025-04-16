@@ -146,4 +146,15 @@ class ContainersTest {
         final var env = statefulSet.getContainer().getEnv();
         env.assertHasValue("ATL_JIRA_SESSION_TIMEOUT", "60");
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
+    void jira_session_timeout_default(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var env = statefulSet.getContainer().getEnv();
+        env.assertDoesNotHaveAnyOf("ATL_JIRA_SESSION_TIMEOUT");
+    }
 }
