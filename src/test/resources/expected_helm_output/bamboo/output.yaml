@@ -151,6 +151,7 @@ data:
           minHeap: 512m
       securityContext:
         fsGroup: 2005
+        fsGroupChangePolicy: OnRootMismatch
       securityContextEnabled: true
       securityToken:
         secretKey: agentTestKey
@@ -472,6 +473,7 @@ spec:
           ip: 127.0.0.1
       securityContext:
         fsGroup: 2005
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: nfs-permission-fixer
           image: alpine:latest

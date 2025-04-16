@@ -156,6 +156,7 @@ data:
         endpointOverride: null
       securityContext:
         fsGroup: 2002
+        fsGroupChangePolicy: OnRootMismatch
       securityContextEnabled: true
       seraphConfig:
         autoLoginCookieAge: "1209600"
@@ -663,7 +664,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 9440a057ff8824a9bd3b7a134c8da4e4cc22f0a7903112eb6e82d88aafb389aa
+        checksum/config-jvm: dcd3dc9d329aade9a42205d6a1e4c4ecb3cf65c2df8f8023af13a3df0b697176
       labels:
         helm.sh/chart: confluence-1.22.7
         app.kubernetes.io/name: confluence
@@ -675,6 +676,7 @@ spec:
       terminationGracePeriodSeconds: 25
       securityContext:
         fsGroup: 2002
+        fsGroupChangePolicy: OnRootMismatch
       hostAliases:
         - hostnames:
           - test.example.com

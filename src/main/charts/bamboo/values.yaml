@@ -648,6 +648,12 @@ bamboo:
     #
     fsGroup: 2005
 
+    # -- fsGroupChangePolicy defines behavior for changing ownership and permission of the volume before being exposed inside a Pod.
+    # This field only applies to volume types that support fsGroup controlled ownership and permissions.
+    # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods
+    #
+    fsGroupChangePolicy: "OnRootMismatch"
+
   # -- Standard K8s field that holds security configurations that will be applied to a container.
   # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   #
