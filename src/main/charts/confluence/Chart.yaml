@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '1.22.7'
+version: '1.22.8'
 appVersion: 9.2.3
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Update Helm chart version"
+    - "Set fsGroupChangePolicy to OnRootMismatch in securityContext by default (#986)"
+    - "Update appVersions for DC apps (#981)"
 
 dependencies:
 - name: common

@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jvm-config
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -40,7 +40,7 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jmx-config
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -62,7 +62,7 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-helm-values
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -484,7 +484,7 @@ kind: Service
 metadata:
   name: unittest-confluence-jmx
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -507,7 +507,7 @@ kind: Service
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -534,7 +534,7 @@ kind: Service
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -562,7 +562,7 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -581,7 +581,7 @@ spec:
       annotations:
         checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
-        helm.sh/chart: confluence-1.22.7
+        helm.sh/chart: confluence-1.22.8
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
         app.kubernetes.io/version: "9.2.3"
@@ -647,7 +647,7 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -664,9 +664,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: dcd3dc9d329aade9a42205d6a1e4c4ecb3cf65c2df8f8023af13a3df0b697176
+        checksum/config-jvm: b7b0c349fd90ba40657064cca602185dd9f96fb11709e25265e63941268329d6
       labels:
-        helm.sh/chart: confluence-1.22.7
+        helm.sh/chart: confluence-1.22.8
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
         app.kubernetes.io/version: "9.2.3"
@@ -801,7 +801,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"
@@ -832,7 +832,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-1.22.7
+    helm.sh/chart: confluence-1.22.8
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
     app.kubernetes.io/version: "9.2.3"

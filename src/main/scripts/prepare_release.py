@@ -29,7 +29,7 @@ prod_base = "src/main/charts"
 
 jira_keys_pattern = r'(CLIP|DCCLIP)-[0-9]{1,5}(?![0-9]): '
 drop_commits_pattern = r'^\* Prepare release [0-9].{1,4}'
-update_app_versions_commit_msg = r'(\* Update appVersions for DC apps|.*#(\d+))'
+update_app_versions_commit_msg = r"^\* Update appVersions for DC apps.*"
 
 # parse Chart.yaml to get K8s version, app version and Helm chart version
 # to use those when generating changelog/release notes
