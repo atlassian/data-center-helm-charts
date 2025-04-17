@@ -257,6 +257,7 @@ data:
       repository: atlassian/bamboo
       tag: ""
     ingress:
+      additionalPaths: []
       annotations: {}
       className: nginx
       create: false

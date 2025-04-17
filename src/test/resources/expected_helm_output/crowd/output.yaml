@@ -203,6 +203,7 @@ data:
       repository: atlassian/crowd
       tag: ""
     ingress:
+      additionalPaths: []
       annotations: {}
       className: nginx
       create: false
