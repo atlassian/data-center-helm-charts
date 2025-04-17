@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 1.22.7](https://img.shields.io/badge/Version-1.22.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 10.2.3](https://img.shields.io/badge/AppVersion-10.2.3-informational?style=flat-square)
+![Version: 1.22.8](https://img.shields.io/badge/Version-1.22.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 10.2.3](https://img.shields.io/badge/AppVersion-10.2.3-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
@@ -137,6 +137,7 @@ Kubernetes: `>=1.21.x-0`
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | image.repository | string | `"atlassian/bamboo"` | The Bamboo Docker image to use https://hub.docker.com/r/atlassian/bamboo  |
 | image.tag | string | `""` | The docker image tag to be used - defaults to the Chart appVersion  |
+| ingress.additionalPaths | list | `[]` | Additional paths to be added to the Ingress resource to point to different backend services  |
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource. If using an ingress-nginx controller be sure that the annotations you add here are compatible with those already defined in the 'ingess.yaml' template  |
 | ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used.  Please follow documenation of your ingress controller. If the cluster contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic.  |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a pre-provisioned Ingress Controller being available.  |

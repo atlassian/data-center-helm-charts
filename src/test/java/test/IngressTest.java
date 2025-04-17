@@ -641,4 +641,26 @@ class IngressTest {
                 .hasTextEqualTo("/mypath");
 
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void ingress_additional_paths(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                ".synchrony.enabled", "false",
+                "ingress.create", "true",
+                "ingress.host", "myhost.mydomain",
+                "ingress.additionalPaths[0].path", "/my-path",
+                "ingress.additionalPaths[0].pathType", "ImplementationSpecific",
+                "ingress.additionalPaths[0].service", "my-svc",
+                "ingress.additionalPaths[0].portNumber", "80"));
+
+        final var ingressList = resources.getAll(Kind.Ingress).toStream().toList();
+        final var ingressToCheck = product == Product.confluence
+                ? ingressList.get(1)
+                : ingressList.get(0);
+        assertThat(ingressToCheck.getNode("spec", "rules").required(0).path("http").path("paths").required(1).path("path")).hasTextEqualTo("/my-path");
+        assertThat(ingressToCheck.getNode("spec", "rules").required(0).path("http").path("paths").required(1).path("pathType")).hasTextEqualTo("ImplementationSpecific");
+        assertThat(ingressToCheck.getNode("spec", "rules").required(0).path("http").path("paths").required(1).path("backend").path("service").path("name")).hasTextEqualTo("my-svc");
+        assertThat(ingressToCheck.getNode("spec", "rules").required(0).path("http").path("paths").required(1).path("backend").path("service").path("port").path("number")).hasValueEqualTo(80);
+    }
 }

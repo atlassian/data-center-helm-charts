@@ -115,6 +115,7 @@ data:
       repository: atlassian/jira-software
       tag: ""
     ingress:
+      additionalPaths: []
       annotations: {}
       className: nginx
       create: false

@@ -523,6 +523,14 @@ ingress:
   #
   tlsSecretName:
 
+  # -- Additional paths to be added to the Ingress resource to point to different backend services
+  #
+  additionalPaths: []
+    #- path: /static-content
+    #  pathType: Prefix
+    #  service: static-content-svc
+    #  portNumber: 80
+
 # Bitbucket configuration
 #
 bitbucket:

@@ -246,6 +246,7 @@ data:
       repository: atlassian/confluence
       tag: ""
     ingress:
+      additionalPaths: []
       annotations: {}
       className: nginx
       create: false
