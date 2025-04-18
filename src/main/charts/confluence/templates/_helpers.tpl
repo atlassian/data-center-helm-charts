@@ -208,7 +208,7 @@ Pod labels
     {{- else -}}
         {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
         {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
-        {{- end }}    
+        {{- end }}
     {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true
@@ -616,6 +616,17 @@ volumeClaimTemplates:
     resources:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "confluence.sessionVars"}}
+{{- if .Values.confluence.session.timeout }}
+- name: ATL_CONFLUENCE_SESSION_TIMEOUT
+  value: {{ .Values.confluence.session.timeout | quote }}
+{{- end }}
+{{- if .Values.confluence.session.autologinCookieAge }}
+- name: ATL_AUTOLOGIN_COOKIE_AGE
+  value: {{ .Values.confluence.session.autologinCookieAge | quote }}
 {{- end }}
 {{- end }}
 

@@ -824,6 +824,16 @@ confluence:
     #
     localHomeSubPath: "logs"
 
+  session:
+
+    # -- User session timeout. Set to 30 minutes in web.xml
+    #
+    timeout:
+
+    # -- The maximum time a user can remain logged-in with 'Remember Me'. Defaults to 1209600; two weeks, in seconds
+    #
+    autologinCookieAge:
+
   # Data Center clustering
   #
   clustering:
