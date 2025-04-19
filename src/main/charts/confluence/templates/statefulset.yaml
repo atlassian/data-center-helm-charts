@@ -215,6 +215,7 @@ spec:
             {{ end }}
             {{- end }}
           env:
+            {{- include "confluence.sessionVars" . | nindent 12 }}
             {{- include "confluence.tunnelVars" . | nindent 12 }}
             {{ if .Values.ingress.https }}
             - name: ATL_TOMCAT_SCHEME

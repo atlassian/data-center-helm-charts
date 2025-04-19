@@ -172,6 +172,9 @@ data:
           clientIP:
             timeoutSeconds: null
         type: ClusterIP
+      session:
+        autologinCookieAge: null
+        timeout: null
       setPermissions: true
       shutdown:
         command: /shutdown-wait.sh

@@ -8,6 +8,17 @@
 {{- end }}
 {{- end }}
 
+{{- define "jira.sessionVars"}}
+{{- if .Values.jira.session.timeout }}
+- name: ATL_JIRA_SESSION_TIMEOUT
+  value: {{ .Values.jira.session.timeout | quote }}
+{{- end }}
+{{- if .Values.jira.session.autologinCookieAge }}
+- name: ATL_AUTOLOGIN_COOKIE_AGE
+  value: {{ .Values.jira.session.autologinCookieAge | quote }}
+{{- end }}
+{{- end }}
+
 {{- define "jira.tunnelVars"}}
 {{- if .Values.jira.tunnel.additionalConnector.port }}
 {{- with .Values.jira.tunnel.additionalConnector.port }}

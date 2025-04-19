@@ -135,26 +135,43 @@ class ContainersTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
-    void jira_session_timeout(Product product) throws Exception {
+    @EnumSource(value = Product.class, names = {"jira", "confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void test_session_timeout(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                pname+".session.timeout", "60"
+                "jira.session.timeout", "60",
+                "confluence.session.timeout", "60"
         ));
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         final var env = statefulSet.getContainer().getEnv();
-        env.assertHasValue("ATL_JIRA_SESSION_TIMEOUT", "60");
+        env.assertHasValue("ATL_" + pname.toUpperCase() +"_SESSION_TIMEOUT", "60");
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"}, mode = EnumSource.Mode.INCLUDE)
-    void jira_session_timeout_default(Product product) throws Exception {
+    @EnumSource(value = Product.class, names = {"jira", "confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void test_autologin_cookie_age(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "jira.session.autologinCookieAge", "60",
+                "confluence.session.autologinCookieAge", "60"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var env = statefulSet.getContainer().getEnv();
+        env.assertHasValue("ATL_AUTOLOGIN_COOKIE_AGE", "60");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void session_timeout_default(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
 
         final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         final var env = statefulSet.getContainer().getEnv();
         env.assertDoesNotHaveAnyOf("ATL_JIRA_SESSION_TIMEOUT");
+        env.assertDoesNotHaveAnyOf("ATL_CONFLUENCE_SESSION_TIMEOUT");
+
     }
 }

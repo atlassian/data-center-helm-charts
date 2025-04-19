@@ -252,6 +252,9 @@ For additional settings that can be supplied, see: [Recognized System Properties
 
   Password for the OpenSearch cluster.
 
+* `ATL_CONFLUENCE_SESSION_TIMEOUT`
+
+  The default Tomcat session timeout (in minutes) for all newly created sessions which is set in web.xml. Defaults to 30.
 
 * `ATL_CONFLUENCE_CFG_ADDITIONAL_PROPERTIES`
 

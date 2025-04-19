@@ -457,7 +457,7 @@ ingress:
   # https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   #
   tlsSecretName:
-  
+
   # -- Additional paths to be added to the Ingress resource to point to different backend services
   #
   additionalPaths: []
@@ -465,7 +465,7 @@ ingress:
     #  pathType: Prefix
     #  service: static-content-svc
     #  portNumber: 80
-  
+
 
 # Jira configuration
 #
@@ -726,6 +726,10 @@ jira:
     # -- User session timeout. Set to 30 minutes in web.xml
     #
     timeout:
+
+    # -- The maximum time a user can remain logged-in with 'Remember Me'. Defaults to 1209600; two weeks, in seconds
+    #
+    autologinCookieAge:
 
   # Data Center clustering
   #
