@@ -54,7 +54,7 @@ log, offering insights into the actions performed by the entrypoint script.
 
 * `VERBOSE_LOGS` (default: false)
 
-  Set to `true` to enable detailed debug messages during the container initialization.
+   Set to `true` to enable detailed debug messages during the container initialization.
 
 ### Memory / Heap Size
 
@@ -92,6 +92,11 @@ can be controlled via the below environment variables.
    deployment method this port may need to be
    [exposed and published][docker-expose].
 
+* `ATL_TOMCAT_PROTOCOL` (default: HTTP/1.1)
+
+   The protocol to be used by Tomcat. Bamboo provides additional customized protocols that will support encryption
+   along with ATL_TOMCAT_BAMBOO_ENCRYPTION_KEY. For more information, see [Encrypting passwords in server][encrypting-passwords-in-server].
+
 * `ATL_TOMCAT_SCHEME` (default: http)
 
    The protocol via which the application is accessed. `CATALINA_CONNECTOR_SCHEME` is also
@@ -117,7 +122,6 @@ see <https://tomcat.apache.org/tomcat-9.0-doc/config/index.html>.
 * `ATL_TOMCAT_MAXTHREADS` (default: 150)
 * `ATL_TOMCAT_MGMT_PORT` (default: 8007)
 * `ATL_TOMCAT_MINSPARETHREADS` (default: 25)
-* `ATL_TOMCAT_PROTOCOL` (default: HTTP/1.1)
 * `ATL_TOMCAT_URIENCODING` (default: UTF-8)
 * `ATL_TOMCAT_STUCKTHREADDETECTIONVALVE_THRESHOLD` (default: 60)
 
@@ -152,7 +156,7 @@ The standard HTTP connectors (NIO, NIO2 and APR/native) settings
 
 * `ATL_TOMCAT_SSL_ENABLED`
 
-  Use this attribute to enable SSL traffic on a connector.
+   Set this attribute to `true` to enable SSL traffic on a connector.
 
 * `ATL_TOMCAT_SSL_PROTOCOL`
 
@@ -241,7 +245,7 @@ The standard HTTP connectors (NIO, NIO2 and APR/native) settings
 * `ATL_TOMCAT_COMPRESSIONMINSIZE`
 
    The minimum amount of data before the output is compressed. Only applicable if 
-  `ATL_TOMCAT_COMPRESSION` is set to `on` or `force`. If not specified, this attribute 
+   `ATL_TOMCAT_COMPRESSION` is set to `on` or `force`. If not specified, this attribute 
    defaults to `2048`.
 
 * `ATL_TOMCAT_REQUESTATTRIBUTESENABLED`
@@ -254,23 +258,23 @@ The standard HTTP connectors (NIO, NIO2 and APR/native) settings
 
 * `ATL_TOMCAT_TRUSTEDPROXIES`
 
-  A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
-  Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will appear* 
-  in the `proxiesHeader` value. By adding a list of Trusted Proxies, Bamboo will remove the 
-  load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
-  in a clustered load balancer architecture where the load balancer address changes depending on 
-  which node proxies the connection, requiring re-approval of Agents. 
-  If not specified, no trusted proxies will be trusted.
+   A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
+   Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will appear* 
+   in the `proxiesHeader` value. By adding a list of Trusted Proxies, Bamboo will remove the 
+   load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
+   in a clustered load balancer architecture where the load balancer address changes depending on 
+   which node proxies the connection, requiring re-approval of Agents. 
+   If not specified, no trusted proxies will be trusted.
 
 * `ATL_TOMCAT_INTERNALPROXIES`
 
-  A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
-  Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will not appear* 
-  in the `proxiesHeader` value. By adding a list of Internal Proxies, Bamboo will remove the 
-  load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
-  in a clustered load balancer architecture where the load balancer address changes depending on 
-  which node proxies the connection, requiring re-approval of Agents.
-  If not specified, no internal proxies will be trusted.
+   A list of IP addresses separated by a pipe character e.g. `10.0.9.6|10.0.9.32`.  
+   Trusted proxies that appear in the `remoteIpHeader` will be trusted and *will not appear* 
+   in the `proxiesHeader` value. By adding a list of Internal Proxies, Bamboo will remove the 
+   load balancers' IP addresses from Bamboo's view of the incoming connection. This could be desired
+   in a clustered load balancer architecture where the load balancer address changes depending on 
+   which node proxies the connection, requiring re-approval of Agents.
+   If not specified, no internal proxies will be trusted.
 
 ### Access Log Settings
 
@@ -615,3 +619,4 @@ Licensed under the Apache License, Version 2.0.
 
 [docker-expose]: https://docs.docker.com/v17.09/engine/userguide/networking/default_network/binding/
 [entrypoint.py]: https://bitbucket.org/atlassian-docker/docker-bamboo-server/src/master/entrypoint.py
+[encrypting-passwords-in-server]: https://confluence.atlassian.com/display/BAMBOO/Encrypting+passwords+in+server.xml
