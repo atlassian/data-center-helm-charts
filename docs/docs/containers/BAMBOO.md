@@ -95,7 +95,7 @@ can be controlled via the below environment variables.
 * `ATL_TOMCAT_PROTOCOL` (default: HTTP/1.1)
 
    The protocol to be used by Tomcat. Bamboo provides additional customized protocols that will support encryption
-   along with ATL_TOMCAT_BAMBOO_ENCRYPTION_KEY. For more information, see [Encrypting passwords in server][encrypting-passwords-in-server].
+   along with `ATL_TOMCAT_BAMBOO_ENCRYPTION_KEY`. For more information, see [Encrypting passwords in server][encrypting-passwords-in-server].
 
 * `ATL_TOMCAT_SCHEME` (default: http)
 
