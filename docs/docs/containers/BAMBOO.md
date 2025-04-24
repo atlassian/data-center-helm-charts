@@ -196,6 +196,11 @@ The standard HTTP connectors (NIO, NIO2 and APR/native) settings
    The password used to access the private key associated with the server certificate 
    from the specified file.
 
+* `ATL_TOMCAT_KEY_ALIAS`
+
+   Specify the key alias to be loaded in case the provided keystore contains multiple 
+   private key aliases.
+
 * `ATL_TOMCAT_CLIENT_AUTH`
  
    Set to required if you want the SSL stack to require a valid certificate chain from
