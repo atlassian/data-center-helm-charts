@@ -1,14 +1,5 @@
 # Breaking Changes
 
-## Confluence: Version 1.23.0
-
-OpenSearch credentials are now passed as environment variables instead of JVM arguments in the ConfigMap. This is a breaking change for existing Confluence Helm charts that use bundled OpenSearch (`opensearch.enabled` is set to true).
-
-In **1.23.0** `-Dopensearch.password` has been removed from config-jvm ConfigMap. OpenSearch credentials and other relevant settings are now passed as environment variables and written to `confluence.cfg.xml` in the image entrypoint (See: [Add Opensearch properties](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/pull-requests/192/overview)).
-
-When upgrading Confluence Helm chart to version 1.23.0, you **must** set `confluence.forceConfigUpdate` to true in Helm values file, which will force the image entrypoint to recreate the `confluence.cfg.xml` file with the new Opensearch properties.
-This is a one-time operation. After the upgrade, you can set `confluence.forceConfigUpdate` to false.
-
 ## Version 2.0.0 [not released]
 
 ### Required values
@@ -37,3 +28,12 @@ Error: unable to build kubernetes objects from release manifest: error validatin
 ```
 
 It means your `value.yaml` file contains the unsupported `enabled` or `gid` values for the `securityContext`. Please follow the steps from `securityContext` change above.
+
+### OpenSearch Credentials in Confluence Helm Chart
+
+OpenSearch credentials are now passed as environment variables instead of JVM arguments in the ConfigMap. This is a breaking change for existing Confluence Helm charts that use bundled OpenSearch (`opensearch.enabled` is set to true).
+
+In **2.0.0** `-Dopensearch.password` has been removed from config-jvm ConfigMap. OpenSearch credentials and other relevant settings are now passed as environment variables and written to `confluence.cfg.xml` in the image entrypoint (See: [Add Opensearch properties](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/pull-requests/192/overview)).
+
+When upgrading Confluence Helm chart to version 2.0.0, you **must** set `confluence.forceConfigUpdate` to true in Helm values file, which will force the image entrypoint to recreate the `confluence.cfg.xml` file with the new Opensearch properties.
+This is a one-time operation. After the upgrade, you can set `confluence.forceConfigUpdate` to false.
