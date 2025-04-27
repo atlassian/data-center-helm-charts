@@ -43,7 +43,7 @@ class ConfluenceOpenSearchTest {
                 "opensearch.enabled", "true"
         ));
         final var jvmConfigMap = resources.get(ConfigMap, product.getHelmReleaseName() + "-jvm-config");
-        JsonNodeAssert.assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Dsearch.platform=opensearch -Dopensearch.http.url=http://opensearch-cluster-master:9200 -Dopensearch.username=admin -Dopensearch.password=");
+        JsonNodeAssert.assertThat(jvmConfigMap.getConfigMapData().path("additional_jvm_args")).hasTextContaining("-Dsearch.platform=opensearch -Dopensearch.http.url=http://opensearch-cluster-master:9200 -Dopensearch.username=admin");
     }
 
     @ParameterizedTest
@@ -60,5 +60,34 @@ class ConfluenceOpenSearchTest {
         }, "Password should be a valid Base64 encoded string");
         byte[] decodedPassword = Base64.getDecoder().decode(password.asText());
         assertEquals(40, decodedPassword.length, "The decoded password should have a length of 40 bytes.");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void confluence_has_opensearch_envs(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "opensearch.enabled", "true"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var env = statefulSet.getContainer().getEnv();
+        env.assertHasValue("ATL_SEARCH_PLATFORM", "opensearch");
+        env.assertHasValue("ATL_OPENSEARCH_HTTP_URL", "http://opensearch-cluster-master:9200");
+        env.assertHasValue("ATL_OPENSEARCH_USERNAME", "admin");
+        env.assertHasSecretRef("ATL_OPENSEARCH_PASSWORD", "opensearch-initial-password", "OPENSEARCH_INITIAL_ADMIN_PASSWORD");
+    }
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void confluence_has_opensearch_env_existing_secret(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "opensearch.enabled", "true",
+                "opensearch.credentials.existingSecretRef.name", "my-opensearch-secret"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var env = statefulSet.getContainer().getEnv();
+        env.assertHasSecretRef("ATL_OPENSEARCH_PASSWORD", "my-opensearch-secret", "OPENSEARCH_INITIAL_ADMIN_PASSWORD");
     }
 }

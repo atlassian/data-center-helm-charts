@@ -791,3 +791,19 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 {{ include "generate_static_password_b64enc" . }}
 {{- end }}
 {{- end }}
+
+{{- define "opensearch.env.vars" }}
+{{- if .Values.opensearch.enabled }}
+- name: ATL_SEARCH_PLATFORM
+  value: opensearch
+- name: ATL_OPENSEARCH_HTTP_URL
+  value: http://opensearch-cluster-master:9200
+- name: ATL_OPENSEARCH_USERNAME
+  value: admin
+- name: ATL_OPENSEARCH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.opensearch.credentials.existingSecretRef.name | default "opensearch-initial-password" }}
+      key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+{{- end }}
+{{- end }}
