@@ -27,7 +27,7 @@ If you encounter this error:
 Error: unable to build kubernetes objects from release manifest: error validating "": error validating data: [ValidationError(StatefulSet.spec.template.spec.securityContext): unknown field "enabled" in io.k8s.api.core.v1.PodSecurityContext, ValidationError(StatefulSet.spec.template.spec.securityContext): unknown field "gid" in io.k8s.api.core.v1.PodSecurityContext]
 ```
 
-It means your `value.yaml` file contains the unsupported `enabled` or `gid` values for the `securityContext`. Please follow the steps from `securityContext` change above.
+It means your `values.yaml` file contains the unsupported `enabled` or `gid` values for the `securityContext`. Please follow the steps from `securityContext` change above.
 
 ### OpenSearch Credentials in Confluence Helm Chart
 

@@ -51,18 +51,13 @@ spec:
       {{- if .Values.crowd.securityContextEnabled }}
       {{- with .Values.crowd.securityContext }}
       securityContext:
-        {{/* this condition is to be removed in v2.0.0 */}}
-        {{- if and .enabled .gid }}
-        fsGroup: {{ .gid }}
-        {{- else }}
         {{ toYaml . | nindent 8 }}
         {{- if not .fsGroup }}
         fsGroup: 2004
         {{- end }}
-        {{- end }}
       {{- end }}
       {{- end }}
-       {{- end }}
+      {{- end }}
       initContainers:
         {{- include "crowd.additionalInitContainers" . | nindent 8 }}
         {{- if and .Values.volumes.sharedHome.nfsPermissionFixer.enabled (not .Values.openshift.runWithRestrictedSCC) }}
