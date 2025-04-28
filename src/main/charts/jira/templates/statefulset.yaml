@@ -51,14 +51,9 @@ spec:
       {{- if .Values.jira.securityContextEnabled }}
       {{- with .Values.jira.securityContext }}
       securityContext:
-        {{/* this condition is to be removed in v2.0.0 */}}
-        {{- if and .enabled .gid }}
-        fsGroup: {{ .gid }}
-        {{- else }}
         {{ toYaml . | nindent 8 }}
         {{- if not .fsGroup }}
         fsGroup: 2001
-        {{- end }}
         {{- end }}
       {{- end }}
       {{- end }}
