@@ -1,6 +1,6 @@
 # Breaking Changes
 
-## Version 2.0.0 [not released]
+## Version 2.0.0
 
 ### Required values
 
