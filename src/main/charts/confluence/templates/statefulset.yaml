@@ -271,6 +271,7 @@ spec:
             - name: CATALINA_OPTS
               value: {{ include "common.jmx.javaagent" . | replace "\n" "" | quote }}
             {{- end }}
+            {{- include "opensearch.env.vars" . | nindent 12 }}
             {{- include "confluence.additionalEnvironmentVariables" . | nindent 12 }}
           lifecycle:
           {{- if .Values.confluence.postStart.command }}

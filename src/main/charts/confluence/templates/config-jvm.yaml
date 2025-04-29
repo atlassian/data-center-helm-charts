@@ -27,7 +27,6 @@ data:
     -Dsearch.platform=opensearch
     -Dopensearch.http.url=http://opensearch-cluster-master:9200
     -Dopensearch.username=admin
-    -Dopensearch.password={{ include "opensearch.initial.admin.password" . | b64dec -}}
     {{- end }}
     {{- if .Values.confluence.tunnel.additionalConnector.port }}
     -Dsecure.tunnel.upstream.port={{ .Values.confluence.tunnel.additionalConnector.port }}
