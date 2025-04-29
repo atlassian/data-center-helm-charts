@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '1.22.9'
+version: '2.0.0'
 appVersion: 9.2.3
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,9 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Make session and autologin configurable for Jira and Confluence (#992)"
-    - "Make it possible to declare additional ingress paths (#991)"
-    - "Bring changelog in order (#990)"
+    - "Pass OpenSearch details as env vars (#999)"
+    - "Remove condition to support legacy securityContext format (#1000)"
 
 dependencies:
 - name: common
