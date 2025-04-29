@@ -2,6 +2,8 @@
 
 ## 2.0.0
 
+This release includes breaking changes. See [Breaking Changes](https://github.com/atlassian/data-center-helm-charts/blob/main/BREAKING_CHANGES.md)
+
 **Release date:** 2025-4-29
 
 ![AppVersion: 10.3.5](https://img.shields.io/static/v1?label=AppVersion&message=10.3.5&color=success&logo=)
