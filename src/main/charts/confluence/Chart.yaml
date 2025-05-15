@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '2.0.0'
+version: '2.0.1'
 appVersion: 9.2.4
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,8 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Pass OpenSearch details as env vars (#999)"
-    - "Remove condition to support legacy securityContext format (#1000)"
+    - "Update appVersions for DC apps (#1004)"
 
 dependencies:
 - name: common
