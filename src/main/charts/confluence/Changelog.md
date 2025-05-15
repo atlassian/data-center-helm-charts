@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.1
+
+**Release date:** 2025-5-15
+
+![AppVersion: 9.2.4](https://img.shields.io/static/v1?label=AppVersion&message=9.2.4&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update appVersions for DC apps (#1004)
+
 ## 2.0.0
 
 This release includes breaking changes. See [Breaking Changes](https://github.com/atlassian/data-center-helm-charts/blob/main/BREAKING_CHANGES.md)
