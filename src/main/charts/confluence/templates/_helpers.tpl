@@ -622,11 +622,11 @@ volumeClaimTemplates:
 {{- define "confluence.sessionVars"}}
 {{- if .Values.confluence.session.timeout }}
 - name: ATL_CONFLUENCE_SESSION_TIMEOUT
-  value: {{ .Values.confluence.session.timeout | quote }}
+  value: {{ .Values.confluence.session.timeout | int | quote }}
 {{- end }}
 {{- if .Values.confluence.session.autologinCookieAge }}
 - name: ATL_AUTOLOGIN_COOKIE_AGE
-  value: {{ .Values.confluence.session.autologinCookieAge | quote }}
+  value: {{ .Values.confluence.session.autologinCookieAge | int | quote }}
 {{- end }}
 {{- end }}
 
