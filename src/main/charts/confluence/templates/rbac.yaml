@@ -1,4 +1,4 @@
-{{- if and (.Values.confluence.clustering.enabled) (or .Values.serviceAccount.clusterRole.create .Values.serviceAccount.role.create) -}}
+{{- if and (.Values.confluence.clustering.enabled) (or .Values.serviceAccount.clusterRole.create .Values.serviceAccount.role.create) }}
 apiVersion: rbac.authorization.k8s.io/v1
 {{- if .Values.serviceAccount.clusterRole.create }}
 kind: ClusterRole
@@ -27,7 +27,7 @@ rules:
       - list
 {{- end }}
 ---
-{{- if and (.Values.confluence.clustering.enabled) (or .Values.serviceAccount.clusterRoleBinding.create .Values.serviceAccount.roleBinding.create) -}}
+{{- if and (.Values.confluence.clustering.enabled) (or .Values.serviceAccount.clusterRoleBinding.create .Values.serviceAccount.roleBinding.create) }}
 apiVersion: rbac.authorization.k8s.io/v1
 {{- if .Values.serviceAccount.clusterRoleBinding.create }}
 kind: ClusterRoleBinding
