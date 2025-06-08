@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -39,7 +39,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -65,7 +65,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -363,7 +363,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -386,7 +386,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -410,7 +410,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -429,7 +429,7 @@ spec:
         helm.sh/chart: jira-2.0.1
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
-        app.kubernetes.io/version: "10.3.6"
+        app.kubernetes.io/version: "10.3.7"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-jira
@@ -463,7 +463,7 @@ spec:
               name: shared-home
       containers:
         - name: jira
-          image: "atlassian/jira-software:10.3.6"
+          image: "atlassian/jira-software:10.3.7"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -564,7 +564,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -596,7 +596,7 @@ metadata:
     helm.sh/chart: jira-2.0.1
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "10.3.6"
+    app.kubernetes.io/version: "10.3.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
