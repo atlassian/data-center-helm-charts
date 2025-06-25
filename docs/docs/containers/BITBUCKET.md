@@ -20,6 +20,7 @@ This Docker container makes it easy to get an instance of Bitbucket up and
 running.
 
 ???+ note "Embedded OpenSearch"
+    Only Bitbucket versions < 10 include an embedded search server.
     For backwards-compatibility, by default the image will start both Bitbucket and an embedded OpenSearch. 
     However, this is not a recommended configuration, especially in a clustered environment, and has known issues with
     shutdown. Instead, we recommend running a separate OpenSearch instance (possibly in another Docker container); 
@@ -133,7 +134,8 @@ cluster.  You can specify the following properties to start Bitbucket as a
 mirror or as a Data Center node:
 
 * `SEARCH_ENABLED` (default: true)
-
+  
+  Note: This property is not applicable for Bitbucket 10.0.0 onwards, as embedded search was removed in Bitbucket 10.<br>
   Set 'false' to prevent OpenSearch (previously Elasticsearch) from starting in the
   container. This should be used if OpenSearch is running remotely, e.g. for if Bitbucket
   is running in a Data Center cluster. You may also use `ELASTICSEARCH_ENABLED` to
