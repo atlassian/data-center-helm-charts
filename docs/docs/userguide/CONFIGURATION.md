@@ -34,6 +34,187 @@ Some key considerations to note when configuring the controller are:
 !!!info "Request body size"
     By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. The maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
 
+## :material-account-group: Session Stickiness for High Availability
+
+When running Atlassian Data Center products in High Availability (HA) mode with multiple pods, session stickiness (also known as session affinity) is crucial for proper operation. Session stickiness ensures that once a user establishes a session with a specific pod, all subsequent requests from that user are routed to the same pod for the duration of their session.
+
+!!!info "Why session stickiness is important"
+    * **User session consistency**: Ensures users remain connected to the same application instance throughout their session
+    * **Application state management**: Prevents issues with in-memory session data being lost when requests are routed to different pods
+    * **Performance optimization**: Reduces overhead of session replication across the cluster
+    * **Feature compatibility**: Some features may not work correctly without sticky sessions
+
+### NGINX Ingress Controller (Default Configuration)
+
+The Helm charts are pre-configured with session stickiness when using the NGINX Ingress Controller. When `ingress.nginx: true` (the default), the following annotations are automatically applied:
+
+```yaml
+ingress:
+  create: true
+  nginx: true  # This enables automatic session stickiness
+  host: bitbucket.example.com
+```
+
+This automatically adds these annotations to the Ingress resource:
+
+```yaml
+annotations:
+  "nginx.ingress.kubernetes.io/affinity": "cookie"
+  "nginx.ingress.kubernetes.io/affinity-mode": "persistent"
+```
+
+#### Customizing NGINX Session Stickiness
+
+You can customize the session stickiness behavior by adding additional annotations:
+
+```yaml
+ingress:
+  create: true
+  nginx: true
+  host: bitbucket.example.com
+  annotations:
+    # Customize cookie name (default: INGRESSCOOKIE)
+    "nginx.ingress.kubernetes.io/session-cookie-name": "BITBUCKET-AFFINITY"
+    # Set cookie expiration time (default: 86400 seconds = 24 hours)
+    "nginx.ingress.kubernetes.io/session-cookie-max-age": "43200"
+    # Change cookie path (default: /)
+    "nginx.ingress.kubernetes.io/session-cookie-path": "/bitbucket"
+```
+
+### AWS Application Load Balancer (ALB)
+
+For AWS EKS clusters using the AWS Load Balancer Controller, configure session stickiness using ALB-specific annotations:
+
+```yaml
+ingress:
+  create: true
+  nginx: false  # Disable NGINX-specific annotations
+  className: "alb"
+  host: bitbucket.example.com
+  annotations:
+    # Enable ALB session stickiness
+    alb.ingress.kubernetes.io/target-group-attributes: |
+      stickiness.enabled=true,
+      stickiness.lb_cookie.duration_seconds=86400
+    # Target type (required for EKS with Fargate)
+    alb.ingress.kubernetes.io/target-type: ip
+    # Health check path
+    alb.ingress.kubernetes.io/healthcheck-path: /status
+```
+
+#### Multiple Target Groups with ALB
+
+For complex routing scenarios, you can configure different stickiness settings per target group:
+
+```yaml
+ingress:
+  annotations:
+    alb.ingress.kubernetes.io/target-group-attributes: |
+      stickiness.enabled=true,
+      stickiness.lb_cookie.duration_seconds=86400,
+      stickiness.type=lb_cookie
+```
+
+### Google Cloud Load Balancer (GKE)
+
+For Google Kubernetes Engine, session affinity is configured through BackendConfig:
+
+```yaml
+# Create a BackendConfig resource
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: bitbucket-backend-config
+spec:
+  sessionAffinity:
+    affinityType: "CLIENT_IP_PROTO"
+    affinityCookieTtlSec: 86400
+---
+# Reference it in your service
+bitbucket:
+  service:
+    annotations:
+      cloud.google.com/backend-config: '{"default": "bitbucket-backend-config"}'
+```
+
+### Azure Application Gateway
+
+For Azure Kubernetes Service with Application Gateway, enable cookie-based affinity:
+
+```yaml
+ingress:
+  create: true
+  nginx: false
+  className: "azure/application-gateway"
+  host: bitbucket.example.com
+  annotations:
+    # Enable cookie-based session affinity
+    appgw.ingress.kubernetes.io/cookie-based-affinity: "true"
+    # Optional: Set custom cookie name
+    appgw.ingress.kubernetes.io/affinity-cookie-name: "BITBUCKET-AFFINITY"
+```
+
+### Service-Level Session Affinity
+
+As an alternative or supplement to ingress-level session stickiness, you can configure session affinity at the Kubernetes service level:
+
+```yaml
+bitbucket:
+  service:
+    # Enable ClientIP-based session affinity
+    sessionAffinity: ClientIP
+    sessionAffinityConfig:
+      clientIP:
+        # Session timeout in seconds (default: 10800 = 3 hours)
+        timeoutSeconds: 10800
+```
+
+!!!note "Service vs Ingress Session Affinity"
+    * **Service-level affinity** is based on client IP and works at the network layer
+    * **Ingress-level affinity** typically uses cookies and works at the application layer
+    * Ingress-level affinity is generally preferred for web applications as it's more reliable when users are behind NAT/proxies
+
+### Verifying Session Stickiness
+
+To verify that session stickiness is working correctly:
+
+1. **Check ingress annotations**:
+   ```shell
+   kubectl describe ingress bitbucket -n atlassian
+   ```
+
+2. **Test with curl** (look for Set-Cookie headers):
+   ```shell
+   curl -I https://bitbucket.example.com/status
+   ```
+
+3. **Monitor pod traffic** during user sessions:
+   ```shell
+   kubectl logs -f bitbucket-0 -n atlassian
+   kubectl logs -f bitbucket-1 -n atlassian
+   ```
+
+4. **Check service configuration**:
+   ```shell
+   kubectl describe service bitbucket -n atlassian
+   ```
+
+### Troubleshooting Session Stickiness
+
+Common issues and solutions:
+
+| Issue | Possible Cause | Solution |
+|-------|----------------|----------|
+| Users getting logged out randomly | Session stickiness not configured | Add appropriate ingress annotations or service session affinity |
+| "Session expired" errors in HA setup | Requests routing to different pods | Verify ingress controller supports session affinity |
+| Inconsistent behavior between users | Load balancer not honoring cookies | Check load balancer configuration and cookie settings |
+| Session stickiness not working behind CDN | CDN stripping session cookies | Configure CDN to preserve session cookies |
+
+!!!warning "Important considerations"
+    * **Cookie security**: Ensure session cookies are configured with appropriate security settings (Secure, HttpOnly, SameSite)
+    * **Session duration**: Balance session duration between user convenience and security requirements
+    * **Pod scaling**: When scaling down, ensure graceful session handling to minimize user impact
+    * **Health checks**: Configure health check paths that don't interfere with session stickiness
 
 ## :material-directions-fork: LoadBalancer/NodePort Service Type
 
