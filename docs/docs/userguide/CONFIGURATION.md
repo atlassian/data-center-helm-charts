@@ -34,6 +34,53 @@ Some key considerations to note when configuring the controller are:
 !!!info "Request body size"
     By default the maximum allowed size for the request body is set to `250MB`. If the size in a request exceeds the maximum size of the client request body, an `413` error will be returned to the client. The maximum request body can be configured by changing the value of `maxBodySize` in `values.yaml`.
 
+## :material-account-group: Session Stickiness for High Availability
+
+### NGINX Ingress Controller
+
+Session stickiness is automatically enabled when using NGINX Ingress Controller:
+
+```yaml
+ingress:
+  create: true
+  nginx: true  # Automatically enables session stickiness
+  host: bitbucket.example.com
+```
+
+#### Custom Configuration
+
+```yaml
+ingress:
+  create: true
+  nginx: true
+  host: bitbucket.example.com
+  annotations:
+    "nginx.ingress.kubernetes.io/session-cookie-name": "BITBUCKET-SESSION"
+    "nginx.ingress.kubernetes.io/session-cookie-max-age": "28800"  # 8 hours
+    "nginx.ingress.kubernetes.io/session-cookie-change-on-failure": "true"
+```
+
+#### Verify Configuration
+
+```shell
+# Check ingress annotations
+kubectl describe ingress bitbucket -n atlassian
+
+# Test with curl (look for Set-Cookie header)
+curl -I https://bitbucket.example.com/status
+```
+
+#### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| Users getting logged out randomly | Verify session stickiness annotations are applied |
+| Requests routing to different pods | Check if clustering is enabled |
+| Session cookies not working | Ensure ingress controller supports session affinity |
+
+### Other Ingress Controllers
+
+For other ingress controllers (AWS ALB, Google Cloud Load Balancer, Azure Application Gateway), refer to your controller's documentation for session stickiness configuration.
 
 ## :material-directions-fork: LoadBalancer/NodePort Service Type
 

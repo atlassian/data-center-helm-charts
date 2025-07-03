@@ -200,6 +200,71 @@ Important considerations:
 * Ensure that the Ingress hostname can be resolved from within the Kubernetes cluster network
 * If the certificate is not signed by a public authority, you will need to add the certificate to Java trust store in Bitbucket containers by defining a secret name in `bitbucket.additionalCertificates.secretName`
 
+## Use AWS OpenSearch Service
+
+If you're using AWS OpenSearch Service (managed service) instead of deploying your own OpenSearch cluster, configure Bitbucket to connect to your existing AWS OpenSearch domain using environment variables.
+
+### Prerequisites
+
+* Create an AWS OpenSearch Service domain
+* Configure domain access policy to allow your EKS cluster
+* Have the domain endpoint URL and credentials ready
+
+### Configuration
+
+```yaml
+bitbucket:
+  clustering:
+    enabled: true
+  # Do not enable the opensearch helm chart
+  opensearch:
+    enabled: false
+  
+  additionalEnvironmentVariables:
+    - name: SEARCH_ENABLED
+      value: "false"
+    - name: PLUGIN_SEARCH_CONFIG_BASEURL
+      value: "https://search-your-domain-abc123.us-east-1.es.amazonaws.com"
+    - name: PLUGIN_SEARCH_CONFIG_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: aws-opensearch-credentials
+          key: username
+    - name: PLUGIN_SEARCH_CONFIG_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: aws-opensearch-credentials
+          key: password
+```
+
+### Create AWS OpenSearch Credentials Secret
+
+```shell
+kubectl create secret generic aws-opensearch-credentials \
+  --from-literal=username=your-master-username \
+  --from-literal=password=your-master-password \
+  -n your-namespace
+```
+
+### Using IAM Authentication
+
+For domains using IAM authentication, configure IAM roles and omit username/password:
+
+```yaml
+bitbucket:
+  clustering:
+    enabled: true
+  opensearch:
+    enabled: false
+  
+  additionalEnvironmentVariables:
+    - name: SEARCH_ENABLED
+      value: "false"
+    - name: PLUGIN_SEARCH_CONFIG_BASEURL
+      value: "https://search-your-domain-abc123.us-east-1.es.amazonaws.com"
+    # No username/password needed - uses IAM role
+```
+
 ## Troubleshooting
 
 ### Authentication
