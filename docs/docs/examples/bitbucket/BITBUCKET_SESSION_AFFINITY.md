@@ -1,36 +1,19 @@
-# Session Stickiness for Bitbucket with NGINX Ingress
+# Configure Session Stickiness with NGINX Ingress
 
-When running Bitbucket Data Center in High Availability (HA) mode with multiple pods, session stickiness ensures that user requests are consistently routed to the same Bitbucket pod throughout their session.
-
-!!!info "Why session stickiness is important for Bitbucket"
-    * **Git operations**: Prevents Git push/pull failures when routed to different pods mid-operation
-    * **User sessions**: Avoids unexpected logouts and session data loss
-    * **Performance**: Maintains repository cache locality for better performance
-
-## Automatic Session Stickiness (Default)
-
-The Bitbucket Helm chart automatically enables session stickiness when using NGINX Ingress Controller:
+## Default Configuration
 
 ```yaml
 ingress:
   create: true
-  nginx: true  # Automatically enables session stickiness
+  nginx: true  # Enables session stickiness automatically
   host: bitbucket.example.com
 
 bitbucket:
   clustering:
-    enabled: true  # Required for HA deployments
+    enabled: true
 ```
 
-This automatically applies these NGINX annotations:
-```yaml
-"nginx.ingress.kubernetes.io/affinity": "cookie"
-"nginx.ingress.kubernetes.io/affinity-mode": "persistent"
-```
-
-## Custom Session Stickiness Configuration
-
-You can customize the session behavior by adding additional annotations:
+## Custom Configuration
 
 ```yaml
 ingress:
@@ -38,16 +21,8 @@ ingress:
   nginx: true
   host: bitbucket.example.com
   annotations:
-    # Custom session cookie name (default: INGRESSCOOKIE)
     "nginx.ingress.kubernetes.io/session-cookie-name": "BITBUCKET-SESSION"
-    # Cookie expiration time in seconds (default: 86400 = 24 hours)
-    "nginx.ingress.kubernetes.io/session-cookie-max-age": "28800"
-    # Whether to change cookie on backend failure (default: false)
-    "nginx.ingress.kubernetes.io/session-cookie-change-on-failure": "true"
-
-bitbucket:
-  clustering:
-    enabled: true
+    "nginx.ingress.kubernetes.io/session-cookie-max-age": "28800"  # 8 hours
 ```
 
 ## Verifying Session Stickiness
