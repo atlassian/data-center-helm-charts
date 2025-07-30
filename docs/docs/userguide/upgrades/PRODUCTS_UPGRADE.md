@@ -134,6 +134,9 @@ You can use rolling upgrade only if the target version is zero-downtime compatib
     
     
     === "Confluence"
+        !!!warning "ATL_FORCE_CFG_UPDATE"
+            Make sure `additionalEnvironmentVariables.ATL_FORCE_CFG_UPDATE` is not excplicitly set to `true` in Helm values before a ZDU upgrade.
+            Setting it to false and performing a ZDU upgrade will result in build numbers mismatch. 
         
         ### Confluence rolling upgrade
         Let's say we have Confluence version `7.12.0` deployed to our Kubernetes cluster, and we want to upgrade it to version
