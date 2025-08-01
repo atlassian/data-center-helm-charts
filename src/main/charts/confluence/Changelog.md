@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.3
+
+**Release date:** 2025-8-1
+
+![AppVersion: 9.2.6](https://img.shields.io/static/v1?label=AppVersion&message=9.2.6&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Fix Confluence UID (#1024)
+* Update appVersions for DC apps (#1021)
+
 ## 2.0.2
 
 **Release date:** 2025-6-16
