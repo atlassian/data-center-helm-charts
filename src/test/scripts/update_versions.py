@@ -7,6 +7,9 @@ import yaml
 
 import product_versions
 
+# USER_AGENT constant for marketplace API calls
+USER_AGENT = "Mozilla_dc_core_eng"
+
 """
 This script is used to update the product versions in the helm charts descriptors (Chart.yaml).
 It fetches the latest available version (LTS for products with LTS) from marketplace and updates the required
@@ -67,7 +70,8 @@ def product_versions_marketplace(product_key):
     page = 1
     while True:
         logging.debug(f'Retrieving Marketplace product versions for {product_key}: page {page}')
-        r = requests.get(mac_url + request_url, params=params)
+        headers = {'User-Agent': USER_AGENT}
+        r = requests.get(mac_url + request_url, params=params, headers=headers)
         version_data = r.json()
         for version in version_data['_embedded']['versions']:
             if all(d.isdigit() for d in version['name'].split('.')):
@@ -130,7 +134,8 @@ for product in products:
         logging.info("Latest LTS version: %s", version)
     else:
         logging.info("Non-LTS product")
-        r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{product}/versions/latest')
+        headers = {'User-Agent': USER_AGENT}
+        r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{product}/versions/latest', headers=headers)
         version = r.json()['name']
 
     new_version_tag = f"{version}{tag_suffix}"
