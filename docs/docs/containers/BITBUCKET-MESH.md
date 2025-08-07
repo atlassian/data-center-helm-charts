@@ -145,11 +145,18 @@ Bitbucket Data Center server. A support matrix is available here:
 
 ## Supported JDK versions and base images
 
-All the Atlassian Docker images are now JDK11 and JDK17 (since version 2.4) only, and generated from the
-[official Eclipse Temurin OpenJDK Docker images](https://hub.docker.com/_/eclipse-temurin).
+The Bitbucket Mesh Docker images support the following JDK versions:
 
-Starting from 2.4 [UBI based](https://catalog.redhat.com/software/containers/ubi9/openjdk-17/61ee7c26ed74b2ffb22b07f6?architecture=amd64) tags are published as well.
-UBI tags are available in 2 formats: `<version>-ubi9` and `<version>-ubi9-jdk17`.
+* **JDK 11**: Supported for Mesh versions 2.0.1 to 3.0.0
+* **JDK 17**: Supported for Mesh versions 2.4 to 3.4.5
+* **JDK 21**: Supported for Mesh versions 3.4.5 and above (required for Mesh 4.x)
+
+Images are generated from the [official Eclipse Temurin OpenJDK Docker images](https://hub.docker.com/_/eclipse-temurin).
+
+Starting from 2.4, [UBI based](https://catalog.redhat.com/software/containers/ubi9/openjdk-17/61ee7c26ed74b2ffb22b07f6?architecture=amd64) tags are published as well.
+UBI tags are available in the following formats:
+* For JDK 17: `<version>-ubi9` and `<version>-ubi9-jdk17`
+* For JDK 21: `<version>-ubi9` and `<version>-ubi9-jdk21` (from version 3.4.5)
 
 The Docker images follow the [Atlassian Support end-of-life
 policy](https://confluence.atlassian.com/support/atlassian-support-end-of-life-policy-201851003.html);
