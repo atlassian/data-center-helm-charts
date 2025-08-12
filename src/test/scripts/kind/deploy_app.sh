@@ -14,8 +14,8 @@ deploy_postgres() {
        --set primary.persistentVolumeClaimRetentionPolicy.whenDeleted="Delete" \
        --set primary.resources.requests.memory=256Mi \
        --set primary.resources.limits.memory=1024Mi \
-       --set image.tag="14.3.0-debian-10-r20" \
-       --version="15.5.1" \
+       --set image.tag="16.4.0-debian-12-r15" \
+       --version="15.5.20" \
        --wait --timeout=120s \
        -n atlassian
 
