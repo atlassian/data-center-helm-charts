@@ -1086,11 +1086,11 @@ monitoring:
 
   # -- Image repository with jmx_exporter jar
   #
-  jmxExporterImageRepo: bitnamilegacy/jmx-exporter
+  jmxExporterImageRepo: bitnamisecure/jmx-exporter
 
   # -- Image tag to be used to pull jmxExporterImageRepo
   #
-  jmxExporterImageTag: 0.18.0
+  jmxExporterImageTag: latest
 
   # -- Port number on which metrics will be available
   #

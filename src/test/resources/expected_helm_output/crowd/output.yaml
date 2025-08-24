@@ -410,7 +410,7 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamisecure/jmx-exporter:latest
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/crowd/shared"]
           securityContext:

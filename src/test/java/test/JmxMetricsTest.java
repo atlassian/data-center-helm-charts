@@ -41,7 +41,7 @@ class JmxMetricsTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnamisecure/jmx-exporter:latest");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
 
@@ -250,7 +250,7 @@ class JmxMetricsTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnamisecure/jmx-exporter:latest");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
 
@@ -286,7 +286,7 @@ class JmxMetricsTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnamisecure/jmx-exporter:latest");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
 

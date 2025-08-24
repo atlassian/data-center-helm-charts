@@ -617,7 +617,7 @@ spec:
           ip: 127.0.0.1
       initContainers:
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamisecure/jmx-exporter:latest
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/mesh"]
           volumeMounts:
@@ -744,7 +744,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamisecure/jmx-exporter:latest
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
           securityContext:
