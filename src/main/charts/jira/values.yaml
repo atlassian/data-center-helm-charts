@@ -998,18 +998,12 @@ monitoring:
 
   # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
   #
-  exposeJmxMetrics: false
+  exposeJmxMetrics: true
 
-  # --  JMX exporter init container configuration
+  # -- JMX exporter init container configuration
   #
   jmxExporterInitContainer:
-
-    # -- The location of the JMX exporter jarfile in the JMX exporter image
-    # Leave blank for default bitnami image
-    #
-    jmxJarLocation:
-
-    # -- Whether to run JMX exporter init container as root to copy JMX exporter binary to shared home volume.
+    # -- Whether to run JMX exporter init container as root to set permissions
     # Set to false if running containers as root is not allowed in the cluster.
     #
     runAsRoot: true
@@ -1033,18 +1027,15 @@ monitoring:
   #
   jmxServiceAnnotations: {}
 
-  # -- Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar
-  # to shared home and provide an absolute path in jmxExporterCustomJarLocation
+  # -- Maven Central configuration for JMX exporter
   #
-  fetchJmxExporterJar: true
-
-  # -- Image repository with jmx_exporter jar
-  #
-  jmxExporterImageRepo: bitnami/jmx-exporter
-
-  # -- Image tag to be used to pull jmxExporterImageRepo
-  #
-  jmxExporterImageTag: 0.18.0
+  jmxExporter:
+    # -- Version of JMX exporter to use
+    version: 0.18.0
+    # -- Maven Central base URL
+    mavenBaseUrl: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent
+    # -- SHA256 checksum for verification
+    sha256: d3ba4ce8eccd3461463358c5e19f8becb99ed949f159c37c850e53b89b560f97
 
   # -- Port number on which metrics will be available
   #
@@ -1060,15 +1051,30 @@ monitoring:
 
   # -- Custom JMX config with the rules
   #
-  jmxExporterCustomConfig: {}
-  #  rules:
-  #   - pattern: ".*"
+  jmxExporterCustomConfig:
+    rules:
+      - pattern: "java.lang<type=Memory><HeapMemoryUsage>.*"
+        name: jvm_memory_heap_$3
+        attrNameSnakeCase: true
+      - pattern: "java.lang<type=Memory><NonHeapMemoryUsage>.*"
+        name: jvm_memory_nonheap_$3
+        attrNameSnakeCase: true
+      - pattern: "java.lang<type=GarbageCollector, name=(.*)><.*>.*"
+        name: jvm_gc_$1_$2
+        attrNameSnakeCase: true
+      - pattern: "Catalina<type=ThreadPool, name=\"(.*)\">(.*)"
+        name: tomcat_threadpool_$2
+        labels:
+          pool: $1
+      - pattern: "com.atlassian.jira<type=ThreadMonitor>(.*)"
+        name: jira_thread_$1
+        attrNameSnakeCase: true
 
   serviceMonitor:
 
     # -- Create ServiceMonitor to start scraping metrics. ServiceMonitor CRD needs to be created in advance.
     #
-    create: false
+    create: true
 
     # -- ServiceMonitorSelector of the prometheus instance.
     #
