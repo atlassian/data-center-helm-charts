@@ -164,14 +164,19 @@ class JmxMetricsTest {
     void expose_jmx_metrics_enabled_custom_init_container(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.exposeJmxMetrics", "true",
-                "monitoring.jmxExporterImageRepo", "myregistry/myrepo",
-                "monitoring.jmxExporterImageTag", "0.17.0"
+                "monitoring.jmxExporter.version", "0.17.0",
+                "monitoring.jmxExporter.sha256", "custom_sha256"
         ));
 
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("myregistry/myrepo:0.17.0");
+        var initContainer = statefulSet.getInitContainer("fetch-jmx-exporter").get();
+        assertThat(initContainer.path("image")).hasTextEqualTo("curlimages/curl:latest");
+        
+        // Verify custom version is used
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("VERSION=\"0.17.0\"");
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("EXPECTED_SHA256=\"custom_sha256\"");
     }
 
     @ParameterizedTest
@@ -185,6 +190,11 @@ class JmxMetricsTest {
 
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
         var initContainer = statefulSet.getInitContainer("fetch-jmx-exporter").get();
+
+        // Verify init container setup
+        assertThat(initContainer.path("image")).hasTextEqualTo("curlimages/curl:latest");
+        assertThat(initContainer.path("command").get(0)).hasTextEqualTo("/bin/sh");
+        assertThat(initContainer.path("args").get(0)).hasTextEqualTo("-ec");
 
         // Verify script content
         assertThat(initContainer.path("args").get(1)).hasTextContaining("curl -L");

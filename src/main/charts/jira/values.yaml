@@ -998,7 +998,7 @@ monitoring:
 
   # -- Expose JMX metrics with jmx_exporter https://github.com/prometheus/jmx_exporter
   #
-  exposeJmxMetrics: false
+  exposeJmxMetrics: true
 
   # -- JMX exporter init container configuration
   #
@@ -1051,15 +1051,30 @@ monitoring:
 
   # -- Custom JMX config with the rules
   #
-  jmxExporterCustomConfig: {}
-  #  rules:
-  #   - pattern: ".*"
+  jmxExporterCustomConfig:
+    rules:
+      - pattern: "java.lang<type=Memory><HeapMemoryUsage>.*"
+        name: jvm_memory_heap_$3
+        attrNameSnakeCase: true
+      - pattern: "java.lang<type=Memory><NonHeapMemoryUsage>.*"
+        name: jvm_memory_nonheap_$3
+        attrNameSnakeCase: true
+      - pattern: "java.lang<type=GarbageCollector, name=(.*)><.*>.*"
+        name: jvm_gc_$1_$2
+        attrNameSnakeCase: true
+      - pattern: "Catalina<type=ThreadPool, name=\"(.*)\">(.*)"
+        name: tomcat_threadpool_$2
+        labels:
+          pool: $1
+      - pattern: "com.atlassian.jira<type=ThreadMonitor>(.*)"
+        name: jira_thread_$1
+        attrNameSnakeCase: true
 
   serviceMonitor:
 
     # -- Create ServiceMonitor to start scraping metrics. ServiceMonitor CRD needs to be created in advance.
     #
-    create: false
+    create: true
 
     # -- ServiceMonitorSelector of the prometheus instance.
     #

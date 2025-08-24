@@ -262,15 +262,16 @@ data:
       useHelmReleaseNameAsContainerName: false
     monitoring:
       exposeJmxMetrics: true
-      fetchJmxExporterJar: true
       grafana:
         createDashboards: false
         dashboardAnnotations: {}
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnami/jmx-exporter
-      jmxExporterImageTag: 0.18.0
+      jmxExporter:
+        version: 0.18.0
+        mavenBaseUrl: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent
+        sha256: d3ba4ce8eccd3461463358c5e19f8becb99ed949f159c37c850e53b89b560f97
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null

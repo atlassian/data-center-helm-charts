@@ -25,7 +25,7 @@ Jmx config volume mount
 Jmx init container
 */}}
 {{- define "common.jmx.initContainer" -}}
-{{- if .Values.monitoring.exposeJmxMetrics }}
+{{- if and .Values.monitoring.exposeJmxMetrics (not .Values.monitoring.jmxExporterCustomJarLocation) }}
 - name: fetch-jmx-exporter
   image: curlimages/curl:latest
   command: ["/bin/sh"]
