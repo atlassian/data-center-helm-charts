@@ -227,8 +227,8 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-      jmxExporterImageTag: 0.18.0
+      jmxExporterImageRepo: bitnamisecure/jmx-exporter
+      jmxExporterImageTag: latest
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null
