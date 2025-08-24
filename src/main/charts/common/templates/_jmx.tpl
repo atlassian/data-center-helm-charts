@@ -27,9 +27,34 @@ Jmx init container
 {{- define "common.jmx.initContainer" -}}
 {{- if and .Values.monitoring.exposeJmxMetrics .Values.monitoring.fetchJmxExporterJar }}
 - name: fetch-jmx-exporter
-  image: {{ .Values.monitoring.jmxExporterImageRepo}}:{{ .Values.monitoring.jmxExporterImageTag}}
-  command: ["cp"]
-  args: ["{{ .Values.monitoring.jmxExporterInitContainer.jmxJarLocation | default "/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar" }}", "{{ .Values.volumes.sharedHome.mountPath }}"]
+  image: curlimages/curl:latest
+  command: ["/bin/sh"]
+  args:
+    - -ec
+    - |
+      AGENT_PATH="{{ .Values.volumes.sharedHome.mountPath }}/jmx_prometheus_javaagent.jar"
+      VERSION="{{ .Values.monitoring.jmxExporter.version }}"
+      BASE_URL="{{ .Values.monitoring.jmxExporter.mavenBaseUrl }}"
+      EXPECTED_SHA256="{{ .Values.monitoring.jmxExporter.sha256 }}"
+
+      # Download the agent
+      curl -L "${BASE_URL}/${VERSION}/jmx_prometheus_javaagent-${VERSION}.jar" -o $AGENT_PATH
+
+      # Verify SHA256
+      echo "${EXPECTED_SHA256} ${AGENT_PATH}" | sha256sum -c -
+
+      # Set permissions
+      chmod 644 $AGENT_PATH
+
+      # Verify JAR structure
+      if ! unzip -l $AGENT_PATH | grep -q "META-INF/MANIFEST.MF"; then
+        echo "Invalid JAR file"
+        exit 1
+      fi
+      if ! unzip -l $AGENT_PATH | grep -q "JavaAgent.class"; then
+        echo "Not a valid Java agent JAR"
+        exit 1
+      fi
   {{- if .Values.monitoring.jmxExporterInitContainer.resources }}
   resources:
   {{- with .Values.monitoring.jmxExporterInitContainer.resources }}

@@ -1038,13 +1038,15 @@ monitoring:
   #
   fetchJmxExporterJar: true
 
-  # -- Image repository with jmx_exporter jar
+  # -- Maven Central configuration for JMX exporter
   #
-  jmxExporterImageRepo: bitnami/jmx-exporter
-
-  # -- Image tag to be used to pull jmxExporterImageRepo
-  #
-  jmxExporterImageTag: 0.18.0
+  jmxExporter:
+    # -- Version of JMX exporter to use
+    version: 0.18.0
+    # -- Maven Central base URL
+    mavenBaseUrl: https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent
+    # -- SHA256 checksum for verification
+    sha256: d3ba4ce8eccd3461463358c5e19f8becb99ed949f159c37c850e53b89b560f97
 
   # -- Port number on which metrics will be available
   #
