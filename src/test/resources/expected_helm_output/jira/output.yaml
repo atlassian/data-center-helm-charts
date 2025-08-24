@@ -453,9 +453,34 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
-          command: ["cp"]
-          args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
+          image: curlimages/curl:latest
+          command: ["/bin/sh"]
+          args:
+            - -ec
+            - |
+              AGENT_PATH="/var/atlassian/application-data/shared-home/jmx_prometheus_javaagent.jar"
+              VERSION="0.18.0"
+              BASE_URL="https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent"
+              EXPECTED_SHA256="d3ba4ce8eccd3461463358c5e19f8becb99ed949f159c37c850e53b89b560f97"
+
+              # Download the agent
+              curl -L "${BASE_URL}/${VERSION}/jmx_prometheus_javaagent-${VERSION}.jar" -o $AGENT_PATH
+
+              # Verify SHA256
+              echo "${EXPECTED_SHA256} ${AGENT_PATH}" | sha256sum -c -
+
+              # Set permissions
+              chmod 644 $AGENT_PATH
+
+              # Verify JAR structure
+              if ! unzip -l $AGENT_PATH | grep -q "META-INF/MANIFEST.MF"; then
+                echo "Invalid JAR file"
+                exit 1
+              fi
+              if ! unzip -l $AGENT_PATH | grep -q "JavaAgent.class"; then
+                echo "Not a valid Java agent JAR"
+                exit 1
+              fi
           securityContext:
             runAsUser: 0
           volumeMounts:

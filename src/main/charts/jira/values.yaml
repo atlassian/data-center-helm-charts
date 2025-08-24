@@ -1000,16 +1000,10 @@ monitoring:
   #
   exposeJmxMetrics: false
 
-  # --  JMX exporter init container configuration
+  # -- JMX exporter init container configuration
   #
   jmxExporterInitContainer:
-
-    # -- The location of the JMX exporter jarfile in the JMX exporter image
-    # Leave blank for default bitnami image
-    #
-    jmxJarLocation:
-
-    # -- Whether to run JMX exporter init container as root to copy JMX exporter binary to shared home volume.
+    # -- Whether to run JMX exporter init container as root to set permissions
     # Set to false if running containers as root is not allowed in the cluster.
     #
     runAsRoot: true
@@ -1032,11 +1026,6 @@ monitoring:
   # -- Annotations added to the jmx service
   #
   jmxServiceAnnotations: {}
-
-  # -- Fetch jmx_exporter jar from the image. If set to false make sure to manually copy the jar
-  # to shared home and provide an absolute path in jmxExporterCustomJarLocation
-  #
-  fetchJmxExporterJar: true
 
   # -- Maven Central configuration for JMX exporter
   #

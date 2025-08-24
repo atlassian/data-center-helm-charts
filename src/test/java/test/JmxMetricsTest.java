@@ -41,9 +41,9 @@ class JmxMetricsTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("curlimages/curl:latest");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("/bin/sh");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("-ec");
 
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
@@ -176,6 +176,26 @@ class JmxMetricsTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void expose_jmx_metrics_maven_central_download(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "monitoring.exposeJmxMetrics", "true",
+                "monitoring.jmxExporter.version", "0.18.0",
+                "monitoring.jmxExporter.sha256", "d3ba4ce8eccd3461463358c5e19f8becb99ed949f159c37c850e53b89b560f97"
+        ));
+
+        StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        var initContainer = statefulSet.getInitContainer("fetch-jmx-exporter").get();
+
+        // Verify script content
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("curl -L");
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("sha256sum -c");
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("chmod 644");
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("META-INF/MANIFEST.MF");
+        assertThat(initContainer.path("args").get(1)).hasTextContaining("JavaAgent.class");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void expose_jmx_metrics_enabled_custom_jar(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "monitoring.exposeJmxMetrics", "true",
@@ -250,9 +270,9 @@ class JmxMetricsTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-mesh");
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("curlimages/curl:latest");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("/bin/sh");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("-ec");
 
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(localHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(localHomePath);
@@ -286,9 +306,9 @@ class JmxMetricsTest {
         StatefulSet statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
 
         // assert jmx_exporter init container
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("bitnami/jmx-exporter:0.18.0");
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("cp");
-        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("image")).hasTextEqualTo("curlimages/curl:latest");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("command").get(0)).hasTextEqualTo("/bin/sh");
+        assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(0)).hasTextEqualTo("-ec");
 
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("args").get(1)).hasTextEqualTo(sharedHomePath);
         assertThat(statefulSet.getInitContainer("fetch-jmx-exporter").get().path("volumeMounts").get(0).path("mountPath")).hasTextEqualTo(sharedHomePath);
