@@ -323,7 +323,7 @@ data:
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
       jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-      jmxExporterImageTag: "0.18.0"
+      jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null
@@ -603,7 +603,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 6d181dfda9628ad7368f967e46162aeaed0397fb8a1ff10dc7281a0fa4435f33
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -724,7 +723,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: d41cb66dde727850d1d61b3b7713b15cc2d251e06d2719615254a598995e28a6
       labels:
         helm.sh/chart: bitbucket-2.0.3
         app.kubernetes.io/name: bitbucket

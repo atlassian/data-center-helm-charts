@@ -1041,7 +1041,7 @@ monitoring:
   # -- Image repository with jmx_exporter jar
   #
   jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-  jmxExporterImageTag: "0.18.0"
+  jmxExporterImageTag: 0.18.0
 
 
 

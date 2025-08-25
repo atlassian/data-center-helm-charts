@@ -282,7 +282,7 @@ data:
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
       jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-      jmxExporterImageTag: "0.18.0"
+      jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null
@@ -457,7 +457,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5f2e1fe8ea8401c5ca814250bc51fa6597b1483ea8fa8fc6b348cbf4ff03d32a
       labels:
         helm.sh/chart: bamboo-2.0.3
         app.kubernetes.io/name: bamboo

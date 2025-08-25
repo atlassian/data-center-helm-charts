@@ -228,7 +228,7 @@ data:
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
       jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-      jmxExporterImageTag: "0.18.0"
+      jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null
@@ -381,7 +381,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 1bea2c16f981799a7469bd9ccf69bea4d2cb94ea4b8c0773f4b52279a4785880
       labels:
         helm.sh/chart: crowd-2.0.3
         app.kubernetes.io/name: crowd

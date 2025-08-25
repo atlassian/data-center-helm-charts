@@ -274,7 +274,7 @@ data:
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
       jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-      jmxExporterImageTag: "0.18.0"
+      jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null
@@ -583,7 +583,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
         helm.sh/chart: confluence-2.0.3
         app.kubernetes.io/name: confluence-synchrony
@@ -668,7 +667,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: f53f69d8b911460bab609b81f98d4bd092b91b2546e42ffb4a5f427ede29f56b
       labels:
         helm.sh/chart: confluence-2.0.3
         app.kubernetes.io/name: confluence
