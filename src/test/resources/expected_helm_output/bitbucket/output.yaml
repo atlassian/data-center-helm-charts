@@ -322,7 +322,7 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
       jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
@@ -603,7 +603,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 6d181dfda9628ad7368f967e46162aeaed0397fb8a1ff10dc7281a0fa4435f33
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -617,7 +616,7 @@ spec:
           ip: 127.0.0.1
       initContainers:
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/mesh"]
           volumeMounts:
@@ -724,7 +723,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: d41cb66dde727850d1d61b3b7713b15cc2d251e06d2719615254a598995e28a6
       labels:
         helm.sh/chart: bitbucket-2.0.3
         app.kubernetes.io/name: bitbucket
@@ -744,7 +742,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
           securityContext:
