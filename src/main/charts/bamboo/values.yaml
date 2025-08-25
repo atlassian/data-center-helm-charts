@@ -1086,7 +1086,7 @@ monitoring:
 
   # -- Image repository with jmx_exporter jar
   #
-  jmxExporterImageRepo: bitnamisecure/jmx-exporter
+  jmxExporterImageRepo: bitnamilegacy/jmx-exporter
 
   # -- Image tag to be used to pull jmxExporterImageRepo
   #

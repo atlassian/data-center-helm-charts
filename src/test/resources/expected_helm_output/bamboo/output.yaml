@@ -281,7 +281,7 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnamisecure/jmx-exporter
+      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
       jmxExporterImageTag: latest
       jmxExporterInitContainer:
         customSecurityContext: {}
@@ -486,7 +486,7 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnamisecure/jmx-exporter:latest
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
           securityContext:
