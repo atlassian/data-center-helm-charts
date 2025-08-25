@@ -323,7 +323,7 @@ data:
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
       jmxExporterImageRepo: bitnamilegacy/jmx-exporter
-      jmxExporterImageTag: latest
+      jmxExporterImageTag: "0.18.0"
       jmxExporterInitContainer:
         customSecurityContext: {}
         jmxJarLocation: null

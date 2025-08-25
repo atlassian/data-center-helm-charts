@@ -154,7 +154,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.grafana.dashboardLabels | object | `{}` | Label selector for Grafana dashboard importer sidecar  |
 | monitoring.jmxExporterCustomConfig | object | `{}` | Custom JMX config with the rules  |
 | monitoring.jmxExporterCustomJarLocation | string | `nil` | Location of jmx_exporter jar file if mounted from a secret or manually copied to shared home  |
-| monitoring.jmxExporterImageRepo | string | `"bitnami/jmx-exporter"` | Image repository with jmx_exporter jar  |
+| monitoring.jmxExporterImageRepo | string | `"bitnamilegacy/jmx-exporter"` | Image repository with jmx_exporter jar (temporary solution, will be replaced with Maven Central download)  |
 | monitoring.jmxExporterImageTag | string | `"0.18.0"` | Image tag to be used to pull jmxExporterImageRepo  |
 | monitoring.jmxExporterInitContainer | object | `{"customSecurityContext":{},"jmxJarLocation":null,"resources":{},"runAsRoot":true}` | JMX exporter init container configuration  |
 | monitoring.jmxExporterInitContainer.customSecurityContext | object | `{}` | Custom SecurityContext for the jmx exporter init container  |
