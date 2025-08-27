@@ -21,7 +21,7 @@ bamboo:
 
 database:
   type: postgresql
-  url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql:5432/bamboo
+  url: jdbc:postgresql://${helm.release.prefix}-bamboo-pgsql-rw:5432/bamboo
   credentials:
     secretName: bamboo-database-credentials
 

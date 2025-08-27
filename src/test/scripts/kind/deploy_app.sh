@@ -1,29 +1,46 @@
 #!/usr/bin/env bash
 
-# deploy non ephemeral Postgres, delete PVC and PV when the StatefulSet is deleted
-# See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+# deploy CloudNativePG cluster for PostgreSQL
 deploy_postgres() {
-  echo "[INFO]: Installing Postgres Helm chart"
-  helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
-  helm install postgres bitnami/postgresql \
-       --set auth.database="${DC_APP}" \
-       --set auth.username="${DC_APP}" \
-       --set auth.password="${DC_APP}pwd" \
-       --set fullnameOverride="postgres" \
-       --set primary.persistentVolumeClaimRetentionPolicy.enabled="true" \
-       --set primary.persistentVolumeClaimRetentionPolicy.whenDeleted="Delete" \
-       --set primary.resources.requests.memory=256Mi \
-       --set primary.resources.limits.memory=1024Mi \
-       --set image.tag="16.4.0-debian-12-r15" \
-       --version="15.5.20" \
+  echo "[INFO]: Installing CloudNativePG operator and PostgreSQL cluster"
+  
+  # Install CloudNativePG operator
+  helm repo add cnpg https://cloudnative-pg.github.io/charts --force-update
+  helm install cnpg-operator cnpg/cloudnative-pg \
        --wait --timeout=120s \
-       -n atlassian
+       -n cnpg-system --create-namespace
+
+  # Create database credentials secret
+  kubectl create secret generic postgres-credentials \
+    --from-literal=username="${DC_APP}" \
+    --from-literal=password="${DC_APP}pwd" \
+    -n atlassian
+
+  # Create PostgreSQL cluster using CloudNativePG template
+  echo "[INFO]: Creating PostgreSQL cluster using template"
+  
+  # Set template variables
+  export POSTGRES_CLUSTER_NAME="postgres"
+  export TARGET_NAMESPACE="atlassian"
+  export DATABASE_NAME="${DC_APP}"
+  export DATABASE_USER="${DC_APP}"
+  export POSTGRES_SECRET_NAME="postgres-credentials"
+  
+  # Get the script directory to find the template
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  TEMPLATE_PATH="${SCRIPT_DIR}/../../infrastructure/cloudnativepg/postgres-cluster-template.yaml"
+  
+  # Apply the template with variable substitution
+  envsubst < "${TEMPLATE_PATH}" | kubectl apply -f -
+
+  # Wait for cluster to be ready
+  kubectl wait --for=condition=Ready cluster/postgres -n atlassian --timeout=300s
 
   # db-init file is used in Jira HA tests only
   if [ -f "${DB_INIT_SCRIPT_FILE}" ]; then
     echo "[INFO]: DB init file '${DB_INIT_SCRIPT_FILE}' found. Initializing the database"
-    kubectl cp ${DB_INIT_SCRIPT_FILE} postgres-0:/tmp/db-init-script.sql -n atlassian
-    kubectl exec postgres-0 -n atlassian -- /bin/bash -c "psql postgresql://${DC_APP}:${DC_APP}pwd@localhost:5432/${DC_APP} -f /tmp/db-init-script.sql"
+    kubectl cp ${DB_INIT_SCRIPT_FILE} postgres-1:/tmp/db-init-script.sql -n atlassian
+    kubectl exec postgres-1 -n atlassian -- /bin/bash -c "psql postgresql://${DC_APP}:${DC_APP}pwd@localhost:5432/${DC_APP} -f /tmp/db-init-script.sql"
   fi
 }
 

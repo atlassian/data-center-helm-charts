@@ -1,0 +1,38 @@
+# CloudNativePG cluster configuration for test environments
+# This replaces the previous Bitnami PostgreSQL configuration
+
+cluster:
+  name: postgres
+  instances: 1
+  
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "256MB"
+      effective_cache_size: "1GB"
+      
+  bootstrap:
+    initdb:
+      database: postgres
+      owner: postgres
+      secret:
+        name: postgres-credentials
+        
+  storage:
+    size: 1Gi
+    storageClass: standard
+    
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+      
+  monitoring:
+    enabled: true
+    
+  # Annotations required for KITT clusters
+  annotations:
+    "atlassian.com/business_unit": "server_engineering"

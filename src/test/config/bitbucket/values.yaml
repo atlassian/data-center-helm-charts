@@ -6,7 +6,7 @@ image:
   tag: 8.0.0
 
 database:
-  url: jdbc:postgresql://${helm.release.prefix}-bitbucket-pgsql:5432/bitbucket
+  url: jdbc:postgresql://${helm.release.prefix}-bitbucket-pgsql-rw:5432/bitbucket
   driver: org.postgresql.Driver
   credentials:
     secretName: bitbucket-database-credentials

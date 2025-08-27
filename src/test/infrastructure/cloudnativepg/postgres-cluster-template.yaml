@@ -1,0 +1,36 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ${POSTGRES_CLUSTER_NAME}
+  namespace: ${TARGET_NAMESPACE}
+  annotations:
+    atlassian.com/business_unit: "server_engineering"
+spec:
+  instances: 1
+  
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "256MB"
+      effective_cache_size: "1GB"
+      
+  bootstrap:
+    initdb:
+      database: ${DATABASE_NAME}
+      owner: ${DATABASE_USER}
+      secret:
+        name: ${POSTGRES_SECRET_NAME}
+        
+  storage:
+    size: 1Gi
+    
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+      
+  monitoring:
+    enabled: true

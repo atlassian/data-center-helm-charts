@@ -28,3 +28,4 @@
 Database deployment and configuration instructions for cloud providers can be found below:
 
 * [Amazon RDS](AMAZON_RDS.md)
+* [CloudNativePG (Kubernetes-native PostgreSQL)](CLOUDNATIVEPG.md)
