@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -36,7 +36,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jmx-config
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -62,7 +62,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-helm-values
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -269,7 +269,7 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
       jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
@@ -360,7 +360,7 @@ kind: Service
 metadata:
   name: unittest-jira-jmx
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -383,7 +383,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -407,7 +407,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -424,9 +424,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: e8d9a3469ceda202c19178fffff6949544923d62cfa570c581495a45f57af41c
+        checksum/config-jvm: 24817e66ebd401642aa14272c1a32f00fda584806ae3048a50fe29001daeef7e
       labels:
-        helm.sh/chart: jira-2.0.3
+        helm.sh/chart: jira-2.0.4
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
         app.kubernetes.io/version: "10.3.9"
@@ -453,7 +453,7 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2001 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
           securityContext:
@@ -561,7 +561,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"
@@ -593,7 +593,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.3
+    helm.sh/chart: jira-2.0.4
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "10.3.9"

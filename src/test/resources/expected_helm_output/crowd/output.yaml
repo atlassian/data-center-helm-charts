@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jvm-config
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -36,7 +36,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jmx-config
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -64,7 +64,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-helm-values
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -227,7 +227,7 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
       jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
@@ -317,7 +317,7 @@ kind: Service
 metadata:
   name: unittest-crowd-jmx
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -340,7 +340,7 @@ kind: Service
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -364,7 +364,7 @@ kind: StatefulSet
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -381,9 +381,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 1bea2c16f981799a7469bd9ccf69bea4d2cb94ea4b8c0773f4b52279a4785880
+        checksum/config-jvm: 47e5ef6b7cdca42357138b748035cc2654bfd6259d7cab902e8fc809f77ba214
       labels:
-        helm.sh/chart: crowd-2.0.3
+        helm.sh/chart: crowd-2.0.4
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
         app.kubernetes.io/version: "6.3.2"
@@ -410,7 +410,7 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2004 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/crowd/shared"]
           securityContext:
@@ -517,7 +517,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"
@@ -548,7 +548,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-2.0.3
+    helm.sh/chart: crowd-2.0.4
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "6.3.2"

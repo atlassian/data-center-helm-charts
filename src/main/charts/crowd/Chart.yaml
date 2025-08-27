@@ -2,8 +2,9 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: '2.0.3'
+version: '2.0.4'
 appVersion: 6.3.2
+
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Crowd
@@ -20,7 +21,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update Helm chart version"
+    - "fix: Update Bitnami image references due to deprecation notice (#1037)"
 
 dependencies:
 - name: common
