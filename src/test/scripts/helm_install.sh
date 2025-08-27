@@ -77,8 +77,8 @@ setup() {
 
   echo "Cluster type is $CLUSTER_TYPE"
 
-  # Install the bitnami postgresql Helm chart
-  helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
+  # Install the CloudNativePG operator
+  helm repo add cnpg https://cloudnative-pg.github.io/charts --force-update
 
   # add elastic helm repo
   helm repo add elastic https://helm.elastic.co --force-update
@@ -120,25 +120,38 @@ bootstrap_nfs() {
 
 bootstrap_database() {
   echo "Task $((tasknum+=1)) - Bootstrapping database server." >&2
-  # Use the product name for the name of the postgres database, username, and password.
-  # These must match the credentials stored in the Secret preloaded into the namespace,
-  # which the application will use to connect to the database.
-  PSQL_CHART_VALUES="$THISDIR/../infrastructure/postgres/postgres-values.yaml"
-  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
-     "$POSTGRES_RELEASE_NAME" \
-     --values $PSQL_CHART_VALUES \
-     --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
-     --set image.tag="$POSTGRES_APP_VERSION" \
-     --set auth.database="$DB_NAME" \
-     --set auth.username="$PRODUCT_NAME" \
-     --set auth.password="$PRODUCT_NAME" \
-     --version "$POSTGRES_CHART_VERSION" \
-     $HELM_DEBUG_OPTION \
-     bitnami/postgresql >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+  
+  # Install CloudNativePG operator first
+  helm install cnpg-operator cnpg/cloudnative-pg \
+    --wait --timeout=5m \
+    -n cnpg-system --create-namespace \
+    $HELM_DEBUG_OPTION >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+
+  # Create database credentials secret
+  kubectl create secret generic "${POSTGRES_RELEASE_NAME}-credentials" \
+    --from-literal=username="$PRODUCT_NAME" \
+    --from-literal=password="$PRODUCT_NAME" \
+    -n "${TARGET_NAMESPACE}"
+
+  # Create PostgreSQL cluster using CloudNativePG template
+  echo "[INFO]: Creating PostgreSQL cluster using template"
+  
+  # Set template variables
+  export POSTGRES_CLUSTER_NAME="${POSTGRES_RELEASE_NAME}"
+  export DATABASE_NAME="${DB_NAME}"
+  export DATABASE_USER="${PRODUCT_NAME}"
+  export POSTGRES_SECRET_NAME="${POSTGRES_RELEASE_NAME}-credentials"
+  
+  # Apply the template with variable substitution
+  envsubst < "${SCRIPT_DIR}/../infrastructure/cloudnativepg/postgres-cluster-template.yaml" | \
+    kubectl apply -n "${TARGET_NAMESPACE}" -f -
+
+  # Wait for cluster to be ready
+  kubectl wait --for=condition=Ready cluster/${POSTGRES_RELEASE_NAME} -n "${TARGET_NAMESPACE}" --timeout=900s
 
   if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
-    kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
-    kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
+    kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE ${POSTGRES_RELEASE_NAME}-1:/tmp/db-init-script.sql
+    kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-1 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
   fi
 }
 

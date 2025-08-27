@@ -10,7 +10,7 @@ crowd:
 
 database:
   type: postgresql
-  url: jdbc:postgresql://${helm.release.prefix}-crowd-pgsql:5432/crowd
+  url: jdbc:postgresql://${helm.release.prefix}-crowd-pgsql-rw:5432/crowd
   credentials:
     secretName: crowd-database-credentials
 

@@ -82,7 +82,7 @@ DC_APP_REPLACEME:
 
 database:
   type: DB_TYPE_REPLACEME
-  url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME
+  url: jdbc:postgresql://postgres-rw:5432/DC_APP_REPLACEME
   driver: org.postgresql.Driver
   credentials:
     secretName: DC_APP_REPLACEME-db-creds
