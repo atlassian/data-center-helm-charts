@@ -125,7 +125,7 @@ bootstrap_database() {
   helm repo update
   
   # Install CloudNativePG operator if not already installed
-  if ! kubectl get deployment cnpg-operator-controller-manager -n cnpg-system >/dev/null 2>&1; then
+  if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
     echo "Installing CloudNativePG operator..." >&2
     CNPG_CHART_VALUES="$THISDIR/../infrastructure/cloudnativepg/operator-values.yaml"
     helm install -n cnpg-system --create-namespace --wait --timeout 15m \
@@ -135,8 +135,15 @@ bootstrap_database() {
        cloudnative-pg/cloudnative-pg >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
     
     # Wait for operator to be ready
-    kubectl wait --for=condition=Available deployment/cnpg-operator-controller-manager \
-      --namespace cnpg-system --timeout=300s
+    echo "Waiting for CloudNativePG CRDs to be available..." >&2
+    for i in {1..60}; do
+      if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+        echo "CloudNativePG operator is ready" >&2
+        break
+      fi
+      echo "Waiting for CloudNativePG CRDs... ($i/60)" >&2
+      sleep 5
+    done
   fi
   
   # Create database credentials secret

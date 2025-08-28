@@ -18,8 +18,14 @@ deploy_postgres() {
   
   # Wait for operator to be ready
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
-  kubectl wait --for=condition=Available deployment/cnpg-operator-controller-manager \
-    --namespace cnpg-system --timeout=300s
+  for i in {1..60}; do
+    if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+      echo "[INFO]: CloudNativePG operator is ready"
+      break
+    fi
+    echo "[INFO]: Waiting for CloudNativePG CRDs to be available... ($i/60)"
+    sleep 5
+  done
   
   # Create database credentials secret
   echo "[INFO]: Creating database credentials secret"
