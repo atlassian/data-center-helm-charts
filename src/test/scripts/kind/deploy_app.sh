@@ -56,7 +56,7 @@ deploy_postgres() {
   # Wait for cluster to be ready
   echo "[INFO]: Waiting for PostgreSQL cluster to be ready"
   kubectl wait --for=condition=Ready cluster/${DC_APP}-db \
-    --namespace atlassian --timeout=600s
+    --namespace atlassian --timeout=180s
   
   # Wait for primary pod to be ready
   echo "[INFO]: Waiting for PostgreSQL primary pod to be ready"

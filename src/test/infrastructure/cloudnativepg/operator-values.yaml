@@ -1,5 +1,4 @@
-# CloudNativePG Operator configuration for test environments
-# This file contains overrides for the cloudnative-pg/cloudnative-pg helm chart
+# CloudNativePG Operator configuration optimized for CI/test environments
 
 replicaCount: 1
 
@@ -8,7 +7,7 @@ image:
   pullPolicy: IfNotPresent
   tag: "1.27.0"
 
-# Operator configuration
+# Operator configuration optimized for CI
 config:
   create: true
   name: cnpg-controller-manager-config
@@ -17,22 +16,23 @@ config:
   data:
     INHERITED_ANNOTATIONS: "categories"
     INHERITED_LABELS: "environment,workload,app"
-  maxConcurrentReconciles: 10
+  # Reduce concurrent reconciles for CI
+  maxConcurrentReconciles: 3
 
-# Enable monitoring for test environments
+# Disable monitoring for CI
 monitoring:
-  podMonitorEnabled: false  # Disabled for test environments
+  podMonitorEnabled: false
   grafanaDashboard:
     create: false
 
-# Resource limits for test environments
+# Minimal resource limits for CI
 resources:
   limits:
-    cpu: 200m
-    memory: 256Mi
-  requests:
     cpu: 100m
     memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
 
 # Security context
 containerSecurityContext:
@@ -54,7 +54,6 @@ podSecurityContext:
 # Service account
 serviceAccount:
   create: true
-  name: ""
 
 # RBAC
 rbac:
@@ -65,7 +64,7 @@ rbac:
 crds:
   create: true
 
-# Webhook configuration
+# Webhook configuration with faster probes
 webhook:
   port: 9443
   mutating:
@@ -74,3 +73,10 @@ webhook:
   validating:
     create: true
     failurePolicy: Fail
+  livenessProbe:
+    initialDelaySeconds: 1
+  readinessProbe:
+    initialDelaySeconds: 1
+  startupProbe:
+    failureThreshold: 3
+    periodSeconds: 2

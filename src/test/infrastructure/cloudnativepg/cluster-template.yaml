@@ -10,43 +10,52 @@ metadata:
     app.kubernetes.io/part-of: ${DC_APP}
 spec:
   instances: 1
+  
+  # Use a more stable PostgreSQL version
   imageName: ghcr.io/cloudnative-pg/postgresql:16.2
   
+  # Minimal resources for CI environment
   resources:
     requests:
-      memory: "128Mi"
-      cpu: "50m"
+      memory: "64Mi"
+      cpu: "25m"
     limits:
-      memory: "512Mi"
-      cpu: "500m"
+      memory: "256Mi"
+      cpu: "250m"
   
+  # Minimal storage for CI
   storage:
-    size: 512Mi
+    size: 256Mi
+    storageClass: standard
   
+  # Simple bootstrap configuration
   bootstrap:
     initdb:
       database: ${DC_APP}
       owner: ${DC_APP}
       secret:
         name: ${DC_APP}-db-credentials
+      # Minimal postInitSQL to avoid issues
       postInitSQL:
-        - "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
-        - "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
         - "ALTER USER ${DC_APP} CREATEDB;"
-        - "GRANT CREATE ON SCHEMA public TO ${DC_APP};"
-        - "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${DC_APP};"
-        - "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ${DC_APP};"
-        - "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${DC_APP};"
-        - "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO ${DC_APP};"
-        - "CREATE OR REPLACE FUNCTION health_check() RETURNS text AS $$ BEGIN RETURN 'OK'; END; $$ LANGUAGE plpgsql;"
   
+  # Optimized PostgreSQL parameters for CI
   postgresql:
     parameters:
-      max_connections: "50"
-      shared_buffers: "64MB"
-      work_mem: "2MB"
-      maintenance_work_mem: "32MB"
-      effective_cache_size: "256MB"
+      # Minimal configuration for fast startup
+      max_connections: "20"
+      shared_buffers: "32MB"
+      work_mem: "1MB"
+      maintenance_work_mem: "16MB"
+      effective_cache_size: "128MB"
+      # Disable durability for speed in CI
       fsync: "off"
       synchronous_commit: "off"
       full_page_writes: "off"
+      # Reduce checkpoint frequency
+      checkpoint_timeout: "15min"
+      max_wal_size: "64MB"
+      min_wal_size: "16MB"
+      # Reduce logging
+      log_statement: "none"
+      log_min_duration_statement: "-1"
