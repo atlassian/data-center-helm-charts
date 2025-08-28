@@ -1,6 +1,3 @@
-# CloudNativePG Cluster template for test environments
-# This template will be used to create PostgreSQL clusters for DC apps testing
-
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -12,13 +9,9 @@ metadata:
     app.kubernetes.io/component: database
     app.kubernetes.io/part-of: ${DC_APP}
 spec:
-  # Single instance for test environments
   instances: 1
-  
-  # PostgreSQL version - matching Bitnami's current version
   imageName: ghcr.io/cloudnative-pg/postgresql:16.2
   
-  # Resource configuration matching current Bitnami setup
   resources:
     requests:
       memory: "256Mi"
@@ -27,12 +20,10 @@ spec:
       memory: "1Gi"
       cpu: "1000m"
   
-  # Storage configuration - ephemeral for tests
   storage:
     size: 1Gi
     storageClass: standard
   
-  # Bootstrap configuration
   bootstrap:
     initdb:
       database: ${DC_APP}
@@ -43,7 +34,6 @@ spec:
         - "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
         - "ALTER USER ${DC_APP} CREATEDB;"
   
-  # PostgreSQL configuration
   postgresql:
     parameters:
       max_connections: "100"
@@ -51,31 +41,8 @@ spec:
       work_mem: "4MB"
       maintenance_work_mem: "64MB"
       effective_cache_size: "512MB"
-      # Enable logging for debugging
       log_statement: "all"
       log_min_duration_statement: "1000"
-      # Disable fsync for test performance
       fsync: "off"
       synchronous_commit: "off"
       full_page_writes: "off"
-  
-  # Monitoring configuration
-  monitoring:
-    enabled: false  # Disabled for test environments
-  
-  # Backup configuration - disabled for ephemeral test environments
-  backup:
-    retentionPolicy: "1d"
-    barmanObjectStore:
-      destinationPath: ""
-      s3Credentials:
-        accessKeyId:
-          name: ""
-          key: ""
-        secretAccessKey:
-          name: ""
-          key: ""
-      wal:
-        retention: "1d"
-      data:
-        retention: "1d"
