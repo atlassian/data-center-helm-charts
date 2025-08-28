@@ -32,7 +32,14 @@ spec:
         name: ${DC_APP}-db-credentials
       postInitSQL:
         - "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
+        - "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
         - "ALTER USER ${DC_APP} CREATEDB;"
+        - "GRANT CREATE ON SCHEMA public TO ${DC_APP};"
+        - "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ${DC_APP};"
+        - "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ${DC_APP};"
+        - "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${DC_APP};"
+        - "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO ${DC_APP};"
+        - "CREATE OR REPLACE FUNCTION health_check() RETURNS text AS $$ BEGIN RETURN 'OK'; END; $$ LANGUAGE plpgsql;"
   
   postgresql:
     parameters:
