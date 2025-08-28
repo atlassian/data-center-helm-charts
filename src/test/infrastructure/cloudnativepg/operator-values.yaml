@@ -1,0 +1,76 @@
+# CloudNativePG Operator configuration for test environments
+# This file contains overrides for the cloudnative-pg/cloudnative-pg helm chart
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/cloudnative-pg/cloudnative-pg
+  pullPolicy: IfNotPresent
+  tag: "1.27.0"
+
+# Operator configuration
+config:
+  create: true
+  name: cnpg-controller-manager-config
+  secret: false
+  clusterWide: true
+  data:
+    INHERITED_ANNOTATIONS: "categories"
+    INHERITED_LABELS: "environment,workload,app"
+  maxConcurrentReconciles: 10
+
+# Enable monitoring for test environments
+monitoring:
+  podMonitorEnabled: false  # Disabled for test environments
+  grafanaDashboard:
+    create: false
+
+# Resource limits for test environments
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop:
+      - "ALL"
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+# Service account
+serviceAccount:
+  create: true
+  name: ""
+
+# RBAC
+rbac:
+  create: true
+  aggregateClusterRoles: false
+
+# CRDs
+crds:
+  create: true
+
+# Webhook configuration
+webhook:
+  port: 9443
+  mutating:
+    create: true
+    failurePolicy: Fail
+  validating:
+    create: true
+    failurePolicy: Fail
