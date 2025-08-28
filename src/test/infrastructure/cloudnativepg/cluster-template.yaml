@@ -10,11 +10,8 @@ metadata:
     app.kubernetes.io/part-of: ${DC_APP}
 spec:
   instances: 1
-  
-  # Use a more stable PostgreSQL version
   imageName: ghcr.io/cloudnative-pg/postgresql:16.2
   
-  # Minimal resources for CI environment
   resources:
     requests:
       memory: "64Mi"
@@ -23,39 +20,38 @@ spec:
       memory: "256Mi"
       cpu: "250m"
   
-  # Minimal storage for CI
   storage:
     size: 256Mi
     storageClass: standard
   
-  # Simple bootstrap configuration
   bootstrap:
     initdb:
       database: ${DC_APP}
       owner: ${DC_APP}
       secret:
         name: ${DC_APP}-db-credentials
-      # Minimal postInitSQL to avoid issues
       postInitSQL:
         - "ALTER USER ${DC_APP} CREATEDB;"
+        - "ALTER USER ${DC_APP} WITH PASSWORD '${DC_APP}pwd' VALID UNTIL 'infinity';"
   
-  # Optimized PostgreSQL parameters for CI
   postgresql:
     parameters:
-      # Minimal configuration for fast startup
       max_connections: "20"
       shared_buffers: "32MB"
       work_mem: "1MB"
       maintenance_work_mem: "16MB"
       effective_cache_size: "128MB"
-      # Disable durability for speed in CI
       fsync: "off"
       synchronous_commit: "off"
       full_page_writes: "off"
-      # Reduce checkpoint frequency
-      checkpoint_timeout: "15min"
+      # WAL configuration
+      wal_level: "replica"
+      max_wal_senders: "2"
+      min_wal_size: "32MB"
       max_wal_size: "64MB"
-      min_wal_size: "16MB"
+      checkpoint_timeout: "15min"
+      # Authentication
+      password_encryption: "scram-sha-256"
       # Reduce logging
       log_statement: "none"
       log_min_duration_statement: "-1"

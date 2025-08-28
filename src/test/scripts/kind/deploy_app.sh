@@ -42,13 +42,16 @@ deploy_postgres() {
   
   # Replace placeholders in cluster template
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    SED_COMMAND="sed -i ''"
+    # macOS requires an empty string argument after -i
+    sed -i '' -e "s/\${DC_APP}/${DC_APP}/g" -e "s/\${NAMESPACE}/atlassian/g" "${TMP_DIR}/cluster.yaml"
   else
-    SED_COMMAND="sed -i"
+    # Linux version
+    sed -i -e "s/\${DC_APP}/${DC_APP}/g" -e "s/\${NAMESPACE}/atlassian/g" "${TMP_DIR}/cluster.yaml"
   fi
   
-  ${SED_COMMAND} "s/\${DC_APP}/${DC_APP}/g" ${TMP_DIR}/cluster.yaml
-  ${SED_COMMAND} "s/\${NAMESPACE}/atlassian/g" ${TMP_DIR}/cluster.yaml
+  # Debug: Print the generated configuration
+  echo "[INFO]: Generated PostgreSQL cluster configuration:"
+  cat ${TMP_DIR}/cluster.yaml
   
   # Apply the cluster configuration
   kubectl apply -f ${TMP_DIR}/cluster.yaml
