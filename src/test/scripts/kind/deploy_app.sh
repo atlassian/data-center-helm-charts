@@ -81,10 +81,14 @@ create_secrets() {
   echo "[INFO]: Creating db, admin and license secrets"
   DC_APP_CAPITALIZED="$(echo ${DC_APP} | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')"
 
-  kubectl create secret generic ${DC_APP}-db-credentials \
-          --from-literal=username="${DC_APP}" \
-          --from-literal=password="${DC_APP}pwd" \
-          -n atlassian
+  # Database credentials secret is already created in deploy_postgres function
+  # Only create it if it doesn't exist
+  if ! kubectl get secret ${DC_APP}-db-credentials -n atlassian >/dev/null 2>&1; then
+    kubectl create secret generic ${DC_APP}-db-credentials \
+            --from-literal=username="${DC_APP}" \
+            --from-literal=password="${DC_APP}pwd" \
+            -n atlassian
+  fi
   kubectl create secret generic ${DC_APP}-admin \
           --from-literal=username="admin" \
           --from-literal=password="admin" \
