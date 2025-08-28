@@ -14,15 +14,14 @@ spec:
   
   resources:
     requests:
-      memory: "256Mi"
-      cpu: "100m"
+      memory: "128Mi"
+      cpu: "50m"
     limits:
-      memory: "1Gi"
-      cpu: "1000m"
+      memory: "512Mi"
+      cpu: "500m"
   
   storage:
-    size: 1Gi
-    storageClass: standard
+    size: 512Mi
   
   bootstrap:
     initdb:
@@ -43,13 +42,11 @@ spec:
   
   postgresql:
     parameters:
-      max_connections: "100"
-      shared_buffers: "128MB"
-      work_mem: "4MB"
-      maintenance_work_mem: "64MB"
-      effective_cache_size: "512MB"
-      log_statement: "all"
-      log_min_duration_statement: "1000"
+      max_connections: "50"
+      shared_buffers: "64MB"
+      work_mem: "2MB"
+      maintenance_work_mem: "32MB"
+      effective_cache_size: "256MB"
       fsync: "off"
       synchronous_commit: "off"
       full_page_writes: "off"
