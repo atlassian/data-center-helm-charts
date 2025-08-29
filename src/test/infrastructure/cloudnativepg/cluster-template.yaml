@@ -1,0 +1,57 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ${DC_APP}-db
+  namespace: ${NAMESPACE}
+  labels:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: ${DC_APP}-db
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: ${DC_APP}
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "25m"
+    limits:
+      memory: "256Mi"
+      cpu: "250m"
+  
+  storage:
+    size: 256Mi
+    storageClass: standard
+  
+  bootstrap:
+    initdb:
+      database: ${DC_APP}
+      owner: ${DC_APP}
+      secret:
+        name: ${DC_APP}-db-credentials
+      postInitSQL:
+        - "ALTER USER ${DC_APP} CREATEDB;"
+        - "ALTER USER ${DC_APP} WITH PASSWORD '${DC_APP}pwd' VALID UNTIL 'infinity';"
+  
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "32MB"
+      work_mem: "1MB"
+      maintenance_work_mem: "16MB"
+      effective_cache_size: "128MB"
+      fsync: "off"
+      synchronous_commit: "off"
+      full_page_writes: "off"
+      # WAL configuration
+      wal_level: "replica"
+      max_wal_senders: "2"
+      min_wal_size: "32MB"
+      max_wal_size: "64MB"
+      checkpoint_timeout: "15min"
+      # Authentication
+      password_encryption: "scram-sha-256"
+      # Reduce logging
+      log_statement: "none"
+      log_min_duration_statement: "-1"

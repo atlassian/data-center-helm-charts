@@ -77,8 +77,7 @@ setup() {
 
   echo "Cluster type is $CLUSTER_TYPE"
 
-  # Install the bitnami postgresql Helm chart
-  helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
+  # CloudNativePG repository will be added in bootstrap_database function
 
   # add elastic helm repo
   helm repo add elastic https://helm.elastic.co --force-update
@@ -119,26 +118,74 @@ bootstrap_nfs() {
 }
 
 bootstrap_database() {
-  echo "Task $((tasknum+=1)) - Bootstrapping database server." >&2
-  # Use the product name for the name of the postgres database, username, and password.
-  # These must match the credentials stored in the Secret preloaded into the namespace,
-  # which the application will use to connect to the database.
-  PSQL_CHART_VALUES="$THISDIR/../infrastructure/postgres/postgres-values.yaml"
-  helm install -n "${TARGET_NAMESPACE}" --wait --timeout 15m \
-     "$POSTGRES_RELEASE_NAME" \
-     --values $PSQL_CHART_VALUES \
-     --set fullnameOverride="$POSTGRES_RELEASE_NAME" \
-     --set image.tag="$POSTGRES_APP_VERSION" \
-     --set auth.database="$DB_NAME" \
-     --set auth.username="$PRODUCT_NAME" \
-     --set auth.password="$PRODUCT_NAME" \
-     --version "$POSTGRES_CHART_VERSION" \
-     $HELM_DEBUG_OPTION \
-     bitnami/postgresql >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+  echo "Task $((tasknum+=1)) - Bootstrapping CloudNativePG database server." >&2
+  
+  # Add CloudNativePG Helm repository
+  helm repo add cloudnative-pg https://cloudnative-pg.github.io/charts --force-update
+  helm repo update
+  
+  # Install CloudNativePG operator if not already installed
+  if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+    echo "Installing CloudNativePG operator..." >&2
+    CNPG_CHART_VALUES="$THISDIR/../infrastructure/cloudnativepg/operator-values.yaml"
+    helm install -n cnpg-system --create-namespace --wait --timeout 15m \
+       cnpg-operator \
+       --values $CNPG_CHART_VALUES \
+       $HELM_DEBUG_OPTION \
+       cloudnative-pg/cloudnative-pg >> $LOG_DOWNLOAD_DIR/helm_install_log.txt
+    
+    # Wait for operator to be ready
+    echo "Waiting for CloudNativePG CRDs to be available..." >&2
+    for i in {1..60}; do
+      if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+        echo "CloudNativePG operator is ready" >&2
+        break
+      fi
+      echo "Waiting for CloudNativePG CRDs... ($i/60)" >&2
+      sleep 5
+    done
+  fi
+  
+  # Create database credentials secret
+  kubectl create secret generic ${PRODUCT_NAME}-db-credentials \
+    --from-literal=username="$PRODUCT_NAME" \
+    --from-literal=password="$PRODUCT_NAME" \
+    --namespace "${TARGET_NAMESPACE}" \
+    --dry-run=client -o yaml | kubectl apply -f -
+  
+  # Create PostgreSQL cluster from template
+  TMP_DIR=$(mktemp -d)
+  cp "$THISDIR/../infrastructure/cloudnativepg/cluster-template.yaml" ${TMP_DIR}/cluster.yaml
+  
+  # Replace placeholders in cluster template
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    SED_COMMAND="sed -i ''"
+  else
+    SED_COMMAND="sed -i"
+  fi
+  
+  ${SED_COMMAND} "s/\${DC_APP}/${PRODUCT_NAME}/g" ${TMP_DIR}/cluster.yaml
+  ${SED_COMMAND} "s/\${NAMESPACE}/${TARGET_NAMESPACE}/g" ${TMP_DIR}/cluster.yaml
+  
+  # Apply the cluster configuration
+  kubectl apply -f ${TMP_DIR}/cluster.yaml
+  
+  # Wait for cluster to be ready
+  kubectl wait --for=condition=Ready cluster/${PRODUCT_NAME}-db \
+    --namespace "${TARGET_NAMESPACE}" --timeout=900s
+  
+  # Wait for primary pod to be ready
+  kubectl wait --for=condition=Ready pod -l cnpg.io/cluster=${PRODUCT_NAME}-db,role=primary \
+    --namespace "${TARGET_NAMESPACE}" --timeout=300s
 
   if [[ "$DB_INIT_SCRIPT_FILE" ]]; then
-    kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE $POSTGRES_RELEASE_NAME-0:/tmp/db-init-script.sql
-    kubectl exec -n "${TARGET_NAMESPACE}" ${POSTGRES_RELEASE_NAME}-0 -- /bin/bash -c "psql postgresql://$PRODUCT_NAME:$PRODUCT_NAME@localhost:5432/$DB_NAME -f /tmp/db-init-script.sql"
+    echo "Executing database initialization script..." >&2
+    # Get the primary pod name
+    PRIMARY_POD=$(kubectl get pods -n "${TARGET_NAMESPACE}" -l cnpg.io/cluster=${PRODUCT_NAME}-db,role=primary -o jsonpath='{.items[0].metadata.name}')
+    
+    # Copy and execute the initialization script
+    kubectl cp -n "${TARGET_NAMESPACE}" $DB_INIT_SCRIPT_FILE ${PRIMARY_POD}:/tmp/db-init-script.sql
+    kubectl exec -n "${TARGET_NAMESPACE}" ${PRIMARY_POD} -- psql -U ${PRODUCT_NAME} -d ${DB_NAME} -f /tmp/db-init-script.sql
   fi
 }
 

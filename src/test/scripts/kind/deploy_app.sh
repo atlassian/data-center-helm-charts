@@ -1,29 +1,77 @@
 #!/usr/bin/env bash
 
-# deploy non ephemeral Postgres, delete PVC and PV when the StatefulSet is deleted
-# See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+# Deploy CloudNativePG operator and PostgreSQL cluster
 deploy_postgres() {
-  echo "[INFO]: Installing Postgres Helm chart"
-  helm repo add bitnami https://charts.bitnami.com/bitnami --force-update
-  helm install postgres bitnami/postgresql \
-       --set auth.database="${DC_APP}" \
-       --set auth.username="${DC_APP}" \
-       --set auth.password="${DC_APP}pwd" \
-       --set fullnameOverride="postgres" \
-       --set primary.persistentVolumeClaimRetentionPolicy.enabled="true" \
-       --set primary.persistentVolumeClaimRetentionPolicy.whenDeleted="Delete" \
-       --set primary.resources.requests.memory=256Mi \
-       --set primary.resources.limits.memory=1024Mi \
-       --set image.tag="16.4.0-debian-12-r15" \
-       --version="15.5.20" \
-       --wait --timeout=120s \
-       -n atlassian
-
-  # db-init file is used in Jira HA tests only
+  echo "[INFO]: Installing CloudNativePG operator"
+  
+  # Add CloudNativePG Helm repository
+  helm repo add cloudnative-pg https://cloudnative-pg.github.io/charts --force-update
+  helm repo update
+  
+  # Install CloudNativePG operator
+  echo "[INFO]: Installing CloudNativePG operator"
+  helm upgrade --install cnpg-operator cloudnative-pg/cloudnative-pg \
+       --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
+       --namespace cnpg-system \
+       --create-namespace \
+       --wait --timeout=300s
+  
+  # Wait for operator to be ready
+  echo "[INFO]: Waiting for CloudNativePG operator to be ready"
+  for i in {1..60}; do
+    if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+      echo "[INFO]: CloudNativePG operator is ready"
+      break
+    fi
+    echo "[INFO]: Waiting for CloudNativePG CRDs to be available... ($i/60)"
+    sleep 5
+  done
+  
+  # Create database credentials secret
+  echo "[INFO]: Creating database credentials secret"
+  kubectl create secret generic ${DC_APP}-db-credentials \
+    --from-literal=username="${DC_APP}" \
+    --from-literal=password="${DC_APP}pwd" \
+    --namespace atlassian \
+    --dry-run=client -o yaml | kubectl apply -f -
+  
+  # Create PostgreSQL cluster from template
+  echo "[INFO]: Creating PostgreSQL cluster for ${DC_APP}"
+  TMP_DIR=$(mktemp -d)
+  cp src/test/infrastructure/cloudnativepg/cluster-template.yaml ${TMP_DIR}/cluster.yaml
+  
+  # Replace placeholders in cluster template
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS requires an empty string argument after -i
+    sed -i '' -e "s/\${DC_APP}/${DC_APP}/g" -e "s/\${NAMESPACE}/atlassian/g" "${TMP_DIR}/cluster.yaml"
+  else
+    # Linux version
+    sed -i -e "s/\${DC_APP}/${DC_APP}/g" -e "s/\${NAMESPACE}/atlassian/g" "${TMP_DIR}/cluster.yaml"
+  fi
+  
+  # Debug: Print the generated configuration
+  echo "[INFO]: Generated PostgreSQL cluster configuration:"
+  cat ${TMP_DIR}/cluster.yaml
+  
+  # Apply the cluster configuration
+  kubectl apply -f ${TMP_DIR}/cluster.yaml
+  
+  # Wait for cluster to be ready
+  echo "[INFO]: Waiting for PostgreSQL cluster to be ready"
+  kubectl wait --for=condition=Ready cluster/${DC_APP}-db \
+    --namespace atlassian --timeout=180s
+  
+  # Wait for primary pod to be ready
+  echo "[INFO]: Waiting for PostgreSQL primary pod to be ready"
+  kubectl wait --for=condition=Ready pod -l cnpg.io/cluster=${DC_APP}-db,role=primary \
+    --namespace atlassian --timeout=300s
+  
+  # Execute custom initialization script if provided
   if [ -f "${DB_INIT_SCRIPT_FILE}" ]; then
     echo "[INFO]: DB init file '${DB_INIT_SCRIPT_FILE}' found. Initializing the database"
-    kubectl cp ${DB_INIT_SCRIPT_FILE} postgres-0:/tmp/db-init-script.sql -n atlassian
-    kubectl exec postgres-0 -n atlassian -- /bin/bash -c "psql postgresql://${DC_APP}:${DC_APP}pwd@localhost:5432/${DC_APP} -f /tmp/db-init-script.sql"
+    PRIMARY_POD=$(kubectl get pods -n atlassian -l cnpg.io/cluster=${DC_APP}-db,role=primary -o jsonpath='{.items[0].metadata.name}')
+    kubectl cp ${DB_INIT_SCRIPT_FILE} atlassian/${PRIMARY_POD}:/tmp/db-init-script.sql -c postgres
+    kubectl exec -n atlassian ${PRIMARY_POD} -c postgres -- psql -U ${DC_APP} -d ${DC_APP} -f /tmp/db-init-script.sql
   fi
 }
 
@@ -33,10 +81,14 @@ create_secrets() {
   echo "[INFO]: Creating db, admin and license secrets"
   DC_APP_CAPITALIZED="$(echo ${DC_APP} | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')"
 
-  kubectl create secret generic ${DC_APP}-db-creds \
-          --from-literal=username="${DC_APP}" \
-          --from-literal=password="${DC_APP}pwd" \
-          -n atlassian
+  # Database credentials secret is already created in deploy_postgres function
+  # Only create it if it doesn't exist
+  if ! kubectl get secret ${DC_APP}-db-credentials -n atlassian >/dev/null 2>&1; then
+    kubectl create secret generic ${DC_APP}-db-credentials \
+            --from-literal=username="${DC_APP}" \
+            --from-literal=password="${DC_APP}pwd" \
+            -n atlassian
+  fi
   kubectl create secret generic ${DC_APP}-admin \
           --from-literal=username="admin" \
           --from-literal=password="admin" \
