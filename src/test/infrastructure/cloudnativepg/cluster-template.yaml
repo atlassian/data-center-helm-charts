@@ -36,7 +36,7 @@ spec:
   
   postgresql:
     parameters:
-      max_connections: "20"
+      max_connections: "100"
       shared_buffers: "32MB"
       work_mem: "1MB"
       maintenance_work_mem: "16MB"
