@@ -14,10 +14,10 @@ spec:
   
   resources:
     requests:
-      memory: "64Mi"
+      memory: "256Mi"
       cpu: "25m"
     limits:
-      memory: "256Mi"
+      memory: "1024Mi"
       cpu: "250m"
   
   storage:
