@@ -8,19 +8,48 @@ deploy_postgres() {
   helm repo add cloudnative-pg https://cloudnative-pg.github.io/charts --force-update
   helm repo update
   
-  # Install CloudNativePG operator
+  # Install CloudNativePG operator only if not already installed
   echo "[INFO]: Installing CloudNativePG operator"
-  if ! helm upgrade --install cnpg-operator cloudnative-pg/cloudnative-pg \
-       --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-       --namespace cnpg-system \
-       --create-namespace \
-       --wait --timeout=600s; then
-    echo "[ERROR]: Failed to install CloudNativePG operator"
-    echo "[DEBUG]: Checking operator pod status..."
-    kubectl get pods -n cnpg-system
-    echo "[DEBUG]: Checking operator logs..."
-    kubectl logs -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg --tail=50 || true
-    exit 1
+  if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+    echo "[INFO]: CloudNativePG operator not found, installing..."
+    
+    # Try installing with wait first
+    if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
+         --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
+         --namespace cnpg-system \
+         --create-namespace \
+         --wait --timeout=10m 2>&1; then
+      
+      echo "[WARN]: Initial installation failed, checking if resources were created..."
+      kubectl get pods -n cnpg-system || true
+      
+      # If resources exist, the install might have partially succeeded
+      if kubectl get deployment -n cnpg-system cnpg-cloudnative-pg >/dev/null 2>&1; then
+        echo "[INFO]: Operator deployment exists, waiting for it to become ready..."
+      else
+        # Try again without --wait flag for microshift compatibility
+        echo "[INFO]: Retrying installation without wait flag (microshift compatibility)..."
+        helm uninstall cnpg-operator -n cnpg-system 2>/dev/null || true
+        sleep 5
+        
+        if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
+             --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
+             --namespace cnpg-system \
+             --create-namespace \
+             --timeout=10m; then
+          echo "[ERROR]: Failed to install CloudNativePG operator even without wait flag"
+          echo "[DEBUG]: Helm list..."
+          helm list -n cnpg-system
+          echo "[DEBUG]: Checking all resources in cnpg-system namespace..."
+          kubectl get all -n cnpg-system || true
+          echo "[DEBUG]: Checking operator deployment..."
+          kubectl describe deployment -n cnpg-system || true
+          exit 1
+        fi
+      fi
+    fi
+  else
+    echo "[INFO]: CloudNativePG operator already installed, skipping..."
   fi
   
   # Wait for operator to be ready
