@@ -10,11 +10,18 @@ deploy_postgres() {
   
   # Install CloudNativePG operator
   echo "[INFO]: Installing CloudNativePG operator"
-  helm upgrade --install cnpg-operator cloudnative-pg/cloudnative-pg \
+  if ! helm upgrade --install cnpg-operator cloudnative-pg/cloudnative-pg \
        --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
        --namespace cnpg-system \
        --create-namespace \
-       --wait --timeout=300s
+       --wait --timeout=600s; then
+    echo "[ERROR]: Failed to install CloudNativePG operator"
+    echo "[DEBUG]: Checking operator pod status..."
+    kubectl get pods -n cnpg-system
+    echo "[DEBUG]: Checking operator logs..."
+    kubectl logs -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg --tail=50 || true
+    exit 1
+  fi
   
   # Wait for operator to be ready
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
@@ -26,6 +33,10 @@ deploy_postgres() {
     echo "[INFO]: Waiting for CloudNativePG CRDs to be available... ($i/60)"
     sleep 5
   done
+  
+  # Verify operator is actually running
+  echo "[DEBUG]: CloudNativePG operator status:"
+  kubectl get pods -n cnpg-system
   
   # Create database credentials secret
   echo "[INFO]: Creating database credentials secret"

@@ -28,8 +28,8 @@ monitoring:
 # Minimal resource limits for CI
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 200m
+    memory: 256Mi
   requests:
     cpu: 50m
     memory: 64Mi
@@ -74,9 +74,9 @@ webhook:
     create: true
     failurePolicy: Fail
   livenessProbe:
-    initialDelaySeconds: 1
+    initialDelaySeconds: 3
   readinessProbe:
-    initialDelaySeconds: 1
+    initialDelaySeconds: 3
   startupProbe:
-    failureThreshold: 3
-    periodSeconds: 2
+    failureThreshold: 30
+    periodSeconds: 5
