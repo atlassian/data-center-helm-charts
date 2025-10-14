@@ -22,6 +22,19 @@ monitoring:
   grafanaDashboard:
     create: false
 
+# Security context - compatible with microshift/OpenShift SCC
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
 # Service account
 serviceAccount:
   create: true
