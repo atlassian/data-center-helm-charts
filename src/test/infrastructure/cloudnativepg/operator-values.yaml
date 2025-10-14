@@ -7,49 +7,20 @@ image:
   pullPolicy: IfNotPresent
   tag: "1.27.0"
 
-# Operator configuration optimized for CI
-config:
-  create: true
-  name: cnpg-controller-manager-config
-  secret: false
-  clusterWide: true
-  data:
-    INHERITED_ANNOTATIONS: "categories"
-    INHERITED_LABELS: "environment,workload,app"
-  # Reduce concurrent reconciles for CI
-  maxConcurrentReconciles: 3
+# Minimal resource limits for CI
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 # Disable monitoring for CI
 monitoring:
   podMonitorEnabled: false
   grafanaDashboard:
     create: false
-
-# Minimal resource limits for CI
-resources:
-  limits:
-    cpu: 200m
-    memory: 256Mi
-  requests:
-    cpu: 50m
-    memory: 64Mi
-
-# Security context
-containerSecurityContext:
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
-  runAsUser: 10001
-  runAsGroup: 10001
-  seccompProfile:
-    type: RuntimeDefault
-  capabilities:
-    drop:
-      - "ALL"
-
-podSecurityContext:
-  runAsNonRoot: true
-  seccompProfile:
-    type: RuntimeDefault
 
 # Service account
 serviceAccount:
@@ -58,25 +29,7 @@ serviceAccount:
 # RBAC
 rbac:
   create: true
-  aggregateClusterRoles: false
 
 # CRDs
 crds:
   create: true
-
-# Webhook configuration with faster probes
-webhook:
-  port: 9443
-  mutating:
-    create: true
-    failurePolicy: Fail
-  validating:
-    create: true
-    failurePolicy: Fail
-  livenessProbe:
-    initialDelaySeconds: 3
-  readinessProbe:
-    initialDelaySeconds: 3
-  startupProbe:
-    failureThreshold: 30
-    periodSeconds: 5
