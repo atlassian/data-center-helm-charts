@@ -32,6 +32,12 @@ deploy_postgres() {
         helm uninstall cnpg-operator -n cnpg-system 2>/dev/null || true
         sleep 5
         
+        # First check what would be installed
+        echo "[DEBUG]: Checking Helm template output..."
+        helm template cnpg-operator cloudnative-pg/cloudnative-pg \
+             --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
+             --namespace cnpg-system | grep -A 5 "kind: Deployment" || echo "No Deployment found in template"
+        
         if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
              --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
              --namespace cnpg-system \
@@ -44,6 +50,8 @@ deploy_postgres() {
           kubectl get all -n cnpg-system || true
           echo "[DEBUG]: Checking operator deployment..."
           kubectl describe deployment -n cnpg-system || true
+          echo "[DEBUG]: Getting Helm manifest..."
+          helm get manifest cnpg-operator -n cnpg-system || true
           exit 1
         fi
       fi
@@ -56,16 +64,53 @@ deploy_postgres() {
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
   for i in {1..60}; do
     if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
-      echo "[INFO]: CloudNativePG operator is ready"
+      echo "[INFO]: CloudNativePG CRDs are available"
       break
     fi
     echo "[INFO]: Waiting for CloudNativePG CRDs to be available... ($i/60)"
     sleep 5
   done
   
+  # Wait for operator deployment to exist
+  echo "[INFO]: Waiting for operator deployment to be created..."
+  for i in {1..30}; do
+    if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
+      echo "[INFO]: Operator deployment found"
+      break
+    fi
+    echo "[INFO]: Waiting for operator deployment... ($i/30)"
+    sleep 2
+  done
+  
   # Verify operator is actually running
-  echo "[DEBUG]: CloudNativePG operator status:"
+  echo "[DEBUG]: CloudNativePG operator deployments:"
+  kubectl get deployments -n cnpg-system
+  echo "[DEBUG]: CloudNativePG operator pods:"
   kubectl get pods -n cnpg-system
+  
+  # Wait for operator pod to be ready
+  echo "[INFO]: Waiting for operator pod to be ready..."
+  if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
+    kubectl wait --for=condition=Available deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg --timeout=300s || {
+      echo "[ERROR]: Operator deployment failed to become available"
+      echo "[DEBUG]: Deployment description:"
+      kubectl describe deployment -n cnpg-system
+      echo "[DEBUG]: Pod description:"
+      kubectl describe pods -n cnpg-system
+      echo "[DEBUG]: Events in cnpg-system namespace:"
+      kubectl get events -n cnpg-system --sort-by='.lastTimestamp'
+      exit 1
+    }
+  else
+    echo "[ERROR]: No operator deployment found!"
+    echo "[DEBUG]: All resources in cnpg-system:"
+    kubectl get all -n cnpg-system
+    echo "[DEBUG]: Helm release status:"
+    helm status cnpg-operator -n cnpg-system
+    exit 1
+  fi
+  
+  echo "[INFO]: CloudNativePG operator is ready"
   
   # Create database credentials secret
   echo "[INFO]: Creating database credentials secret"
