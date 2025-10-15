@@ -48,6 +48,7 @@ data:
                 defaultHost="localhost"
                 debug="0">
           <Host name="localhost"
+                <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
                 debug="0"
                 appBase="webapps"
                 unpackWARs="true"
