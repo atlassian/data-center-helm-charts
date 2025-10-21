@@ -24,6 +24,8 @@ monitoring:
 
 # Security context - compatible with microshift/OpenShift SCC
 containerSecurityContext:
+  runAsUser: null
+  runAsGroup: null
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
   capabilities:

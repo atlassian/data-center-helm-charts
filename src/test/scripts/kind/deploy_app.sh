@@ -76,6 +76,17 @@ deploy_postgres() {
   for i in {1..30}; do
     if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
       echo "[INFO]: Operator deployment found"
+      # MicroShift/OpenShift: grant anyuid SCC to operator SA to satisfy UID range constraints
+      if kubectl api-resources | grep -q "securitycontextconstraints"; then
+        echo "[INFO]: Detected SCC support; granting 'anyuid' SCC to operator service account"
+        SA_NAME="cnpg-operator-cloudnative-pg"
+        # Try with oc if available, otherwise patch SCC directly
+        if command -v oc >/dev/null 2>&1; then
+          oc adm policy add-scc-to-user anyuid -z "$SA_NAME" -n cnpg-system || true
+        else
+          kubectl patch scc anyuid --type=json -p='[{"op":"add","path":"/users/-","value":"system:serviceaccount:cnpg-system:'"$SA_NAME"'"}]' || true
+        fi
+      fi
       break
     fi
     echo "[INFO]: Waiting for operator deployment... ($i/30)"
