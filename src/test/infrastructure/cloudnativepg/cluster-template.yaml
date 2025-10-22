@@ -22,7 +22,7 @@ spec:
   
   storage:
     size: 256Mi
-    storageClass: standard
+    # storageClass intentionally omitted to use cluster default
   
   bootstrap:
     initdb:
