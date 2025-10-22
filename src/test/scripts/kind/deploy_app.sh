@@ -144,6 +144,23 @@ deploy_postgres() {
     # Linux version
     sed -i -e "s/\${DC_APP}/${DC_APP}/g" -e "s/\${NAMESPACE}/atlassian/g" "${TMP_DIR}/cluster.yaml"
   fi
+
+  # Detect default StorageClass in the cluster and use it (MicroShift compatibility)
+  DEFAULT_SC=$(kubectl get sc -o jsonpath='{range .items[*]}{.metadata.name}{"|"}{.metadata.annotations.storageclass\.kubernetes\.io/is-default-class}{"\n"}{end}' 2>/dev/null | awk -F'|' '$2=="true"{print $1; exit}')
+  if [[ -z "$DEFAULT_SC" ]]; then
+    DEFAULT_SC=$(kubectl get sc -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || echo "")
+  fi
+  if [[ -n "$DEFAULT_SC" ]]; then
+    echo "[INFO]: Using default StorageClass '$DEFAULT_SC' for database PVCs"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      sed -i '' -e "s/storageClass: standard/storageClass: ${DEFAULT_SC}/g" "${TMP_DIR}/cluster.yaml"
+    else
+      sed -i -e "s/storageClass: standard/storageClass: ${DEFAULT_SC}/g" "${TMP_DIR}/cluster.yaml"
+    fi
+  else
+    echo "[WARN]: No StorageClass detected; database PVCs may remain Pending"
+    kubectl get sc || true
+  fi
   
   # Debug: Print the generated configuration
   echo "[INFO]: Generated PostgreSQL cluster configuration:"
@@ -155,7 +172,22 @@ deploy_postgres() {
   # Wait for cluster to be ready
   echo "[INFO]: Waiting for PostgreSQL cluster to be ready"
   kubectl wait --for=condition=Ready cluster/${DC_APP}-db \
-    --namespace atlassian --timeout=180s
+    --namespace atlassian --timeout=300s || {
+      echo "[ERROR]: Cluster did not become Ready in time"
+      echo "[DEBUG]: Cluster description:"
+      kubectl describe cluster/${DC_APP}-db -n atlassian || true
+      echo "[DEBUG]: Pods for cluster:"
+      kubectl get pods -l cnpg.io/cluster=${DC_APP}-db -n atlassian -o wide || true
+      echo "[DEBUG]: PVCs in namespace:"
+      kubectl get pvc -n atlassian || true
+      echo "[DEBUG]: Describe PVCs:"
+      for pvc in $(kubectl get pvc -n atlassian -o name || true); do kubectl describe $pvc -n atlassian || true; done
+      echo "[DEBUG]: Events in atlassian namespace:"
+      kubectl get events -n atlassian --sort-by='.lastTimestamp' | tail -n 200 || true
+      echo "[DEBUG]: StorageClasses:"
+      kubectl get sc || true
+      exit 1
+    }
   
   # Wait for primary pod to be ready
   echo "[INFO]: Waiting for PostgreSQL primary pod to be ready"
