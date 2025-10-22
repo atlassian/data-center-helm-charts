@@ -18,50 +18,11 @@ deploy_postgres() {
     echo "[INFO]: Applying CloudNativePG CRDs"
     helm show crds cloudnative-pg/cloudnative-pg | kubectl apply -f -
     
-    # Try installing with wait first
-    if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
-         --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-         --namespace cnpg-system \
-         --create-namespace \
-         --skip-crds \
-         --timeout=10m 2>&1; then
-      
-      echo "[WARN]: Initial installation failed, checking if resources were created..."
-      kubectl get pods -n cnpg-system || true
-      
-      # If resources exist, the install might have partially succeeded
-      if kubectl get deployment -n cnpg-system cnpg-cloudnative-pg >/dev/null 2>&1; then
-        echo "[INFO]: Operator deployment exists, waiting for it to become ready..."
-      else
-        # Try again without --wait flag for microshift compatibility
-        echo "[INFO]: Retrying installation without wait flag (microshift compatibility)..."
-        helm uninstall cnpg-operator -n cnpg-system 2>/dev/null || true
-        sleep 5
-        
-        # First check what would be installed
-        echo "[DEBUG]: Checking Helm template output..."
-        helm template cnpg-operator cloudnative-pg/cloudnative-pg \
-             --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-             --namespace cnpg-system | grep -A 5 "kind: Deployment" || echo "No Deployment found in template"
-        
-        if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
-             --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-             --namespace cnpg-system \
-             --create-namespace \
-             --timeout=10m; then
-          echo "[ERROR]: Failed to install CloudNativePG operator even without wait flag"
-          echo "[DEBUG]: Helm list..."
-          helm list -n cnpg-system
-          echo "[DEBUG]: Checking all resources in cnpg-system namespace..."
-          kubectl get all -n cnpg-system || true
-          echo "[DEBUG]: Checking operator deployment..."
-          kubectl describe deployment -n cnpg-system || true
-          echo "[DEBUG]: Getting Helm manifest..."
-          helm get manifest cnpg-operator -n cnpg-system || true
-          exit 1
-        fi
-      fi
-    fi
+    # Render manifests and apply directly to avoid Helm client install timeouts in e2e runs
+    echo "[INFO]: Applying operator manifests rendered from Helm chart"
+    helm template cnpg-operator cloudnative-pg/cloudnative-pg \
+      --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
+      --namespace cnpg-system --skip-crds | kubectl apply -n cnpg-system -f -
   else
     echo "[INFO]: CloudNativePG operator already installed, skipping..."
   fi
