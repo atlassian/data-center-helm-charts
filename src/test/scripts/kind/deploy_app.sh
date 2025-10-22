@@ -12,12 +12,18 @@ deploy_postgres() {
   echo "[INFO]: Installing CloudNativePG operator"
   if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
     echo "[INFO]: CloudNativePG operator not found, installing..."
+    # Ensure namespace exists (idempotent)
+    kubectl get ns cnpg-system >/dev/null 2>&1 || kubectl create namespace cnpg-system
+    # Pre-apply CRDs to avoid Helm timeout on slow apiservers
+    echo "[INFO]: Applying CloudNativePG CRDs"
+    helm show crds cloudnative-pg/cloudnative-pg | kubectl apply -f -
     
     # Try installing with wait first
     if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
          --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
          --namespace cnpg-system \
          --create-namespace \
+         --skip-crds \
          --timeout=10m 2>&1; then
       
       echo "[WARN]: Initial installation failed, checking if resources were created..."
