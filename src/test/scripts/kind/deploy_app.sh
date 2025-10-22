@@ -18,7 +18,7 @@ deploy_postgres() {
          --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
          --namespace cnpg-system \
          --create-namespace \
-         --wait --timeout=10m 2>&1; then
+         --timeout=10m 2>&1; then
       
       echo "[WARN]: Initial installation failed, checking if resources were created..."
       kubectl get pods -n cnpg-system || true
