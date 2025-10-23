@@ -16,30 +16,23 @@ deploy_postgres() {
     # Create namespace first to ensure it exists
     kubectl create namespace cnpg-system --dry-run=client -o yaml | kubectl apply -f -
     
-    # Install without --wait to avoid client-side timeouts in slow/busy clusters (e2e)
-    # We'll use kubectl wait commands afterward for more reliable readiness checks
-    echo "[INFO]: Installing operator (without client-side wait for e2e compatibility)..."
-    if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
+    # Use helm template + kubectl apply to completely avoid Helm client timeouts
+    # This is the most reliable method for slow/busy clusters (e2e, MicroShift)
+    echo "[INFO]: Rendering operator manifests from Helm chart..."
+    helm template cnpg-operator cloudnative-pg/cloudnative-pg \
          --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
          --namespace cnpg-system \
-         --timeout=10m 2>&1; then
-      
-      echo "[ERROR]: Helm install command failed"
-      echo "[DEBUG]: Checking if resources were partially created..."
+         --include-crds > /tmp/cnpg-operator-manifests.yaml
+    
+    echo "[INFO]: Applying operator manifests to cluster..."
+    if ! kubectl apply -f /tmp/cnpg-operator-manifests.yaml; then
+      echo "[ERROR]: Failed to apply operator manifests"
+      echo "[DEBUG]: Checking what was created..."
       kubectl get all -n cnpg-system || true
-      
-      # Check if deployment was created despite helm failure
-      if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
-        echo "[INFO]: Operator deployment was created, will proceed to wait for readiness..."
-      else
-        echo "[ERROR]: No operator deployment found after install attempt"
-        echo "[DEBUG]: Helm releases:"
-        helm list -n cnpg-system || true
-        echo "[DEBUG]: All resources in cnpg-system:"
-        kubectl get all -n cnpg-system || true
-        exit 1
-      fi
+      exit 1
     fi
+    
+    echo "[INFO]: Operator manifests applied successfully"
   else
     echo "[INFO]: CloudNativePG operator already installed, skipping..."
   fi
