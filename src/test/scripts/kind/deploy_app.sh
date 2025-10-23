@@ -25,11 +25,19 @@ deploy_postgres() {
          --include-crds > /tmp/cnpg-operator-manifests.yaml
     
     echo "[INFO]: Applying operator manifests to cluster..."
-    if ! kubectl apply -f /tmp/cnpg-operator-manifests.yaml; then
-      echo "[ERROR]: Failed to apply operator manifests"
-      echo "[DEBUG]: Checking what was created..."
-      kubectl get all -n cnpg-system || true
-      exit 1
+    # Apply with server-side apply to handle large CRD annotations
+    if ! kubectl apply --server-side=true -f /tmp/cnpg-operator-manifests.yaml 2>&1 | tee /tmp/cnpg-apply.log; then
+      # Check if it's just the poolers CRD annotation issue (non-fatal)
+      if grep -q "poolers.postgresql.cnpg.io.*Too long" /tmp/cnpg-apply.log && \
+         kubectl get deployment -n cnpg-system cnpg-operator-cloudnative-pg >/dev/null 2>&1; then
+        echo "[WARN]: Poolers CRD has annotation size issue, but operator deployment was created"
+        echo "[INFO]: Continuing with deployment..."
+      else
+        echo "[ERROR]: Failed to apply operator manifests"
+        echo "[DEBUG]: Checking what was created..."
+        kubectl get all -n cnpg-system || true
+        exit 1
+      fi
     fi
     
     echo "[INFO]: Operator manifests applied successfully"
