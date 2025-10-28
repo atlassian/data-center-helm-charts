@@ -13,49 +13,34 @@ deploy_postgres() {
   if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
     echo "[INFO]: CloudNativePG operator not found, installing..."
     
-    # Try installing with wait first
-    if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
+    # Create namespace first to ensure it exists
+    kubectl create namespace cnpg-system --dry-run=client -o yaml | kubectl apply -f -
+    
+    # Use helm template + kubectl apply to completely avoid Helm client timeouts
+    # This is the most reliable method for slow/busy clusters (e2e, MicroShift)
+    echo "[INFO]: Rendering operator manifests from Helm chart..."
+    helm template cnpg-operator cloudnative-pg/cloudnative-pg \
          --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
          --namespace cnpg-system \
-         --create-namespace \
-         --wait --timeout=10m 2>&1; then
-      
-      echo "[WARN]: Initial installation failed, checking if resources were created..."
-      kubectl get pods -n cnpg-system || true
-      
-      # If resources exist, the install might have partially succeeded
-      if kubectl get deployment -n cnpg-system cnpg-cloudnative-pg >/dev/null 2>&1; then
-        echo "[INFO]: Operator deployment exists, waiting for it to become ready..."
+         --include-crds > /tmp/cnpg-operator-manifests.yaml
+    
+    echo "[INFO]: Applying operator manifests to cluster..."
+    # Apply with server-side apply to handle large CRD annotations
+    if ! kubectl apply --server-side=true -f /tmp/cnpg-operator-manifests.yaml 2>&1 | tee /tmp/cnpg-apply.log; then
+      # Check if it's just the poolers CRD annotation issue (non-fatal)
+      if grep -q "poolers.postgresql.cnpg.io.*Too long" /tmp/cnpg-apply.log && \
+         kubectl get deployment -n cnpg-system cnpg-operator-cloudnative-pg >/dev/null 2>&1; then
+        echo "[WARN]: Poolers CRD has annotation size issue, but operator deployment was created"
+        echo "[INFO]: Continuing with deployment..."
       else
-        # Try again without --wait flag for microshift compatibility
-        echo "[INFO]: Retrying installation without wait flag (microshift compatibility)..."
-        helm uninstall cnpg-operator -n cnpg-system 2>/dev/null || true
-        sleep 5
-        
-        # First check what would be installed
-        echo "[DEBUG]: Checking Helm template output..."
-        helm template cnpg-operator cloudnative-pg/cloudnative-pg \
-             --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-             --namespace cnpg-system | grep -A 5 "kind: Deployment" || echo "No Deployment found in template"
-        
-        if ! helm install cnpg-operator cloudnative-pg/cloudnative-pg \
-             --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-             --namespace cnpg-system \
-             --create-namespace \
-             --timeout=10m; then
-          echo "[ERROR]: Failed to install CloudNativePG operator even without wait flag"
-          echo "[DEBUG]: Helm list..."
-          helm list -n cnpg-system
-          echo "[DEBUG]: Checking all resources in cnpg-system namespace..."
-          kubectl get all -n cnpg-system || true
-          echo "[DEBUG]: Checking operator deployment..."
-          kubectl describe deployment -n cnpg-system || true
-          echo "[DEBUG]: Getting Helm manifest..."
-          helm get manifest cnpg-operator -n cnpg-system || true
-          exit 1
-        fi
+        echo "[ERROR]: Failed to apply operator manifests"
+        echo "[DEBUG]: Checking what was created..."
+        kubectl get all -n cnpg-system || true
+        exit 1
       fi
     fi
+    
+    echo "[INFO]: Operator manifests applied successfully"
   else
     echo "[INFO]: CloudNativePG operator already installed, skipping..."
   fi
@@ -213,9 +198,9 @@ create_secrets() {
   # Only create it if it doesn't exist
   if ! kubectl get secret ${DC_APP}-db-credentials -n atlassian >/dev/null 2>&1; then
     kubectl create secret generic ${DC_APP}-db-credentials \
-          --from-literal=username="${DC_APP}" \
-          --from-literal=password="${DC_APP}pwd" \
-          -n atlassian
+            --from-literal=username="${DC_APP}" \
+            --from-literal=password="${DC_APP}pwd" \
+            -n atlassian
   fi
   kubectl create secret generic ${DC_APP}-admin \
           --from-literal=username="admin" \
