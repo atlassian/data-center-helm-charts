@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - fix/microshift_tests
     paths:
       - 'src/main/charts/bamboo/**'
       - 'src/main/charts/bamboo-agent/**'
