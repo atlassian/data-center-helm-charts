@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.ref_name }}
 
       - name: Install the latest Terraform
         run: |
@@ -83,6 +83,7 @@ jobs:
       - name: Checkout Deployment Automation
         run: |
           DEPLOYMENT_REPO='https://github.com/atlassian-labs/data-center-terraform.git'
+          echo "TF_REPO_REF env: '${TF_REPO_REF}'"
           if [ -n "${TF_REPO_REF}" ]; then
             echo "Using override ref('${TF_REPO_REF}') of Deployment Automation repo."
             git clone -b "${TF_REPO_REF}" "$DEPLOYMENT_REPO" tf
@@ -93,6 +94,9 @@ jobs:
             echo "Using LTS version('${LTS}') of Deployment Automation to provision the infrastructure for Atlassian DC Products."
             git clone -b "$LTS" "$DEPLOYMENT_REPO" tf
           fi
+          echo "TF repo branch: $(git -C tf rev-parse --abbrev-ref HEAD)"
+          echo "TF repo remote: $(git -C tf remote get-url origin)"
+          echo "TF repo latest:  $(git -C tf log -1 --pretty='%h %s')"
 
       - name: Setup test environment
         uses: actions/setup-go@v3
