@@ -8,24 +8,105 @@ deploy_postgres() {
   helm repo add cloudnative-pg https://cloudnative-pg.github.io/charts --force-update
   helm repo update
   
-  # Install CloudNativePG operator
+  # Install CloudNativePG operator only if not already installed
   echo "[INFO]: Installing CloudNativePG operator"
-  helm upgrade --install cnpg-operator cloudnative-pg/cloudnative-pg \
-       --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
-       --namespace cnpg-system \
-       --create-namespace \
-       --wait --timeout=300s
+  if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
+    echo "[INFO]: CloudNativePG operator not found, installing..."
+    
+    # Create namespace first to ensure it exists
+    kubectl create namespace cnpg-system --dry-run=client -o yaml | kubectl apply -f -
+    
+    # Use helm template + kubectl apply to completely avoid Helm client timeouts
+    # This is the most reliable method for slow/busy clusters (e2e, MicroShift)
+    echo "[INFO]: Rendering operator manifests from Helm chart..."
+    helm template cnpg-operator cloudnative-pg/cloudnative-pg \
+         --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
+         --namespace cnpg-system \
+         --include-crds > /tmp/cnpg-operator-manifests.yaml
+    
+    echo "[INFO]: Applying operator manifests to cluster..."
+    # Apply with server-side apply to handle large CRD annotations
+    if ! kubectl apply --server-side=true -f /tmp/cnpg-operator-manifests.yaml 2>&1 | tee /tmp/cnpg-apply.log; then
+      # Check if it's just the poolers CRD annotation issue (non-fatal)
+      if grep -q "poolers.postgresql.cnpg.io.*Too long" /tmp/cnpg-apply.log && \
+         kubectl get deployment -n cnpg-system cnpg-operator-cloudnative-pg >/dev/null 2>&1; then
+        echo "[WARN]: Poolers CRD has annotation size issue, but operator deployment was created"
+        echo "[INFO]: Continuing with deployment..."
+      else
+        echo "[ERROR]: Failed to apply operator manifests"
+        echo "[DEBUG]: Checking what was created..."
+        kubectl get all -n cnpg-system || true
+        exit 1
+      fi
+    fi
+    
+    echo "[INFO]: Operator manifests applied successfully"
+  else
+    echo "[INFO]: CloudNativePG operator already installed, skipping..."
+  fi
   
   # Wait for operator to be ready
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
   for i in {1..60}; do
     if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
-      echo "[INFO]: CloudNativePG operator is ready"
+      echo "[INFO]: CloudNativePG CRDs are available"
       break
     fi
     echo "[INFO]: Waiting for CloudNativePG CRDs to be available... ($i/60)"
     sleep 5
   done
+  
+  # Wait for operator deployment to exist
+  echo "[INFO]: Waiting for operator deployment to be created..."
+  for i in {1..30}; do
+    if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
+      echo "[INFO]: Operator deployment found"
+      # MicroShift/OpenShift: grant anyuid SCC to operator SA to satisfy UID range constraints
+      if kubectl api-resources | grep -q "securitycontextconstraints"; then
+        echo "[INFO]: Detected SCC support; granting 'anyuid' SCC to operator service account"
+        SA_NAME="cnpg-operator-cloudnative-pg"
+        # Try with oc if available, otherwise patch SCC directly
+        if command -v oc >/dev/null 2>&1; then
+          oc adm policy add-scc-to-user anyuid -z "$SA_NAME" -n cnpg-system || true
+        else
+          kubectl patch scc anyuid --type=json -p='[{"op":"add","path":"/users/-","value":"system:serviceaccount:cnpg-system:'"$SA_NAME"'"}]' || true
+        fi
+      fi
+      break
+    fi
+    echo "[INFO]: Waiting for operator deployment... ($i/30)"
+    sleep 2
+  done
+  
+  # Verify operator is actually running
+  echo "[DEBUG]: CloudNativePG operator deployments:"
+  kubectl get deployments -n cnpg-system
+  echo "[DEBUG]: CloudNativePG operator pods:"
+  kubectl get pods -n cnpg-system
+  
+  # Wait for operator pod to be ready
+  echo "[INFO]: Waiting for operator pod to be ready..."
+  if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
+    kubectl wait --for=condition=Available deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg --timeout=300s || {
+      echo "[ERROR]: Operator deployment failed to become available"
+      echo "[DEBUG]: Deployment description:"
+      kubectl describe deployment -n cnpg-system
+      echo "[DEBUG]: Pod description:"
+      kubectl describe pods -n cnpg-system
+      echo "[DEBUG]: Events in cnpg-system namespace:"
+      kubectl get events -n cnpg-system --sort-by='.lastTimestamp'
+      exit 1
+    }
+  else
+    echo "[ERROR]: No operator deployment found!"
+    echo "[DEBUG]: All resources in cnpg-system:"
+    kubectl get all -n cnpg-system
+    echo "[DEBUG]: Helm release status:"
+    helm status cnpg-operator -n cnpg-system
+    exit 1
+  fi
+  
+  echo "[INFO]: CloudNativePG operator is ready"
   
   # Create database credentials secret
   echo "[INFO]: Creating database credentials secret"
@@ -48,6 +129,23 @@ deploy_postgres() {
     # Linux version
     sed -i -e "s/\${DC_APP}/${DC_APP}/g" -e "s/\${NAMESPACE}/atlassian/g" "${TMP_DIR}/cluster.yaml"
   fi
+
+  # Detect default StorageClass in the cluster and use it (MicroShift compatibility)
+  DEFAULT_SC=$(kubectl get sc -o jsonpath='{range .items[*]}{.metadata.name}{"|"}{.metadata.annotations.storageclass\.kubernetes\.io/is-default-class}{"\n"}{end}' 2>/dev/null | awk -F'|' '$2=="true"{print $1; exit}')
+  if [[ -z "$DEFAULT_SC" ]]; then
+    DEFAULT_SC=$(kubectl get sc -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || echo "")
+  fi
+  if [[ -n "$DEFAULT_SC" ]]; then
+    echo "[INFO]: Using default StorageClass '$DEFAULT_SC' for database PVCs"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      sed -i '' -e "s/storageClass: standard/storageClass: ${DEFAULT_SC}/g" "${TMP_DIR}/cluster.yaml"
+    else
+      sed -i -e "s/storageClass: standard/storageClass: ${DEFAULT_SC}/g" "${TMP_DIR}/cluster.yaml"
+    fi
+  else
+    echo "[WARN]: No StorageClass detected; database PVCs may remain Pending"
+    kubectl get sc || true
+  fi
   
   # Debug: Print the generated configuration
   echo "[INFO]: Generated PostgreSQL cluster configuration:"
@@ -59,7 +157,22 @@ deploy_postgres() {
   # Wait for cluster to be ready
   echo "[INFO]: Waiting for PostgreSQL cluster to be ready"
   kubectl wait --for=condition=Ready cluster/${DC_APP}-db \
-    --namespace atlassian --timeout=180s
+    --namespace atlassian --timeout=300s || {
+      echo "[ERROR]: Cluster did not become Ready in time"
+      echo "[DEBUG]: Cluster description:"
+      kubectl describe cluster/${DC_APP}-db -n atlassian || true
+      echo "[DEBUG]: Pods for cluster:"
+      kubectl get pods -l cnpg.io/cluster=${DC_APP}-db -n atlassian -o wide || true
+      echo "[DEBUG]: PVCs in namespace:"
+      kubectl get pvc -n atlassian || true
+      echo "[DEBUG]: Describe PVCs:"
+      for pvc in $(kubectl get pvc -n atlassian -o name || true); do kubectl describe $pvc -n atlassian || true; done
+      echo "[DEBUG]: Events in atlassian namespace:"
+      kubectl get events -n atlassian --sort-by='.lastTimestamp' | tail -n 200 || true
+      echo "[DEBUG]: StorageClasses:"
+      kubectl get sc || true
+      exit 1
+    }
   
   # Wait for primary pod to be ready
   echo "[INFO]: Waiting for PostgreSQL primary pod to be ready"
