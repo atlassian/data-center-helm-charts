@@ -1011,7 +1011,7 @@ bitbucket:
 
       # -- The docker image tag to be used
       #
-      tag: "3.4.8"
+      tag: "3.4.10"
 
     # -- Number of Bitbucket Mesh nodes. Do not change it. Currently, only the quorum of 3 mesh nodes is supported.
     # Reducing the number of replicas will result in mesh degradation while increasing the number of Mesh nodes
