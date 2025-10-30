@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-bamboo-agent
   labels:
-    helm.sh/chart: bamboo-agent-2.0.3
+    helm.sh/chart: bamboo-agent-2.0.4
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo-agent/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-agent-jvm-config
   labels:
-    helm.sh/chart: bamboo-agent-2.0.3
+    helm.sh/chart: bamboo-agent-2.0.4
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 data:
   max_heap: 512m
@@ -32,10 +32,10 @@ kind: Deployment
 metadata:
   name: unittest-bamboo-agent
   labels:
-    helm.sh/chart: bamboo-agent-2.0.3
+    helm.sh/chart: bamboo-agent-2.0.4
     app.kubernetes.io/name: bamboo-agent
     app.kubernetes.io/instance: unittest-bamboo-agent
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -46,7 +46,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 24f456ffe2617cac262f03e261adba2c8ce9b2a8787fa43082bc2dddaf924d8d
+        checksum/config-jvm: 65812517f73ea4851a65c05f44bc00031c22360901bd428a480cc34da383ff73
       labels:
         app.kubernetes.io/name: bamboo-agent
         app.kubernetes.io/instance: unittest-bamboo-agent
@@ -64,7 +64,7 @@ spec:
       initContainers:
       containers:
         - name: bamboo-agent
-          image: "atlassian/bamboo-agent-base:11.0.4"
+          image: "atlassian/bamboo-agent-base:11.0.5"
           imagePullPolicy: IfNotPresent
           env:
             - name: BAMBOO_SERVER

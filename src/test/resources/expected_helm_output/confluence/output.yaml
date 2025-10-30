@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jvm-config
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -40,10 +40,10 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-jmx-config
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -62,10 +62,10 @@ kind: ConfigMap
 metadata:
   name: unittest-confluence-helm-values
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -273,7 +273,7 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
       jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
@@ -488,10 +488,10 @@ kind: Service
 metadata:
   name: unittest-confluence-jmx
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -511,10 +511,10 @@ kind: Service
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -538,10 +538,10 @@ kind: Service
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -566,10 +566,10 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence-synchrony
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -585,10 +585,10 @@ spec:
       annotations:
         checksum/config-jvm: 5c7e4f3183d49bd4e8c82a29b06246e551e4120042495652f1f9b27a0599a882
       labels:
-        helm.sh/chart: confluence-2.0.3
+        helm.sh/chart: confluence-2.0.4
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
-        app.kubernetes.io/version: "9.2.7"
+        app.kubernetes.io/version: "9.2.9"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
@@ -601,7 +601,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:9.2.7"
+          image: "atlassian/confluence:9.2.9"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -651,10 +651,10 @@ kind: StatefulSet
 metadata:
   name: unittest-confluence
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -668,12 +668,12 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: f53f69d8b911460bab609b81f98d4bd092b91b2546e42ffb4a5f427ede29f56b
+        checksum/config-jvm: d1ef486def92fcd0f62c851d5662d8e4d3208e4984c271a8b2ad87b0d39e8839
       labels:
-        helm.sh/chart: confluence-2.0.3
+        helm.sh/chart: confluence-2.0.4
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
-        app.kubernetes.io/version: "9.2.7"
+        app.kubernetes.io/version: "9.2.9"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
@@ -696,7 +696,7 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2002 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
           securityContext:
@@ -706,7 +706,7 @@ spec:
               name: shared-home
       containers:
         - name: confluence
-          image: "atlassian/confluence:9.2.7"
+          image: "atlassian/confluence:9.2.9"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -805,10 +805,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -836,10 +836,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: confluence-2.0.3
+    helm.sh/chart: confluence-2.0.4
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "9.2.7"
+    app.kubernetes.io/version: "9.2.9"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

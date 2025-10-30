@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.4
+
+**Release date:** 2025-8-27
+
+![AppVersion: 6.3.1](https://img.shields.io/static/v1?label=AppVersion&message=6.3.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* fix: Update Bitnami image references due to deprecation notice (#1037)
+
 ## 2.0.3
 
 **Release date:** 2025-8-1

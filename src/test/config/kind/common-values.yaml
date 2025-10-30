@@ -82,10 +82,10 @@ DC_APP_REPLACEME:
 
 database:
   type: DB_TYPE_REPLACEME
-  url: jdbc:postgresql://postgres:5432/DC_APP_REPLACEME
+  url: jdbc:postgresql://DC_APP_REPLACEME-db-rw:5432/DC_APP_REPLACEME
   driver: org.postgresql.Driver
   credentials:
-    secretName: DC_APP_REPLACEME-db-creds
+    secretName: DC_APP_REPLACEME-db-credentials
 
 # nfs volume provisioner and nfs server are deployed to KinD cluster
 # thus we can create PVCs and expect them to be bound to PVs that provisioner will create

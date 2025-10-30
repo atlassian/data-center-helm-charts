@@ -1,4 +1,5 @@
-# This file contains overrides for the bitnami/postgresql helm chart, suitable for deployment into the KITT clusters.
+# DEPRECATED: This file is no longer used. CloudNativePG is now used instead of Bitnami PostgreSQL.
+# See src/test/infrastructure/cloudnativepg/ for the new configuration files.
 
 primary:
   podAnnotations:

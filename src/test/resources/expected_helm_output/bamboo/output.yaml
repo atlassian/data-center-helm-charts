@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-jvm-config
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -34,10 +34,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-jmx-config
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -62,10 +62,10 @@ kind: ConfigMap
 metadata:
   name: unittest-bamboo-helm-values
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -281,7 +281,7 @@ data:
         dashboardLabels: {}
       jmxExporterCustomConfig: {}
       jmxExporterCustomJarLocation: null
-      jmxExporterImageRepo: bitnami/jmx-exporter
+      jmxExporterImageRepo: bitnamilegacy/jmx-exporter
       jmxExporterImageTag: 0.18.0
       jmxExporterInitContainer:
         customSecurityContext: {}
@@ -370,10 +370,10 @@ kind: Service
 metadata:
   name: unittest-bamboo-jms
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -393,10 +393,10 @@ kind: Service
 metadata:
   name: unittest-bamboo-jmx
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -416,10 +416,10 @@ kind: Service
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -440,10 +440,10 @@ kind: StatefulSet
 metadata:
   name: unittest-bamboo
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -457,12 +457,12 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5f2e1fe8ea8401c5ca814250bc51fa6597b1483ea8fa8fc6b348cbf4ff03d32a
+        checksum/config-jvm: 6139b68a0cb8cc3041fe762f5ee766ba2a413c168584f4db7f2978f1d7dc0392
       labels:
-        helm.sh/chart: bamboo-2.0.3
+        helm.sh/chart: bamboo-2.0.4
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
-        app.kubernetes.io/version: "11.0.4"
+        app.kubernetes.io/version: "11.0.5"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-bamboo
@@ -486,7 +486,7 @@ spec:
               mountPath: "/shared-home"
           command: ["sh", "-c", "(chgrp 2005 /shared-home; chmod g+w /shared-home)"]
         - name: fetch-jmx-exporter
-          image: bitnami/jmx-exporter:0.18.0
+          image: bitnamilegacy/jmx-exporter:0.18.0
           command: ["cp"]
           args: ["/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar", "/var/atlassian/application-data/shared-home"]
           securityContext:
@@ -496,7 +496,7 @@ spec:
               name: shared-home
       containers:
         - name: bamboo
-          image: "atlassian/bamboo:11.0.4"
+          image: "atlassian/bamboo:11.0.5"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -626,10 +626,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -670,10 +670,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: bamboo-2.0.3
+    helm.sh/chart: bamboo-2.0.4
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.4"
+    app.kubernetes.io/version: "11.0.5"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

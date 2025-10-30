@@ -2,8 +2,8 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '2.0.3'
-appVersion: 9.2.7
+version: '2.0.4'
+appVersion: 9.2.9
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Confluence
@@ -20,8 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Fix Confluence UID (#1024)"
-    - "Update appVersions for DC apps (#1021)"
+    - "fix: Update Bitnami image references due to deprecation notice (#1037)"
+    - "Update appVersions for DC apps (#1029)"
 
 dependencies:
 - name: common

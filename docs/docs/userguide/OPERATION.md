@@ -8,7 +8,7 @@ When `monitoring.exposeJmxMetrics` is enabled, [JMX exporter](https://github.com
 [JMX exporter jar](https://github.com/prometheus/jmx_exporter){.external} isn't available in products dependencies or container images, that is why when `monitoring.exposeJmxMetrics`
 is enabled there are 2 ways to get it:
 
-* copy from an init container ([bitnami/jmx-exporter DockerHub image](https://hub.docker.com/r/bitnami/jmx-exporter){.external}) - the **default** option in values.yaml which works out of the box
+* copy from an init container ([bitnamilegacy/jmx-exporter DockerHub image](https://hub.docker.com/r/bitnamilegacy/jmx-exporter){.external}) - the **default** option in values.yaml which works out of the box
 * manually download from [JMX exporter GitHub releases page](https://github.com/prometheus/jmx_exporter/tags){.external} and copy to shared-home or mount as a secret
 
 
