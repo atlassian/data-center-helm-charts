@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: '2.0.4'
+version: '2.0.5'
 appVersion: 9.4.12
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "fix: Update Bitnami image references due to deprecation notice (#1037)"
+    - "Update appVersions for DC apps (#1049)"
 
 dependencies:
 - name: common
