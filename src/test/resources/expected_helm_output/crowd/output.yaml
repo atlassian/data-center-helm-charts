@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jvm-config
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -36,7 +36,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-jmx-config
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -64,7 +64,7 @@ kind: ConfigMap
 metadata:
   name: unittest-crowd-helm-values
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -78,7 +78,7 @@ data:
     - hostnames:
       - foo.local
       - bar.local
-      ip: 127.1.0.1
+      ip: 127.0.0.1
     additionalInitContainers: []
     additionalLabels: {}
     affinity: {}
@@ -317,7 +317,7 @@ kind: Service
 metadata:
   name: unittest-crowd-jmx
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -340,7 +340,7 @@ kind: Service
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -364,7 +364,7 @@ kind: StatefulSet
 metadata:
   name: unittest-crowd
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -381,9 +381,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 47e5ef6b7cdca42357138b748035cc2654bfd6259d7cab902e8fc809f77ba214
+        checksum/config-jvm: 33b34c7dd5ed27e06a9c221da42805aeee39f7d9273f328833e104889586d433
       labels:
-        helm.sh/chart: crowd-2.0.4
+        helm.sh/chart: crowd-2.0.5
         app.kubernetes.io/name: crowd
         app.kubernetes.io/instance: unittest-crowd
         app.kubernetes.io/version: "7.1.0"
@@ -395,7 +395,7 @@ spec:
         - hostnames:
           - foo.local
           - bar.local
-          ip: 127.1.0.1
+          ip: 127.0.0.1
       securityContext:
         fsGroup: 2004
         fsGroupChangePolicy: OnRootMismatch
@@ -517,7 +517,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
@@ -548,7 +548,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: crowd-2.0.4
+    helm.sh/chart: crowd-2.0.5
     app.kubernetes.io/name: crowd
     app.kubernetes.io/instance: unittest-crowd
     app.kubernetes.io/version: "7.1.0"
