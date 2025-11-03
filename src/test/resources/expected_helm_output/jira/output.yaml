@@ -424,7 +424,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 90dd7238442df6e5cd750fa929a1675353a9cf2d428dc0d782fc47b5c88b0128
+        checksum/config-jvm: 61db5d5c09601f3ab3a4a0800172be644e3ba0de0d23a6aa933bb7b743a48e39
       labels:
         helm.sh/chart: jira-2.0.5
         app.kubernetes.io/name: jira

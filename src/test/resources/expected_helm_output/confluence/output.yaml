@@ -668,7 +668,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 139f1cdd4101022a790de67975f105114f4fcc91b3039e5398592805123683d6
+        checksum/config-jvm: 04ff0c84ab05c7df598092cab4e3ed532c63c7ebdd6d6fa282db5cd050b64b49
       labels:
         helm.sh/chart: confluence-2.0.5
         app.kubernetes.io/name: confluence

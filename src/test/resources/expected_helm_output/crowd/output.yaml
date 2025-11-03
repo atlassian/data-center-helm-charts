@@ -381,7 +381,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 33b34c7dd5ed27e06a9c221da42805aeee39f7d9273f328833e104889586d433
+        checksum/config-jvm: 497118b00b16287b7740f0f2bea19d09ff7aac932a47557021c98924575aef7e
       labels:
         helm.sh/chart: crowd-2.0.5
         app.kubernetes.io/name: crowd

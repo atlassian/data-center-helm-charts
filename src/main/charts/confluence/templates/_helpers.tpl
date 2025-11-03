@@ -569,7 +569,9 @@ persistentVolumeClaimRetentionPolicy:
 {{- end}}
 volumeClaimTemplates:
 {{- if .Values.volumes.localHome.persistentVolumeClaim.create }}
-- metadata:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
     name: local-home
   spec:
     accessModes: [ "ReadWriteOnce" ]
@@ -605,7 +607,9 @@ persistentVolumeClaimRetentionPolicy:
     whenScaled: {{.Values.volumes.synchronyHome.persistentVolumeClaimRetentionPolicy.whenScaled}}
 {{- end}}
 volumeClaimTemplates:
-- metadata:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
     name: synchrony-home
   spec:
     accessModes: [ "ReadWriteOnce" ]
