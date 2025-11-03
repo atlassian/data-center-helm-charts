@@ -603,7 +603,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 9d87fe02971b3280c98b630b6a74b979acc9c5e593d8484ea81136bda4bfd30b
+        checksum/config-jvm: cb9e5fb87fcd54e34c0f4e3b8c6d172bc0613964ef4289bdb3ebfdffe3510931
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -724,7 +724,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8df48b44d600f578afe6ef9ea3a9baf219505c6306eade5f74bf628a5293a086
+        checksum/config-jvm: 6526e9d5f767c7c61f1c789fc0582d8e3e46c6d8858e781dc5be5030c0159fdf
       labels:
         helm.sh/chart: bitbucket-2.0.4
         app.kubernetes.io/name: bitbucket
