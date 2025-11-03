@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.6
+
+**Release date:** 2025-11-3
+
+![AppVersion: 10.3.12](https://img.shields.io/static/v1?label=AppVersion&message=10.3.12&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* fix: Add missing ErrorReportValve to default server.xml #1047 (#1047)
+* fix: Added default Kubernetes parameters to VolumeClaimTemplate to prevent infinite DRIFT (#1030)
+
 ## 2.0.5
 
 **Release date:** 2025-11-1
