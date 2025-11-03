@@ -66,7 +66,7 @@ data:
                 appBase="webapps"
                 unpackWARs="true"
                 autoDeploy="true">
-
+            <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
             <Context path="{{ .Values.jira.service.contextPath | default "" }}"
                      docBase="${catalina.home}/atlassian-jira"
                      reloadable="false"
