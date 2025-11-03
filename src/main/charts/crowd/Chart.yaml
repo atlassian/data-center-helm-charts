@@ -2,7 +2,7 @@ apiVersion: v2
 name: crowd
 description: A chart for installing Crowd Data Center on Kubernetes
 type: application
-version: '2.0.5'
+version: '2.0.6'
 appVersion: 7.1.0
 
 kubeVersion: ">=1.21.x-0"
@@ -21,7 +21,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#1049)"
+    - "fix: Add missing ErrorReportValve to default server.xml #1047 (#1047)"
+    - "fix: Added default Kubernetes parameters to VolumeClaimTemplate to prevent infinite DRIFT (#1030)"
 
 dependencies:
 - name: common
