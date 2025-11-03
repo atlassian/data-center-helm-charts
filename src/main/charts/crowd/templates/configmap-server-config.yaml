@@ -47,6 +47,7 @@ data:
                 defaultHost="localhost">
 
         <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
+           <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
            <Context path="{{ .Values.crowd.service.contextPath | default "/crowd" }}" docBase="../../crowd-webapp" debug="0">
              <Manager pathname="" />
            </Context>
