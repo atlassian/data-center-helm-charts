@@ -48,12 +48,12 @@ data:
                 defaultHost="localhost"
                 debug="0">
           <Host name="localhost"
-                <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
                 debug="0"
                 appBase="webapps"
                 unpackWARs="true"
                 autoDeploy="false"
                 startStopThreads="4">
+            <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
             <Context path="{{ .Values.confluence.service.contextPath | default "" }}"
                      docBase="../confluence"
                      debug="0"
