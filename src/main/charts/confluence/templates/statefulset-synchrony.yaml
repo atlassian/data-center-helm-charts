@@ -139,6 +139,7 @@ spec:
             {{ end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
+            {{- include "synchrony.additionalEnvironmentVariables" . | nindent 12 }}
       {{- if .Values.synchrony.nodeSelector }}
       nodeSelector:
       {{- toYaml .Values.synchrony.nodeSelector | nindent 8 }}

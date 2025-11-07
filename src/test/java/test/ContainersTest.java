@@ -41,6 +41,21 @@ class ContainersTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void additionalSynchronyEnvironmentVariables(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
+                "synchrony.additionalEnvironmentVariables[0].name", "MY_ENV_VAR",
+                "synchrony.additionalEnvironmentVariables[0].value", "env-value"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+        final var env = statefulSet.getContainer().getEnv();
+        env.assertHasValue("MY_ENV_VAR", "env-value");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void additionalPorts(Product product) throws Exception {
         final var pname = product.name().toLowerCase();

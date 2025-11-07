@@ -430,6 +430,15 @@ Define additional Synchrony volume mounts here to allow template overrides when 
 {{/*
 Define additional environment variables here to allow template overrides when used as a sub chart
 */}}
+{{- define "synchrony.additionalEnvironmentVariables" -}}
+{{- with .Values.synchrony.additionalEnvironmentVariables }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define additional environment variables here to allow template overrides when used as a sub chart
+*/}}
 {{- define "confluence.additionalEnvironmentVariables" -}}
 {{- with .Values.confluence.additionalEnvironmentVariables }}
 {{- toYaml . }}

@@ -1257,6 +1257,9 @@ synchrony:
   podAnnotations: {}
   #  name: <value>
 
+  # -- Additional environment variables passed to synchrony container
+  additionalEnvironmentVariables: []
+
   # K8s Synchrony Service configuration
   #
   service:
