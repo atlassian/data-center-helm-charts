@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: '2.0.6'
+version: '2.0.7'
 appVersion: 9.4.12
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "fix: Added default Kubernetes parameters to VolumeClaimTemplate to prevent infinite DRIFT (#1030)"
+    - "Update Helm chart version"
 
 dependencies:
 - name: common
