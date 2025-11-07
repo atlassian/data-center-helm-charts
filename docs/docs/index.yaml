@@ -2,6 +2,35 @@ apiVersion: v1
 entries:
   bamboo:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#1058)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 11.0.8
+    created: "2025-11-07T09:21:06.608910825Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center on Kubernetes
+    digest: 1e86158bb1ef085f375639fb0059f50f243f31374d3444fb53792ed848ff5d85
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Server
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-server
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-2.0.7/bamboo-2.0.7.tgz
+    version: 2.0.7
+  - annotations:
       artifacthub.io/changes: |-
         - "Update appVersions for DC apps (#1052)"
         - "fix: Added default Kubernetes parameters to VolumeClaimTemplate to prevent infinite DRIFT (#1030)"
@@ -1991,6 +2020,35 @@ entries:
     version: 0.0.1
   bamboo-agent:
   - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#1058)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 11.0.8
+    created: "2025-11-07T09:21:06.814220661Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Bamboo Data Center remote agents on Kubernetes
+    digest: ce60f63dd228f0eaa38086acf9df54afdce4daff655d4cd0fe431b4b5a19fe2d
+    home: https://www.atlassian.com/software/bamboo
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bamboo.svg
+    keywords:
+    - Bamboo
+    - Bamboo Agent
+    - Bamboo Data Center
+    - Bamboo DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bamboo-agent
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-bamboo-agent-base
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-2.0.7/bamboo-agent-2.0.7.tgz
+    version: 2.0.7
+  - annotations:
       artifacthub.io/changes: '- "Update appVersions for DC apps (#1052)"'
       artifacthub.io/containsSecurityUpdates: "false"
     apiVersion: v2
@@ -3901,6 +3959,39 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/bamboo-agent-0.0.1/bamboo-agent-0.0.1.tgz
     version: 0.0.1
   bitbucket:
+  - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 9.4.12
+    created: "2025-11-07T09:21:07.076628748Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.install
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Bitbucket Data Center on Kubernetes
+    digest: a4657ac2fec22ae8e164f9ba20af641276cb911f7b3b44858379dbc48e833828
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/bitbucket.svg
+    keywords:
+    - Bitbucket
+    - Bitbucket Server
+    - Bitbucket Data Center
+    - Bitbucket DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: bitbucket
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/bitbucket-2.0.7/bitbucket-2.0.7.tgz
+    version: 2.0.7
   - annotations:
       artifacthub.io/changes: '- "fix: Added default Kubernetes parameters to VolumeClaimTemplate
         to prevent infinite DRIFT (#1030)"'
@@ -6567,6 +6658,42 @@ entries:
   confluence:
   - annotations:
       artifacthub.io/changes: |-
+        - "Update appVersions for DC apps (#1058)"
+        - "Synchrony: support additional env vars (#1057)"
+        - "fix: move ErrorReportValve to the correct line (#1055)"
+      artifacthub.io/containsSecurityUpdates: "true"
+    apiVersion: v2
+    appVersion: 9.2.10
+    created: "2025-11-07T09:21:07.52765654Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    - condition: opensearch.enabled
+      name: opensearch
+      repository: https://opensearch-project.github.io/helm-charts
+      version: 2.19.0
+    description: A chart for installing Confluence Data Center on Kubernetes
+    digest: 389a216252a90533b65904e99abddf24c4dc7798680281e69ba3090253499617
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/confluence.svg
+    keywords:
+    - Confluence
+    - Confluence Server
+    - Confluence Data Center
+    - Confluence DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: confluence
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/confluence-2.0.7/confluence-2.0.7.tgz
+    version: 2.0.7
+  - annotations:
+      artifacthub.io/changes: |-
         - "fix: Add missing ErrorReportValve to default server.xml #1047 (#1047)"
         - "fix: Added default Kubernetes parameters to VolumeClaimTemplate to prevent infinite DRIFT (#1030)"
       artifacthub.io/containsSecurityUpdates: "true"
@@ -9157,6 +9284,35 @@ entries:
     version: 0.6.0
   crowd:
   - annotations:
+      artifacthub.io/changes: '- "Update Helm chart version"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 7.1.0
+    created: "2025-11-07T09:21:07.768081565Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Crowd Data Center on Kubernetes
+    digest: d2462f7c42fadc83ce45997dbbd9c4763925c9c0725f87b12535f3d2e9fef329
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/crowd.svg
+    keywords:
+    - Crowd
+    - Crowd Server
+    - Crowd Data Center
+    - Crowd DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: crowd
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-crowd/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-2.0.7/crowd-2.0.7.tgz
+    version: 2.0.7
+  - annotations:
       artifacthub.io/changes: |-
         - "fix: Add missing ErrorReportValve to default server.xml #1047 (#1047)"
         - "fix: Added default Kubernetes parameters to VolumeClaimTemplate to prevent infinite DRIFT (#1030)"
@@ -11451,6 +11607,36 @@ entries:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/crowd-0.7.0/crowd-0.7.0.tgz
     version: 0.7.0
   jira:
+  - annotations:
+      artifacthub.io/changes: '- "Update appVersions for DC apps (#1058)"'
+      artifacthub.io/containsSecurityUpdates: "false"
+    apiVersion: v2
+    appVersion: 10.3.13
+    created: "2025-11-07T09:21:07.975393276Z"
+    dependencies:
+    - name: common
+      repository: https://atlassian.github.io/data-center-helm-charts
+      version: 1.2.7
+    description: A chart for installing Jira Data Center on Kubernetes
+    digest: 88450ae2b9b39c0b0d82285beb544f06d96c55c9668285a203bb7dcde1f7b919
+    home: https://atlassian.github.io/data-center-helm-charts/
+    icon: https://atlassian.github.io/data-center-helm-charts/icons/jira-software.svg
+    keywords:
+    - Jira
+    - Jira Software
+    - Jira Server
+    - Jira Data Center
+    - Jira DC
+    - Atlassian
+    kubeVersion: '>=1.21.x-0'
+    name: jira
+    sources:
+    - https://github.com/atlassian/data-center-helm-charts
+    - https://bitbucket.org/atlassian-docker/docker-atlassian-jira/
+    type: application
+    urls:
+    - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-2.0.7/jira-2.0.7.tgz
+    version: 2.0.7
   - annotations:
       artifacthub.io/changes: |-
         - "fix: Add missing ErrorReportValve to default server.xml #1047 (#1047)"
@@ -13916,4 +14102,4 @@ entries:
     urls:
     - https://github.com/atlassian/data-center-helm-charts/releases/download/jira-0.6.0/jira-0.6.0.tgz
     version: 0.6.0
-generated: "2025-11-03T18:10:24.507772196Z"
+generated: "2025-11-07T09:21:07.976613005Z"
