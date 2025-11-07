@@ -49,7 +49,7 @@ class ContainersTest {
                 "synchrony.additionalEnvironmentVariables[0].value", "env-value"
         ));
 
-        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName()) + "-synchrony";
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
         final var env = statefulSet.getContainer().getEnv();
         env.assertHasValue("MY_ENV_VAR", "env-value");
     }
