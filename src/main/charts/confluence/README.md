@@ -1,6 +1,6 @@
 # confluence
 
-![Version: 2.0.6](https://img.shields.io/badge/Version-2.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.2.9](https://img.shields.io/badge/AppVersion-9.2.9-informational?style=flat-square)
+![Version: 2.0.6](https://img.shields.io/badge/Version-2.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 9.2.10](https://img.shields.io/badge/AppVersion-9.2.10-informational?style=flat-square)
 
 A chart for installing Confluence Data Center on Kubernetes
 
@@ -209,6 +209,7 @@ Kubernetes: `>=1.21.x-0`
 | synchrony.additionalCertificates.initContainer.securityContext | object | `{}` | Custom SecurityContext for the import-certs init container  |
 | synchrony.additionalCertificates.secretList | list | `[]` | A list of secrets with their respective keys holding certificates to be added to the Java truststore. It is mandatory to specify which keys from secret data need to be mounted as files to the init container.  |
 | synchrony.additionalCertificates.secretName | string | `nil` | Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.  |
+| synchrony.additionalEnvironmentVariables | list | `[]` | Additional environment variables passed to synchrony container |
 | synchrony.additionalJvmArgs | list | `[]` | Specifies a list of additional arguments that can be passed to the Synchrony JVM, e.g. system properties.  |
 | synchrony.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Synchrony container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/  |
 | synchrony.additionalPorts | list | `[]` | Defines any additional ports for the Synchrony container.  |
