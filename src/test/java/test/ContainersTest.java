@@ -45,6 +45,7 @@ class ContainersTest {
     void additionalSynchronyEnvironmentVariables(Product product) throws Exception {
         final var pname = product.name().toLowerCase();
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "synchrony.enabled", "true",
                 "synchrony.additionalEnvironmentVariables[0].name", "MY_ENV_VAR",
                 "synchrony.additionalEnvironmentVariables[0].value", "env-value"
         ));
