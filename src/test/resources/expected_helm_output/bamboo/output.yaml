@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: bamboo/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -37,7 +37,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -65,7 +65,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -373,7 +373,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -396,7 +396,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -419,7 +419,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -443,7 +443,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -462,7 +462,7 @@ spec:
         helm.sh/chart: bamboo-2.0.7
         app.kubernetes.io/name: bamboo
         app.kubernetes.io/instance: unittest-bamboo
-        app.kubernetes.io/version: "11.0.8"
+        app.kubernetes.io/version: "12.0.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-bamboo
@@ -496,7 +496,7 @@ spec:
               name: shared-home
       containers:
         - name: bamboo
-          image: "atlassian/bamboo:11.0.8"
+          image: "atlassian/bamboo:12.0.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -629,7 +629,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -673,7 +673,7 @@ metadata:
     helm.sh/chart: bamboo-2.0.7
     app.kubernetes.io/name: bamboo
     app.kubernetes.io/instance: unittest-bamboo
-    app.kubernetes.io/version: "11.0.8"
+    app.kubernetes.io/version: "12.0.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
