@@ -1089,8 +1089,6 @@ monitoring:
   jmxExporterImageRepo: bitnamilegacy/jmx-exporter
   jmxExporterImageTag: 0.18.0
 
-
-
   # -- Port number on which metrics will be available
   #
   jmxExporterPort: 9999
@@ -1123,6 +1121,10 @@ monitoring:
     # -- Scrape interval for the JMX service.
     #
     scrapeIntervalSeconds: 30
+
+    # -- How long until a scrape request times out. It cannot be greater than the scrape interval.
+    #
+    scrapeTimeoutSeconds: 20
 
   grafana:
 

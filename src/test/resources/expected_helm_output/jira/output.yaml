@@ -283,6 +283,7 @@ data:
         create: false
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
+        scrapeTimeoutSeconds: 20
     nodeSelector: {}
     openshift:
       runWithRestrictedSCC: false
@@ -424,7 +425,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 692cb0848ec554f921ac79135bb619580adad68bad433a9caae40a2e114cc746
+        checksum/config-jvm: 01a291b179aace17cc3641a89f204d175ee19d2398085d9d7d656293d8a9395b
       labels:
         helm.sh/chart: jira-2.0.7
         app.kubernetes.io/name: jira

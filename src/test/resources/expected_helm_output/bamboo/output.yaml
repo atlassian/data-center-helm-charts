@@ -295,6 +295,7 @@ data:
         create: false
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
+        scrapeTimeoutSeconds: 20
     nodeSelector: {}
     openshift:
       runWithRestrictedSCC: false
@@ -457,7 +458,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 8505c83cd32dfad77686b84d90b18842600f88c414e8091bc4e6fa9e4003e639
+        checksum/config-jvm: ecb6651a80885551b248af0e8ab7d60a8e53397e0174b5793fe2898121ce1ec4
       labels:
         helm.sh/chart: bamboo-2.0.7
         app.kubernetes.io/name: bamboo

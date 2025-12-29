@@ -19,6 +19,7 @@ spec:
         sourceLabels:
           - __meta_kubernetes_pod_name
         targetLabel: instance
+    scrapeTimeout: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeTimeoutSeconds }}
 
   - interval: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeIntervalSeconds }}
     path: /metrics
@@ -29,6 +30,7 @@ spec:
         sourceLabels:
           - __meta_kubernetes_pod_name
         targetLabel: instance
+    scrapeTimeout: {{ printf "%.0fs" .Values.monitoring.serviceMonitor.scrapeTimeoutSeconds }}
   selector:
     matchLabels:
     {{- include "common.labels.selectorLabels" . | nindent 6 }}
