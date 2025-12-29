@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '2.0.7'
+version: '2.0.8'
 appVersion: 11.3.1
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -22,7 +22,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#1058)"
+    - "Update appVersions for DC apps (#1071)"
+    - "feat: Added scrape timeout configuration on servicemonitor (#1067)"
 
 dependencies:
 - name: common
