@@ -170,6 +170,7 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.create | bool | `false` | Create ServiceMonitor to start scraping metrics. ServiceMonitor CRD needs to be created in advance.  |
 | monitoring.serviceMonitor.prometheusLabelSelector | object | `{}` | ServiceMonitorSelector of the prometheus instance.  |
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
+| monitoring.serviceMonitor.scrapeTimeoutSeconds | int | `20` | How long until a scrape request times out. It cannot be greater than the scrape interval.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Confluence pods  |
 | opensearch.credentials.createSecret | bool | `true` | Let the Helm chart create a secret with an auto generated initial admin password  |
 | opensearch.credentials.existingSecretRef | object | `{"name":null}` | Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD holding the initial admin password  |
