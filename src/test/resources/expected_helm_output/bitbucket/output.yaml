@@ -336,6 +336,7 @@ data:
         create: false
         prometheusLabelSelector: {}
         scrapeIntervalSeconds: 30
+        scrapeTimeoutSeconds: 20
     nodeSelector: {}
     opensearch:
       baseUrl: null
@@ -603,7 +604,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 31bbdb148088bc9b8883744788942917ac1019f48887a3744dc7997f936e1fba
+        checksum/config-jvm: 668599691b249ef79e06b658d4b310d7963490d3d2ef835fba616b0fd6289b2e
       labels:
         app.kubernetes.io/name: bitbucket-mesh
         app.kubernetes.io/instance: unittest-bitbucket
@@ -724,7 +725,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: aa001aa1c6a02afbce6a90fffcca207f79b83c6059079f9b99b917f26d21aef5
+        checksum/config-jvm: 08a62445c6476b6776beddeed78caca27541ac9d2db622d4bf8a3883a6fc9997
       labels:
         helm.sh/chart: bitbucket-2.0.7
         app.kubernetes.io/name: bitbucket
