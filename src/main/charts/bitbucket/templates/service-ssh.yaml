@@ -17,6 +17,9 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.bitbucket.sshService.port }}
+      {{- if and (eq .Values.bitbucket.sshService.type "NodePort") .Values.bitbucket.sshService.nodePort}}
+      nodePort: {{ .Values.bitbucket.sshService.nodePort }}
+      {{- end }}
       targetPort: ssh
       protocol: TCP
       name: ssh
