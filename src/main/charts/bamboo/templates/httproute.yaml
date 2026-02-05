@@ -1,0 +1,60 @@
+{{- if .Values.gateway.create }}
+{{- if .Values.ingress.create }}
+{{- fail "Cannot enable both gateway.create and ingress.create. Please set one to false." }}
+{{- end }}
+{{- if not .Values.gateway.gatewayName }}
+{{- fail "gateway.gatewayName is required when gateway.create is true" }}
+{{- end }}
+{{- if not .Values.gateway.hostnames }}
+{{- fail "gateway.hostnames is required when gateway.create is true. Provide at least one hostname." }}
+{{- end }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels:
+    {{- include "common.labels.commonLabels" . | nindent 4 }}
+    {{- with .Values.gateway.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.gateway.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  # Reference to the Gateway
+  parentRefs:
+  - name: {{ .Values.gateway.gatewayName }}
+    {{- if .Values.gateway.gatewayNamespace }}
+    namespace: {{ .Values.gateway.gatewayNamespace }}
+    {{- end }}
+  
+  # Hostnames to match
+  hostnames:
+  {{- range .Values.gateway.hostnames }}
+  - {{ . | quote }}
+  {{- end }}
+  
+  # Routing rules
+  rules:
+  # Default rule - routes to Bamboo service
+  - matches:
+    - path:
+        type: {{ .Values.gateway.pathType }}
+        value: {{ .Values.gateway.path }}
+    
+    {{- if .Values.gateway.filters }}
+    filters:
+    {{- toYaml .Values.gateway.filters | nindent 4 }}
+    {{- end }}
+    
+    backendRefs:
+    - name: {{ include "common.names.fullname" . }}
+      port: {{ .Values.bamboo.service.port }}
+      weight: 100
+  
+  {{- if .Values.gateway.additionalRules }}
+  # Additional custom rules
+  {{- toYaml .Values.gateway.additionalRules | nindent 2 }}
+  {{- end }}
+{{- end }}

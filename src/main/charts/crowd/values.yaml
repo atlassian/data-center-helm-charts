@@ -605,6 +605,83 @@ ingress:
     #  service: static-content-svc
     #  portNumber: 80
 
+# Gateway API configuration
+# https://gateway-api.sigs.k8s.io/
+#
+gateway:
+
+  # -- Set to 'true' if an HTTPRoute Resource should be created. This depends on a
+  # pre-provisioned Gateway API controller being available and a Gateway resource.
+  # Cannot be enabled if ingress.create is true.
+  #
+  create: false
+
+  # -- The name of the Gateway resource that this HTTPRoute will attach to.
+  # The Gateway must be in the same namespace or allow routes from this namespace.
+  #
+  gatewayName: ""
+
+  # -- The namespace of the Gateway resource. If not specified, defaults to the
+  # release namespace.
+  #
+  gatewayNamespace: ""
+
+  # -- The hostnames that should be routed to Crowd. At least one hostname
+  # is required when gateway.create is true.
+  #
+  hostnames: []
+  # - crowd.example.com
+  # - identity.example.com
+
+  # -- Set to 'true' if browser communication with the application should be TLS
+  # (HTTPS) enforced. This affects the service URL and proxy port configuration.
+  #
+  https: true
+
+  # -- The base path for routing. Defaults to "/" to route all paths.
+  #
+  path: "/"
+
+  # -- Path matching type. Can be "PathPrefix", "Exact", or "RegularExpression".
+  # PathPrefix is recommended for most use cases.
+  #
+  pathType: "PathPrefix"
+
+  # -- Annotations to add to the HTTPRoute resource.
+  #
+  annotations: {}
+  # kubernetes.io/ingress.class: gateway
+  # cert-manager.io/cluster-issuer: letsencrypt
+
+  # -- Labels to add to the HTTPRoute resource.
+  #
+  labels: {}
+  # environment: production
+  # team: platform
+
+  # -- HTTP filters to apply to requests. Can be used to add/remove headers,
+  # perform redirects, or rewrite URLs.
+  # See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteFilter
+  #
+  filters: []
+  # - type: RequestHeaderModifier
+  #   requestHeaderModifier:
+  #     add:
+  #     - name: X-Forwarded-Proto
+  #       value: https
+
+  # -- Advanced routing rules. Use this for complex routing scenarios like
+  # header-based routing, traffic splitting, or multiple backends.
+  # See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteRule
+  #
+  additionalRules: []
+  # - matches:
+  #   - path:
+  #       type: PathPrefix
+  #       value: /api
+  #   backendRefs:
+  #   - name: crowd-api
+  #     port: 8095
 
 # Fluentd configuration
 #

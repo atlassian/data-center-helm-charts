@@ -119,7 +119,7 @@ spec:
           env:
             {{- include "jira.sessionVars" . | nindent 12 }}
             {{- include "jira.tunnelVars" . | nindent 12 }}
-            {{ if .Values.ingress.https }}
+            {{ if eq (include "jira.https" . | trim) "true" }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
@@ -131,11 +131,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.jira.ports.http | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "jira.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "jira.ingressPort" . | quote }}
+              value: {{ include "jira.proxyPort" . | quote }}
             {{ end }}
             {{- include "jira.s3StorageEnvVars" . | nindent 12 }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}
