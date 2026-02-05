@@ -131,11 +131,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.bamboo.ports.http | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "bamboo.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "bamboo.ingressPort" . | quote }}
+              value: {{ include "bamboo.proxyPort" . | quote }}
             {{ end }}
             {{- include "bamboo.databaseEnvVars" . | nindent 12 }}
             - name: SET_PERMISSIONS

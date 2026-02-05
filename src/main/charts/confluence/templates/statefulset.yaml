@@ -224,11 +224,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.confluence.ports.http | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "confluence.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "confluence.ingressPort" . | quote }}
+              value: {{ include "confluence.proxyPort" . | quote }}
             {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.confluence.accessLog.enabled | quote }}

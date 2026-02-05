@@ -204,11 +204,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.crowd.ports.http | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "crowd.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "crowd.ingressPort" . | quote }}
+              value: {{ include "crowd.proxyPort" . | quote }}
             {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.crowd.accessLog.enabled | quote }}

@@ -415,6 +415,56 @@ verify_openshift_analytics() {
   fi
 }
 
+verify_gateway() {
+  if [ -z "${TEST_GATEWAY}" ]; then
+    echo "[INFO]: Skipping Gateway verification (TEST_GATEWAY not set)"
+    return 0
+  fi
+  
+  echo "[INFO]: Verifying HTTPRoute resource for ${DC_APP}"
+  if ! kubectl get httproute/${DC_APP} -n atlassian >/dev/null 2>&1; then
+    echo "[ERROR]: HTTPRoute ${DC_APP} not found in atlassian namespace"
+    kubectl get httproute -n atlassian || true
+    exit 1
+  fi
+  
+  echo "[INFO]: Checking HTTPRoute status"
+  kubectl wait --for=condition=Accepted httproute/${DC_APP} -n atlassian --timeout=60s || {
+    echo "[ERROR]: HTTPRoute not accepted"
+    kubectl describe httproute/${DC_APP} -n atlassian
+    exit 1
+  }
+  
+  # Check if route has resolved backend refs
+  kubectl wait --for=condition=ResolvedRefs httproute/${DC_APP} -n atlassian --timeout=60s || {
+    echo "[WARN]: HTTPRoute ResolvedRefs condition not met, checking details"
+    kubectl describe httproute/${DC_APP} -n atlassian
+  }
+  
+  echo "[INFO]: Verifying Gateway attachment"
+  GATEWAY_NAME=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.parentRefs[0].name}')
+  echo "[INFO]: HTTPRoute attached to Gateway: ${GATEWAY_NAME}"
+  
+  if [ -z "${GATEWAY_NAME}" ]; then
+    echo "[ERROR]: No Gateway referenced in HTTPRoute"
+    exit 1
+  fi
+  
+  echo "[INFO]: Checking Gateway status"
+  kubectl get gateway/${GATEWAY_NAME} -n atlassian -o yaml
+  
+  # Verify hostnames are configured
+  HOSTNAMES=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[*]}')
+  echo "[INFO]: HTTPRoute hostnames: ${HOSTNAMES}"
+  
+  if [ -z "${HOSTNAMES}" ]; then
+    echo "[ERROR]: No hostnames configured on HTTPRoute"
+    exit 1
+  fi
+  
+  echo "[INFO]: Gateway API verification complete for ${DC_APP}"
+}
+
 # create 2 NodePort services to expose each DC pod, required for functional tests
 # where communication between nodes and cache replication is tested
 create_backdoor_services() {

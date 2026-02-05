@@ -13,8 +13,8 @@ To see the custom values you used for this release:
 
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
-{{ if .Values.ingress.create -}}
-{{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ include "bitbucket.ingressPath" . }}
+{{ if or .Values.ingress.create .Values.gateway.create -}}
+{{ title .Chart.Name }} service URL: {{ if .Values.gateway.create }}{{ ternary "https" "http" .Values.gateway.https }}{{ else }}{{ ternary "https" "http" .Values.ingress.https }}{{ end -}}://{{ include "bitbucket.hostname" . }}{{ include "bitbucket.ingressPath" . }}
 {{- else }}
 Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- if contains "NodePort" .Values.bitbucket.service.type }}
@@ -64,7 +64,7 @@ Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 
 {{- if and (.Values.bitbucket.mesh.enabled) (not .Values.bitbucket.mesh.nodeAutoRegistration)}}
 
-Bitbucket Mesh deployed. You can register Mesh nodes at {{ if .Values.ingress.create }}{{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ include "bitbucket.ingressPath" . }}{{ else }}${BITBUCKET_URL}{{ end }}/admin/git/mesh using the following URLs:
+Bitbucket Mesh deployed. You can register Mesh nodes at {{ if or .Values.ingress.create .Values.gateway.create }}{{ ternary "https" "http" .Values.ingress.https -}}://{{ include "bitbucket.hostname" . }}{{ include "bitbucket.ingressPath" . }}{{ else }}${BITBUCKET_URL}{{ end }}/admin/git/mesh using the following URLs:
 
 {{- range $index := until (.Values.bitbucket.mesh.replicaCount | int) }}
 {{- with $ }}

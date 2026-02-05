@@ -25,10 +25,10 @@ data:
                    acceptCount="{{ .Values.confluence.tomcatConfig.acceptCount | default "100" }}"
                    debug="{{ .Values.confluence.tomcatConfig.debug | default "0" }}"
                    URIEncoding="{{ .Values.confluence.tomcatConfig.uriEncoding | default "UTF-8" }}"
-                   secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.confluence.tomcatConfig.secure }}"
-                   scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.confluence.tomcatConfig.scheme }}"
-                   proxyName="{{ .Values.confluence.tomcatConfig.proxyName | default .Values.ingress.host  }}"
-                   proxyPort="{{ .Values.confluence.tomcatConfig.proxyPort | default (ternary "443" "80" .Values.ingress.https)  }}"
+                   secure="{{ default (ternary "true" "false" (include "confluence.https" .)) .Values.confluence.tomcatConfig.secure }}"
+                   scheme="{{ default (ternary "https" "http" (include "confluence.https" .)) .Values.confluence.tomcatConfig.scheme }}"
+                   proxyName="{{ .Values.confluence.tomcatConfig.proxyName | default (include "confluence.hostname" .)  }}"
+                   proxyPort="{{ .Values.confluence.tomcatConfig.proxyPort | default (include "confluence.proxyPort" .)  }}"
                    maxHttpHeaderSize="{{ .Values.confluence.tomcatConfig.maxHttpHeaderSize | default "8192" }}" />
 
          {{- if .Values.confluence.tunnel.additionalConnector.port }}

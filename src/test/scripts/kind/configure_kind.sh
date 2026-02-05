@@ -20,6 +20,47 @@ kubectl wait --for=condition=ready pod \
         --timeout=300s \
         -n ingress-nginx
 
+# Install Gateway API CRDs and Controller
+# This enables testing of Gateway API features alongside traditional Ingress
+if [ -z "${SKIP_GATEWAY_API}" ]; then
+  echo "[INFO]: Installing Gateway API CRDs"
+  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+  
+  echo "[INFO]: Waiting for Gateway API CRDs to be established"
+  kubectl wait --for condition=established --timeout=60s crd/gateways.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/httproutes.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
+  
+  echo "[INFO]: Installing Envoy Gateway"
+  helm repo add eg https://gateway.envoyproxy.io
+  helm repo update
+  helm install eg eg/gateway-helm \
+      --create-namespace \
+      --namespace envoy-gateway-system \
+      --set deployment.envoyGateway.resources.requests.cpu=50m \
+      --set deployment.envoyGateway.resources.requests.memory=100Mi \
+      --timeout=300s \
+      --wait
+  
+  echo "[INFO]: Waiting for Envoy Gateway to be ready"
+  kubectl wait --for=condition=available deployment/envoy-gateway \
+      --namespace envoy-gateway-system \
+      --timeout=300s
+  
+  echo "[INFO]: Creating test Gateway resource in atlassian namespace"
+  kubectl apply -f src/test/config/kind/gateway.yaml
+  
+  echo "[INFO]: Waiting for Gateway to be programmed"
+  kubectl wait --for=condition=Programmed gateway/atlassian-gateway -n atlassian --timeout=300s || {
+    echo "[WARN]: Gateway not programmed in time, continuing anyway"
+    kubectl describe gateway/atlassian-gateway -n atlassian || true
+  }
+  
+  echo "[INFO]: Gateway API installation complete"
+else
+  echo "[INFO]: Skipping Gateway API installation (SKIP_GATEWAY_API is set)"
+fi
+
 # this is for local runs, because existing nfs server images does not run on arm64 platforms
 # instead, we create a hostPath RWX volume and override the default common settings
 if [ -z "${HOSTPATH_PV}" ]; then

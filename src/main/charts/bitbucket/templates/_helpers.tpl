@@ -608,3 +608,59 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
 {{- end }}
 {{- end }}
+
+{{/*
+Validate Gateway API configuration
+*/}}
+{{- define "bitbucket.validateGatewayConfig" -}}
+{{- if and .Values.gateway.create .Values.ingress.create -}}
+{{- fail "ERROR: Cannot enable both gateway.create and ingress.create" -}}
+{{- end -}}
+{{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
+{{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
+{{- end -}}
+{{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
+{{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get Gateway namespace - defaults to release namespace if not specified
+*/}}
+{{- define "bitbucket.gatewayNamespace" -}}
+{{- .Values.gateway.gatewayNamespace | default .Release.Namespace -}}
+{{- end -}}
+
+{{/*
+Get the hostname for the service - works with both Ingress and Gateway API
+Returns the first hostname from gateway.hostnames if gateway is enabled, otherwise ingress.host
+*/}}
+{{- define "bitbucket.hostname" -}}
+{{- if .Values.gateway.create -}}
+{{- index .Values.gateway.hostnames 0 -}}
+{{- else -}}
+{{- .Values.ingress.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if HTTPS is enabled (gateway.https if gateway is enabled, otherwise ingress.https)
+*/}}
+{{- define "bitbucket.https" -}}
+{{- if .Values.gateway.create -}}
+{{- .Values.gateway.https -}}
+{{- else -}}
+{{- .Values.ingress.https -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the proxy port (gateway or ingress-based)
+*/}}
+{{- define "bitbucket.proxyPort" -}}
+{{- if .Values.gateway.create -}}
+{{- ternary "443" "80" .Values.gateway.https -}}
+{{- else -}}
+{{- default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- end -}}
+{{- end -}}

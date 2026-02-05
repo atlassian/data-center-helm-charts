@@ -238,11 +238,11 @@ spec:
             {{- end }}
             - name: PLUGIN_SSH_PORT
               value: {{ .Values.bitbucket.ports.ssh | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: SERVER_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "bitbucket.hostname" . | quote }}
             - name: SERVER_PROXY_PORT
-              value: {{ include "bitbucket.ingressPort" . | quote }}
+              value: {{ include "bitbucket.proxyPort" . | quote }}
             - name: SETUP_BASEURL
               value: {{ include "bitbucket.baseUrl" . | quote }}
             {{- with .Values.bitbucket.displayName }}
