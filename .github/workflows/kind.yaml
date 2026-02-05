@@ -71,7 +71,7 @@ jobs:
       - name: Verify ${{inputs.dc_app}} status
         run: |
           source src/test/scripts/kind/deploy_app.sh
-          verify_ingress
+          verify_gateway_ingress
 
       - name: Verify ${{inputs.dc_app}} grafana dashboards
         run: |
@@ -89,6 +89,17 @@ jobs:
         run: |
           source src/test/scripts/kind/deploy_app.sh
           verify_metrics
+
+      - name: Verify Gateway API integration
+        run: |
+          export TEST_GATEWAY=true
+          source src/test/scripts/kind/deploy_app.sh
+          verify_gateway
+
+      - name: Verify ${{inputs.dc_app}} status via Gateway
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_gateway_ingress
 
       - name: Get debug info
         if: always()

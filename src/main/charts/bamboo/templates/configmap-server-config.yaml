@@ -32,10 +32,10 @@ data:
                    protocol="{{ .Values.bamboo.tomcatConfig.protocol | default "HTTP/1.1" }}"
                    redirectPort="{{ .Values.bamboo.tomcatConfig.redirectPort | default "8443" }}"
                    acceptCount="{{ .Values.bamboo.tomcatConfig.acceptCount | default "100" }}"
-                   secure="{{ default (ternary "true" "false" .Values.ingress.https) .Values.bamboo.tomcatConfig.secure }}"
-                   scheme="{{ default (ternary "https" "http" .Values.ingress.https) .Values.bamboo.tomcatConfig.scheme }}"
-                   proxyName="{{ .Values.bamboo.tomcatConfig.proxyName | default .Values.ingress.host  }}"
-                   proxyPort="{{ .Values.bamboo.tomcatConfig.proxyPort | default (ternary "443" "80" .Values.ingress.https)  }}"
+                   secure="{{ default (ternary "true" "false" (include "bamboo.https" .)) .Values.bamboo.tomcatConfig.secure }}"
+                   scheme="{{ default (ternary "https" "http" (include "bamboo.https" .)) .Values.bamboo.tomcatConfig.scheme }}"
+                   proxyName="{{ .Values.bamboo.tomcatConfig.proxyName | default (include "bamboo.hostname" .)  }}"
+                   proxyPort="{{ .Values.bamboo.tomcatConfig.proxyPort | default (include "bamboo.proxyPort" .)  }}"
 
                    {{- if .Values.bamboo.tomcatConfig.address }}
                    address="{{ .Values.bamboo.tomcatConfig.address }}"
