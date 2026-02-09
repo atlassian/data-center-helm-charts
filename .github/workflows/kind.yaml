@@ -90,6 +90,30 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_metrics
 
+      - name: Upgrade to Gateway API (disable Ingress, enable Gateway)
+        run: |
+          echo "[INFO]: Upgrading ${DC_APP} to use Gateway API instead of Ingress"
+          helm upgrade ${DC_APP} ./src/main/charts/${DC_APP} \
+            -f src/test/config/kind/common-values.yaml \
+            -f src/test/config/${DC_APP}/values.yaml \
+            --set ingress.create=false \
+            --set gateway.create=true \
+            --set gateway.gatewayName=atlassian-gateway \
+            --set gateway.hostnames[0]=localhost \
+            --wait --timeout=360s --debug \
+            -n atlassian
+
+      - name: Verify Gateway API integration
+        run: |
+          export TEST_GATEWAY=true
+          source src/test/scripts/kind/deploy_app.sh
+          verify_gateway
+
+      - name: Verify ${{inputs.dc_app}} status via Gateway
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_ingress
+
       - name: Get debug info
         if: always()
         run: |

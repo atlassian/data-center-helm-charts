@@ -129,6 +129,43 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_openshift_analytics
 
+      - name: Install Gateway API CRDs
+        run: |
+          echo "[INFO]: Installing Gateway API CRDs"
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+          kubectl wait --for=condition=Established crd/gateways.gateway.networking.k8s.io --timeout=60s
+          kubectl wait --for=condition=Established crd/httproutes.gateway.networking.k8s.io --timeout=60s
+
+      - name: Create Gateway resource for OpenShift
+        run: |
+          echo "[INFO]: Creating Gateway resource for OpenShift"
+          oc apply -f src/test/config/openshift/gateway.yaml
+
+      - name: Upgrade to Gateway API (disable Ingress/Route, enable Gateway)
+        run: |
+          echo "[INFO]: Upgrading ${DC_APP} to use Gateway API instead of Ingress/Route"
+          export OPENSHIFT_VALUES="-f ./src/test/config/openshift/openshift.yaml --set ${DC_APP}.resources.container.requests.cpu=20m --set ${DC_APP}.resources.container.requests.memory=5Mi --set synchrony.resources.container.requests.cpu=20m --set synchrony.resources.container.requests.memory=5Mi"
+          helm upgrade ${DC_APP} ./src/main/charts/${DC_APP} \
+            ${OPENSHIFT_VALUES} \
+            --set ingress.create=false \
+            --set gateway.create=true \
+            --set gateway.gatewayName=atlassian-gateway \
+            --set gateway.hostnames[0]=atlassian.apps.crc.testing \
+            --wait --timeout=360s --debug \
+            -n atlassian
+
+      - name: Verify Gateway API integration
+        run: |
+          export TEST_GATEWAY=true
+          source src/test/scripts/kind/deploy_app.sh
+          verify_gateway
+
+      - name: Verify ${{inputs.dc_app}} status via Gateway
+        run: |
+          export OPENSHIFT_VALUES="1"
+          source src/test/scripts/kind/deploy_app.sh
+          verify_ingress
+
       - name: Get debug info
         if: always()
         run: |
