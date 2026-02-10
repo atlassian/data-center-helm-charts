@@ -32,9 +32,9 @@ if [ -z "${SKIP_GATEWAY_API}" ]; then
   kubectl wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
   
   echo "[INFO]: Installing Envoy Gateway"
-  helm repo add eg https://gateway.envoyproxy.io
-  helm repo update
-  helm install eg eg/gateway-helm \
+  # Envoy Gateway uses OCI registry, not a traditional Helm repo
+  helm install eg oci://docker.io/envoyproxy/gateway-helm \
+      --version v1.2.5 \
       --create-namespace \
       --namespace envoy-gateway-system \
       --set deployment.envoyGateway.resources.requests.cpu=50m \
