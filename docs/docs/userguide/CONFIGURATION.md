@@ -80,7 +80,7 @@ curl -I https://bitbucket.example.com/status
 
 ### Other Ingress Controllers
 
-For other ingress controllers (AWS ALB, Google Cloud Load Balancer, Azure Application Gateway), refer to your controller's documentation for session stickiness configuration.
+For other ingress controllers ([AWS ALB](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/){.external}, [Google Cloud Load Balancer](https://cloud.google.com/load-balancing){.external}, [Azure Application Gateway](https://azure.microsoft.com/en-us/products/application-gateway){.external}), refer to your controller's documentation for session stickiness configuration.
 
 ## :material-directions-fork: LoadBalancer/NodePort Service Type
 
@@ -141,7 +141,7 @@ For these reasons, the default volume configuration of the Helm charts is suitab
 
 While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external} and `PersistentVolumeClaims`.
 
-The `local-home` volume requires a `PersistentVolume` with [ReadWriteOnce (RWO)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability, and `shared-home` requires a `PersistentVolume` with [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own `RWX` volumes (e.g. [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}). While this entails a higher upfront setup effort, it gives the best flexibility.
+The `local-home` volume requires a `PersistentVolume` with [ReadWriteOnce (RWO)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability, and `shared-home` requires a `PersistentVolume` with [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own `RWX` volumes (e.g. [AWS EFS](https://aws.amazon.com/efs/){.external}, [Google Filestore](https://cloud.google.com/filestore){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}). While this entails a higher upfront setup effort, it gives the best flexibility.
 
 ### Volumes configuration
 By default, the charts will configure the `local-home` and `shared-home` values as follows:
@@ -360,7 +360,7 @@ By default, the Helm charts will not configure the products for Data Center clus
         Clustering is enabled by default. To disable clustering, set `crowd.clustering.enabled` to `false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
 
 
-In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
+In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}, [GCP Filestore](https://cloud.google.com/filestore){.external}, or any NFS-compatible storage)
 
 ## :material-book-cog: Generating configuration files
 

@@ -70,7 +70,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 
 ### :material-folder-network: Configure a shared-home volume
 * All of the Data Center products require a shared network filesystem if they are to be operated in multi-node clusters. If no shared filesystem is available, the products can only be operated in single-node configuration.
-* Some cloud based options for a shared filesystem include [AWS EFS](https://aws.amazon.com/efs/){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}. You can also stand up your own NFS.
+* Some cloud based options for a shared filesystem include [Google Filestore](https://cloud.google.com/filestore){.external}, [AWS EFS](https://aws.amazon.com/efs/){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}. You can also stand up your own NFS.
 
 !!! info "Bitbucket shared storage"
       Due to the high performance requirements on IO operations, it is critical that you adhere to the requirements in [Bitbucket Supported platforms](https://confluence.atlassian.com/display/BitbucketServer/Supported+platforms).
@@ -85,7 +85,7 @@ Before installing the Data Center Helm charts you need to set up your environmen
 * As with the [shared-home](#configure-a-shared-home-volume), each pod requires its own volume for `local-home`. Each product needs this for defining operational data.
 * If not defined, an [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir){.external} will be utilised.
 * Although an `emptyDir` may be acceptable for evaluation purposes, we recommend that each pod is allocated its own volume.
-* A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision an [AWS EBS](https://aws.amazon.com/ebs/?ebs-whats-new.sort-by=item.additionalFields.postDateTime&ebs-whats-new.sort-order=desc){.external} volume to each pod.
+* A `local-home` volume could be logically represented within the cluster using a `StorageClass`. This will dynamically provision a persistent block volume (e.g., [AWS EBS](https://docs.aws.amazon.com/ebs/){.external}, [GCP Persistent Disks](https://docs.cloud.google.com/compute/docs/disks/persistent-disks){.external}, [Azure Managed Disks](https://azure.microsoft.com/en-au/products/storage/disks){.external}) to each pod depending on your cloud provider.
 
 !!!example ""
       An example of this strategy can be found [the local storage example](../examples/storage/aws/LOCAL_STORAGE.md).
