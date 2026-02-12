@@ -168,8 +168,10 @@ We provide a set of Grafana specific dashboards for each DC product. These can b
     monitoring:
       jmxExporterPortType: LoadBalancer
     ``` 
-    Make sure you allow access only to Prometheus CIDR in the LB SecurityGroup (if you deploy to AWS) because
-    JMX endpoints are not password protected. See: [jmx_exporter does not support authentication to the HTTP endpoint](https://github.com/prometheus/jmx_exporter/issues/687)
+    Make sure you restrict access to the Prometheus endpoint to only authorized CIDR ranges because JMX endpoints are not password protected. Configure your load balancer's network security rules to limit inbound access. 
+
+    See: [jmx_exporter does not support authentication to the HTTP 
+    endpoint](https://github.com/prometheus/jmx_exporter/issues/687)
 
 If you use a standalone Prometheus in Kubernetes, you need to manually create scrape configuration. See: [Monitor Jira with Prometheus and Grafana](https://confluence.atlassian.com/adminjiraserver/monitor-jira-with-prometheus-and-grafana-1155466715.html).
 
