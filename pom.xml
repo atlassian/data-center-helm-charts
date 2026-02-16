@@ -93,7 +93,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <junit5.version>5.9.0</junit5.version>
-        <assertj.version>3.23.1</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <vavr.version>0.10.3</vavr.version>
         <jackson.version>2.13.3</jackson.version>
         <kubernetes-client.version>6.0.0</kubernetes-client.version>
