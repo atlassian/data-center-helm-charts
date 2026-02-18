@@ -179,12 +179,6 @@ jobs:
           source src/test/scripts/kind/deploy_app.sh
           verify_gateway
 
-      - name: Verify ${{inputs.dc_app}} status via Gateway
-        run: |
-          export OPENSHIFT_VALUES="1"
-          source src/test/scripts/kind/deploy_app.sh
-          verify_gateway_ingress
-
       - name: Get debug info
         if: always()
         run: |

@@ -7,7 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
 import test.model.Kind;
-import test.model.KubeResource;
 import test.model.Product;
 
 import java.util.Map;
