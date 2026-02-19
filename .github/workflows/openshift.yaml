@@ -106,11 +106,13 @@ jobs:
           oc wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
 
           # Envoy Gateway (installs into envoy-gateway-system)
-          # NOTE: The chart uses fixed runAsUser/runAsGroup IDs. On OpenShift this typically
-          # requires granting the anyuid SCC to the Envoy Gateway service accounts.
+          # OpenShift admission can reject fixed runAsUser/seccomp settings unless the
+          # service accounts are allowed to use a more permissive SCC.
           oc create namespace envoy-gateway-system --dry-run=client -o yaml | oc apply -f -
-          oc adm policy add-scc-to-user anyuid system:serviceaccount:envoy-gateway-system:envoy-gateway || true
-          oc adm policy add-scc-to-user anyuid system:serviceaccount:envoy-gateway-system:eg-gateway-helm-certgen || true
+          # Pre-grant SCCs to all service accounts in the namespace so Helm hooks can run
+          # even before the chart-created ServiceAccounts exist.
+          oc adm policy add-scc-to-group anyuid system:serviceaccounts:envoy-gateway-system || true
+          oc adm policy add-scc-to-group privileged system:serviceaccounts:envoy-gateway-system || true
 
           helm install eg oci://docker.io/envoyproxy/gateway-helm \
             --version v1.2.5 \
