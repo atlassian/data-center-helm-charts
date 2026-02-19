@@ -106,15 +106,24 @@ jobs:
           oc wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
 
           # Envoy Gateway (installs into envoy-gateway-system)
+          # NOTE: The chart uses fixed runAsUser/runAsGroup IDs. On OpenShift this typically
+          # requires granting the anyuid SCC to the Envoy Gateway service accounts.
+          oc create namespace envoy-gateway-system --dry-run=client -o yaml | oc apply -f -
+          oc adm policy add-scc-to-user anyuid system:serviceaccount:envoy-gateway-system:envoy-gateway || true
+          oc adm policy add-scc-to-user anyuid system:serviceaccount:envoy-gateway-system:eg-gateway-helm-certgen || true
+
           helm install eg oci://docker.io/envoyproxy/gateway-helm \
             --version v1.2.5 \
-            --create-namespace \
             --namespace envoy-gateway-system \
             --set deployment.envoyGateway.resources.requests.cpu=50m \
             --set deployment.envoyGateway.resources.requests.memory=100Mi \
             --skip-crds \
-            --timeout=300s \
-            --wait
+            --timeout=600s \
+            --wait || { \
+              oc get all -n envoy-gateway-system || true; \
+              oc get events -n envoy-gateway-system --sort-by='.lastTimestamp' | tail -n 200 || true; \
+              exit 1; \
+            }
 
           oc wait --for=condition=available deployment/envoy-gateway \
             --namespace envoy-gateway-system \
@@ -129,17 +138,23 @@ jobs:
           spec:
             controllerName: gateway.envoyproxy.io/gatewayclass-controller
           EOF
-          oc wait --for=condition=Accepted gatewayclass/eg --timeout=60s || (oc get gatewayclass/eg -o yaml && true)
+          oc wait --for=condition=Accepted gatewayclass/eg --timeout=180s || { oc get gatewayclass/eg -o yaml; oc get pods -n envoy-gateway-system -o wide || true; exit 1; }
 
           # Create test Gateway
           oc apply -f src/test/config/openshift/gateway.yaml
-          oc wait --for=condition=Accepted gateway/atlassian-gateway -n atlassian --timeout=300s || true
+          oc wait --for=condition=Accepted gateway/atlassian-gateway -n atlassian --timeout=300s || { oc describe gateway/atlassian-gateway -n atlassian; oc get events -n atlassian --sort-by='.lastTimestamp' | tail -n 200 || true; exit 1; }
 
           # Wait for data-plane
           oc wait --for=condition=Available deployment \
             -n envoy-gateway-system \
             -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
-            --timeout=300s || true
+            --timeout=300s || { \
+              oc get deployments -n envoy-gateway-system -o wide; \
+              oc get pods -n envoy-gateway-system -o wide; \
+              oc describe deployment -n envoy-gateway-system -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway || true; \
+              oc get events -n envoy-gateway-system --sort-by='.lastTimestamp' | tail -n 200 || true; \
+              exit 1; \
+            }
 
       - name: Deploy postgres database
         run: |

@@ -6,7 +6,7 @@ kubectl cluster-info
 echo "[INFO]: current-context:" $(kubectl config current-context)
 echo "[INFO]: environment-kubeconfig:" "${KUBECONFIG}"
 
-kubectl create namespace atlassian || true
+kubectl create namespace atlassian --dry-run=client -o yaml | kubectl apply -f -
 
 # even though there's a kind command to load a local image directly to KinD container runtime
 # let's deploy an insecure registry in case we need it for any further tests
@@ -52,9 +52,10 @@ spec:
 EOF
 
   echo "[INFO]: Waiting for GatewayClass 'eg' to be accepted"
-  kubectl wait --for=condition=Accepted gatewayclass/eg --timeout=60s || {
-    echo "[WARN]: GatewayClass not accepted in time"
-    kubectl get gatewayclass/eg -o yaml || true
+  kubectl wait --for=condition=Accepted gatewayclass/eg --timeout=180s || {
+    echo "[ERROR]: GatewayClass not accepted in time"
+    kubectl get gatewayclass/eg -o yaml
+    exit 1
   }
   
   echo "[INFO]: Creating test Gateway resource in atlassian namespace"
@@ -66,8 +67,9 @@ EOF
   # 1) Gateway Accepted=True (control-plane picked it up)
   # 2) The Envoy proxy Deployment for this Gateway to become Available (data-plane ready)
   kubectl wait --for=condition=Accepted gateway/atlassian-gateway -n atlassian --timeout=300s || {
-    echo "[WARN]: Gateway not accepted in time, continuing anyway"
-    kubectl describe gateway/atlassian-gateway -n atlassian || true
+    echo "[ERROR]: Gateway not accepted in time"
+    kubectl describe gateway/atlassian-gateway -n atlassian
+    exit 1
   }
 
   echo "[INFO]: Waiting for Envoy proxy deployment for the Gateway"
@@ -75,9 +77,10 @@ EOF
     -n envoy-gateway-system \
     -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
     --timeout=300s || {
-      echo "[WARN]: Envoy proxy deployment not ready in time"
-      kubectl get deployments -n envoy-gateway-system -o wide || true
-      kubectl get pods -n envoy-gateway-system -o wide || true
+      echo "[ERROR]: Envoy proxy deployment not ready in time"
+      kubectl get deployments -n envoy-gateway-system -o wide
+      kubectl get pods -n envoy-gateway-system -o wide
+      exit 1
     }
   
   echo "[INFO]: Gateway API installation complete"
