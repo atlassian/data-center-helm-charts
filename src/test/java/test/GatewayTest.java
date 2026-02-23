@@ -215,6 +215,24 @@ class GatewayTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"})
+    void gateway_routes_synchrony_when_enabled(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "gateway.create", "true",
+                "gateway.gatewayName", "my-gateway",
+                "gateway.hostnames[0]", "confluence.example.com",
+                "synchrony.enabled", "true"));
+
+        final var httpRoute = resources.get(Kind.HTTPRoute);
+
+        // When Synchrony is enabled, Confluence creates an extra rule.
+        // We just validate it points at the synchrony Service.
+        assertThat(httpRoute.getNode("spec", "rules").required(0)
+                .path("backendRefs").required(0).path("name"))
+                .hasTextContaining("synchrony");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo"})
     void gateway_backend_refs_bamboo(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(

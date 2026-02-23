@@ -37,6 +37,20 @@ spec:
   
   # Routing rules
   rules:
+
+  {{- if .Values.synchrony.enabled }}
+  # Synchrony rule (collaborative editing)
+  - matches:
+    - path:
+        type: PathPrefix
+        value: {{ .Values.synchrony.ingress.path | default "/synchrony" }}
+
+    backendRefs:
+    - name: {{ include "synchrony.fullname" . }}
+      port: {{ .Values.synchrony.service.port }}
+      weight: 100
+  {{- end }}
+
   # Default rule - routes to Confluence service
   - matches:
     - path:

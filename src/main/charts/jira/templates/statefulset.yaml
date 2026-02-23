@@ -1,3 +1,4 @@
+{{- include "jira.validateGatewayConfig" . -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:

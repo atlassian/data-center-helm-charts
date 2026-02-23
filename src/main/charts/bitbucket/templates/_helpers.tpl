@@ -137,10 +137,15 @@ Mesh Pod labels
 {{- end }}
 
 {{/*
-Create default value for ingress path
+Create default value for ingress path.
+
+When using Gateway API, prefer gateway.path to keep URL/path
+behavior consistent with ingress.path.
 */}}
 {{- define "bitbucket.ingressPath" -}}
-{{- if .Values.ingress.path -}}
+{{- if .Values.gateway.create -}}
+{{- .Values.gateway.path -}}
+{{- else if .Values.ingress.path -}}
 {{- .Values.ingress.path -}}
 {{- else -}}
 {{ default ( "/" ) .Values.bitbucket.service.contextPath -}}
