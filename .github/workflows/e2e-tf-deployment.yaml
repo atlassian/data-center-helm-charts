@@ -15,6 +15,17 @@ on:
   pull_request_target:
     types: [ labeled ]
   workflow_dispatch:
+    inputs:
+      use_gateway_api:
+        description: 'Use Gateway API (Envoy Gateway) instead of NGINX Ingress'
+        required: false
+        type: boolean
+        default: false
+      terraform_branch:
+        description: 'Terraform repo branch to use (leave empty for latest LTS tag)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   test:
@@ -40,6 +51,7 @@ jobs:
       TF_VAR_crowdstrike_kms_key_name: ${{ secrets.TF_VAR_CROWDSTRIKE_KMS_KEY_NAME }}
       TF_VAR_crowdstrike_aws_account_id: ${{ secrets.TF_VAR_CROWDSTRIKE_AWS_ACCOUNT_ID }}
       USE_DOMAIN: "true"
+      USE_GATEWAY_API: ${{ github.event.inputs.use_gateway_api || 'false' }}
 
     steps:
       - name: Checkout Helm charts
@@ -82,11 +94,17 @@ jobs:
       - name: Checkout Deployment Automation
         run: |
           DEPLOYMENT_REPO='https://github.com/atlassian-labs/data-center-terraform.git'
-          LTS=$(git ls-remote --tags --exit-code --refs "$DEPLOYMENT_REPO" \
-            | sed -E 's/^[[:xdigit:]]+[[:space:]]+refs\/tags\/(.+)/\1/g' \
-            | grep '^[0-9]*.[0-9]*.[0-9]*$' | sort -V | tail -1)
-          echo "Using LTS version('${LTS}') of Deployment Automation to provision the infrastructure for Atlassian DC Products."
-          git clone -b $LTS $DEPLOYMENT_REPO tf
+          CUSTOM_BRANCH="${{ github.event.inputs.terraform_branch }}"
+          if [ -n "$CUSTOM_BRANCH" ]; then
+            echo "Using custom branch '${CUSTOM_BRANCH}' of Deployment Automation."
+            git clone -b $CUSTOM_BRANCH $DEPLOYMENT_REPO tf
+          else
+            LTS=$(git ls-remote --tags --exit-code --refs "$DEPLOYMENT_REPO" \
+              | sed -E 's/^[[:xdigit:]]+[[:space:]]+refs\/tags\/(.+)/\1/g' \
+              | grep '^[0-9]*.[0-9]*.[0-9]*$' | sort -V | tail -1)
+            echo "Using LTS version('${LTS}') of Deployment Automation to provision the infrastructure for Atlassian DC Products."
+            git clone -b $LTS $DEPLOYMENT_REPO tf
+          fi
 
       - name: Setup test environment
         uses: actions/setup-go@v3
@@ -147,6 +165,14 @@ jobs:
           bamboo_install_local_chart = true
           crowd_install_local_chart = true
           EOF
+
+          # Append Gateway API toggle if enabled
+          if [ "$USE_GATEWAY_API" = "true" ]; then
+            echo 'use_gateway_api = true' >> ./e2etest/test-config.tfvars.tmpl
+            echo "Gateway API mode enabled (Envoy Gateway will replace NGINX Ingress)"
+          else
+            echo "NGINX Ingress mode (default)"
+          fi
 
           # Deploy infrastructure, install helm charts, run e2e tests, and cleanup all
           # boto3 ignores AWS creds env vars for some reason

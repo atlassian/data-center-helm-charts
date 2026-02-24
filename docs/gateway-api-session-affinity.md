@@ -9,6 +9,20 @@ nginx.ingress.kubernetes.io/affinity-mode: "persistent"
 
 With Gateway API, session affinity is **not** part of the standard HTTPRoute spec and must be configured separately.
 
+### Cookie naming
+
+Use a **dedicated routing cookie** per product (e.g. `ATLROUTE_JIRA`) rather than the application's own `JSESSIONID`. All Atlassian DC products run on Tomcat, which sets `JSESSIONID` to track the user's HTTP session. If the load balancer also uses `JSESSIONID` for routing, the first request creates a race condition: both Envoy and Tomcat emit `Set-Cookie: JSESSIONID` with different values, and on the next request the hash may route to a different pod -- breaking the session. A separate cookie avoids this entirely and mirrors how NGINX Ingress used its own `route` cookie.
+
+Recommended cookie names:
+
+| Product | Cookie |
+|---|---|
+| Jira | `ATLROUTE_JIRA` |
+| Confluence | `ATLROUTE_CONFLUENCE` |
+| Bitbucket | `ATLROUTE_BITBUCKET` |
+| Bamboo | `ATLROUTE_BAMBOO` |
+| Crowd | `ATLROUTE_CROWD` |
+
 ## Options at a glance
 
 | Approach | Cookie-based | Standard channel | Production-ready |
@@ -41,7 +55,7 @@ spec:
     consistentHash:
       type: Cookie
       cookie:
-        name: JSESSIONID
+        name: ATLROUTE_<PRODUCT>   # e.g. ATLROUTE_JIRA -- see cookie naming above
         ttl: 10h
 ```
 
@@ -69,7 +83,7 @@ spec:
     loadBalancer:
       consistentHash:
         httpCookie:
-          name: JSESSIONID
+          name: ATLROUTE_<PRODUCT>   # e.g. ATLROUTE_CONFLUENCE -- see cookie naming above
           ttl: 36000s
 ```
 
@@ -109,7 +123,7 @@ gateway:
         type: PathPrefix
         value: /
     sessionPersistence:
-      sessionName: JSESSIONID
+      sessionName: ATLROUTE_<PRODUCT>   # use a dedicated cookie, not JSESSIONID
       type: Cookie
       absoluteTimeout: 10h
       idleTimeout: 1h
