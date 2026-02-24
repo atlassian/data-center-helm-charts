@@ -654,6 +654,18 @@ gateway:
   #   - name: confluence-api
   #     port: 8090
 
+  # -- Session affinity (sticky sessions) is required for Atlassian DC products but
+  # is not part of the standard Gateway API HTTPRoute spec. It must be configured
+  # separately through your Gateway implementation's own policy resources.
+  # See docs/gateway-api-session-affinity.md for working examples.
+
+  # -- Timeout configuration for HTTPRoute rules (standard channel).
+  # See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteTimeouts
+  #
+  timeouts: {}
+  # request: "60s"
+  # backendRequest: "60s"
+
 # Confluence configuration
 #
 confluence:

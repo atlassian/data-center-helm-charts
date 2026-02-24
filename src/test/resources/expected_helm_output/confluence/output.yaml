@@ -255,6 +255,7 @@ data:
       labels: {}
       path: /
       pathType: PathPrefix
+      timeouts: {}
     hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent

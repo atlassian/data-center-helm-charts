@@ -262,6 +262,38 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void gateway_with_timeouts(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "gateway.create", "true",
+                "gateway.gatewayName", "my-gateway",
+                "gateway.hostnames[0]", product + ".example.com",
+                "gateway.timeouts.request", "120s",
+                "gateway.timeouts.backendRequest", "60s"));
+
+        final var httpRoute = resources.get(Kind.HTTPRoute);
+        final var rule = httpRoute.getNode("spec", "rules").required(0);
+        assertThat(rule.path("timeouts").path("request"))
+                .hasTextEqualTo("120s");
+        assertThat(rule.path("timeouts").path("backendRequest"))
+                .hasTextEqualTo("60s");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void gateway_no_timeouts_by_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "gateway.create", "true",
+                "gateway.gatewayName", "my-gateway",
+                "gateway.hostnames[0]", product + ".example.com"));
+
+        final var httpRoute = resources.get(Kind.HTTPRoute);
+        final var rule = httpRoute.getNode("spec", "rules").required(0);
+        Assertions.assertTrue(rule.path("timeouts").isMissingNode(),
+                "timeouts should not be present when not configured");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void gateway_default_path_is_root(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",

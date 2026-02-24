@@ -42,12 +42,14 @@ spec:
     - path:
         type: {{ .Values.gateway.pathType }}
         value: {{ .Values.gateway.path }}
-    
+    {{- with .Values.gateway.timeouts }}
+    timeouts:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
     {{- if .Values.gateway.filters }}
     filters:
     {{- toYaml .Values.gateway.filters | nindent 4 }}
     {{- end }}
-    
     backendRefs:
     - name: {{ include "common.names.fullname" . }}
       port: {{ .Values.bamboo.service.port }}
