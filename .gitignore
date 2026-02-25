@@ -16,3 +16,5 @@ src/main/charts/*/charts/*.tgz
 
 # Stale tmpfile from failed release process
 src/main/charts/*/tmp*
+
+# Test comment
