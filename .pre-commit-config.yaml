@@ -9,3 +9,5 @@ repos:
           # Repeating the flag adds this to the list, now [./_templates.gotmpl, README.md.gotmpl]
           # A base filename makes it relative to each chart directory found
           - --template-files=./README.md.gotmpl
+
+# Test Comment
