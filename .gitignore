@@ -16,3 +16,5 @@ src/main/charts/*/charts/*.tgz
 
 # Stale tmpfile from failed release process
 src/main/charts/*/tmp*
+
+# Trying to add few things to create PR and test the workflows
