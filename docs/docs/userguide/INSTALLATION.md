@@ -68,7 +68,12 @@ database:
     Read about [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/){.external}.
     
 ## 4. Configure Ingress
-Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure the [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external} provisioned as part of the [Prerequisites](PREREQUISITES.md). The values you provide here will be used to provision an Ingress resource for the controller. Refer to the associated comments within the `values.yaml` file for additional details on how to configure the Ingress resource:
+Using the `values.yaml` file obtained in [step 2](#2-obtain-valuesyaml), configure how the product will be exposed outside the cluster. You can use either:
+
+- a Kubernetes **Ingress** (requires an [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external}), or
+- a Kubernetes Gateway API **HTTPRoute** (requires a Gateway API controller and a `Gateway`).
+
+The values you provide here will be used to provision either an `Ingress` or an `HTTPRoute` resource for your chosen controller. Refer to the associated comments within the `values.yaml` file for additional details.
 
 ```yaml
 ingress:
@@ -83,10 +88,28 @@ ingress:
   tlsSecretName: <tls_certificate_name>
 ```
 
+Alternatively, to use Gateway API:
+
+```yaml
+ingress:
+  create: false
+
+gateway:
+  create: true  # Creates an HTTPRoute resource
+  gatewayName: <gateway_name>
+  # gatewayNamespace: <gateway_namespace>  # optional, defaults to release namespace
+  hostnames:
+    - <dns_host_name>
+  https: true
+```
+
 !!!info "Ingress configuration"
     For additional details on Ingress controllers see [the Ingress section of the configuration guide](CONFIGURATION.md#ingress). 
 
-    See an example of [how to set up a controller](../examples/ingress/CONTROLLERS.md).
+    See an example of [how to set up an NGINX Ingress Controller](../examples/ingress/INGRESS_NGINX.md) and an overview of [controller options](../examples/ingress/CONTROLLERS.md).
+
+!!!info "Gateway API configuration"
+    For Gateway API exposure, start with the [Gateway API controller guide](../examples/ingress/GATEWAY_API.md) and then configure [session affinity](../examples/ingress/GATEWAY_API_SESSION_AFFINITY.md).
     
 ## 5. Configure persistent storage
 

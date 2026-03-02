@@ -12,7 +12,7 @@ In order to deploy Atlassian’s Data Center products, the following is required
 Before installing the Data Center Helm charts you need to set up your environment:
 
 1. [Create and connect to the Kubernetes cluster](#create-and-connect-to-the-kubernetes-cluster)
-2. [Provision an Ingress Controller](#provision-an-ingress-controller)
+2. [Provision an Ingress or Gateway API controller](#provision-an-ingress-or-gateway-api-controller)
 3. [Provision a database](#provision-a-database)
 4. [Configure a shared-home volume](#configure-a-shared-home-volume)
 5. [Configure a local-home volume](#configure-local-home-volume)
@@ -30,16 +30,22 @@ Before installing the Data Center Helm charts you need to set up your environmen
 !!!example ""
       See examples of [provisioning Kubernetes clusters on cloud-based providers](../examples/cluster/CLOUD_PROVIDERS.md).
 
-### :material-directions-fork: Provision an Ingress Controller
+<a id="provision-an-ingress-controller"></a>
+### :material-directions-fork: Provision an Ingress or Gateway API controller
 
 * This step is necessary in order to make your Atlassian product available from outside of the Kubernetes cluster after deployment.
-* The Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme){.external}, [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme){.external} and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme){.external}. There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external}.
-* Because different Kubernetes clusters use different ingress configurations/controllers, the Helm charts provide [Ingress Object](https://kubernetes.io/docs/concepts/services-networking/ingress/){.external} templates only.
-* The Ingress resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml` (an alternative controller can be used).
-* For more information about the Ingress controller go to the [Ingress section of the configuration guide](CONFIGURATION.md#ingress).
+* You can expose the product using either:
+    * the Kubernetes **Ingress** API (requires an Ingress controller), or
+    * the Kubernetes **Gateway API** (requires a Gateway API controller).
+* For Ingress, the Kubernetes project supports and maintains ingress controllers for the major cloud providers including; [AWS](https://github.com/kubernetes-sigs/aws-load-balancer-controller#readme){.external}, [GCE](https://github.com/kubernetes/ingress-gce/blob/master/README.md#readme){.external} and [nginx](https://github.com/kubernetes/ingress-nginx/blob/master/README.md#readme){.external}. There are also a number of open-source [third-party projects available](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/){.external}.
+* For Gateway API, see the Gateway API project docs and the list of implementations:
+    * Gateway API overview: <https://gateway-api.sigs.k8s.io/>
+    * Implementations: <https://gateway-api.sigs.k8s.io/implementations/>
+* The Helm charts can create either an `Ingress` (`ingress.create: true`) or an `HTTPRoute` (`gateway.create: true`) resource. These options are mutually exclusive.
+* For more information about exposure options and required configuration, see the [Ingress section of the configuration guide](CONFIGURATION.md#ingress).
 
 !!!example ""
-      See an example of [provisioning an NGINX Ingress Controller](../examples/ingress/CONTROLLERS.md).
+      See examples of [provisioning an NGINX Ingress Controller](../examples/ingress/INGRESS_NGINX.md) and [Gateway API setup](../examples/ingress/GATEWAY_API.md). For an overview, see [Provisioning a traffic entry controller](../examples/ingress/CONTROLLERS.md).
 
 ### :material-database: Provision a database
 

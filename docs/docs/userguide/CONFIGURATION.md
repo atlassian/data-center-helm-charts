@@ -1,15 +1,22 @@
 # Configuration
 
 ## :material-directions-fork: Ingress
-In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
+In order to make the Atlassian product available from outside of the Kubernetes cluster, you must provision a suitable HTTP/HTTPS traffic entry controller.
 
-The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller.
+The Helm charts support exposing products using either:
+
+- Kubernetes **Ingress** resources (via an Ingress controller), or
+- Kubernetes **Gateway API** resources (via a Gateway API controller), by creating a `HTTPRoute`.
+
+The exact details will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how controllers can be installed and configured.
+
+The charts themselves provide templates for either `Ingress` or `HTTPRoute` resources (depending on configuration). These include the required knobs for configuring hostnames, paths, timeouts, and (for NGINX Ingress) annotations.
 
 Some key considerations to note when configuring the controller are:
 
 !!!Ingress requirements
     * At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
-    * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
+    * The `Ingress` template provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
 
          * Usage of the NGINX Ingress Controller
          * Ingress Controller annotations
@@ -77,6 +84,25 @@ curl -I https://bitbucket.example.com/status
 | Users getting logged out randomly | Verify session stickiness annotations are applied |
 | Requests routing to different pods | Check if clustering is enabled |
 | Session cookies not working | Ensure ingress controller supports session affinity |
+
+### Gateway API (HTTPRoute)
+
+The charts can create a Gateway API `HTTPRoute` instead of an `Ingress` resource.
+
+```yaml
+ingress:
+  create: false
+
+gateway:
+  create: true
+  gatewayName: atlassian-gateway
+  hostnames:
+    - bitbucket.example.com
+  https: true
+```
+
+!!!important "Sticky sessions with Gateway API"
+    Session affinity is **not** part of the standard Gateway API `HTTPRoute` spec. You must configure it using your Gateway implementation (for example, Envoy Gateway policy resources or Istio traffic policy). See [Session affinity with Gateway API](../examples/ingress/GATEWAY_API_SESSION_AFFINITY.md) for working examples and fallbacks.
 
 ### Other Ingress Controllers
 
