@@ -18,7 +18,7 @@ Kubernetes: `>=1.21.x-0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://atlassian.github.io/data-center-helm-charts | common | 1.2.7 |
-| https://opensearch-project.github.io/helm-charts | opensearch | 2.19.0 |
+| https://opensearch-project.github.io/helm-charts | opensearch | 3.5.0 |
 
 ## Values
 
