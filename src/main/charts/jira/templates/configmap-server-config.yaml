@@ -70,7 +70,8 @@ data:
             <Context path="{{ .Values.jira.service.contextPath | default "" }}"
                      docBase="${catalina.home}/atlassian-jira"
                      reloadable="false"
-                     useHttpOnly="true">
+                     useHttpOnly="true"
+                     suspendWrappedResponseAfterForward="false">
               <Resource name="UserTransaction"
                         auth="Container"
                         type="javax.transaction.UserTransaction"
