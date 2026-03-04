@@ -108,15 +108,19 @@ podAnnotations:
   quote: "true"
   normal: annotation-comes-here
 
-# KinD is deployed with custom settings, namely extraPortMappings for ports 80 and 443
-# to make sure ingress traffic is available at http://localhost
+# KinD tests use Gateway API with Envoy Gateway.
+# Note: tests access the Gateway via kubectl port-forward (not via host ports 80/443).
 ingress:
-  create: true
+  create: false
   host: localhost
   https: false
-  proxyConnectTimeout: 300
-  proxyReadTimeout: 300
-  proxySendTimeout: 300
+
+gateway:
+  create: true
+  gatewayName: atlassian-gateway
+  hostnames:
+    - localhost
+  https: false
 
 monitoring:
   exposeJmxMetrics: true

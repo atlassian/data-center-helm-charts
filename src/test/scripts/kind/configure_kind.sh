@@ -6,19 +6,87 @@ kubectl cluster-info
 echo "[INFO]: current-context:" $(kubectl config current-context)
 echo "[INFO]: environment-kubeconfig:" "${KUBECONFIG}"
 
-kubectl create namespace atlassian
+kubectl create namespace atlassian --dry-run=client -o yaml | kubectl apply -f -
 
 # even though there's a kind command to load a local image directly to KinD container runtime
 # let's deploy an insecure registry in case we need it for any further tests
 echo "[INFO]: Deploy ephemeral container registry"
 kubectl apply -f src/test/config/kind/registry.yaml
 
-echo "[INFO]: Deploy Nginx ingress controller"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-kubectl wait --for=condition=ready pod \
-        --selector=app.kubernetes.io/component=controller \
-        --timeout=300s \
-        -n ingress-nginx
+# Install Gateway API CRDs and Controller
+if [ -z "${SKIP_GATEWAY_API}" ]; then
+  echo "[INFO]: Installing Gateway API CRDs"
+  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+  
+  echo "[INFO]: Waiting for Gateway API CRDs to be established"
+  kubectl wait --for condition=established --timeout=60s crd/gateways.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/httproutes.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
+  
+  echo "[INFO]: Installing Envoy Gateway"
+  # Envoy Gateway uses OCI registry, not a traditional Helm repo
+  helm install eg oci://docker.io/envoyproxy/gateway-helm \
+      --version v1.2.5 \
+      --create-namespace \
+      --namespace envoy-gateway-system \
+      --set deployment.envoyGateway.resources.requests.cpu=50m \
+      --set deployment.envoyGateway.resources.requests.memory=100Mi \
+      --skip-crds \
+      --timeout=300s \
+      --wait
+  
+  echo "[INFO]: Waiting for Envoy Gateway to be ready"
+  kubectl wait --for=condition=available deployment/envoy-gateway \
+      --namespace envoy-gateway-system \
+      --timeout=300s
+
+  # Some environments don't auto-create the GatewayClass.
+  echo "[INFO]: Ensuring GatewayClass 'eg' exists"
+  cat << EOF | kubectl apply -f -
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+EOF
+
+  echo "[INFO]: Waiting for GatewayClass 'eg' to be accepted"
+  kubectl wait --for=condition=Accepted gatewayclass/eg --timeout=180s || {
+    echo "[ERROR]: GatewayClass not accepted in time"
+    kubectl get gatewayclass/eg -o yaml
+    exit 1
+  }
+  
+  echo "[INFO]: Creating test Gateway resource in atlassian namespace"
+  kubectl apply -f src/test/config/kind/gateway.yaml
+  
+  echo "[INFO]: Waiting for Gateway to be reconciled"
+  # In KinD there is no real LoadBalancer implementation, so the Gateway may never become
+  # fully Programmed (AddressNotAssigned). Instead, wait for:
+  # 1) Gateway Accepted=True (control-plane picked it up)
+  # 2) The Envoy proxy Deployment for this Gateway to become Available (data-plane ready)
+  kubectl wait --for=condition=Accepted gateway/atlassian-gateway -n atlassian --timeout=300s || {
+    echo "[ERROR]: Gateway not accepted in time"
+    kubectl describe gateway/atlassian-gateway -n atlassian
+    exit 1
+  }
+
+  echo "[INFO]: Waiting for Envoy proxy deployment for the Gateway"
+  kubectl wait --for=condition=Available deployment \
+    -n envoy-gateway-system \
+    -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
+    --timeout=300s || {
+      echo "[ERROR]: Envoy proxy deployment not ready in time"
+      kubectl get deployments -n envoy-gateway-system -o wide
+      kubectl get pods -n envoy-gateway-system -o wide
+      exit 1
+    }
+  
+  echo "[INFO]: Gateway API installation complete"
+else
+  echo "[INFO]: Skipping Gateway API installation (SKIP_GATEWAY_API is set)"
+fi
 
 # this is for local runs, because existing nfs server images does not run on arm64 platforms
 # instead, we create a hostPath RWX volume and override the default common settings

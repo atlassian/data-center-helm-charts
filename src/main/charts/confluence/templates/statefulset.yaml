@@ -1,3 +1,4 @@
+{{- include "confluence.validateGatewayConfig" . -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -212,7 +213,7 @@ spec:
           env:
             {{- include "confluence.sessionVars" . | nindent 12 }}
             {{- include "confluence.tunnelVars" . | nindent 12 }}
-            {{ if .Values.ingress.https }}
+            {{ if eq (include "confluence.https" . | trim) "true" }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
@@ -224,11 +225,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.confluence.ports.http | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "confluence.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "confluence.ingressPort" . | quote }}
+              value: {{ include "confluence.proxyPort" . | quote }}
             {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.confluence.accessLog.enabled | quote }}
