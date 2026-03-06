@@ -545,3 +545,41 @@ volumeClaimTemplates:
 set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
 {{- end }}
 {{- end }}
+
+{{- define "generate_static_password_b64enc" -}}
+{{- if not (index .Release "temp_vars") -}}
+{{-   $_ := set .Release "temp_vars" dict -}}
+{{- end -}}
+{{- $key := printf "%s_%s" .Release.Name "password" -}}
+{{- if not (index .Release.temp_vars $key) -}}
+{{-   $_ := set .Release.temp_vars $key (randAlphaNum 40 | b64enc ) -}}
+{{- end -}}
+{{- index .Release.temp_vars $key -}}
+{{- end -}}
+
+{{- define "opensearch.initial.admin.password" }}
+{{- $defaultSecretName := "opensearch-initial-password" }}
+{{- $secretName := default $defaultSecretName .Values.opensearch.credentials.existingSecretRef.name }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace $secretName) }}
+{{- if $secretData.data }}
+{{- index $secretData.data "OPENSEARCH_INITIAL_ADMIN_PASSWORD" }}
+{{- else }}
+{{ include "generate_static_password_b64enc" . }}
+{{- end }}
+{{- end }}
+
+{{- define "opensearch.env.vars" }}
+{{- if .Values.opensearch.enabled }}
+- name: ATL_SEARCH_PLATFORM
+  value: opensearch
+- name: ATL_OPENSEARCH_HTTP_URL
+  value: http://opensearch-cluster-master:9200
+- name: ATL_OPENSEARCH_USERNAME
+  value: admin
+- name: ATL_OPENSEARCH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.opensearch.credentials.existingSecretRef.name | default "opensearch-initial-password" }}
+      key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+{{- end }}
+{{- end }}

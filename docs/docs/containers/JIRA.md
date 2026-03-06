@@ -219,6 +219,26 @@ information, please refer to
 
   Override the default AWS API endpoint with a custom one (optional).
 
+### OpenSearch configuration
+
+Starting with Jira 11.0, you can configure Jira to use OpenSearch as the search platform.
+
+* `ATL_SEARCH_PLATFORM`
+
+    The search platform to use. Set to `opensearch` if you want to use OpenSearch as the search platform.
+
+* `ATL_OPENSEARCH_HTTP_URL`
+
+    HTTP(S) URL of the OpenSearch cluster, or multiple URLs separated by commas.
+
+* `ATL_OPENSEARCH_USERNAME`
+
+    Username for the OpenSearch cluster.
+
+* `ATL_OPENSEARCH_PASSWORD`
+
+  Password for the OpenSearch cluster.
+
 ### S3 Attachments storage configuration
 Starting with Jira 9.9, you can configure Jira to [store attachment files in Amazon S3](https://confluence.atlassian.com/adminjiraserver/storing-attachments-in-amazon-s3-1282250191.html). For requirements and additional
 information, please refer to [Configuring Amazon S3 Object Storage](https://confluence.atlassian.com/pages/viewpage.action?spaceKey=JSERVERM&title=.Configuring+Amazon+S3+object+storage+vJira_admin_9.9).

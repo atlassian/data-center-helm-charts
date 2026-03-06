@@ -29,7 +29,7 @@ import static test.postinstall.Utils.*;
 @EnabledIf("isOSDeployed")
 class OpenSearchInstallTest {
     static boolean isOSDeployed() {
-        return productIs(Product.bitbucket);
+        return productIs(Product.bitbucket) || productIs(Product.jira);
     }
 
     private static KubeClient client;
@@ -64,8 +64,14 @@ class OpenSearchInstallTest {
                 // If this changes an alternative would be to use the fabric8 client ExecWatch/ExecListener to
                 // invoke curl from a pod.
                 final var indexURL = osIngressBase + "/_cat/indices?format=json";
-                when().get(indexURL).then()
-                        .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
+                if (productIs(Product.bitbucket)) {
+                    when().get(indexURL).then()
+                            .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
+                } else if (productIs(Product.jira)) {
+                    // Jira creates indices when it starts using OpenSearch; verify at least one index exists
+                    when().get(indexURL).then()
+                            .body("size()", greaterThan(0));
+                }
             } catch (Exception e) {
                 retries--;
                 try {

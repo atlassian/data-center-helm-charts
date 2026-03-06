@@ -8,5 +8,6 @@ nav:
     - bamboo
     - bitbucket
     - confluence
+    - jira
     - logging
     - ...
