@@ -318,6 +318,78 @@ deploy_app() {
   fi
 }
 
+verify_gateway_ingress() {
+  STATUS_ENDPOINT_PATH="status"
+  if [ ${DC_APP} == "bamboo" ]; then
+    STATUS_ENDPOINT_PATH="rest/api/latest/status"
+  elif [ ${DC_APP} == "crowd" ]; then
+    STATUS_ENDPOINT_PATH="crowd/status"
+  fi
+
+  echo "[INFO]: Checking ${DC_APP} status via Gateway API"
+  # give ingress/gateway controller a few seconds before polling
+  sleep 5
+
+  if ! kubectl get httproute/${DC_APP} -n atlassian >/dev/null 2>&1; then
+    echo "[ERROR]: HTTPRoute ${DC_APP} not found in atlassian namespace"
+    kubectl get httproute -n atlassian || true
+    exit 1
+  fi
+
+  # Find the Envoy proxy Service created for our Gateway
+  ENVOY_SVC=$(kubectl get svc -n envoy-gateway-system \
+    -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
+    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+
+  if [ -z "${ENVOY_SVC}" ]; then
+    echo "[ERROR]: Envoy Gateway proxy service not found"
+    kubectl get svc -n envoy-gateway-system -o wide || true
+    exit 1
+  fi
+
+  HOST_HEADER=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[0]}' 2>/dev/null || true)
+  if [ -z "${HOST_HEADER}" ]; then
+    HOST_HEADER="localhost"
+  fi
+
+  PF_PORT=18080
+  PF_LOG="/tmp/envoy-port-forward-${DC_APP}.log"
+  kubectl port-forward -n envoy-gateway-system "svc/${ENVOY_SVC}" "${PF_PORT}:80" >"${PF_LOG}" 2>&1 &
+  PF_PID=$!
+  trap 'kill ${PF_PID} 2>/dev/null || true; wait ${PF_PID} 2>/dev/null || true' RETURN
+
+  # Wait until port-forward is active
+  for i in {1..20}; do
+    if grep -q "Forwarding from" "${PF_LOG}" 2>/dev/null; then
+      break
+    fi
+    if ! kill -0 ${PF_PID} 2>/dev/null; then
+      echo "[ERROR]: port-forward process exited early"
+      cat "${PF_LOG}" || true
+      exit 1
+    fi
+    sleep 0.5
+  done
+
+  for i in {1..10}; do
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' -H "Host: ${HOST_HEADER}" "http://127.0.0.1:${PF_PORT}/${STATUS_ENDPOINT_PATH}")
+    if [ $STATUS -ne 200 ]; then
+      echo "[ERROR]: Status code is not 200. Waiting 10 seconds"
+      sleep 10
+    else
+      echo "[INFO]: Received status ${STATUS}"
+      curl -s -H "Host: ${HOST_HEADER}" "http://127.0.0.1:${PF_PORT}/${STATUS_ENDPOINT_PATH}"
+      echo -e "\n"
+      break
+    fi
+  done
+
+  if [ $STATUS -ne 200 ]; then
+    curl -v -H "Host: ${HOST_HEADER}" "http://127.0.0.1:${PF_PORT}/${STATUS_ENDPOINT_PATH}"
+    exit 1
+  fi
+}
+
 verify_ingress() {
   STATUS_ENDPOINT_PATH="status"
   if [ ${DC_APP} == "bamboo" ]; then
@@ -413,6 +485,77 @@ verify_openshift_analytics() {
     echo "[ERROR]: Analytics.json does not have isRunOnOpenshift as true."
     exit 1
   fi
+}
+
+verify_gateway() {
+  if [ -z "${TEST_GATEWAY}" ]; then
+    echo "[INFO]: Skipping Gateway verification (TEST_GATEWAY not set)"
+    return 0
+  fi
+  
+  echo "[INFO]: Verifying HTTPRoute resource for ${DC_APP}"
+  if ! kubectl get httproute/${DC_APP} -n atlassian >/dev/null 2>&1; then
+    echo "[ERROR]: HTTPRoute ${DC_APP} not found in atlassian namespace"
+    kubectl get httproute -n atlassian || true
+    exit 1
+  fi
+  
+  echo "[INFO]: Checking HTTPRoute status"
+
+  # Wait on Gateway API parent conditions (Envoy Gateway reports conditions under
+  # `.status.parents[*].conditions`). Use a JSONPath filter by type.
+  # Note: Don't escape the double-quotes inside the single-quoted JSONPath.
+
+  kubectl wait \
+    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}'=True \
+    httproute/${DC_APP} -n atlassian --timeout=180s || {
+      echo "[ERROR]: HTTPRoute not accepted"
+      echo "[DEBUG]: HTTPRoute status (YAML)"
+      kubectl get httproute/${DC_APP} -n atlassian -o yaml | sed -n '/^status:/,$p' || true
+      echo "[DEBUG]: HTTPRoute status.parents (JSON)"
+      kubectl get httproute/${DC_APP} -n atlassian -o json | jq '.status.parents' || true
+      echo "[DEBUG]: Gateway status (YAML)"
+      kubectl get gateway/atlassian-gateway -n atlassian -o yaml | sed -n '/^status:/,$p' || true
+      echo "[DEBUG]: Envoy Gateway deployments/pods"
+      kubectl get deployments -n envoy-gateway-system -o wide || true
+      kubectl get pods -n envoy-gateway-system -o wide || true
+      kubectl describe httproute/${DC_APP} -n atlassian
+      exit 1
+    }
+
+  kubectl wait \
+    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
+    httproute/${DC_APP} -n atlassian --timeout=180s || {
+      echo "[WARN]: HTTPRoute ResolvedRefs condition not met"
+      echo "[DEBUG]: HTTPRoute status.parents (JSON)"
+      kubectl get httproute/${DC_APP} -n atlassian -o json | jq '.status.parents' || true
+      kubectl describe httproute/${DC_APP} -n atlassian
+    }
+
+  echo "[INFO]: HTTPRoute is Accepted and ResolvedRefs"
+  
+  echo "[INFO]: Verifying Gateway attachment"
+  GATEWAY_NAME=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.parentRefs[0].name}')
+  echo "[INFO]: HTTPRoute attached to Gateway: ${GATEWAY_NAME}"
+  
+  if [ -z "${GATEWAY_NAME}" ]; then
+    echo "[ERROR]: No Gateway referenced in HTTPRoute"
+    exit 1
+  fi
+  
+  echo "[INFO]: Checking Gateway status"
+  kubectl get gateway/${GATEWAY_NAME} -n atlassian -o yaml
+  
+  # Verify hostnames are configured
+  HOSTNAMES=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[*]}')
+  echo "[INFO]: HTTPRoute hostnames: ${HOSTNAMES}"
+  
+  if [ -z "${HOSTNAMES}" ]; then
+    echo "[ERROR]: No hostnames configured on HTTPRoute"
+    exit 1
+  fi
+  
+  echo "[INFO]: Gateway API verification complete for ${DC_APP}"
 }
 
 # create 2 NodePort services to expose each DC pod, required for functional tests

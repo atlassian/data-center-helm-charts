@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -36,7 +36,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jmx-config
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -62,7 +62,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-helm-values
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -109,6 +109,19 @@ data:
       imageRepo: fluent/fluentd-kubernetes-daemonset
       imageTag: v1.11.5-debian-elasticsearch7-1.2
       resources: {}
+    gateway:
+      additionalRules: []
+      annotations: {}
+      create: false
+      filters: []
+      gatewayName: ""
+      gatewayNamespace: ""
+      hostnames: []
+      https: true
+      labels: {}
+      path: /
+      pathType: PathPrefix
+      timeouts: {}
     hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent
@@ -361,7 +374,7 @@ kind: Service
 metadata:
   name: unittest-jira-jmx
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -384,7 +397,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -408,7 +421,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -425,9 +438,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5d632191c42871616de74827f73c9c72e383ec5c85f91e28f69c079802792851
       labels:
-        helm.sh/chart: jira-2.0.9
+        helm.sh/chart: jira-2.0.10
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
         app.kubernetes.io/version: "11.3.1"
@@ -562,7 +574,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"
@@ -594,7 +606,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.9
+    helm.sh/chart: jira-2.0.10
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.1"

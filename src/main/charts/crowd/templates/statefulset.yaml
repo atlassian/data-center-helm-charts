@@ -1,3 +1,4 @@
+{{- include "crowd.validateGatewayConfig" . -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -192,7 +193,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{ if .Values.ingress.https }}
+            {{ if eq (include "crowd.https" . | trim) "true" }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
@@ -204,11 +205,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.crowd.ports.http | quote }}
-            {{ if .Values.ingress.host }}
+            {{ if or .Values.ingress.host .Values.gateway.create }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.ingress.host | quote }}
+              value: {{ include "crowd.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "crowd.ingressPort" . | quote }}
+              value: {{ include "crowd.proxyPort" . | quote }}
             {{ end }}
             - name: ATL_TOMCAT_ACCESS_LOG
               value: {{ .Values.crowd.accessLog.enabled | quote }}
