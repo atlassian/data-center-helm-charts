@@ -25,9 +25,5 @@ database:
   credentials:
     secretName: bamboo-database-credentials
 
-ingress:
-  create: false
-  host: bamboo.atlassian.svc.cluster.local
-
 monitoring:
   exposeJmxMetrics: true
