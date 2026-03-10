@@ -272,11 +272,12 @@ deploy_app() {
     SHARED_HOME_HOSTPATH="--set volumes.sharedHome.persistentVolumeClaim.create=false,volumes.sharedHome.customVolume.persistentVolumeClaim.claimName=hostpath-shared-home-pvc"
   fi
 
-  # For Bamboo, set the ingress host to the K8s service name so the server's base URL
-  # is reachable by the agent (Bamboo 12+ redirects agents to the configured base URL)
-  BAMBOO_INGRESS_HOST=""
+  # For Bamboo, set proxyName to the K8s service name so the server's base URL
+  # is reachable by the agent (Bamboo 12+ redirects agents to the configured base URL).
+  # ingress.host remains 'localhost' for external access via the ingress controller.
+  BAMBOO_PROXY_OVERRIDE=""
   if [ "${DC_APP}" == "bamboo" ]; then
-    BAMBOO_INGRESS_HOST="--set ingress.host=bamboo.atlassian.svc.cluster.local"
+    BAMBOO_PROXY_OVERRIDE="--set bamboo.tomcatConfig.proxyName=bamboo.atlassian.svc.cluster.local"
   fi
 
   # deploy helm chart and set overrides if any
@@ -289,7 +290,7 @@ deploy_app() {
                ${SHARED_HOME_HOSTPATH} \
                ${DISABLE_BITBUCKET_SEARCH_MESH} \
                ${ENABLE_OPENSEARCH} \
-               ${BAMBOO_INGRESS_HOST} \
+               ${BAMBOO_PROXY_OVERRIDE} \
                ${MISC_OVERRIDES}
 
   if [ ${DC_APP} == "bamboo" ]; then
