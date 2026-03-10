@@ -285,6 +285,25 @@ data:
         scrapeIntervalSeconds: 30
         scrapeTimeoutSeconds: 20
     nodeSelector: {}
+    opensearch:
+      credentials:
+        createSecret: true
+        existingSecretRef:
+          name: null
+      enabled: false
+      envFrom:
+      - secretRef:
+          name: opensearch-initial-password
+      extraEnvs:
+      - name: plugins.security.ssl.http.enabled
+        value: "false"
+      persistence:
+        size: 10Gi
+      resources:
+        requests:
+          cpu: 1
+          memory: 1Gi
+      singleNode: true
     openshift:
       runWithRestrictedSCC: false
     ordinals:

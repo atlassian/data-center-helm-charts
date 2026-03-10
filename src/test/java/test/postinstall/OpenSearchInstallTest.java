@@ -68,9 +68,8 @@ class OpenSearchInstallTest {
                     when().get(indexURL).then()
                             .body("findAll { it.index == 'bitbucket-index-version' }[0]", hasEntry("docs.count", "1"));
                 } else if (productIs(Product.jira)) {
-                    // Jira creates indices when it starts using OpenSearch; verify at least one index exists
                     when().get(indexURL).then()
-                            .body("size()", greaterThan(0));
+                            .body("findAll { it.index =~ /jira.*/ }.size()", greaterThan(0));
                 }
             } catch (Exception e) {
                 retries--;
