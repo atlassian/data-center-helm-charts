@@ -296,8 +296,22 @@ deploy_app() {
                  --set agent.resources.container.requests.memory=10Mi \
                 ${OPENSHIFT_VALUES} \
                 ${AGENT_OVERRIDES} \
-                --wait --timeout=180s \
-                --debug
+                --wait --timeout=360s \
+                --debug || {
+      echo "[ERROR]: Bamboo agent deployment failed. Collecting diagnostic logs..."
+      echo "[DEBUG]: Bamboo agent pods:"
+      kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent -o wide 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent pod describe:"
+      kubectl describe pods -n atlassian -l app.kubernetes.io/name=bamboo-agent 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Events in atlassian namespace (last 50):"
+      kubectl get events -n atlassian --sort-by='.lastTimestamp' 2>/dev/null | tail -50 || true
+      exit 1
+    }
   fi
 
   # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
