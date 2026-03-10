@@ -123,7 +123,9 @@ behavior consistent with ingress.path.
 */}}
 {{- define "jira.ingressPath" -}}
 {{- if .Values.gateway.create -}}
+{{- if .Values.gateway.path -}}
 {{- .Values.gateway.path -}}
+{{- end -}}
 {{- else if .Values.ingress.path -}}
 {{- .Values.ingress.path -}}
 {{- else -}}
@@ -555,15 +557,15 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 Validate Gateway API configuration
 */}}
 {{- define "jira.validateGatewayConfig" -}}
-{{- if and .Values.gateway.create .Values.ingress.create -}}
-{{- fail "ERROR: Cannot enable both gateway.create and ingress.create" -}}
-{{- end -}}
-{{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
-{{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
-{{- end -}}
-{{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
-{{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
-{{- end -}}
+    {{- if and .Values.gateway.create .Values.ingress.create -}}
+        {{- fail "ERROR: Cannot enable both gateway.create and ingress.create" -}}
+    {{- end -}}
+    {{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
+        {{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
+    {{- end -}}
+    {{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
+        {{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*
@@ -571,31 +573,31 @@ Get the hostname for the service - works with both Ingress and Gateway API
 Returns the first hostname from gateway.hostnames if gateway is enabled, otherwise ingress.host
 */}}
 {{- define "jira.hostname" -}}
-{{- if .Values.gateway.create -}}
-{{- index .Values.gateway.hostnames 0 -}}
-{{- else -}}
-{{- .Values.ingress.host -}}
-{{- end -}}
+    {{- if .Values.gateway.create -}}
+        {{- index .Values.gateway.hostnames 0 -}}
+    {{- else -}}
+        {{- .Values.ingress.host -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*
 Returns true if HTTPS is enabled (gateway.https if gateway is enabled, otherwise ingress.https)
 */}}
 {{- define "jira.https" -}}
-{{- if .Values.gateway.create -}}
-{{- .Values.gateway.https -}}
-{{- else -}}
-{{- .Values.ingress.https -}}
-{{- end -}}
+    {{- if .Values.gateway.create -}}
+        {{- .Values.gateway.https -}}
+    {{- else -}}
+        {{- .Values.ingress.https -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*
 Returns the proxy port (gateway or ingress-based)
 */}}
 {{- define "jira.proxyPort" -}}
-{{- if .Values.gateway.create -}}
-{{- ternary "443" "80" .Values.gateway.https -}}
-{{- else -}}
-{{- default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-{{- end -}}
+    {{- if .Values.gateway.create -}}
+        {{- ternary "443" "80" .Values.gateway.https -}}
+    {{- else -}}
+        {{- default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+    {{- end -}}
 {{- end -}}
