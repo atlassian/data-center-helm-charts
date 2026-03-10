@@ -604,10 +604,17 @@ gateway:
   # - confluence.example.com
   # - wiki.example.com
 
-  # -- Set to 'true' if browser communication with the application should be TLS
-  # (HTTPS) enforced. This affects the service URL and proxy port configuration.
+  # -- Whether users access the application over HTTPS. This does NOT configure TLS
+  # on the Gateway itself — it tells the application to generate https:// URLs and
+  # set Tomcat's secure flag. Set this to match your actual Gateway/load balancer TLS config.
   #
   https: true
+
+  # -- The external port the application is accessed on. Defaults to 443 (https) or 80 (http).
+  # This does NOT configure the Gateway itself — it tells the application which port users connect on,
+  # so it generates correct URLs. Set this to match your actual Gateway/load balancer port.
+  #
+  # externalPort:
 
   # -- The base path for routing. Defaults to "/" to route all paths.
   #

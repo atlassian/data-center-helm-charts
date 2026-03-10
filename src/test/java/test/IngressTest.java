@@ -334,7 +334,7 @@ class IngressTest {
                 "ingress.https", "true"));
 
         resources.getStatefulSet(product.getHelmReleaseName()).getContainer().getEnv()
-                .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain");
+                .assertHasValue("ATL_BASE_URL", "https://myhost.mydomain/");
     }
 
     @ParameterizedTest
