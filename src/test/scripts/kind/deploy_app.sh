@@ -378,17 +378,20 @@ verify_gateway_ingress() {
   trap 'kill ${PF_PID} 2>/dev/null || true; wait ${PF_PID} 2>/dev/null || true' RETURN
 
   # Wait until port-forward is active
-  for i in {1..20}; do
-    if grep -q "Forwarding from" "${PF_LOG}" 2>/dev/null; then
-      break
-    fi
-    if ! kill -0 ${PF_PID} 2>/dev/null; then
+  check_port_forward_ready() {
+    if ! kill -0 "$PF_PID" 2>/dev/null; then
       echo "[ERROR]: port-forward process exited early"
-      cat "${PF_LOG}" || true
+      cat "$PF_LOG" || true
       exit 1
     fi
-    sleep 0.5
-  done
+    grep -q "Forwarding from" "$PF_LOG" 2>/dev/null
+  }
+
+  wait_for "port-forward to Envoy proxy" 10 1 check_port_forward_ready || {
+    echo "[ERROR]: port-forward did not become ready"
+    cat "${PF_LOG}" || true
+    exit 1
+  }
 
   STATUS_URL_VIA_GATEWAY="http://127.0.0.1:${PF_PORT}/${STATUS_ENDPOINT_PATH}"
   wait_for "${DC_APP} HTTP 200 via Gateway" 120 10 \
