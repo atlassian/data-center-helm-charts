@@ -83,8 +83,8 @@ deploy_postgres() {
   echo "[INFO]: Waiting for operator deployment to be created..."
   wait_for "CloudNativePG operator deployment" 60 2 \
     kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg || {
-    echo "[ERROR]: CloudNativePG operator deployment not found"
-    exit 1
+    echo "[WARNING]: CloudNativePG operator deployment not found"
+    # this will be checked again below - keeping old behavior to minimize risk of this change
   }
 
   # MicroShift/OpenShift: grant anyuid SCC to operator SA to satisfy UID range constraints
