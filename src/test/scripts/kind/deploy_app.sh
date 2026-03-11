@@ -272,6 +272,14 @@ deploy_app() {
     SHARED_HOME_HOSTPATH="--set volumes.sharedHome.persistentVolumeClaim.create=false,volumes.sharedHome.customVolume.persistentVolumeClaim.claimName=hostpath-shared-home-pvc"
   fi
 
+  # For Bamboo, set proxyName to the K8s service name so the server's base URL
+  # is reachable by the agent (Bamboo 12+ redirects agents to the configured base URL).
+  # ingress.host remains 'localhost' for external access via the ingress controller.
+  BAMBOO_PROXY_OVERRIDE=""
+  if [ "${DC_APP}" == "bamboo" ]; then
+    BAMBOO_PROXY_OVERRIDE="--set bamboo.tomcatConfig.proxyName=bamboo.atlassian.svc.cluster.local"
+  fi
+
   # deploy helm chart and set overrides if any
   helm upgrade --install ${DC_APP} ./src/main/charts/${DC_APP} \
                -f ${TMP_DIR}/common-values.yaml ${OPENSHIFT_VALUES} \
@@ -282,6 +290,7 @@ deploy_app() {
                ${SHARED_HOME_HOSTPATH} \
                ${DISABLE_BITBUCKET_SEARCH_MESH} \
                ${ENABLE_OPENSEARCH} \
+               ${BAMBOO_PROXY_OVERRIDE} \
                ${MISC_OVERRIDES}
 
   if [ ${DC_APP} == "bamboo" ]; then
@@ -296,8 +305,27 @@ deploy_app() {
                  --set agent.resources.container.requests.memory=10Mi \
                 ${OPENSHIFT_VALUES} \
                 ${AGENT_OVERRIDES} \
-                --wait --timeout=180s \
-                --debug
+                --wait --timeout=360s \
+                --debug || {
+      echo "[ERROR]: Bamboo agent deployment failed."
+      echo "[DEBUG]: Bamboo agent pods:"
+      kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent -o wide 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent pod describe:"
+      kubectl describe pods -n atlassian -l app.kubernetes.io/name=bamboo-agent 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Bamboo server container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Events in atlassian namespace (last 50):"
+      kubectl get events -n atlassian --sort-by='.lastTimestamp' 2>/dev/null | tail -50 || true
+      exit 1
+    }
   fi
 
   # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
