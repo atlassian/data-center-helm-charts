@@ -131,9 +131,9 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.bamboo.ports.http | quote }}
-            {{ if or .Values.bamboo.tomcatConfig.proxyName .Values.ingress.host }}
+            {{ if .Values.ingress.host }}
             - name: ATL_PROXY_NAME
-              value: {{ .Values.bamboo.tomcatConfig.proxyName | default .Values.ingress.host | quote }}
+              value: {{ .Values.ingress.host | quote }}
             - name: ATL_PROXY_PORT
               value: {{ include "bamboo.ingressPort" . | quote }}
             {{ end }}

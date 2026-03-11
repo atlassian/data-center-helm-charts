@@ -62,14 +62,13 @@
 Deduce the base URL for bamboo.
 */}}
 {{- define "bamboo.baseUrl" -}}
-    {{- $host := .Values.bamboo.tomcatConfig.proxyName | default .Values.ingress.host -}}
-    {{- if $host -}}
+    {{- if .Values.ingress.host -}}
         {{ ternary "https" "http" .Values.ingress.https -}}
         ://
         {{- if .Values.ingress.path -}}
-            {{ $host }}{{.Values.ingress.path }}
+            {{ .Values.ingress.host}}{{.Values.ingress.path }}
         {{- else -}}
-            {{ $host }}
+            {{ .Values.ingress.host}}
         {{- end }}
     {{- else -}}
         {{- print  "http://localhost:8085/" }}
