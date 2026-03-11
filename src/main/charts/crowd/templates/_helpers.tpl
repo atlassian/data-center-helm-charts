@@ -47,13 +47,6 @@
 {{- end }}
 
 {{/*
-Create default value for ingress port
-*/}}
-{{- define "crowd.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-{{- end }}
-
-{{/*
 The name of the service account to be used.
 If the name is defined in the chart values, then use that,
 else if we're creating a new service account then use the name of the Helm release,
@@ -373,51 +366,17 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 {{- end }}
 {{- end }}
 
-{{/*
-Validate Gateway API configuration
-*/}}
-{{- define "crowd.validateGatewayConfig" -}}
-    {{- if and .Values.gateway.create .Values.ingress.create -}}
-        {{- fail "ERROR: Cannot enable both gateway.create and ingress.create" -}}
-    {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
-        {{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
-    {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
-        {{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
-    {{- end -}}
-{{- end -}}
+
 
 {{/*
-Get the hostname for the service - works with both Ingress and Gateway API
-Returns the first hostname from gateway.hostnames if gateway is enabled, otherwise ingress.host
+Create default value for the service path.
 */}}
-{{- define "crowd.hostname" -}}
-    {{- if .Values.gateway.create -}}
-        {{- index .Values.gateway.hostnames 0 -}}
-    {{- else -}}
-        {{- .Values.ingress.host -}}
-    {{- end -}}
-{{- end -}}
+{{- define "crowd.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.crowd.service.contextPath
+) -}}
+{{- end }}
 
-{{/*
-Returns true if HTTPS is enabled (gateway.https if gateway is enabled, otherwise ingress.https)
-*/}}
-{{- define "crowd.https" -}}
-    {{- if .Values.gateway.create -}}
-        {{- .Values.gateway.https -}}
-    {{- else -}}
-        {{- .Values.ingress.https -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Returns the proxy port (gateway or ingress-based)
-*/}}
-{{- define "crowd.proxyPort" -}}
-    {{- if .Values.gateway.create -}}
-        {{- ternary "443" "80" .Values.gateway.https -}}
-    {{- else -}}
-        {{- default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-    {{- end -}}
-{{- end -}}

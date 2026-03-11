@@ -61,13 +61,6 @@
 {{- end }}
 
 {{/*
-Create default value for ingress port
-*/}}
-{{- define "confluence.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-{{- end }}
-
-{{/*
 The name the synchrony app within the chart.
 TODO: This will break if the common.names.name exceeds 63 characters, need to find a more rebust way to do this
 */}}
@@ -205,11 +198,7 @@ Pod labels
 {{- end }}
 {{- if .Values.synchrony.enabled -}}
     {{- if .Values.synchrony.service.url -}}-Dsynchrony.service.url={{ .Values.synchrony.service.url }}/v1
-    {{- else -}}
-        {{- $host := include "confluence.hostname" . -}}
-        {{- if eq (include "confluence.https" . | trim) "true" -}}-Dsynchrony.service.url=https://{{ $host }}/{{ $synchronyIngressPath }}/v1
-        {{- else -}}-Dsynchrony.service.url=http://{{ $host }}/{{ $synchronyIngressPath }}/v1
-        {{- end -}}
+    {{- else -}}-Dsynchrony.service.url={{ include "common.gateway.scheme" . }}://{{ include "common.gateway.hostname" . }}/{{ $synchronyIngressPath }}/v1
     {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true
@@ -217,21 +206,22 @@ Pod labels
 {{- end -}}
 
 {{/*
-Create default value for ingress path.
+Create default value for the service path.
+*/}}
+{{- define "confluence.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.confluence.service.contextPath
+) -}}
+{{- end }}
 
-When using Gateway API, prefer gateway.path to keep URL/path
-behavior consistent with ingress.path.
+{{/*
+Alias for backward compatibility with ingress templates.
 */}}
 {{- define "confluence.ingressPath" -}}
-{{- if .Values.gateway.create -}}
-{{- if .Values.gateway.path -}}
-{{- .Values.gateway.path -}}
-{{- end -}}
-{{- else if .Values.ingress.path -}}
-{{- .Values.ingress.path -}}
-{{- else -}}
-{{ default ( "/" ) .Values.confluence.service.contextPath -}}
-{{- end }}
+{{- include "confluence.path" . -}}
 {{- end }}
 
 {{/*
@@ -829,51 +819,4 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 {{- end }}
 {{- end }}
 
-{{/*
-Validate Gateway API configuration
-*/}}
-{{- define "confluence.validateGatewayConfig" -}}
-    {{- if and .Values.gateway.create .Values.ingress.create -}}
-        {{- fail "ERROR: Cannot enable both gateway.create and ingress.create" -}}
-    {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
-        {{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
-    {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
-        {{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
-    {{- end -}}
-{{- end -}}
 
-{{/*
-Get the hostname for the service - works with both Ingress and Gateway API
-Returns the first hostname from gateway.hostnames if gateway is enabled, otherwise ingress.host
-*/}}
-{{- define "confluence.hostname" -}}
-    {{- if .Values.gateway.create -}}
-        {{- index .Values.gateway.hostnames 0 -}}
-    {{- else -}}
-        {{- .Values.ingress.host -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Returns true if HTTPS is enabled (gateway.https if gateway is enabled, otherwise ingress.https)
-*/}}
-{{- define "confluence.https" -}}
-    {{- if .Values.gateway.create -}}
-        {{- .Values.gateway.https -}}
-    {{- else -}}
-        {{- .Values.ingress.https -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Returns the proxy port (gateway or ingress-based)
-*/}}
-{{- define "confluence.proxyPort" -}}
-    {{- if .Values.gateway.create -}}
-        {{- ternary "443" "80" .Values.gateway.https -}}
-    {{- else -}}
-        {{- default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-    {{- end -}}
-{{- end -}}

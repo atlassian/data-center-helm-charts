@@ -21,3 +21,5 @@
 .idea/
 *.tmproj
 .vscode/
+# Ignore non-template files from symlinked common_templates
+templates/common_templates/*.md

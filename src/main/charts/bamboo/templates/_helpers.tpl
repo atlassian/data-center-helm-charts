@@ -62,45 +62,30 @@
 Deduce the base URL for bamboo.
 */}}
 {{- define "bamboo.baseUrl" -}}
-    {{- if or .Values.ingress.host .Values.gateway.create -}}
-        {{ ternary "https" "http" (include "bamboo.https" . | trim | eq "true") -}}
-        ://
-        {{- include "bamboo.hostname" . -}}
-        {{- if .Values.gateway.create -}}
-            {{- if .Values.gateway.path -}}
-                {{- .Values.gateway.path -}}
-            {{- end -}}
-        {{- else if .Values.ingress.path -}}
-            {{- .Values.ingress.path -}}
-        {{- end }}
-    {{- else -}}
-        {{- print  "http://localhost:8085/" }}
-    {{- end }}
+{{- if eq (include "common.gateway.isConfigured" .) "true" -}}
+{{- include "common.gateway.origin" . -}}{{ include "bamboo.path" . -}}
+{{- else -}}
+{{- print "http://localhost:8085/" -}}
+{{- end -}}
 {{- end }}
 
 {{/*
-Create default value for ingress port
+Create default value for the service path.
 */}}
-{{- define "bamboo.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- define "bamboo.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.bamboo.service.contextPath
+) -}}
 {{- end }}
 
 {{/*
-Create default value for ingress path.
-
-When using Gateway API, prefer gateway.path to keep URL/path
-behavior consistent with ingress.path.
+Alias for backward compatibility with ingress templates.
 */}}
 {{- define "bamboo.ingressPath" -}}
-{{- if .Values.gateway.create -}}
-{{- if .Values.gateway.path -}}
-{{- .Values.gateway.path -}}
-{{- end -}}
-{{- else if .Values.ingress.path -}}
-{{- .Values.ingress.path -}}
-{{- else -}}
-{{ default ( "/" ) .Values.bamboo.service.contextPath -}}
-{{- end }}
+{{- include "bamboo.path" . -}}
 {{- end }}
 
 {{/*
@@ -458,51 +443,4 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 {{- end }}
 {{- end }}
 
-{{/*
-Validate Gateway API configuration
-*/}}
-{{- define "bamboo.validateGatewayConfig" -}}
-    {{- if and .Values.gateway.create .Values.ingress.create -}}
-        {{- fail "ERROR: Cannot enable both gateway.create and ingress.create" -}}
-    {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
-        {{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
-    {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
-        {{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
-    {{- end -}}
-{{- end -}}
 
-{{/*
-Get the hostname for the service - works with both Ingress and Gateway API
-Returns the first hostname from gateway.hostnames if gateway is enabled, otherwise ingress.host
-*/}}
-{{- define "bamboo.hostname" -}}
-    {{- if .Values.gateway.create -}}
-        {{- index .Values.gateway.hostnames 0 -}}
-    {{- else -}}
-        {{- .Values.ingress.host -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Returns true if HTTPS is enabled (gateway.https if gateway is enabled, otherwise ingress.https)
-*/}}
-{{- define "bamboo.https" -}}
-    {{- if .Values.gateway.create -}}
-        {{- .Values.gateway.https -}}
-    {{- else -}}
-        {{- .Values.ingress.https -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Returns the proxy port (gateway or ingress-based)
-*/}}
-{{- define "bamboo.proxyPort" -}}
-    {{- if .Values.gateway.create -}}
-        {{- ternary "443" "80" .Values.gateway.https -}}
-    {{- else -}}
-        {{- default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-    {{- end -}}
-{{- end -}}

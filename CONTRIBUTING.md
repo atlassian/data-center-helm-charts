@@ -25,6 +25,22 @@ For any pull requests, code owners should review the changes thoroughly and make
 
 For external contributions, any Github action workflow related changes are not acceptable.
 
+## Windows Users
+
+This repository uses **symlinks** to share common Helm templates across product charts
+(see `src/main/charts/common_templates/`). Git on Windows doesn't enable symlinks by default — without them,
+Helm template rendering will fail.
+
+To enable symlinks on Windows:
+
+1. Enable **Developer Mode** in Windows Settings (Settings → Update & Security → For Developers), or run Git as Administrator
+2. Configure Git to create real symlinks:
+   ```
+   git config --global core.symlinks true
+   ```
+3. Re-clone the repository after changing this setting (existing clones won't retroactively fix symlinks)
+
+
 ### How to run E2E tests
 
 The Data Center Helm Charts uses the latest release of [Deployment Automation for Atlassian DC on K8s](https://github.com/atlassian-labs/data-center-terraform#deployment-automation-for-atlassian-dc-on-k8s) for end-to-end testing. Internal reviewers can run the tests by adding `e2e` label on a pull request (for external contributions, be mindful of the changes as it will run on internal cloud environment).
