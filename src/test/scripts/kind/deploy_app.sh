@@ -305,6 +305,20 @@ deploy_app() {
     if [ ${SETUP_ELAPSED} -ge ${SETUP_TIMEOUT} ]; then
       echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
     fi
+
+    # Debug: simulate what the agent does to understand redirect behavior
+    echo "[DEBUG]: Checking /agentServer via ingress (localhost)..."
+    curl -v -s --max-redirs 0 http://localhost/agentServer 2>&1 || true
+    echo ""
+    echo "[DEBUG]: Checking /agentServer via K8s service DNS (from inside server pod)..."
+    kubectl exec -n atlassian ${DC_APP}-0 -- curl -v -s --max-redirs 0 http://bamboo.atlassian.svc.cluster.local:8085/agentServer 2>&1 || true
+    echo ""
+    echo "[DEBUG]: Checking /agentServer via localhost (from inside server pod)..."
+    kubectl exec -n atlassian ${DC_APP}-0 -- curl -v -s --max-redirs 0 http://localhost:8085/agentServer 2>&1 || true
+    echo ""
+    echo "[DEBUG]: Checking /rest/api/latest/info via K8s service DNS (from inside server pod)..."
+    kubectl exec -n atlassian ${DC_APP}-0 -- curl -v -s --max-redirs 0 http://bamboo.atlassian.svc.cluster.local:8085/rest/api/latest/info 2>&1 || true
+    echo ""
   fi
 
   if [ ${DC_APP} == "bamboo" ]; then
