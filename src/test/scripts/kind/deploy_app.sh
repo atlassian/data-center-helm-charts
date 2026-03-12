@@ -295,7 +295,7 @@ deploy_app() {
     SETUP_TIMEOUT=300
     SETUP_ELAPSED=0
     while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
-      RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://localhost/agentServer 2>/dev/null || echo "000|")
+      RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://localhost/ 2>/dev/null || echo "000|")
       HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
       REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
 
@@ -303,11 +303,13 @@ deploy_app() {
         # Server is in setup mode — trigger setup advancement by following the redirect chain
         curl -s -o /dev/null -L --max-redirs 10 http://localhost/ 2>/dev/null || true
         echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
-      elif [ "${HTTP_CODE}" = "200" ] || [ "${HTTP_CODE}" = "404" ]; then
-        echo "[INFO]: Bamboo server setup complete (HTTP ${HTTP_CODE}, no setup redirect)"
+      elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
+        echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
         break
+      elif [ "${HTTP_CODE}" = "000" ]; then
+        echo "[INFO]: Bamboo server not reachable yet. Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
       else
-        echo "[INFO]: Bamboo server not ready yet (HTTP ${HTTP_CODE}). Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+        echo "[INFO]: Bamboo server responded with HTTP ${HTTP_CODE}. Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
       fi
 
       sleep 10
@@ -315,21 +317,9 @@ deploy_app() {
     done
     if [ ${SETUP_ELAPSED} -ge ${SETUP_TIMEOUT} ]; then
       echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
+      echo "[DEBUG]: Full response from GET / with redirects:"
+      curl -v -s -L --max-redirs 10 http://localhost/ 2>&1 || true
     fi
-
-    # Debug: simulate what the agent does to understand redirect behavior
-    echo "[DEBUG]: Checking /agentServer via ingress (localhost)..."
-    curl -v -s --max-redirs 0 http://localhost/agentServer 2>&1 || true
-    echo ""
-    echo "[DEBUG]: Checking /agentServer via K8s service DNS (from inside server pod)..."
-    kubectl exec -n atlassian ${DC_APP}-0 -- curl -v -s --max-redirs 0 http://bamboo.atlassian.svc.cluster.local:8085/agentServer 2>&1 || true
-    echo ""
-    echo "[DEBUG]: Checking /agentServer via localhost (from inside server pod)..."
-    kubectl exec -n atlassian ${DC_APP}-0 -- curl -v -s --max-redirs 0 http://localhost:8085/agentServer 2>&1 || true
-    echo ""
-    echo "[DEBUG]: Checking /rest/api/latest/info via K8s service DNS (from inside server pod)..."
-    kubectl exec -n atlassian ${DC_APP}-0 -- curl -v -s --max-redirs 0 http://bamboo.atlassian.svc.cluster.local:8085/rest/api/latest/info 2>&1 || true
-    echo ""
   fi
 
   if [ ${DC_APP} == "bamboo" ]; then
