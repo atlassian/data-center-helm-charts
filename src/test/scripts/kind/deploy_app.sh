@@ -287,21 +287,26 @@ deploy_app() {
   # For Bamboo, wait for the unattended setup to complete before deploying the agent.
   # Bamboo 12+ uses absolute redirects during setup, which prevents the agent from
   # triggering setup advancement (unlike Bamboo 11 which used relative redirects).
-  # We check /agentServer (the same endpoint the agent hits) — if it redirects to
-  # the setup wizard, we trigger setup advancement by following the redirect chain.
-  # Once /agentServer stops redirecting to setup, the server is ready for the agent.
+  # We check GET / — during setup it redirects to /bootstrap/selectSetupStep.action,
+  # after setup it redirects to /userlogin.action. We use this to detect setup state
+  # and trigger setup advancement by following the redirect chain.
   if [ ${DC_APP} == "bamboo" ]; then
     echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
+    if [ -n "${OPENSHIFT_VALUES}" ]; then
+      SETUP_HOSTNAME="atlassian.apps.crc.testing"
+    else
+      SETUP_HOSTNAME="localhost"
+    fi
     SETUP_TIMEOUT=300
     SETUP_ELAPSED=0
     while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
-      RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://localhost/ 2>/dev/null || echo "000|")
+      RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://${SETUP_HOSTNAME}/ 2>/dev/null || echo "000|")
       HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
       REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
 
       if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
         # Server is in setup mode — trigger setup advancement by following the redirect chain
-        curl -s -o /dev/null -L --max-redirs 10 http://localhost/ 2>/dev/null || true
+        curl -s -o /dev/null -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>/dev/null || true
         echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
       elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
         echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
@@ -318,7 +323,7 @@ deploy_app() {
     if [ ${SETUP_ELAPSED} -ge ${SETUP_TIMEOUT} ]; then
       echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
       echo "[DEBUG]: Full response from GET / with redirects:"
-      curl -v -s -L --max-redirs 10 http://localhost/ 2>&1 || true
+      curl -v -s -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>&1 || true
     fi
   fi
 
