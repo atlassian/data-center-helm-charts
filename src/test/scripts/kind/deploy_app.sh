@@ -284,6 +284,29 @@ deploy_app() {
                ${ENABLE_OPENSEARCH} \
                ${MISC_OVERRIDES}
 
+  # For Bamboo, wait for the unattended setup to complete before deploying the agent.
+  # Bamboo's unattended setup requires HTTP requests to advance through the setup wizard steps.
+  # We hit the server via the ingress (localhost) which also triggers setup advancement,
+  # and poll /rest/api/latest/info until it returns 200 (setup complete).
+  if [ ${DC_APP} == "bamboo" ]; then
+    echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
+    SETUP_TIMEOUT=300
+    SETUP_ELAPSED=0
+    while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
+      STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-redirs 10 http://localhost/rest/api/latest/info 2>/dev/null || echo "000")
+      if [ "${STATUS_CODE}" = "200" ]; then
+        echo "[INFO]: Bamboo server setup complete (HTTP ${STATUS_CODE})"
+        break
+      fi
+      echo "[INFO]: Bamboo setup not ready yet (HTTP ${STATUS_CODE}). Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+      sleep 10
+      SETUP_ELAPSED=$((SETUP_ELAPSED + 10))
+    done
+    if [ ${SETUP_ELAPSED} -ge ${SETUP_TIMEOUT} ]; then
+      echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
+    fi
+  fi
+
   if [ ${DC_APP} == "bamboo" ]; then
     if [[ -n "${OPENSHIFT_VALUES}" ]]; then
       OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
@@ -291,7 +314,7 @@ deploy_app() {
     echo "[INFO]: Deploying Bamboo agent..."
     helm dependency build ./src/main/charts/bamboo-agent
     helm upgrade --install bamboo-agent ./src/main/charts/bamboo-agent -n atlassian \
-                 --set agent.server="bamboo.atlassian.svc.cluster.local/agentServer/" \
+                 --set agent.server=bamboo.atlassian.svc.cluster.local \
                  --set agent.resources.container.requests.cpu=20m \
                  --set agent.resources.container.requests.memory=10Mi \
                 ${OPENSHIFT_VALUES} \
