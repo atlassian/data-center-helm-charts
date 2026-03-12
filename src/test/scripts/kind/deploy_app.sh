@@ -285,20 +285,31 @@ deploy_app() {
                ${MISC_OVERRIDES}
 
   # For Bamboo, wait for the unattended setup to complete before deploying the agent.
-  # Bamboo's unattended setup requires HTTP requests to advance through the setup wizard steps.
-  # We hit the server via the ingress (localhost) which also triggers setup advancement,
-  # and poll /rest/api/latest/info until it returns 200 (setup complete).
+  # Bamboo 12+ uses absolute redirects during setup, which prevents the agent from
+  # triggering setup advancement (unlike Bamboo 11 which used relative redirects).
+  # We check /agentServer (the same endpoint the agent hits) — if it redirects to
+  # the setup wizard, we trigger setup advancement by following the redirect chain.
+  # Once /agentServer stops redirecting to setup, the server is ready for the agent.
   if [ ${DC_APP} == "bamboo" ]; then
     echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
     SETUP_TIMEOUT=300
     SETUP_ELAPSED=0
     while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
-      STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-redirs 10 http://localhost/rest/api/latest/info 2>/dev/null || echo "000")
-      if [ "${STATUS_CODE}" = "200" ]; then
-        echo "[INFO]: Bamboo server setup complete (HTTP ${STATUS_CODE})"
+      RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://localhost/agentServer 2>/dev/null || echo "000|")
+      HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
+      REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
+
+      if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
+        # Server is in setup mode — trigger setup advancement by following the redirect chain
+        curl -s -o /dev/null -L --max-redirs 10 http://localhost/ 2>/dev/null || true
+        echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+      elif [ "${HTTP_CODE}" = "200" ] || [ "${HTTP_CODE}" = "404" ]; then
+        echo "[INFO]: Bamboo server setup complete (HTTP ${HTTP_CODE}, no setup redirect)"
         break
+      else
+        echo "[INFO]: Bamboo server not ready yet (HTTP ${HTTP_CODE}). Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
       fi
-      echo "[INFO]: Bamboo setup not ready yet (HTTP ${STATUS_CODE}). Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+
       sleep 10
       SETUP_ELAPSED=$((SETUP_ELAPSED + 10))
     done
