@@ -285,6 +285,8 @@ deploy_app() {
                ${MISC_OVERRIDES}
 
   if [ ${DC_APP} == "bamboo" ]; then
+    wait_for_bamboo_setup
+
     if [[ -n "${OPENSHIFT_VALUES}" ]]; then
       OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
     fi
@@ -297,7 +299,26 @@ deploy_app() {
                 ${OPENSHIFT_VALUES} \
                 ${AGENT_OVERRIDES} \
                 --wait --timeout=180s \
-                --debug
+                --debug || {
+      echo "[ERROR]: Bamboo agent deployment failed."
+      echo "[DEBUG]: Bamboo agent pods:"
+      kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent -o wide 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent pod describe:"
+      kubectl describe pods -n atlassian -l app.kubernetes.io/name=bamboo-agent 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Bamboo server container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Events in atlassian namespace (last 50):"
+      kubectl get events -n atlassian --sort-by='.lastTimestamp' 2>/dev/null | tail -50 || true
+      exit 1
+    }
   fi
 
   # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
@@ -318,6 +339,53 @@ deploy_app() {
   fi
 }
 
+# Resolve the ingress/gateway hostname based on the deployment environment.
+get_routing_hostname() {
+  if [ -n "${OPENSHIFT_VALUES}" ]; then
+    echo "atlassian.apps.crc.testing"
+  else
+    echo "localhost"
+  fi
+}
+
+# Wait for Bamboo server's unattended setup wizard to complete.
+# Bamboo 12+ uses absolute redirects during setup, which prevents the agent from
+# triggering setup advancement (unlike Bamboo 11 which used relative redirects).
+# We poll GET / — during setup it redirects to /bootstrap/selectSetupStep.action,
+# after setup it redirects to /userlogin.action. Following the redirect chain
+# during setup triggers the wizard to advance to the next step.
+wait_for_bamboo_setup() {
+  echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
+  SETUP_HOSTNAME=$(get_routing_hostname)
+  SETUP_TIMEOUT=300
+  SETUP_ELAPSED=0
+  while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://${SETUP_HOSTNAME}/ 2>/dev/null || echo "000|")
+    HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
+    REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
+
+    if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
+      # Server is in setup mode — trigger setup advancement by following the redirect chain
+      curl -s -o /dev/null -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>/dev/null || true
+      echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+    elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
+      echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
+      return 0
+    elif [ "${HTTP_CODE}" = "000" ]; then
+      echo "[INFO]: Bamboo server not reachable yet. Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+    else
+      echo "[INFO]: Bamboo server responded with HTTP ${HTTP_CODE}. Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+    fi
+
+    sleep 10
+    SETUP_ELAPSED=$((SETUP_ELAPSED + 10))
+  done
+
+  echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
+  echo "[DEBUG]: Full response from GET / with redirects:"
+  curl -v -s -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>&1 || true
+}
+
 verify_ingress() {
   STATUS_ENDPOINT_PATH="status"
   if [ ${DC_APP} == "bamboo" ]; then
@@ -328,11 +396,7 @@ verify_ingress() {
   echo "[INFO]: Checking ${DC_APP} status"
   # give ingress controller a few seconds before polling
   sleep 5
-  if [ -n "${OPENSHIFT_VALUES}" ]; then
-    HOSTNAME="atlassian.apps.crc.testing"
-  else
-    HOSTNAME="localhost"
-  fi
+  HOSTNAME=$(get_routing_hostname)
   for i in {1..10}; do
     STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://${HOSTNAME}/${STATUS_ENDPOINT_PATH})
     if [ $STATUS -ne 200 ]; then
