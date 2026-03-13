@@ -30,19 +30,19 @@ check_http_200() {
 # Deploy CloudNativePG operator and PostgreSQL cluster
 deploy_postgres() {
   echo "[INFO]: Installing CloudNativePG operator"
-  
+
   # Add CloudNativePG Helm repository
   helm repo add cloudnative-pg https://cloudnative-pg.github.io/charts --force-update
   helm repo update
-  
+
   # Install CloudNativePG operator only if not already installed
   echo "[INFO]: Installing CloudNativePG operator"
   if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
     echo "[INFO]: CloudNativePG operator not found, installing..."
-    
+
     # Create namespace first to ensure it exists
     kubectl create namespace cnpg-system --dry-run=client -o yaml | kubectl apply -f -
-    
+
     # Use helm template + kubectl apply to completely avoid Helm client timeouts
     # This is the most reliable method for slow/busy clusters (e2e, MicroShift)
     echo "[INFO]: Rendering operator manifests from Helm chart..."
@@ -50,7 +50,7 @@ deploy_postgres() {
          --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
          --namespace cnpg-system \
          --include-crds > /tmp/cnpg-operator-manifests.yaml
-    
+
     echo "[INFO]: Applying operator manifests to cluster..."
     # Apply with server-side apply to handle large CRD annotations
     if ! kubectl apply --server-side=true -f /tmp/cnpg-operator-manifests.yaml 2>&1 | tee /tmp/cnpg-apply.log; then
@@ -66,19 +66,18 @@ deploy_postgres() {
         exit 1
       fi
     fi
-    
+
     echo "[INFO]: Operator manifests applied successfully"
   else
     echo "[INFO]: CloudNativePG operator already installed, skipping..."
   fi
-  
+
   # Wait for operator to be ready
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
   wait_for "CloudNativePG CRDs" 300 5 kubectl get crd clusters.postgresql.cnpg.io || {
     echo "[ERROR]: CloudNativePG CRDs not available"
     exit 1
   }
-  
   # Wait for operator deployment to exist
   echo "[INFO]: Waiting for operator deployment to be created..."
   wait_for "CloudNativePG operator deployment" 60 2 \
@@ -104,7 +103,7 @@ deploy_postgres() {
   kubectl get deployments -n cnpg-system
   echo "[DEBUG]: CloudNativePG operator pods:"
   kubectl get pods -n cnpg-system
-  
+
   # Wait for operator pod to be ready
   echo "[INFO]: Waiting for operator pod to be ready..."
   if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
@@ -126,9 +125,9 @@ deploy_postgres() {
     helm status cnpg-operator -n cnpg-system
     exit 1
   fi
-  
+
   echo "[INFO]: CloudNativePG operator is ready"
-  
+
   # Create database credentials secret
   echo "[INFO]: Creating database credentials secret"
   kubectl create secret generic ${DC_APP}-db-credentials \
@@ -136,12 +135,12 @@ deploy_postgres() {
     --from-literal=password="${DC_APP}pwd" \
     --namespace atlassian \
     --dry-run=client -o yaml | kubectl apply -f -
-  
+
   # Create PostgreSQL cluster from template
   echo "[INFO]: Creating PostgreSQL cluster for ${DC_APP}"
   TMP_DIR=$(mktemp -d)
   cp src/test/infrastructure/cloudnativepg/cluster-template.yaml ${TMP_DIR}/cluster.yaml
-  
+
   # Replace placeholders in cluster template
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS requires an empty string argument after -i
@@ -167,14 +166,14 @@ deploy_postgres() {
     echo "[WARN]: No StorageClass detected; database PVCs may remain Pending"
     kubectl get sc || true
   fi
-  
+
   # Debug: Print the generated configuration
   echo "[INFO]: Generated PostgreSQL cluster configuration:"
   cat ${TMP_DIR}/cluster.yaml
-  
+
   # Apply the cluster configuration
   kubectl apply -f ${TMP_DIR}/cluster.yaml
-  
+
   # Wait for cluster to be ready
   echo "[INFO]: Waiting for PostgreSQL cluster to be ready"
   kubectl wait --for=condition=Ready cluster/${DC_APP}-db \
@@ -194,12 +193,12 @@ deploy_postgres() {
       kubectl get sc || true
       exit 1
     }
-  
+
   # Wait for primary pod to be ready
   echo "[INFO]: Waiting for PostgreSQL primary pod to be ready"
   kubectl wait --for=condition=Ready pod -l cnpg.io/cluster=${DC_APP}-db,role=primary \
     --namespace atlassian --timeout=300s
-  
+
   # Execute custom initialization script if provided
   if [ -f "${DB_INIT_SCRIPT_FILE}" ]; then
     echo "[INFO]: DB init file '${DB_INIT_SCRIPT_FILE}' found. Initializing the database"
@@ -368,7 +367,9 @@ verify_gateway_ingress() {
 
   HOST_HEADER=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[0]}' 2>/dev/null || true)
   if [ -z "${HOST_HEADER}" ]; then
-    HOST_HEADER="localhost"
+    echo "[ERROR]: HTTPRoute ${DC_APP} has no hostname configured (spec.hostnames[0] is empty)"
+    kubectl get httproute/${DC_APP} -n atlassian -o yaml || true
+    exit 1
   fi
 
   PF_PORT=18080
@@ -497,18 +498,13 @@ verify_openshift_analytics() {
 }
 
 verify_gateway() {
-  if [ -z "${TEST_GATEWAY}" ]; then
-    echo "[INFO]: Skipping Gateway verification (TEST_GATEWAY not set)"
-    return 0
-  fi
-  
   echo "[INFO]: Verifying HTTPRoute resource for ${DC_APP}"
   if ! kubectl get httproute/${DC_APP} -n atlassian >/dev/null 2>&1; then
     echo "[ERROR]: HTTPRoute ${DC_APP} not found in atlassian namespace"
     kubectl get httproute -n atlassian || true
     exit 1
   fi
-  
+
   echo "[INFO]: Checking HTTPRoute status"
 
   # Wait on Gateway API parent conditions (Envoy Gateway reports conditions under
@@ -535,35 +531,36 @@ verify_gateway() {
   kubectl wait \
     --for=jsonpath='{.status.parents[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
     httproute/${DC_APP} -n atlassian --timeout=180s || {
-      echo "[WARN]: HTTPRoute ResolvedRefs condition not met"
+      echo "[ERROR]: HTTPRoute ResolvedRefs condition not met"
       echo "[DEBUG]: HTTPRoute status.parents (JSON)"
       kubectl get httproute/${DC_APP} -n atlassian -o json | jq '.status.parents' || true
       kubectl describe httproute/${DC_APP} -n atlassian
+      exit 1
     }
 
-  echo "[INFO]: HTTPRoute is Accepted and ResolvedRefs"
-  
+  echo "[INFO]: HTTPRoute is Accepted and ResolvedRefs verified"
+
   echo "[INFO]: Verifying Gateway attachment"
   GATEWAY_NAME=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.parentRefs[0].name}')
   echo "[INFO]: HTTPRoute attached to Gateway: ${GATEWAY_NAME}"
-  
+
   if [ -z "${GATEWAY_NAME}" ]; then
     echo "[ERROR]: No Gateway referenced in HTTPRoute"
     exit 1
   fi
-  
+
   echo "[INFO]: Checking Gateway status"
   kubectl get gateway/${GATEWAY_NAME} -n atlassian -o yaml
-  
+
   # Verify hostnames are configured
   HOSTNAMES=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[*]}')
   echo "[INFO]: HTTPRoute hostnames: ${HOSTNAMES}"
-  
+
   if [ -z "${HOSTNAMES}" ]; then
     echo "[ERROR]: No hostnames configured on HTTPRoute"
     exit 1
   fi
-  
+
   echo "[INFO]: Gateway API verification complete for ${DC_APP}"
 }
 

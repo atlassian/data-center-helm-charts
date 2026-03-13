@@ -297,14 +297,16 @@ data:
       annotations: {}
       create: false
       filters: []
-      gatewayName: ""
-      gatewayNamespace: ""
       hostnames: []
       https: true
       labels: {}
-      path: /
+      parentRef:
+        name: ""
+      path: null
       pathType: PathPrefix
-      timeouts: {}
+      timeouts:
+        backendRequest: 60s
+        request: 60s
     hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent

@@ -16,10 +16,7 @@ metadata:
 spec:
   # Reference to the Gateway
   parentRefs:
-  - name: {{ .Values.gateway.gatewayName }}
-    {{- if .Values.gateway.gatewayNamespace }}
-    namespace: {{ .Values.gateway.gatewayNamespace }}
-    {{- end }}
+  - {{- toYaml .Values.gateway.parentRef | nindent 4 }}
   
   # Hostnames to match
   hostnames:
@@ -33,22 +30,21 @@ spec:
   - matches:
     - path:
         type: {{ .Values.gateway.pathType }}
-        value: {{ .Values.gateway.path }}
+        value: {{ include "bitbucket.path" . }}
     {{- with .Values.gateway.timeouts }}
     timeouts:
       {{- toYaml . | nindent 6 }}
     {{- end }}
-    {{- if .Values.gateway.filters }}
+    {{- with .Values.gateway.filters }}
     filters:
-    {{- toYaml .Values.gateway.filters | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
     backendRefs:
     - name: {{ include "common.names.fullname" . }}
       port: {{ .Values.bitbucket.service.port }}
       weight: 100
   
-  {{- if .Values.gateway.additionalRules }}
-  # Additional custom rules
-  {{- toYaml .Values.gateway.additionalRules | nindent 2 }}
+  {{- with .Values.gateway.additionalRules }}
+  {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}

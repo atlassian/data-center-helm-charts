@@ -12,14 +12,10 @@ volumes:
 openshift:
   runWithRestrictedSCC: true
 
-ingress:
-  openShiftRoute: false
-  create: false
-  host: atlassian.apps.crc.testing
-
 gateway:
   create: true
-  gatewayName: atlassian-gateway
+  parentRef:
+    name: atlassian-gateway
   hostnames:
     - atlassian.apps.crc.testing
   https: false

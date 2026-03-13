@@ -1,8 +1,10 @@
 package test;
 
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.AbstractStringAssert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import test.helm.Helm;
@@ -11,13 +13,10 @@ import test.model.Product;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static test.jackson.JsonNodeAssert.assertThat;
 
-/**
- * Tests for Gateway API HTTPRoute resources.
- * These tests verify that HTTPRoute resources are correctly generated
- * from Helm chart values and follow Gateway API specifications.
- */
 class GatewayTest {
     private Helm helm;
 
@@ -28,14 +27,14 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_create(Product product) throws Exception {
+    void gateway_creates_httproute_with_parent_ref_and_hostname(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoutes = resources.getAll(Kind.HTTPRoute);
-        Assertions.assertEquals(1, httpRoutes.size());
+        assertEquals(1, httpRoutes.size());
 
         final var httpRoute = httpRoutes.head();
         assertThat(httpRoute.getNode("spec", "parentRefs").required(0).path("name"))
@@ -47,41 +46,44 @@ class GatewayTest {
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void gateway_cannot_coexist_with_ingress(Product product) {
-        Assertions.assertThrows(AssertionError.class, () -> {
-            helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                    "gateway.create", "true",
-                    "ingress.create", "true",
-                    "gateway.gatewayName", "my-gateway",
-                    "gateway.hostnames[0]", product + ".example.com"));
-        });
+        assertThrowsAssertionWithMessage(
+                "ERROR: Cannot enable both gateway.create and ingress.create",
+                () -> helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                        "gateway.create", "true",
+                        "ingress.create", "true",
+                        "gateway.parentRef.name", "my-gateway",
+                        "gateway.hostnames[0]", product + ".example.com"))
+        );
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void gateway_requires_gateway_name(Product product) {
-        Assertions.assertThrows(AssertionError.class, () -> {
-            helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                    "gateway.create", "true",
-                    "gateway.hostnames[0]", product + ".example.com"));
-        });
+        assertThrowsAssertionWithMessage(
+                "ERROR: gateway.parentRef.name is required when gateway.create is true",
+                () -> helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                        "gateway.create", "true",
+                        "gateway.hostnames[0]", product + ".example.com"))
+        );
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
     void gateway_requires_hostnames(Product product) {
-        Assertions.assertThrows(AssertionError.class, () -> {
-            helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                    "gateway.create", "true",
-                    "gateway.gatewayName", "my-gateway"));
-        });
+        assertThrowsAssertionWithMessage(
+                "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true",
+                () -> helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                        "gateway.create", "true",
+                        "gateway.parentRef.name", "my-gateway"))
+        );
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_with_custom_path(Product product) throws Exception {
+    void gateway_custom_path_is_applied_to_route_match(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.path", "/" + product));
 
@@ -93,10 +95,10 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_with_multiple_hostnames(Product product) throws Exception {
+    void gateway_supports_multiple_hostnames(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.hostnames[1]", product + "-alt.example.com"));
 
@@ -109,11 +111,11 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_with_namespace(Product product) throws Exception {
+    void gateway_namespace_is_set_on_parent_ref(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
-                "gateway.gatewayNamespace", "gateway-system",
+                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRef.namespace", "gateway-system",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
@@ -123,11 +125,11 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_path_types(Product product) throws Exception {
+    void gateway_supports_all_path_types(Product product) throws Exception {
         for (String pathType : new String[]{"PathPrefix", "Exact", "RegularExpression"}) {
             final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                     "gateway.create", "true",
-                    "gateway.gatewayName", "my-gateway",
+                    "gateway.parentRef.name", "my-gateway",
                     "gateway.hostnames[0]", product + ".example.com",
                     "gateway.pathType", pathType));
 
@@ -140,10 +142,10 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_with_annotations(Product product) throws Exception {
+    void gateway_custom_annotations_are_applied(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.annotations.cert-manager\\.io/cluster-issuer", "letsencrypt"));
 
@@ -155,10 +157,10 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_with_labels(Product product) throws Exception {
+    void gateway_custom_labels_are_applied(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.labels.environment", "production"));
 
@@ -168,104 +170,48 @@ class GatewayTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bitbucket"})
-    void gateway_backend_refs_bitbucket(Product product) throws Exception {
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void gateway_backend_ref_targets_product_service(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
-                "gateway.hostnames[0]", "bitbucket.example.com"));
+                "gateway.parentRef.name", "my-gateway",
+                "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
-        assertThat(httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("name"))
-                .hasTextContaining("bitbucket");
-        // Service port is 80 (Kubernetes service port), not the container port
-        Assertions.assertEquals(80, httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("port").asInt());
-        Assertions.assertEquals(100, httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("weight").asInt());
+        final var backendRef = httpRoute.getNode("spec", "rules").required(0)
+                .path("backendRefs").required(0);
+
+        assertThat(backendRef.path("name"))
+                .hasTextContaining(product.toString());
+        assertEquals(80, backendRef.path("port").asInt());
+        assertEquals(100, backendRef.path("weight").asInt());
     }
 
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"jira"})
-    void gateway_backend_refs_jira(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+    @Test
+    void gateway_routes_synchrony_traffic_when_enabled() throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(Product.confluence, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
-                "gateway.hostnames[0]", "jira.example.com"));
-
-        final var httpRoute = resources.get(Kind.HTTPRoute);
-        // Service port is 80 (Kubernetes service port), not the container port
-        Assertions.assertEquals(80, httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("port").asInt());
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"confluence"})
-    void gateway_backend_refs_confluence(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
-                "gateway.hostnames[0]", "confluence.example.com"));
-
-        final var httpRoute = resources.get(Kind.HTTPRoute);
-        // Service port is 80 (Kubernetes service port), not the container port
-        Assertions.assertEquals(80, httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("port").asInt());
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"confluence"})
-    void gateway_routes_synchrony_when_enabled(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", "confluence.example.com",
                 "synchrony.enabled", "true"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
 
-        // When Synchrony is enabled, Confluence creates an extra rule.
-        // We just validate it points at the synchrony Service.
         assertThat(httpRoute.getNode("spec", "rules").required(0)
                 .path("backendRefs").required(0).path("name"))
                 .hasTextContaining("synchrony");
-    }
 
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo"})
-    void gateway_backend_refs_bamboo(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
-                "gateway.hostnames[0]", "bamboo.example.com"));
-
-        final var httpRoute = resources.get(Kind.HTTPRoute);
-        // Service port is 80 (Kubernetes service port), not the container port
-        Assertions.assertEquals(80, httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("port").asInt());
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"crowd"})
-    void gateway_backend_refs_crowd(Product product) throws Exception {
-        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
-                "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
-                "gateway.hostnames[0]", "crowd.example.com"));
-
-        final var httpRoute = resources.get(Kind.HTTPRoute);
-        // Service port is 80 (Kubernetes service port), not the container port
-        Assertions.assertEquals(80, httpRoute.getNode("spec", "rules").required(0)
-                .path("backendRefs").required(0).path("port").asInt());
+        assertThat(httpRoute.getNode("spec", "rules").required(1)
+                .path("backendRefs").required(0).path("name"))
+                .hasTextContaining("confluence");
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_with_timeouts(Product product) throws Exception {
+    void gateway_custom_timeouts_are_applied(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.timeouts.request", "120s",
                 "gateway.timeouts.backendRequest", "60s"));
@@ -280,24 +226,26 @@ class GatewayTest {
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_no_timeouts_by_default(Product product) throws Exception {
+    void gateway_has_default_timeouts(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
         final var rule = httpRoute.getNode("spec", "rules").required(0);
-        Assertions.assertTrue(rule.path("timeouts").isMissingNode(),
-                "timeouts should not be present when not configured");
+        assertThat(rule.path("timeouts").path("request"))
+                .hasTextEqualTo("60s");
+        assertThat(rule.path("timeouts").path("backendRequest"))
+                .hasTextEqualTo("60s");
     }
 
     @ParameterizedTest
-    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Product.class, names = {"bamboo_agent", "crowd"}, mode = EnumSource.Mode.EXCLUDE)
     void gateway_default_path_is_root(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
@@ -306,17 +254,39 @@ class GatewayTest {
                 .hasTextEqualTo("/");
     }
 
+    @Test
+    void gateway_default_path_uses_context_path_for_crowd() throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(Product.crowd, Map.of(
+                "gateway.create", "true",
+                "gateway.parentRef.name", "my-gateway",
+                "gateway.hostnames[0]", "crowd.example.com"));
+
+        final var httpRoute = resources.get(Kind.HTTPRoute);
+        assertThat(httpRoute.getNode("spec", "rules").required(0)
+                .path("matches").required(0).path("path").path("value"))
+                .hasTextEqualTo("/crowd");
+    }
+
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_default_pathType_is_prefix(Product product) throws Exception {
+    void gateway_default_path_type_is_prefix(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.gatewayName", "my-gateway",
+                "gateway.parentRef.name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
         assertThat(httpRoute.getNode("spec", "rules").required(0)
                 .path("matches").required(0).path("path").path("type"))
                 .hasTextEqualTo("PathPrefix");
+    }
+
+    private static void assertThrowsAssertionWithMessage(String expectedErrorMessage, Executable fn) {
+        assertThatString(
+                assertThrows(AssertionError.class, fn).getMessage()
+        ).contains(expectedErrorMessage);
+    }
+    private static AbstractStringAssert<?> assertThatString(String text) {
+        return org.assertj.core.api.Assertions.assertThat(text);
     }
 }

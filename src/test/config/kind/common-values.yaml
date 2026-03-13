@@ -110,16 +110,12 @@ podAnnotations:
 
 # KinD tests use Gateway API with Envoy Gateway.
 # Note: tests access the Gateway via kubectl port-forward (not via host ports 80/443).
-ingress:
-  create: false
-  host: localhost
-  https: false
-
 gateway:
   create: true
-  gatewayName: atlassian-gateway
+  parentRef:
+    name: atlassian-gateway
   hostnames:
-    - localhost
+    - dc-app.test
   https: false
 
 monitoring:

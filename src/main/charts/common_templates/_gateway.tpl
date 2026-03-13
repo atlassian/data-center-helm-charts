@@ -28,8 +28,8 @@ Ensures mutual exclusion and required fields.
     {{- if and (not (empty .Values.gateway.hostnames)) (not (empty .Values.ingress.host)) -}}
         {{- fail "ERROR: Cannot set both gateway.hostnames and ingress.host — use one or the other" -}}
     {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.gatewayName) -}}
-        {{- fail "ERROR: gateway.gatewayName is required when gateway.create is true" -}}
+    {{- if and .Values.gateway.create (not .Values.gateway.parentRef.name) -}}
+        {{- fail "ERROR: gateway.parentRef.name is required when gateway.create is true" -}}
     {{- end -}}
     {{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
         {{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}
@@ -87,10 +87,9 @@ include "common.gateway.path" (dict
 )
 */}}
 {{- define "common.gateway.path" -}}
-{{- if eq .useGatewayMode "true" -}}
-    {{- .gatewayPath | default "/" -}}
-{{- else if .ingressPath -}}
-    {{- .ingressPath -}}
+{{- $explicitPath := ternary .gatewayPath .ingressPath (eq .useGatewayMode "true") -}}
+{{- if $explicitPath -}}
+    {{- $explicitPath -}}
 {{- else -}}
     {{- .contextPath | default "/" -}}
 {{- end -}}

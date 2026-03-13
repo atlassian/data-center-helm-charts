@@ -554,6 +554,8 @@ gateway:
   # is required when gateway.create is true. Setting hostnames activates gateway
   # mode for product configuration even when gateway.create is false, allowing
   # use with a pre-existing Gateway or external proxy.
+  # The first entry is used as the canonical hostname for base URL, proxy
+  # settings, and NOTES output — list the primary/public hostname first.
   #
   hostnames: []
   # - bitbucket.example.com
@@ -571,24 +573,23 @@ gateway:
   #
   # externalPort:
 
-  # -- The base path for routing. Defaults to "/" to route all paths.
+  # -- The base path for routing. When empty, falls back to the product's
+  # service.contextPath (same behavior as ingress). Set explicitly to
+  # override, e.g. "/bitbucket".
   #
-  path: "/"
+  path:
 
   # ---------------------------------------------------------------------------
   # The options below apply only when gateway.create is true.
   # They configure the HTTPRoute resource and have no effect otherwise.
   # ---------------------------------------------------------------------------
 
-  # -- The name of the Gateway resource that this HTTPRoute will attach to.
-  # The Gateway must be in the same namespace or allow routes from this namespace.
+  # -- Reference to the parent Gateway resource. Supports any standard
+  # parentRef fields (name, namespace, sectionName, etc.).
+  # See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference
   #
-  gatewayName: ""
-
-  # -- The namespace of the Gateway resource. If not specified, defaults to the
-  # release namespace.
-  #
-  gatewayNamespace: ""
+  parentRef:
+    name: ""
 
   # -- Path matching type. Can be "PathPrefix", "Exact", or "RegularExpression".
   # PathPrefix is recommended for most use cases.
@@ -645,12 +646,16 @@ gateway:
   # separately through your Gateway implementation's own policy resources.
   # See docs/gateway-api-session-affinity.md for working examples.
 
-  # -- Timeout configuration for HTTPRoute rules (standard channel).
+  # -- Timeout configuration for HTTPRoute rules.
+  # Note: when migrating from Ingress, these replace proxyReadTimeout and
+  # proxySendTimeout. There is no Gateway API equivalent for
+  # proxyConnectTimeout or maxBodySize — those require controller-specific
+  # policies (e.g. Envoy Gateway BackendTrafficPolicy).
   # See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteTimeouts
   #
-  timeouts: {}
-  # request: "60s"
-  # backendRequest: "60s"
+  timeouts:
+    request: "60s"
+    backendRequest: "60s"
 
 # Bitbucket configuration
 #
