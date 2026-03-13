@@ -1,7 +1,7 @@
 # Configuring OpenSearch for Jira
 
 !!!info "Jira and Helm chart version"
-    OpenSearch is supported in Jira 11.0.0 and Helm chart 2.0 onwards.
+    OpenSearch is supported in Jira 11.0.0 and Helm chart 2.0.10 onwards.
 
 As Jira instances grow in size and scale, the default search engine, Lucene, may be slower to index and return search results. To address this, Jira Data Center offers an alternative search engine as an opt-in feature — OpenSearch.
 

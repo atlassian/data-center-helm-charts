@@ -225,15 +225,15 @@ Starting with Jira 11.0, you can configure Jira to use OpenSearch as the search 
 
 * `ATL_SEARCH_PLATFORM`
 
-    The search platform to use. Set to `opensearch` if you want to use OpenSearch as the search platform.
+  The search platform to use. Set to `opensearch` if you want to use OpenSearch as the search platform.
 
 * `ATL_OPENSEARCH_HTTP_URL`
 
-    HTTP(S) URL of the OpenSearch cluster, or multiple URLs separated by commas.
+  HTTP(S) URL of the OpenSearch cluster, or multiple URLs separated by commas.
 
 * `ATL_OPENSEARCH_USERNAME`
 
-    Username for the OpenSearch cluster.
+  Username for the OpenSearch cluster.
 
 * `ATL_OPENSEARCH_PASSWORD`
 
