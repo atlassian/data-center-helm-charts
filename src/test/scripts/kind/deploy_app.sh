@@ -408,6 +408,7 @@ start_gateway_port_forward() {
   }
 
   GATEWAY_URL="http://127.0.0.1:${pf_port}"
+  GATEWAY_CONNECT_TO="${GATEWAY_HOST}:80:127.0.0.1:${pf_port}"
   echo "[INFO]: Gateway port-forward ready — ${GATEWAY_URL} (Host: ${GATEWAY_HOST})"
 }
 
@@ -439,8 +440,9 @@ wait_for_bamboo_setup() {
     REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
 
     if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
-      # Server is in setup mode — trigger setup advancement by following the redirect chain
-      curl -s -o /dev/null -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" "${GATEWAY_URL}/" 2>/dev/null || true
+      # --connect-to remaps dc-app.test:80 → 127.0.0.1:<pf_port> so curl can follow
+      # Bamboo's absolute redirects through the port-forward
+      curl -s -o /dev/null -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" --connect-to "${GATEWAY_CONNECT_TO}" "${GATEWAY_URL}/" 2>/dev/null || true
       echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
     elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
       echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
@@ -456,8 +458,7 @@ wait_for_bamboo_setup() {
   done
 
   echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
-  echo "[DEBUG]: Full response from GET / with redirects:"
-  curl -v -s -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" "${GATEWAY_URL}/" 2>&1 || true
+  curl -v -s -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" --connect-to "${GATEWAY_CONNECT_TO}" "${GATEWAY_URL}/" 2>&1 || true
 }
 
 verify_gateway_ingress() {
