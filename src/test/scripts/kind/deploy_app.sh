@@ -368,6 +368,57 @@ get_routing_hostname() {
   fi
 }
 
+# Check if the gateway port-forward process is alive and forwarding.
+_check_gateway_pf_ready() {
+  kill -0 "${GATEWAY_PF_PID}" 2>/dev/null && grep -q "Forwarding from" "${PF_LOG}" 2>/dev/null
+}
+
+# Start a port-forward to the Envoy Gateway proxy and export:
+#   GATEWAY_URL    — base URL (http://127.0.0.1:<port>)
+#   GATEWAY_HOST   — hostname from the HTTPRoute (used as Host header)
+#   GATEWAY_PF_PID — PID of the background port-forward process
+start_gateway_port_forward() {
+  local pf_port="${1:-18080}"
+
+  ENVOY_SVC=$(kubectl get svc -n envoy-gateway-system \
+    -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
+    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+
+  if [ -z "${ENVOY_SVC}" ]; then
+    echo "[ERROR]: Envoy Gateway proxy service not found"
+    kubectl get svc -n envoy-gateway-system -o wide || true
+    return 1
+  fi
+
+  GATEWAY_HOST=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[0]}' 2>/dev/null || true)
+  if [ -z "${GATEWAY_HOST}" ]; then
+    echo "[ERROR]: HTTPRoute ${DC_APP} has no hostname configured"
+    return 1
+  fi
+
+  PF_LOG=$(mktemp)
+  kubectl port-forward -n envoy-gateway-system "svc/${ENVOY_SVC}" "${pf_port}:80" >"${PF_LOG}" 2>&1 &
+  GATEWAY_PF_PID=$!
+
+  wait_for "port-forward to Envoy proxy" 10 1 _check_gateway_pf_ready || {
+    echo "[ERROR]: port-forward did not become ready"
+    cat "${PF_LOG}" || true
+    kill ${GATEWAY_PF_PID} 2>/dev/null || true
+    return 1
+  }
+
+  GATEWAY_URL="http://127.0.0.1:${pf_port}"
+  echo "[INFO]: Gateway port-forward ready — ${GATEWAY_URL} (Host: ${GATEWAY_HOST})"
+}
+
+stop_gateway_port_forward() {
+  if [ -n "${GATEWAY_PF_PID}" ]; then
+    kill ${GATEWAY_PF_PID} 2>/dev/null || true
+    wait ${GATEWAY_PF_PID} 2>/dev/null || true
+    GATEWAY_PF_PID=""
+  fi
+}
+
 # Wait for Bamboo server's unattended setup wizard to complete.
 # Bamboo 12+ uses absolute redirects during setup, which prevents the agent from
 # triggering setup advancement (unlike Bamboo 11 which used relative redirects).
@@ -376,17 +427,20 @@ get_routing_hostname() {
 # during setup triggers the wizard to advance to the next step.
 wait_for_bamboo_setup() {
   echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
-  SETUP_HOSTNAME=$(get_routing_hostname)
+
+  start_gateway_port_forward 18080 || return 1
+  trap 'stop_gateway_port_forward' RETURN
+
   SETUP_TIMEOUT=300
   SETUP_ELAPSED=0
   while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://${SETUP_HOSTNAME}/ 2>/dev/null || echo "000|")
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 -H "Host: ${GATEWAY_HOST}" "${GATEWAY_URL}/" 2>/dev/null || echo "000|")
     HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
     REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
 
     if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
       # Server is in setup mode — trigger setup advancement by following the redirect chain
-      curl -s -o /dev/null -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>/dev/null || true
+      curl -s -o /dev/null -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" "${GATEWAY_URL}/" 2>/dev/null || true
       echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
     elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
       echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
@@ -403,7 +457,7 @@ wait_for_bamboo_setup() {
 
   echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
   echo "[DEBUG]: Full response from GET / with redirects:"
-  curl -v -s -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>&1 || true
+  curl -v -s -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" "${GATEWAY_URL}/" 2>&1 || true
 }
 
 verify_gateway_ingress() {
@@ -422,56 +476,19 @@ verify_gateway_ingress() {
     exit 1
   }
 
-  # Find the Envoy proxy Service created for our Gateway
-  ENVOY_SVC=$(kubectl get svc -n envoy-gateway-system \
-    -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
-    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+  start_gateway_port_forward 18080 || exit 1
+  trap 'stop_gateway_port_forward' RETURN
 
-  if [ -z "${ENVOY_SVC}" ]; then
-    echo "[ERROR]: Envoy Gateway proxy service not found"
-    kubectl get svc -n envoy-gateway-system -o wide || true
-    exit 1
-  fi
-
-  HOST_HEADER=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[0]}' 2>/dev/null || true)
-  if [ -z "${HOST_HEADER}" ]; then
-    echo "[ERROR]: HTTPRoute ${DC_APP} has no hostname configured (spec.hostnames[0] is empty)"
-    kubectl get httproute/${DC_APP} -n atlassian -o yaml || true
-    exit 1
-  fi
-
-  PF_PORT=18080
-  PF_LOG="/tmp/envoy-port-forward-${DC_APP}.log"
-  kubectl port-forward -n envoy-gateway-system "svc/${ENVOY_SVC}" "${PF_PORT}:80" >"${PF_LOG}" 2>&1 &
-  PF_PID=$!
-  trap 'kill ${PF_PID} 2>/dev/null || true; wait ${PF_PID} 2>/dev/null || true' RETURN
-
-  # Wait until port-forward is active
-  check_port_forward_ready() {
-    if ! kill -0 "$PF_PID" 2>/dev/null; then
-      echo "[ERROR]: port-forward process exited early"
-      cat "$PF_LOG" || true
-      exit 1
-    fi
-    grep -q "Forwarding from" "$PF_LOG" 2>/dev/null
-  }
-
-  wait_for "port-forward to Envoy proxy" 10 1 check_port_forward_ready || {
-    echo "[ERROR]: port-forward did not become ready"
-    cat "${PF_LOG}" || true
-    exit 1
-  }
-
-  STATUS_URL_VIA_GATEWAY="http://127.0.0.1:${PF_PORT}/${STATUS_ENDPOINT_PATH}"
+  STATUS_URL="${GATEWAY_URL}/${STATUS_ENDPOINT_PATH}"
   wait_for "${DC_APP} HTTP 200 via Gateway" 120 10 \
-    check_http_200 "${STATUS_URL_VIA_GATEWAY}" -H "Host: ${HOST_HEADER}" || {
+    check_http_200 "${STATUS_URL}" -H "Host: ${GATEWAY_HOST}" || {
     echo "[ERROR]: ${DC_APP} did not return HTTP 200 via Gateway"
-    curl -v -H "Host: ${HOST_HEADER}" "${STATUS_URL_VIA_GATEWAY}"
+    curl -v -H "Host: ${GATEWAY_HOST}" "${STATUS_URL}"
     exit 1
   }
 
   echo "[INFO]: ${DC_APP} responded successfully via Gateway"
-  curl -s -H "Host: ${HOST_HEADER}" "${STATUS_URL_VIA_GATEWAY}"
+  curl -s -H "Host: ${GATEWAY_HOST}" "${STATUS_URL}"
   echo -e "\n"
 }
 
