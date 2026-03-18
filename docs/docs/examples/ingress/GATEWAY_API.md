@@ -26,7 +26,7 @@ The exact `gatewayClassName`, listener configuration, and TLS configuration depe
 
 ## 3. Configure the Helm chart
 
-Disable `ingress.create` and enable `gateway.create`. The key inputs are the **Gateway name** and at least one **hostname**.
+Disable `ingress.create` and enable `gateway.create`. Provide a **parentRef** pointing to your `Gateway` and at least one **hostname**.
 
 ```yaml
 ingress:
@@ -34,19 +34,64 @@ ingress:
 
 gateway:
   create: true
-  gatewayName: atlassian-gateway
-  # gatewayNamespace: gateway-system   # optional, defaults to release namespace
   hostnames:
     - confluence.example.com
   https: true
-  path: "/"
-  pathType: PathPrefix
+  parentRefs:
+    - name: atlassian-gateway
+      namespace: gateway-system   # optional, defaults to release namespace
+      sectionName: https          # optional, target a specific Gateway listener
 ```
 
 !!!info "TLS termination"
     With Gateway API, TLS termination is configured on the `Gateway` listeners (not on the `HTTPRoute`). The `gateway.https` value controls the product's proxy/URL settings (e.g., generating HTTPS links), but it does not provision certificates by itself.
 
-## 4. Configure session affinity (sticky sessions)
+## Gateway values reference
+
+The `gateway` stanza is split into two groups:
+
+**Product configuration** (always active when `gateway.hostnames` is set):
+
+| Value | Description | Default |
+|-------|-------------|---------|
+| `gateway.create` | Create an `HTTPRoute` resource | `false` |
+| `gateway.hostnames` | Hostnames to route; first entry is used as the canonical hostname for base URL and proxy settings | `[]` |
+| `gateway.https` | Whether users access the application over HTTPS | `true` |
+| `gateway.externalPort` | Port users connect on; only set for non-standard ports | `443` (https) / `80` (http) |
+| `gateway.path` | Base path; falls back to `<product>.service.contextPath` when empty | (empty) |
+
+**HTTPRoute configuration** (only applies when `gateway.create: true`):
+
+| Value | Description | Default |
+|-------|-------------|---------|
+| `gateway.parentRefs` | List of [ParentReference](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference){.external} objects (`name`, `namespace`, `sectionName`, etc.) | `[]` (required) |
+| `gateway.pathType` | Path matching type: `PathPrefix`, `Exact`, or `RegularExpression` | `PathPrefix` |
+| `gateway.annotations` | Annotations to add to the HTTPRoute | `{}` |
+| `gateway.labels` | Labels to add to the HTTPRoute | `{}` |
+| `gateway.filters` | [HTTPRouteFilter](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteFilter){.external} list (header modification, redirects, URL rewrites) | `[]` |
+| `gateway.timeouts.request` | Total request timeout | `60s` |
+| `gateway.timeouts.backendRequest` | Backend request timeout | `60s` |
+| `gateway.additionalRules` | Extra [HTTPRouteRule](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteRule){.external} entries for advanced routing | `[]` |
+
+!!!note "Using gateway config without creating an HTTPRoute"
+    Setting `gateway.hostnames` activates gateway mode for the product's proxy and base-URL configuration **even when `gateway.create` is false**. This is useful when you have a pre-existing Gateway or external proxy/load balancer and only need the Helm chart to configure the product itself, without creating any Kubernetes routing resource.
+
+## 4. Timeouts
+
+The `gateway.timeouts` block replaces the Ingress-style `proxyReadTimeout` / `proxySendTimeout` settings:
+
+```yaml
+gateway:
+  timeouts:
+    request: "60s"        # total request timeout
+    backendRequest: "60s" # backend request timeout
+```
+
+!!!warning "No Gateway API equivalents"
+    There is no standard Gateway API equivalent for `proxyConnectTimeout` or `maxBodySize`. If you need those, configure them through controller-specific policies (e.g. Envoy Gateway `BackendTrafficPolicy`).
+
+
+## Configure session affinity (sticky sessions)
 
 Session affinity is **required** for Atlassian DC products and is **not** part of the standard `HTTPRoute` API.
 

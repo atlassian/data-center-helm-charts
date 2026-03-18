@@ -96,11 +96,12 @@ ingress:
 
 gateway:
   create: true  # Creates an HTTPRoute resource
-  gatewayName: <gateway_name>
-  # gatewayNamespace: <gateway_namespace>  # optional, defaults to release namespace
   hostnames:
     - <dns_host_name>
   https: true
+  parentRefs:
+    - name: <gateway_name>
+      namespace: <gateway_namespace>  # optional, defaults to release namespace
 ```
 
 !!!info "Ingress configuration"
@@ -109,7 +110,7 @@ gateway:
     See an example of [how to set up an NGINX Ingress Controller](../examples/ingress/INGRESS_NGINX.md) and an overview of [controller options](../examples/ingress/CONTROLLERS.md).
 
 !!!info "Gateway API configuration"
-    For Gateway API exposure, start with the [Gateway API controller guide](../examples/ingress/GATEWAY_API.md) and then configure [session affinity](../examples/ingress/GATEWAY_API_SESSION_AFFINITY.md).
+    For Gateway API exposure, start with the [Gateway API controller guide](../examples/ingress/GATEWAY_API.md) and then configure [session affinity](../examples/ingress/GATEWAY_API_SESSION_AFFINITY.md). The Gateway API guide includes a full values reference and examples for timeouts, filters, and advanced routing.
     
 ## 5. Configure persistent storage
 

@@ -95,11 +95,27 @@ ingress:
 
 gateway:
   create: true
-  gatewayName: atlassian-gateway
   hostnames:
     - bitbucket.example.com
   https: true
+  parentRefs:
+    - name: atlassian-gateway
+      namespace: gateway-system  # optional
 ```
+
+The `gateway` stanza supports additional options for fine-tuning the `HTTPRoute`:
+
+- **`parentRefs`** – list of [ParentReference](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference){.external} objects pointing to your `Gateway` resource (supports `name`, `namespace`, `sectionName`, etc.)
+- **`externalPort`** – non-standard port that users connect on (defaults to `443`/`80`)
+- **`timeouts`** – `request` and `backendRequest` timeouts (replaces Ingress `proxyReadTimeout`/`proxySendTimeout`)
+- **`filters`** – [HTTPRouteFilter](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteFilter){.external} list for header modification, redirects, or URL rewrites
+- **`additionalRules`** – extra [HTTPRouteRule](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteRule){.external} entries for advanced routing (traffic splitting, header-based routing)
+- **`annotations`** / **`labels`** – metadata applied to the HTTPRoute resource
+
+!!!note "Gateway mode without creating an HTTPRoute"
+    Setting `gateway.hostnames` activates gateway mode for the product's proxy and base-URL configuration even when `gateway.create` is false. This allows use with a pre-existing Gateway or external proxy/load balancer.
+
+For the full list of values and usage examples, see the [Gateway API guide](../examples/ingress/GATEWAY_API.md).
 
 !!!important "Sticky sessions with Gateway API"
     Session affinity is **not** part of the standard Gateway API `HTTPRoute` spec. You must configure it using your Gateway implementation (for example, Envoy Gateway policy resources or Istio traffic policy). See [Session affinity with Gateway API](../examples/ingress/GATEWAY_API_SESSION_AFFINITY.md) for working examples and fallbacks.
