@@ -28,8 +28,11 @@ Ensures mutual exclusion and required fields.
     {{- if and (not (empty .Values.gateway.hostnames)) (not (empty .Values.ingress.host)) -}}
         {{- fail "ERROR: Cannot set both gateway.hostnames and ingress.host — use one or the other" -}}
     {{- end -}}
-    {{- if and .Values.gateway.create (not .Values.gateway.parentRef.name) -}}
-        {{- fail "ERROR: gateway.parentRef.name is required when gateway.create is true" -}}
+    {{- if and .Values.gateway.create (empty .Values.gateway.parentRefs) -}}
+        {{- fail "ERROR: gateway.parentRefs is required when gateway.create is true" -}}
+    {{- end -}}
+    {{- if and .Values.gateway.create (not (empty .Values.gateway.parentRefs)) (not (index .Values.gateway.parentRefs 0).name) -}}
+        {{- fail "ERROR: gateway.parentRefs[0].name is required when gateway.create is true" -}}
     {{- end -}}
     {{- if and .Values.gateway.create (not .Values.gateway.hostnames) -}}
         {{- fail "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true" -}}

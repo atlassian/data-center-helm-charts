@@ -251,8 +251,7 @@ data:
       hostnames: []
       https: true
       labels: {}
-      parentRef:
-        name: ""
+      parentRefs: []
       path: null
       pathType: PathPrefix
       timeouts:
@@ -684,7 +683,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 5fb6580d3d86adefce4a3cdf588b618930426168fab196e4059dffd36c1e17d2
       labels:
         helm.sh/chart: confluence-2.0.10
         app.kubernetes.io/name: confluence

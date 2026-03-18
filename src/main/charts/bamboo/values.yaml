@@ -19,10 +19,11 @@
 # https://atlassian.github.io/data-center-helm-charts/userguide/INSTALLATION/#3-configure-database
 # https://atlassian.github.io/data-center-helm-charts/userguide/INSTALLATION/#5-configure-persistent-storage
 #
-# To manage external access to the Bamboo instance, an ingress resource can also be configured
-# under the 'ingress' stanza. This requires a pre-provisioned ingress controller to be present.
+# To manage external access to the Bamboo instance, a Gateway API HTTPRoute or an Ingress
+# resource can be configured under the 'gateway' or 'ingress' stanza respectively.
+# This requires a pre-provisioned gateway/ingress controller to be present.
 #
-# Additional details on pre-provisioning an ingress controller can be found here:
+# Additional details on configuring external access can be found here:
 # https://atlassian.github.io/data-center-helm-charts/userguide/INSTALLATION/#4-configure-ingress
 #
 ##
@@ -512,8 +513,10 @@ gateway:
   # parentRef fields (name, namespace, sectionName, etc.).
   # See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference
   #
-  parentRef:
-    name: ""
+  parentRefs: []
+    # - name: example-gateway
+    #   namespace: example-gateway-namespace
+    #   sectionName: https
 
   # -- Path matching type. Can be "PathPrefix", "Exact", or "RegularExpression".
   # PathPrefix is recommended for most use cases.

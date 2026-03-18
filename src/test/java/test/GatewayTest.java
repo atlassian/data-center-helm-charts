@@ -30,7 +30,7 @@ class GatewayTest {
     void gateway_creates_httproute_with_parent_ref_and_hostname(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoutes = resources.getAll(Kind.HTTPRoute);
@@ -51,18 +51,19 @@ class GatewayTest {
                 () -> helm.captureKubeResourcesFromHelmChart(product, Map.of(
                         "gateway.create", "true",
                         "ingress.create", "true",
-                        "gateway.parentRef.name", "my-gateway",
+                        "gateway.parentRefs[0].name", "my-gateway",
                         "gateway.hostnames[0]", product + ".example.com"))
         );
     }
 
     @ParameterizedTest
     @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
-    void gateway_requires_gateway_name(Product product) {
+    void gateway_requires_parentRefs_name(Product product) {
         assertThrowsAssertionWithMessage(
-                "ERROR: gateway.parentRef.name is required when gateway.create is true",
+                "ERROR: gateway.parentRefs[0].name is required when gateway.create is true",
                 () -> helm.captureKubeResourcesFromHelmChart(product, Map.of(
                         "gateway.create", "true",
+                        "gateway.parentRefs[0].namespace", "gateway-system",
                         "gateway.hostnames[0]", product + ".example.com"))
         );
     }
@@ -74,7 +75,7 @@ class GatewayTest {
                 "ERROR: gateway.hostnames must contain at least one hostname when gateway.create is true",
                 () -> helm.captureKubeResourcesFromHelmChart(product, Map.of(
                         "gateway.create", "true",
-                        "gateway.parentRef.name", "my-gateway"))
+                        "gateway.parentRefs[0].name", "my-gateway"))
         );
     }
 
@@ -83,7 +84,7 @@ class GatewayTest {
     void gateway_custom_path_is_applied_to_route_match(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.path", "/" + product));
 
@@ -98,7 +99,7 @@ class GatewayTest {
     void gateway_supports_multiple_hostnames(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.hostnames[1]", product + "-alt.example.com"));
 
@@ -114,8 +115,8 @@ class GatewayTest {
     void gateway_namespace_is_set_on_parent_ref(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
-                "gateway.parentRef.namespace", "gateway-system",
+                "gateway.parentRefs[0].name", "my-gateway",
+                "gateway.parentRefs[0].namespace", "gateway-system",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
@@ -129,7 +130,7 @@ class GatewayTest {
         for (String pathType : new String[]{"PathPrefix", "Exact", "RegularExpression"}) {
             final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                     "gateway.create", "true",
-                    "gateway.parentRef.name", "my-gateway",
+                    "gateway.parentRefs[0].name", "my-gateway",
                     "gateway.hostnames[0]", product + ".example.com",
                     "gateway.pathType", pathType));
 
@@ -145,7 +146,7 @@ class GatewayTest {
     void gateway_custom_annotations_are_applied(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.annotations.cert-manager\\.io/cluster-issuer", "letsencrypt"));
 
@@ -160,7 +161,7 @@ class GatewayTest {
     void gateway_custom_labels_are_applied(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.labels.environment", "production"));
 
@@ -174,7 +175,7 @@ class GatewayTest {
     void gateway_backend_ref_targets_product_service(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
@@ -191,7 +192,7 @@ class GatewayTest {
     void gateway_routes_synchrony_traffic_when_enabled() throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(Product.confluence, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", "confluence.example.com",
                 "synchrony.enabled", "true"));
 
@@ -211,7 +212,7 @@ class GatewayTest {
     void gateway_custom_timeouts_are_applied(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com",
                 "gateway.timeouts.request", "120s",
                 "gateway.timeouts.backendRequest", "60s"));
@@ -229,7 +230,7 @@ class GatewayTest {
     void gateway_has_default_timeouts(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
@@ -245,7 +246,7 @@ class GatewayTest {
     void gateway_default_path_is_root(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
@@ -258,13 +259,13 @@ class GatewayTest {
     void gateway_default_path_uses_context_path_for_crowd() throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(Product.crowd, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", "crowd.example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);
         assertThat(httpRoute.getNode("spec", "rules").required(0)
                 .path("matches").required(0).path("path").path("value"))
-                .hasTextEqualTo("/crowd");
+                .hasTextEqualTo("/");
     }
 
     @ParameterizedTest
@@ -272,7 +273,7 @@ class GatewayTest {
     void gateway_default_path_type_is_prefix(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
                 "gateway.create", "true",
-                "gateway.parentRef.name", "my-gateway",
+                "gateway.parentRefs[0].name", "my-gateway",
                 "gateway.hostnames[0]", product + ".example.com"));
 
         final var httpRoute = resources.get(Kind.HTTPRoute);

@@ -14,8 +14,8 @@ openshift:
 
 gateway:
   create: true
-  parentRef:
-    name: atlassian-gateway
+  parentRefs:
+    - name: atlassian-gateway
   hostnames:
     - atlassian.apps.crc.testing
   https: false

@@ -259,8 +259,7 @@ data:
       hostnames: []
       https: true
       labels: {}
-      parentRef:
-        name: ""
+      parentRefs: []
       path: null
       pathType: PathPrefix
       timeouts:

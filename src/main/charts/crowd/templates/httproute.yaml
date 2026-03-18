@@ -16,7 +16,7 @@ metadata:
 spec:
   # Reference to the Gateway
   parentRefs:
-  - {{- toYaml .Values.gateway.parentRef | nindent 4 }}
+  {{- toYaml .Values.gateway.parentRefs | nindent 2 }}
   
   # Hostnames to match
   hostnames:

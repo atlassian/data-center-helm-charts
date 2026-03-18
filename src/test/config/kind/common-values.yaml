@@ -112,8 +112,8 @@ podAnnotations:
 # Note: tests access the Gateway via kubectl port-forward (not via host ports 80/443).
 gateway:
   create: true
-  parentRef:
-    name: atlassian-gateway
+  parentRefs:
+    - name: atlassian-gateway
   hostnames:
     - dc-app.test
   https: false

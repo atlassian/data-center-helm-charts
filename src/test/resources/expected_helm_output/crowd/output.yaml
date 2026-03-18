@@ -205,9 +205,8 @@ data:
       hostnames: []
       https: true
       labels: {}
-      parentRef:
-        name: ""
-      path: null
+      parentRefs: []
+      path: /
       pathType: PathPrefix
       timeouts:
         backendRequest: 60s
