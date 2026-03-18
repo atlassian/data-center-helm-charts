@@ -202,14 +202,15 @@ data:
       annotations: {}
       create: false
       filters: []
-      gatewayName: ""
-      gatewayNamespace: ""
       hostnames: []
       https: true
       labels: {}
+      parentRefs: []
       path: /
       pathType: PathPrefix
-      timeouts: {}
+      timeouts:
+        backendRequest: 60s
+        request: 60s
     hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent

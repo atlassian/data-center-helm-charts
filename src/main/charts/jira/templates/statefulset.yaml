@@ -1,4 +1,4 @@
-{{- include "jira.validateGatewayConfig" . -}}
+{{- include "common.gateway.validateConfig" . -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -120,7 +120,7 @@ spec:
           env:
             {{- include "jira.sessionVars" . | nindent 12 }}
             {{- include "jira.tunnelVars" . | nindent 12 }}
-            {{ if eq (include "jira.https" . | trim) "true" }}
+            {{ if eq (include "common.gateway.https" .) "true" }}
             - name: ATL_TOMCAT_SCHEME
               value: "https"
             - name: ATL_TOMCAT_SECURE
@@ -132,11 +132,11 @@ spec:
             {{ end }}
             - name: ATL_TOMCAT_PORT
               value: {{ .Values.jira.ports.http | quote }}
-            {{ if or .Values.ingress.host .Values.gateway.create }}
+            {{ if eq (include "common.gateway.isConfigured" .) "true" }}
             - name: ATL_PROXY_NAME
-              value: {{ include "jira.hostname" . | quote }}
+              value: {{ include "common.gateway.hostname" . | quote }}
             - name: ATL_PROXY_PORT
-              value: {{ include "jira.proxyPort" . | quote }}
+              value: {{ include "common.gateway.externalPort" . | quote }}
             {{ end }}
             {{- include "jira.s3StorageEnvVars" . | nindent 12 }}
             {{- include "jira.databaseEnvVars" . | nindent 12 }}

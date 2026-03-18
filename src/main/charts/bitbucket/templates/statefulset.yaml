@@ -1,7 +1,7 @@
 {{/* This describes a k8s StatefulSet for deploying Bitbucket for testing */}}
 {{/* the default can be removed in v2.0.0 */}}
 {{- $mirror := default dict .Values.bitbucket.mirror }}
-{{- include "bitbucket.validateGatewayConfig" . -}}
+{{- include "common.gateway.validateConfig" . -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -239,13 +239,13 @@ spec:
             {{- end }}
             - name: PLUGIN_SSH_PORT
               value: {{ .Values.bitbucket.ports.ssh | quote }}
-            {{ if or .Values.ingress.host .Values.gateway.create }}
+            {{ if eq (include "common.gateway.isConfigured" .) "true" }}
             - name: SERVER_PROXY_NAME
-              value: {{ include "bitbucket.hostname" . | quote }}
+              value: {{ include "common.gateway.hostname" . | quote }}
             - name: SERVER_PROXY_PORT
-              value: {{ include "bitbucket.proxyPort" . | quote }}
+              value: {{ include "common.gateway.externalPort" . | quote }}
             - name: SETUP_BASEURL
-              value: {{ include "bitbucket.baseUrl" . | quote }}
+              value: {{ include "common.gateway.origin" . | quote }}
             {{- with .Values.bitbucket.displayName }}
             - name: SETUP_DISPLAYNAME
               value: {{ . | quote }}
@@ -256,10 +256,10 @@ spec:
             {{- end }}
             {{ end }}
             - name: SERVER_CONTEXT_PATH
-              value: {{ include "bitbucket.ingressPath" . | quote }}
+              value: {{ include "bitbucket.path" . | quote }}
             - name: SERVER_PORT
               value: {{ .Values.bitbucket.ports.http | quote }}
-            {{ if eq (include "bitbucket.https" . | trim) "true" }}
+            {{ if eq (include "common.gateway.https" .) "true" }}
             - name: SERVER_SCHEME
               value: "https"
             - name: SERVER_SECURE

@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: confluence/templates/config-jvm.yaml
@@ -20,7 +20,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -43,7 +43,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -65,7 +65,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -248,14 +248,15 @@ data:
       annotations: {}
       create: false
       filters: []
-      gatewayName: ""
-      gatewayNamespace: ""
       hostnames: []
       https: true
       labels: {}
-      path: /
+      parentRefs: []
+      path: null
       pathType: PathPrefix
-      timeouts: {}
+      timeouts:
+        backendRequest: 60s
+        request: 60s
     hostNamespaces: {}
     image:
       pullPolicy: IfNotPresent
@@ -506,7 +507,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -529,7 +530,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -556,7 +557,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -584,7 +585,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence-synchrony
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -602,7 +603,7 @@ spec:
         helm.sh/chart: confluence-2.0.10
         app.kubernetes.io/name: confluence-synchrony
         app.kubernetes.io/instance: unittest-confluence
-        app.kubernetes.io/version: "10.2.2"
+        app.kubernetes.io/version: "10.2.7"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
@@ -615,7 +616,7 @@ spec:
           ip: 192.168.1.1
       containers:
         - name: synchrony
-          image: "atlassian/confluence:10.2.2"
+          image: "atlassian/confluence:10.2.7"
           imagePullPolicy: IfNotPresent
           command: ["/scripts/start-synchrony.sh"]
           volumeMounts:
@@ -668,7 +669,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -686,7 +687,7 @@ spec:
         helm.sh/chart: confluence-2.0.10
         app.kubernetes.io/name: confluence
         app.kubernetes.io/instance: unittest-confluence
-        app.kubernetes.io/version: "10.2.2"
+        app.kubernetes.io/version: "10.2.7"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-confluence
@@ -719,7 +720,7 @@ spec:
               name: shared-home
       containers:
         - name: confluence
-          image: "atlassian/confluence:10.2.2"
+          image: "atlassian/confluence:10.2.7"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -821,7 +822,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -852,7 +853,7 @@ metadata:
     helm.sh/chart: confluence-2.0.10
     app.kubernetes.io/name: confluence
     app.kubernetes.io/instance: unittest-confluence
-    app.kubernetes.io/version: "10.2.2"
+    app.kubernetes.io/version: "10.2.7"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

@@ -131,12 +131,7 @@ spec:
             {{ if .Values.synchrony.service.url }}
               value: "{{ .Values.synchrony.service.url }}"
             {{ else }}
-              {{- $host := include "confluence.hostname" . -}}
-              {{- if eq (include "confluence.https" . | trim) "true" }}
-              value: "https://{{ $host }}/synchrony"
-              {{- else }}
-              value: "http://{{ $host }}/synchrony"
-              {{- end }}
+              value: "{{ include "common.gateway.scheme" . }}://{{ include "common.gateway.hostname" . }}/synchrony"
             {{ end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}
