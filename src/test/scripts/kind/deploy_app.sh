@@ -30,19 +30,19 @@ check_http_200() {
 # Deploy CloudNativePG operator and PostgreSQL cluster
 deploy_postgres() {
   echo "[INFO]: Installing CloudNativePG operator"
-
+  
   # Add CloudNativePG Helm repository
   helm repo add cloudnative-pg https://cloudnative-pg.github.io/charts --force-update
   helm repo update
-
+  
   # Install CloudNativePG operator only if not already installed
   echo "[INFO]: Installing CloudNativePG operator"
   if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
     echo "[INFO]: CloudNativePG operator not found, installing..."
-
+    
     # Create namespace first to ensure it exists
     kubectl create namespace cnpg-system --dry-run=client -o yaml | kubectl apply -f -
-
+    
     # Use helm template + kubectl apply to completely avoid Helm client timeouts
     # This is the most reliable method for slow/busy clusters (e2e, MicroShift)
     echo "[INFO]: Rendering operator manifests from Helm chart..."
@@ -50,7 +50,7 @@ deploy_postgres() {
          --values src/test/infrastructure/cloudnativepg/operator-values.yaml \
          --namespace cnpg-system \
          --include-crds > /tmp/cnpg-operator-manifests.yaml
-
+    
     echo "[INFO]: Applying operator manifests to cluster..."
     # Apply with server-side apply to handle large CRD annotations
     if ! kubectl apply --server-side=true -f /tmp/cnpg-operator-manifests.yaml 2>&1 | tee /tmp/cnpg-apply.log; then
@@ -66,12 +66,12 @@ deploy_postgres() {
         exit 1
       fi
     fi
-
+    
     echo "[INFO]: Operator manifests applied successfully"
   else
     echo "[INFO]: CloudNativePG operator already installed, skipping..."
   fi
-
+  
   # Wait for operator to be ready
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
   wait_for "CloudNativePG CRDs" 300 5 kubectl get crd clusters.postgresql.cnpg.io || {
@@ -103,7 +103,7 @@ deploy_postgres() {
   kubectl get deployments -n cnpg-system
   echo "[DEBUG]: CloudNativePG operator pods:"
   kubectl get pods -n cnpg-system
-
+  
   # Wait for operator pod to be ready
   echo "[INFO]: Waiting for operator pod to be ready..."
   if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
@@ -125,9 +125,9 @@ deploy_postgres() {
     helm status cnpg-operator -n cnpg-system
     exit 1
   fi
-
+  
   echo "[INFO]: CloudNativePG operator is ready"
-
+  
   # Create database credentials secret
   echo "[INFO]: Creating database credentials secret"
   kubectl create secret generic ${DC_APP}-db-credentials \
@@ -135,12 +135,12 @@ deploy_postgres() {
     --from-literal=password="${DC_APP}pwd" \
     --namespace atlassian \
     --dry-run=client -o yaml | kubectl apply -f -
-
+  
   # Create PostgreSQL cluster from template
   echo "[INFO]: Creating PostgreSQL cluster for ${DC_APP}"
   TMP_DIR=$(mktemp -d)
   cp src/test/infrastructure/cloudnativepg/cluster-template.yaml ${TMP_DIR}/cluster.yaml
-
+  
   # Replace placeholders in cluster template
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS requires an empty string argument after -i
@@ -166,14 +166,14 @@ deploy_postgres() {
     echo "[WARN]: No StorageClass detected; database PVCs may remain Pending"
     kubectl get sc || true
   fi
-
+  
   # Debug: Print the generated configuration
   echo "[INFO]: Generated PostgreSQL cluster configuration:"
   cat ${TMP_DIR}/cluster.yaml
-
+  
   # Apply the cluster configuration
   kubectl apply -f ${TMP_DIR}/cluster.yaml
-
+  
   # Wait for cluster to be ready
   echo "[INFO]: Waiting for PostgreSQL cluster to be ready"
   kubectl wait --for=condition=Ready cluster/${DC_APP}-db \
@@ -193,12 +193,12 @@ deploy_postgres() {
       kubectl get sc || true
       exit 1
     }
-
+  
   # Wait for primary pod to be ready
   echo "[INFO]: Waiting for PostgreSQL primary pod to be ready"
   kubectl wait --for=condition=Ready pod -l cnpg.io/cluster=${DC_APP}-db,role=primary \
     --namespace atlassian --timeout=300s
-
+  
   # Execute custom initialization script if provided
   if [ -f "${DB_INIT_SCRIPT_FILE}" ]; then
     echo "[INFO]: DB init file '${DB_INIT_SCRIPT_FILE}' found. Initializing the database"
@@ -305,6 +305,8 @@ deploy_app() {
                ${MISC_OVERRIDES}
 
   if [ ${DC_APP} == "bamboo" ]; then
+    wait_for_bamboo_setup
+
     if [[ -n "${OPENSHIFT_VALUES}" ]]; then
       OPENSHIFT_VALUES="--set openshift.runWithRestrictedSCC=true"
     fi
@@ -317,7 +319,26 @@ deploy_app() {
                 ${OPENSHIFT_VALUES} \
                 ${AGENT_OVERRIDES} \
                 --wait --timeout=180s \
-                --debug
+                --debug || {
+      echo "[ERROR]: Bamboo agent deployment failed."
+      echo "[DEBUG]: Bamboo agent pods:"
+      kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent -o wide 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent pod describe:"
+      kubectl describe pods -n atlassian -l app.kubernetes.io/name=bamboo-agent 2>/dev/null || true
+      echo "[DEBUG]: Bamboo agent container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo-agent --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Bamboo server container logs (last 500 lines):"
+      for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=bamboo --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+        echo "--- Logs from ${pod} ---"
+        kubectl logs "${pod}" -n atlassian --tail=500 2>/dev/null || true
+      done
+      echo "[DEBUG]: Events in atlassian namespace (last 50):"
+      kubectl get events -n atlassian --sort-by='.lastTimestamp' 2>/dev/null | tail -50 || true
+      exit 1
+    }
   fi
 
   # Deploy Bitbucket Mirror in KinD only. MicroShift can't handle too many pods/processes
@@ -336,6 +357,53 @@ deploy_app() {
                  --wait --timeout=360s --debug \
                  -n atlassian
   fi
+}
+
+# Resolve the ingress/gateway hostname based on the deployment environment.
+get_routing_hostname() {
+  if [ -n "${OPENSHIFT_VALUES}" ]; then
+    echo "atlassian.apps.crc.testing"
+  else
+    echo "localhost"
+  fi
+}
+
+# Wait for Bamboo server's unattended setup wizard to complete.
+# Bamboo 12+ uses absolute redirects during setup, which prevents the agent from
+# triggering setup advancement (unlike Bamboo 11 which used relative redirects).
+# We poll GET / — during setup it redirects to /bootstrap/selectSetupStep.action,
+# after setup it redirects to /userlogin.action. Following the redirect chain
+# during setup triggers the wizard to advance to the next step.
+wait_for_bamboo_setup() {
+  echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
+  SETUP_HOSTNAME=$(get_routing_hostname)
+  SETUP_TIMEOUT=300
+  SETUP_ELAPSED=0
+  while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://${SETUP_HOSTNAME}/ 2>/dev/null || echo "000|")
+    HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
+    REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
+
+    if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
+      # Server is in setup mode — trigger setup advancement by following the redirect chain
+      curl -s -o /dev/null -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>/dev/null || true
+      echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+    elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
+      echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
+      return 0
+    elif [ "${HTTP_CODE}" = "000" ]; then
+      echo "[INFO]: Bamboo server not reachable yet. Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+    else
+      echo "[INFO]: Bamboo server responded with HTTP ${HTTP_CODE}. Waiting... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
+    fi
+
+    sleep 10
+    SETUP_ELAPSED=$((SETUP_ELAPSED + 10))
+  done
+
+  echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
+  echo "[DEBUG]: Full response from GET / with redirects:"
+  curl -v -s -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>&1 || true
 }
 
 verify_gateway_ingress() {
@@ -415,11 +483,7 @@ verify_ingress() {
     STATUS_ENDPOINT_PATH="crowd/status"
   fi
   echo "[INFO]: Checking ${DC_APP} status"
-  if [ -n "${OPENSHIFT_VALUES}" ]; then
-    HOSTNAME="atlassian.apps.crc.testing"
-  else
-    HOSTNAME="localhost"
-  fi
+  HOSTNAME=$(get_routing_hostname)
 
   wait_for "${DC_APP} HTTP 200 via Ingress" 120 10 \
     check_http_200 "http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}" || {
