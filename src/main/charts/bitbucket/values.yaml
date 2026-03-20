@@ -639,7 +639,7 @@ gateway:
   # -- Session affinity (sticky sessions) is required for Atlassian DC products but
   # is not part of the standard Gateway API HTTPRoute spec. It must be configured
   # separately through your Gateway implementation's own policy resources.
-  # See docs/gateway-api-session-affinity.md for working examples.
+  # See docs/docs/examples/ingress/GATEWAY_API_SESSION_AFFINITY.md for working examples.
 
   # -- Timeout configuration for HTTPRoute rules.
   # Note: when migrating from Ingress, these replace proxyReadTimeout and
