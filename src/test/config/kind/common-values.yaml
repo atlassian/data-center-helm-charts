@@ -109,7 +109,7 @@ podAnnotations:
   normal: annotation-comes-here
 
 # KinD tests use Gateway API with Envoy Gateway.
-# Note: tests access the Gateway via kubectl port-forward (not via host ports 80/443).
+# Envoy proxy is exposed via NodePort(30080) -> hostPort(80); dc-app.test resolves via /etc/hosts.
 gateway:
   create: true
   parentRefs:
