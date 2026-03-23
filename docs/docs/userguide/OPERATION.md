@@ -62,8 +62,7 @@ Go to `http://localhost:9999/metrics` in your local browser to verify metrics av
 
 !!!warning "JMX service security"
     By default, JMX services are created as ClusterIP types, i.e. they are not available outside the Kubernetes cluster.
-    Because the metrics endpoint isn't password protected, make sure you protected with SecurityGroup rules (if in AWS)
-    when exposing it as a LoadBalancer if required:
+    Because the metrics endpoint isn't password protected, make sure you protect it using your cloud provider's network security features (e.g., [AWS SecurityGroups](https://docs.aws.amazon.com/managedservices/latest/userguide/about-security-groups.html){.external}, [GCP Cloud Firewall](https://docs.cloud.google.com/firewall/docs){.external}, [Azure Network Security Groups](https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview){.external}) when exposing it as a LoadBalancer if required:
     ```
     monitoring:
       jmxExporterPortType: LoadBalancer

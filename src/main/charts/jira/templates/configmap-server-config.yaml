@@ -67,10 +67,15 @@ data:
                 unpackWARs="true"
                 autoDeploy="true">
             <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false" />
+            <!--
+            suspendWrappedResponseAfterForward preserves the behavior from Tomcat 10 in Tomcat 11+ regarding the handling of wrapped responses.
+            See the changelog https://tomcat.apache.org/tomcat-11.0-doc/changelog.html#Tomcat_11.0.0-M18_(markt)/Catalina
+            -->
             <Context path="{{ .Values.jira.service.contextPath | default "" }}"
                      docBase="${catalina.home}/atlassian-jira"
                      reloadable="false"
-                     useHttpOnly="true">
+                     useHttpOnly="true"
+                     suspendWrappedResponseAfterForward="false">
               <Resource name="UserTransaction"
                         auth="Container"
                         type="javax.transaction.UserTransaction"
