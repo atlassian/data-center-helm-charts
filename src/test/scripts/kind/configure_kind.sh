@@ -17,12 +17,14 @@ kubectl apply -f src/test/config/kind/registry.yaml
 if [ -z "${SKIP_GATEWAY_API}" ]; then
   echo "[INFO]: Installing Gateway API CRDs"
   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
-  
+  kubectl apply --server-side=true -f https://raw.githubusercontent.com/envoyproxy/gateway/v1.2.5/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_envoyproxies.yaml
+
   echo "[INFO]: Waiting for Gateway API CRDs to be established"
   kubectl wait --for condition=established --timeout=60s crd/gateways.gateway.networking.k8s.io
   kubectl wait --for condition=established --timeout=60s crd/httproutes.gateway.networking.k8s.io
   kubectl wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
-  
+  kubectl wait --for condition=established --timeout=60s crd/envoyproxies.gateway.envoyproxy.io
+
   echo "[INFO]: Installing Envoy Gateway"
   # Envoy Gateway uses OCI registry, not a traditional Helm repo
   helm install eg oci://docker.io/envoyproxy/gateway-helm \
@@ -40,8 +42,15 @@ if [ -z "${SKIP_GATEWAY_API}" ]; then
       --namespace envoy-gateway-system \
       --timeout=300s
 
-  # Some environments don't auto-create the GatewayClass.
-  echo "[INFO]: Ensuring GatewayClass 'eg' exists"
+  # EnvoyProxy CR tells the controller to create the data-plane proxy Service
+  # as NodePort with nodePort 30080 — matching the KinD extraPortMappings.
+  # This must be applied BEFORE the GatewayClass so the controller picks it up.
+  echo "[INFO]: Applying EnvoyProxy configuration (NodePort 30080)"
+  kubectl apply -f src/test/config/kind/envoy-proxy.yaml
+
+  # GatewayClass references the EnvoyProxy CR via parametersRef so every
+  # Gateway using this class gets the NodePort configuration automatically.
+  echo "[INFO]: Creating GatewayClass 'eg' with parametersRef"
   cat << EOF | kubectl apply -f -
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
@@ -49,6 +58,11 @@ metadata:
   name: eg
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: kind-proxy-config
+    namespace: envoy-gateway-system
 EOF
 
   echo "[INFO]: Waiting for GatewayClass 'eg' to be accepted"
@@ -83,6 +97,10 @@ EOF
       exit 1
     }
   
+  # Add /etc/hosts entry so dc-app.test resolves to localhost on the runner.
+  echo "[INFO]: Adding dc-app.test to /etc/hosts"
+  echo "127.0.0.1 dc-app.test" | sudo tee -a /etc/hosts
+
   echo "[INFO]: Gateway API installation complete"
 else
   echo "[INFO]: Skipping Gateway API installation (SKIP_GATEWAY_API is set)"

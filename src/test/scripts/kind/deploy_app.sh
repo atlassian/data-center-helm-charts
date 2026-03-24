@@ -359,64 +359,17 @@ deploy_app() {
   fi
 }
 
-# Resolve the ingress/gateway hostname based on the deployment environment.
+# Resolve the routing hostname based on the deployment environment.
+#
+# - KinD: Envoy Gateway proxy is exposed via NodePort(30080) -> hostPort(80)
+#         and the workflow adds /etc/hosts so dc-app.test resolves locally.
+# - OpenShift/MicroShift: Envoy proxy is exposed via an OpenShift Route on the
+#         CRC apps domain.
 get_routing_hostname() {
   if [ -n "${OPENSHIFT_VALUES}" ]; then
     echo "atlassian.apps.crc.testing"
   else
-    echo "localhost"
-  fi
-}
-
-# Check if the gateway port-forward process is alive and forwarding.
-_check_gateway_pf_ready() {
-  kill -0 "${GATEWAY_PF_PID}" 2>/dev/null && grep -q "Forwarding from" "${PF_LOG}" 2>/dev/null
-}
-
-# Start a port-forward to the Envoy Gateway proxy and export:
-#   GATEWAY_URL    — base URL (http://127.0.0.1:<port>)
-#   GATEWAY_HOST   — hostname from the HTTPRoute (used as Host header)
-#   GATEWAY_PF_PID — PID of the background port-forward process
-start_gateway_port_forward() {
-  local pf_port="${1:-18080}"
-
-  ENVOY_SVC=$(kubectl get svc -n envoy-gateway-system \
-    -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
-    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
-
-  if [ -z "${ENVOY_SVC}" ]; then
-    echo "[ERROR]: Envoy Gateway proxy service not found"
-    kubectl get svc -n envoy-gateway-system -o wide || true
-    return 1
-  fi
-
-  GATEWAY_HOST=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[0]}' 2>/dev/null || true)
-  if [ -z "${GATEWAY_HOST}" ]; then
-    echo "[ERROR]: HTTPRoute ${DC_APP} has no hostname configured"
-    return 1
-  fi
-
-  PF_LOG=$(mktemp)
-  kubectl port-forward -n envoy-gateway-system "svc/${ENVOY_SVC}" "${pf_port}:80" >"${PF_LOG}" 2>&1 &
-  GATEWAY_PF_PID=$!
-
-  wait_for "port-forward to Envoy proxy" 10 1 _check_gateway_pf_ready || {
-    echo "[ERROR]: port-forward did not become ready"
-    cat "${PF_LOG}" || true
-    kill ${GATEWAY_PF_PID} 2>/dev/null || true
-    return 1
-  }
-
-  GATEWAY_URL="http://127.0.0.1:${pf_port}"
-  GATEWAY_CONNECT_TO="${GATEWAY_HOST}:80:127.0.0.1:${pf_port}"
-  echo "[INFO]: Gateway port-forward ready — ${GATEWAY_URL} (Host: ${GATEWAY_HOST})"
-}
-
-stop_gateway_port_forward() {
-  if [ -n "${GATEWAY_PF_PID}" ]; then
-    kill ${GATEWAY_PF_PID} 2>/dev/null || true
-    wait ${GATEWAY_PF_PID} 2>/dev/null || true
-    GATEWAY_PF_PID=""
+    echo "dc-app.test"
   fi
 }
 
@@ -429,20 +382,16 @@ stop_gateway_port_forward() {
 wait_for_bamboo_setup() {
   echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
 
-  start_gateway_port_forward 18080 || return 1
-  trap 'stop_gateway_port_forward' RETURN
-
+  SETUP_HOSTNAME=$(get_routing_hostname)
   SETUP_TIMEOUT=300
   SETUP_ELAPSED=0
   while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 -H "Host: ${GATEWAY_HOST}" "${GATEWAY_URL}/" 2>/dev/null || echo "000|")
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 "http://${SETUP_HOSTNAME}/" 2>/dev/null || echo "000|")
     HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
     REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
 
     if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
-      # --connect-to remaps dc-app.test:80 → 127.0.0.1:<pf_port> so curl can follow
-      # Bamboo's absolute redirects through the port-forward
-      curl -s -o /dev/null -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" --connect-to "${GATEWAY_CONNECT_TO}" "${GATEWAY_URL}/" 2>/dev/null || true
+      curl -s -o /dev/null -L --max-redirs 10 "http://${SETUP_HOSTNAME}/" 2>/dev/null || true
       echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
     elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
       echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
@@ -458,7 +407,7 @@ wait_for_bamboo_setup() {
   done
 
   echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
-  curl -v -s -L --max-redirs 10 -H "Host: ${GATEWAY_HOST}" --connect-to "${GATEWAY_CONNECT_TO}" "${GATEWAY_URL}/" 2>&1 || true
+  curl -v -s -L --max-redirs 10 "http://${SETUP_HOSTNAME}/" 2>&1 || true
 }
 
 verify_gateway_ingress() {
@@ -477,41 +426,18 @@ verify_gateway_ingress() {
     exit 1
   }
 
-  start_gateway_port_forward 18080 || exit 1
-  trap 'stop_gateway_port_forward' RETURN
+  HOSTNAME=$(get_routing_hostname)
+  STATUS_URL="http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}"
 
-  STATUS_URL="${GATEWAY_URL}/${STATUS_ENDPOINT_PATH}"
   wait_for "${DC_APP} HTTP 200 via Gateway" 120 10 \
-    check_http_200 "${STATUS_URL}" -H "Host: ${GATEWAY_HOST}" || {
+    check_http_200 "${STATUS_URL}" || {
     echo "[ERROR]: ${DC_APP} did not return HTTP 200 via Gateway"
-    curl -v -H "Host: ${GATEWAY_HOST}" "${STATUS_URL}"
+    curl -v "${STATUS_URL}"
     exit 1
   }
 
   echo "[INFO]: ${DC_APP} responded successfully via Gateway"
-  curl -s -H "Host: ${GATEWAY_HOST}" "${STATUS_URL}"
-  echo -e "\n"
-}
-
-verify_ingress() {
-  STATUS_ENDPOINT_PATH="status"
-  if [ ${DC_APP} == "bamboo" ]; then
-    STATUS_ENDPOINT_PATH="rest/api/latest/status"
-  elif [ ${DC_APP} == "crowd" ]; then
-    STATUS_ENDPOINT_PATH="crowd/status"
-  fi
-  echo "[INFO]: Checking ${DC_APP} status"
-  HOSTNAME=$(get_routing_hostname)
-
-  wait_for "${DC_APP} HTTP 200 via Ingress" 120 10 \
-    check_http_200 "http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}" || {
-    echo "[ERROR]: ${DC_APP} did not return HTTP 200 via Ingress"
-    curl -v http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}
-    exit 1
-  }
-
-  echo "[INFO]: ${DC_APP} responded successfully via Ingress"
-  curl -s http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}
+  curl -s "${STATUS_URL}"
   echo -e "\n"
 }
 

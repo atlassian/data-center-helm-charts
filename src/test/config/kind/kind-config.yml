@@ -5,8 +5,12 @@ networking:
 nodes:
 - role: control-plane
   # Previously we mounted /dev + labelled ingress-ready to support ingress-nginx.
-  # KinD tests now run Gateway API via port-forward, so no ingress-specific node setup is required.
+  # KinD tests now run Gateway API via Envoy Gateway, exposed through a fixed NodePort.
   extraPortMappings:
+  # Route host traffic to Envoy Gateway proxy via NodePort
+  - containerPort: 30080
+    hostPort: 80
+    protocol: TCP
   # map registry NodePort to host port to be able to
   # build and push images to an internal registry
   - containerPort: 32767
