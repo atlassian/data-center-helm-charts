@@ -97,6 +97,10 @@ EOF
       exit 1
     }
   
+  # Add /etc/hosts entry so dc-app.test resolves to localhost on the runner.
+  echo "[INFO]: Adding dc-app.test to /etc/hosts"
+  echo "127.0.0.1 dc-app.test" | sudo tee -a /etc/hosts
+
   echo "[INFO]: Gateway API installation complete"
 else
   echo "[INFO]: Skipping Gateway API installation (SKIP_GATEWAY_API is set)"
