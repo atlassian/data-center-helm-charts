@@ -28,7 +28,7 @@ For external contributions, any Github action workflow related changes are not a
 ## Windows Users
 
 This repository uses **symlinks** to share common Helm templates across product charts
-(see `src/main/charts/common_templates/`). Git on Windows doesn't enable symlinks by default — without them,
+(see `src/main/common_templates/`). Git on Windows doesn't enable symlinks by default — without them,
 Helm template rendering will fail.
 
 To enable symlinks on Windows:

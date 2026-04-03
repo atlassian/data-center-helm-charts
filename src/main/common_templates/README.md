@@ -2,6 +2,8 @@
 
 Shared Helm template helpers that are symlinked into each product chart's `templates/` directory.
 
+This directory lives at `src/main/common_templates/`, outside of any individual chart.
+
 ## Why this pattern?
 
 The existing `common/` library chart is published as a remote Helm dependency. Any change to it
@@ -9,7 +11,7 @@ requires a **two-step rollout**: publish the library first, then update each pro
 `Chart.yaml` to reference the new version.
 
 This `common_templates/` directory avoids that by using **symlinks**. Each product chart has a
-symlink at `templates/common_templates → ../../common_templates`, so Helm picks up these templates
+symlink at `templates/common_templates → ../../../common_templates`, so Helm picks up these templates
 directly. Changes here take effect immediately across all products — no publishing, no version
 bumps, single PR.
 
@@ -27,7 +29,7 @@ next modified — there is no technical reason to keep them in the library chart
 Each product chart has a symlink:
 
 ```
-src/main/charts/<product>/templates/common_templates → ../../common_templates
+src/main/charts/<product>/templates/common_templates → ../../../common_templates
 ```
 
 Helm follows symlinks during `helm template` and `helm package`, so:
