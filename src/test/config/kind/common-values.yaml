@@ -60,6 +60,7 @@ DC_APP_REPLACEME:
     - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
     - -Djira.websudo.is.disabled=true
     - -Datlassian.allow.insecure.url.parameter.login=true
+    - -Dcom.atlassian.plugins.authentication.basic.auth.filter.force.allow=true
 
   # Jira func tests will setup Jira, and during this time status will report 500
   # to avoid marking container as non-ready, let's bump failureThreshold for a readinessProbe
