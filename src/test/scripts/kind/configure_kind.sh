@@ -99,7 +99,12 @@ EOF
   
   # Add /etc/hosts entry so dc-app.test resolves to localhost on the runner.
   echo "[INFO]: Adding dc-app.test to /etc/hosts"
-  echo "127.0.0.1 dc-app.test" | sudo tee -a /etc/hosts
+  if [ "$(id -u)" -ne 0 ]; then
+    SUDO=$(which sudo)
+    echo "127.0.0.1 dc-app.test" | ${SUDO} tee -a /etc/hosts >/dev/null
+  else
+    echo "127.0.0.1 dc-app.test" >> /etc/hosts
+  fi
 
   echo "[INFO]: Gateway API installation complete"
 else
