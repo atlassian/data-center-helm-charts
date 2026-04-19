@@ -1,6 +1,6 @@
 # bamboo
 
-![Version: 2.0.12](https://img.shields.io/badge/Version-2.0.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.1.3](https://img.shields.io/badge/AppVersion-12.1.3-informational?style=flat-square)
+![Version: 2.0.12](https://img.shields.io/badge/Version-2.0.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.1.6](https://img.shields.io/badge/AppVersion-12.1.6-informational?style=flat-square)
 
 A chart for installing Bamboo Data Center on Kubernetes
 
