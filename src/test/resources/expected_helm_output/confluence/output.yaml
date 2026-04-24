@@ -388,6 +388,7 @@ data:
         healthcheckPath: /synchrony/heartbeat
         initialDelaySeconds: 5
         periodSeconds: 1
+        timeoutSeconds: 1
       replicaCount: 1
       resources:
         container:
@@ -638,6 +639,7 @@ spec:
               path: /synchrony/heartbeat
             initialDelaySeconds: 5
             periodSeconds: 1
+            timeoutSeconds: 1
             failureThreshold: 10
           resources:
             requests:

@@ -111,6 +111,7 @@ spec:
               path: {{ .Values.synchrony.readinessProbe.healthcheckPath }}
             initialDelaySeconds: {{ .Values.synchrony.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.synchrony.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.synchrony.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.synchrony.readinessProbe.failureThreshold }}
           {{- with .Values.synchrony.containerSecurityContext }}
           securityContext:
