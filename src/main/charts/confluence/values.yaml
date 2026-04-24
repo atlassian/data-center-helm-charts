@@ -1482,6 +1482,10 @@ synchrony:
     #
     periodSeconds: 1
 
+    # -- Number of seconds after which the Synchrony container readiness probe times out
+    #
+    timeoutSeconds: 1
+
     # -- The number of consecutive failures of the Synchrony container readiness probe
     # before the pod fails readiness checks.
     #
