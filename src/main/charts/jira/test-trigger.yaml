@@ -1,0 +1,7 @@
+# CRC Workflow Trigger Test - Canary: HB-CRC-TEST-8a3f
+# This file tests whether modifying a watched path triggers the crc.yaml workflow
+
+apiVersion: v2
+name: jira-test
+description: Test chart modification to trigger crc workflow
+version: 0.1.0
