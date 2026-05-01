@@ -1,0 +1,30 @@
+# EnvoyProxy tells Envoy Gateway *how* to create the data-plane proxy
+# for any Gateway whose GatewayClass references this resource.
+#
+# Key behaviour:
+#   - The proxy Service is created as NodePort (not the default ClusterIP/LB).
+#   - A strategic-merge patch pins nodePort: 30080 for the HTTP listener,
+#     matching the KinD extraPortMappings (host 80 → node 30080).
+#
+# This removes the need for any post-hoc `kubectl patch` in configure_kind.sh.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: kind-proxy-config
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: NodePort
+        # Pin the HTTP listener to a fixed NodePort so it aligns with
+        # the KinD extraPortMappings entry (host :80 → node :30080).
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              ports:
+                - port: 80
+                  nodePort: 30080
+                  protocol: TCP

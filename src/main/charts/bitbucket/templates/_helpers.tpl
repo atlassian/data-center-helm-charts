@@ -125,26 +125,23 @@ Mesh Pod labels
 {{- end }}
 {{- end }}
 
-{{- define "bitbucket.baseUrl" -}}
-{{ ternary "https" "http" .Values.ingress.https -}}
-://
-{{- .Values.ingress.host -}}
-{{ with .Values.ingress.port }}:{{ . }}{{ end }}
+{{/*
+Create default value for the service path.
+*/}}
+{{- define "bitbucket.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.bitbucket.service.contextPath
+) -}}
 {{- end }}
 
 {{/*
-Create default value for ingress path
+Alias for backward compatibility with ingress templates.
 */}}
 {{- define "bitbucket.ingressPath" -}}
-{{- if .Values.ingress.path -}}
-{{- .Values.ingress.path -}}
-{{- else -}}
-{{ default ( "/" ) .Values.bitbucket.service.contextPath -}}
-{{- end }}
-{{- end }}
-
-{{- define "bitbucket.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- include "bitbucket.path" . -}}
 {{- end }}
 
 {{/*
@@ -608,3 +605,5 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
 {{- end }}
 {{- end }}
+
+

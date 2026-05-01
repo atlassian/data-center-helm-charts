@@ -1,6 +1,6 @@
 # jira
 
-![Version: 2.0.8](https://img.shields.io/badge/Version-2.0.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 11.3.1](https://img.shields.io/badge/AppVersion-11.3.1-informational?style=flat-square)
+![Version: 2.0.12](https://img.shields.io/badge/Version-2.0.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 11.3.4](https://img.shields.io/badge/AppVersion-11.3.4-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
@@ -50,6 +50,17 @@ Kubernetes: `>=1.21.x-0`
 | fluentd.imageRepo | string | `"fluent/fluentd-kubernetes-daemonset"` | The Fluentd sidecar image repository  |
 | fluentd.imageTag | string | `"v1.11.5-debian-elasticsearch7-1.2"` | The Fluentd sidecar image tag  |
 | fluentd.resources | object | `{}` | Resources requests and limits for fluentd sidecar container See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/  |
+| gateway.additionalRules | list | `[]` | Advanced routing rules. Use this for complex routing scenarios like header-based routing, traffic splitting, or multiple backends. See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteRule  |
+| gateway.annotations | object | `{}` | Annotations to add to the HTTPRoute resource.  |
+| gateway.create | bool | `false` | Set to 'true' if an HTTPRoute Resource should be created. This depends on a pre-provisioned Gateway API controller being available and a Gateway resource. Cannot be enabled if ingress.create is true.  |
+| gateway.filters | list | `[]` | HTTP filters to apply to requests. Can be used to add/remove headers, perform redirects, or rewrite URLs. See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteFilter  |
+| gateway.hostnames | list | `[]` | The hostnames that should be routed to Jira. At least one hostname is required when gateway.create is true. Setting hostnames activates gateway mode for product configuration even when gateway.create is false, allowing use with a pre-existing Gateway or external proxy. The first entry is used as the canonical hostname for base URL, proxy settings, and NOTES output — list the primary/public hostname first.  |
+| gateway.https | bool | `true` | Whether users access the application over HTTPS. This does not configure TLS on the Gateway or load balancer — it must match how traffic is actually routed to the application.  |
+| gateway.labels | object | `{}` | Labels to add to the HTTPRoute resource.  |
+| gateway.parentRefs | list | `[]` | Reference to the parent Gateway resource. Supports any standard parentRef fields (name, namespace, sectionName, etc.). See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference  |
+| gateway.path | string | `nil` | The base path for routing. When empty, falls back to the product's service.contextPath (same behavior as ingress). Set explicitly to override, e.g. "/jira".  |
+| gateway.pathType | string | `"PathPrefix"` | Path matching type. Can be "PathPrefix", "Exact", or "RegularExpression". PathPrefix is recommended for most use cases.  |
+| gateway.timeouts | object | `{"backendRequest":"60s","request":"60s"}` | Timeout configuration for HTTPRoute rules. Note: when migrating from Ingress, these replace proxyReadTimeout and proxySendTimeout. There is no Gateway API equivalent for proxyConnectTimeout or maxBodySize — those require controller-specific policies (e.g. Envoy Gateway BackendTrafficPolicy). See: https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteTimeouts  |
 | hostNamespaces | object | `{}` | Share host namespaces which may include hostNetwork, hostIPC, and hostPID  |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy  |
 | image.repository | string | `"atlassian/jira-software"` | The Jira Docker image to use https://hub.docker.com/r/atlassian/jira-software  |
@@ -58,12 +69,12 @@ Kubernetes: `>=1.21.x-0`
 | ingress.annotations | object | `{}` | The custom annotations that should be applied to the Ingress Resource. If using an ingress-nginx controller be sure that the annotations you add here are compatible with those already defined in the 'ingess.yaml' template  |
 | ingress.className | string | `"nginx"` | The class name used by the ingress controller if it's being used.  Please follow documentation of your ingress controller. If the cluster contains multiple ingress controllers, this setting allows you to control which of them is used for Atlassian application traffic.  |
 | ingress.create | bool | `false` | Set to 'true' if an Ingress Resource should be created. This depends on a pre-provisioned Ingress Controller being available.  |
-| ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Ingress Resource. Traffic coming in on this hostname will be routed by the Ingress Resource to the appropriate backend Service.  |
-| ingress.https | bool | `true` | Set to 'true' if browser communication with the application should be TLS (HTTPS) enforced.  |
+| ingress.host | string | `nil` | The fully-qualified hostname (FQDN) of the Jira instance. This value is used to configure the product's proxy settings and, when ingress.create is true, the Ingress resource routing rules.  |
+| ingress.https | bool | `true` | Whether users access the application over HTTPS. Set to 'false' if not using TLS, e.g. when reaching the service via localhost port-forwarding.  |
 | ingress.maxBodySize | string | `"250m"` | The max body size to allow. Requests exceeding this size will result in an HTTP 413 error being returned to the client.  |
 | ingress.nginx | bool | `true` | Set to 'true' if the Ingress Resource is to use the K8s 'ingress-nginx' controller. https://kubernetes.github.io/ingress-nginx/  This will populate the Ingress Resource with annotations that are specific to the K8s ingress-nginx controller. Set to 'false' if a different controller is to be used, in which case the appropriate annotations for that controller must be specified below under 'ingress.annotations'.  |
 | ingress.openShiftRoute | bool | `false` | Set to true if you want to create an OpenShift Route instead of an Ingress  |
-| ingress.path | string | `nil` | The base path for the Ingress Resource. For example '/jira'. Based on a 'ingress.host' value of 'company.k8s.com' this would result in a URL of 'company.k8s.com/jira'. Default value is 'jira.service.contextPath'  |
+| ingress.path | string | `nil` | The base path for the application, e.g. '/jira'. Defaults to 'jira.service.contextPath'.  |
 | ingress.proxyConnectTimeout | int | `60` | Defines a timeout for establishing a connection with a proxied server. It should be noted that this timeout cannot usually exceed 75 seconds.  |
 | ingress.proxyReadTimeout | int | `60` | Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed.  |
 | ingress.proxySendTimeout | int | `60` | Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed.  |

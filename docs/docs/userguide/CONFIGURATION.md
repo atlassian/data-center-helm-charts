@@ -1,15 +1,22 @@
 # Configuration
 
 ## :material-directions-fork: Ingress
-In order to make the Atlassian product available from outside of the Kubernetes cluster, a suitable HTTP/HTTPS ingress controller needs to be installed. The standard Kubernetes Ingress resource is not flexible enough for our needs, so a third-party ingress controller and resource definition must be provided. The exact details of the Ingress will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how this controller can be installed and configured.
+In order to make the Atlassian product available from outside of the Kubernetes cluster, you must provision a suitable HTTP/HTTPS traffic entry controller.
 
-The charts themselves provide a template for Ingress resource rules to be utilised by the provisioned controller. These include all required annotations and optional TLS configuration for the NGINX Ingress Controller.
+The Helm charts support exposing products using either:
+
+- Kubernetes **Ingress** resources (via an Ingress controller), or
+- Kubernetes **Gateway API** resources (via a Gateway API controller), by creating a `HTTPRoute`.
+
+The exact details will be highly site-specific. These Helm charts were tested using the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external}. We also provide [example instructions](../examples/ingress/CONTROLLERS.md) on how controllers can be installed and configured.
+
+The charts themselves provide templates for either `Ingress` or `HTTPRoute` resources (depending on configuration). These include the required knobs for configuring hostnames, paths, timeouts, and (for NGINX Ingress) annotations.
 
 Some key considerations to note when configuring the controller are:
 
 !!!Ingress requirements
     * At a minimum, the ingress needs the ability to support long request timeouts, as well as session affinity (aka "sticky sessions").
-    * The Ingress Resource provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
+    * The `Ingress` template provided as part of the Helm charts is geared toward the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/){.external} and can be configured via the `ingress` stanza in the appropriate `values.yaml`. Some key aspects that can be configured include:
 
          * Usage of the NGINX Ingress Controller
          * Ingress Controller annotations
@@ -78,9 +85,44 @@ curl -I https://bitbucket.example.com/status
 | Requests routing to different pods | Check if clustering is enabled |
 | Session cookies not working | Ensure ingress controller supports session affinity |
 
+### Gateway API (HTTPRoute)
+
+The charts can create a Gateway API `HTTPRoute` instead of an `Ingress` resource.
+
+```yaml
+ingress:
+  create: false
+
+gateway:
+  create: true
+  hostnames:
+    - bitbucket.example.com
+  https: true
+  parentRefs:
+    - name: atlassian-gateway
+      namespace: gateway-system  # optional
+```
+
+The `gateway` stanza supports additional options for fine-tuning the `HTTPRoute`:
+
+- **`parentRefs`** – list of [ParentReference](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference){.external} objects pointing to your `Gateway` resource (supports `name`, `namespace`, `sectionName`, etc.)
+- **`externalPort`** – non-standard port that users connect on (defaults to `443`/`80`)
+- **`timeouts`** – `request` and `backendRequest` timeouts (replaces Ingress `proxyReadTimeout`/`proxySendTimeout`)
+- **`filters`** – [HTTPRouteFilter](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteFilter){.external} list for header modification, redirects, or URL rewrites
+- **`additionalRules`** – extra [HTTPRouteRule](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.HTTPRouteRule){.external} entries for advanced routing (traffic splitting, header-based routing)
+- **`annotations`** / **`labels`** – metadata applied to the HTTPRoute resource
+
+!!!note "Gateway mode without creating an HTTPRoute"
+    Setting `gateway.hostnames` activates gateway mode for the product's proxy and base-URL configuration even when `gateway.create` is false. This allows use with a pre-existing Gateway or external proxy/load balancer.
+
+For the full list of values and usage examples, see the [Gateway API guide](../examples/ingress/GATEWAY_API.md).
+
+!!!important "Sticky sessions with Gateway API"
+    Session affinity is **not** part of the standard Gateway API `HTTPRoute` spec. You must configure it using your Gateway implementation (for example, Envoy Gateway policy resources or Istio traffic policy). See [Session affinity with Gateway API](../examples/ingress/GATEWAY_API_SESSION_AFFINITY.md) for working examples and fallbacks.
+
 ### Other Ingress Controllers
 
-For other ingress controllers (AWS ALB, Google Cloud Load Balancer, Azure Application Gateway), refer to your controller's documentation for session stickiness configuration.
+For other ingress controllers ([AWS ALB](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/){.external}, [Google Cloud Load Balancer](https://cloud.google.com/load-balancing){.external}, [Azure Application Gateway](https://azure.microsoft.com/en-us/products/application-gateway){.external}), refer to your controller's documentation for session stickiness configuration.
 
 ## :material-directions-fork: LoadBalancer/NodePort Service Type
 
@@ -141,7 +183,7 @@ For these reasons, the default volume configuration of the Helm charts is suitab
 
 While you are free to configure your Kubernetes volume management in any way you wish, within the constraints imposed by the products, the recommended setup is to use Kubernetes [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/){.external} and `PersistentVolumeClaims`.
 
-The `local-home` volume requires a `PersistentVolume` with [ReadWriteOnce (RWO)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability, and `shared-home` requires a `PersistentVolume` with [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own `RWX` volumes (e.g. [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}). While this entails a higher upfront setup effort, it gives the best flexibility.
+The `local-home` volume requires a `PersistentVolume` with [ReadWriteOnce (RWO)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability, and `shared-home` requires a `PersistentVolume` with [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} capability. Typically, this will be an NFS volume provided as part of your infrastructure, but some public-cloud Kubernetes engines provide their own `RWX` volumes (e.g. [AWS EFS](https://aws.amazon.com/efs/){.external}, [Google Filestore](https://cloud.google.com/filestore){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}). While this entails a higher upfront setup effort, it gives the best flexibility.
 
 ### Volumes configuration
 By default, the charts will configure the `local-home` and `shared-home` values as follows:
@@ -360,7 +402,7 @@ By default, the Helm charts will not configure the products for Data Center clus
         Clustering is enabled by default. To disable clustering, set `crowd.clustering.enabled` to `false` in `${CROWD_HOME}/shared/crowd.cfg.xml` and rollout restart Crowd StatefulSet after the initial product setup is complete.
 
 
-In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external} and [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external})
+In addition, the `shared-home` volume must be correctly configured as a [ReadWriteMany (RWX)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes){.external} filesystem (e.g. NFS, [AWS EFS](https://aws.amazon.com/efs/){.external}, [Azure Files](https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction){.external}, [GCP Filestore](https://cloud.google.com/filestore){.external}, or any NFS-compatible storage)
 
 ## :material-book-cog: Generating configuration files
 

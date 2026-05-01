@@ -6,19 +6,110 @@ kubectl cluster-info
 echo "[INFO]: current-context:" $(kubectl config current-context)
 echo "[INFO]: environment-kubeconfig:" "${KUBECONFIG}"
 
-kubectl create namespace atlassian
+kubectl create namespace atlassian --dry-run=client -o yaml | kubectl apply -f -
 
 # even though there's a kind command to load a local image directly to KinD container runtime
 # let's deploy an insecure registry in case we need it for any further tests
 echo "[INFO]: Deploy ephemeral container registry"
 kubectl apply -f src/test/config/kind/registry.yaml
 
-echo "[INFO]: Deploy Nginx ingress controller"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-kubectl wait --for=condition=ready pod \
-        --selector=app.kubernetes.io/component=controller \
-        --timeout=300s \
-        -n ingress-nginx
+# Install Gateway API CRDs and Controller
+if [ -z "${SKIP_GATEWAY_API}" ]; then
+  echo "[INFO]: Installing Gateway API CRDs"
+  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+  kubectl apply --server-side=true -f https://raw.githubusercontent.com/envoyproxy/gateway/v1.2.5/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_envoyproxies.yaml
+
+  echo "[INFO]: Waiting for Gateway API CRDs to be established"
+  kubectl wait --for condition=established --timeout=60s crd/gateways.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/httproutes.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
+  kubectl wait --for condition=established --timeout=60s crd/envoyproxies.gateway.envoyproxy.io
+
+  echo "[INFO]: Installing Envoy Gateway"
+  # Envoy Gateway uses OCI registry, not a traditional Helm repo
+  helm install eg oci://docker.io/envoyproxy/gateway-helm \
+      --version v1.2.5 \
+      --create-namespace \
+      --namespace envoy-gateway-system \
+      --set deployment.envoyGateway.resources.requests.cpu=50m \
+      --set deployment.envoyGateway.resources.requests.memory=100Mi \
+      --skip-crds \
+      --timeout=300s \
+      --wait
+  
+  echo "[INFO]: Waiting for Envoy Gateway to be ready"
+  kubectl wait --for=condition=available deployment/envoy-gateway \
+      --namespace envoy-gateway-system \
+      --timeout=300s
+
+  # EnvoyProxy CR tells the controller to create the data-plane proxy Service
+  # as NodePort with nodePort 30080 — matching the KinD extraPortMappings.
+  # This must be applied BEFORE the GatewayClass so the controller picks it up.
+  echo "[INFO]: Applying EnvoyProxy configuration (NodePort 30080)"
+  kubectl apply -f src/test/config/kind/envoy-proxy.yaml
+
+  # GatewayClass references the EnvoyProxy CR via parametersRef so every
+  # Gateway using this class gets the NodePort configuration automatically.
+  echo "[INFO]: Creating GatewayClass 'eg' with parametersRef"
+  cat << EOF | kubectl apply -f -
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: kind-proxy-config
+    namespace: envoy-gateway-system
+EOF
+
+  echo "[INFO]: Waiting for GatewayClass 'eg' to be accepted"
+  kubectl wait --for=condition=Accepted gatewayclass/eg --timeout=180s || {
+    echo "[ERROR]: GatewayClass not accepted in time"
+    kubectl get gatewayclass/eg -o yaml
+    exit 1
+  }
+  
+  echo "[INFO]: Creating test Gateway resource in atlassian namespace"
+  kubectl apply -f src/test/config/kind/gateway.yaml
+  
+  echo "[INFO]: Waiting for Gateway to be reconciled"
+  # In KinD there is no real LoadBalancer implementation, so the Gateway may never become
+  # fully Programmed (AddressNotAssigned). Instead, wait for:
+  # 1) Gateway Accepted=True (control-plane picked it up)
+  # 2) The Envoy proxy Deployment for this Gateway to become Available (data-plane ready)
+  kubectl wait --for=condition=Accepted gateway/atlassian-gateway -n atlassian --timeout=300s || {
+    echo "[ERROR]: Gateway not accepted in time"
+    kubectl describe gateway/atlassian-gateway -n atlassian
+    exit 1
+  }
+
+  echo "[INFO]: Waiting for Envoy proxy deployment for the Gateway"
+  kubectl wait --for=condition=Available deployment \
+    -n envoy-gateway-system \
+    -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
+    --timeout=300s || {
+      echo "[ERROR]: Envoy proxy deployment not ready in time"
+      kubectl get deployments -n envoy-gateway-system -o wide
+      kubectl get pods -n envoy-gateway-system -o wide
+      exit 1
+    }
+  
+  # Add /etc/hosts entry so dc-app.test resolves to localhost on the runner.
+  echo "[INFO]: Adding dc-app.test to /etc/hosts"
+  if [ "$(id -u)" -ne 0 ]; then
+    SUDO=$(which sudo)
+    echo "127.0.0.1 dc-app.test" | ${SUDO} tee -a /etc/hosts >/dev/null
+  else
+    echo "127.0.0.1 dc-app.test" >> /etc/hosts
+  fi
+
+  echo "[INFO]: Gateway API installation complete"
+else
+  echo "[INFO]: Skipping Gateway API installation (SKIP_GATEWAY_API is set)"
+fi
 
 # this is for local runs, because existing nfs server images does not run on arm64 platforms
 # instead, we create a hostPath RWX volume and override the default common settings

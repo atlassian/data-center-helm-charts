@@ -1,5 +1,46 @@
 # Change Log
 
+## 2.0.12
+
+**Release date:** 2026-4-9
+
+![AppVersion: 12.1.3](https://img.shields.io/static/v1?label=AppVersion&message=12.1.3&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update Helm chart version
+
+## 2.0.11
+
+**Release date:** 2026-4-7
+
+![AppVersion: 12.1.3](https://img.shields.io/static/v1?label=AppVersion&message=12.1.3&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update Helm chart version
+
+## 2.0.10
+
+**Release date:** 2026-4-3
+
+![AppVersion: 12.1.3](https://img.shields.io/static/v1?label=AppVersion&message=12.1.3&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* DEVPROD-3580: Add gateway api support (#1084)
+* Update appVersions for DC apps (#1100)
+
+## 2.0.9
+
+**Release date:** 2026-2-1
+
+![AppVersion: 12.1.1](https://img.shields.io/static/v1?label=AppVersion&message=12.1.1&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update appVersions for DC apps (#1074)
+
 ## 2.0.8
 
 **Release date:** 2025-12-29

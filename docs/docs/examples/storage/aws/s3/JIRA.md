@@ -7,7 +7,7 @@ tag: 9.9.0
 jira:
   s3Storage:
     avatars:
-      bucketName: jira-avatars-bucket
+      bucketName: <your-jira-bucket-name>
       bucketRegion: us-east-1
 ```
 
@@ -59,8 +59,8 @@ Below is an example policy, providing appropriate S3 access to Jira, that needs 
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::jira-avatars-bucket/*",
-                "arn:aws:s3:::jira-avatars-bucket"
+                "arn:aws:s3:::<your-jira-bucket-name>/*",
+                "arn:aws:s3:::<your-jira-bucket-name>"
             ],
             "Sid": ""
         }

@@ -1,0 +1,19 @@
+# EnvoyProxy tells Envoy Gateway *how* to create the data-plane proxy
+# for any Gateway whose GatewayClass references this resource.
+#
+# On OpenShift/MicroShift we keep the default ClusterIP and expose
+# Envoy via an OpenShift Route (created in the workflow).
+# This resource exists so the GatewayClass can use a consistent
+# parametersRef pattern across environments.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: openshift-proxy-config
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        # ClusterIP is fine here — the OpenShift Route handles external access.
+        type: ClusterIP

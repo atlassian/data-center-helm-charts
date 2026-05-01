@@ -131,11 +131,7 @@ spec:
             {{ if .Values.synchrony.service.url }}
               value: "{{ .Values.synchrony.service.url }}"
             {{ else }}
-              {{ if .Values.ingress.https }}
-              value: "https://{{ .Values.ingress.host }}/synchrony"
-              {{ else }}
-              value: "http://{{ .Values.ingress.host }}/synchrony"
-              {{- end }}
+              value: "{{ include "common.gateway.scheme" . }}://{{ include "common.gateway.hostname" . }}/synchrony"
             {{ end }}
             {{- include "synchrony.databaseEnvVars" . | nindent 12 }}
             {{- include "synchrony.clusteringEnvVars" . | nindent 12 }}

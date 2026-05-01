@@ -13,8 +13,8 @@ To see the custom values you used for this release:
 
   $ helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
 
-{{ if .Values.ingress.create -}}
-{{ title .Chart.Name }} service URL: {{ ternary "https" "http" .Values.ingress.https -}}://{{ .Values.ingress.host }}{{ default ( "" ) .Values.ingress.path }}
+{{ if eq (include "common.gateway.isConfigured" .) "true" -}}
+{{ title .Chart.Name }} service URL: {{ include "common.gateway.origin" . }}{{ include "crowd.path" . }}
 {{- else }}
 Get the {{ title .Chart.Name }} URL by running these commands in the same shell:
 {{- if contains "NodePort" .Values.crowd.service.type }}
