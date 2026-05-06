@@ -1,6 +1,6 @@
 # jira
 
-![Version: 2.0.12](https://img.shields.io/badge/Version-2.0.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 11.3.4](https://img.shields.io/badge/AppVersion-11.3.4-informational?style=flat-square)
+![Version: 2.0.13](https://img.shields.io/badge/Version-2.0.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 11.3.4](https://img.shields.io/badge/AppVersion-11.3.4-informational?style=flat-square)
 
 A chart for installing Jira Data Center on Kubernetes
 
@@ -18,6 +18,7 @@ Kubernetes: `>=1.21.x-0`
 | Repository | Name | Version |
 |------------|------|---------|
 | https://atlassian.github.io/data-center-helm-charts | common | 1.2.7 |
+| https://opensearch-project.github.io/helm-charts | opensearch | 3.5.0 |
 
 ## Values
 
@@ -90,6 +91,8 @@ Kubernetes: `>=1.21.x-0`
 | jira.additionalCertificates.initContainer.securityContext | object | `{}` | Custom SecurityContext for the import-certs init container  |
 | jira.additionalCertificates.secretList | list | `[]` | A list of secrets with their respective keys holding certificates to be added to the Java truststore. It is mandatory to specify which keys from secret data need to be mounted as files to the init container.  |
 | jira.additionalCertificates.secretName | string | `nil` | Name of the Kubernetes secret with certificates in its data. All secret keys in the secret data will be treated as certificates to be added to Java truststore. If defined, this takes precedence over secretList.  |
+| jira.additionalConfigProperties | list | `[]` | Additional properties to inject into jira-config.properties at container startup via ADDITIONAL_JIRA_CONFIG_* environment variables. Each entry is a "key=value" property line. Environment variable names are sorted for consistent file generation; order has no effect on runtime behavior.  Requires a Jira container image version that supports ADDITIONAL_JIRA_CONFIG_*.  |
+| jira.additionalConfigPropertiesExpandEnv | list | `[]` | Additional properties requiring environment variable expansion at container startup. Values containing {VAR_NAME} placeholders will be replaced with the corresponding environment variable value. Useful for injecting secrets without hardcoding them in values.  |
 | jira.additionalEnvironmentVariables | list | `[]` | Defines any additional environment variables to be passed to the Jira container. See https://hub.docker.com/r/atlassian/jira-software for supported variables.  |
 | jira.additionalJvmArgs | list | `[]` |  |
 | jira.additionalLibraries | list | `[]` | Specifies a list of additional Java libraries that should be added to the Jira container. Each item in the list should specify the name of the volume that contains the library, as well as the name of the library file within that volume's root directory. Optionally, a subDirectory field can be included to specify which directory in the volume contains the library file. Additional details: https://atlassian.github.io/data-center-helm-charts/examples/external_libraries/EXTERNAL_LIBS/  |
@@ -180,6 +183,16 @@ Kubernetes: `>=1.21.x-0`
 | monitoring.serviceMonitor.scrapeIntervalSeconds | int | `30` | Scrape interval for the JMX service.  |
 | monitoring.serviceMonitor.scrapeTimeoutSeconds | int | `20` | How long until a scrape request times out. It cannot be greater than the scrape interval.  |
 | nodeSelector | object | `{}` | Standard K8s node-selectors that will be applied to all Jira pods  |
+| opensearch.credentials.createSecret | bool | `true` | Let the Helm chart create a secret with an auto generated initial admin password  |
+| opensearch.credentials.existingSecretRef | object | `{"name":null}` | Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD holding the initial admin password  |
+| opensearch.enabled | bool | `false` | Deploy OpenSearch Helm chart and Configure Jira to use it as a search platform  |
+| opensearch.envFrom[0].secretRef.name | string | `"opensearch-initial-password"` | If using a pre-created secret, make sure to change secret name to match opensearch.credentials.existingSecretRef.name  |
+| opensearch.extraEnvs[0].name | string | `"plugins.security.ssl.http.enabled"` |  |
+| opensearch.extraEnvs[0].value | string | `"false"` |  |
+| opensearch.persistence.size | string | `"10Gi"` |  |
+| opensearch.resources.requests.cpu | int | `1` |  |
+| opensearch.resources.requests.memory | string | `"1Gi"` |  |
+| opensearch.singleNode | bool | `true` | OpenSearch helm specific values, see: https://github.com/opensearch-project/helm-charts/blob/main/charts/opensearch/values.yaml  |
 | openshift.runWithRestrictedSCC | bool | `false` | When set to true, the containers will run with a restricted Security Context Constraint (SCC). See: https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html This configuration property unsets pod's SecurityContext, nfs-fixer init container (which runs as root), and mounts server configuration files as ConfigMaps.  |
 | ordinals | object | `{"enabled":false,"start":0}` | Set a custom start ordinal number for the K8s stateful set. Note that this depends on the StatefulSetStartOrdinal K8s feature gate, which has entered beta state with K8s version 1.27.  |
 | ordinals.enabled | bool | `false` | Enable only if StatefulSetStartOrdinal K8s feature gate is available.  |
