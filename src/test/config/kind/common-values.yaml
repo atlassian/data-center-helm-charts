@@ -60,6 +60,7 @@ DC_APP_REPLACEME:
     - -Datlassian.darkfeature.jira.onboarding.feature.disabled=true
     - -Djira.websudo.is.disabled=true
     - -Datlassian.allow.insecure.url.parameter.login=true
+    - -Dcom.atlassian.plugins.authentication.basic.auth.filter.force.allow=true
 
   # Jira func tests will setup Jira, and during this time status will report 500
   # to avoid marking container as non-ready, let's bump failureThreshold for a readinessProbe
@@ -108,15 +109,15 @@ podAnnotations:
   quote: "true"
   normal: annotation-comes-here
 
-# KinD is deployed with custom settings, namely extraPortMappings for ports 80 and 443
-# to make sure ingress traffic is available at http://localhost
-ingress:
+# KinD tests use Gateway API with Envoy Gateway.
+# Envoy proxy is exposed via NodePort(30080) -> hostPort(80); dc-app.test resolves via /etc/hosts.
+gateway:
   create: true
-  host: localhost
+  parentRefs:
+    - name: atlassian-gateway
+  hostnames:
+    - dc-app.test
   https: false
-  proxyConnectTimeout: 300
-  proxyReadTimeout: 300
-  proxySendTimeout: 300
 
 monitoring:
   exposeJmxMetrics: true

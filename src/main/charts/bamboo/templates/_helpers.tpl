@@ -62,35 +62,30 @@
 Deduce the base URL for bamboo.
 */}}
 {{- define "bamboo.baseUrl" -}}
-    {{- if .Values.ingress.host -}}
-        {{ ternary "https" "http" .Values.ingress.https -}}
-        ://
-        {{- if .Values.ingress.path -}}
-            {{ .Values.ingress.host}}{{.Values.ingress.path }}
-        {{- else -}}
-            {{ .Values.ingress.host}}
-        {{- end }}
-    {{- else -}}
-        {{- print  "http://localhost:8085/" }}
-    {{- end }}
+{{- if eq (include "common.gateway.isConfigured" .) "true" -}}
+{{- include "common.gateway.origin" . -}}{{ include "bamboo.path" . -}}
+{{- else -}}
+{{- print "http://localhost:8085/" -}}
+{{- end -}}
 {{- end }}
 
 {{/*
-Create default value for ingress port
+Create default value for the service path.
 */}}
-{{- define "bamboo.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- define "bamboo.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.bamboo.service.contextPath
+) -}}
 {{- end }}
 
 {{/*
-Create default value for ingress path
+Alias for backward compatibility with ingress templates.
 */}}
 {{- define "bamboo.ingressPath" -}}
-{{- if .Values.ingress.path -}}
-{{- .Values.ingress.path -}}
-{{- else -}}
-{{ default ( "/" ) .Values.bamboo.service.contextPath -}}
-{{- end }}
+{{- include "bamboo.path" . -}}
 {{- end }}
 
 {{/*
@@ -447,3 +442,5 @@ Define additional hosts here to allow template overrides when used as a sub char
 set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/cacerts; for crt in /tmp/crt/*.*; do echo "Adding $crt to keystore"; keytool -import -keystore /var/ssl/cacerts -storepass changeit -noprompt -alias $(echo $(basename $crt)) -file $crt; done;
 {{- end }}
 {{- end }}
+
+

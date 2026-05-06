@@ -1,5 +1,32 @@
 #!/usr/bin/env bash
 
+# Poll until a command succeeds or timeout is reached.
+# Usage: wait_for "description" timeout_seconds interval_seconds command [args...]
+wait_for() {
+  local desc="$1"; shift
+  local timeout="$1"; shift
+  local interval="$1"; shift
+  local elapsed=0
+
+  while ! "$@" >/dev/null 2>&1; do
+    if [ $elapsed -ge $timeout ]; then
+      echo "[ERROR]: Timed out after ${elapsed}s waiting for: ${desc}"
+      return 1
+    fi
+    echo "[INFO]: Waiting for ${desc}... (${elapsed}/${timeout}s)"
+    sleep $interval
+    elapsed=$((elapsed + interval))
+  done
+  echo "[INFO]: ${desc} — ready"
+}
+
+# Check if a URL returns HTTP 200.
+# Usage: check_http_200 url [extra-curl-args...]
+check_http_200() {
+  local url="$1"; shift
+  test "$(curl -s -o /dev/null -w '%{http_code}' "$@" "$url")" = "200"
+}
+
 # Deploy CloudNativePG operator and PostgreSQL cluster
 deploy_postgres() {
   echo "[INFO]: Installing CloudNativePG operator"
@@ -47,36 +74,29 @@ deploy_postgres() {
   
   # Wait for operator to be ready
   echo "[INFO]: Waiting for CloudNativePG operator to be ready"
-  for i in {1..60}; do
-    if kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
-      echo "[INFO]: CloudNativePG CRDs are available"
-      break
-    fi
-    echo "[INFO]: Waiting for CloudNativePG CRDs to be available... ($i/60)"
-    sleep 5
-  done
-  
+  wait_for "CloudNativePG CRDs" 300 5 kubectl get crd clusters.postgresql.cnpg.io || {
+    echo "[ERROR]: CloudNativePG CRDs not available"
+    exit 1
+  }
   # Wait for operator deployment to exist
   echo "[INFO]: Waiting for operator deployment to be created..."
-  for i in {1..30}; do
-    if kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg >/dev/null 2>&1; then
-      echo "[INFO]: Operator deployment found"
-      # MicroShift/OpenShift: grant anyuid SCC to operator SA to satisfy UID range constraints
-      if kubectl api-resources | grep -q "securitycontextconstraints"; then
-        echo "[INFO]: Detected SCC support; granting 'anyuid' SCC to operator service account"
-        SA_NAME="cnpg-operator-cloudnative-pg"
-        # Try with oc if available, otherwise patch SCC directly
-        if command -v oc >/dev/null 2>&1; then
-          oc adm policy add-scc-to-user anyuid -z "$SA_NAME" -n cnpg-system || true
-        else
-          kubectl patch scc anyuid --type=json -p='[{"op":"add","path":"/users/-","value":"system:serviceaccount:cnpg-system:'"$SA_NAME"'"}]' || true
-        fi
-      fi
-      break
+  wait_for "CloudNativePG operator deployment" 60 2 \
+    kubectl get deployment -n cnpg-system -l app.kubernetes.io/name=cloudnative-pg || {
+    echo "[WARNING]: CloudNativePG operator deployment not found"
+    # this will be checked again below - keeping old behavior to minimize risk of this change
+  }
+
+  # MicroShift/OpenShift: grant anyuid SCC to operator SA to satisfy UID range constraints
+  if kubectl api-resources | grep -q "securitycontextconstraints"; then
+    echo "[INFO]: Detected SCC support; granting 'anyuid' SCC to operator service account"
+    SA_NAME="cnpg-operator-cloudnative-pg"
+    # Try with oc if available, otherwise patch SCC directly
+    if command -v oc >/dev/null 2>&1; then
+      oc adm policy add-scc-to-user anyuid -z "$SA_NAME" -n cnpg-system || true
+    else
+      kubectl patch scc anyuid --type=json -p='[{"op":"add","path":"/users/-","value":"system:serviceaccount:cnpg-system:'"$SA_NAME"'"}]' || true
     fi
-    echo "[INFO]: Waiting for operator deployment... ($i/30)"
-    sleep 2
-  done
+  fi
   
   # Verify operator is actually running
   echo "[DEBUG]: CloudNativePG operator deployments:"
@@ -339,12 +359,17 @@ deploy_app() {
   fi
 }
 
-# Resolve the ingress/gateway hostname based on the deployment environment.
+# Resolve the routing hostname based on the deployment environment.
+#
+# - KinD: Envoy Gateway proxy is exposed via NodePort(30080) -> hostPort(80)
+#         and the workflow adds /etc/hosts so dc-app.test resolves locally.
+# - OpenShift/MicroShift: Envoy proxy is exposed via an OpenShift Route on the
+#         CRC apps domain.
 get_routing_hostname() {
   if [ -n "${OPENSHIFT_VALUES}" ]; then
     echo "atlassian.apps.crc.testing"
   else
-    echo "localhost"
+    echo "dc-app.test"
   fi
 }
 
@@ -356,17 +381,17 @@ get_routing_hostname() {
 # during setup triggers the wizard to advance to the next step.
 wait_for_bamboo_setup() {
   echo "[INFO]: Waiting for Bamboo server unattended setup to complete..."
+
   SETUP_HOSTNAME=$(get_routing_hostname)
   SETUP_TIMEOUT=300
   SETUP_ELAPSED=0
   while [ ${SETUP_ELAPSED} -lt ${SETUP_TIMEOUT} ]; do
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 http://${SETUP_HOSTNAME}/ 2>/dev/null || echo "000|")
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}|%{redirect_url}" --max-redirs 0 "http://${SETUP_HOSTNAME}/" 2>/dev/null || echo "000|")
     HTTP_CODE=$(echo "$RESPONSE" | cut -d'|' -f1)
     REDIRECT_URL=$(echo "$RESPONSE" | cut -d'|' -f2)
 
     if echo "${REDIRECT_URL}" | grep -q "bootstrap\|setup"; then
-      # Server is in setup mode — trigger setup advancement by following the redirect chain
-      curl -s -o /dev/null -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>/dev/null || true
+      curl -s -o /dev/null -L --max-redirs 10 "http://${SETUP_HOSTNAME}/" 2>/dev/null || true
       echo "[INFO]: Bamboo setup in progress (HTTP ${HTTP_CODE} → ${REDIRECT_URL}). Triggering setup... (${SETUP_ELAPSED}s/${SETUP_TIMEOUT}s)"
     elif [ "${HTTP_CODE}" = "302" ] && echo "${REDIRECT_URL}" | grep -q "userlogin"; then
       echo "[INFO]: Bamboo server setup complete (redirecting to login page)"
@@ -382,37 +407,38 @@ wait_for_bamboo_setup() {
   done
 
   echo "[WARNING]: Bamboo setup did not complete within ${SETUP_TIMEOUT}s. Proceeding with agent deployment anyway."
-  echo "[DEBUG]: Full response from GET / with redirects:"
-  curl -v -s -L --max-redirs 10 http://${SETUP_HOSTNAME}/ 2>&1 || true
+  curl -v -s -L --max-redirs 10 "http://${SETUP_HOSTNAME}/" 2>&1 || true
 }
 
-verify_ingress() {
+verify_gateway_ingress() {
   STATUS_ENDPOINT_PATH="status"
   if [ ${DC_APP} == "bamboo" ]; then
     STATUS_ENDPOINT_PATH="rest/api/latest/status"
   elif [ ${DC_APP} == "crowd" ]; then
     STATUS_ENDPOINT_PATH="crowd/status"
   fi
-  echo "[INFO]: Checking ${DC_APP} status"
-  # give ingress controller a few seconds before polling
-  sleep 5
+
+  echo "[INFO]: Checking ${DC_APP} status via Gateway API"
+
+  wait_for "HTTPRoute ${DC_APP}" 60 2 kubectl get httproute/${DC_APP} -n atlassian || {
+    echo "[ERROR]: HTTPRoute ${DC_APP} not found in atlassian namespace"
+    kubectl get httproute -n atlassian || true
+    exit 1
+  }
+
   HOSTNAME=$(get_routing_hostname)
-  for i in {1..10}; do
-    STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://${HOSTNAME}/${STATUS_ENDPOINT_PATH})
-    if [ $STATUS -ne 200 ]; then
-      echo "[ERROR]: Status code is not 200. Waiting 10 seconds"
-      sleep 10
-    else
-      echo "[INFO]: Received status ${STATUS}"
-      curl -s http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}
-      echo -e "\n"
-      break
-    fi
-  done
-  if [ $STATUS -ne 200 ]; then
-  curl -v http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}
-   exit 1
-  fi
+  STATUS_URL="http://${HOSTNAME}/${STATUS_ENDPOINT_PATH}"
+
+  wait_for "${DC_APP} HTTP 200 via Gateway" 120 10 \
+    check_http_200 "${STATUS_URL}" || {
+    echo "[ERROR]: ${DC_APP} did not return HTTP 200 via Gateway"
+    curl -v "${STATUS_URL}"
+    exit 1
+  }
+
+  echo "[INFO]: ${DC_APP} responded successfully via Gateway"
+  curl -s "${STATUS_URL}"
+  echo -e "\n"
 }
 
 verify_metrics() {
@@ -558,6 +584,73 @@ verify_opensearch() {
     kubectl logs "${pod}" -n atlassian --tail=200 2>/dev/null || true
   done
   exit 1
+}
+
+verify_gateway() {
+  echo "[INFO]: Verifying HTTPRoute resource for ${DC_APP}"
+  if ! kubectl get httproute/${DC_APP} -n atlassian >/dev/null 2>&1; then
+    echo "[ERROR]: HTTPRoute ${DC_APP} not found in atlassian namespace"
+    kubectl get httproute -n atlassian || true
+    exit 1
+  fi
+
+  echo "[INFO]: Checking HTTPRoute status"
+
+  # Wait on Gateway API parent conditions (Envoy Gateway reports conditions under
+  # `.status.parents[*].conditions`). Use a JSONPath filter by type.
+  # Note: Don't escape the double-quotes inside the single-quoted JSONPath.
+
+  kubectl wait \
+    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}'=True \
+    httproute/${DC_APP} -n atlassian --timeout=180s || {
+      echo "[ERROR]: HTTPRoute not accepted"
+      echo "[DEBUG]: HTTPRoute status (YAML)"
+      kubectl get httproute/${DC_APP} -n atlassian -o yaml | sed -n '/^status:/,$p' || true
+      echo "[DEBUG]: HTTPRoute status.parents (JSON)"
+      kubectl get httproute/${DC_APP} -n atlassian -o json | jq '.status.parents' || true
+      echo "[DEBUG]: Gateway status (YAML)"
+      kubectl get gateway/atlassian-gateway -n atlassian -o yaml | sed -n '/^status:/,$p' || true
+      echo "[DEBUG]: Envoy Gateway deployments/pods"
+      kubectl get deployments -n envoy-gateway-system -o wide || true
+      kubectl get pods -n envoy-gateway-system -o wide || true
+      kubectl describe httproute/${DC_APP} -n atlassian
+      exit 1
+    }
+
+  kubectl wait \
+    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
+    httproute/${DC_APP} -n atlassian --timeout=180s || {
+      echo "[ERROR]: HTTPRoute ResolvedRefs condition not met"
+      echo "[DEBUG]: HTTPRoute status.parents (JSON)"
+      kubectl get httproute/${DC_APP} -n atlassian -o json | jq '.status.parents' || true
+      kubectl describe httproute/${DC_APP} -n atlassian
+      exit 1
+    }
+
+  echo "[INFO]: HTTPRoute is Accepted and ResolvedRefs verified"
+
+  echo "[INFO]: Verifying Gateway attachment"
+  GATEWAY_NAME=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.parentRefs[0].name}')
+  echo "[INFO]: HTTPRoute attached to Gateway: ${GATEWAY_NAME}"
+
+  if [ -z "${GATEWAY_NAME}" ]; then
+    echo "[ERROR]: No Gateway referenced in HTTPRoute"
+    exit 1
+  fi
+
+  echo "[INFO]: Checking Gateway status"
+  kubectl get gateway/${GATEWAY_NAME} -n atlassian -o yaml
+
+  # Verify hostnames are configured
+  HOSTNAMES=$(kubectl get httproute/${DC_APP} -n atlassian -o jsonpath='{.spec.hostnames[*]}')
+  echo "[INFO]: HTTPRoute hostnames: ${HOSTNAMES}"
+
+  if [ -z "${HOSTNAMES}" ]; then
+    echo "[ERROR]: No hostnames configured on HTTPRoute"
+    exit 1
+  fi
+
+  echo "[INFO]: Gateway API verification complete for ${DC_APP}"
 }
 
 # create 2 NodePort services to expose each DC pod, required for functional tests

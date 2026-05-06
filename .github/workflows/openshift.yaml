@@ -97,6 +97,98 @@ jobs:
         run: |
            oc apply -f src/test/config/openshift/shared-home-pvc.yaml
 
+      - name: Install Gateway API + Envoy Gateway
+        run: |
+          # Gateway API CRDs
+          oc apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+          oc apply --server-side=true -f https://raw.githubusercontent.com/envoyproxy/gateway/v1.2.5/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_envoyproxies.yaml
+          
+          oc wait --for condition=established --timeout=60s crd/gateways.gateway.networking.k8s.io
+          oc wait --for condition=established --timeout=60s crd/httproutes.gateway.networking.k8s.io
+          oc wait --for condition=established --timeout=60s crd/gatewayclasses.gateway.networking.k8s.io
+          oc wait --for condition=established --timeout=60s crd/envoyproxies.gateway.envoyproxy.io
+
+          # Envoy Gateway (installs into envoy-gateway-system)
+          # OpenShift admission can reject fixed runAsUser/seccomp settings unless the
+          # service accounts are allowed to use a more permissive SCC.
+          oc create namespace envoy-gateway-system --dry-run=client -o yaml | oc apply -f -
+          # Pre-grant SCCs to all service accounts in the namespace so Helm hooks can run
+          # even before the chart-created ServiceAccounts exist.
+          oc adm policy add-scc-to-group anyuid system:serviceaccounts:envoy-gateway-system || true
+          oc adm policy add-scc-to-group privileged system:serviceaccounts:envoy-gateway-system || true
+
+          helm install eg oci://docker.io/envoyproxy/gateway-helm \
+            --version v1.2.5 \
+            --namespace envoy-gateway-system \
+            --set deployment.envoyGateway.resources.requests.cpu=50m \
+            --set deployment.envoyGateway.resources.requests.memory=100Mi \
+            --skip-crds \
+            --timeout=600s \
+            --wait || { \
+              oc get all -n envoy-gateway-system || true; \
+              oc get events -n envoy-gateway-system --sort-by='.lastTimestamp' | tail -n 200 || true; \
+              exit 1; \
+            }
+
+          oc wait --for=condition=available deployment/envoy-gateway \
+            --namespace envoy-gateway-system \
+            --timeout=300s
+
+          # EnvoyProxy CR configures the proxy Service as ClusterIP (default for OpenShift; an OpenShift Route will handle external access).
+          oc apply -f src/test/config/openshift/envoy-proxy.yaml
+          
+          # GatewayClass references the EnvoyProxy CR via parametersRef
+          cat << EOF | oc apply -f -
+          apiVersion: gateway.networking.k8s.io/v1
+          kind: GatewayClass
+          metadata:
+            name: eg
+          spec:
+            controllerName: gateway.envoyproxy.io/gatewayclass-controller
+            parametersRef:
+              group: gateway.envoyproxy.io
+              kind: EnvoyProxy
+              name: openshift-proxy-config
+              namespace: envoy-gateway-system
+          EOF
+          oc wait --for=condition=Accepted gatewayclass/eg --timeout=180s || { oc get gatewayclass/eg -o yaml; oc get pods -n envoy-gateway-system -o wide || true; exit 1; }
+
+          # Create test Gateway
+          oc apply -f src/test/config/openshift/gateway.yaml
+          oc wait --for=condition=Accepted gateway/atlassian-gateway -n atlassian --timeout=300s || { oc describe gateway/atlassian-gateway -n atlassian; oc get events -n atlassian --sort-by='.lastTimestamp' | tail -n 200 || true; exit 1; }
+
+          # Wait for data-plane
+          oc wait --for=condition=Available deployment \
+            -n envoy-gateway-system \
+            -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
+            --timeout=300s || { \
+              oc get deployments -n envoy-gateway-system -o wide; \
+              oc get pods -n envoy-gateway-system -o wide; \
+              oc describe deployment -n envoy-gateway-system -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway || true; \
+              oc get events -n envoy-gateway-system --sort-by='.lastTimestamp' | tail -n 200 || true; \
+              exit 1; \
+            }
+
+          # Create an OpenShift Route so atlassian.apps.crc.testing reaches the
+          # Envoy proxy Service without port-forward or Host headers.
+          ENVOY_SVC=$(oc get svc -n envoy-gateway-system \
+            -l gateway.envoyproxy.io/owning-gateway-name=atlassian-gateway \
+            -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+
+          if [ -z "${ENVOY_SVC}" ]; then
+            echo "[ERROR]: Envoy Gateway proxy service not found"
+            oc get svc -n envoy-gateway-system -o wide || true
+            exit 1
+          fi
+
+          oc -n envoy-gateway-system expose svc/${ENVOY_SVC} \
+            --name atlassian-gateway-proxy \
+            --hostname atlassian.apps.crc.testing || true
+
+          # Log the Route and Endpoint details for debugging
+          oc -n envoy-gateway-system get route atlassian-gateway-proxy -o yaml || true
+          oc -n envoy-gateway-system get endpoints ${ENVOY_SVC} -o yaml || true
+
       - name: Deploy postgres database
         run: |
           source src/test/scripts/kind/deploy_app.sh
@@ -117,7 +209,7 @@ jobs:
         run: |
           export OPENSHIFT_VALUES="1"
           source src/test/scripts/kind/deploy_app.sh
-          verify_ingress
+          verify_gateway_ingress
 
       - name: Verify ${{inputs.dc_app}} metrics availability
         run: |
@@ -128,6 +220,11 @@ jobs:
         run: |
           source src/test/scripts/kind/deploy_app.sh
           verify_openshift_analytics
+
+      - name: Verify Gateway API integration
+        run: |
+          source src/test/scripts/kind/deploy_app.sh
+          verify_gateway
 
       - name: Get debug info
         if: always()

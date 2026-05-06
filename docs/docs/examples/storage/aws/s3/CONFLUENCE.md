@@ -6,7 +6,7 @@ Since 8.1.0 Confluence supports storing attachments in AWS S3. To enable this fe
 tag: 8.1.0
 confluence:
   s3AttachmentsStorage:
-    bucketName: confluence-attachments-bucket
+    bucketName: <your-confluence-bucket-name>
     bucketRegion: us-east-1
 ```
 
@@ -58,8 +58,8 @@ Below is an example policy, providing appropriate S3 access to Confluence, that 
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::confluence-attachments-bucket/*",
-                "arn:aws:s3:::confluence-attachments-bucket"
+                "arn:aws:s3:::<your-confluence-bucket-name>/*",
+                "arn:aws:s3:::<your-confluence-bucket-name>"
             ],
             "Sid": ""
         }

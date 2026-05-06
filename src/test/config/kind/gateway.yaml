@@ -1,0 +1,21 @@
+# Gateway API Gateway resource for testing
+# This Gateway is used by the KinD test environment to enable HTTPRoute testing
+# alongside traditional Ingress tests.
+#
+# The Gateway uses the Envoy Gateway controller (gatewayClassName: eg)
+# and listens on port 80 for HTTP traffic.
+#
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: atlassian-gateway
+  namespace: atlassian
+spec:
+  gatewayClassName: eg
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: Same

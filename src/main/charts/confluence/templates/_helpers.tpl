@@ -61,13 +61,6 @@
 {{- end }}
 
 {{/*
-Create default value for ingress port
-*/}}
-{{- define "confluence.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
-{{- end }}
-
-{{/*
 The name the synchrony app within the chart.
 TODO: This will break if the common.names.name exceeds 63 characters, need to find a more rebust way to do this
 */}}
@@ -205,10 +198,7 @@ Pod labels
 {{- end }}
 {{- if .Values.synchrony.enabled -}}
     {{- if .Values.synchrony.service.url -}}-Dsynchrony.service.url={{ .Values.synchrony.service.url }}/v1
-    {{- else -}}
-        {{- if .Values.ingress.https -}}-Dsynchrony.service.url=https://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
-        {{- else }}-Dsynchrony.service.url=http://{{ .Values.ingress.host }}/{{ $synchronyIngressPath }}/v1
-        {{- end }}
+    {{- else -}}-Dsynchrony.service.url={{ include "common.gateway.scheme" . }}://{{ include "common.gateway.hostname" . }}/{{ $synchronyIngressPath }}/v1
     {{- end }}
 {{- else -}}
 -Dsynchrony.btf.disabled=true
@@ -216,14 +206,22 @@ Pod labels
 {{- end -}}
 
 {{/*
-Create default value for ingress path
+Create default value for the service path.
+*/}}
+{{- define "confluence.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.confluence.service.contextPath
+) -}}
+{{- end }}
+
+{{/*
+Alias for backward compatibility with ingress templates.
 */}}
 {{- define "confluence.ingressPath" -}}
-{{- if .Values.ingress.path -}}
-{{- .Values.ingress.path -}}
-{{- else -}}
-{{ default ( "/" ) .Values.confluence.service.contextPath -}}
-{{- end }}
+{{- include "confluence.path" . -}}
 {{- end }}
 
 {{/*
@@ -820,3 +818,5 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
       key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
 {{- end }}
 {{- end }}
+
+

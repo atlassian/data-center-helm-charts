@@ -109,21 +109,22 @@
 {{- end }}
 
 {{/*
-Create default value for ingress port
+Create default value for the service path.
 */}}
-{{- define "jira.ingressPort" -}}
-{{ default (ternary "443" "80" .Values.ingress.https) .Values.ingress.port -}}
+{{- define "jira.path" -}}
+{{- include "common.gateway.path" (dict
+  "useGatewayMode" (include "common.gateway.useGatewayMode" .)
+  "gatewayPath"   .Values.gateway.path
+  "ingressPath"   .Values.ingress.path
+  "contextPath"   .Values.jira.service.contextPath
+) -}}
 {{- end }}
 
 {{/*
-Create default value for ingress path
+Alias for backward compatibility with ingress templates.
 */}}
 {{- define "jira.ingressPath" -}}
-{{- if .Values.ingress.path -}}
-{{- .Values.ingress.path -}}
-{{- else -}}
-{{ default ( "/" ) .Values.jira.service.contextPath -}}
-{{- end }}
+{{- include "jira.path" . -}}
 {{- end }}
 
 {{/*
