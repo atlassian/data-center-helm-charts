@@ -1,6 +1,4 @@
-import json
 import logging
-import urllib.request
 
 import requests
 import yaml
@@ -10,12 +8,15 @@ import product_versions
 # USER_AGENT constant for marketplace API calls
 USER_AGENT = "Mozilla_dc_core_eng"
 
+# Marketplace API base host.
+MARKETPLACE_BASE_URL = "https://marketplace.atlassian.com"
+
 """
 This script is used to update the product versions in the helm charts descriptors (Chart.yaml).
 It fetches the latest available version (LTS for products with LTS) from marketplace and updates the required
 tag in the product chart. It also updates expected output for the product.
 
-Script is currently executed manually and is in a fairly rough shape. 
+Script is currently executed manually and is in a fairly rough shape.
 """
 
 logging.basicConfig(level=logging.INFO, format="%(levelname).1s %(message)s")
@@ -27,7 +28,7 @@ lts_products = ["bitbucket", "jira", "confluence"]
 
 def update_versions(product_to_update, new_version):
     products_to_update = [product_to_update]
-    if product == 'bamboo':
+    if product_to_update == 'bamboo':
         products_to_update.append("bamboo-agent")
 
     chart_files = [f'../../main/charts/{p}/Chart.yaml' for p in products_to_update]
@@ -62,43 +63,19 @@ def update_expected_output(products_to_update, new_version):
         logging.info('Updated expected output file: %s', output_file)
 
 
-def product_versions_marketplace(product_key):
-    mac_url = 'https://marketplace.atlassian.com'
-    request_url = f'/rest/2/products/key/{product_key}/versions'
-    params = {'offset': 0, 'limit': 50}
-    versions = set()
-    page = 1
-    while True:
-        logging.debug(f'Retrieving Marketplace product versions for {product_key}: page {page}')
-        headers = {'User-Agent': USER_AGENT}
-        r = requests.get(mac_url + request_url, params=params, headers=headers)
-        version_data = r.json()
-        for version in version_data['_embedded']['versions']:
-            if all(d.isdigit() for d in version['name'].split('.')):
-                logging.debug(f"Adding version {version['name']}")
-                versions.add(version['name'])
-        if 'next' not in version_data['_links']:
-            break
-        request_url = version_data['_links']['next']['href']
-        page += 1
-        params = {}
-    logging.debug(f'Found {len(versions)} versions')
-    return sorted(list(versions), reverse=True)
-
-
-def latest_minor(version, mac_versions):
-    major_minor_version = '.'.join(version.split('.')[:2])
-    minor_versions = [v for v in mac_versions
-                      if v.startswith(f'{major_minor_version}.')]
-    minor_versions.sort(key=lambda s: [int(u) for u in s.split('.')])
-    return minor_versions[-1]
+def latest_marketplace_version(product_key):
+    """Return the latest version string for a host product via the v3
+    `parent-software` API. Uses `?limit=1`; v3 returns the list in
+    descending buildNumber order, so the first item is the latest."""
+    url = f"{MARKETPLACE_BASE_URL}/rest/3/parent-software/{product_key}/versions"
+    r = requests.get(url, params={'limit': 1}, headers={'User-Agent': USER_AGENT})
+    return r.json()['versions'][0]['versionNumber']
 
 
 def update_mesh_tag():
     logging.info("-------------------------------")
     logging.info('- Updating Bitbucket Mesh tag -')
     logging.info("-------------------------------")
-    mesh_repo = 'atlassian/bitbucket-mesh'
     new_version = product_versions.get_lts_version(['mesh']).replace(tag_suffix, "")
     bitbucket_values_file = '../../main/charts/bitbucket/values.yaml'
     expected_bitbucket_output_file = '../resources/expected_helm_output/bitbucket/output.yaml'
@@ -134,9 +111,7 @@ for product in products:
         logging.info("Latest LTS version: %s", version)
     else:
         logging.info("Non-LTS product")
-        headers = {'User-Agent': USER_AGENT}
-        r = requests.get(f'https://marketplace.atlassian.com/rest/2/products/key/{product}/versions/latest', headers=headers)
-        version = r.json()['name']
+        version = latest_marketplace_version(product)
 
     new_version_tag = f"{version}{tag_suffix}"
     logging.info(f"Latest version: %s, tagname: {version}{tag_suffix}", version)
