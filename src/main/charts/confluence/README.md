@@ -1,6 +1,6 @@
 # confluence
 
-![Version: 2.0.13](https://img.shields.io/badge/Version-2.0.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 10.2.11](https://img.shields.io/badge/AppVersion-10.2.11-informational?style=flat-square)
+![Version: 2.0.13](https://img.shields.io/badge/Version-2.0.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 10.2.13](https://img.shields.io/badge/AppVersion-10.2.13-informational?style=flat-square)
 
 A chart for installing Confluence Data Center on Kubernetes
 
