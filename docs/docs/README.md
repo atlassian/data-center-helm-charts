@@ -50,12 +50,11 @@ The diagram below provides a high level overview of what a typical deployment mi
 
 
 ## Product versions
-The minimum versions that we support for each product are:
+These Helm charts support all product versions that have not reached End of Life (EOL). Please refer to the [Atlassian End of Support Policy](https://confluence.atlassian.com/support/atlassian-end-of-support-policy-201851003.html){.external} to verify that your product version is currently supported.
 
-| Jira DC                                                                                                            | Confluence DC                                                                                         | Bitbucket DC                                                                                                                           | Bamboo DC                                                                                        | Crowd DC                                                                                        |
-|--------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------
-| [8.19](https://confluence.atlassian.com/jirasoftware/jira-software-8-19-x-release-notes-1082526044.html){.external} | [7.13](https://confluence.atlassian.com/doc/confluence-7-13-release-notes-1044114085.html){.external}  | [7.12](https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-7-12-release-notes-1044112744.html){.external} | [8.1](https://confluence.atlassian.com/bamboo/bamboo-8-1-release-notes-1103070461.html){.external}| [4.3](https://confluence.atlassian.com/crowd043/crowd-documentation-1086408091.html){.external}|
-      
+The Helm charts are product-version agnostic and do not assume or require a specific product version. This means you do not need to wait for a new Helm chart release before upgrading your product to a newer version — the two can be updated independently.
+
+New Helm chart releases typically introduce improvements and new features to make the charts more flexible and easier to configure. Occasionally, a new chart release adds support for new product features, but these are almost always opt-in and will not affect existing deployments unless explicitly configured.      
 
 ## Feedback
 

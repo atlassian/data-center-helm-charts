@@ -249,7 +249,7 @@ package_functest_helm_chart() {
   for ((NODE = 0; NODE < ${TARGET_REPLICA_COUNT:-0}; NODE += 1)); do
     backdoor_services+="- ${PRODUCT_RELEASE_NAME}-${NODE}${NEWLINE}"
   done
-  if [[ "$PRODUCT_NAME" == "bitbucket" ]]; then
+  if [[ "$PRODUCT_NAME" == "bitbucket" || "$PRODUCT_NAME" == "jira" ]]; then
     echo "OpenSearch is being deployed, adding a backdoor"
     backdoor_services+="- opensearch-cluster-master-0${NEWLINE}"
   fi

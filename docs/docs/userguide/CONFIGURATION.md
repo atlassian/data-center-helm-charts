@@ -461,6 +461,58 @@ jira:
     * dash `-` becomes underscore `_`
     * Example: `this.new-property` becomes `THIS_NEW_PROPERTY`
 
+## :material-book-cog: Additional config properties
+
+!!!info "Jira only"
+    This feature is currently available for Jira only. It requires a Jira
+    container image version that supports the `ADDITIONAL_JIRA_CONFIG_*`
+    environment variables. See the
+    [Docker image documentation](../containers/JIRA.md#custom-jira-configproperties)
+    for full details on the underlying mechanism.
+
+The Helm chart provides dedicated values for injecting properties into
+`jira-config.properties` without constructing environment variable names
+manually:
+
+```yaml
+jira:
+  additionalConfigProperties:
+    - "jira.websudo.is.disabled=true"
+    - "jira.lf.top.bgcolour=#003366"
+```
+
+These are equivalent to setting `ADDITIONAL_JIRA_CONFIG_*` environment
+variables directly. The values can also be set via `--set`:
+
+```bash
+helm install jira atlassian-data-center/jira \
+  --set 'jira.additionalConfigProperties[0]=jira.websudo.is.disabled=true'
+```
+
+### Injecting secrets
+
+For values that reference Kubernetes Secrets (e.g. passwords), use
+`additionalConfigPropertiesExpandEnv`. Placeholders in `{VAR_NAME}` format are
+replaced with the corresponding environment variable value at container
+startup:
+
+```yaml
+jira:
+  additionalEnvironmentVariables:
+    - name: MY_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: my-k8s-secret
+          key: password
+
+  additionalConfigPropertiesExpandEnv:
+    - "some.password={MY_SECRET}"
+```
+
+Alternatively, you can use `jira.additionalEnvironmentVariables` to pass the
+`ADDITIONAL_JIRA_CONFIG_*` environment variables explicitly if you need full
+control over naming.
+
 ## :material-book-cog: Additional libraries & plugins
 
 The products' Docker images contain the default set of bundled libraries and plugins.

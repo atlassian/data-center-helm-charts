@@ -1026,6 +1026,25 @@ jira:
   #
   additionalVolumeMounts: []
 
+  # -- Additional properties to inject into jira-config.properties at container
+  # startup via ADDITIONAL_JIRA_CONFIG_* environment variables.
+  # Each entry is a "key=value" property line. Environment variable names are
+  # sorted for consistent file generation; order has no effect on runtime behavior.
+  #
+  # Requires a Jira container image version that supports ADDITIONAL_JIRA_CONFIG_*.
+  #
+  additionalConfigProperties: []
+  #  - "jira.websudo.is.disabled=true"
+  #  - "jira.lf.top.bgcolour=#003366"
+
+  # -- Additional properties requiring environment variable expansion at
+  # container startup. Values containing {VAR_NAME} placeholders will be
+  # replaced with the corresponding environment variable value.
+  # Useful for injecting secrets without hardcoding them in values.
+  #
+  additionalConfigPropertiesExpandEnv: []
+  #  - "opensearch.password={OPENSEARCH_ADMIN_PASSWORD}"
+
   # -- Defines any additional environment variables to be passed to the Jira
   # container. See https://hub.docker.com/r/atlassian/jira-software for
   # supported variables.
@@ -1466,3 +1485,37 @@ openshift:
   # configuration files as ConfigMaps.
   #
   runWithRestrictedSCC: false
+
+opensearch:
+
+  # -- Deploy OpenSearch Helm chart and Configure Jira to use it as a search platform
+  #
+  enabled: false
+
+  credentials:
+    # -- Let the Helm chart create a secret with an auto generated initial admin password
+    #
+    createSecret: true
+
+    # -- Use an existing secret with the key OPENSEARCH_INITIAL_ADMIN_PASSWORD holding the initial admin password
+    #
+    existingSecretRef:
+      name:
+
+  # -- OpenSearch helm specific values, see: https://github.com/opensearch-project/helm-charts/blob/main/charts/opensearch/values.yaml
+  #
+  singleNode: true
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+  persistence:
+    size: 10Gi
+  extraEnvs:
+    - name: plugins.security.ssl.http.enabled
+      value: "false"
+  envFrom:
+    - secretRef:
+         # -- If using a pre-created secret, make sure to change secret name to match opensearch.credentials.existingSecretRef.name
+         #
+         name: opensearch-initial-password

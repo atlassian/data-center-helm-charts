@@ -17,5 +17,11 @@ database:
   credentials:
     secretName: jira-database-credentials
 
+opensearch:
+  enabled: true
+  extraEnvs:
+    - name: plugins.security.disabled
+      value: "true"
+
 monitoring:
   exposeJmxMetrics: true

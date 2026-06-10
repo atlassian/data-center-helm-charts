@@ -291,6 +291,20 @@ Define additional environment variables here to allow template overrides when us
 {{- end }}
 
 {{/*
+Renders ADDITIONAL_JIRA_CONFIG_* environment variables from additionalConfigProperties values
+*/}}
+{{- define "jira.additionalConfigProperties" -}}
+{{- range $index, $prop := .Values.jira.additionalConfigProperties }}
+- name: {{ printf "ADDITIONAL_JIRA_CONFIG_HELM_%03d" $index }}
+  value: {{ $prop | quote }}
+{{- end }}
+{{- range $index, $prop := .Values.jira.additionalConfigPropertiesExpandEnv }}
+- name: {{ printf "ADDITIONAL_JIRA_CONFIG_HELM_%03d__EXPAND_ENV" $index }}
+  value: {{ $prop | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
 For each additional library declared, generate a volume mount that injects that library into the Jira lib directory
 */}}
 {{- define "jira.additionalLibraries" -}}
@@ -547,4 +561,42 @@ set -e; cp $JAVA_HOME/lib/security/cacerts /var/ssl/cacerts; chmod 664 /var/ssl/
 {{- end }}
 {{- end }}
 
+{{- define "generate_static_password_b64enc" -}}
+{{- if not (index .Release "temp_vars") -}}
+{{-   $_ := set .Release "temp_vars" dict -}}
+{{- end -}}
+{{- $key := printf "%s_%s" .Release.Name "password" -}}
+{{- if not (index .Release.temp_vars $key) -}}
+{{-   $_ := set .Release.temp_vars $key (randAlphaNum 40 | b64enc ) -}}
+{{- end -}}
+{{- index .Release.temp_vars $key -}}
+{{- end -}}
 
+{{- define "opensearch.initial.admin.password" }}
+{{- $defaultSecretName := "opensearch-initial-password" }}
+{{- $secretName := default $defaultSecretName .Values.opensearch.credentials.existingSecretRef.name }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace $secretName) }}
+{{- if $secretData.data }}
+{{- index $secretData.data "OPENSEARCH_INITIAL_ADMIN_PASSWORD" }}
+{{- else }}
+{{ include "generate_static_password_b64enc" . }}
+{{- end }}
+{{- end }}
+
+{{- define "opensearch.env.vars" }}
+{{- if .Values.opensearch.enabled }}
+- name: ADDITIONAL_JIRA_CONFIG_SEARCH_PLATFORM
+  value: "search.platform=opensearch"
+- name: ADDITIONAL_JIRA_CONFIG_SEARCH_URL
+  value: "opensearch.http.url=http://opensearch-cluster-master:9200"
+- name: ADDITIONAL_JIRA_CONFIG_SEARCH_USERNAME
+  value: "opensearch.username=admin"
+- name: OPENSEARCH_ADMIN_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.opensearch.credentials.existingSecretRef.name | default "opensearch-initial-password" }}
+      key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+- name: ADDITIONAL_JIRA_CONFIG_SEARCH_PASSWORD__EXPAND_ENV
+  value: "opensearch.password={OPENSEARCH_ADMIN_PASSWORD}"
+{{- end }}
+{{- end }}

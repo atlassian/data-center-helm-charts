@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: jira/templates/config-jvm.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
 data:
   additional_jvm_args: >-
@@ -36,10 +36,10 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jmx-config
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
 data:
   jmx-config.yaml: |
@@ -62,10 +62,10 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-helm-values
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
 data:
   values.yaml: |
@@ -158,6 +158,8 @@ data:
           securityContext: {}
         secretList: []
         secretName: null
+      additionalConfigProperties: []
+      additionalConfigPropertiesExpandEnv: []
       additionalEnvironmentVariables: []
       additionalJvmArgs: []
       additionalLibraries: []
@@ -299,6 +301,25 @@ data:
         scrapeIntervalSeconds: 30
         scrapeTimeoutSeconds: 20
     nodeSelector: {}
+    opensearch:
+      credentials:
+        createSecret: true
+        existingSecretRef:
+          name: null
+      enabled: false
+      envFrom:
+      - secretRef:
+          name: opensearch-initial-password
+      extraEnvs:
+      - name: plugins.security.ssl.http.enabled
+        value: "false"
+      persistence:
+        size: 10Gi
+      resources:
+        requests:
+          cpu: 1
+          memory: 1Gi
+      singleNode: true
     openshift:
       runWithRestrictedSCC: false
     ordinals:
@@ -375,10 +396,10 @@ kind: Service
 metadata:
   name: unittest-jira-jmx
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -398,10 +419,10 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
 spec:
@@ -422,10 +443,10 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
   annotations:
     argocd.argoproj.io/sync-wave: "10"
@@ -439,12 +460,12 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: a57e7f42b5c87e621285b3b2973ce4bf0e961fb655e9cc133081fa7189302027
+        checksum/config-jvm: 83a2e202b7e63d8c21e942f1015c499fe99e269b9186cb191f5490c96c56eb78
       labels:
-        helm.sh/chart: jira-2.0.12
+        helm.sh/chart: jira-2.0.13
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
-        app.kubernetes.io/version: "11.3.4"
+        app.kubernetes.io/version: "11.3.6"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: unittest-jira
@@ -478,7 +499,7 @@ spec:
               name: shared-home
       containers:
         - name: jira
-          image: "atlassian/jira-software:11.3.4"
+          image: "atlassian/jira-software:11.3.6"
           imagePullPolicy: IfNotPresent
           env:
             - name: ATL_TOMCAT_SCHEME
@@ -576,10 +597,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:
@@ -608,10 +629,10 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.12
+    helm.sh/chart: jira-2.0.13
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
-    app.kubernetes.io/version: "11.3.4"
+    app.kubernetes.io/version: "11.3.6"
     app.kubernetes.io/managed-by: Helm
 spec:
   containers:

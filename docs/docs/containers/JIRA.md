@@ -219,6 +219,55 @@ information, please refer to
 
   Override the default AWS API endpoint with a custom one (optional).
 
+### OpenSearch configuration
+
+Starting with Jira 11.2, you can configure Jira to use OpenSearch as the search platform.
+For the full list of available OpenSearch properties and requirements, see
+[Configuring OpenSearch for Jira](https://confluence.atlassian.com/adminjiraserver/configuring-opensearch-for-jira-1620511851.html).
+
+OpenSearch properties are injected into `jira-config.properties` using
+`ADDITIONAL_JIRA_CONFIG_*` environment variables (see
+[Custom `jira-config.properties`](#custom-jira-configproperties) for details on
+the mechanism).
+
+The minimum required properties are:
+
+* `search.platform`
+
+  The search platform to use. Set to `opensearch` to enable OpenSearch.
+
+* `opensearch.http.url`
+
+  HTTP(S) URL of the OpenSearch cluster, or multiple URLs separated by commas.
+
+* `opensearch.username`
+
+  Username for the OpenSearch cluster.
+
+* `opensearch.password`
+
+  Password for the OpenSearch cluster.
+
+The `__EXPAND_ENV` suffix lets you keep the password in a separate environment
+variable rather than embedding it directly in the property line. In the example
+below `MY_OPENSEARCH_PASSWORD` is passed inline for brevity:
+
+```bash
+docker run \
+  -e MY_OPENSEARCH_PASSWORD=my-secret \
+  -e ADDITIONAL_JIRA_CONFIG_01="search.platform=opensearch" \
+  -e ADDITIONAL_JIRA_CONFIG_02="opensearch.http.url=http://opensearch-host:9200" \
+  -e ADDITIONAL_JIRA_CONFIG_03="opensearch.username=admin" \
+  -e ADDITIONAL_JIRA_CONFIG_04__EXPAND_ENV="opensearch.password={MY_OPENSEARCH_PASSWORD}" \
+  atlassian/jira-software:latest
+```
+
+!!! warning "Sensitive values on the command line"
+    Passing secrets via `-e` exposes them in shell history, process listings,
+    and `docker inspect` output. In production, use `--env-file` with a
+    permission-protected file or an external secrets manager to supply
+    `MY_OPENSEARCH_PASSWORD`.
+
 ### S3 Attachments storage configuration
 Starting with Jira 9.9, you can configure Jira to [store attachment files in Amazon S3](https://confluence.atlassian.com/adminjiraserver/storing-attachments-in-amazon-s3-1282250191.html). For requirements and additional
 information, please refer to [Configuring Amazon S3 Object Storage](https://confluence.atlassian.com/pages/viewpage.action?spaceKey=JSERVERM&title=.Configuring+Amazon+S3+object+storage+vJira_admin_9.9).
@@ -522,6 +571,85 @@ as a non-root user.
 * `ATL_JIRA_SESSION_TIMEOUT`
 
   The default Tomcat session timeout (in minutes) for all newly created sessions which is set in web.xml. Defaults to 30.
+
+### Custom `jira-config.properties`
+
+Additional properties can be injected into `jira-config.properties` using
+environment variables prefixed with `ADDITIONAL_JIRA_CONFIG_`.
+
+Each variable's value must be a complete property line in `key=value` format.
+Environment variable names are sorted for consistent file generation; order has
+no effect on runtime behavior.
+
+```bash
+docker run \
+  -e ADDITIONAL_JIRA_CONFIG_01="jira.websudo.is.disabled=true" \
+  -e ADDITIONAL_JIRA_CONFIG_02="jira.lf.top.bgcolour=#003366" \
+  atlassian/jira-software:latest
+```
+
+#### How properties are written
+
+The properties are written to a clearly marked auto-generated section at the end
+of the file. Any manually added content outside this section is preserved across
+container restarts.
+
+#### Injecting secrets via `__EXPAND_ENV`
+
+For values that reference secrets stored in separate environment variables
+(common in Kubernetes where secrets are mounted as env vars), use the
+`__EXPAND_ENV` suffix. Placeholders in `{VAR_NAME}` format are replaced with
+the corresponding environment variable value at startup:
+
+```bash
+docker run \
+  -e MY_OPENSEARCH_PASSWORD=my-secret \
+  -e ADDITIONAL_JIRA_CONFIG_01="search.platform=opensearch" \
+  -e ADDITIONAL_JIRA_CONFIG_02__EXPAND_ENV="opensearch.password={MY_OPENSEARCH_PASSWORD}" \
+  atlassian/jira-software:latest
+```
+
+This generates the following in `jira-config.properties`:
+
+```properties
+# ---- AUTO GENERATED ADDITIONAL PROPERTIES FROM DOCKER IMAGE ---
+# DO NOT MODIFY this section - it is auto-generated during container startup
+# from ADDITIONAL_JIRA_CONFIG_* environment variables
+search.platform=opensearch
+opensearch.password=my-secret
+# ---- END OF AUTO GENERATED ADDITIONAL PROPERTIES ---
+```
+
+If a referenced environment variable is not set, the placeholder is left
+unchanged and a warning is logged.
+
+#### Limitations and requirements
+
+* **Local home directory only**: `jira-config.properties` is written to
+  `$JIRA_HOME` which must be the node-local home directory (not shared storage).
+  Using `ADDITIONAL_JIRA_CONFIG_*` when `jira-config.properties` is stored on a
+  shared filesystem (e.g. NFS, EFS) may cause unexpected outcomes due to update
+  races across different container instances during rolling deployments.
+
+* **Read-only mounts not supported**: If `jira-config.properties` is mounted as
+  a read-only file (e.g. via a Kubernetes ConfigMap volume mount), the
+  `ADDITIONAL_JIRA_CONFIG_*` variables will have no effect. A warning is logged
+  in this case. Manage the file content entirely through the mount instead — do
+  not combine both approaches.
+
+* **Auto-generated section**: The generated properties are placed inside clearly
+  marked comment boundaries at the end of the file. Manual edits outside these
+  markers are preserved. Do not edit content within the markers — it will be
+  overwritten on the next container startup.
+
+| Aspect                  | Detail                                                      |
+|-------------------------|-------------------------------------------------------------|
+| Env var prefix          | `ADDITIONAL_JIRA_CONFIG_`                                   |
+| Secret expansion suffix | `__EXPAND_ENV` (double underscore)                          |
+| Target file             | `$JIRA_HOME/jira-config.properties`                         |
+| Ordering                | Sorted for reproducibility; order has no effect on behavior |
+| Existing content        | Preserved (only auto-generated section is replaced)         |
+| No matching env vars    | File is not created; stale section is removed if present    |
 
 ### Advanced Configuration
 

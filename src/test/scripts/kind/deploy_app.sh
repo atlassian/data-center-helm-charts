@@ -505,6 +505,87 @@ verify_openshift_analytics() {
   fi
 }
 
+verify_opensearch() {
+  # Only Jira and Bitbucket use OpenSearch in KinD tests
+  if [ "${DC_APP}" != "jira" ] && [ "${DC_APP}" != "bitbucket" ]; then
+    echo "[INFO]: OpenSearch verification is not applicable for ${DC_APP}, skipping"
+    return 0
+  fi
+
+  # OpenSearch is disabled on MicroShift/OpenShift
+  if [ -n "${OPENSHIFT_VALUES:-}" ]; then
+    echo "[INFO]: OpenSearch is disabled on OpenShift, skipping verification"
+    return 0
+  fi
+
+  echo "[INFO]: Verifying OpenSearch is being used by ${DC_APP}"
+
+  OS_POD="opensearch-cluster-master-0"
+  RETRIES=12
+  SLEEP_INTERVAL=5
+
+  # Retrieve OpenSearch admin password from the Kubernetes secret
+  OS_PASSWORD=$(kubectl get secret opensearch-initial-password -n atlassian -o jsonpath='{.data.OPENSEARCH_INITIAL_ADMIN_PASSWORD}' | base64 -d)
+  if [ -z "${OS_PASSWORD}" ]; then
+    echo "[ERROR]: Failed to retrieve OpenSearch admin password from secret 'opensearch-initial-password'"
+    exit 1
+  fi
+  OS_CURL_AUTH="admin:${OS_PASSWORD}"
+
+  # First, wait for the OpenSearch pod to be ready
+  echo "[INFO]: Waiting for OpenSearch pod to be ready"
+  kubectl wait --for=condition=ready pod/${OS_POD} -n atlassian --timeout=300s || {
+    echo "[ERROR]: OpenSearch pod ${OS_POD} did not become ready"
+    kubectl describe pod/${OS_POD} -n atlassian || true
+    exit 1
+  }
+
+  for i in $(seq 1 ${RETRIES}); do
+    INDICES=$(kubectl exec -n atlassian ${OS_POD} -- \
+      curl -s -u "${OS_CURL_AUTH}" http://localhost:9200/_cat/indices?format=json 2>/dev/null) || true
+
+    if [ -z "${INDICES}" ] || [ "${INDICES}" = "null" ]; then
+      echo "[INFO]: OpenSearch returned empty response, retrying... (${i}/${RETRIES})"
+      sleep ${SLEEP_INTERVAL}
+      continue
+    fi
+
+    if [ "${DC_APP}" = "bitbucket" ]; then
+      # Bitbucket creates a 'bitbucket-index-version' index with exactly 1 document
+      DOC_COUNT=$(echo "${INDICES}" | jq -r '[.[] | select(.index == "bitbucket-index-version")] | .[0] | .["docs.count"] // empty' 2>/dev/null) || true
+      if [ -n "${DOC_COUNT}" ] && [ "${DOC_COUNT}" = "1" ]; then
+        echo "[INFO]: OpenSearch verification passed for Bitbucket: bitbucket-index-version has docs.count=${DOC_COUNT}"
+        return 0
+      fi
+      echo "[INFO]: Waiting for Bitbucket to create index in OpenSearch... (${i}/${RETRIES})"
+
+    elif [ "${DC_APP}" = "jira" ]; then
+      # Jira creates a 'jira-issues-*' index on startup; on a fresh instance it will have 0 documents
+      INDEX_EXISTS=$(echo "${INDICES}" | jq -r '[.[] | select(.index | test("^jira-issues-"))] | length' 2>/dev/null) || true
+      if [ -n "${INDEX_EXISTS}" ] && [ "${INDEX_EXISTS}" != "0" ]; then
+        DOC_COUNT=$(echo "${INDICES}" | jq -r '[.[] | select(.index | test("^jira-issues-"))] | .[0] | .["docs.count"] // "0"' 2>/dev/null) || true
+        echo "[INFO]: OpenSearch verification passed for Jira: jira-issues index exists (docs.count=${DOC_COUNT})"
+        return 0
+      fi
+      echo "[INFO]: Waiting for Jira to create index in OpenSearch... (${i}/${RETRIES})"
+    fi
+
+    sleep ${SLEEP_INTERVAL}
+  done
+
+  echo "[ERROR]: OpenSearch verification failed for ${DC_APP} after $((RETRIES * SLEEP_INTERVAL)) seconds"
+  echo "[DEBUG]: OpenSearch indices:"
+  kubectl exec -n atlassian ${OS_POD} -- curl -s -u "${OS_CURL_AUTH}" http://localhost:9200/_cat/indices?format=json 2>/dev/null | jq . || true
+  echo "[DEBUG]: OpenSearch cluster health:"
+  kubectl exec -n atlassian ${OS_POD} -- curl -s -u "${OS_CURL_AUTH}" http://localhost:9200/_cat/health 2>/dev/null || true
+  echo "[DEBUG]: ${DC_APP} pod logs (last 200 lines):"
+  for pod in $(kubectl get pods -n atlassian -l app.kubernetes.io/name=${DC_APP} --no-headers -o custom-columns=":metadata.name" 2>/dev/null); do
+    echo "--- Logs from ${pod} ---"
+    kubectl logs "${pod}" -n atlassian --tail=200 2>/dev/null || true
+  done
+  exit 1
+}
+
 verify_gateway() {
   echo "[INFO]: Verifying HTTPRoute resource for ${DC_APP}"
   if ! kubectl get httproute/${DC_APP} -n atlassian >/dev/null 2>&1; then

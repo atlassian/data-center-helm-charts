@@ -2,8 +2,8 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '2.0.12'
-appVersion: 11.3.4
+version: '2.0.13'
+appVersion: 11.3.6
 kubeVersion: ">=1.21.x-0"
 keywords:
 - Jira
@@ -22,9 +22,14 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update Helm chart version"
+    - "DEVPROD-3811 Added support for OpenSearch for Jira. (#1099)"
+    - "Update appVersions for DC apps (#1113)"
 
 dependencies:
 - name: common
   version: 1.2.7
   repository: https://atlassian.github.io/data-center-helm-charts
+- name: opensearch
+  version: 3.5.0
+  repository: https://opensearch-project.github.io/helm-charts
+  condition: opensearch.enabled
