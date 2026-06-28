@@ -10,6 +10,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.confluence.service.type }}
+  {{- if and .Values.confluence.service.externalTrafficPolicy (or (eq .Values.confluence.service.type "NodePort") (eq .Values.confluence.service.type "LoadBalancer")) }}
+  externalTrafficPolicy: {{ .Values.confluence.service.externalTrafficPolicy }}
+  {{- end }}
   sessionAffinity: {{ .Values.confluence.service.sessionAffinity }}
   {{- if .Values.confluence.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
   sessionAffinityConfig:

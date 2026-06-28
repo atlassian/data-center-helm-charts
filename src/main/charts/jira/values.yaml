@@ -606,6 +606,11 @@ jira:
     #
     type: ClusterIP
 
+    # -- The external traffic policy for the service. Set to Local to preserve
+    # client source IPs. Only applies when service.type is NodePort or LoadBalancer.
+    #
+    externalTrafficPolicy:
+
     # --  Only applicable if service.type is NodePort. NodePort for Jira service
     #
     nodePort:

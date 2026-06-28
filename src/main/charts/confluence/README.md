@@ -91,6 +91,7 @@ Kubernetes: `>=1.21.x-0`
 | confluence.seraphConfig.generateByHelm | bool | `false` | Mount seraph-config.xml as a ConfigMap. Override configuration elements if necessary  |
 | confluence.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | confluence.service.contextPath | string | `nil` | The Tomcat context path that Confluence will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
+| confluence.service.externalTrafficPolicy | string | `nil` | The external traffic policy for the service. Set to Local to preserve client source IPs. Only applies when service.type is NodePort or LoadBalancer.  |
 | confluence.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | confluence.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Confluence service  |
 | confluence.service.port | int | `80` | The port on which the Confluence K8s Service will listen  |

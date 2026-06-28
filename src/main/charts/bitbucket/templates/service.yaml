@@ -11,6 +11,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.bitbucket.service.type }}
+  {{- if and .Values.bitbucket.service.externalTrafficPolicy (or (eq .Values.bitbucket.service.type "NodePort") (eq .Values.bitbucket.service.type "LoadBalancer")) }}
+  externalTrafficPolicy: {{ .Values.bitbucket.service.externalTrafficPolicy }}
+  {{- end }}
   sessionAffinity: {{ .Values.bitbucket.service.sessionAffinity }}
   {{- if .Values.bitbucket.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
   sessionAffinityConfig:
