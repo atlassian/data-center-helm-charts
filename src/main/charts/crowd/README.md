@@ -73,6 +73,7 @@ Kubernetes: `>=1.21.x-0`
 | crowd.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | crowd.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | crowd.service.contextPath | string | `"/crowd"` | The Tomcat context path that Crowd will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
+| crowd.service.externalTrafficPolicy | string | `nil` | The external traffic policy for the service. Set to Local to preserve client source IPs. Only applies when service.type is NodePort or LoadBalancer.  |
 | crowd.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | crowd.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Crowd service  |
 | crowd.service.port | int | `80` | The port on which the Crowd K8s Service will listen  |

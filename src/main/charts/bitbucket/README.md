@@ -129,6 +129,7 @@ Kubernetes: `>=1.21.x-0`
 | bitbucket.securityContextEnabled | bool | `true` | Whether to apply security context to pod.  |
 | bitbucket.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | bitbucket.service.contextPath | string | `nil` | The context path that Bitbucket will use.  |
+| bitbucket.service.externalTrafficPolicy | string | `nil` | The external traffic policy for the service. Set to Local to preserve client source IPs. Only applies when service.type is NodePort or LoadBalancer.  |
 | bitbucket.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | bitbucket.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Bitbucket service  |
 | bitbucket.service.port | int | `80` | The port on which the Bitbucket K8s HTTP Service will listen  |

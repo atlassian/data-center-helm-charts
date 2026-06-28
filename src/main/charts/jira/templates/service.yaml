@@ -10,6 +10,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.jira.service.type }}
+  {{- if and .Values.jira.service.externalTrafficPolicy (or (eq .Values.jira.service.type "NodePort") (eq .Values.jira.service.type "LoadBalancer")) }}
+  externalTrafficPolicy: {{ .Values.jira.service.externalTrafficPolicy }}
+  {{- end }}
   sessionAffinity: {{ .Values.jira.service.sessionAffinity }}
   {{- if .Values.jira.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
   sessionAffinityConfig:

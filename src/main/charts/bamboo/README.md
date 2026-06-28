@@ -90,6 +90,7 @@ Kubernetes: `>=1.21.x-0`
 | bamboo.seraphConfig.generateByHelm | bool | `false` | Mount seraph-config.xml as a ConfigMap. Override configuration elements if necessary  |
 | bamboo.service.annotations | object | `{}` | Additional annotations to apply to the Service  |
 | bamboo.service.contextPath | string | `nil` | The Tomcat context path that Bamboo will use. The ATL_TOMCAT_CONTEXTPATH will be set automatically.  |
+| bamboo.service.externalTrafficPolicy | string | `nil` | The external traffic policy for the service. Set to Local to preserve client source IPs. Only applies when service.type is NodePort or LoadBalancer.  |
 | bamboo.service.loadBalancerIP | string | `nil` | Use specific loadBalancerIP. Only applies to service type LoadBalancer.  |
 | bamboo.service.nodePort | string | `nil` | Only applicable if service.type is NodePort. NodePort for Bamboo service  |
 | bamboo.service.port | int | `80` | The port on which the Bamboo K8s Service will listen for http traffic  |

@@ -10,6 +10,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.bamboo.service.type }}
+  {{- if and .Values.bamboo.service.externalTrafficPolicy (or (eq .Values.bamboo.service.type "NodePort") (eq .Values.bamboo.service.type "LoadBalancer")) }}
+  externalTrafficPolicy: {{ .Values.bamboo.service.externalTrafficPolicy }}
+  {{- end }}
   sessionAffinity: {{ .Values.bamboo.service.sessionAffinity }}
   {{- if .Values.bamboo.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
   sessionAffinityConfig:

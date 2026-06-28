@@ -118,6 +118,19 @@ class ServiceTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_external_traffic_policy(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.type", "NodePort",
+                product + ".service.externalTrafficPolicy", "Local"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getSpec().path("externalTrafficPolicy")).hasTextEqualTo("Local");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void synchrony_service_default_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
