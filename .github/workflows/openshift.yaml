@@ -41,7 +41,7 @@ jobs:
       - name: Fetch crc binary
         run: |
           CRC_VERSION="2.49.0"
-          wget -q https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/${CRC_VERSION}/crc-linux-amd64.tar.xz
+          wget -q https://developers.redhat.com/content-gateway/file/pub/cgw/crc/${CRC_VERSION}/crc-linux-amd64.tar.xz
           tar -xvf crc-linux-amd64.tar.xz
           sudo cp crc-linux-${CRC_VERSION}-amd64/crc /usr/bin/crc
           sudo chmod a+x /usr/bin/crc
