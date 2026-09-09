@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "nfs-server.fullname" . }}
+  labels:
+    {{- include "nfs-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "nfs-server.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "nfs-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nfs-server.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "nfs-server.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MOUNTD_PORT
+              value: "{{ .Values.service.mountdPort }}"
+            - name: NFS_PORT
+              value: "{{ .Values.service.nfsPort }}"
+            - name: STATD_PORT
+              value: "{{ .Values.service.statdPort }}"
+            - name: STATD_PORT_OUT
+              value: "{{ .Values.service.statdOutgoingPort }}"
+            - name: LOCKD_PORT
+              value: "{{ .Values.service.lockdPort }}"
+            - name: EXPORT_PATH
+              value: "{{ .Values.exportPath }}"
+            {{- with .Values.podEnvironmentVariables }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+          - name: nfs
+            containerPort: {{ .Values.service.nfsPort }}
+            protocol: TCP
+          - name: nfs-udp
+            containerPort: {{ .Values.service.nfsPort }}
+            protocol: UDP
+          - name: mountd
+            containerPort: {{ .Values.service.mountdPort }}
+            protocol: TCP
+          - name: mountd-udp
+            containerPort: {{ .Values.service.mountdPort }}
+            protocol: UDP
+          - name: rpcbind
+            containerPort: 111
+            protocol: TCP
+          - name: rpcbind-udp
+            containerPort: 111
+            protocol: UDP
+          - name: statd
+            containerPort: {{ .Values.service.statdPort }}
+            protocol: TCP
+          - name: statd-udp
+            containerPort: {{ .Values.service.statdPort }}
+            protocol: UDP
+          - name: statd-out
+            containerPort: {{ .Values.service.statdOutgoingPort }}
+            protocol: TCP
+          - name: statd-out-udp
+            containerPort: {{ .Values.service.statdOutgoingPort }}
+            protocol: UDP
+          - name: lockd
+            containerPort: {{ .Values.service.lockdPort }}
+            protocol: TCP
+          - name: lockd-udp
+            containerPort: {{ .Values.service.lockdPort }}
+            protocol: UDP
+          livenessProbe:
+            exec:
+              command:
+                - /usr/local/bin/docker-entrypoint.sh
+                - healthcheck
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          startupProbe:
+            exec:
+              command:
+                - /usr/local/bin/docker-entrypoint.sh
+                - healthcheck
+            failureThreshold: 30
+            periodSeconds: 1
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /srv/nfs
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- with .Values.persistence.annotations }}
+        annotations:
+          {{- toYaml . | indent 10 }}
+        {{- end }}
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ include "nfs-server.storageClassName" . }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | default "1Gi" }}
