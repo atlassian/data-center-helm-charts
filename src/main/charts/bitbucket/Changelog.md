@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.17
+
+**Release date:** 2026-10-5
+
+![AppVersion: 10.2.8](https://img.shields.io/static/v1?label=AppVersion&message=10.2.8&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Update appVersions for DC products (#1154)
+
 ## 2.0.15
 
 **Release date:** 2026-9-10
