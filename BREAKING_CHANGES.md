@@ -36,4 +36,4 @@ OpenSearch credentials are now passed as environment variables instead of JVM ar
 In **2.0.0** `-Dopensearch.password` has been removed from config-jvm ConfigMap. OpenSearch credentials and other relevant settings are now passed as environment variables and written to `confluence.cfg.xml` in the image entrypoint (See: [Add Opensearch properties](https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server/pull-requests/192/overview)).
 
 When upgrading Confluence Helm chart to version 2.0.0, you **must** set `confluence.forceConfigUpdate` to true in Helm values file, which will force the image entrypoint to recreate the `confluence.cfg.xml` file with the new Opensearch properties.
-This is a one-time operation. After the upgrade, you can set `confluence.forceConfigUpdate` to false.
+This is a one-time operation. After the upgrade you can set `confluence.forceConfigUpdate` to false.
