@@ -1,0 +1,27 @@
+{{ .Chart.Name }} installed.
+
+Do not use in production, this is for testing purposes only.
+
+
+Uninstalling this release will not clean up the PhysicalVolume that the StatefulSet creates, you
+can do so by executing:
+
+    kubectl delete pvc -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Run `helm test` to verify the server works correctly and to run a performance test.
+
+The performance test can take a significant amount of time. Specify a custom `--timeout` value
+for the `helm test` command to make sure it can finish running.
+
+    helm test {{ .Release.Name }} --timeout=30m
+
+Check the test results with:
+
+    kubectl logs {{ include "nfs-server.fullname" . }}-perf-nfs -f
+
+See this page for more information:
+https://confluence.atlassian.com/bitbucketserverkb/test-nfs-disk-access-speed-for-bitbucket-data-center-and-git-operations-1044804304.html
+
+To clean up after the test, run:
+
+    kubectl delete pv,pvc,all -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=test
