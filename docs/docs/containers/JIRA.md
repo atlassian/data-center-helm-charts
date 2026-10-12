@@ -754,6 +754,64 @@ All Jira versions from 7.13+ (Software/Core) / 3.16+ (Service Management) are av
     All Jira Service Management 4.x versions are also available as `atlassian/jira-servicedesk`. 
     This namespace has been deprecated and versions from 5+ onwards will only be available as `atlassian/jira-servicemanagement`.
 
+### Image revision and release tags
+
+Starting from Jira 11.3.12, every published image also receives an incremental release tag of the form
+`<version>-r<N>`, and carries the same number in the `org.opencontainers.image.revision` label.
+The same Jira version may be rebuilt and republished (for example to pick up base image or JDK updates).
+The first build of a version is published as `r1`, and each subsequent rebuild of that version
+increments the number (`r2`, `r3`, ...). Release numbers are counted independently per full tag,
+so each flavour has its own sequence, for example:
+
+* `atlassian/jira-core:11.3.12-r1`
+* `atlassian/jira-core:11.3.12-jdk21-r1`
+* `atlassian/jira-core:11.3.12-ubi9-r1`
+* `atlassian/jira-core:11.3.12-ubi9-jdk21-r1`
+
+Floating tags such as `latest`, `11`, `11.3` and `11.3.12` always point to the newest revision of the
+version and never carry a release number themselves. Once a version is rebuilt, the previous build is no
+longer reachable through those tags. The release tags are the way to reach previous revisions: every
+`-r<N>` tag remains published, so an earlier build can still be pulled explicitly after a newer revision
+has been released. For example, if `11.3.12` has been rebuilt as `r2`, the original build is still
+available as:
+
+```shell
+docker pull atlassian/jira-core:11.3.12-r1
+```
+
+Use the release tag whenever you need to pin a deployment to an exact build, roll back to a previous
+revision of the same version, or reproduce an environment that was running an older build.
+
+To find out which revision a given image is, read the label from the image metadata with `docker inspect`:
+
+```shell
+docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' atlassian/jira-core:11.3.12
+```
+
+Example output of `docker inspect atlassian/jira-core:11.3.12` (truncated):
+
+```json
+"Config": {
+    "Env": [
+        "...",
+        "JIRA_VERSION=11.3.12",
+        "ARTEFACT_NAME=atlassian-jira-core"
+    ],
+    "Labels": {
+        "maintainer": "dc-deployments@atlassian.com",
+        "org.opencontainers.image.revision": "1",
+        "org.opencontainers.image.version": "24.04",
+        "securitytxt": "https://www.atlassian.com/.well-known/security.txt"
+    }
+}
+```
+
+Together with `JIRA_VERSION`, the revision label allows you to tell apart two images that share the same
+floating tag but were built at different times, which is useful when auditing deployments or tracking down
+which image build is running in a given environment. The value of the label always matches the `-r<N>`
+suffix of the corresponding release tag, so an image reporting revision `1` can be referenced explicitly
+as `atlassian/jira-core:11.3.12-r1`.
+
 ## Supported JDK versions and base images
 
 Atlassian Docker images are generated from either
