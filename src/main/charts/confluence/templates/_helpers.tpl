@@ -580,6 +580,8 @@ volumeClaimTemplates:
   kind: PersistentVolumeClaim
   metadata:
     name: local-home
+    labels:
+      {{- include "common.labels.commonLabels" . | nindent 6 }}
   spec:
     accessModes: [ "ReadWriteOnce" ]
     {{- if .Values.volumes.localHome.persistentVolumeClaim.storageClassName }}
@@ -593,6 +595,8 @@ volumeClaimTemplates:
 {{- range .Values.confluence.additionalVolumeClaimTemplates }}
 - metadata:
     name: {{ .name }}
+    labels:
+      {{- include "common.labels.commonLabels" $ | nindent 6 }}
   spec:
     accessModes: [ "ReadWriteOnce" ]
     {{- if .storageClassName }}
