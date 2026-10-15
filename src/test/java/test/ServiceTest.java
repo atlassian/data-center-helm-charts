@@ -118,6 +118,44 @@ class ServiceTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_external_traffic_policy_default_absent(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.type", "NodePort"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getExternalTrafficPolicy()).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_external_traffic_policy_applied_for_eligible_type(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.type", "LoadBalancer",
+                product + ".service.externalTrafficPolicy", "Local"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getExternalTrafficPolicy()).hasTextEqualTo("Local");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void service_external_traffic_policy_ignored_for_cluster_ip(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                product + ".service.type", "ClusterIP",
+                product + ".service.externalTrafficPolicy", "Local"
+        ));
+
+        final var service = resources.get(Kind.Service, Service.class, product.getHelmReleaseName());
+
+        assertThat(service.getExternalTrafficPolicy()).isEmpty();
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void synchrony_service_default_annotations(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
