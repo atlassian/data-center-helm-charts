@@ -20,7 +20,7 @@ on:
         description: 'Use Gateway API (Envoy Gateway) instead of NGINX Ingress'
         required: false
         type: boolean
-        default: false
+        default: true
       terraform_branch:
         description: 'Terraform repo branch to use (leave empty for latest LTS tag)'
         required: false

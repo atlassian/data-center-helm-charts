@@ -631,6 +631,13 @@ jira:
     #
     loadBalancerIP:
 
+    # -- The external traffic policy for the Service. Set to "Local" to preserve the
+    # client source IP (e.g. for audit logging or when fronted by an AWS ALB/NLB with
+    # instance/NodePort targets). Only applied when service.type is "NodePort" or
+    # "LoadBalancer"; ignored for ClusterIP, where Kubernetes rejects this field.
+    #
+    externalTrafficPolicy:
+
     # -- The Tomcat context path that Jira will use. The ATL_TOMCAT_CONTEXTPATH
     # will be set automatically.
     #

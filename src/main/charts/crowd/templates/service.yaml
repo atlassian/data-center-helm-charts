@@ -10,6 +10,9 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.crowd.service.type }}
+  {{- if and .Values.crowd.service.externalTrafficPolicy (or (eq .Values.crowd.service.type "NodePort") (eq .Values.crowd.service.type "LoadBalancer")) }}
+  externalTrafficPolicy: {{ .Values.crowd.service.externalTrafficPolicy }}
+  {{- end }}
   sessionAffinity: {{ .Values.crowd.service.sessionAffinity }}
   {{- if .Values.crowd.service.sessionAffinityConfig.clientIP.timeoutSeconds }}
   sessionAffinityConfig:

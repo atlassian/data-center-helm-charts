@@ -222,6 +222,7 @@ data:
       service:
         annotations: {}
         contextPath: null
+        externalTrafficPolicy: null
         loadBalancerIP: null
         nodePort: null
         port: 80
