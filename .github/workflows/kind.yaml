@@ -34,6 +34,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       - name: Pin Kubectl version
         uses: azure/setup-kubectl@v4

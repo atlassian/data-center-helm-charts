@@ -20,7 +20,7 @@ on:
         description: 'Use Gateway API (Envoy Gateway) instead of NGINX Ingress'
         required: false
         type: boolean
-        default: false
+        default: true
       terraform_branch:
         description: 'Terraform repo branch to use (leave empty for latest LTS tag)'
         required: false
@@ -59,6 +59,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       - name: Install the latest Terraform
         run: |
