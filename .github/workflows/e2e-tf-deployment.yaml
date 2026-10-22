@@ -55,10 +55,11 @@ jobs:
 
     steps:
       - name: Checkout Helm charts
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       - name: Install the latest Terraform
         run: |
@@ -112,7 +113,7 @@ jobs:
           go-version: '1.18'
 
       - name: Setup Python environment
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.9.14'
       - run: |
@@ -182,7 +183,7 @@ jobs:
 
       - name: Upload test log files
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: e2e-test-artifacts
           path: tf/test/e2etest/artifacts/
