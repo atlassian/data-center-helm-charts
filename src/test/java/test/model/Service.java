@@ -25,4 +25,8 @@ public class Service extends KubeResource {
     public JsonNode getLoadBalancerIP() {
         return getSpec().path("loadBalancerIP");
     }
+
+    public JsonNode getExternalTrafficPolicy() {
+        return getSpec().path("externalTrafficPolicy");
+    }
 }
