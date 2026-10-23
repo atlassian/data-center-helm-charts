@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.18
+
+**Release date:** 2026-10-23
+
+![AppVersion: 10.2.19](https://img.shields.io/static/v1?label=AppVersion&message=10.2.19&color=success&logo=)
+![Kubernetes: >=1.21.x-0](https://img.shields.io/static/v1?label=Kubernetes&message=>=1.21.x-0&color=informational&logo=kubernetes)
+![Helm: v3](https://img.shields.io/static/v1?label=Helm&message=v3&color=informational&logo=helm)
+
+* Feat: Add externalTrafficPolicy for DC products (#1160)
+* fix(jira,confluence): apply common labels to local-home and additional PVC templates (#1148)
+
 ## 2.0.17
 
 **Release date:** 2026-10-5

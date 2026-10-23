@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '2.0.17'
+version: '2.0.18'
 appVersion: 10.2.19
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Update appVersions for DC apps (#1152)"
+    - "Feat: Add externalTrafficPolicy for DC products (#1160)"
+    - "fix(jira,confluence): apply common labels to local-home and additional PVC templates (#1148)"
 
 dependencies:
 - name: common
