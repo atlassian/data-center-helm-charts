@@ -108,9 +108,10 @@ jobs:
           fi
 
       - name: Setup test environment
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v6
         with:
-          go-version: '1.18'
+          go-version-file: 'tf/go.mod'
+          cache-dependency-path: 'tf/go.sum'
 
       - name: Setup Python environment
         uses: actions/setup-python@v6
@@ -121,12 +122,11 @@ jobs:
           pip install boto3
 
       - name: Install test dependencies
-        id: setup-dependencies
         working-directory: tf/test/
         run: |
           go version
-          go get -v -t -d ./... && go mod tidy
-          echo ::set-output name=exit_code::$?
+          go get -v -t ./...
+          go mod tidy
 
       - name: Add private SSH key for Bitbucket tests
         uses: shimataro/ssh-key-action@v2
