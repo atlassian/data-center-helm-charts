@@ -2,7 +2,7 @@ apiVersion: v2
 name: bitbucket
 description: A chart for installing Bitbucket Data Center on Kubernetes
 type: application
-version: '2.0.19'
+version: '2.0.20'
 appVersion: 10.2.8
 kubeVersion: ">=1.21.x-0"
 keywords:

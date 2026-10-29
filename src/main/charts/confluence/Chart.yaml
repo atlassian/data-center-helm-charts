@@ -2,7 +2,7 @@ apiVersion: v2
 name: confluence
 description: A chart for installing Confluence Data Center on Kubernetes
 type: application
-version: '2.0.19'
+version: '2.0.20'
 appVersion: 10.2.19
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -20,7 +20,7 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - "Revert "fix(jira,confluence): apply common labels to local-home and additiona…" (#1164)"
+    - "Update Helm chart version"
 
 dependencies:
 - name: common

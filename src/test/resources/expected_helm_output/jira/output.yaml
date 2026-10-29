@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -17,7 +17,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jvm-config
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -36,7 +36,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-jmx-config
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -62,7 +62,7 @@ kind: ConfigMap
 metadata:
   name: unittest-jira-helm-values
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -397,7 +397,7 @@ kind: Service
 metadata:
   name: unittest-jira-jmx
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -420,7 +420,7 @@ kind: Service
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -444,7 +444,7 @@ kind: StatefulSet
 metadata:
   name: unittest-jira
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -461,9 +461,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config-jvm: 110d3a071b3d9ae692a53837a44f3bb36a558c173645a6f818910dfc30d6ef40
+        checksum/config-jvm: 0206c5c18aa18f1990d9c0f8781900dfdbb581ba723da9234d937a1837037201
       labels:
-        helm.sh/chart: jira-2.0.19
+        helm.sh/chart: jira-2.0.20
         app.kubernetes.io/name: jira
         app.kubernetes.io/instance: unittest-jira
         app.kubernetes.io/version: "11.3.12"
@@ -598,7 +598,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
@@ -630,7 +630,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: jira-2.0.19
+    helm.sh/chart: jira-2.0.20
     app.kubernetes.io/name: jira
     app.kubernetes.io/instance: unittest-jira
     app.kubernetes.io/version: "11.3.12"
