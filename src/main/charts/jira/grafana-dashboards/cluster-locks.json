@@ -779,14 +779,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "com_atlassian_jira_issue_assigned_count_Value",
+        "definition": "query_result(com_atlassian_jira_issue_assigned_count_Value)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "com_atlassian_jira_issue_assigned_count_Value",
+          "query": "query_result(com_atlassian_jira_issue_assigned_count_Value)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -800,14 +800,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "com_atlassian_jira_issue_assigned_count_Value",
+        "definition": "query_result(com_atlassian_jira_issue_assigned_count_Value)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "service",
         "options": [],
         "query": {
-          "query": "com_atlassian_jira_issue_assigned_count_Value",
+          "query": "query_result(com_atlassian_jira_issue_assigned_count_Value)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

@@ -1721,14 +1721,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "java_lang_Runtime_Uptime{product=\"crowd\"}",
+        "definition": "query_result(java_lang_Runtime_Uptime{product=\"crowd\"})",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "java_lang_Runtime_Uptime{product=\"crowd\"}",
+          "query": "query_result(java_lang_Runtime_Uptime{product=\"crowd\"})",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1742,14 +1742,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "java_lang_Runtime_Uptime{product=\"crowd\"}",
+        "definition": "query_result(java_lang_Runtime_Uptime{product=\"crowd\"})",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "service",
         "options": [],
         "query": {
-          "query": "java_lang_Runtime_Uptime{product=\"crowd\"}",
+          "query": "query_result(java_lang_Runtime_Uptime{product=\"crowd\"})",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

@@ -633,14 +633,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "com_atlassian_bitbucket_Repositories_Count",
+        "definition": "query_result(com_atlassian_bitbucket_Repositories_Count)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "com_atlassian_bitbucket_Repositories_Count",
+          "query": "query_result(com_atlassian_bitbucket_Repositories_Count)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -654,14 +654,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "com_atlassian_bitbucket_Repositories_Count",
+        "definition": "query_result(com_atlassian_bitbucket_Repositories_Count)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "service",
         "options": [],
         "query": {
-          "query": "com_atlassian_bitbucket_Repositories_Count",
+          "query": "query_result(com_atlassian_bitbucket_Repositories_Count)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
