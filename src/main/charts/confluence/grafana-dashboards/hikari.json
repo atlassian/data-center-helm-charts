@@ -443,14 +443,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "Confluence_MailTaskQueue_ErrorQueueSize",
+        "definition": "query_result(Confluence_MailTaskQueue_ErrorQueueSize)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "Confluence_MailTaskQueue_ErrorQueueSize",
+          "query": "query_result(Confluence_MailTaskQueue_ErrorQueueSize)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -469,14 +469,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "Confluence_MailTaskQueue_ErrorQueueSize",
+        "definition": "query_result(Confluence_MailTaskQueue_ErrorQueueSize)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "service",
         "options": [],
         "query": {
-          "query": "Confluence_MailTaskQueue_ErrorQueueSize",
+          "query": "query_result(Confluence_MailTaskQueue_ErrorQueueSize)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

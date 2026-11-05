@@ -1705,14 +1705,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"}",
+        "definition": "query_result(java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"})",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"}",
+          "query": "query_result(java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"})",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1726,14 +1726,14 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"}",
+        "definition": "query_result(java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"})",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "service",
         "options": [],
         "query": {
-          "query": "java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"}",
+          "query": "query_result(java_lang_Memory_HeapMemoryUsage_committed{product=\"bamboo\"})",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
