@@ -199,6 +199,18 @@ volumes:
         requests:
           storage: 1Gi
 
+      # -- (Optional) If 'true', common labels will be applied to the local-home volume claim template.
+      # StatefulSet volumeClaimTemplates are immutable in Kubernetes; changing this for an existing StatefulSet
+      # will cause Helm upgrades to fail. Only enable for new installations or when recreating the StatefulSet.
+      #
+      addCommonLabels: false
+
+      # -- (Optional) Custom labels that should be applied to the local-home volume claim template.
+      # StatefulSet volumeClaimTemplates are immutable in Kubernetes; changing this for an existing StatefulSet
+      # will cause Helm upgrades to fail.
+      #
+      labels: {}
+
     # This field controls if and how PVCs are deleted during the lifecycle of a StatefulSet.
     # Only configure the below two attributes when your Kubernetes version is 1.27+, and
     # feature gate StatefulSetAutoDeletePVC is enabled.
@@ -1120,6 +1132,8 @@ bamboo:
   #    resources:
   #      requests:
   #        storage: 1Gi
+  #    addCommonLabels: false
+  #    labels: {}
 
   # -- Defines topology spread constraints for Bamboo pods. See details:
   # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/

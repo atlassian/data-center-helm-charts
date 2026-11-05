@@ -241,6 +241,18 @@ volumes:
         requests:
           storage: 1Gi
 
+      # -- (Optional) If 'true', common labels will be applied to the local-home volume claim template.
+      # StatefulSet volumeClaimTemplates are immutable in Kubernetes; changing this for an existing StatefulSet
+      # will cause Helm upgrades to fail. Only enable for new installations or when recreating the StatefulSet.
+      #
+      addCommonLabels: false
+
+      # -- (Optional) Custom labels that should be applied to the local-home volume claim template.
+      # StatefulSet volumeClaimTemplates are immutable in Kubernetes; changing this for an existing StatefulSet
+      # will cause Helm upgrades to fail.
+      #
+      labels: {}
+
     # This field controls if and how PVCs are deleted during the lifecycle of a StatefulSet.
     # Only configure the below two attributes when your Kubernetes version is 1.27+, and
     # feature gate StatefulSetAutoDeletePVC is enabled.
@@ -1204,6 +1216,8 @@ bitbucket:
         requests:
           storage: 1Gi
       storageClass:
+      addCommonLabels: false
+      labels: {}
       mountPath: "/var/atlassian/application-data/mesh"
       persistentVolumeClaimRetentionPolicy:
         whenDeleted:
@@ -1385,6 +1399,8 @@ bitbucket:
   #    resources:
   #      requests:
   #        storage: 1Gi
+  #    addCommonLabels: false
+  #    labels: {}
 
   # -- Defines additional annotations to the Bitbucket StateFulSet. This might be required when deploying using a GitOps approach
   additionalAnnotations: {}
