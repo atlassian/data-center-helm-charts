@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nfs-server.fullname" . }}
+  labels:
+    {{- include "nfs-server.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if and (contains "ClusterIP" .Values.service.type) (not (empty .Values.service.clusterIP)) }}
+  clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.service.nfsPort }}
+      targetPort: nfs
+      protocol: TCP
+      name: nfs
+    - port: {{ .Values.service.nfsPort }}
+      targetPort: nfs-udp
+      protocol: UDP
+      name: nfs-udp
+    - port: {{ .Values.service.mountdPort }}
+      targetPort: mountd
+      protocol: TCP
+      name: mountd
+    - port: {{ .Values.service.mountdPort }}
+      targetPort: mountd-udp
+      protocol: UDP
+      name: mountd-udp
+    - port: {{ .Values.service.rpcbindPort }}
+      targetPort: rpcbind
+      protocol: TCP
+      name: rpcbind
+    - port: {{ .Values.service.rpcbindPort }}
+      targetPort: rpcbind-udp
+      protocol: UDP
+      name: rpcbind-udp
+    - port: {{ .Values.service.statdPort }}
+      targetPort: statd
+      protocol: TCP
+      name: statd
+    - port: {{ .Values.service.statdPort }}
+      targetPort: statd-udp
+      protocol: UDP
+      name: statd-udp
+    - port: {{ .Values.service.statdOutgoingPort }}
+      targetPort: statd-out
+      protocol: TCP
+      name: statd-out
+    - port: {{ .Values.service.statdOutgoingPort }}
+      targetPort: statd-out-udp
+      protocol: UDP
+      name: statd-out-udp
+    - port: {{ .Values.service.lockdPort }}
+      targetPort: lockd
+      protocol: TCP
+      name: lockd
+    - port: {{ .Values.service.lockdPort }}
+      targetPort: lockd-udp
+      protocol: UDP
+      name: lockd-udp
+  selector:
+    {{- include "nfs-server.selectorLabels" . | nindent 4 }}
