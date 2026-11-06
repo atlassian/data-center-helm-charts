@@ -2,7 +2,7 @@ apiVersion: v2
 name: jira
 description: A chart for installing Jira Data Center on Kubernetes
 type: application
-version: '2.0.20'
+version: '2.0.21'
 appVersion: 11.3.13
 kubeVersion: ">=1.21.x-0"
 keywords:
@@ -22,7 +22,8 @@ deprecated: false
 annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |-
-    - "Update Helm chart version"
+    - "Update appVersions for DC apps (#1178)"
+    - "fix: wrap namespace/service variable queries in query_result() (#1171)"
 
 dependencies:
 - name: common
