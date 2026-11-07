@@ -384,6 +384,53 @@ class VolumesTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void localHome_pvc_labels_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.localHome.persistentVolumeClaim.create", "true"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var pvcTemplate = statefulSet.getVolumeClaimTemplates().head();
+        assertThat(pvcTemplate.path("metadata").path("labels")).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void localHome_pvc_with_labels(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "volumes.localHome.persistentVolumeClaim.create", "true",
+                "volumes.localHome.persistentVolumeClaim.addCommonLabels", "true",
+                "volumes.localHome.persistentVolumeClaim.labels.custom-key", "custom-val"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var pvcTemplate = statefulSet.getVolumeClaimTemplates().head();
+        assertThat(pvcTemplate.path("metadata").path("labels").path("app.kubernetes.io/name"))
+                .hasTextEqualTo(product.getHelmReleaseName());
+        assertThat(pvcTemplate.path("metadata").path("labels").path("custom-key"))
+                .hasTextEqualTo("custom-val");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void additionalVolumeClaimTemplate_with_labels(Product product) throws Exception {
+        final var pname = product.name().toLowerCase();
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                pname + ".additionalVolumeClaimTemplates[0].name", "my-additional-volume-claim-template",
+                pname + ".additionalVolumeClaimTemplates[0].addCommonLabels", "true",
+                pname + ".additionalVolumeClaimTemplates[0].labels.backup", "daily"
+        ));
+
+        final var statefulSet = resources.getStatefulSet(product.getHelmReleaseName());
+        final var additionalVolumeClaimTemplate = statefulSet.getVolumeClaimTemplates().head();
+        assertThat(additionalVolumeClaimTemplate.path("metadata").path("labels").path("app.kubernetes.io/name"))
+                .hasTextEqualTo(product.getHelmReleaseName());
+        assertThat(additionalVolumeClaimTemplate.path("metadata").path("labels").path("backup"))
+                .hasTextEqualTo("daily");
+    }
+
+    @ParameterizedTest
     @EnumSource(value = Product.class, names = "confluence")
     void synchrony_volume_default_mode(Product product) throws Exception {
         final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
