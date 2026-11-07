@@ -16,6 +16,9 @@ spec:
   {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- with .Values.podManagementPolicy }}
+  podManagementPolicy: {{ . }}
+  {{- end }}
   {{ if .Values.ordinals.enabled }}
   ordinals:
     start: {{ .Values.ordinals.start }}
