@@ -24,7 +24,7 @@ spec:
     start: {{ .Values.ordinals.start }}
   {{ end }}
   replicas: {{ .Values.replicaCount }}
-  podManagementPolicy: {{ default "OrderedReady" .Values.bitbucket.podManagementStrategy }}
+  podManagementPolicy: {{ default "OrderedReady" (or .Values.podManagementPolicy .Values.bitbucket.podManagementPolicy .Values.bitbucket.podManagementStrategy) }}
   serviceName: {{ include "common.names.fullname" . }}
   selector:
     matchLabels:
