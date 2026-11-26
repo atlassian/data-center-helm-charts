@@ -1,0 +1,7 @@
+apiVersion: v2
+name: nfs-server-example
+description: A NFS server example using NFS Ganesha. Do not use in production.
+
+type: application
+version: 0.1.0
+appVersion: "2.0"
