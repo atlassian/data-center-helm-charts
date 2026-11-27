@@ -17,6 +17,16 @@ The Helm charts provision one `StatefulSet` by default. The number of replicas w
       kubectl scale statefulsets <statefulsetset-name> --replicas=n
       ```
 
+=== "Autoscaling (HPA)"
+      Enable the HorizontalPodAutoscaler to dynamically adjust replica count based on CPU, memory, or custom metrics:
+      ```yaml
+      autoscaling:
+        enabled: true
+        minReplicas: 1
+        maxReplicas: 5
+        targetCPUUtilizationPercentage: 80
+      ```
+
 !!!note "Initial cluster size"
       **Jira**, **Confluence**, and **Crowd** all require manual configuration after the first pod is deployed and before scaling up to additional pods, therefore when you deploy the product only one pod (replica) is created. The initial number of pods that should be started at deployment of each product is set in the `replicaCount` variable found in the values.yaml and should always be kept as 1.
 

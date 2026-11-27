@@ -1435,6 +1435,20 @@ podDisruptionBudget:
   minAvailable:
   maxUnavailable:
 
+# -- HorizontalPodAutoscaler configuration: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+# Automatically scales the product StatefulSet based on observed CPU/memory utilization or custom metrics.
+#
+autoscaling:
+  enabled: false
+  labels: {}
+  annotations: {}
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage:
+  customMetrics: []
+  behavior: {}
+
 # -- Create additional ConfigMaps with given names, keys and content. Ther Helm release name will be used as a prefix
 # for a ConfigMap name, fileName is used as subPath
 #

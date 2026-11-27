@@ -1228,6 +1228,20 @@ podDisruptionBudget:
   minAvailable:
   maxUnavailable:
 
+# -- HorizontalPodAutoscaler configuration: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+# Automatically scales the product StatefulSet based on observed CPU/memory utilization or custom metrics.
+#
+autoscaling:
+  enabled: false
+  labels: {}
+  annotations: {}
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage:
+  customMetrics: []
+  behavior: {}
+
 atlassianAnalyticsAndSupport:
 
   analytics:
