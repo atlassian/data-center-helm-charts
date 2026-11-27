@@ -49,6 +49,13 @@ ordinals:
 updateStrategy: {}
   # type: OnDelete
 
+# -- StatefulSet pod management policy: "OrderedReady" (Kubernetes default) or "Parallel".
+# "Parallel" creates/deletes all pods at once when scaling or when pods are recreated.
+# Note: this field is immutable on an existing StatefulSet.
+# See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+#
+podManagementPolicy:
+
 # Image configuration
 #
 image:
@@ -1382,6 +1389,10 @@ synchrony:
   # -- Number of Synchrony pods
   #
   replicaCount: 1
+
+  # -- StatefulSet pod management policy for Synchrony: "OrderedReady" (Kubernetes default) or "Parallel".
+  #
+  podManagementPolicy:
 
   # -- Custom annotations that will be applied to all Synchrony pods.
   # When undefined, default to '.Values.podAnnotations' which are Confluence pod annotations (if defined)
