@@ -580,6 +580,15 @@ volumeClaimTemplates:
   kind: PersistentVolumeClaim
   metadata:
     name: local-home
+    {{- if or .Values.volumes.localHome.persistentVolumeClaim.addCommonLabels .Values.volumes.localHome.persistentVolumeClaim.labels }}
+    labels:
+      {{- if .Values.volumes.localHome.persistentVolumeClaim.addCommonLabels }}
+      {{- include "common.labels.commonLabels" . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.volumes.localHome.persistentVolumeClaim.labels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
   spec:
     accessModes: [ "ReadWriteOnce" ]
     {{- if .Values.volumes.localHome.persistentVolumeClaim.storageClassName }}
@@ -593,6 +602,15 @@ volumeClaimTemplates:
 {{- range .Values.confluence.additionalVolumeClaimTemplates }}
 - metadata:
     name: {{ .name }}
+    {{- if or .addCommonLabels .labels }}
+    labels:
+      {{- if .addCommonLabels }}
+      {{- include "common.labels.commonLabels" $ | nindent 6 }}
+      {{- end }}
+      {{- with .labels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
   spec:
     accessModes: [ "ReadWriteOnce" ]
     {{- if .storageClassName }}
@@ -618,6 +636,15 @@ volumeClaimTemplates:
   kind: PersistentVolumeClaim
   metadata:
     name: synchrony-home
+    {{- if or .Values.volumes.synchronyHome.persistentVolumeClaim.addCommonLabels .Values.volumes.synchronyHome.persistentVolumeClaim.labels }}
+    labels:
+      {{- if .Values.volumes.synchronyHome.persistentVolumeClaim.addCommonLabels }}
+      {{- include "common.labels.commonLabels" . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.volumes.synchronyHome.persistentVolumeClaim.labels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
   spec:
     accessModes: [ "ReadWriteOnce" ]
     {{- if .Values.volumes.synchronyHome.persistentVolumeClaim.storageClassName }}
