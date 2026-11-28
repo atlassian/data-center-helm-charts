@@ -88,4 +88,36 @@ public class StatefulSetUpdateTest {
         JsonNode updateStrategy = sts.getSpec().path("updateStrategy").path("type");
         assertThat(updateStrategy).isEmpty();
     }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"bamboo_agent"}, mode = EnumSource.Mode.EXCLUDE)
+    void sts_min_ready_seconds(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "minReadySeconds", "30"
+        ));
+        StatefulSet sts = resources.getStatefulSet(product.getHelmReleaseName());
+        JsonNode minReady = sts.getSpec().path("minReadySeconds");
+        assertEquals(30, minReady.asInt());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"jira", "confluence", "bitbucket", "bamboo", "crowd"}, mode = EnumSource.Mode.INCLUDE)
+    void sts_min_ready_seconds_default(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of());
+        StatefulSet sts = resources.getStatefulSet(product.getHelmReleaseName());
+        JsonNode minReady = sts.getSpec().path("minReadySeconds");
+        assertThat(minReady).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Product.class, names = {"confluence"}, mode = EnumSource.Mode.INCLUDE)
+    void sts_min_ready_seconds_synchrony(Product product) throws Exception {
+        final var resources = helm.captureKubeResourcesFromHelmChart(product, Map.of(
+                "minReadySeconds", "45",
+                "synchrony.enabled", "true"
+        ));
+        StatefulSet sts = resources.getStatefulSet(product.getHelmReleaseName() + "-synchrony");
+        JsonNode minReady = sts.getSpec().path("minReadySeconds");
+        assertEquals(45, minReady.asInt());
+    }
 }

@@ -61,6 +61,11 @@ ordinals:
 updateStrategy: {}
   # type: OnDelete
 
+# -- Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing, for it to be considered available.
+# See: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#minimum-ready-seconds
+#
+minReadySeconds:
+
 # Image configuration
 #
 image:

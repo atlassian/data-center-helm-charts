@@ -16,6 +16,9 @@ spec:
   {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- with or .Values.synchrony.minReadySeconds .Values.minReadySeconds }}
+  minReadySeconds: {{ . }}
+  {{- end }}
   {{ if .Values.ordinals.enabled }}
   ordinals:
     start: {{ .Values.ordinals.start }}
